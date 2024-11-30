@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(3DMMForever LANGUAGES CXX C VERSION 0.2.0)
+project(3DMMEx LANGUAGES CXX C VERSION 0.2.0)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
@@ -475,9 +475,9 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/content-files/"
 
 # DO NOT CHANGE THIS. EVER. Generated manually via uuidgen. This needs to be
 # the same so that user's can automatically upgrade via MSI
-set(CPACK_WIX_UPGRADE_GUID 01c5fef4-82b5-4194-aaf3-bd0247004941)
+set(CPACK_WIX_UPGRADE_GUID 34ffdec3-60c4-4578-9cff-3e45cbc9ab0c)
 # Change this as needed.
-set(CPACK_WIX_PROPERTY_ARPURLINFOABOUT https://github.com/foone/3DMMForever)
+set(CPACK_WIX_PROPERTY_ARPURLINFOABOUT https://github.com/benstone/3DMMEx)
 
 if (BUILD_PACKAGES)
   add_custom_target(dist DEPENDS $<TARGET_NAME_IF_EXISTS:package>)
