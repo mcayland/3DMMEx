@@ -172,4 +172,9 @@
 #define cidActorClickedDown 44016
 #define cidDeactivate 44017
 #define cidSceneLoaded 44018
+
+// Feature flags
+#define kpridHighQualitySoundImport 0x23700
+#define kpridFeatureFlagLim 0x23800
+
 #endif // SOCDEF_H

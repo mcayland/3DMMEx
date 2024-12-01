@@ -326,6 +326,8 @@ bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, long sty, CNO *pcno, PSTN pstn
     long cbOriginalFile = 0;
     long cbCompressedFile = 0;
     FP fpNew;
+    bool fCompress = fTrue;
+    long lwProp = 0;
 
     pfilSrc->GetFni(&fniSrc);
     if (pvNil == pstn)
@@ -349,170 +351,180 @@ bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, long sty, CNO *pcno, PSTN pstn
     if (FAILED(psnd->GetFormat((LPWAVEFORMATEX)&wfxSrc, size(WAVEFORMATEX))))
         goto LFailPushError;
 
-    // if the file format is not 11M8, then create a converter to 11M8
-    if ((wfxSrc.nSamplesPerSec != knSamplesPerSec) || (wfxSrc.wBitsPerSample != kwBitsPerSample) ||
-        (wfxSrc.nChannels != knChannels))
+    // Check if high quality sound import is enabled
+    // This option skips re-compressing the imported file
+    if (vpappb->FGetProp(kpridHighQualitySoundImport, &lwProp))
     {
-        // Convert the wave import to 3mm's 11M8
-        wfxSrc.nSamplesPerSec = knSamplesPerSec;
-        wfxSrc.nAvgBytesPerSec = knAvgBytesPerSec;
-        wfxSrc.wBitsPerSample = kwBitsPerSample;
-        wfxSrc.nChannels = knChannels;
-        wfxSrc.nBlockAlign = knBlockAlign;
-        if (FAILED(AllocConvertFilter(&psndTemp, psnd, (LPWAVEFORMATEX)&wfxSrc)))
-            goto LFailPushError;
-
-        ReleasePpo(&psnd);
-        psnd = psndTemp;
-        psndTemp = pvNil;
+        fCompress = !(FPure(lwProp));
     }
 
-    // now figure out how many total samples there are
-    csampSrc = psnd->GetSamples();
-    if (csampSrc == -1) // Don't allow infinite sources to be written
-        goto LFailPushError;
-    cbSrc = csampSrc * (wfxSrc.wBitsPerSample >> 3) * wfxSrc.nChannels;
+    if (fCompress)
+    {
+        // if the file format is not 11M8, then create a converter to 11M8
+        if ((wfxSrc.nSamplesPerSec != knSamplesPerSec) || (wfxSrc.wBitsPerSample != kwBitsPerSample) ||
+            (wfxSrc.nChannels != knChannels))
+        {
+            // Convert the wave import to 3mm's 11M8
+            wfxSrc.nSamplesPerSec = knSamplesPerSec;
+            wfxSrc.nAvgBytesPerSec = knAvgBytesPerSec;
+            wfxSrc.wBitsPerSample = kwBitsPerSample;
+            wfxSrc.nChannels = knChannels;
+            wfxSrc.nBlockAlign = knBlockAlign;
+            if (FAILED(AllocConvertFilter(&psndTemp, psnd, (LPWAVEFORMATEX)&wfxSrc)))
+                goto LFailPushError;
 
-    if (FAILED(psnd->SetMode(TRUE, TRUE))) // Activate the Sound Audio Stream
-        goto LFailPushError;
+            ReleasePpo(&psnd);
+            psnd = psndTemp;
+            psndTemp = pvNil;
+        }
 
-    // allocate a buffer big enough to hold them all
-    if (!FAllocPv((LPVOID *)&pbSrc, cbSrc, fmemNil, mprNormal))
-        goto LFail;
+        // now figure out how many total samples there are
+        csampSrc = psnd->GetSamples();
+        if (csampSrc == -1) // Don't allow infinite sources to be written
+            goto LFailPushError;
+        cbSrc = csampSrc * (wfxSrc.wBitsPerSample >> 3) * wfxSrc.nChannels;
 
-    // get all of the samples
-    if (FAILED(psnd->GetSampleData(pbSrc, 0, &csampSrc, NULL)))
-        goto LFailPushError;
+        if (FAILED(psnd->SetMode(TRUE, TRUE))) // Activate the Sound Audio Stream
+            goto LFailPushError;
 
-    // -------------------------------------
-    // inplace compress the samples to ADPCM
+        // allocate a buffer big enough to hold them all
+        if (!FAllocPv((LPVOID *)&pbSrc, cbSrc, fmemNil, mprNormal))
+            goto LFail;
 
-    // figure out the correct size for dest waveformatex (so we get the codec info)
-    if (acmMetrics(NULL, ACM_METRIC_MAX_SIZE_FORMAT, &cbwfx))
-        goto LFailPushError;
+        // get all of the samples
+        if (FAILED(psnd->GetSampleData(pbSrc, 0, &csampSrc, NULL)))
+            goto LFailPushError;
 
-    // allocate a buffer of this size
-    if (!FAllocPv((LPVOID *)&pwfxDst, cbwfx, fmemNil, mprNormal))
-        goto LFail;
+        // -------------------------------------
+        // inplace compress the samples to ADPCM
 
-    // allocate a destination buffer big enough to hold them all
-    cbDst = cbSrc;
-    if (!FAllocPv((LPVOID *)&pbDst, cbDst, fmemNil, mprNormal))
-        goto LFail;
+        // figure out the correct size for dest waveformatex (so we get the codec info)
+        if (acmMetrics(NULL, ACM_METRIC_MAX_SIZE_FORMAT, &cbwfx))
+            goto LFailPushError;
 
-    // set up the dest wfx
-    pwfxDst->wFormatTag = WAVE_FORMAT_ADPCM;
-    pwfxDst->nChannels = knChannels;
-    pwfxDst->nSamplesPerSec = knSamplesPerSec;
-    // pwfxDst->wBitsPerSample, pwfxDst->nAvgBytesPerSec, and
-    // pwfxDst->nBlockAlign  are calced by the acmFormatSuggest()
-    pwfxDst->cbSize = (WORD)cbwfx - sizeof(WAVEFORMATEX);
+        // allocate a buffer of this size
+        if (!FAllocPv((LPVOID *)&pwfxDst, cbwfx, fmemNil, mprNormal))
+            goto LFail;
 
-    // fill in the coeffiecients in the destination WFX by calling acmFormatSuggest
-    if (acmFormatSuggest(NULL, &wfxSrc, pwfxDst, cbwfx,
-                         ACM_FORMATSUGGESTF_WFORMATTAG | ACM_FORMATSUGGESTF_NCHANNELS |
-                             ACM_FORMATSUGGESTF_NSAMPLESPERSEC))
-        goto LFailPushError;
+        // allocate a destination buffer big enough to hold them all
+        cbDst = cbSrc;
+        if (!FAllocPv((LPVOID *)&pbDst, cbDst, fmemNil, mprNormal))
+            goto LFail;
 
-    // open convert stream
-    if (acmStreamOpen(&hacmstream, NULL, &wfxSrc, pwfxDst, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME))
-        goto LFailPushError;
+        // set up the dest wfx
+        pwfxDst->wFormatTag = WAVE_FORMAT_ADPCM;
+        pwfxDst->nChannels = knChannels;
+        pwfxDst->nSamplesPerSec = knSamplesPerSec;
+        // pwfxDst->wBitsPerSample, pwfxDst->nAvgBytesPerSec, and
+        // pwfxDst->nBlockAlign  are calced by the acmFormatSuggest()
+        pwfxDst->cbSize = (WORD)cbwfx - sizeof(WAVEFORMATEX);
 
-    acmhdr.cbStruct = sizeof(ACMSTREAMHEADER);
-    acmhdr.fdwStatus = 0;
-    acmhdr.dwUser = 0;
-    acmhdr.pbSrc = pbSrc;
-    acmhdr.cbSrcLength = cbSrc;
-    acmhdr.cbSrcLengthUsed = 0;
-    acmhdr.dwSrcUser = 0;
-    acmhdr.pbDst = pbDst;
-    acmhdr.cbDstLength = cbDst;
-    acmhdr.cbDstLengthUsed = 0;
-    acmhdr.dwDstUser = 0;
+        // fill in the coeffiecients in the destination WFX by calling acmFormatSuggest
+        if (acmFormatSuggest(NULL, &wfxSrc, pwfxDst, cbwfx,
+                             ACM_FORMATSUGGESTF_WFORMATTAG | ACM_FORMATSUGGESTF_NCHANNELS |
+                                 ACM_FORMATSUGGESTF_NSAMPLESPERSEC))
+            goto LFailPushError;
 
-    // prep acm convert header
-    if (acmStreamPrepareHeader(hacmstream, &acmhdr, NULL))
-        goto LFailPushError;
+        // open convert stream
+        if (acmStreamOpen(&hacmstream, NULL, &wfxSrc, pwfxDst, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME))
+            goto LFailPushError;
 
-    // now convert
-    if (acmStreamConvert(hacmstream, &acmhdr, ACM_STREAMCONVERTF_END))
-        goto LFailPushError;
+        acmhdr.cbStruct = sizeof(ACMSTREAMHEADER);
+        acmhdr.fdwStatus = 0;
+        acmhdr.dwUser = 0;
+        acmhdr.pbSrc = pbSrc;
+        acmhdr.cbSrcLength = cbSrc;
+        acmhdr.cbSrcLengthUsed = 0;
+        acmhdr.dwSrcUser = 0;
+        acmhdr.pbDst = pbDst;
+        acmhdr.cbDstLength = cbDst;
+        acmhdr.cbDstLengthUsed = 0;
+        acmhdr.dwDstUser = 0;
 
-    // unprep header
-    if (acmStreamUnprepareHeader(hacmstream, &acmhdr, NULL))
-        goto LFailPushError;
+        // prep acm convert header
+        if (acmStreamPrepareHeader(hacmstream, &acmhdr, NULL))
+            goto LFailPushError;
 
-    // close stream
-    acmStreamClose(hacmstream, NULL);
-    hacmstream = pvNil;
+        // now convert
+        if (acmStreamConvert(hacmstream, &acmhdr, ACM_STREAMCONVERTF_END))
+            goto LFailPushError;
 
-    // OK, now we have the sound file converted in memory, write out the data file...
-    // open file
-    pfilNew = FIL::PfilCreate(&fniNew);
-    if (pvNil == pfilNew)
-        goto LFail;
-    fpNew = 0;
+        // unprep header
+        if (acmStreamUnprepareHeader(hacmstream, &acmhdr, NULL))
+            goto LFailPushError;
 
-    // write out 'riff' header
-    dwTag = RIFF_TAG;
-    if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
-        goto LFail;
-    cbCompressedFile = sizeof(RIFF) + pwfxDst->cbSize + 12 - 8 +
-                       acmhdr.cbDstLengthUsed; // +12 is for fact chunk chunk, -8 for is riff chunk
-    dwLength = cbCompressedFile;
-    if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
-        goto LFail;
+        // close stream
+        acmStreamClose(hacmstream, NULL);
+        hacmstream = pvNil;
 
-    // write WAVE tag
-    dwTag = WAVE_TAG;
-    if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
-        goto LFail;
+        // OK, now we have the sound file converted in memory, write out the data file...
+        // open file
+        pfilNew = FIL::PfilCreate(&fniNew);
+        if (pvNil == pfilNew)
+            goto LFail;
+        fpNew = 0;
 
-    // write out 'fmt '
-    dwTag = FMT__TAG;
-    if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
-        goto LFail;
-    dwLength = sizeof(WAVEFORMATEX) + pwfxDst->cbSize;
-    if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
-        goto LFail;
-    if (!pfilNew->FWriteRgbSeq(pwfxDst, dwLength, &fpNew))
-        goto LFail;
+        // write out 'riff' header
+        dwTag = RIFF_TAG;
+        if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
+            goto LFail;
+        cbCompressedFile = sizeof(RIFF) + pwfxDst->cbSize + 12 - 8 +
+                           acmhdr.cbDstLengthUsed; // +12 is for fact chunk chunk, -8 for is riff chunk
+        dwLength = cbCompressedFile;
+        if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
+            goto LFail;
 
-    // write out 'fact'
-    dwTag = FACT_TAG;
-    if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
-        goto LFail;
-    dwLength = sizeof(DWORD);
-    if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
-        goto LFail;
-    dwLength = csampSrc;
-    if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
-        goto LFail;
+        // write WAVE tag
+        dwTag = WAVE_TAG;
+        if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
+            goto LFail;
 
-    // write out 'data'
-    dwTag = DATA_TAG;
-    if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
-        goto LFail;
-    dwLength = acmhdr.cbDstLengthUsed;
-    if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
-        goto LFail;
-    if (!pfilNew->FWriteRgbSeq(pbDst, dwLength, &fpNew))
-        goto LFail;
+        // write out 'fmt '
+        dwTag = FMT__TAG;
+        if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
+            goto LFail;
+        dwLength = sizeof(WAVEFORMATEX) + pwfxDst->cbSize;
+        if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
+            goto LFail;
+        if (!pfilNew->FWriteRgbSeq(pwfxDst, dwLength, &fpNew))
+            goto LFail;
 
-    // clean up conversion
-    FreePpv((LPVOID *)&pwfxDst); // free up destination waveformat
-    FreePpv((LPVOID *)&pbSrc);   // free convert src buffer
-    FreePpv((LPVOID *)&pbDst);   // free convert dest buffer
-    ReleasePpo(&pfilNew);        // release open file
-    if (psnd)
-        psnd->SetMode(FALSE, TRUE);
-    ReleasePpo(&psnd); // release sound
+        // write out 'fact'
+        dwTag = FACT_TAG;
+        if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
+            goto LFail;
+        dwLength = sizeof(DWORD);
+        if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
+            goto LFail;
+        dwLength = csampSrc;
+        if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
+            goto LFail;
+
+        // write out 'data'
+        dwTag = DATA_TAG;
+        if (!pfilNew->FWriteRgbSeq(&dwTag, sizeof(dwTag), &fpNew))
+            goto LFail;
+        dwLength = acmhdr.cbDstLengthUsed;
+        if (!pfilNew->FWriteRgbSeq(&dwLength, sizeof(dwLength), &fpNew))
+            goto LFail;
+        if (!pfilNew->FWriteRgbSeq(pbDst, dwLength, &fpNew))
+            goto LFail;
+
+        // clean up conversion
+        FreePpv((LPVOID *)&pwfxDst); // free up destination waveformat
+        FreePpv((LPVOID *)&pbSrc);   // free convert src buffer
+        FreePpv((LPVOID *)&pbDst);   // free convert dest buffer
+        ReleasePpo(&pfilNew);        // release open file
+        if (psnd)
+            psnd->SetMode(FALSE, TRUE);
+        ReleasePpo(&psnd); // release sound
+    }
 
     // -------------------------------------------------------------------
     // Copy the original or converted file to a chunk in the current movie
 
     // if the compressed file is larger then the original
-    if (cbCompressedFile > cbOriginalFile)
+    if (!fCompress || (cbCompressedFile > cbOriginalFile))
     {
         // then just use original file
         if (pvNil == (pfilNew = FIL::PfilOpen(&fniSrc)))

@@ -66,6 +66,10 @@ class KWA : public KWA_PAR
 #define kszStartupSoundValue PszLit("StartupSound")
 #define kfStartupSoundDefault fTrue
 
+// If fTrue, skip recompressing audio on import
+#define kszHighQualitySoundImport PszLit("HighQualitySoundImport")
+#define kszHighQualitySoundImportDefault fFalse
+
 // FGetSetRegKey flags
 enum
 {

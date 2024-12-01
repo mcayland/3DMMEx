@@ -1331,6 +1331,7 @@ bool APP::_FReadUserData(void)
 
     UDAT udat;
     long iprid;
+    long fEnableFeature;
 
     ClearPb(&udat, size(UDAT));
 
@@ -1343,6 +1344,11 @@ bool APP::_FReadUserData(void)
         if (!FSetProp(kpridUserDataBase + iprid, udat.rglw[iprid]))
             return fFalse;
     }
+
+    // Read feature flags
+    fEnableFeature = kszHighQualitySoundImportDefault;
+    (void)FGetSetRegKey(kszHighQualitySoundImport, &fEnableFeature, size(fEnableFeature), fregNil);
+    FSetProp(kpridHighQualitySoundImport, fEnableFeature);
 
     return fTrue;
 }
