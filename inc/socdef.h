@@ -175,6 +175,7 @@
 
 // Feature flags
 #define kpridHighQualitySoundImport 0x23700
+#define kpridStereoSoundPlayback 0x23701
 #define kpridFeatureFlagLim 0x23800
 
 #endif // SOCDEF_H

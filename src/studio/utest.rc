@@ -176,29 +176,29 @@ CAPTION "Product Info"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDCANCEL,68,222,50,14
-    LTEXT           "Product Identification Number:",IDC_STATIC,10,40,141,8
-    EDITTEXT        IDC_EDIT4,10,54,145,12,ES_AUTOHSCROLL | ES_READONLY | 
-                    NOT WS_BORDER
     CONTROL         "Fullscreen",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP,15,87,156,10
+                    WS_GROUP,12, 48, 79, 10
     CONTROL         "Run in Window",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,
-                    15,103,156,10
+                    12, 66, 79, 10
 #ifdef DEBUG
     LTEXT           "cactAV:",IDC_STATIC,123,223,27,10
     EDITTEXT        IDC_EDIT3,152,223,35,12,ES_AUTOHSCROLL
 #endif
     LTEXT           "(c) and (p) 1995 Microsoft Corporation.  All rights reserved.",
-                    IDC_STATIC,10,27,192,8
-    EDITTEXT        IDC_EDIT2,10,6,192,13,ES_AUTOHSCROLL | ES_READONLY | NOT
+                    IDC_STATIC,6,18,186,8
+    EDITTEXT        IDC_EDIT2,6,6,186,12,ES_AUTOHSCROLL | ES_READONLY | NOT
                     WS_BORDER
-    GROUPBOX        "Display Options",IDC_STATIC,10,74,170,49
+    GROUPBOX        "Display Options",IDC_STATIC,6,36,90,49
     CONTROL         "Make these the default settings",IDC_CHECK1,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,10,193,170,18
-    GROUPBOX        "Performance Options",IDC_STATIC,10,129,170,50
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,198,170,18
+    GROUPBOX        "Performance Options",IDC_STATIC,102,36,90,50
     CONTROL         "Better Quality",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP,15,145,156,10
-    CONTROL         "Better Speed",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,15,
-                    161,156,10
+                    WS_GROUP,108, 48, 67, 10
+    CONTROL         "Better Speed",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,108,66,67,10
+    GROUPBOX        "Features",IDC_STATIC,6,90,186,108
+    CONTROL         "Play startup sound",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,102,174,12
+    CONTROL         "Stereo sound playback (requires restart)",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,120,174,12
+    CONTROL         "High quality sound import",IDC_CHECK4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,138,174,12
 END
 
 dlidInitFailed DIALOG DISCARDABLE  0, 0, 187, 71

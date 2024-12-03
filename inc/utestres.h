@@ -50,6 +50,9 @@
 #define IDC_PREVIEW 1023
 #define IDC_BUTTON3 1024
 #define IDC_EDIT3 1025
+#define IDC_CHECK2 1026
+#define IDC_CHECK3 1027
+#define IDC_CHECK4 1028
 #define cidInfo 40038
 #define cidWriteBmps 40039
 #define cidHelpBook 40040

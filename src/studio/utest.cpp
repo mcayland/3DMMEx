@@ -1358,6 +1358,10 @@ bool APP::_FReadUserData(void)
     (void)FGetSetRegKey(kszHighQualitySoundImport, &fEnableFeature, size(fEnableFeature), fregNil);
     FSetProp(kpridHighQualitySoundImport, fEnableFeature);
 
+    fEnableFeature = kszStereoSoundDefault;
+    (void)FGetSetRegKey(kszStereoSound, &fEnableFeature, size(fEnableFeature), fregNil);
+    FSetProp(kpridStereoSoundPlayback, fEnableFeature);
+
     return fTrue;
 }
 
@@ -3247,7 +3251,6 @@ PMVIE APP::_Pmvie(void)
 enum
 {
     iditOkInfo,
-    iditProductId,
     iditWindowModeInfo,
 #ifdef DEBUG
     iditCactAV,
@@ -3255,6 +3258,9 @@ enum
     iditProductNameInfo,
     iditSaveChanges,
     iditRenderModeInfo,
+    iditStartupSound,
+    iditStereoSound,
+    iditHighQualitySoundImport,
     iditLimInfo
 };
 
@@ -3293,6 +3299,8 @@ bool APP::FCmdInfo(PCMD pcmd)
     STN stn;
     STN stnT;
     bool fSaveChanges;
+    long lwValue = 0;
+    bool fValue = fFalse;
 
     pmvie = _Pmvie();
 
@@ -3309,33 +3317,26 @@ bool APP::FCmdInfo(PCMD pcmd)
     stn.FAppendStn(&stnT);
     pdlg->FPutStn(iditProductNameInfo, &stn);
 
-#ifdef WIN
-    LPSTR lpszPid;
-    char rgchPid[kcchMaxStn + 1];
-
-    lpszPid = (LPSTR)LoadGenResource(vwig.hinst, MAKEINTRESOURCE(RC_PID_NUMBER), RT_RCDATA);
-
-    if (lpszPid != pvNil)
-    {
-
-#define PID_RPC 128
-#define PID_SITE (PID_RPC + 5)
-#define PID_SERIAL (PID_SITE + 3)
-#define PID_RANDOM (PID_SERIAL + 7)
-
-        wsprintf(rgchPid, "%5.5s-%3.3s-%7.7s-%5.5s", lpszPid + PID_RPC, lpszPid + PID_SITE, lpszPid + PID_SERIAL,
-                 lpszPid + PID_RANDOM);
-
-        stn.SetSz(rgchPid);
-        pdlg->FPutStn(iditProductId, &stn);
-    }
-#endif
-
 #ifdef DEBUG
     pdlg->FPutLwInEdit(iditCactAV, vcactAV);
 #endif // DEBUG
     pdlg->PutRadio(iditWindowModeInfo, _fRunInWindow ? 1 : 0);
 
+    // Get startup sound option
+    lwValue = kfStartupSoundDefault;
+    (void)FGetSetRegKey(kszStartupSoundValue, &lwValue, size(lwValue), fregNil);
+    pdlg->PutCheck(iditStartupSound, FPure(lwValue));
+
+    // Get sound options
+    lwValue = 0;
+    AssertDo(FGetProp(kpridStereoSoundPlayback, &lwValue), "can't get stereo sound property");
+    pdlg->PutCheck(iditStereoSound, FPure(lwValue));
+
+    lwValue = 0;
+    AssertDo(FGetProp(kpridHighQualitySoundImport, &lwValue), "can't get sound import property");
+    pdlg->PutCheck(iditHighQualitySoundImport, FPure(lwValue));
+
+    // Show dialog
     idit = pdlg->IditDo();
 
     fSaveChanges = pdlg->FGetCheck(iditSaveChanges);
@@ -3428,6 +3429,32 @@ bool APP::FCmdInfo(PCMD pcmd)
         }
     }
 #endif // DEBUG
+
+    // Save startup sound preference
+    if (fSaveChanges)
+    {
+        long lwValue = pdlg->FGetCheck(iditStartupSound);
+        AssertDo(FGetSetRegKey(kszStartupSoundValue, &lwValue, size(lwValue), fregSetKey),
+                 "can't save startup sound to registry");
+    }
+
+    // Set audio preferences
+    fValue = pdlg->FGetCheck(iditStereoSound);
+    AssertDo(FSetProp(kpridStereoSoundPlayback, fValue), "can't save stereo sound property");
+
+    fValue = pdlg->FGetCheck(iditHighQualitySoundImport);
+    AssertDo(FSetProp(kpridHighQualitySoundImport, fValue), "can't save sound import property");
+
+    if (fSaveChanges)
+    {
+        AssertDo(FGetProp(kpridHighQualitySoundImport, &lwValue), "can't get sound import property");
+        AssertDo(FGetSetRegKey(kszHighQualitySoundImport, &lwValue, size(lwValue), fregSetKey),
+                 "can't save sound import preference to registry");
+
+        AssertDo(FGetProp(kpridStereoSoundPlayback, &lwValue), "can't get stereo sound property");
+        AssertDo(FGetSetRegKey(kszStereoSound, &lwValue, size(lwValue), fregSetKey),
+                 "can't save stereo sound preference to registry");
+    }
 
     ReleasePpo(&pdlg);
 
