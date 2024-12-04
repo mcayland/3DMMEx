@@ -1605,7 +1605,7 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
     if (pgst->IvMac() == 0)
     {
         stnTitle.SetSz(PszLit("3D Movie Maker/3DMovie"));
-        sid = 1;
+        sid = 2;
         if (!pgst->FAddStn(&stnTitle, &sid))
         {
             Warn("Failed to add fallback Title!");
