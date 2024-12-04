@@ -579,7 +579,12 @@ bool APPB::_FInit(ulong grfapp, ulong grfgob, long ginDef)
         return fFalse;
 
     // initialize sound functionality
-    if (!_FInitSound(kwav22M16))
+    long lwWav = kwav22M16;
+    if (FPure(grfapp & fappStereoSound))
+    {
+        lwWav = kwav44S16;
+    }
+    if (!_FInitSound(lwWav))
         return fFalse;
 
     // import any external clipboard

@@ -70,6 +70,10 @@ class KWA : public KWA_PAR
 #define kszHighQualitySoundImport PszLit("HighQualitySoundImport")
 #define kszHighQualitySoundImportDefault fFalse
 
+// If fTrue, mix sound in 44.1KHz 16-bit Stereo
+#define kszStereoSound PszLit("StereoSound")
+#define kszStereoSoundDefault fFalse
+
 // FGetSetRegKey flags
 enum
 {

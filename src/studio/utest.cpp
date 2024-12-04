@@ -103,6 +103,14 @@ void APP::Run(ulong grfapp, ulong grfgob, long ginDef)
 
     _CleanupTemp();
 
+    // Get stereo sound preference from registry
+    long lwValue = fFalse;
+    (void)FGetSetRegKey(kszStereoSound, &lwValue, size(lwValue), fregNil);
+    if (FPure(lwValue))
+    {
+        grfapp |= fappStereoSound;
+    }
+
     __try
     {
         APP_PAR::Run(grfapp, grfgob, ginDef);

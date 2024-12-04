@@ -56,6 +56,7 @@ enum
     fappNil = 0x0,
     fappOffscreen = 0x1,
     fappOnscreen = 0x2,
+    fappStereoSound = 0x4,
 };
 
 typedef class APPB *PAPPB;
