@@ -2834,7 +2834,7 @@ void DoubleVertStretch(byte *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, by
 
             // copy two rows to the destination in C code
             CopyPb(prgbSrc + xpOn, prgbDst + xpOn, xpOff - xpOn);
-            CopyPb(prgbSrc + xpOn + cbRowDst, prgbDst + xpOn, xpOff - xpOn);
+            CopyPb(prgbSrc + xpOn, prgbDst + cbRowDst + xpOn, xpOff - xpOn);
 
 #endif //! IN_80386
 
