@@ -16,11 +16,23 @@ jobs:
           pushvc (invoke-vcvars -TargetArch x86 -HostArch AMD64)
           cmake --preset x86-msvc-relwithdebinfo -D3DMM_PACKAGE_WIX=OFF
           cmake --build build/x86-msvc-relwithdebinfo --target dist
-      - name: Upload Artifact
+      - name: Calculate release hash
+        shell: pwsh
+        run: |
+          Get-FileHash -Algorithm SHA256 build/x86-msvc-relwithdebinfo/3DMMEx-*.zip
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: 3D-Movie-Maker
+          name: Build Artifacts
           path: |
             build/x86-msvc-relwithdebinfo
             !build/x86-msvc-relwithdebinfo/_CPack_Packages
             !build/x86-msvc-relwithdebinfo/chomp/studio/*.chk
+            !build/x86-msvc-relwithdebinfo/*.zip
+      - name: Upload Release
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3DMMEx Release
+          path: |
+            build/x86-msvc-relwithdebinfo/*.zip
+          compression-level: 0 # already compressed
