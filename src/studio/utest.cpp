@@ -3309,7 +3309,7 @@ bool APP::FCmdInfo(PCMD pcmd)
         return fTrue;
     pdlg->PutRadio(iditRenderModeInfo, _fSlowCPU ? 1 : 0);
 
-    GetStnAppName(&stn);
+    stn = "3DMMEx";
 #ifdef DEBUG
     stn.FAppendSz(PszLit(" (Debug)"));
 #endif // DEBUG
