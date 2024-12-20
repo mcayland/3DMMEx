@@ -104,6 +104,7 @@ class APPB : public APPB_PAR
     bool _fToolTip : 1;         // whether we're in tool-tip mode
     bool _fForeground : 1;      // whether we're the foreground app
     bool _fEndModal : 1;        // set to end the topmost modal loop
+    bool _fFlushCursor : 1;     // flush cursor events when setting cursor position
 
     PGL _pglmkrgn;        // list of marked regions for fast updating
     long _onnDefFixed;    // default fixed pitch font

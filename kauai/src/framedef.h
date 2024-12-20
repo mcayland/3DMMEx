@@ -86,6 +86,7 @@
 #define kpridMaximized 1
 #define kpridFullScreen 2
 #define kpridToolTipDelay 3
+#define kpridReduceMouseJitter 4
 
 /***************************************************************************
     Transitions that Kauai knows how to do.

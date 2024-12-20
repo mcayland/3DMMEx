@@ -3261,6 +3261,8 @@ enum
     iditStartupSound,
     iditStereoSound,
     iditHighQualitySoundImport,
+    iditReduceMouseJitter,
+
     iditLimInfo
 };
 
@@ -3335,6 +3337,10 @@ bool APP::FCmdInfo(PCMD pcmd)
     lwValue = 0;
     AssertDo(FGetProp(kpridHighQualitySoundImport, &lwValue), "can't get sound import property");
     pdlg->PutCheck(iditHighQualitySoundImport, FPure(lwValue));
+
+    lwValue = 0;
+    AssertDo(FGetProp(kpridReduceMouseJitter, &lwValue), "can't get reduce mouse jitter property");
+    pdlg->PutCheck(iditReduceMouseJitter, FPure(lwValue));
 
     // Show dialog
     idit = pdlg->IditDo();
@@ -3445,6 +3451,9 @@ bool APP::FCmdInfo(PCMD pcmd)
     fValue = pdlg->FGetCheck(iditHighQualitySoundImport);
     AssertDo(FSetProp(kpridHighQualitySoundImport, fValue), "can't save sound import property");
 
+    fValue = pdlg->FGetCheck(iditReduceMouseJitter);
+    AssertDo(FSetProp(kpridReduceMouseJitter, fValue), "can't save reduce mouse jitter property");
+
     if (fSaveChanges)
     {
         AssertDo(FGetProp(kpridHighQualitySoundImport, &lwValue), "can't get sound import property");
@@ -3454,6 +3463,8 @@ bool APP::FCmdInfo(PCMD pcmd)
         AssertDo(FGetProp(kpridStereoSoundPlayback, &lwValue), "can't get stereo sound property");
         AssertDo(FGetSetRegKey(kszStereoSound, &lwValue, size(lwValue), fregSetKey),
                  "can't save stereo sound preference to registry");
+
+        // TODO: Save "flush mouse" property to the registry
     }
 
     ReleasePpo(&pdlg);

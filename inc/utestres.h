@@ -53,6 +53,7 @@
 #define IDC_CHECK2 1026
 #define IDC_CHECK3 1027
 #define IDC_CHECK4 1028
+#define IDC_CHECK5 1029
 #define cidInfo 40038
 #define cidWriteBmps 40039
 #define cidHelpBook 40040

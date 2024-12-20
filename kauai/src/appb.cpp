@@ -267,6 +267,21 @@ void APPB::PositionCurs(long xpScreen, long ypScreen)
 
     // REVIEW shonk: implement on Mac
     MacWin(RawRtn(), SetCursorPos(xpScreen, ypScreen));
+
+#ifdef WIN
+    if (_fFlushCursor)
+    {
+        // APPB::TrackMouse gets the mouse position by peeking the message queue for WM_MOUSE* messages.
+        // After the cursor position has been reset, there may still be some WM_MOUSEMOVE messages with old
+        // cooordinates in the message queue. This can cause jitter when dragging actors around the stage.
+        // Flush all mouse move messages from this thread's message queue.
+        MSG msg;
+        while (PeekMessage(&msg, hNil, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE | PM_NOYIELD))
+        {
+            // do nothing
+        }
+    }
+#endif // WIN
 }
 
 /***************************************************************************
@@ -548,6 +563,7 @@ bool APPB::_FInit(ulong grfapp, ulong grfgob, long ginDef)
     AssertThis(0);
 
     _fOffscreen = FPure(grfapp & fappOffscreen);
+    _fFlushCursor = fTrue;
 
 #ifdef DEBUG
     if (!_FInitDebug())
@@ -1418,6 +1434,10 @@ bool APPB::FSetProp(long prid, long lw)
         ResetToolTip();
         break;
 
+    case kpridReduceMouseJitter:
+        _fFlushCursor = FPure(lw);
+        break;
+
     default:
         return _FSetProp(prid, lw);
     }
@@ -1452,6 +1472,10 @@ bool APPB::FGetProp(long prid, long *plw)
 
     case kpridToolTipDelay:
         *plw = LwMulDivAway(_dtsToolTip, kdtimSecond, kdtsSecond);
+        break;
+
+    case kpridReduceMouseJitter:
+        *plw = FPure(_fFlushCursor);
         break;
 
     default:
