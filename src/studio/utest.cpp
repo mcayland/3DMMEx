@@ -1426,11 +1426,18 @@ bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfre
     DWORD dwDisposition;
     DWORD dwCbData = cbData;
     DWORD dwType;
+    long lwRet;
     HKEY hkey = 0;
 
-    if (RegCreateKeyEx((grfreg & fregMachine) ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, kszSocratesKey, 0, NULL,
-                       REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, &dwDisposition) != ERROR_SUCCESS)
+    lwRet = RegCreateKeyEx((grfreg & fregMachine) ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, kszSocratesKey, 0, NULL,
+                           REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, &dwDisposition);
+    if (lwRet != ERROR_SUCCESS)
     {
+#ifdef DEBUG
+        STN stnErr;
+        stnErr.FFormatSz(PszLit("Could not open Socrates key: lwRet=0x%x"), lwRet);
+        Warn(stnErr.Psz());
+#endif // DEBUG
         goto LFail;
     }
 
@@ -1455,16 +1462,21 @@ bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfre
             dwType = REG_DWORD;
         }
 
-        if (RegSetValueEx(hkey, pszValueName, NULL, dwType, (byte *)pvData, dwCbData) != ERROR_SUCCESS)
+        lwRet = RegSetValueEx(hkey, pszValueName, NULL, dwType, (byte *)pvData, dwCbData);
+        if (lwRet != ERROR_SUCCESS)
         {
+#ifdef DEBUG
+            STN stnErr;
+            stnErr.FFormatSz(PszLit("Could not set value %z: lwRet=0x%x"), pszValueName, lwRet);
+            Warn(stnErr.Psz());
+#endif // DEBUG
             goto LFail;
         }
     }
     else
     {
-        long lwRet;
-
-        if ((lwRet = RegQueryValueEx(hkey, pszValueName, NULL, &dwType, (byte *)pvData, &dwCbData)) != ERROR_SUCCESS)
+        lwRet = RegQueryValueEx(hkey, pszValueName, NULL, &dwType, (byte *)pvData, &dwCbData);
+        if (lwRet != ERROR_SUCCESS)
         {
             if (lwRet == ERROR_FILE_NOT_FOUND && fSetDefault)
                 goto LWriteValue;
