@@ -6462,7 +6462,6 @@ void MVU::StartPlaceActor(bool fEntireScene)
 
     _fMouseDownSeen = fFalse;
     _tsLastSample = TsCurrent();
-    SlowKeyboardRepeat();
 
     return;
 }
@@ -6847,8 +6846,6 @@ void MVU::_MouseDown(CMD_MOUSE *pcmd)
     PT pt;
     long ibset;
     PDOCB pdocb;
-
-    SlowKeyboardRepeat();
 
     if (Pmvie()->FPlaying())
     {
