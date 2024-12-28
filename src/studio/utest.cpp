@@ -1428,9 +1428,10 @@ bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfre
     DWORD dwType;
     long lwRet;
     HKEY hkey = 0;
+    REGSAM samDesired = (fSetKey || fSetDefault) ? KEY_ALL_ACCESS : KEY_READ;
 
     lwRet = RegCreateKeyEx((grfreg & fregMachine) ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, kszSocratesKey, 0, NULL,
-                           REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, &dwDisposition);
+                           REG_OPTION_NON_VOLATILE, samDesired, NULL, &hkey, &dwDisposition);
     if (lwRet != ERROR_SUCCESS)
     {
 #ifdef DEBUG
