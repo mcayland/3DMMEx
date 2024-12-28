@@ -1595,29 +1595,32 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
 
     if ((pgst = GST::PgstNew(size(long))) == pvNil)
         goto LFail;
-    if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, kszProductsKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ, NULL, &hkey,
-                       &dwDisposition) != ERROR_SUCCESS)
-    {
-        Warn("Missing InstallDirectory registry entry or registry error");
-        _FGenericError("Missing InstallDirectory registry entry or registry error");
-        goto LFail;
-    }
 
-    for (iValue = 0; RegEnumValue(hkey, iValue, szSid, &cchSid, NULL, NULL, (unsigned char *)szTitle, &cchTitle) !=
-                     ERROR_NO_MORE_ITEMS;
-         iValue++)
+    if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, kszProductsKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ, NULL, &hkey,
+                       &dwDisposition) == ERROR_SUCCESS)
     {
-        stnSid.SetSz(szSid);
-        if (!stnSid.FGetLw(&sid))
+        for (iValue = 0; RegEnumValue(hkey, iValue, szSid, &cchSid, NULL, NULL, (unsigned char *)szTitle, &cchTitle) !=
+                         ERROR_NO_MORE_ITEMS;
+             iValue++)
         {
-            Warn("Invalid registry name for Products key value");
-            continue;
+            stnSid.SetSz(szSid);
+            if (!stnSid.FGetLw(&sid))
+            {
+                Warn("Invalid registry name for Products key value");
+                continue;
+            }
+            stnTitle.SetSz(&szTitle[0]);
+            if (!pgst->FAddStn(&stnTitle, &sid))
+                goto LFail;
+            cchTitle = kcchMaxSz;
+            cchSid = kcchMaxSz;
         }
-        stnTitle.SetSz(&szTitle[0]);
-        if (!pgst->FAddStn(&stnTitle, &sid))
-            goto LFail;
-        cchTitle = kcchMaxSz;
-        cchSid = kcchMaxSz;
+
+        (void)RegCloseKey(hkey);
+    }
+    else
+    {
+        Warn("_FReadTitlesFromReg: Could not open products key");
     }
 
     if (pgst->IvMac() == 0)
