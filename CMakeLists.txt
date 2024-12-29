@@ -402,6 +402,11 @@ target_include_directories(studio
   PUBLIC $<TARGET_PROPERTY:engine,INCLUDE_DIRECTORIES>
   "${PROJECT_BINARY_DIR}/inc"
   "${PROJECT_SOURCE_DIR}/src")
+target_compile_definitions(
+    studio
+    PRIVATE
+    NAMES # Adds names to chunks in Chunky files
+)
 target_chomp_sources(studio
   "${PROJECT_SOURCE_DIR}/src/studio/utest.cht"
   "${PROJECT_SOURCE_DIR}/src/studio/studio.cht"
