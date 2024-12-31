@@ -81,8 +81,8 @@ if (CMAKE_C_BYTE_ORDER MATCHES LITTLE_ENDIAN)
     add_compile_definitions ("LITTLE_ENDIAN")
 endif()
 
-
-if (NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
+# MCA: temporarily disable 64-bit check on Linux
+if ((NOT CMAKE_SIZEOF_VOID_P EQUAL 4) AND NOT LINUX)
   message(FATAL_ERROR "Cannot compile for 64-bit yet")
 endif()
 
