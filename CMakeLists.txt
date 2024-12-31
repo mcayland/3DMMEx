@@ -38,7 +38,10 @@ enable_testing()
 find_package(GTest CONFIG REQUIRED)
 include(GoogleTest)
 
-find_package(BRender REQUIRED)
+# MCA: temporarily only build BRender on Windows
+if (WIN32)
+  find_package(BRender REQUIRED)
+endif()
 
 # Options
 option(BUILD_PACKAGES "Build packages for 3DMM" ON)
@@ -363,10 +366,20 @@ target_sources(brender
     "${PROJECT_SOURCE_DIR}/bren/zbmp.cpp"
 )
 target_include_directories(brender PUBLIC "${PROJECT_SOURCE_DIR}/BREN/INC")
-target_link_libraries(brender
-  PUBLIC
-    kauai
-    BRender::Libraries)
+
+# MCA: temporarily disable BRender on Linux
+if (WIN32)
+  target_link_libraries(brender
+      PUBLIC
+      kauai
+      BRender::Libraries)
+endif()
+
+if (LINUX)
+  target_link_libraries(brender
+      PUBLIC
+      kauai)
+endif()
 
 add_library(engine)
 target_sources(engine
