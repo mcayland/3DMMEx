@@ -334,13 +334,16 @@ target_compile_definitions(kauai PUBLIC
   _LPCVOID_DEFINED
   STRICT)
 
-target_link_libraries(kauai
-  PUBLIC
-    3DMMForever::AudioMan
-    $<$<PLATFORM_ID:Windows>:Msacm32>
-    $<$<PLATFORM_ID:Windows>:Vfw32>
-    $<$<PLATFORM_ID:Windows>:Winmm>
-    $<$<PLATFORM_ID:Windows>:mpr>)
+# MCA: temporarily disable Windows kauai link libraries on Linux
+if (WIN32)
+  target_link_libraries(kauai
+    PUBLIC
+      3DMMForever::AudioMan
+      $<$<PLATFORM_ID:Windows>:Msacm32>
+      $<$<PLATFORM_ID:Windows>:Vfw32>
+      $<$<PLATFORM_ID:Windows>:Winmm>
+      $<$<PLATFORM_ID:Windows>:mpr>)
+endif()
 
 # Unit tests
 add_executable(kauai_test
