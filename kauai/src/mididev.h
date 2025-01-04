@@ -20,7 +20,7 @@
 ***************************************************************************/
 typedef class MIDP *PMIDP;
 #define MIDP_PAR SNDMQ
-#define kclsMIDP 'MIDP'
+#define kclsMIDP KLCONST4('M', 'I', 'D', 'P')
 class MIDP : public MIDP_PAR
 {
     RTCLASS_DEC

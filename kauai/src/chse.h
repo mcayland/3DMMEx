@@ -29,7 +29,7 @@ enum
 
 typedef class CHSE *PCHSE;
 #define CHSE_PAR BASE
-#define kclsCHSE 'CHSE'
+#define kclsCHSE KLCONST4('C', 'H', 'S', 'E')
 class CHSE : public CHSE_PAR
 {
     RTCLASS_DEC

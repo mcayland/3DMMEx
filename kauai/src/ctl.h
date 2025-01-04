@@ -25,7 +25,7 @@ typedef ControlHandle HCTL;
 // general control
 typedef class CTL *PCTL;
 #define CTL_PAR GOB
-#define kclsCTL 'CTL'
+#define kclsCTL KLCONST3('C', 'T', 'L')
 class CTL : public CTL_PAR
 {
     RTCLASS_DEC
@@ -85,7 +85,7 @@ enum
 
 typedef class SCB *PSCB;
 #define SCB_PAR CTL
-#define kclsSCB 'SCB'
+#define kclsSCB KLCONST3('S', 'C', 'B')
 class SCB : public SCB_PAR
 {
     RTCLASS_DEC
@@ -143,7 +143,7 @@ class SCB : public SCB_PAR
 // size box
 typedef class WSB *PWSB;
 #define WSB_PAR CTL
-#define kclsWSB 'WSB'
+#define kclsWSB KLCONST3('W', 'S', 'B')
 class WSB : public WSB_PAR
 {
     RTCLASS_DEC

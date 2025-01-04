@@ -151,7 +151,7 @@ const short kswMinSccg = 0x1015;  // we can read back to this version
 ****************************************/
 typedef class SCCG *PSCCG;
 #define SCCG_PAR SCCB
-#define kclsSCCG 'SCCG'
+#define kclsSCCG KLCONST4('S', 'C', 'C', 'G')
 class SCCG : public SCCG_PAR
 {
     RTCLASS_DEC

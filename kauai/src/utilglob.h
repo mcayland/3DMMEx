@@ -24,7 +24,7 @@ const ulong kluTimeScaleNormal = 0x00010000;
 
 typedef class USAC *PUSAC;
 #define USAC_PAR BASE
-#define kclsUSAC 'USAC'
+#define kclsUSAC KLCONST4('U', 'S', 'A', 'C')
 class USAC : public USAC_PAR
 {
     RTCLASS_DEC

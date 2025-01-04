@@ -27,7 +27,7 @@
 ***************************************************************************/
 typedef class BSM *PBSM;
 #define BSM_PAR BASE
-#define kclsBSM 'BSM'
+#define kclsBSM KLCONST3('B', 'S', 'M')
 class BSM : public BSM_PAR
 {
     RTCLASS_DEC
@@ -66,7 +66,7 @@ class BSM : public BSM_PAR
 ***************************************************************************/
 typedef class BSF *PBSF;
 #define BSF_PAR BASE
-#define kclsBSF 'BSF'
+#define kclsBSF KLCONST3('B', 'S', 'F')
 class BSF : public BSF_PAR
 {
     RTCLASS_DEC

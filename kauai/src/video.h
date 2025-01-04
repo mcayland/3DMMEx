@@ -21,7 +21,7 @@
 ***************************************************************************/
 typedef class GVID *PGVID;
 #define GVID_PAR CMH
-#define kclsGVID 'GVID'
+#define kclsGVID KLCONST4('G', 'V', 'I', 'D')
 class GVID : public GVID_PAR
 {
     RTCLASS_DEC
@@ -53,7 +53,7 @@ class GVID : public GVID_PAR
 ****************************************/
 typedef class GVDS *PGVDS;
 #define GVDS_PAR GVID
-#define kclsGVDS 'GVDS'
+#define kclsGVDS KLCONST4('G', 'V', 'D', 'S')
 class GVDS : public GVDS_PAR
 {
     RTCLASS_DEC
@@ -109,7 +109,7 @@ class GVDS : public GVDS_PAR
 ****************************************/
 typedef class GVDW *PGVDW;
 #define GVDW_PAR GVID
-#define kclsGVDW 'GVDW'
+#define kclsGVDW KLCONST4('G', 'V', 'D', 'W')
 class GVDW : public GVDW_PAR
 {
     RTCLASS_DEC

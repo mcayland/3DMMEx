@@ -25,7 +25,7 @@ enum
 
 typedef class CLOK *PCLOK;
 #define CLOK_PAR CMH
-#define kclsCLOK 'CLOK'
+#define kclsCLOK KLCONST4('C', 'L', 'O', 'K')
 class CLOK : public CLOK_PAR
 {
     RTCLASS_DEC
