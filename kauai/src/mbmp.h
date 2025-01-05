@@ -16,7 +16,7 @@
 #ifndef MBMP_H
 #define MBMP_H
 
-const FTG kftgBmp = 'BMP';
+const FTG kftgBmp = KLCONST3('B', 'M', 'P');
 
 enum
 {

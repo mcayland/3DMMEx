@@ -46,10 +46,12 @@ enum
 
 typedef long FTG; // file type
 
-const FTG ftgNil = '...,';
-const FTG kftgDir = '....';
-const FTG kftgTemp = MacWin('temp', 'TMP'); // the standard temp file ftg
-const FTG kftgText = MacWin('TEXT', 'TXT');
+const FTG ftgNil = KLCONST4('.', '.', '.', ',');
+const FTG kftgDir = KLCONST4('.', '.', '.', '.');
+const FTG kftgTemp = MacWin(KLCONST4('t', 'e', 'm', 'p'),
+                            KLCONST3('T', 'M', 'P')); // the standard temp file ftg
+const FTG kftgText = MacWin(KLCONST4('T', 'E', 'X', 'T'),
+                            KLCONST3('T', 'X', 'T'));
 
 extern FTG vftgTemp; // the ftg to use for temp files
 
