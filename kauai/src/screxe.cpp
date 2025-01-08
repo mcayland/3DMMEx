@@ -141,6 +141,22 @@ bool SCEB::FAttachScript(PSCPT pscpt, long *prglw, long clw)
     long lw;
     DVER dver;
 
+#ifdef DEBUG
+    if (pscpt != pvNil)
+    {
+        STN stnTrace;
+        if (pscpt->_stnSrcChunk.Cch() > 0)
+        {
+            stnTrace.FFormatSz(PszLit("Executing: %f:%d: %s\n"), pscpt->Ctg(), pscpt->Cno(), &pscpt->_stnSrcChunk);
+        }
+        else
+        {
+            stnTrace.FFormatSz(PszLit("Executing: %f:%d\n"), pscpt->Ctg(), pscpt->Cno());
+        }
+        OutputDebugStringA(stnTrace.Psz());
+    }
+#endif // DEBUG
+
     Free();
     _lwReturn = 0;
     _fError = fFalse;
@@ -1380,6 +1396,20 @@ PSCPT SCPT::PscptRead(PCFL pcfl, CTG ctg, CNO cno)
         ReleasePpo(&pgst);
         return pvNil;
     }
+
+#ifdef DEBUG
+    {
+        // Store source information in the script object
+        FLO flo;
+        AssertDo(blck.FGetFlo(&flo), "Cannot get file location for script chunk");
+        flo.pfil->GetFni(&pscpt->_fniSrc);
+
+        if (!pcfl->FGetName(ctg, cno, &pscpt->_stnSrcChunk))
+        {
+            pscpt->_stnSrcChunk = "";
+        }
+    }
+#endif // DEBUG
 
     if (kboOther == bo)
         SwapBytesRglw(pgllw->QvGet(0), pgllw->IvMac());

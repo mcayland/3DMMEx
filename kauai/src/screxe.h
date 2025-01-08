@@ -53,6 +53,12 @@ class SCPT : public SCPT_PAR
     friend class SCEB;
     friend class SCCB;
 
+#ifdef DEBUG
+    FNI _fniSrc;           // Source file
+    STN _stnSrcChunk = ""; // Source chunk name
+
+#endif // DEBUG
+
   public:
     static bool FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
     static PSCPT PscptRead(PCFL pcfl, CTG ctg, CNO cno);
