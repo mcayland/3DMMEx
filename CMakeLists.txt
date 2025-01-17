@@ -249,9 +249,18 @@ add_custom_command(
     ARGS -DINPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/framechk.in -DOUTPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/framechk.h -P ${PROJECT_SOURCE_DIR}/kauai/src/genfrchk.cmk
 )
 
+# Build kid chunk headers
+add_custom_command(
+    OUTPUT ${PROJECT_SOURCE_DIR}/kauai/src/kidchk.h
+    DEPENDS ${PROJECT_SOURCE_DIR}/kauai/src/kidchk.in
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -DINPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/kidchk.in -DOUTPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/kidchk.h -P ${PROJECT_SOURCE_DIR}/kauai/src/genfrchk.cmk
+)
+
 add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4430>)
 add_library(kauai
-            "${PROJECT_SOURCE_DIR}/kauai/src/framechk.h")
+            "${PROJECT_SOURCE_DIR}/kauai/src/framechk.h"
+            "${PROJECT_SOURCE_DIR}/kauai/src/kidchk.h")
 target_include_directories(
   kauai
     PUBLIC
