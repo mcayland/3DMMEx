@@ -241,8 +241,17 @@ file(GLOB building-chunk-sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/bu
 file(GLOB studio-chunk-sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/studio/*.cht")
 
 
+# Build frame chunk headers
+add_custom_command(
+    OUTPUT ${PROJECT_SOURCE_DIR}/kauai/src/framechk.h
+    DEPENDS ${PROJECT_SOURCE_DIR}/kauai/src/framechk.in
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -DINPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/framechk.in -DOUTPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/framechk.h -P ${PROJECT_SOURCE_DIR}/kauai/src/genfrchk.cmk
+)
+
 add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4430>)
-add_library(kauai)
+add_library(kauai
+            "${PROJECT_SOURCE_DIR}/kauai/src/framechk.h")
 target_include_directories(
   kauai
     PUBLIC
