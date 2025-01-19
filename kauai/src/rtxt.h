@@ -300,7 +300,7 @@ class TXRD : public TXRD_PAR
 
     TXRD(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
     ~TXRD(void);
-    bool _FInit(PFNI pfni = pvNil, CTG ctg = kctgRichText);
+    bool _FInit(PFNI pfni = pvNil, CTG ctg = kctgLRichText);
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText);
     virtual bool _FOpenArg(long icact, byte sprm, short bo, short osk);
 

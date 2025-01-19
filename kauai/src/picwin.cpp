@@ -44,7 +44,7 @@ PPIC PIC::PpicFetch(PCFL pcfl, CTG ctg, CNO cno, CHID chid)
 
     if (!pcfl->FFind(ctg, cno))
         return pvNil;
-    if (pcfl->FGetKidChidCtg(ctg, cno, chid, kctgMeta, &kid) && pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
+    if (pcfl->FGetKidChidCtg(ctg, cno, chid, kctgLMeta, &kid) && pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
     {
         return PpicRead(&blck);
     }
