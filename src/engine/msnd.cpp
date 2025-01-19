@@ -180,7 +180,7 @@ bool MSND::FWriteMidi(PCFL pcflDest, PMIDS pmids, STN *pstnName, CNO *pcno)
         return fFalse;
 
     // Create the midi chunk as a child of the msnd chunk
-    if (!pcflDest->FAddChild(kctgMsnd, *pcno, kchidSnd, pmids->CbOnFile(), kctgMidi, &cno, &blck))
+    if (!pcflDest->FAddChild(kctgMsnd, *pcno, kchidSnd, pmids->CbOnFile(), kctgLMidi, &cno, &blck))
         goto LFail;
 
     if (!pmids->FWrite(&blck))
@@ -229,10 +229,10 @@ bool MSND::FWriteWave(PFIL pfilSrc, PCFL pcflDest, long sty, STN *pstnName, CNO 
         return fFalse;
 
     // Create the wave chunk as a child of the msnd chunk
-    if (!pcflDest->FAddChild(kctgMsnd, *pcno, kchidSnd, floSrc.cb, kctgWave, &cno))
+    if (!pcflDest->FAddChild(kctgMsnd, *pcno, kchidSnd, floSrc.cb, kctgLWave, &cno))
         goto LFail;
 
-    if (!pcflDest->FFindFlo(kctgWave, cno, &floDest))
+    if (!pcflDest->FFindFlo(kctgLWave, cno, &floDest))
         goto LFail;
 
     if (!floSrc.FCopy(&floDest))
