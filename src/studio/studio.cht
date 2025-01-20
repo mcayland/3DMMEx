@@ -1173,7 +1173,7 @@ ENDCHUNK
 //
 // Miscellaneous studio strings
 //
-CHUNK (kctgGst kcnoGstMisc "Miscellaneous strings")
+CHUNK (kctgSGst kcnoGstMisc "Miscellaneous strings")
 	LONG
 	GST(4)
 	ITEM "%d / %d" idsBrowserPage

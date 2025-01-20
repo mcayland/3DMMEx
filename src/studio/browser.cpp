@@ -1684,7 +1684,7 @@ bool BCL::_FAddGokdToThd(PCFL pcfl, long sid, KID *pkid)
 
     thd.tag.sid = sid;
     thd.chidThum = pkid->chid;
-    if (pcfl->FGetKidChidCtg(cki.ctg, cki.cno, 0, kctgGokd, &kid))
+    if (pcfl->FGetKidChidCtg(cki.ctg, cki.cno, 0, kctgLGokd, &kid))
         thd.cno = kid.cki.cno;
     else
     {
@@ -2227,7 +2227,7 @@ bool BRWM::FCmdFile(PCMD pcmd)
         Assert(_sty == styMidi, "Portfolio should filter out Wave for this browser");
         if (_sty != styMidi)
             goto LEnd;
-        cki.ctg = kctgMidi;
+        cki.ctg = kctgLMidi;
         break;
 
     case kftgWave:
@@ -2235,7 +2235,7 @@ bool BRWM::FCmdFile(PCMD pcmd)
         // The score browser does not import wave files
         if (_sty == styMidi)
             goto LEnd;
-        cki.ctg = kctgWave;
+        cki.ctg = kctgLWave;
         break;
 
     case kftg3mm:
@@ -3057,7 +3057,7 @@ bool BRWR::FInit(PCMD pcmd, CTG ctgTmplThum, long ithumDisplay, PSTDIO pstdio)
                 SwapBytesBom(&tfc, kbomTfc);
             Assert(kboCur == tfc.bo, "bad TFC");
 
-            if (!pcfl->FGetKidChidCtg(ctgTmplThum, cki.cno, 0, kctgGokd, &kid))
+            if (!pcfl->FGetKidChidCtg(ctgTmplThum, cki.cno, 0, kctgLGokd, &kid))
             {
                 Warn("Actor content missing gokd");
                 continue;
