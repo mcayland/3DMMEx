@@ -54,8 +54,8 @@ class SCPT : public SCPT_PAR
     friend class SCCB;
 
 #ifdef DEBUG
-    FNI _fniSrc;           // Source file
-    STN _stnSrcChunk;      // Source chunk name
+    FNI _fniSrc;      // Source file
+    STN _stnSrcChunk; // Source chunk name
 
 #endif // DEBUG
 
