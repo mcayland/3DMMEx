@@ -40,3 +40,11 @@ void MUTX::Leave(void)
 
     LeaveCriticalSection(_crit);
 }
+
+/****************************************
+    Current thread id
+****************************************/
+inline long LwThreadCur(void)
+{
+    return GetCurrentThreadId();
+}

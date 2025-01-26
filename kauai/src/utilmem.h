@@ -263,12 +263,4 @@ inline long BvSubPvs(void *pv1, void *pv2)
 
 extern MUTX vmutxMem;
 
-/****************************************
-    Current thread id
-****************************************/
-inline long LwThreadCur(void)
-{
-    return MacWin(0, GetCurrentThreadId());
-}
-
 #endif //! UTILMEM_H
