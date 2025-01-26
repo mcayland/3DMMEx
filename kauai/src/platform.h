@@ -25,4 +25,10 @@ class MUTX
     void Leave(void);
 };
 
+/****************************************
+    Current thread id
+****************************************/
+
+extern inline uint32_t LwThreadCur(void);
+
 #endif //! PLATFORM_H
