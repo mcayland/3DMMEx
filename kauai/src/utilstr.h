@@ -41,9 +41,20 @@ const short koskWin = koskUniWin;
 const short koskMac = koskSbMac;
 const short koskWin = koskSbWin;
 #endif //! UNICODE
-const short koskCur = MacWin(koskMac, koskWin);
-const short koskSb = MacWin(koskSbMac, koskSbWin);
-const short koskUni = MacWin(koskUniMac, koskUniWin);
+
+#ifdef MAC
+const short koskCur = koskMac;
+const short koskSb = koskSbMac;
+const short koskUni = koskUniMac;
+#elif defined(WIN)
+const short koskCur = koskWin;
+const short koskSb = koskSbWin;
+const short koskUni = koskUniWin;
+#else // use Win defaults for other platforms
+const short koskCur = koskWin;
+const short koskSb = koskSbWin;
+const short koskUni = koskUniWin;
+#endif
 
 #ifdef DEBUG
 void AssertOsk(short osk);
