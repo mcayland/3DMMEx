@@ -29,4 +29,12 @@ class MUTX
 
 extern inline long LwThreadCur(void);
 
+/***************************************************************************
+    Universal scalable application clock and other time stuff
+***************************************************************************/
+
+extern const unsigned long kdtsSecond;
+extern unsigned long TsCurrentSystem(void);
+extern unsigned long DtsCaret(void);
+
 #endif //! PLATFORM_H

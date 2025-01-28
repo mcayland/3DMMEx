@@ -19,7 +19,6 @@
 /***************************************************************************
     Universal scalable application clock and other time stuff
 ***************************************************************************/
-const ulong kdtsSecond = MacWin(60, 1000);
 const ulong kluTimeScaleNormal = 0x00010000;
 
 typedef class USAC *PUSAC;
@@ -54,15 +53,6 @@ extern PUSAC vpusac;
 inline ulong TsCurrent(void)
 {
     return vpusac->TsCur();
-}
-inline ulong TsCurrentSystem(void)
-{
-    // n.b. WIN: timeGetTime is more accurate than GetTickCount
-    return MacWin(TickCount(), timeGetTime());
-}
-inline ulong DtsCaret(void)
-{
-    return MacWin(GetCaretTime(), GetCaretBlinkTime());
 }
 
 /***************************************************************************
