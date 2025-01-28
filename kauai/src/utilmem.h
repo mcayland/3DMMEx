@@ -153,6 +153,11 @@ inline void *QvFromHq(HQ hq)
 {
     return (void *)hq;
 }
+#else
+inline void *QvFromHq(HQ hq)
+{
+    return (void *)hq;
+}
 #endif // WIN
 
 #define AssertHq(hq)
