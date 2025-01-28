@@ -58,8 +58,10 @@ typedef struct WizSpecChars
 #ifndef SC_FAR
 #ifdef MAC
 #define SC_FAR
-#else
+#elif defined(WIN)
 #define SC_FAR far
+#else
+#define SC_FAR
 #endif
 #endif
 
