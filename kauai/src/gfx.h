@@ -783,5 +783,6 @@ extern long vcactRealize;
 ****************************************/
 void GfxHideCursor(void);
 void GfxShowCursor(void);
+void GfxSetCursorPos(long xpScreen, long ypScreen);
 
 #endif //! GFX_H

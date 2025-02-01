@@ -266,22 +266,7 @@ void APPB::PositionCurs(long xpScreen, long ypScreen)
     AssertThis(0);
 
     // REVIEW shonk: implement on Mac
-    MacWin(RawRtn(), SetCursorPos(xpScreen, ypScreen));
-
-#ifdef WIN
-    if (_fFlushCursor)
-    {
-        // APPB::TrackMouse gets the mouse position by peeking the message queue for WM_MOUSE* messages.
-        // After the cursor position has been reset, there may still be some WM_MOUSEMOVE messages with old
-        // cooordinates in the message queue. This can cause jitter when dragging actors around the stage.
-        // Flush all mouse move messages from this thread's message queue.
-        MSG msg;
-        while (PeekMessage(&msg, hNil, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE | PM_NOYIELD))
-        {
-            // do nothing
-        }
-    }
-#endif // WIN
+    GfxSetCursorPos(xpScreen, ypScreen);
 }
 
 /***************************************************************************

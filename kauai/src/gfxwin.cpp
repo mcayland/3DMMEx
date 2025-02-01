@@ -2025,3 +2025,8 @@ void GfxShowCursor(void)
 {
     ShowCursor(fTrue);
 }
+
+void GfxSetCursorPos(long xpScreen, long ypScreen)
+{
+    SetCursorPos(xpScreen, ypScreen);
+}
