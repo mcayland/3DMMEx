@@ -245,7 +245,7 @@ void APPB::HideCurs(void)
 {
     AssertThis(0);
 
-    MacWin(HideCursor(), ShowCursor(fFalse));
+    GfxHideCursor();
 }
 
 /***************************************************************************

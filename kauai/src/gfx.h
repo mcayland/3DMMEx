@@ -778,4 +778,9 @@ void DoubleVertStretch(byte *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, by
 // change.
 extern long vcactRealize;
 
+/****************************************
+    Cursors.
+****************************************/
+void GfxHideCursor(void);
+
 #endif //! GFX_H

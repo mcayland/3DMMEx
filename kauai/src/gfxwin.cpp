@@ -2012,3 +2012,11 @@ bool FEqualRgn(HRGN hrgn1, HRGN hrgn2)
     Assert(hNil != hrgn2, "null rgn2");
     return EqualRgn(hrgn1, hrgn2);
 }
+
+/***************************************************************************
+    Cursors.
+***************************************************************************/
+void GfxHideCursor(void)
+{
+    ShowCursor(fFalse);
+}
