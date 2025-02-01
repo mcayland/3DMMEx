@@ -2020,3 +2020,8 @@ void GfxHideCursor(void)
 {
     ShowCursor(fFalse);
 }
+
+void GfxShowCursor(void)
+{
+    ShowCursor(fTrue);
+}

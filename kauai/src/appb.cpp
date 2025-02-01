@@ -255,7 +255,7 @@ void APPB::ShowCurs(void)
 {
     AssertThis(0);
 
-    MacWin(ShowCursor(), ShowCursor(fTrue));
+    GfxShowCursor();
 }
 
 /***************************************************************************
