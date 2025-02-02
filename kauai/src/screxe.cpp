@@ -145,14 +145,35 @@ bool SCEB::FAttachScript(PSCPT pscpt, long *prglw, long clw)
     if (pscpt != pvNil)
     {
         STN stnTrace;
+        STN stnParams;
+
         if (pscpt->_stnSrcChunk.Cch() > 0)
         {
-            stnTrace.FFormatSz(PszLit("Executing: %f:%d: %s\n"), pscpt->Ctg(), pscpt->Cno(), &pscpt->_stnSrcChunk);
+            stnTrace.FFormatSz(PszLit("Executing: %f:%d: %s"), pscpt->Ctg(), pscpt->Cno(), &pscpt->_stnSrcChunk);
         }
         else
         {
-            stnTrace.FFormatSz(PszLit("Executing: %f:%d\n"), pscpt->Ctg(), pscpt->Cno());
+            stnTrace.FFormatSz(PszLit("Executing: %f:%d"), pscpt->Ctg(), pscpt->Cno());
         }
+
+        if (clw > 0)
+        {
+            STN stnT;
+            stnParams = PszLit(" (");
+            for (int ilw = 0; ilw < clw; ilw++)
+            {
+                if (ilw > 0)
+                {
+                    stnParams.FAppendSz(PszLit(", "));
+                }
+                stnT.FFormatSz(PszLit("0x%x"), prglw[ilw]);
+                stnParams.FAppendStn(&stnT);
+            }
+            stnParams.FAppendSz(PszLit(")"));
+            stnTrace.FAppendStn(&stnParams);
+        }
+
+        stnTrace.FAppendCh(ChLit('\n'));
         OutputDebugStringA(stnTrace.Psz());
     }
 #endif // DEBUG
