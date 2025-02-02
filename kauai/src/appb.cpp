@@ -280,7 +280,7 @@ long APPB::OnnDefVariable(void)
     {
         STN stn;
 
-        stn = MacWin(PszLit("New York"), PszLit("Times New Roman"));
+        stn = AppFontDefVariable();
         if (!vntl.FGetOnn(&stn, &_onnDefVariable))
             _onnDefVariable = vntl.OnnSystem();
     }

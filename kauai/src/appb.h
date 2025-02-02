@@ -350,4 +350,9 @@ enum
     cokStop,        // inform the user that we can't do that
 };
 
+/****************************************
+    Fonts.
+****************************************/
+PSZ AppFontDefVariable(void);
+
 #endif //! APPB_H

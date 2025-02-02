@@ -1075,3 +1075,12 @@ tribool APPB::TGiveAlertSz(const PSZ psz, long bk, long cok)
         return tNo;
     }
 }
+
+/****************************************
+    Fonts.
+****************************************/
+PSZ AppFontDefVariable(void)
+{
+    // Default variable pitch font
+    return PszLit("Times New Roman");
+}
