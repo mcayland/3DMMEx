@@ -128,7 +128,14 @@ CHILD_SCRIPT("Spletter Color, track mouse", kchidScript1)
 	EnqueueCid(cidBrowserCancel, kidSpltsColor, 0, 0, 0, 0);
 	Return(fFalse);
 ENDCHUNK
-CHILD_SCRIPT("Spletter Color, disable keys", kchidScript2)
+CHILD_SCRIPT("Spletter Color, handle keys", kchidScript2)
+	If(_parm[3] == kvkeyDown);
+		EnqueueCid(cidBrowserFwd, kidSpltsColor, 0, 0, 0, 0);
+	Elif(_parm[3] == kvkeyUp);
+		EnqueueCid(cidBrowserBack, kidSpltsColor, 0, 0, 0, 0);
+	Elif (_parm[3] == kvkeyEscape);
+		EnqueueCid(cidBrowserCancel, kidSpltsColor, 0, 0, 0, 0);
+	End;
 	Return(fTrue);
 ENDCHUNK
 
@@ -273,7 +280,17 @@ CHILD_SCRIPT("Spletter Shape, track mouse", kchidScript1)
 	EnqueueCid(cidBrowserCancel, kidSpltsShape, 0, 0, 0, 0);
 	Return(fFalse);
 ENDCHUNK
-CHILD_SCRIPT("Spletter Shape, disable keys", kchidScript2)
+CHILD_SCRIPT("Spletter Shape, handle keys", kchidScript2)
+	If(_parm[3] == kvkeyDown);
+		// down arrow key
+		EnqueueCid(cidBrowserFwd, kidSpltsShape, 0, 0, 0, 0);
+	Elif(_parm[3] == kvkeyUp);
+		// up arrow key
+		EnqueueCid(cidBrowserBack, kidSpltsShape, 0, 0, 0, 0);
+	Elif (_parm[3] == kvkeyEscape);
+		// escape key
+		EnqueueCid(cidBrowserCancel, kidSpltsShape, 0, 0, 0, 0);
+	End;
 	Return(fTrue);
 ENDCHUNK
 
