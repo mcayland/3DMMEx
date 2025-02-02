@@ -298,7 +298,7 @@ long APPB::OnnDefFixed(void)
     {
         STN stn;
 
-        stn = MacWin(PszLit("Courier"), PszLit("Courier New"));
+        stn = AppFontDefFixed();
         if (!vntl.FGetOnn(&stn, &_onnDefFixed))
         {
             // just use the first fixed pitch font

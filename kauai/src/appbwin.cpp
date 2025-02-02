@@ -1084,3 +1084,9 @@ PSZ AppFontDefVariable(void)
     // Default variable pitch font
     return PszLit("Times New Roman");
 }
+
+PSZ AppFontDefFixed(void)
+{
+    // Default fixed pitch font
+    return PszLit("Courier New");
+}

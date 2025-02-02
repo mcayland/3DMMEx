@@ -354,5 +354,6 @@ enum
     Fonts.
 ****************************************/
 PSZ AppFontDefVariable(void);
+PSZ AppFontDefFixed(void);
 
 #endif //! APPB_H
