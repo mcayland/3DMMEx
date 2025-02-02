@@ -190,8 +190,18 @@ REP_MBMPREG(CHID(kstDefault, krepMouseDnOn), "studio\bmp\e1canc.bmp",
 	kxpregSpltCancel, kypregSpltCancel)
 ADOPT_MBMP(LAST_MBMP, CHID(kstSelected, krepDefault))
 ADOPT_WAVE(kcnoCancelWav, CHID(kstDefault, krepClicked))
+CREATE_SCRIPT("Spletters easel created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
 CLICK_SCRIPT("Cancel clicked")
 	EnqueueCid(cidEaselCancel, kidSpltGlass, 0, 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Spletters easel, cancel, key press", kchidScript2)
+	If(_parm[2] == kvkeyEscape);
+		EnqueueCid(cidEaselCancel, kidSpltGlass, 0, 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 //
@@ -349,8 +359,18 @@ REP_MBMPREG(CHID(kstDefault, krepMouseDnOn), "studio\bmp\e2canc.bmp",
 	kxpregCostCancel, kypregCostCancel)
 ADOPT_MBMP(LAST_MBMP, CHID(kstSelected, krepDefault))
 ADOPT_WAVE(kcnoCancelWav, CHID(kstDefault, krepClicked))
+CREATE_SCRIPT("Costume easel created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
 CLICK_SCRIPT("Cancel clicked")
 	EnqueueCid(cidEaselCancel, kidCostGlass, 0, 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Costume easel, cancel, key press", kchidScript2)
+	If(_parm[2] == kvkeyEscape);
+		EnqueueCid(cidEaselCancel, kidCostGlass, 0, 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 //
@@ -752,11 +772,29 @@ ADOPT_MBMP(LAST_MBMP, CHID(kstDefault, krepMouseDnOff))
 REP_MBMPREG(CHID(kstDefault, krepMouseDnOn), "studio\bmp\e3canc.bmp",
 	kxpregSSorterCancel, kypregSSorterCancel)
 ADOPT_WAVE(kcnoCancelWav, CHID(kstDefault, krepClicked))
+CREATE_SCRIPT("Scene sorter, cancel, created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
+
 CLICK_SCRIPT("Scene sorter, cancel, clicked")
 	EnqueueCid(cidSceneSortCancel, kidSSorterBackground, 0, 0, 0, 0);
 	OldState = GetModifierState();
 	OldState &= (fcustHand | fcustNuke);
 	ChangeModifierState(0, OldState);
+ENDCHUNK
+
+CHILD_SCRIPT("Scene sorter, cancel, key press", kchidScript2)
+	If(_parm[2] == kvkeyEscape);
+		EnqueueCid(cidSceneSortCancel, kidSSorterBackground, 0, 0, 0, 0);
+		OldState = GetModifierState();
+		OldState &= (fcustHand | fcustNuke);
+		ChangeModifierState(0, OldState);
+        Return(fTrue);
+    End;
+
+	// unhandled
+    Return(fFalse);
+
 ENDCHUNK
 
 //
@@ -1614,8 +1652,19 @@ REP_MBMPREG(CHID(kstDefault, krepMouseDnOn), "studio\bmp\e4canc.bmp",
 	kxpregListenCancel, kypregListenCancel)
 ADOPT_MBMP(LAST_MBMP, CHID(kstSelected, krepDefault))
 ADOPT_WAVE(kcnoCancelWav, CHID(kstDefault, krepClicked))
-CHILD_SCRIPT("Listener easel cancel", CHID(kstDefault, kchidClick))
+
+CREATE_SCRIPT("Listener easel cancel created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
+CHILD_SCRIPT("Listener easel cancel clicked", CHID(kstDefault, kchidClick))
 	EnqueueCid(cidEaselCancel, GidParGob(GidParThis()), 0, 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Listener easel cancel, key press", kchidScript2)
+	If(_parm[2] == kvkeyEscape);
+		EnqueueCid(cidEaselCancel, GidParGob(GidParThis()), 0, 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 //
@@ -1849,8 +1898,18 @@ REP_MBMPREG(CHID(kstDefault, krepMouseDnOn), "studio\bmp\e5canc.bmp",
 	kxpregRecordCancel, kypregRecordCancel)
 ADOPT_MBMP(LAST_MBMP, CHID(kstSelected, krepDefault))
 ADOPT_WAVE(kcnoCancelWav, CHID(kstDefault, krepClicked))
+CREATE_SCRIPT("Recorder easel cancel created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
 CLICK_SCRIPT("Recorder easel cancel")
 	EnqueueCid(cidEaselCancel, kidRecordGlass, 0, 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Recorder easel cancel, key press", kchidScript2)
+	If(_parm[2] == kvkeyEscape);
+		EnqueueCid(cidEaselCancel, kidRecordGlass, 0, 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 //

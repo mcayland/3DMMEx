@@ -65,8 +65,18 @@ REP_MBMPREG(CHID(kstBrowserEnabled, krepMouseDnOn), "studio\bmp\cancelc.bmp",
 	kxpregGenericCancel, kypregGenericCancel)
 REP_RECT(CHID(kstBrowserDisabled, krepDefault ), "hidden", 0, 0, 0, 0)
 ADOPT_WAVE(kcnoCancelWav, CHID(kstBrowserEnabled, krepClicked))
+CREATE_SCRIPT("Browser cancel created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
 CLICK_SCRIPT("Browser cancel clicked")
 	EnqueueCid(cidBrowserCancel, GidParGob(GidParThis()), GidThis(), 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Browser cancel key press", kchidScript2)
+	If(_parm[2] == kvkeyEscape);
+		EnqueueCid(cidBrowserCancel, GidParGob(GidParThis()), GidThis(), 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 GOBCHUNK("Generic browser Okay", kidGenericOk, kgokkRectHit)
