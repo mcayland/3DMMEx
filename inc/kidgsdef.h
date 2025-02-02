@@ -86,4 +86,11 @@
 // Nil runtime Gob ID
 #define kidNil 0
 
+// Virtual key codes
+#define kvkeyEscape 0x1b
+#define kvkeyLeft 0x25
+#define kvkeyUp 0x26
+#define kvkeyRight 0x27
+#define kvkeyDown 0x28
+
 #endif // !KIDGSDEF_H
