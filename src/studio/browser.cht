@@ -31,8 +31,18 @@ REP_MBMPREG(CHID(kstBrowserEnabled, krepMouseDnOn), "studio\bmp\fwdc.bmp",
 	kxpregGenericPageFwd, kypregGenericPageFwd)
 REP_RECT(CHID(kstBrowserDisabled, krepDefault ), "hidden", 0, 0, 0, 0)
 ADOPT_WAVE(kcnoBrwzBtnWav, CHID(kstBrowserEnabled, krepClicked))
+CREATE_SCRIPT("Browser page fwd created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
 CLICK_SCRIPT("Browser page fwd clicked")
 	EnqueueCid(cidBrowserFwd, GidParGob(GidParThis()), GidThis(), 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Browser page fwd key press", kchidScript2)
+	If(_parm[3] == kvkeyRight);
+		EnqueueCid(cidBrowserFwd, GidParGob(GidParThis()), GidThis(), 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 GOBCHUNK("Generic browser page back", kidGenericPageBack, kgokkRectHit)
@@ -48,8 +58,18 @@ REP_MBMPREG(CHID(kstBrowserEnabled, krepMouseDnOn), "studio\bmp\bbackc.bmp",
 	kxpregGenericPageBack, kypregGenericPageBack)
 REP_RECT(CHID(kstBrowserDisabled, krepDefault ), "hidden", 0, 0, 0, 0)
 ADOPT_WAVE(kcnoBrwzBtnWav, CHID(kstBrowserEnabled, krepClicked))
+CREATE_SCRIPT("Browser page back created")
+	FilterCmdsThis(cidKey, kidNil, kchidScript2)
+ENDCHUNK
 CLICK_SCRIPT("Browser page back clicked")
 	EnqueueCid(cidBrowserBack, GidParGob(GidParThis()), GidThis(), 0, 0, 0);
+ENDCHUNK
+CHILD_SCRIPT("Browser page back key press", kchidScript2)
+	If(_parm[3] == kvkeyLeft);
+		EnqueueCid(cidBrowserBack, GidParGob(GidParThis()), GidThis(), 0, 0, 0);
+		Return(fTrue);
+	End;
+	Return(fFalse);
 ENDCHUNK
 
 GOBCHUNK("Generic browser cancel", kidGenericCancel, kgokkRectHit)
