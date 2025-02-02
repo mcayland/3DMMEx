@@ -62,10 +62,14 @@ WAVE_CHUNK( "building\sound\studio\STD4.wav", kwavStudioIntro )
 
 OBJECT("studio1: TOOLS INTRO ", kgobToolsIntroAVI, 999, kcrsHand1)
 	REP_VIDEO( CHID1( krepDefault ), "tools1.avi", fTrue )
+	CREATE_SCRIPT("studio1: TOOLS INTRO: created")
+		// If any key is pressed, call the click script to stop the video
+		FilterCmdsThis(cidKey, kidNil, CHID1( kchidClick ))
+	ENDCHUNK
 	CLICK_SCRIPT( "clicked tools intro" )
 		// stop playing... the polling will catch and throw
 		// us to the tools
-		StopThis();	
+		StopThis();
 	ENDCHUNK
 
 
