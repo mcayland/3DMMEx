@@ -277,6 +277,7 @@ bool SCB::_FCreate(long val, long valMin, long valMax, ulong grfscb)
     RCS rcs;
     HWND hwnd;
     HCTL hctl;
+    bool fRedraw;
 
     _fVert = FPure(grfscb & fscbVert);
     if ((hwnd = _HwndGetRc(&rc)) == hNil)
@@ -294,6 +295,7 @@ bool SCB::_FCreate(long val, long valMin, long valMax, ulong grfscb)
     if (hctl == hNil || !_FSetHctl(hctl))
         return fFalse;
     ValidRc(pvNil);
+    fRedraw = fTrue;
 #endif // MAC
 #ifdef WIN
     hctl = CreateWindow(PszLit("SCROLLBAR"), PszLit(""), (_fVert ? SBS_VERT : SBS_HORZ) | WS_CHILD | WS_VISIBLE,
@@ -302,9 +304,10 @@ bool SCB::_FCreate(long val, long valMin, long valMax, ulong grfscb)
         return fFalse;
     SetScrollRange(hctl, SB_CTL, 0, _klwMaxScroll, fFalse);
     SetScrollPos(hctl, SB_CTL, 0, fFalse);
+    fRedraw = fFalse;
 #endif // WIN
 
-    SetValMinMax(val, valMin, valMax, MacWin(fTrue, fFalse));
+    SetValMinMax(val, valMin, valMax, fRedraw);
     return fTrue;
 }
 
