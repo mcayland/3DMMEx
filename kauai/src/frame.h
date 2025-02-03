@@ -16,6 +16,7 @@
 #ifndef FRAME_H
 #define FRAME_H
 
+#include <cassert>
 #include "frameres.h" //frame resource id's
 #include "util.h"
 #include "keys.h"
