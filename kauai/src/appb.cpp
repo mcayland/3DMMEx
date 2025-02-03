@@ -1099,6 +1099,7 @@ void APPB::InvalMarked(HWND hwnd)
     AssertThis(0);
     Assert(hNil != hwnd, "bad hwnd");
 
+#ifdef WIN
     long imkrgn;
     MKRGN mkrgn;
     RC rc;
@@ -1121,6 +1122,9 @@ void APPB::InvalMarked(HWND hwnd)
             _pglmkrgn->Delete(imkrgn);
         }
     }
+#else
+    assert(0);
+#endif
 }
 
 /***************************************************************************
