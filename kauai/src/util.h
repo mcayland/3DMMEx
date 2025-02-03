@@ -58,6 +58,10 @@ typedef HPALETTE HPAL;
 typedef HCURSOR HCRS;
 #define hBadWin INVALID_HANDLE_VALUE // some windows APIs return this
 
+#else
+
+#include "posixsdl.h"
+
 #endif // WIN
 
 #define SIZEOF(foo) ((long)sizeof(foo))
