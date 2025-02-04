@@ -369,7 +369,7 @@ bool DOCB::FSaveToFni(FNI *pfni, bool fSetFni)
 ***************************************************************************/
 bool DOCB::FGetFniSave(FNI *pfni)
 {
-    return FGetFniSaveMacro(pfni, 'TEXT',
+    return FGetFniSaveMacro(pfni, KLCONST4('T', 'E', 'X', 'T'),
                             "\x9"
                             "Save As: ",
                             "", PszLit("All files\0*.*\0"), vwig.hwndApp);
