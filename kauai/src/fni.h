@@ -103,6 +103,10 @@ class FNI : public FNI_PAR
     bool FGetOpen(achar *prgchFilter, HWND hwndOwner);
     bool FGetSave(achar *prgchFilter, HWND hwndOwner);
     bool FSearchInPath(PSTN pstn, PSTN pstnEnv = pvNil);
+#else
+    bool FGetOpen(achar *prgchFilter, HWND hwndOwner);
+    bool FGetSave(achar *prgchFilter, HWND hwndOwner);
+    bool FSearchInPath(PSTN pstn, PSTN pstnEnv = pvNil);
 #endif                                                   // WIN
     bool FBuildFromPath(PSTN pstn, FTG ftgDef = ftgNil); // REVIEW shonk: Mac: implement
     bool FGetUnique(FTG ftg);
@@ -131,8 +135,10 @@ class FNI : public FNI_PAR
 #ifdef MAC
 #define FGetFniOpenMacro(pfni, prgftg, cftg, prgchFilter, hwndOwner) (pfni)->FGetOpen(prgftg, cftg)
 #define FGetFniSaveMacro(pfni, ftg, pstPrompt, pstDef, prgchFilter, hwndOwner) (pfni)->FGetSave(ftg, pstPrompt, pstDef)
-#endif // MAC
-#ifdef WIN
+#elif defined(WIN)
+#define FGetFniOpenMacro(pfni, prgftg, cftg, prgchFilter, hwndOwner) (pfni)->FGetOpen(prgchFilter, hwndOwner)
+#define FGetFniSaveMacro(pfni, ftg, pstPrompt, pstDef, prgchFilter, hwndOwner) (pfni)->FGetSave(prgchFilter, hwndOwner)
+#else
 #define FGetFniOpenMacro(pfni, prgftg, cftg, prgchFilter, hwndOwner) (pfni)->FGetOpen(prgchFilter, hwndOwner)
 #define FGetFniSaveMacro(pfni, ftg, pstPrompt, pstDef, prgchFilter, hwndOwner) (pfni)->FGetSave(prgchFilter, hwndOwner)
 #endif // WIN
