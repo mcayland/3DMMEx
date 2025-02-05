@@ -62,8 +62,7 @@ inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
     ValidRect(prcs);
     SetPort(pprt);
 }
-#endif // MAC
-#ifdef WIN
+#elsif defined(WIN) // MAC
 inline void InvalHwndRcs(HWND hwnd, RCS *prcs)
 {
     InvalidateRect(hwnd, prcs, fFalse);
@@ -72,7 +71,20 @@ inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
 {
     ValidateRect(hwnd, prcs);
 }
-#endif // WIN
+#else // WIN
+inline void GetClientRect(HWND hwnd, RCS *prcs)
+{
+    assert(0);
+}
+inline void InvalHwndRcs(HWND hwnd, RCS *prcs)
+{
+    assert(0);
+}
+inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
+{
+    assert(0);
+}
+#endif
 
 // coordinates
 enum
