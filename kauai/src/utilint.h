@@ -344,6 +344,18 @@ typedef Point PTS;
 #elif defined(WIN)
 typedef RECT RCS;
 typedef POINT PTS;
+#else
+typedef struct _RECT {
+    int left;
+    int right;
+    int top;
+    int bottom;
+} RCS;
+
+typedef struct _PTS {
+    int x;
+    int y;
+} PTS;
 #endif // WIN
 
 /****************************************
