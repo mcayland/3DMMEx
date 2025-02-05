@@ -644,9 +644,8 @@ class GPT : public GPT_PAR
     SCR _Scr(ACR acr);
 
     bool _FInit(HDC hdc);
-#endif // WIN
 
-#ifdef MAC
+#elsif defined(MAC)
     static HCLT _hcltDef;
     static bool _fForcePalOnSys;
     static HCLT _HcltUse(long cbitPixel);
@@ -678,6 +677,10 @@ class GPT : public GPT_PAR
     void _FramePoly(HQ *phqoly);
     void _DrawLine(PTS *prgpts);
     void _GetRcsFromRgch(RCS *prcs, achar *prgch, short cch, PTS *ppts, DSF *pdsf);
+
+#else
+    bool _fNewClip : 1; // unknown
+
 #endif // MAC
 
     // low level draw routine
