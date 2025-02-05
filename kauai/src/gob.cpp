@@ -1148,8 +1148,7 @@ PGOB GOB::PgobFromPtGlobal(long xp, long yp, PT *pptLocal)
     GlobalToLocal(&pts);
     SetPort(pprt);
     return pgob->PgobFromPt(pts.h, pts.v, pptLocal);
-#endif // MAC
-#ifdef WIN
+#elsif defined(WIN) // MAC
     pts.x = xp;
     pts.y = yp;
     if (hNil == (hwnd = WindowFromPoint(pts)) || pvNil == (pgob = PgobFromHwnd(hwnd)))
@@ -1163,7 +1162,10 @@ PGOB GOB::PgobFromPtGlobal(long xp, long yp, PT *pptLocal)
     }
     ScreenToClient(hwnd, &pts);
     return pgob->PgobFromPt(pts.x, pts.y, pptLocal);
-#endif // WIN
+#else // WIN
+    assert(0);
+    return NULL;
+#endif
 }
 
 /***************************************************************************
