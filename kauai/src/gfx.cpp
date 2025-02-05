@@ -734,7 +734,10 @@ HQ GNV::_HqolyFrame(POGN pogn, ulong grfogn)
     return hqoly;
 #elif defined(MAC)
     return _HqolyCreate(pogn, grfogn);
-#endif // MAC
+#else  // MAC
+    assert(0);
+    return NULL;
+#endif
 }
 
 /***************************************************************************
