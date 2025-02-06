@@ -356,12 +356,13 @@ void *CLIP::PvExport(long cb, long clfm)
 
     _clfmExport = clfm;
     return GlobalLock(_hnExport);
-#endif // WIN
-
-#ifdef MAC
+#elsif defined(MAC)
     RawRtn(); // REVIEW shonk: Mac: implement CLIP::PvExport
     return pvNil;
-#endif // MAC
+#else // MAC
+    assert(0);
+    return NULL;
+#endif
 }
 
 /***************************************************************************
