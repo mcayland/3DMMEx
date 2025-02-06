@@ -427,7 +427,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
 #endif // LITTLE_ENDIAN
 
     // make sure it's a valid header chunk
-    if (midhed.midchd.lwSig != 'MThd' || !FIn(midhed.midchd.cb + SIZEOF(midchd), SIZEOF(midhed), flo.cb))
+    if (midhed.midchd.lwSig != KLCONST4('M', 'T', 'h', 'd') || !FIn(midhed.midchd.cb + SIZEOF(midchd), SIZEOF(midhed), flo.cb))
     {
         goto LFail;
     }
@@ -455,7 +455,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
             goto LFail;
 
         // if it's not a track chunk ignore it
-        if (midchd.lwSig != 'MTrk' || midchd.cb == 0)
+        if (midchd.lwSig != KLCONST4('M', 'T', 'r', 'k') || midchd.cb == 0)
         {
             fp += midchd.cb;
             continue;
