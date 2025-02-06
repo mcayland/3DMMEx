@@ -748,8 +748,7 @@ LDone:
         *pfUpsideDown = bmh.bmih.biHeight < 0;
     ReleasePpo(&pfil);
     return fTrue;
-#endif // WIN
-#ifdef MAC
+#elsif defined(MAC)
     if (pvNil != pprgb)
         *pprgb = pvNil;
     if (pvNil != ppglclr)
@@ -760,7 +759,10 @@ LDone:
     TrashVar(pfUpsideDown);
     RawRtn(); // REVIEW peted: Mac FReadBitmap NYI
     return fFalse;
-#endif // MAC
+#else // MAC
+    assert(0);
+    return fFalse;
+#endif
 }
 
 /***************************************************************************
@@ -862,9 +864,11 @@ LFail:
         ReleasePpo(&pfil);
     }
     return fRet;
-#endif // WIN
-#ifdef MAC
+#elsif defined(MAC)
     RawRtn(); // REVIEW peted: Mac FWriteBitmap NYI
     return fFalse;
-#endif // MAC
+#else // MAC
+    assert(0);
+    return fFalse;
+#endif
 }
