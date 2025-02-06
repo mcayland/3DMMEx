@@ -1155,8 +1155,7 @@ HRGN REGN::HrgnCreate(void)
     hrgn = ExtCreateRegion(pvNil, SIZEOF(RGNDATAHEADER) + LwMul(crc, SIZEOF(RECT)), (RGNDATA *)prd);
     FreePpv((void **)&prd);
     return hrgn;
-#endif // WIN
-#ifdef MAC
+#elsif defined(MAC)
     HRGN hrgn;
 
     if (pvNil == _pglxp)
@@ -1265,7 +1264,10 @@ HRGN REGN::HrgnCreate(void)
     Assert(psw == PvAddBv(*hrgn, cb), "wrong size!");
     HUnlock((HN)hrgn);
     return hrgn;
-#endif // MAC
+#else
+    assert(0);
+    return 0;
+#endif
 }
 
 /***************************************************************************
