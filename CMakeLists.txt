@@ -43,6 +43,11 @@ if (WIN32)
   find_package(BRender REQUIRED)
 endif()
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  # Disable warnings about string literals
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
+endif()
+
 # Options
 option(BUILD_PACKAGES "Build packages for 3DMM" ON)
 
