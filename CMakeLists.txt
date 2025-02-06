@@ -311,7 +311,6 @@ target_sources(kauai
     "${PROJECT_SOURCE_DIR}/kauai/src/scrcomg.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/screxe.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/screxeg.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/sndm.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/spell.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/stream.cpp"
@@ -330,6 +329,7 @@ target_sources(kauai
     # Windows implementations
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/appbwin.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/dlgwin.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/filewin.cpp>
