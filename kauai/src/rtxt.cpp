@@ -1293,10 +1293,17 @@ bool TXRD::FGetFniSave(FNI *pfni)
 {
     // REVIEW shonk: what file type to use on Mac?
     AssertThis(0);
+#ifdef WIN
     return FGetFniSaveMacro(pfni, 'CHN2',
                             "\x9"
                             "Save As: ",
                             "", PszLit("All files\0*.*\0"), vwig.hwndApp);
+#else
+    return FGetFniSaveMacro(pfni, 'CHN2',
+                            "\x9"
+                            "Save As: ",
+                            "", PszLit("All files\0*.*\0"), 0);
+#endif
 }
 
 /***************************************************************************
