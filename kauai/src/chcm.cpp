@@ -2304,10 +2304,12 @@ bool CHLX::FGetPath(FNI *pfni)
     if (0 != SearchPath(_szInclude, stn.Psz(), pvNil, kcchMaxSz, szT, pvNil))
         stn = szT;
     return pfni->FBuildFromPath(&stn);
-#endif // WIN
-#ifdef MAC
+#elsif defined(MAC)
     return pfni->FBuild(0, 0, &stn, kftgText);
-#endif // MAC
+#else // MAC
+    assert(0);
+    return NULL;
+#endif
 }
 
 /***************************************************************************
