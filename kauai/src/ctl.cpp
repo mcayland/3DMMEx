@@ -87,10 +87,12 @@ PCTL CTL::PctlFromHctl(HCTL hctl)
 {
 #ifdef MAC
     return (PCTL)GetCRefCon(hctl);
-#endif // MAC
-#ifdef WIN
+#elsif defined(WIN)
     return (PCTL)GetProp(hctl, _szCtlProp);
-#endif // WIN
+#else
+    assert(0);
+    return NULL;
+#endif
 }
 
 /***************************************************************************
@@ -203,10 +205,12 @@ long SCB::DxpNormal(void)
     if (_dxp > 0)
         return _dxp;
     return (_dxp = GetSystemMetrics(SM_CXVSCROLL));
-#endif // WIN
-#ifdef MAC
+#elsif defined(MAC)
     return 16;
-#endif // MAC
+#else
+    assert(0);
+    return 0;
+#endif
 }
 
 /***************************************************************************
@@ -220,10 +224,12 @@ long SCB::DypNormal(void)
     if (_dyp > 0)
         return _dyp;
     return (_dyp = GetSystemMetrics(SM_CYHSCROLL));
-#endif // WIN
-#ifdef MAC
+#elsif defined(MAC)
     return 16;
-#endif // MAC
+#else // MAC
+    assert(0);
+    return 0;
+#endif
 }
 
 /***************************************************************************
