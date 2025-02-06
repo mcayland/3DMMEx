@@ -1276,6 +1276,7 @@ HRGN REGN::HrgnCreate(void)
 ***************************************************************************/
 HRGN REGN::HrgnEnsure(void)
 {
+#ifdef WIN
     if (hNil != _hrgn)
     {
         if (_dptRgn.xp != 0 || _dptRgn.yp != 0)
@@ -1289,6 +1290,10 @@ HRGN REGN::HrgnEnsure(void)
     _dptRgn.xp = _dptRgn.yp = 0;
     _hrgn = HrgnCreate();
     return _hrgn;
+#else
+    assert(0);
+    return 0;
+#endif
 }
 
 #ifdef DEBUG
