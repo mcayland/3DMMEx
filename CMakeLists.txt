@@ -302,8 +302,6 @@ target_sources(kauai
     "${PROJECT_SOURCE_DIR}/kauai/src/mbmp.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/mbmpgui.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/midi.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/mssio.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/pic.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/region.cpp"
@@ -330,6 +328,8 @@ target_sources(kauai
     "${PROJECT_SOURCE_DIR}/kauai/src/video.cpp"
 
     # Windows implementations
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/appbwin.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/dlgwin.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/filewin.cpp>
