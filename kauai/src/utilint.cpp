@@ -527,8 +527,8 @@ PT::operator PTS(void)
     AssertThisMem();
     PTS pts;
 
-    MacWin(pts.h, pts.x) = SwTruncLw(xp);
-    MacWin(pts.v, pts.y) = SwTruncLw(yp);
+    pts.x = SwTruncLw(xp);
+    pts.y = SwTruncLw(yp);
     return pts;
 }
 
@@ -538,8 +538,8 @@ PT::operator PTS(void)
 PT &PT::operator=(PTS &pts)
 {
     AssertThisMem();
-    xp = MacWin(pts.h, pts.x);
-    yp = MacWin(pts.v, pts.y);
+    xp = pts.x;
+    yp = pts.y;
     return *this;
 }
 
