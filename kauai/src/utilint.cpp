@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include <cmath>
+#include "platform.h"
 
 ASSERTNAME
 
@@ -1081,7 +1082,7 @@ void RAT::AssertValid(ulong grf)
 USAC::USAC(void)
 {
     AssertThisMem();
-    _tsBaseSys = MacWin(TickCount(), timeGetTime());
+    _tsBaseSys = TsCurrentSystem();
     _tsBaseApp = 0;
     _luScale = kluTimeScaleNormal;
 }
