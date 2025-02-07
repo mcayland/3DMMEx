@@ -493,12 +493,13 @@ long GVDW::NfrCur(void)
         return 0;
     }
     return mciStatus.dwReturn;
-#endif // WIN
-
-#ifdef MAC
+#elif defined(MAC) // WIN
     RawRtn(); // REVIEW shonk: Mac: implement GVDW::NfrCur
     return 0;
-#endif // MAC
+#else // MAC
+    assert(0);
+    return 0;
+#endif
 }
 
 /***************************************************************************
@@ -587,12 +588,13 @@ bool GVDW::FPlay(RC *prc)
     _fPlaying = fTrue;
 
     return fTrue;
-#endif // WIN
-
-#ifdef MAC
+#elif defined(MAC) // WIN
     RawRtn(); // REVIEW shonk: Mac: implement GVDW::NfrCur
     return fFalse;
-#endif // MAC
+#else // MAC
+    assert(0);
+    return fFalse;
+#endif
 }
 
 /***************************************************************************
