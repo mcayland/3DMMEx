@@ -17,6 +17,7 @@
     (if the implementation of Win HQs changes, it will go away).
 ***************************************************************************/
 #include "util.h"
+#include <cstdlib>
 ASSERTNAME
 
 #ifdef DEBUG
