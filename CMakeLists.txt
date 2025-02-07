@@ -342,7 +342,7 @@ target_sources(kauai
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gobwin.cpp>
 
     # Stubs for Visual C++ 2.1 CRT functions
-    "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"   
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp>
 )
 
 if (ENABLE_ASM_X86)
