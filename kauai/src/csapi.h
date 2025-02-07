@@ -415,14 +415,16 @@ typedef SC_PATH *LPSC_PATH;
 #define sdcDumpMdr1 401
 #endif /* DEBUG */
 
-#ifndef SC_PASCAL
+#ifdef MAC
 #define SC_PASCAL pascal
+#else
+#define SC_PASCAL
 #endif
 
 #define GLOBAL SC_FAR SC_PASCAL
 #define GLOBALSEC SC_SEC SC_FAR SC_PASCAL
 
-#ifdef MAC
+#ifndef WIN
 
 /* Exported Function Prototypes */
 
@@ -447,10 +449,12 @@ extern GLOBALSEC SpellGetListUdr(SC_SPLID, SC_UDR, SC_WORD, LPSC_SRB);
 extern GLOBALSEC SpellCloseMdr(SC_SPLID, LPSC_MDRS);
 extern GLOBALSEC SpellCloseUdr(SC_SPLID, SC_UDR, SC_BOOL);
 
+#ifdef MAC
 extern Handle HCsapiResInit(SC_CHAR *stzsFileName, short vRef, long dirId);
 extern void CsapiResTerm(void);
 extern void CsapiResFlush(void);
+#endif
 
-#endif /* MAC */
+#endif /* !WIN */
 
 #endif /* !CSAPI_H */
