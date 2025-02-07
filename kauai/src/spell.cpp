@@ -87,7 +87,9 @@ bool SPLC::_FInit(SC_LID sclid, PSTN pstnCustom)
     wsc.bEnDash = 150;
     wsc.bEllipsis = 133;
     wsc.rgParaBreak[0] = kchReturn;
-    Win(wsc.rgParaBreak[1] = kchLineFeed;)
+#ifdef WIN
+    wsc.rgParaBreak[1] = kchLineFeed;
+#endif
 
         if (secNOERRORS != SpellInit((SC_SPLID *)&_splid, &wsc)) return fFalse;
     _fSplidValid = fTrue;
@@ -799,7 +801,199 @@ SC_SEC SPLC::SpellCloseUdr(SC_SPLID splid, SC_UDR udr, SC_BOOL fForce)
 
     return (*_pfnCloseUdr)(splid, udr, fForce);
 }
-#endif // WIN
+
+#elsif !defined(MAC) // WIN
+
+/***************************************************************************
+    Stub for SpellInit
+***************************************************************************/
+SC_SEC SPLC::SpellInit(SC_SPLID *psplid, SC_WSC *pwsc)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnInit)
+    {
+        Bug("nil _pfnInit");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellOptions
+***************************************************************************/
+SC_SEC SPLC::SpellOptions(SC_SPLID splid, long grfso)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnOptions)
+    {
+        Bug("nil _pfnOptions");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellCheck
+***************************************************************************/
+SC_SEC SPLC::SpellCheck(SC_SPLID splid, SC_CC sccc, LPSC_SIB psib, LPSC_SRB psrb)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnCheck)
+    {
+        Bug("nil _pfnCheck");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellTerminate
+***************************************************************************/
+SC_SEC SPLC::SpellTerminate(SC_SPLID splid, SC_BOOL fForce)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnTerminate)
+    {
+        Bug("nil _pfnTerminate");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellOpenMdr
+***************************************************************************/
+SC_SEC SPLC::SpellOpenMdr(SC_SPLID splid, LPSC_PATH ppath, LPSC_PATH ppathExclude, SC_BOOL fCreateExclude,
+                          SC_BOOL fCache, SC_LID sclidExpected, LPSC_MDRS pmdrs)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnOpenMdr)
+    {
+        Bug("nil _pfnOpenMdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellOpenUdr
+***************************************************************************/
+SC_SEC SPLC::SpellOpenUdr(SC_SPLID splid, LPSC_PATH ppath, SC_BOOL fCreate, SC_WORD udrprop, SC_UDR *pudr,
+                          SC_BOOL *pfReadOnly)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnOpenUdr)
+    {
+        Bug("nil _pfnOpenUdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Add a word to the given user dictionary
+***************************************************************************/
+SC_SEC SPLC::SpellAddUdr(SC_SPLID splid, SC_UDR udr, SC_CHAR *pszAdd)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnAddUdr)
+    {
+        Bug("nil _pfnAddUdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Add a word pair to the given user dictionary
+***************************************************************************/
+SC_SEC SPLC::SpellAddChangeUdr(SC_SPLID splid, SC_UDR udr, SC_CHAR *pszAdd, SC_CHAR *pszChange)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnAddChangeUdr)
+    {
+        Bug("nil _pfnAddChangeUdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellClearUdr
+***************************************************************************/
+SC_SEC SPLC::SpellClearUdr(SC_SPLID splid, SC_UDR udr)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnClearUdr)
+    {
+        Bug("nil _pfnClearUdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellCloseMdr
+***************************************************************************/
+SC_SEC SPLC::SpellCloseMdr(SC_SPLID splid, LPSC_MDRS pmdrs)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnCloseMdr)
+    {
+        Bug("nil _pfnCloseMdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+
+/***************************************************************************
+    Stub for SpellCloseUdr
+***************************************************************************/
+SC_SEC SPLC::SpellCloseUdr(SC_SPLID splid, SC_UDR udr, SC_BOOL fForce)
+{
+    AssertThis(0);
+
+    if (pvNil == _pfnCloseUdr)
+    {
+        Bug("nil _pfnCloseUdr");
+        return secModuleError;
+    }
+
+    assert(0);
+    return secModuleError;
+}
+#endif
+
 
 #ifdef DEBUG
 /***************************************************************************

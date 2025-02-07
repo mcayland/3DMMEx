@@ -16,7 +16,11 @@
 #define SPELL_H
 
 // REVIEW shonk: dictionary type on Mac
-const FTG kftgDictionary = MacWin(KLCONST4('D', 'I', 'C', 'T'), KLCONST3('D', 'I', 'C'));
+#ifdef MAC
+const FTG kftgDictionary = KLCONST4('D', 'I', 'C', 'T');
+#else
+const FTG kftgDictionary = KLCONST3('D', 'I', 'C');
+#endif
 
 // include the standard spell checker API header
 #ifdef WIN
