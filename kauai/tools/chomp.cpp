@@ -14,6 +14,10 @@ ASSERTNAME
     Main routine for the stand-alone chunky compiler.  Returns non-zero
     iff there's an error.
 ***************************************************************************/
+#ifndef WIN
+#define __cdecl
+#endif
+
 int __cdecl main(int cpszs, char *prgpszs[])
 {
     FNI fniSrc, fniDst;
