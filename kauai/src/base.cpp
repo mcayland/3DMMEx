@@ -63,8 +63,8 @@ inline void _Leave(void)
     vmutxBase.Leave();
 }
 
-#define klwMagicAllocatedBase 'ALOC'
-#define klwMagicNonAllocBase 'NOAL'
+#define klwMagicAllocatedBase KLCONST4('A', 'L', 'O', 'C')
+#define klwMagicNonAllocBase KLCONST4('N', 'O', 'A', 'L')
 
 #else //! DEBUG
 #define kcbBaseDebug 0
