@@ -73,11 +73,13 @@ bool FResizePhq(HQ *phq, long cb, ulong grfmem, long mpr)
         PushErc(ercOomHq);
     }
 #ifdef DEBUG
+#if defined(WIN)
     else if (!_FResizePpvDebug((void **)&phqh, cb + size(HQH), phqh->cb + size(HQH), grfmem, mpr, NULL))
     {
         PushErc(ercOomHq);
         AssertHq(*phq);
     }
+#endif
 #endif
     else
     {
