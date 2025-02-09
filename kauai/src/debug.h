@@ -21,7 +21,14 @@ inline void Debugger(void)
 {
     DebugBreak();
 }
-#endif // WIN
+#elif !defined(MAC) // WIN
+
+#include <signal.h>
+inline void Debugger(void)
+{
+    raise(SIGTRAP);
+}
+#endif
 
 #ifdef DEBUG
 bool FAssertProc(schar *pszsFile, long lwLine, schar *pszsMsg, void *pv, long cb);
