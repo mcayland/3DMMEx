@@ -343,6 +343,9 @@ target_sources(kauai
 
     # Stubs for Visual C++ 2.1 CRT functions
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp>
+
+    # Linux implementations
+    $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/platlinux.cpp>
 )
 
 if (ENABLE_ASM_X86)
