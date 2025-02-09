@@ -322,39 +322,7 @@ void FNI::AssertValid(ulong grffni)
 {
     FNI_PAR::AssertValid(0);
     AssertPo(&_stnFile, 0);
-
-    SZ szT;
-    long cch;
-    PSZ pszT;
-
-    if (grffni == 0)
-        grffni = ffniEmpty | ffniDir | ffniFile;
-
-    if (_ftg == ftgNil)
-    {
-        Assert(grffni & ffniEmpty, "unexpected empty");
-        Assert(_stnFile.Cch() == 0, "named empty?");
-        return;
-    }
-
-    if ((cch = GetFullPathName(_stnFile.Psz(), kcchMaxSz, szT, &pszT)) == 0 || cch > kcchMaxSz ||
-        !_stnFile.FEqualUserRgch(szT, CchSz(szT)))
-    {
-        Bug("bad fni");
-        return;
-    }
-
-    if (_ftg == kftgDir)
-    {
-        Assert(grffni & ffniDir, "unexpected dir");
-        Assert(szT[cch - 1] == ChLit('\\') || szT[cch - 1] == ChLit('/'), "expected trailing slash");
-        Assert(pszT == NULL, "unexpected filename");
-    }
-    else
-    {
-        Assert(grffni & ffniFile, "unexpected file");
-        Assert(pszT >= szT && pszT < szT + cch, "expected filename");
-    }
+    assert(0);
 }
 #endif // DEBUG
 
