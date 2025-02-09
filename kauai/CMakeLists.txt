@@ -311,6 +311,7 @@ endif()
 add_library(KauaiPic
     "${PROJECT_SOURCE_DIR}/kauai/src/pic.cpp"
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/picwin.cpp>
+    $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/piclinux.cpp>
 )
 target_link_libraries(
     KauaiPic
