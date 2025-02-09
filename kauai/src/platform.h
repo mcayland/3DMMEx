@@ -27,7 +27,7 @@ class MUTX
     Current thread id
 ****************************************/
 
-extern inline long LwThreadCur(void);
+extern long LwThreadCur(void);
 
 /***************************************************************************
     Universal scalable application clock and other time stuff
