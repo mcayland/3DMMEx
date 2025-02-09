@@ -459,7 +459,10 @@ void _AssertMbh(MBH *pmbh)
     AssertVarMem(pmbh);
     Assert(pmbh->swMagic == kswMagicMem, "bad magic number");
     AssertIn(pmbh->cb - SIZEOF(MBH) - SIZEOF(MBF), 0, kcbMax);
-    Win(Assert(pmbh->cb <= (long)_msize(pmbh), "bigger than malloced block");) AssertPvCb(pmbh, pmbh->cb);
+#ifdef WIN
+    Assert(pmbh->cb <= (long)_msize(pmbh), "bigger than malloced block");
+#endif
+    AssertPvCb(pmbh, pmbh->cb);
     if (pmbh->pmbhPrev != pvNil)
     {
         AssertVarMem(pmbh->pmbhPrev);
@@ -522,7 +525,9 @@ void AssertUnmarkedMem(void)
             }
         }
     }
-    Mac(_AssertUnmarkedHqs();)
+#ifdef MAC
+    _AssertUnmarkedHqs();
+#endif
 
         // leave the critical section
         vmutxMem.Leave();
@@ -545,7 +550,9 @@ void UnmarkAllMem(void)
         if (pmbh->lwThread == lwThread)
             pmbh->cactRef = 0;
     }
-    Mac(_UnmarkAllHqs();)
+#ifdef MAC
+    _UnmarkAllHqs();
+#endif
 
         // leave the critical section
         vmutxMem.Leave();
