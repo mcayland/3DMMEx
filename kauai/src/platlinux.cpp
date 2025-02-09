@@ -57,7 +57,7 @@ inline long LwThreadCur(void)
 
 const unsigned long kdtsSecond = 1000;
 
-inline unsigned long TsCurrentSystem(void)
+unsigned long TsCurrentSystem(void)
 {
     struct timespec ts;
     static int64_t clockzero_ns;
