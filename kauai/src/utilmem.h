@@ -173,7 +173,9 @@ bool FAllocPvDebug(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr, schar *
 // resizing routine - WIN only
 #ifdef WIN
 bool _FResizePpvDebug(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int32_t mpr, DMAGL *pdmagl);
-#endif // WIN
+#elif !defined(MAC) // WIN
+bool _FResizePpvDebug(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int32_t mpr, DMAGL *pdmagl);
+#endif
 
 // freeing routine
 void FreePpvDebug(void **ppv, DMAGL *pdmagl);
