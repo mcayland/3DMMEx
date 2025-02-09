@@ -79,7 +79,9 @@ class FNI : public FNI_PAR
     FSS _fss;
 #elif defined(WIN)
     STN _stnFile;
-#endif // WIN
+#else // WIN
+    STN _stnFile;
+#endif
 
 #ifdef WIN
     void _SetFtgFromName(void);
