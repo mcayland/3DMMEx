@@ -51,6 +51,7 @@ struct CKI
     CTG ctg;
     CNO cno;
 };
+VERIFY_STRUCT_SIZE(CKI, 8);
 const BOM kbomCki = 0xF0000000;
 
 // child chunk identification
@@ -59,6 +60,7 @@ struct KID
     CKI cki;
     CHID chid;
 };
+VERIFY_STRUCT_SIZE(KID, 12);
 const BOM kbomKid = 0xFC000000;
 
 /***************************************************************************

@@ -25,6 +25,7 @@ struct BKGDF
     byte bPad;
     short swPad;
 };
+VERIFY_STRUCT_SIZE(BKGDF, 8);
 const BOM kbomBkgdf = 0x50000000;
 
 /****************************************
@@ -37,6 +38,7 @@ struct LITE
     BRS rIntensity;
     long lt; // light type
 };
+VERIFY_STRUCT_SIZE(LITE, 56);
 const BOM kbomLite = 0xfffffff0;
 
 /****************************************
@@ -51,6 +53,7 @@ typedef union _apos {
     };
     BVEC3 bvec3Actor;
 } APOS;
+VERIFY_STRUCT_SIZE(APOS, 12);
 
 struct CAM
 {
@@ -64,6 +67,7 @@ struct CAM
     BMAT34 bmat34Cam; // Camera view matrix
     // APOS rgapos[];
 };
+VERIFY_STRUCT_SIZE(CAM, 76);
 const BOM kbomCamOld = 0x5f4fc000;
 const BOM kbomCam = BomField(
     kbomSwapShort,
@@ -89,6 +93,7 @@ struct BDS
     bool fLoop;
     TAG tagSnd;
 };
+VERIFY_STRUCT_SIZE(BDS, 28);
 const BOM kbomBds = 0x5f000000 | kbomTag >> 8;
 
 /****************************************

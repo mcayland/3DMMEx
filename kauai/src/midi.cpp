@@ -373,6 +373,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
         long lwSig;
         long cb;
     };
+    VERIFY_STRUCT_SIZE(MIDCHD, 8);
 #define kbomMidchd 0xF0000000
 
     // Midi file header chunk - should be first chunk
@@ -383,6 +384,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
         short ctrk;
         short swDiv;
     };
+    VERIFY_STRUCT_SIZE(MIDHED, 14);
 #define kbomMidhed 0xF5400000
 #pragma pack()
 

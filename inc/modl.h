@@ -27,6 +27,7 @@ struct MODLF
     //	br_vertex rgbrv[]; // vertices
     //	br_face rgbrf[]; // faces
 };
+VERIFY_STRUCT_SIZE(MODLF, 48);
 typedef MODLF *PMODLF;
 const BOM kbomModlf = 0x55fffff0;
 

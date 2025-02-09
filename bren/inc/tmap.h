@@ -27,6 +27,7 @@ struct TMAPF
     short ypOrigin;
     // void *rgb; 		// pixels follow immediately after TMAPF
 };
+VERIFY_STRUCT_SIZE(TMAPF, 20);
 const ulong kbomTmapf = 0x54555000;
 
 /* A TeXture XransForm on File */
@@ -36,6 +37,7 @@ typedef struct _txxff
     short osk; // OS kind
     BMAT23 bmat23;
 } TXXFF, *PTXXFF;
+VERIFY_STRUCT_SIZE(TXXFF, 28);
 const BOM kbomTxxff = 0x5FFF0000;
 
 // REVIEW *****: should TMAPs have shade table chunks under them, or

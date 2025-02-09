@@ -68,6 +68,7 @@ class MBMP : public MBMP_PAR
         RC rc;
         long cb; // length of whole chunk, including the header
     };
+    VERIFY_STRUCT_SIZE(MBMPH, 28);
 
     MBMP(void)
     {

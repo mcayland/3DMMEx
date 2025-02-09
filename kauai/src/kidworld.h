@@ -28,6 +28,7 @@ struct LOP
     long yp;
     long zp; // the z-plane number used for placing the GOK in the GOB tree
 };
+VERIFY_STRUCT_SIZE(LOP, 16);
 
 // cursor map entry
 struct CUME
@@ -40,6 +41,7 @@ struct CUME
     long cidDefault; // default command
     CNO cnoTopic;    // tool tip topic
 };
+VERIFY_STRUCT_SIZE(CUME, 28);
 
 typedef class GOKD *PGOKD;
 #define GOKD_PAR BACO
@@ -72,6 +74,7 @@ struct GOKDF
     // LOP rglop[];		ends with a default entry (hidPar == hidNil)
     // CUME rgcume[];	the cursor map
 };
+VERIFY_STRUCT_SIZE(GOKDF, 8);
 const BOM kbomGokdf = 0x0C000000;
 
 typedef class GKDS *PGKDS;

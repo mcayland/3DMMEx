@@ -77,6 +77,7 @@ struct GSTF
     long bstMac;
     long cbstFree;
 };
+VERIFY_STRUCT_SIZE(GSTF, 20);
 const BOM kbomGstf = 0x5FF00000L;
 
 /***************************************************************************

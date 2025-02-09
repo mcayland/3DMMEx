@@ -81,6 +81,7 @@ struct MSNDF
     long vlmDefault; // default volume
     bool fInvalid;   // Invalid flag
 };
+VERIFY_STRUCT_SIZE(MSNDF, 16);
 const BOM kbomMsndf = 0x5FC00000;
 
 const CHID kchidSnd = 0; // Movie Sound sound/music

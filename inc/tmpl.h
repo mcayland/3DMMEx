@@ -31,6 +31,7 @@ struct CPS
     short chidModl; // CHID (under TMPL chunk) of model for this body part
     short imat34;   // index into ACTN's GL of transforms
 };
+VERIFY_STRUCT_SIZE(CPS, 4);
 const BOM kbomCps = 0x50000000;
 
 /****************************************
@@ -46,6 +47,7 @@ struct CEL
     BRS dwr;      // distance from previous cel
                   //	CPS rgcps[];	// list of cel part specs (variable part of pggcel)
 };
+VERIFY_STRUCT_SIZE(CEL, 8);
 const BOM kbomCel = 0xf0000000;
 
 // template on file
@@ -59,6 +61,7 @@ struct TMPLF
     short swPad; // so grftmpl (and the whole TMPLF) is long-aligned
     ulong grftmpl;
 };
+VERIFY_STRUCT_SIZE(TMPLF, 16);
 #define kbomTmplf 0x554c0000
 
 // action chunk on file
@@ -68,6 +71,7 @@ struct ACTNF
     short osk;
     long grfactn;
 };
+VERIFY_STRUCT_SIZE(ACTNF, 8);
 const ulong kbomActnf = 0x5c000000;
 
 // grfactn flags

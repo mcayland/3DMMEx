@@ -49,6 +49,7 @@ struct TDFF
     //  BRS rgdxr[cch];
     //  BRS rgdyr[cch];
 };
+VERIFY_STRUCT_SIZE(TDFF, 12);
 const BOM kbomTdff = 0x5F000000; // don't forget to swap rgdxr & rgdyr!
 
 /***************************************************************************

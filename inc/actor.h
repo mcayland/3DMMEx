@@ -38,7 +38,7 @@ struct XYZ
         return ((dxr != xyz.dxr) || (dyr != xyz.dyr) || (dzr != xyz.dzr));
     }
 };
-
+VERIFY_STRUCT_SIZE(XYZ, 12);
 typedef XYZ *PXYZ;
 
 const BOM kbomXyz = 0xfc000000;
@@ -52,6 +52,7 @@ struct RPT
     XYZ xyz;
     BRS dwr; // Distance from this node to the next node on the route
 };
+VERIFY_STRUCT_SIZE(RPT, 16);
 const BOM kbomRpt = 0xff000000;
 
 const long knfrmInvalid = klwMax;                                  // invalid frame state.  Regenerate correct state
@@ -154,6 +155,7 @@ struct AEV
     long nfrm; // Absolute frame number (* Only valid < current event)
     RTEL rtel; // RouTE Location for this event
 };             // Additional event parameters (in the GG)
+VERIFY_STRUCT_SIZE(AEV, 20);
 typedef AEV *PAEV;
 
 //
@@ -178,6 +180,7 @@ enum AET
     aetRotH,   // Single frame rotation : BMAT34
     aetLim
 };
+VERIFY_STRUCT_SIZE(AET, 4);
 
 const BOM kbomAet = 0xc0000000;
 const BOM kbomAev = 0xff000000;
@@ -191,6 +194,7 @@ struct AEVPULL // Squash/stretch
     BRS rScaleY;
     BRS rScaleZ;
 };
+VERIFY_STRUCT_SIZE(AEVPULL, 12);
 const BOM kbomAevpull = 0xfc000000;
 
 // Every subroute is normalized.  The normalization translation is
@@ -205,6 +209,7 @@ struct AEVADD
     BRA ya;  // Single point orientation
     BRA za;  // Single point orientation
 };
+VERIFY_STRUCT_SIZE(AEVADD, 20);
 const BOM kbomAevadd = 0xffc00000 | kbomBmat34 >> 10;
 
 struct AEVACTN
@@ -212,6 +217,7 @@ struct AEVACTN
     long anid;
     long celn; // starting cel of action
 };
+VERIFY_STRUCT_SIZE(AEVACTN, 8);
 const BOM kbomAevactn = 0xf0000000;
 
 struct AEVCOST
@@ -221,6 +227,7 @@ struct AEVCOST
     tribool fCmtl; // vs fMtrl
     TAG tag;
 };
+VERIFY_STRUCT_SIZE(AEVCOST, 28);
 const BOM kbomAevcost = 0xfc000000 | (kbomTag >> 6);
 
 struct AEVSND
@@ -234,6 +241,7 @@ struct AEVSND
     CHID chid;        // user sound requires chid
     TAG tag;
 };
+VERIFY_STRUCT_SIZE(AEVSND, 44);
 const BOM kbomAevsnd = 0xfff00000 | (kbomTag >> 12);
 
 const BOM kbomAevsize = 0xc0000000;

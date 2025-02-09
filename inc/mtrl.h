@@ -22,6 +22,7 @@ struct CMTLF
     short osk;
     long ibset; // which body part set this CMTL attaches to
 };
+VERIFY_STRUCT_SIZE(CMTLF, 8);
 const BOM kbomCmtlf = 0x5c000000;
 
 // material on file (MTRL chunk)
@@ -37,6 +38,7 @@ struct MTRLF
     byte cIndexRange;    // count of entries in palette for this color
     BRS rPower;          // specular exponent
 };
+VERIFY_STRUCT_SIZE(MTRLF, 20);
 const BOM kbomMtrlf = 0x5D530000;
 
 /****************************************

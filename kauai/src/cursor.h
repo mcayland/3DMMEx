@@ -32,6 +32,7 @@ struct CURF
     // byte rgbAnd[];
     // byte rgbXor[];
 };
+VERIFY_STRUCT_SIZE(CURF, 8);
 const BOM kbomCurf = 0xC0000000;
 
 typedef class CURS *PCURS;

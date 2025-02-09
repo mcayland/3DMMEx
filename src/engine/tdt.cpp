@@ -74,6 +74,7 @@ struct TDTF
     long tdts;
     TAG tagTdf;
 };
+VERIFY_STRUCT_SIZE(TDTF, 24);
 const BOM kbomTdtf = (0x5C000000 | kbomTag >> 6);
 
 /***************************************************************************
