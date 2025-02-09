@@ -46,7 +46,7 @@ void MUTX::Leave(void)
 /****************************************
     Current thread id
 ****************************************/
-inline long LwThreadCur(void)
+long LwThreadCur(void)
 {
     return (long)pthread_self();
 }
