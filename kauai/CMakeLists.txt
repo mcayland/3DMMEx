@@ -141,6 +141,7 @@ add_library(KauaiFile
 
     # Linux implementations
     $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/fnilinux.cpp>
+    $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/filelinux.cpp>
 )
 if (ENABLE_ASM_X86)
     target_sources(
