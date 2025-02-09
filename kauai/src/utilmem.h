@@ -177,7 +177,9 @@ bool FAllocPvDebug(void **ppv, long cb, ulong grfmem, long mpr, schar *pszsFile,
 // resizing routine - WIN only
 #ifdef WIN
 bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr, DMAGL *pdmagl);
-#endif // WIN
+#elif !defined(MAC) // WIN
+bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr, DMAGL *pdmagl);
+#endif
 
 // freeing routine
 void FreePpvDebug(void **ppv, DMAGL *pdmagl);
