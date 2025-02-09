@@ -348,6 +348,7 @@ target_sources(kauai
     $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/platlinux.cpp>
     $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/fnilinux.cpp>
     $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/memlinux.cpp>
+    $<$<PLATFORM_ID:Linux>:${PROJECT_SOURCE_DIR}/kauai/src/filelinux.cpp>
 )
 
 if (ENABLE_ASM_X86)
