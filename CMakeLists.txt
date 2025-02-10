@@ -342,6 +342,7 @@ target_link_libraries(kauai
 # Unit tests
 add_executable(kauai_test
     "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
 )
 target_link_libraries(
     kauai_test
