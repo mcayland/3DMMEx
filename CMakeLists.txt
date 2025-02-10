@@ -34,6 +34,10 @@ include(CMakeDependentOption)
 include(FetchContent)
 include(TargetChompSources)
 
+enable_testing()
+find_package(GTest CONFIG REQUIRED)
+include(GoogleTest)
+
 find_package(BRender REQUIRED)
 
 # Options
@@ -334,6 +338,18 @@ target_link_libraries(kauai
     $<$<PLATFORM_ID:Windows>:Vfw32>
     $<$<PLATFORM_ID:Windows>:Winmm>
     $<$<PLATFORM_ID:Windows>:mpr>)
+
+# Unit tests
+add_executable(kauai_test
+    "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
+)
+target_link_libraries(
+    kauai_test
+    PRIVATE
+    kauai
+    GTest::gtest_main
+)
+gtest_discover_tests(kauai_test)
 
 add_library(brender)
 target_sources(brender
