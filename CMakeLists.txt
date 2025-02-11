@@ -438,7 +438,7 @@ target_sources(engine
     "${PROJECT_SOURCE_DIR}/src/engine/tmpl.cpp"
 )
 target_include_directories(engine PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/INC>)
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/inc>)
 target_link_libraries(engine PUBLIC kauai brender)
 
 # On non-windows WIN32 is a no-op
