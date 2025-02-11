@@ -12,6 +12,7 @@
 ***************************************************************************/
 #include "util.h"
 #include <cassert>
+#include <cctype>
 ASSERTNAME
 
 #include "chtrans.h"
@@ -1144,14 +1145,19 @@ void UpperRgchs(schar *prgchs, long cchs)
 
     if (!_fInited)
     {
+#ifdef MAC
         for (ichs = 0; ichs < 256; ichs++)
             _mpchschsUpper[ichs] = (byte)ichs;
-#ifdef MAC
+
         UppercaseText(_mpchschsUpper, 256, smSystemScript);
 #elif defined(WIN)
+        for (ichs = 0; ichs < 256; ichs++)
+            _mpchschsUpper[ichs] = (byte)ichs;
+
         CharUpperBuffA(_mpchschsUpper, 256);
 #else
-        assert(0);
+        for (ichs = 0; ichs < 256; ichs++)
+            _mpchschsUpper[ichs] = toupper(_mpchschsUpper[ichs]);
 #endif
         _fInited = fTrue;
     }

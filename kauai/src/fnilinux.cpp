@@ -11,6 +11,9 @@
 
 ***************************************************************************/
 #include "util.h"
+#include <stdlib.h>
+#include <string.h>
+#include <filesystem>
 #include <cassert>
 
 ASSERTNAME
@@ -79,8 +82,70 @@ bool FNI::FBuildFromPath(PSTN pstn, FTG ftgDef)
     AssertThis(0);
     AssertPo(pstn, 0);
 
-    assert(0);
-    return fFalse;
+    long cch;
+    const achar *pchT;
+    SZ sz;
+    std::filesystem::path p;
+
+    if (kftgDir != ftgDef)
+    {
+        // if the path ends with a slash or only has periods after the last
+        // slash, force the fni to be a directory.
+
+        cch = pstn->Cch();
+        for (pchT = pstn->Prgch() + cch - 1;; pchT--)
+        {
+            if (cch-- <= 0 || *pchT == ChLit('\\') || *pchT == ChLit('/'))
+            {
+                ftgDef = kftgDir;
+                break;
+            }
+            if (*pchT != ChLit('.'))
+                break;
+        }
+    }
+
+    /* Resolve filename to an absolute path */
+    if (!realpath(pstn->Psz(), sz))
+    {
+        goto LFail;
+    }
+
+    cch = strlen(sz);
+    if (cch > kcchMaxSz)
+    {
+        goto LFail;
+    }
+
+    Assert(cch <= kcchMaxSz, 0);
+    _stnFile = sz;
+
+    if (ftgDef == kftgDir)
+    {
+        achar ch = _stnFile.Prgch()[_stnFile.Cch() - 1];
+        if (ch != ChLit('\\') && ch != ChLit('/'))
+        {
+            if (!_stnFile.FAppendCh(ChLit('\\')))
+            {
+                goto LFail;
+            }
+        }
+        _ftg = kftgDir;
+    }
+    else
+    {
+        _SetFtgFromName();
+        if (_ftg == 0 && ftgDef != ftgNil && pstn->Prgch()[pstn->Cch() - 1] != ChLit('.') && !FChangeFtg(ftgDef))
+        {
+        LFail:
+            SetNil();
+            PushErc(ercFniGeneral);
+            return fFalse;
+        }
+    }
+
+    AssertThis(ffniFile | ffniDir);
+    return fTrue;
 }
 
 /******************************************************************************
@@ -322,9 +387,67 @@ void FNI::AssertValid(ulong grffni)
 {
     FNI_PAR::AssertValid(0);
     AssertPo(&_stnFile, 0);
-    assert(0);
+    //assert(0);
 }
 #endif // DEBUG
+
+/***************************************************************************
+    Find the length of the file extension on the fni (including the period).
+    Allow up to kcchsMaxExt characters for the extension (plus one for the
+    period).
+***************************************************************************/
+long FNI::_CchExt(void)
+{
+    AssertBaseThis(0);
+    long cch;
+    PSZ psz = _stnFile.Psz();
+    achar *pch = psz + _stnFile.Cch() - 1;
+
+    for (cch = 1; cch <= kcchsMaxExt + 1 && pch >= psz; cch++, pch--)
+    {
+        if ((achar)(schar)*pch != *pch)
+        {
+            // not an ANSI character - so doesn't qualify for our
+            // definition of an extension
+            return 0;
+        }
+
+        switch (*pch)
+        {
+        case ChLit('.'):
+            return cch;
+        case ChLit('\\'):
+        case ChLit('/'):
+            return 0;
+        }
+    }
+
+    return 0;
+}
+
+/***************************************************************************
+    Set the ftg from the file name.
+***************************************************************************/
+void FNI::_SetFtgFromName(void)
+{
+    AssertBaseThis(0);
+    Assert(_stnFile.Cch() > 0, 0);
+    long cch, ich;
+    achar *pchLim = _stnFile.Psz() + _stnFile.Cch();
+
+    if (pchLim[-1] == ChLit('\\') || pchLim[-1] == ChLit('/'))
+        _ftg = kftgDir;
+    else
+    {
+        _ftg = 0;
+        cch = _CchExt() - 1;
+        AssertIn(cch, -1, kcchsMaxExt + 1);
+        pchLim -= cch;
+        for (ich = 0; ich < cch; ich++)
+            _ftg = (_ftg << 8) | (long)(byte)ChsUpper((schar)pchLim[ich]);
+    }
+    AssertThis(ffniFile | ffniDir);
+}
 
 /***************************************************************************
     Constructor for a File Name Enumerator.

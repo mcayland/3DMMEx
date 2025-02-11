@@ -91,7 +91,10 @@ class FNI : public FNI_PAR
     void _SetFtgFromName(void);
     long _CchExt(void);
     bool _FChangeLeaf(PSTN pstn);
-#endif // WIN
+#elif !defined(MAC) // WIN
+    void _SetFtgFromName(void);
+    long _CchExt(void);
+#endif 
 
   public:
     FNI(void);
