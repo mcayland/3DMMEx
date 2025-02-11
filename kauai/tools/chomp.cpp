@@ -18,7 +18,7 @@ ASSERTNAME
 #define __cdecl
 #endif
 
-int __cdecl main(int cpszs, char *prgpszs[])
+int __cdecl main(int argc, char *prgpszs[])
 {
     FNI fniSrc, fniDst;
     PCFL pcfl;
@@ -26,6 +26,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
     char *pszs;
     MSSIO mssioError(stderr);
     bool fCompile = fTrue;
+    int cpszs = argc--;
 
 #ifdef UNICODE
     fprintf(stderr, "\nMicrosoft (R) Chunky File Compiler (Unicode; " Debug("Debug; ") __DATE__ "; " __TIME__ ")\n");
@@ -37,8 +38,11 @@ int __cdecl main(int cpszs, char *prgpszs[])
     for (prgpszs++; --cpszs > 0; prgpszs++)
     {
         pszs = *prgpszs;
-        if (pszs[0] == '-' || pszs[0] == '/')
+        if (cpszs == argc && (pszs[0] == '-' || pszs[0] == '/'))
         {
+            if (pszs[2] != 0)
+                continue;
+
             // option
             switch (pszs[1])
             {
@@ -53,12 +57,6 @@ int __cdecl main(int cpszs, char *prgpszs[])
                 break;
 
             default:
-                fprintf(stderr, "Bad command line option\n\n");
-                goto LUsage;
-            }
-
-            if (pszs[2] != 0)
-            {
                 fprintf(stderr, "Bad command line option\n\n");
                 goto LUsage;
             }
