@@ -13,12 +13,15 @@
 
 MUTX::MUTX(void)
 {
+    pthread_mutexattr_t ma;
     pthread_mutex_t *mutx;
 
     opaque = malloc(sizeof(pthread_mutex_t));
     mutx = (pthread_mutex_t *)opaque;
 
-    *mutx = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutexattr_init(&ma);
+    pthread_mutexattr_settype(&ma, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(mutx, &ma);
 }
 
 MUTX::~MUTX(void)
