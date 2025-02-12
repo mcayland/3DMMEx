@@ -92,7 +92,6 @@ struct TFC
         };
     };
 };
-VERIFY_STRUCT_SIZE(TFC, 12);
 const BOM kbomTfc = 0x5f000000;
 
 /************************************

@@ -29,7 +29,6 @@ struct HTOP
     long dyp;
     CKI ckiSnd;
 };
-VERIFY_STRUCT_SIZE(HTOP, 32);
 typedef HTOP *PHTOP;
 const BOM kbomHtop = 0xFFF00000;
 

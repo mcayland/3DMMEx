@@ -24,7 +24,7 @@ FTG vftgTemp = kftgTemp;
 
 // maximal number of short characters in an extension is 4 (so it fits in
 // a long).
-const long kcchsMaxExt = size(long);
+const long kcchsMaxExt = SIZEOF(long);
 
 priv void _CleanFtg(FTG *pftg, PSTN pstnExt = pvNil);
 FNI _fniTemp;
@@ -486,7 +486,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
     AssertThis(0);
     AssertNilOrVarMem(pfniDir);
     AssertIn(cftg, 0, kcbMax);
-    AssertPvCb(prgftg, LwMul(cftg, size(FTG)));
+    AssertPvCb(prgftg, LwMul(cftg, SIZEOF(FTG)));
 
     return fFalse;
 }
@@ -515,7 +515,7 @@ void FNE::AssertValid(ulong grf)
     {
         AssertNilOrPo(_pglfes, 0);
         AssertIn(_cftg, 0, kcbMax);
-        AssertPvCb(_prgftg, LwMul(size(FTG), _cftg));
+        AssertPvCb(_prgftg, LwMul(SIZEOF(FTG), _cftg));
         Assert((_cftg <= kcftgFneBase) == (_prgftg == _rgftg), "wrong _prgftg");
     }
     else

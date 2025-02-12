@@ -467,7 +467,6 @@ struct GLF
     long cbEntry;
     long ivMac;
 };
-VERIFY_STRUCT_SIZE(GLF, 12);
 const BOM kbomGlf = 0x5F000000L;
 
 /***************************************************************************
@@ -819,7 +818,6 @@ struct ALF
     long ivMac;
     long cvFree;
 };
-VERIFY_STRUCT_SIZE(ALF, 16);
 const BOM kbomAlf = 0x5FC00000L;
 
 /***************************************************************************
@@ -1120,7 +1118,6 @@ struct GGF
     long clocFree;
     long cbFixed;
 };
-VERIFY_STRUCT_SIZE(GGF, 20);
 const BOM kbomGgf = 0x5FF00000L;
 
 /***************************************************************************

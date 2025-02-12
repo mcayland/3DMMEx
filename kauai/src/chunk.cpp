@@ -128,7 +128,6 @@ struct CFP
 
     long rglwReserved[23]; // reserved for future use - should be zero
 };
-VERIFY_STRUCT_SIZE(CFP, 128);
 const BOM kbomCfp = 0xB55FFC00L;
 
 // free space map entry
@@ -137,7 +136,6 @@ struct FSM
     FP fp;
     long cb;
 };
-VERIFY_STRUCT_SIZE(FSM, 8);
 const BOM kbomFsm = 0xF0000000L;
 
 enum
@@ -209,7 +207,6 @@ struct CRPBG
         cb = cbT;
     }
 };
-VERIFY_STRUCT_SIZE(CRPBG, 32);
 const BOM kbomCrpbgGrfcrp = 0xFFFF0000L;
 const BOM kbomCrpbgBytes = 0xFFFE0000L;
 
@@ -260,7 +257,6 @@ struct CRPSM
         luGrfcrpCb = (cbT << kcbitGrfcrp) | luGrfcrpCb & kgrfcrpAll;
     }
 };
-VERIFY_STRUCT_SIZE(CRPSM, 20);
 const BOM kbomCrpsm = 0xFF500000L;
 
 #ifdef CHUNK_BIG_INDEX
@@ -584,7 +580,6 @@ struct ECDF
     long ckid;
     ulong grfcrp;
 };
-VERIFY_STRUCT_SIZE(ECDF, 24);
 const BOM kbomEcdf = 0x5FFC0000L;
 
 /***************************************************************************

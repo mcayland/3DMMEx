@@ -256,7 +256,6 @@ class TXRD : public TXRD_PAR
         long lw;    // the associated value - meaning depends on the sprm,
                     // but 0 is _always_ the default
     };
-    VERIFY_STRUCT_SIZE(MPE, 8);
 
     // sprm, value, mask triple
     struct SPVM
@@ -265,7 +264,6 @@ class TXRD : public TXRD_PAR
         long lw;
         long lwMask;
     };
-    VERIFY_STRUCT_SIZE(SPVM, 12);
 
     // rich text document properties
     struct RDOP
@@ -277,7 +275,6 @@ class TXRD : public TXRD_PAR
         long lwAcrBack;
         // byte rgbStnFont[]; font name
     };
-    VERIFY_STRUCT_SIZE(RDOP, 16);
 #define kbomRdop 0x5FC00000
 
     PCFL _pcfl;

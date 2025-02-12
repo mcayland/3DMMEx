@@ -39,7 +39,7 @@ bool FAllocHq(HQ *phq, long cb, ulong grfmem, long mpr)
     AssertIn(cb, 0, kcbMax);
     HQH *phqh;
 
-    if (!FAllocPvDebug((void **)&phqh, cb + size(HQH), grfmem, mpr, pszsFile, lwLine, &vdmglob.dmaglHq))
+    if (!FAllocPvDebug((void **)&phqh, cb + SIZEOF(HQH), grfmem, mpr, pszsFile, lwLine, &vdmglob.dmaglHq))
     {
         PushErc(ercOomHq);
         *phq = hqNil;
@@ -65,7 +65,7 @@ bool FResizePhq(HQ *phq, long cb, ulong grfmem, long mpr)
     AssertHq(*phq);
     AssertIn(cb, 0, kcbMax);
     bool fRet = fFalse;
-    HQH *phqh = (HQH *)PvSubBv(*phq, size(HQH));
+    HQH *phqh = (HQH *)PvSubBv(*phq, SIZEOF(HQH));
 
     if (phqh->cactLock > 0)
     {
@@ -74,7 +74,7 @@ bool FResizePhq(HQ *phq, long cb, ulong grfmem, long mpr)
     }
 #ifdef DEBUG
 #if defined(WIN)
-    else if (!_FResizePpvDebug((void **)&phqh, cb + size(HQH), phqh->cb + size(HQH), grfmem, mpr, NULL))
+    else if (!_FResizePpvDebug((void **)&phqh, cb + SIZEOF(HQH), phqh->cb + SIZEOF(HQH), grfmem, mpr, NULL))
     {
         PushErc(ercOomHq);
         AssertHq(*phq);
@@ -103,7 +103,7 @@ void FreePhq(HQ *phq)
         return;
 
     AssertHq(*phq);
-    HQH *phqh = (HQH *)PvSubBv(*phq, size(HQH));
+    HQH *phqh = (HQH *)PvSubBv(*phq, SIZEOF(HQH));
     *phq = hqNil;
     Assert(phqh->cactLock == 0, "Freeing locked HQ");
 
@@ -131,7 +131,7 @@ bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr)
 long CbOfHq(HQ hq)
 {
     AssertHq(hq);
-    HQH *phqh = (HQH *)PvSubBv(hq, size(HQH));
+    HQH *phqh = (HQH *)PvSubBv(hq, SIZEOF(HQH));
     return phqh->cb;
 }
 
@@ -152,7 +152,7 @@ void *QvFromHq(HQ hq)
 void *PvLockHq(HQ hq)
 {
     AssertHq(hq);
-    HQH *phqh = (HQH *)PvSubBv(hq, size(HQH));
+    HQH *phqh = (HQH *)PvSubBv(hq, SIZEOF(HQH));
     phqh->cactLock++;
     Assert(phqh->cactLock > 0, "overflow in cactLock");
     return (void *)hq;
@@ -164,7 +164,7 @@ void *PvLockHq(HQ hq)
 void UnlockHq(HQ hq)
 {
     AssertHq(hq);
-    HQH *phqh = (HQH *)PvSubBv(hq, size(HQH));
+    HQH *phqh = (HQH *)PvSubBv(hq, SIZEOF(HQH));
     Assert(phqh->cactLock > 0, "hq not locked");
     if (phqh->cactLock > 0)
         --phqh->cactLock;
@@ -184,14 +184,14 @@ void AssertHq(HQ hq)
     }
 
     // verify the HQH
-    HQH *phqh = (HQH *)PvSubBv(hq, size(HQH));
+    HQH *phqh = (HQH *)PvSubBv(hq, SIZEOF(HQH));
     if (phqh->lwMagic != klwMagicMem)
     {
         BugVar("beginning of hq block is trashed", phqh);
         return;
     }
     AssertIn(phqh->cactLock, 0, kcbMax);
-    AssertPvAlloced(phqh, phqh->cb + size(HQH));
+    AssertPvAlloced(phqh, phqh->cb + SIZEOF(HQH));
 }
 
 /***************************************************************************
@@ -202,7 +202,7 @@ void MarkHq(HQ hq)
     if (hqNil != hq)
     {
         AssertHq(hq);
-        MarkPv(PvSubBv(hq, size(HQH)));
+        MarkPv(PvSubBv(hq, SIZEOF(HQH)));
     }
 }
 

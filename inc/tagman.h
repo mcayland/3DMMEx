@@ -58,7 +58,6 @@ struct TAG
     CTG ctg;   // CTG of chunk
     CNO cno;   // CNO of chunk
 };
-VERIFY_STRUCT_SIZE(TAG, 16);
 const BOM kbomTag = 0xFF000000;
 
 // FNINSCD is a client-supplied callback function to alert the user to

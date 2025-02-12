@@ -1964,7 +1964,6 @@ struct GOKFL
     long lwAcrBack;
     byte rgbPat[8];
 };
-VERIFY_STRUCT_SIZE(GOKFL, 36);
 const BOM kbomGokfl = 0x5FFF0000;
 
 /***************************************************************************

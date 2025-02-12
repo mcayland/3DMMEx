@@ -1174,7 +1174,7 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     _onnDef = vntl.OnnMapStn(&_stnFontDef, _oskFont);
 
     // get the text
-    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgText, &kid) || !pcfl->FFindFlo(kid.cki.ctg, kid.cki.cno, &floText) ||
+    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLText, &kid) || !pcfl->FFindFlo(kid.cki.ctg, kid.cki.cno, &floText) ||
         floText.cb < SIZEOF(short) || !floText.FReadRgb(&osk, SIZEOF(short), 0))
     {
         return fFalse;
@@ -1191,7 +1191,7 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     ReleasePpo(&floText.pfil);
 
     // get the text properties
-    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgTxtProps, &kid) || !pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) ||
+    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLTxtProps, &kid) || !pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) ||
         pvNil == (_pglmpe = GL::PglRead(&blck, &bo)) || SIZEOF(MPE) != _pglmpe->CbEntry())
     {
         return fFalse;
@@ -1393,7 +1393,7 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     }
 
     // add the text chunk and write it
-    if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, _pbsf->IbMac() - SIZEOF(achar) + SIZEOF(short), kctgText, &cnoText,
+    if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, _pbsf->IbMac() - SIZEOF(achar) + SIZEOF(short), kctgLText, &cnoText,
                          &blckText) ||
         !blckText.FWriteRgb(&osk, SIZEOF(short), 0))
     {

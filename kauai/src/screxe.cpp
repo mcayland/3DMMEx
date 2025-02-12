@@ -174,7 +174,9 @@ bool SCEB::FAttachScript(PSCPT pscpt, long *prglw, long clw)
         }
 
         stnTrace.FAppendCh(ChLit('\n'));
+#ifdef WIN
         OutputDebugStringA(stnTrace.Psz());
+#endif
     }
 #endif // DEBUG
 
