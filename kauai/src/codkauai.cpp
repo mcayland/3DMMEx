@@ -271,8 +271,8 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
         return fFalse;
 
     // allocate the links
-    if (!FAllocPv((void **)&pmpibibNext, LwMul(size(long), cbSrc), fmemNil, mprNormal) ||
-        !FAllocPv((void **)&pmpsuibStart, LwMul(size(long), 0x10000), fmemNil, mprNormal))
+    if (!FAllocPv((void **)&pmpibibNext, LwMul(SIZEOF(long), cbSrc), fmemNil, mprNormal) ||
+        !FAllocPv((void **)&pmpsuibStart, LwMul(SIZEOF(long), 0x10000), fmemNil, mprNormal))
     {
         Warn("failed to allocate memory for links");
         goto LFail;
@@ -281,7 +281,7 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
     // write the links
     // we need to set each entry of pmpsuibStart to a big negative number,
     // but not too big, or we risk overflow below.
-    FillPb(pmpsuibStart, LwMul(size(long), 0x10000), 0xCC);
+    FillPb(pmpsuibStart, LwMul(SIZEOF(long), 0x10000), 0xCC);
     for (ibSrc = 0; ibSrc < cbSrc - 1; ibSrc++)
     {
         ushort suCur = ((ushort)prgbSrc[ibSrc]) << 8 | (ushort)prgbSrc[ibSrc + 1];
@@ -405,9 +405,9 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
         AssertDo(bita.FWriteBits(0xFF, 8 - bita.Ibit()), 0);
 
     // write the tail (kcbTailKcdc bytes of FF)
-    for (cbT = 0; cbT < kcbTailKcdc; cbT += size(long))
+    for (cbT = 0; cbT < kcbTailKcdc; cbT += SIZEOF(long))
     {
-        if (!bita.FWriteBits(0xFFFFFFFF, LwMin(size(long), kcbTailKcdc - cbT) << 3))
+        if (!bita.FWriteBits(0xFFFFFFFF, LwMin(SIZEOF(long), kcbTailKcdc - cbT) << 3))
         {
             goto LFail;
         }
@@ -595,8 +595,8 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
         return fFalse;
 
     // allocate the links
-    if (!FAllocPv((void **)&pmpibibNext, LwMul(size(long), cbSrc), fmemNil, mprNormal) ||
-        !FAllocPv((void **)&pmpsuibStart, LwMul(size(long), 0x10000), fmemNil, mprNormal))
+    if (!FAllocPv((void **)&pmpibibNext, LwMul(SIZEOF(long), cbSrc), fmemNil, mprNormal) ||
+        !FAllocPv((void **)&pmpsuibStart, LwMul(SIZEOF(long), 0x10000), fmemNil, mprNormal))
     {
         Warn("failed to allocate memory for links");
         goto LFail;
@@ -605,7 +605,7 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
     // write the links
     // we need to set each entry of pmpsuibStart to a big negative number,
     // but not too big, or we risk overflow below.
-    FillPb(pmpsuibStart, LwMul(size(long), 0x10000), 0xCC);
+    FillPb(pmpsuibStart, LwMul(SIZEOF(long), 0x10000), 0xCC);
     for (ibSrc = 0; ibSrc < cbSrc - 1; ibSrc++)
     {
         ushort suCur = ((ushort)prgbSrc[ibSrc]) << 8 | (ushort)prgbSrc[ibSrc + 1];
@@ -767,9 +767,9 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
         AssertDo(bita.FWriteBits(0xFF, 8 - bita.Ibit()), 0);
 
     // write the tail (kcbTailKcdc bytes of FF)
-    for (cbT = 0; cbT < kcbTailKcdc; cbT += size(long))
+    for (cbT = 0; cbT < kcbTailKcdc; cbT += SIZEOF(long))
     {
-        if (!bita.FWriteBits(0xFFFFFFFF, LwMin(size(long), kcbTailKcdc - cbT) << 3))
+        if (!bita.FWriteBits(0xFFFFFFFF, LwMin(SIZEOF(long), kcbTailKcdc - cbT) << 3))
         {
             goto LFail;
         }
