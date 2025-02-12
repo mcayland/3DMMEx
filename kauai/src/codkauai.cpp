@@ -474,11 +474,11 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
 #else //! IN_80386
 
     long cb, dib, ibit, cbit;
-    register ulong luCur;
+    ulong luCur;
     byte *pbT;
-    register byte *pbDst = (byte *)pvDst;
+    byte *pbDst = (byte *)pvDst;
     byte *pbLimDst = (byte *)pvDst + cbDst;
-    register byte *pbSrc = (byte *)pvSrc + 1;
+    byte *pbSrc = (byte *)pvSrc + 1;
 
 #define _FTest(ibit) (luCur & (1L << (ibit)))
 #ifdef LITTLE_ENDIAN
@@ -836,12 +836,12 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
 #else //! IN_80386
 
     long cb, dib, ibit, cbit;
-    register ulong luCur;
+    ulong luCur;
     byte bT;
     byte *pbT;
-    register byte *pbDst = (byte *)pvDst;
+    byte *pbDst = (byte *)pvDst;
     byte *pbLimDst = (byte *)pvDst + cbDst;
-    register byte *pbSrc = (byte *)pvSrc + 1;
+    byte *pbSrc = (byte *)pvSrc + 1;
     byte *pbLimSrc = (byte *)pvSrc + cbSrc - kcbTailKcd2;
     long cbitHi;
     bool fAligned;
