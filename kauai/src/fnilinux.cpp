@@ -106,11 +106,7 @@ bool FNI::FBuildFromPath(PSTN pstn, FTG ftgDef)
     }
 
     /* Resolve filename to an absolute path */
-    if (!realpath(pstn->Psz(), sz))
-    {
-        goto LFail;
-    }
-
+    strcpy(sz,  std::filesystem::path(pstn->Psz()).c_str());
     cch = strlen(sz);
     if (cch > kcchMaxSz)
     {
