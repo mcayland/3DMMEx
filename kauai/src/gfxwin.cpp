@@ -506,8 +506,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     // the three longs are for 16 and 32 bit dibs.
     if (!FAllocPv((void **)&pbmi,
                   SIZEOF(BITMAPINFO) + LwMul(cclr, LwMax(SIZEOF(short), SIZEOF(RGBQUAD))) + LwMul(3, SIZEOF(long)),
-                  fmemClear,
-                  mprNormal))
+                  fmemClear, mprNormal))
     {
         goto LFail;
     }

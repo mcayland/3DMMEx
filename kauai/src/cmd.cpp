@@ -280,7 +280,8 @@ bool CEX::_FInit(long ccmdInit, long ccmhInit)
     AssertIn(ccmdInit, 0, kcbMax);
     AssertIn(ccmhInit, 0, kcbMax);
 
-    if (pvNil == (_pglcmd = GL::PglNew(SIZEOF(CMD), ccmdInit)) || pvNil == (_pglcmhe = GL::PglNew(SIZEOF(CMHE), ccmhInit)))
+    if (pvNil == (_pglcmd = GL::PglNew(SIZEOF(CMD), ccmdInit)) ||
+        pvNil == (_pglcmhe = GL::PglNew(SIZEOF(CMHE), ccmhInit)))
     {
         return fFalse;
     }

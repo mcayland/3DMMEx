@@ -1278,8 +1278,8 @@ bool GGB::FEnsureSpace(long cvAdd, long cbAdd, ulong grfgrp)
         return fFalse;
     }
 
-    return _FEnsureSizes(_bvMac + cbAdd + LwMul(cvAdd, _cbFixed + SIZEOF(long) - 1), LwMul(_ivMac + clocAdd, SIZEOF(LOC)),
-                         grfgrp);
+    return _FEnsureSizes(_bvMac + cbAdd + LwMul(cvAdd, _cbFixed + SIZEOF(long) - 1),
+                         LwMul(_ivMac + clocAdd, SIZEOF(LOC)), grfgrp);
 }
 
 /***************************************************************************

@@ -139,8 +139,8 @@ bool BKGD::FReadBkgd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     }
     AssertPo(pbkgd, 0);
     *ppbaco = pbkgd;
-    *pcb =
-        SIZEOF(BKGD) + LwMul(pbkgd->_cbactLight, SIZEOF(BACT)) + LwMul(pbkgd->_cbactLight, SIZEOF(BLIT)); // actual BKGD size
+    *pcb = SIZEOF(BKGD) + LwMul(pbkgd->_cbactLight, SIZEOF(BACT)) +
+           LwMul(pbkgd->_cbactLight, SIZEOF(BLIT)); // actual BKGD size
     return fTrue;
 }
 
