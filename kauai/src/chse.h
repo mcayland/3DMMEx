@@ -55,7 +55,7 @@ class CHSE : public CHSE_PAR
     void DumpHeader(CTG ctg, CNO cno, PSTN pstnName = pvNil, bool fPack = fFalse);
     void DumpRgb(void *prgb, long cb, long cactTab = 1);
     void DumpParentCmd(CTG ctg, CNO cno, CHID chid);
-    void DumpBitmapCmd(byte bTransparent, long dxp, long dyp, PSTN pstnFile);
+    void DumpBitmapCmd(uint8_t bTransparent, long dxp, long dyp, PSTN pstnFile);
     void DumpFileCmd(PSTN pstnFile, bool fPacked = fFalse);
     void DumpAdoptCmd(CKI *pcki, KID *pkid);
     void DumpList(PGLB pglb);

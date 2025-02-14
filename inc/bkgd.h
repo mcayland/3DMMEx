@@ -21,8 +21,8 @@ struct BKGDF
 {
     short bo;
     short osk;
-    byte bIndexBase;
-    byte bPad;
+    uint8_t bIndexBase;
+    uint8_t bPad;
     short swPad;
 };
 VERIFY_STRUCT_SIZE(BKGDF, 8);
@@ -121,7 +121,7 @@ class BKGD : public BKGD_PAR
     CNO _cnoSnd;         // background sound
     STN _stn;            // name of this background
     PGL _pglclr;         // palette for this background
-    byte _bIndexBase;    // first index for palette
+    uint8_t _bIndexBase; // first index for palette
     long _iaposLast;     // Last placement point we used
     long _iaposNext;     // Next placement point to use
     PGL _pglapos;        // actor placement point(s) for current view

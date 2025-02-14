@@ -159,10 +159,10 @@ void MIDO::_Reset(void)
         for (iv = 0; iv < 16; iv++)
         {
             midev.lwSend = 0;
-            midev.rgbSend[0] = (byte)(0xD0 | iv);
+            midev.rgbSend[0] = (uint8_t)(0xD0 | iv);
             midiOutShortMsg(_hmo, midev.lwSend);
 
-            midev.rgbSend[0] = (byte)(0xE0 | iv);
+            midev.rgbSend[0] = (uint8_t)(0xE0 | iv);
             midev.rgbSend[2] = 0x40;
             midiOutShortMsg(_hmo, midev.lwSend);
         }

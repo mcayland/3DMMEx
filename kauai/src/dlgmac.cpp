@@ -24,9 +24,9 @@ bool DLG::_FInit(void)
     short ridDitl;
     long sit, sitLim;
     long idit;
-    byte bState;
-    byte *pbDitl;
-    byte bType;
+    uint8_t bState;
+    uint8_t *pbDitl;
+    uint8_t bType;
     long cbEntry;
     DIT dit;
     bool fAddDit;
@@ -50,7 +50,7 @@ bool DLG::_FInit(void)
     // we're looking at it.
     bState = HGetState(hn);
     HLock(hn);
-    pbDitl = *(byte **)hn;
+    pbDitl = *(uint8_t **)hn;
 
     /***********************************************************************
     This info comes from New Inside Macintosh - Toolbox Essentials,
@@ -427,7 +427,7 @@ void DLG::_GetEditText(long idit, PSTZ pstz)
 
     GetDialogItem(hdlg, (short)dit.sitMin, &sitk, &hn, &rcs);
     AssertVar(sitk == editText, "not an edit item!", &sitk);
-    GetDialogItemText(hn, (byte *)pstz);
+    GetDialogItemText(hn, (uint8_t *)pstz);
     StToStz(pstz);
 }
 
@@ -452,7 +452,7 @@ void DLG::_SetEditText(long idit, PSTZ pstz)
     gnv.Set();
     GetDialogItem(hdlg, (short)dit.sitMin, &sitk, &hn, &rcs);
     AssertVar(sitk == editText, "not an edit item!", &sitk);
-    SetDialogItemText(hn, (byte *)pstz);
+    SetDialogItemText(hn, (uint8_t *)pstz);
     gnv.Restore();
 }
 

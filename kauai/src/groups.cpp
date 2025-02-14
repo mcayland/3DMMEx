@@ -564,7 +564,7 @@ bool GL::FInsert(long iv, void *pv, long cv)
     AssertIn(cv, 1, kcbMax);
     AssertNilOrPvCb(pv, LwMul(cv, _cbEntry));
 
-    byte *qb;
+    uint8_t *qb;
     long cbTot, cbIns, ibIns;
 
     cbTot = LwMul(_ivMac + cv, _cbEntry);
@@ -606,7 +606,7 @@ void GL::Delete(long ivMin, long cv)
 
     if (ivMin < (_ivMac -= cv))
     {
-        byte *qb = _Qb1(LwMul(ivMin, _cbEntry));
+        uint8_t *qb = _Qb1(LwMul(ivMin, _cbEntry));
         BltPb(qb + LwMul(cv, _cbEntry), qb, LwMul(_ivMac - ivMin, _cbEntry));
     }
     TrashPvCb(_Qb1(LwMul(_ivMac, _cbEntry)), LwMul(cv, _cbEntry));
@@ -966,8 +966,8 @@ bool AL::FAdd(void *pv, long *piv)
     if (_cvFree > 0)
     {
         /* find the first free one */
-        byte grfbit;
-        byte *qgrfbit, *qrgb;
+        uint8_t grfbit;
+        uint8_t *qgrfbit, *qrgb;
 
         for (qgrfbit = qrgb = _Qgrfbit(0); *qgrfbit == 0xFF; qgrfbit++)
             ;
@@ -1028,8 +1028,8 @@ void AL::Delete(long iv)
     else
     {
         // find the new _ivMac
-        byte fbit;
-        byte *qgrfbit = _Qgrfbit(iv);
+        uint8_t fbit;
+        uint8_t *qgrfbit = _Qgrfbit(iv);
 
         while (iv >= 0)
         {
@@ -1304,7 +1304,7 @@ void GGB::_RemoveRgb(long bv, long cb)
     AssertIn(bv, 0, _bvMac);
     AssertIn(cb, 1, _bvMac - bv + 1);
     Assert(cb == CbRoundToLong(cb), "cb not divisible by SIZEOF(long)");
-    byte *qb;
+    uint8_t *qb;
 
     if (bv + cb < _bvMac)
     {
@@ -1571,7 +1571,7 @@ void GGB::DeleteRgb(long iv, long bv, long cb)
     LOC loc;
     LOC *qloc;
     long cbDel;
-    byte *qb;
+    uint8_t *qb;
 
     bv += _cbFixed;
     loc = *_Qloc(iv);
@@ -1612,7 +1612,7 @@ bool GGB::FInsertRgb(long iv, long bv, long cb, const void *pv)
 
     LOC loc;
     long cbAdd;
-    byte *qb;
+    uint8_t *qb;
 
     bv += _cbFixed;
     loc = *_Qloc(iv);
@@ -1733,7 +1733,7 @@ bool GGB::FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb)
     // move the last few bytes
     if (cb > cbMove)
     {
-        byte rgb[SIZEOF(long)];
+        uint8_t rgb[SIZEOF(long)];
 
         GetRgb(ivSrc, bvSrc, cb - cbMove, rgb);
         DeleteRgb(ivSrc, bvSrc, cb - cbMove);
@@ -1760,7 +1760,7 @@ void GGB::Merge(long ivSrc, long ivDst)
     Assert(!FFree(ivDst), "element free!");
     Assert(ivSrc != ivDst, "can't merge an element with itself!");
     long cb, cbMove, bv;
-    byte rgb[SIZEOF(long)];
+    uint8_t rgb[SIZEOF(long)];
 
     cb = Cb(ivSrc);
     cbMove = LwRoundToward(cb, SIZEOF(long));
@@ -1915,7 +1915,7 @@ bool GG::FInsert(long iv, long cb, const void *pv, const void *pvFixed)
     AssertIn(cb, 0, kcbMax);
     AssertIn(iv, 0, _ivMac + 1);
 
-    byte *qb;
+    uint8_t *qb;
     LOC loc;
     LOC *qloc;
 
@@ -1972,7 +1972,7 @@ bool GG::FCopyEntries(PGG pggSrc, long ivSrc, long ivDst, long cv)
     AssertIn(ivDst, 0, _ivMac + 1);
     long cb, cbFixed, iv, ivLim;
     LOC loc;
-    byte *pb;
+    uint8_t *pb;
 
     if ((cbFixed = pggSrc->CbFixed()) != CbFixed())
     {
@@ -2170,7 +2170,7 @@ bool AG::FAdd(long cb, long *piv, void *pv, void *pvFixed)
     AssertNilOrVarMem(piv);
 
     long iloc;
-    byte *qb;
+    uint8_t *qb;
     LOC loc;
     LOC *qloc;
 

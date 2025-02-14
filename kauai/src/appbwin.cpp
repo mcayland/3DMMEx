@@ -896,7 +896,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
         // format data
         if (pv != pvNil && cb > 0)
         {
-            byte *pb = (byte *)pv;
+            uint8_t *pb = (uint8_t *)pv;
             long cbT = cb;
             long ilw;
             long lw;

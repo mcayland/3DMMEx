@@ -19,7 +19,7 @@
 void BltPb(const void *pv1, void *pv2, long cb);
 void CopyPb(const void *pv1, void *pv2, long cb);
 void ClearPb(void *pv, long cb);
-void FillPb(void *pv1, long cb, byte b);
+void FillPb(void *pv1, long cb, uint8_t b);
 void ReversePb(void *pv, long cb);
 void ReverseRgsw(void *pv, long csw);
 void ReverseRglw(void *pv, long clw);

@@ -26,8 +26,8 @@ struct HQH
     HQ hqPrev;       // previous hq in doubly linked list
     HQ hqNext;       // next hq in doubly linked list
 #endif               // DEBUG
-    byte cactLock;   // lock count
-    byte cbExtra;    // count of extra bytes
+    uint8_t cactLock;   // lock count
+    uint8_t cbExtra;    // count of extra bytes
 };
 
 #ifdef DEBUG

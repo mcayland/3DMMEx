@@ -149,7 +149,7 @@ bool KCDC::FConvert(bool fEncode, long cfmt, void *pvSrc, long cbSrc, void *pvDs
 class BITA
 {
   protected:
-    byte *_prgb;
+    uint8_t *_prgb;
     long _cb;
 
     long _ibit;
@@ -176,7 +176,7 @@ void BITA::Set(void *pvDst, long cbDst)
 {
     AssertPvCb(pvDst, cbDst);
 
-    _prgb = (byte *)pvDst;
+    _prgb = (uint8_t *)pvDst;
     _cb = cbDst;
     _ibit = _ib = 0;
 }
@@ -192,7 +192,7 @@ bool BITA::FWriteBits(ulong lu, long cbit)
     if (_ibit > 0)
     {
         AssertIn(_ib, 0, _cb);
-        _prgb[_ib] = (byte)((_prgb[_ib] & ((1 << (_ibit)) - 1)) | (lu << _ibit));
+        _prgb[_ib] = (uint8_t)((_prgb[_ib] & ((1 << (_ibit)) - 1)) | (lu << _ibit));
         if (_ibit + cbit < 8)
         {
             _ibit += cbit;
@@ -214,13 +214,13 @@ bool BITA::FWriteBits(ulong lu, long cbit)
 
     while (cb-- > 0)
     {
-        _prgb[_ib++] = (byte)lu;
+        _prgb[_ib++] = (uint8_t)lu;
         lu >>= 8;
     }
 
     if (cbit > 0)
     {
-        _prgb[_ib] = (byte)lu;
+        _prgb[_ib] = (uint8_t)lu;
         _ibit = cbit;
     }
 
@@ -260,10 +260,10 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
 
     long ibSrc;
     long ibMatch, ibTest, cbMatch, ibMin, cbT;
-    byte bMatchNew, bMatchLast;
+    uint8_t bMatchNew, bMatchLast;
     BITA bita;
     long *pmpsuibStart = pvNil;
-    byte *prgbSrc = (byte *)pvSrc;
+    uint8_t *prgbSrc = (uint8_t *)pvSrc;
     long *pmpibibNext = pvNil;
 
     TrashVar(pcbDst);
@@ -298,7 +298,7 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
 
     for (ibSrc = 0; ibSrc < cbSrc; ibSrc += cbMatch)
     {
-        byte *pbMatch;
+        uint8_t *pbMatch;
         long cbMaxMatch;
 
         // get the new byte and the link
@@ -437,7 +437,7 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
     AssertVarMem(pcbDst);
 
     long ib;
-    byte bFlags;
+    uint8_t bFlags;
 
     TrashVar(pcbDst);
     if (cbSrc <= kcbTailKcdc + 1)
@@ -450,14 +450,14 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
     // we won't run past the end of the source.
     for (ib = 0; ib++ < kcbTailKcdc;)
     {
-        if (((byte *)pvSrc)[cbSrc - ib] != 0xFF)
+        if (((uint8_t *)pvSrc)[cbSrc - ib] != 0xFF)
         {
             Bug("bad tail of compressed data");
             return fFalse;
         }
     }
 
-    bFlags = ((byte *)pvSrc)[0];
+    bFlags = ((uint8_t *)pvSrc)[0];
     if (bFlags != 0)
     {
         Bug("unknown flag byte");
@@ -475,10 +475,10 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
 
     long cb, dib, ibit, cbit;
     ulong luCur;
-    byte *pbT;
-    byte *pbDst = (byte *)pvDst;
-    byte *pbLimDst = (byte *)pvDst + cbDst;
-    byte *pbSrc = (byte *)pvSrc + 1;
+    uint8_t *pbT;
+    uint8_t *pbDst = (uint8_t *)pvDst;
+    uint8_t *pbLimDst = (uint8_t *)pvDst + cbDst;
+    uint8_t *pbSrc = (uint8_t *)pvSrc + 1;
 
 #define _FTest(ibit) (luCur & (1L << (ibit)))
 #ifdef LITTLE_ENDIAN
@@ -498,7 +498,7 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
             if (pbDst >= pbLimDst)
                 goto LFail;
 #endif // SAFETY
-            *pbDst++ = (byte)(luCur >> ibit + 1);
+            *pbDst++ = (uint8_t)(luCur >> ibit + 1);
             ibit += 9;
         }
         else
@@ -545,7 +545,7 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
             ibit += cbit + cbit + 1;
 
 #ifdef SAFETY
-            if (pbLimDst - pbDst < cb || pbDst - (byte *)pvDst < dib)
+            if (pbLimDst - pbDst < cb || pbDst - (uint8_t *)pvDst < dib)
                 goto LFail;
 #endif // SAFETY
             for (pbT = pbDst - dib; cb-- > 0;)
@@ -555,7 +555,7 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
         ibit &= 0x07;
     }
 
-    *pcbDst = pbDst - (byte *)pvDst;
+    *pcbDst = pbDst - (uint8_t *)pvDst;
     return fTrue;
 
 #undef _FTest
@@ -583,11 +583,11 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
 
     long ibSrc;
     long ibMatch, ibTest, cbMatch, ibMin, cbT;
-    byte bMatchNew, bMatchLast;
+    uint8_t bMatchNew, bMatchLast;
     BITA bita;
     long cbRun;
     long *pmpsuibStart = pvNil;
-    byte *prgbSrc = (byte *)pvSrc;
+    uint8_t *prgbSrc = (uint8_t *)pvSrc;
     long *pmpibibNext = pvNil;
 
     TrashVar(pcbDst);
@@ -623,7 +623,7 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
     cbRun = 0;
     for (ibSrc = 0;; ibSrc += cbMatch)
     {
-        byte *pbMatch;
+        uint8_t *pbMatch;
         long cbMaxMatch;
 
         if (ibSrc >= cbSrc)
@@ -799,7 +799,7 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
     AssertVarMem(pcbDst);
 
     long ib;
-    byte bFlags;
+    uint8_t bFlags;
 
     TrashVar(pcbDst);
     if (cbSrc <= kcbTailKcd2 + 1)
@@ -812,14 +812,14 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
     // we won't run past the end of the source.
     for (ib = 0; ib++ < kcbTailKcd2;)
     {
-        if (((byte *)pvSrc)[cbSrc - ib] != 0xFF)
+        if (((uint8_t *)pvSrc)[cbSrc - ib] != 0xFF)
         {
             Bug("bad tail of compressed data");
             return fFalse;
         }
     }
 
-    bFlags = ((byte *)pvSrc)[0];
+    bFlags = ((uint8_t *)pvSrc)[0];
     if (bFlags != 0)
     {
         Bug("unknown flag byte");
@@ -837,12 +837,12 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
 
     long cb, dib, ibit, cbit;
     ulong luCur;
-    byte bT;
-    byte *pbT;
-    byte *pbDst = (byte *)pvDst;
-    byte *pbLimDst = (byte *)pvDst + cbDst;
-    byte *pbSrc = (byte *)pvSrc + 1;
-    byte *pbLimSrc = (byte *)pvSrc + cbSrc - kcbTailKcd2;
+    uint8_t bT;
+    uint8_t *pbT;
+    uint8_t *pbDst = (uint8_t *)pvDst;
+    uint8_t *pbLimDst = (uint8_t *)pvDst + cbDst;
+    uint8_t *pbSrc = (uint8_t *)pvSrc + 1;
+    uint8_t *pbLimSrc = (uint8_t *)pvSrc + cbSrc - kcbTailKcd2;
     long cbitHi;
     bool fAligned;
 
@@ -903,7 +903,7 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
             if (!fAligned)
             {
                 // Unaligned: the next cbitHi bits are the upper bits of the final dest byte
-                byte bUpper = (byte)((luCur & ((1 << (ibit + cbitHi)) - 1)) >> ibit);
+                uint8_t bUpper = (uint8_t)((luCur & ((1 << (ibit + cbitHi)) - 1)) >> ibit);
                 bT |= (bUpper << (8 - cbitHi));
                 *pbDst++ = bT;
                 ibit += cbitHi;
@@ -936,7 +936,7 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
             }
 
 #ifdef SAFETY
-            if (pbLimDst - pbDst < cb || pbDst - (byte *)pvDst < dib)
+            if (pbLimDst - pbDst < cb || pbDst - (uint8_t *)pvDst < dib)
                 goto LFail;
 #endif // SAFETY
             for (pbT = pbDst - dib; cb-- > 0;)
@@ -948,7 +948,7 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
     }
 
 LDone:
-    *pcbDst = pbDst - (byte *)pvDst;
+    *pcbDst = pbDst - (uint8_t *)pvDst;
     return fTrue;
 
 #undef _FTest

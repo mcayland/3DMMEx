@@ -16,6 +16,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 #include <stddef.h>
+#include <cstdint>
 
 // define the endian-ness
 #ifdef IN_80386
@@ -72,9 +73,8 @@ typedef HCURSOR HCRS;
 #endif //! DEBUG
 
 // standard scalar types
-typedef unsigned char byte;
-const byte kbMax = 0xFF;
-const byte kbMin = 0;
+const uint8_t kbMax = 0xFF;
+const uint8_t kbMin = 0;
 
 typedef unsigned short ushort;
 const short kswMax = (short)0x7FFF;

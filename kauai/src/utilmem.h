@@ -17,7 +17,7 @@
 #define UTILMEM_H
 
 // used for asserts and limiting memory
-const byte kbGarbage = 0xA3;    // new blocks are filled with this
+const uint8_t kbGarbage = 0xA3; // new blocks are filled with this
 const long kcbMax = 0x08000000; // 128 Megabytes
 const short kswMagicMem = (short)0xA253;
 const long klwMagicMem = (long)0xA253A253;
@@ -248,15 +248,15 @@ void FreePpv(void **ppv);
 ****************************************/
 inline void *PvAddBv(void *pv, long bv)
 {
-    return (byte *)pv + bv;
+    return (uint8_t *)pv + bv;
 }
 inline void *PvSubBv(void *pv, long bv)
 {
-    return (byte *)pv - bv;
+    return (uint8_t *)pv - bv;
 }
 inline long BvSubPvs(void *pv1, void *pv2)
 {
-    return (byte *)pv1 - (byte *)pv2;
+    return (uint8_t *)pv1 - (uint8_t *)pv2;
 }
 
 /****************************************

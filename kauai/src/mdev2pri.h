@@ -30,7 +30,7 @@ typedef MEV *PMEV;
 // We're using the older headers, so need to define our own.
 struct MH
 {
-    byte *lpData;
+    uint8_t *lpData;
     DWORD dwBufferLength;
     DWORD dwBytesRecorded;
     DWORD dwUser;

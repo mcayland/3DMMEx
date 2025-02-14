@@ -118,7 +118,7 @@ bool APPB::FCmdOpenDA(PCMD pcmd)
         pcmd->pgg->Get(0, rgchs + 1);
         st[0] = (schar)cchs;
         GetPort(&pprt);
-        OpenDeskAcc((byte *)rgchs);
+        OpenDeskAcc((uint8_t *)rgchs);
         SetPort(pprt);
     }
     pcmd->cid = cidNil; // don't record this command
@@ -615,8 +615,8 @@ bool APPB::FAssertProcApp(PSZ pszFile, long lwLine, PSZ pszMsg, void *pv, long c
         CopySzSt(pszFile, stFile);
     else
         CopySzSt("Some Header file", stFile);
-    NumToString(lwLine, (byte *)stLine);
-    ParamText((byte *)stLine, (byte *)stFile, (byte *)stMessage, (byte *)"\p");
+    NumToString(lwLine, (uint8_t *)stLine);
+    ParamText((uint8_t *)stLine, (uint8_t *)stFile, (uint8_t *)stMessage, (uint8_t *)"\p");
     bid = Alert(kridAssert, pvNil);
     _fInAssert = fFalse;
 

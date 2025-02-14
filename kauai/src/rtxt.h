@@ -66,8 +66,8 @@ enum
 
 struct PAP
 {
-    byte jc;
-    byte nd;
+    uint8_t jc;
+    uint8_t nd;
     short dxpTab;
     short numLine;
     short dypExtraLine;
@@ -261,7 +261,7 @@ class TXRD : public TXRD_PAR
     // sprm, value, mask triple
     struct SPVM
     {
-        byte sprm;
+        uint8_t sprm;
         long lw;
         long lwMask;
     };
@@ -275,7 +275,7 @@ class TXRD : public TXRD_PAR
         long dxpDef;
         long dypFont;
         long lwAcrBack;
-        // byte rgbStnFont[]; font name
+        // uint8_t rgbStnFont[]; font name
     };
     VERIFY_STRUCT_SIZE(RDOP, 16);
 #define kbomRdop 0x5FC00000
@@ -302,13 +302,13 @@ class TXRD : public TXRD_PAR
     ~TXRD(void);
     bool _FInit(PFNI pfni = pvNil, CTG ctg = kctgRichText);
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText);
-    virtual bool _FOpenArg(long icact, byte sprm, short bo, short osk);
+    virtual bool _FOpenArg(long icact, uint8_t sprm, short bo, short osk);
 
-    ulong _SpcpFromSprmCp(byte sprm, long cp)
+    ulong _SpcpFromSprmCp(uint8_t sprm, long cp)
     {
         return ((ulong)sprm << 24) | (cp & 0x00FFFFFF);
     }
-    byte _SprmFromSpcp(ulong spcp)
+    uint8_t _SprmFromSpcp(ulong spcp)
     {
         return B3Lw(spcp);
     }
@@ -317,29 +317,29 @@ class TXRD : public TXRD_PAR
         return (long)(spcp & 0x00FFFFFF);
     }
     bool _FFindMpe(ulong spcp, MPE *pmpe, long *pcpLim = pvNil, long *pimpe = pvNil);
-    bool _FFetchProp(long impe, byte *psprm, long *plw = pvNil, long *pcpMin = pvNil, long *pcpLim = pvNil);
-    bool _FEnsureInAg(byte sprm, void *pv, long cb, long *pjv);
+    bool _FFetchProp(long impe, uint8_t *psprm, long *plw = pvNil, long *pcpMin = pvNil, long *pcpLim = pvNil);
+    bool _FEnsureInAg(uint8_t sprm, void *pv, long cb, long *pjv);
     void _ReleaseInAg(long jv);
     void _AddRefInAg(long jv);
-    void _ReleaseSprmLw(byte sprm, long lw);
-    void _AddRefSprmLw(byte sprm, long lw);
-    tribool _TGetLwFromChp(byte sprm, PCHP pchpNew, PCHP pchpOld, long *plw, long *plwMask);
-    tribool _TGetLwFromPap(byte sprm, PPAP ppapNew, PPAP ppapOld, long *plw, long *plwMask);
+    void _ReleaseSprmLw(uint8_t sprm, long lw);
+    void _AddRefSprmLw(uint8_t sprm, long lw);
+    tribool _TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw, long *plwMask);
+    tribool _TGetLwFromPap(uint8_t sprm, PPAP ppapNew, PPAP ppapOld, long *plw, long *plwMask);
     bool _FGetRgspvmFromChp(PCHP pchp, PCHP pchpDiff, SPVM *prgspvm, long *pcspvm);
     bool _FGetRgspvmFromPap(PPAP ppap, PPAP ppapDiff, SPVM *prgspvm, long *pcspvm);
     void _ReleaseRgspvm(SPVM *prgspvm, long cspvm);
     void _ApplyRgspvm(long cp, long ccp, SPVM *prgspvm, long cspvm);
     void _GetParaBounds(long *pcpMin, long *pccp, bool fExpand);
     void _AdjustMpe(long cp, long ccpIns, long ccpDel);
-    void _CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccpDst, byte sprmMin, byte sprmLim);
+    void _CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccpDst, uint8_t sprmMin, uint8_t sprmLim);
 
-    virtual bool _FGetObjectRc(long icact, byte sprm, PGNV pgnv, PCHP pchp, RC *prc);
-    virtual bool _FDrawObject(long icact, byte sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
+    virtual bool _FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
+    virtual bool _FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
 
     bool _FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpSrc, long ccpIns, long cp, long ccpDel,
                        PCHP pchp, PPAP ppap, ulong grfdoc);
 
-    static bool _FSprmInAg(byte sprm);
+    static bool _FSprmInAg(uint8_t sprm);
 
   public:
     static PTXRD PtxrdNew(PFNI pfni = pvNil);

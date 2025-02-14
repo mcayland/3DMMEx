@@ -95,7 +95,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
     blck.Set(floSrc.pfil, size(long), floSrc.cb - size(long), fPacked);
 
     {
-        byte *prgb = pvNil;
+        uint8_t *prgb = pvNil;
 
         long dxp, dyp;
         bool fUpsideDown;
@@ -126,7 +126,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
         fprintf(stderr, "Size is left=%d top=%d right=%d bottom=%d stride is %d\n", size.xpLeft, size.ypTop,
                 size.xpRight, size.ypBottom, stride);
         buffer_size = stride * size.ypBottom;
-        byte *temp_buffer = new byte[buffer_size];
+        uint8_t *temp_buffer = new uint8_t[buffer_size];
         memset(temp_buffer, 253, buffer_size);
         mbmp->Draw(temp_buffer, stride, size.ypBottom, 0, 0);
         fprintf(stderr, "Drew %d bytes\n", stride * size.ypBottom);

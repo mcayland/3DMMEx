@@ -751,7 +751,7 @@ void TTW::Draw(PGNV pgnv, RC *prcClip)
             rc.xpRight = rc.xpLeft + dxp;
             rc.ypBottom = rc.ypTop + dyp;
             pgnv->ClipRc(&rc);
-            pgnv->FrameRc(&rc, ACR(byte(3 * irc)));
+            pgnv->FrameRc(&rc, ACR(uint8_t(3 * irc)));
             itnm = irc % CvFromRgv(_rgtnmHorz);
             chH = _rgtnmHorz[itnm].ch;
             tah = _rgtnmHorz[itnm].lw;
@@ -1477,13 +1477,13 @@ DOCPIC *DOCPIC::PdocpicNew(void)
         switch (_cact)
         {
         default:
-            clr.bRed = byte(255 - i);
+            clr.bRed = uint8_t(255 - i);
             break;
         case 1:
-            clr.bGreen = byte(255 - i);
+            clr.bGreen = uint8_t(255 - i);
             break;
         case 2:
-            clr.bBlue = byte(255 - i);
+            clr.bBlue = uint8_t(255 - i);
             break;
         }
         pglclr->FPush(&clr);
@@ -1504,9 +1504,9 @@ DOCPIC *DOCPIC::PdocpicNew(void)
             {
                 rc.Set(i, j, i + 1, j + 1);
                 if ((i + j) & 1)
-                    pgnv->FillRc(&rc, ACR(byte(i * 16 + j)));
+                    pgnv->FillRc(&rc, ACR(uint8_t(i * 16 + j)));
                 else
-                    pgnv->FillOval(&rc, ACR(byte(i * 16 + j)));
+                    pgnv->FillOval(&rc, ACR(uint8_t(i * 16 + j)));
             }
         }
         ReleasePpo(&pgnv);
@@ -1600,9 +1600,9 @@ void DDPIC::Draw(PGNV pgnv, RC *prcClip)
         {
             rc.Set(i, j, i + 1, j + 1);
             if ((i + j) & 1)
-                pgnv->FillRc(&rc, ACR(byte(i * 16 + j)));
+                pgnv->FillRc(&rc, ACR(uint8_t(i * 16 + j)));
             else
-                pgnv->FillOval(&rc, ACR(byte(i * 16 + j)));
+                pgnv->FillOval(&rc, ACR(uint8_t(i * 16 + j)));
         }
     }
 }
@@ -1712,20 +1712,20 @@ DOCGPT *DOCGPT::PdocgptNew(void)
         switch (_cact)
         {
         default:
-            clr.bRed = byte(255 - i);
+            clr.bRed = uint8_t(255 - i);
             break;
         case 1:
-            clr.bGreen = byte(255 - i);
+            clr.bGreen = uint8_t(255 - i);
             break;
         case 2:
-            clr.bBlue = byte(255 - i);
+            clr.bBlue = uint8_t(255 - i);
             break;
         }
         if (i == 100) // make 100 always the same	- yellow
         {
-            clr.bRed = byte(kbMax);
-            clr.bGreen = byte(kbMax);
-            clr.bBlue = byte(0);
+            clr.bRed = uint8_t(kbMax);
+            clr.bGreen = uint8_t(kbMax);
+            clr.bBlue = uint8_t(0);
         }
         pglclr->FPush(&clr);
         _cact = (_cact + 1) % 3;
@@ -1797,14 +1797,14 @@ DOCGPT *DOCGPT::PdocgptNew(void)
     for (i = 0; i < 128; i++)
     {
         ClearPb(&clr, SIZEOF(clr));
-        clr.bGreen = byte(i * 2);
+        clr.bGreen = uint8_t(i * 2);
         pglclr->FPush(&clr);
     }
     for (; i < 256; i++)
     {
         ClearPb(&clr, SIZEOF(clr));
         clr.bGreen = 255;
-        clr.bRed = clr.bBlue = (byte)((i - 128) * 2);
+        clr.bRed = clr.bBlue = (uint8_t)((i - 128) * 2);
         pglclr->FPush(&clr);
     }
 

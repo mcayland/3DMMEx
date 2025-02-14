@@ -176,7 +176,7 @@ bool TMAP::FWrite(PBLCK pblck)
  */
 PTMAP TMAP::PtmapReadNative(FNI *pfni, PGL pglclr)
 {
-    byte *prgb = pvNil;
+    uint8_t *prgb = pvNil;
     PTMAP ptmap = pvNil;
     long dxp, dyp;
     bool fUpsideDown;
@@ -223,7 +223,7 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni, PGL pglclr)
 
                     if (iclrBest != ivNil)
                     {
-                        prgb[iprgb] = (BYTE)iclrBest;
+                        prgb[iprgb] = (uint8_t)iclrBest;
                         continue;
                     }
                 }
@@ -290,7 +290,7 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni)
  *	output:
  *			returns the pointer to the new TMAP
  */
-PTMAP TMAP::PtmapNew(byte *prgbPixels, long dxp, long dyp)
+PTMAP TMAP::PtmapNew(uint8_t *prgbPixels, long dxp, long dyp)
 {
     PTMAP ptmap;
 
@@ -390,9 +390,9 @@ LFail:
 }
 
 #ifdef NOT_YET_REVIEWED
-byte *TMAP::PrgbBuildInverseTable(void)
+uint8_t *TMAP::PrgbBuildInverseTable(void)
 {
-    byte *prgb, *prgbT, iclr;
+    uint8_t *prgb, *prgbT, iclr;
     long cbRgb;
 
     if (_pbpmp->type != BR_PMT_RGB_888)
@@ -408,10 +408,10 @@ byte *TMAP::PrgbBuildInverseTable(void)
     return prgb;
 }
 
-void TMAP::_SortInverseTable(byte *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi)
+void TMAP::_SortInverseTable(uint8_t *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi)
 {
     long cbRgb1 = 0, cbRgb2 = 0;
-    byte *prgb2, *prgbRead, bT;
+    uint8_t *prgb2, *prgbRead, bT;
     BRCLR brclrPivot = brclrLo + (brclrHi - brclrLo) / 2;
     BRCLR *pbrclr;
 

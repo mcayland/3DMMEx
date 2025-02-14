@@ -289,7 +289,7 @@ bool SCB::_FCreate(long val, long valMin, long valMax, ulong grfscb)
 #ifdef MAC
     GNV gnv(this);
     gnv.Set();
-    hctl = NewControl(&hwnd->port, &rcs, (byte *)"\p", fTrue, 0, 0, 0, scrollBarProc, 0);
+    hctl = NewControl(&hwnd->port, &rcs, (uint8_t *)"\p", fTrue, 0, 0, 0, scrollBarProc, 0);
     gnv.Restore();
     if (hctl == hNil || !_FSetHctl(hctl))
         return fFalse;

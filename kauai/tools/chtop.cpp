@@ -2057,7 +2057,7 @@ void HETD::EditHtop(void)
             stn.GetRgch(rgch);
 
             // first character becomes the high byte
-            _htop.ckiSnd.ctg = LwFromBytes((byte)rgch[0], (byte)rgch[1], (byte)rgch[2], (byte)rgch[3]);
+            _htop.ckiSnd.ctg = LwFromBytes((uint8_t)rgch[0], (uint8_t)rgch[1], (uint8_t)rgch[2], (uint8_t)rgch[3]);
         }
     }
 
@@ -2237,7 +2237,7 @@ bool HETG::FInsertPicture(PCRF pcrf, CTG ctg, CNO cno)
     PDLG pdlg;
     STN stn;
     long cb;
-    byte rgb[kcbMaxDataStn];
+    uint8_t rgb[kcbMaxDataStn];
 
     pdlg = DLG::PdlgNew(dlidFormatPicture);
     if (pvNil == pdlg)
@@ -2337,7 +2337,7 @@ bool HETG::FInsertButton(PCRF pcrf, CTG ctg, CNO cno)
     long lw;
     PDLG pdlg;
     STN stn;
-    byte rgb[2 * kcbMaxDataStn];
+    uint8_t rgb[2 * kcbMaxDataStn];
     long cb;
 
     pdlg = DLG::PdlgNew(dlidFormatButton, _FDlgFormatButton);
@@ -2575,7 +2575,7 @@ bool HETG::FCmdGroupText(PCMD pcmd)
     PDLG pdlg;
     CNO cnoTopic;
     STN stnTopic;
-    byte bGroup;
+    uint8_t bGroup;
     long lw;
 
     if (_cpAnchor == _cpOther)
@@ -2600,7 +2600,7 @@ bool HETG::FCmdGroupText(PCMD pcmd)
         vpappb->TGiveAlertSz(PszLit("Group number must be between 0 and 255!"), bkOk, cokExclamation);
         lw = 0;
     }
-    bGroup = (byte)lw;
+    bGroup = (uint8_t)lw;
     if (bGroup != 0)
     {
         pdlg->GetStn(kiditTopicStnGroupText, &stnTopic);
@@ -2763,7 +2763,7 @@ bool HETG::FCmdFormatPicture(PCMD pcmd)
     void *pv;
     PDLG pdlg;
     long cp, cpT, cb;
-    byte rgb[SIZEOF(CKI) + kcbMaxDataStn];
+    uint8_t rgb[SIZEOF(CKI) + kcbMaxDataStn];
     STN stn;
     CKI *pcki = (CKI *)rgb;
 
@@ -2829,7 +2829,7 @@ bool HETG::FCmdFormatButton(PCMD pcmd)
     PDLG pdlg;
     long cp, cpT, cb, ib, cbRead;
     STN stn;
-    byte rgb[SIZEOF(CKI) + SIZEOF(long) + 2 * kcbMaxDataStn];
+    uint8_t rgb[SIZEOF(CKI) + SIZEOF(long) + 2 * kcbMaxDataStn];
     CKI *pcki = (CKI *)rgb;
     long *plw = (long *)(pcki + 1);
 

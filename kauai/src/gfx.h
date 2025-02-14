@@ -125,10 +125,10 @@ typedef RGBColor SCR;
 // NOTE: this matches the Windows RGBQUAD structure
 struct CLR
 {
-    byte bBlue;
-    byte bGreen;
-    byte bRed;
-    byte bZero;
+    uint8_t bBlue;
+    uint8_t bGreen;
+    uint8_t bRed;
+    uint8_t bZero;
 };
 
 #ifdef DEBUG
@@ -181,19 +181,19 @@ class ACR
     {
         _lu = LwFromBytes(kbRgbAcr, clr.bRed, clr.bGreen, clr.bBlue);
     }
-    ACR(byte bRed, byte bGreen, byte bBlue)
+    ACR(uint8_t bRed, uint8_t bGreen, uint8_t bBlue)
     {
         _lu = LwFromBytes(kbRgbAcr, bRed, bGreen, bBlue);
     }
-    void Set(byte bRed, byte bGreen, byte bBlue)
+    void Set(uint8_t bRed, uint8_t bGreen, uint8_t bBlue)
     {
         _lu = LwFromBytes(kbRgbAcr, bRed, bGreen, bBlue);
     }
-    ACR(byte iscr)
+    ACR(uint8_t iscr)
     {
         _lu = LwFromBytes(kbIndexAcr, 0, 0, iscr);
     }
-    void SetToIndex(byte iscr)
+    void SetToIndex(uint8_t iscr)
     {
         _lu = LwFromBytes(kbIndexAcr, 0, 0, iscr);
     }
@@ -257,7 +257,7 @@ const ACR kacrInvert(fFalse, fFalse);
 // abstract pattern
 struct APT
 {
-    byte rgb[8];
+    uint8_t rgb[8];
 
     bool operator==(APT &apt)
     {
@@ -599,7 +599,7 @@ class GPT : public GPT_PAR
     HDC _hdc;
     HWND _hwnd;
     HBMP _hbmp;        // nil if not an offscreen port
-    byte *_prgbPixels; // nil if not a dib section port
+    uint8_t *_prgbPixels; // nil if not a dib section port
     long _cbitPixel;
     long _cbRow;
     RC _rcOff;      // bounding rectangle for a metafile or dib port
@@ -742,7 +742,7 @@ class GPT : public GPT_PAR
 
     void Lock(void);
     void Unlock(void);
-    byte *PrgbLockPixels(RC *prc = pvNil);
+    uint8_t *PrgbLockPixels(RC *prc = pvNil);
     long CbRow(void);
     long CbitPixel(void);
 };
@@ -766,11 +766,11 @@ bool FEqualRgn(HRGN hrgn1, HRGN hrgn2);
 bool FInitGfx(void);
 
 // stretch by a factor of 2 in each dimension.
-void DoubleStretch(byte *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, byte *prgbDst, long cbRowDst, long dypDst,
+void DoubleStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
                    long xpDst, long ypDst, RC *prcClip, PREGN pregnClip);
 
 // stretch by a factor of 2 in vertical direction only.
-void DoubleVertStretch(byte *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, byte *prgbDst, long cbRowDst, long dypDst,
+void DoubleVertStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
                        long xpDst, long ypDst, RC *prcClip, PREGN pregnClip);
 
 // Number of times that the palette has changed (via a call to CclrSetPalette

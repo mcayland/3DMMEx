@@ -353,7 +353,7 @@ bool MODL::_FPrelight(long cblit, BVEC3 *prgbvec3Light)
                  306};
 
     const br_colour kbrcHilite = BR_COLOUR_RGB(255, 255, 255);
-    const byte kbOpaque = 0xff;
+    const uint8_t kbOpaque = 0xff;
     const br_ufraction kbrufKaHilite = BR_UFRACTION(0.10);
     const br_ufraction kbrufKdHilite = BR_UFRACTION(0.60);
     const br_ufraction kbrufKsHilite = BR_UFRACTION(0.00);

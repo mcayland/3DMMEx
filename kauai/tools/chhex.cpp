@@ -145,10 +145,10 @@ void DCH::Draw(PGNV pgnv, RC *prcClip)
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
     STN stn;
-    byte rgb[kcbMaxLineDch];
+    uint8_t rgb[kcbMaxLineDch];
     RC rc, rcSrc;
     long xp, yp, cb, ib, cbT, ibT;
-    byte bT;
+    uint8_t bT;
 
     pgnv->ClipRc(prcClip);
     pgnv->GetRcSrc(&rcSrc);
@@ -283,7 +283,7 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
     long dibSel, dibDel, ibLim;
     long cact;
     CMD cmd;
-    byte rgb[64], bT;
+    uint8_t rgb[64], bT;
     bool fRight = fFalse;
 
     // keep fetching characters until we get a cursor key, delete key or
@@ -330,7 +330,7 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
             if (chNil == pcmd->ch)
                 break;
             if (!_fHexSel)
-                bT = (byte)pcmd->ch;
+                bT = (uint8_t)pcmd->ch;
             else
             {
                 // hex typing
@@ -363,7 +363,7 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
         else
         {
             // hex typing
-            byte bT;
+            uint8_t bT;
             long ibSrc, ibDst;
             long ibAnchor = _ibAnchor;
 
@@ -441,7 +441,7 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
 /***************************************************************************
     Replaces the bytes between ib1 and ib2 with the given bytes.
 ***************************************************************************/
-bool DCH::_FReplace(byte *prgb, long cb, long ib1, long ib2, bool fHalfSel)
+bool DCH::_FReplace(uint8_t *prgb, long cb, long ib1, long ib2, bool fHalfSel)
 {
     _SwitchSel(fFalse);
     SortLw(&ib1, &ib2);

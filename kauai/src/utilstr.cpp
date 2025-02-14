@@ -325,7 +325,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
         if (ibT + 2 > cbMax)
             goto LFail;
 
-        cch = (long)(byte) * (schar *)PvAddBv(pv, ibT++);
+        cch = (long)(uint8_t) * (schar *)PvAddBv(pv, ibT++);
         if (cch > kcchMaxStn || ibT + cch >= cbMax || *(schar *)PvAddBv(pv, ibT + cch) != 0)
         {
             goto LFail;
@@ -395,7 +395,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
     short osk;
     schar chs;
     wchar chw;
-    byte rgb[kcbMaxDataStn];
+    uint8_t rgb[kcbMaxDataStn];
 
     if (!pblck->FUnpackData())
         return fFalse;
@@ -436,7 +436,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
     case SIZEOF(schar):
         if (ibT + 2 > cbMax || !pblck->FReadRgb(&chs, 1, ibT++))
             goto LFail;
-        cch = (long)(byte)chs;
+        cch = (long)(uint8_t)chs;
         if (cch > kcchMaxStn || ibT + cch >= cbMax || !pblck->FReadRgb(rgb, cch + 1, ibT) || rgb[cch] != 0)
         {
             goto LFail;
@@ -711,7 +711,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
         case ChLit('f'):
             for (cch = 4; cch-- > 0; lu >>= 8)
             {
-                ch = (achar)(byte)lu;
+                ch = (achar)(uint8_t)lu;
                 if (0 == ch)
                     ch = 1;
                 rgchT[cch] = ch;
@@ -1144,13 +1144,13 @@ void UpperRgchs(schar *prgchs, long cchs)
     if (!_fInited)
     {
         for (ichs = 0; ichs < 256; ichs++)
-            _mpchschsUpper[ichs] = (byte)ichs;
+            _mpchschsUpper[ichs] = (uint8_t)ichs;
         MacWin(UppercaseText(_mpchschsUpper, 256, smSystemScript), CharUpperBuffA(_mpchschsUpper, 256));
         _fInited = fTrue;
     }
 
     for (; cchs-- != 0; prgchs++)
-        *prgchs = _mpchschsUpper[(byte)*prgchs];
+        *prgchs = _mpchschsUpper[(uint8_t)*prgchs];
 }
 
 /***************************************************************************
@@ -1166,13 +1166,13 @@ void LowerRgchs(schar *prgchs, long cchs)
     if (!_fInited)
     {
         for (ichs = 0; ichs < 256; ichs++)
-            _mpchschsLower[ichs] = (byte)ichs;
+            _mpchschsLower[ichs] = (uint8_t)ichs;
         MacWin(LowercaseText(_mpchschsLower, 256, smSystemScript), CharLowerBuffA(_mpchschsLower, 256));
         _fInited = fTrue;
     }
 
     for (; cchs-- != 0; prgchs++)
-        *prgchs = _mpchschsLower[(byte)*prgchs];
+        *prgchs = _mpchschsLower[(uint8_t)*prgchs];
 }
 
 /***************************************************************************
@@ -1272,9 +1272,9 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
         pchSrc = (achar *)pvSrc;
         for (pchDst = prgchDst, cchT = cbSrc; cchT > 0; cchT--)
         {
-            byte bT = (byte)*pchSrc++;
-            if (bT >= (byte)0x80)
-                *pchDst++ = _mpchschsMacToWin[bT - (byte)0x80];
+            uint8_t bT = (uint8_t)*pchSrc++;
+            if (bT >= (uint8_t)0x80)
+                *pchDst++ = _mpchschsMacToWin[bT - (uint8_t)0x80];
             else
                 *pchDst++ = (achar)bT;
         }
@@ -1320,7 +1320,7 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
 
         pchsSrc = (schar *)pvSrc;
         for (pchDst = prgch, cchT = cbSrc; cchT > 0; cchT--)
-            *pchDst++ = (achar)(byte)*pchsSrc++;
+            *pchDst++ = (achar)(uint8_t)*pchsSrc++;
         return cbSrc;
 
     case koskSbMac:
@@ -1333,9 +1333,9 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
         for (pchDst = prgch, cchT = cbSrc; cchT > 0; cchT--)
             pchsSrc = (schar *)pvSrc;
         {
-            byte bT = (byte)*pchsSrc++;
-            if (bT >= (byte)0x80)
-                *pchDst++ = (achar)_mpchschsMacToWin[bT - (byte)0x80];
+            uint8_t bT = (uint8_t)*pchsSrc++;
+            if (bT >= (uint8_t)0x80)
+                *pchDst++ = (achar)_mpchschsMacToWin[bT - (uint8_t)0x80];
             else
                 *pchDst++ = (achar)bT;
         }
@@ -1374,9 +1374,9 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
         pchSrc = (achar *)pvSrc;
         for (pchDst = prgchDst, cchT = cbSrc; cchT > 0; cchT--)
         {
-            byte bT = (byte)*pchSrc++;
-            if (bT >= (byte)0x80)
-                *pchDst++ = _mpchschsWinToMac[bT - (byte)0x80];
+            uint8_t bT = (uint8_t)*pchSrc++;
+            if (bT >= (uint8_t)0x80)
+                *pchDst++ = _mpchschsWinToMac[bT - (uint8_t)0x80];
             else
                 *pchDst++ = (achar)bT;
         }
@@ -1414,8 +1414,8 @@ void TranslateRgch(achar *prgch, long cch, short osk, bool fToCur)
 
     for (; cch > 0; cch--, prgch++)
     {
-        if ((byte)*prgch >= (byte)0x80)
-            *prgch = pmpchschs[(byte)*prgch - (byte)0x80];
+        if ((uint8_t)*prgch >= (uint8_t)0x80)
+            *prgch = pmpchschs[(uint8_t)*prgch - (uint8_t)0x80];
     }
 #endif //! UNICODE
 }

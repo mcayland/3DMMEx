@@ -57,7 +57,7 @@ void MSTP::Init(PMIDS pmids, ulong tsStart, long lwTempo)
             return;
         _pmids->AddRef();
 
-        _prgb = (byte *)PvLockHq(_pmids->_hqrgb);
+        _prgb = (uint8_t *)PvLockHq(_pmids->_hqrgb);
         _pbLim = _prgb + CbOfHq(_pmids->_hqrgb);
     }
     else if (pvNil == _pmids)
@@ -79,8 +79,8 @@ bool MSTP::FGetEvent(PMIDEV pmidev, bool fAdvance)
     AssertThis(0);
     AssertNilOrVarMem(pmidev);
 
-    byte bT;
-    byte *pbCur;
+    uint8_t bT;
+    uint8_t *pbCur;
     MIDEV midev;
     long cbT;
     long ibSend;
@@ -229,12 +229,12 @@ LFail:
 /***************************************************************************
     Read a variable length quantity.
 ***************************************************************************/
-bool MSTP::_FReadVar(byte **ppbCur, long *plw)
+bool MSTP::_FReadVar(uint8_t **ppbCur, long *plw)
 {
     AssertThis(0);
     AssertVarMem(ppbCur);
 
-    byte bT;
+    uint8_t bT;
 
     *plw = 0;
     do
@@ -258,7 +258,7 @@ void MSTP::AssertValid(ulong grf)
         return;
 
     AssertPo(_pmids, 0);
-    Assert(_prgb == (byte *)QvFromHq(_pmids->_hqrgb), 0);
+    Assert(_prgb == (uint8_t *)QvFromHq(_pmids->_hqrgb), 0);
     Assert(_pbLim == _prgb + CbOfHq(_pmids->_hqrgb), 0);
     AssertIn(_pbCur - _prgb, 0, _pbLim - _prgb + 1);
 }
@@ -403,7 +403,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     BSM bsm;
     RAT ratTempo;
     ulong tsTempo, tsRawTempo, tsLast, ts, dts;
-    byte rgbT[5];
+    uint8_t rgbT[5];
     long cbT;
     bool fSeq;
     long imidtr, imidtrMin;
@@ -508,7 +508,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     if (FPure(fSmpte = (midhed.swDiv < 0)))
     {
         // SMPTE time
-        long fps = (byte)(-BHigh(midhed.swDiv));
+        long fps = (uint8_t)(-BHigh(midhed.swDiv));
         long ctickFrame = BLow(midhed.swDiv);
 
         if (fps == 29)
@@ -643,18 +643,18 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     Static method to convert a long to its midi file variable length
     equivalent.
 ***************************************************************************/
-long MIDS::_CbEncodeLu(ulong lu, byte *prgb)
+long MIDS::_CbEncodeLu(ulong lu, uint8_t *prgb)
 {
     AssertNilOrVarMem(prgb);
 
     long ib;
 
     if (pvNil != prgb)
-        prgb[0] = (byte)(lu & 0x7F);
+        prgb[0] = (uint8_t)(lu & 0x7F);
     for (ib = 1; (lu >>= 7) > 0; ib++)
     {
         if (pvNil != prgb)
-            prgb[ib] = (byte)((lu & 0x7F) | 0x80);
+            prgb[ib] = (uint8_t)((lu & 0x7F) | 0x80);
     }
     if (pvNil != prgb)
         ReversePb(prgb, ib);

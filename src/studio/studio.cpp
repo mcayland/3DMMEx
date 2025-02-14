@@ -1277,7 +1277,7 @@ bool STDIO::FCmdTextSetBkgdColor(PCMD pcmd)
     AssertVarMem(pcmd);
     AssertIn(pcmd->rglw[0], 0, kbMax);
 
-    byte iscr = (byte)pcmd->rglw[0];
+    uint8_t iscr = (uint8_t)pcmd->rglw[0];
     ACR acr(iscr);
     PMVU pmvu = (PMVU)_pmvie->PddgActive();
 
@@ -1307,7 +1307,7 @@ bool STDIO::FCmdTextSetColor(PCMD pcmd)
     AssertVarMem(pcmd);
     AssertIn(pcmd->rglw[0], 0, kbMax);
 
-    byte iscr = (byte)pcmd->rglw[0];
+    uint8_t iscr = (uint8_t)pcmd->rglw[0];
     ACR acr(iscr);
     PMVU pmvu = (PMVU)_pmvie->PddgActive();
 

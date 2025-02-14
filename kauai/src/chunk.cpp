@@ -164,10 +164,10 @@ struct CRPBG
         struct
         {
             // for cvn <= kcvnMinGrfcrp
-            byte fOnExtra; // fcrpOnExtra
-            byte fLoner;   // fcrpLoner
-            byte fPacked;  // fcrpPacked
-            byte bT;       // fcrpMarkT
+            uint8_t fOnExtra; // fcrpOnExtra
+            uint8_t fLoner;  // fcrpLoner
+            uint8_t fPacked; // fcrpPacked
+            uint8_t bT;    // fcrpMarkT
         };
 
         // for cvn >= kcvnMinGrfcrp

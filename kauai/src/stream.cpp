@@ -113,12 +113,12 @@ bool BSM::FReplace(const void *prgb, long cbIns, long ib, long cbDel)
     AssertPvCb(prgb, cbIns);
     AssertIn(ib, 0, _ibMac + 1);
     AssertIn(cbDel, 0, _ibMac + 1 - ib);
-    byte *qrgb;
+    uint8_t *qrgb;
 
     if (!_FEnsureSize(_ibMac + cbIns - cbDel, fFalse))
         return fFalse;
 
-    qrgb = (byte *)QvFromHq(_hqrgb);
+    qrgb = (uint8_t *)QvFromHq(_hqrgb);
     if (ib < _ibMac - cbDel && cbDel != cbIns)
         BltPb(qrgb + ib + cbDel, qrgb + ib + cbIns, _ibMac - cbDel - ib);
     if (cbIns > 0)
@@ -405,7 +405,7 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
     long ibMinSrc, ibLimSrc, ibMinWhole, ib;
     long cbMinFlo, cbLimFlo, cbIns, cbT;
     FLO flo;
-    byte *pb;
+    uint8_t *pb;
     bool fRet;
 
     // REVIEW shonk: if we're only inserting a non-file piece of pbsfSrc, should
@@ -464,7 +464,7 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
             if (pvNil == flo.pfil)
             {
                 // a memory piece
-                pb = (byte *)pbsfSrc->_pggflo->PvLock(ifloMinSrc);
+                pb = (uint8_t *)pbsfSrc->_pggflo->PvLock(ifloMinSrc);
                 fRet = FReplace(pb + ibSrc - ibMinSrc, cbT, ibDst, 0);
                 pbsfSrc->_pggflo->Unlock();
             }
@@ -498,7 +498,7 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
             if (pvNil == flo.pfil)
             {
                 // a memory piece
-                pb = (byte *)pbsfSrc->_pggflo->PvLock(ifloLimSrc);
+                pb = (uint8_t *)pbsfSrc->_pggflo->PvLock(ifloLimSrc);
                 fRet = FReplace(pb + ib - ibLimSrc, cbT, ibDst + cbIns, cbDel);
                 pbsfSrc->_pggflo->Unlock();
             }

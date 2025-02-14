@@ -17,8 +17,8 @@ struct TMAPF
     short bo;
     short osk;
     short cbRow;
-    byte type;
-    byte grftmap;
+    uint8_t type;
+    uint8_t grftmap;
     short xpLeft;
     short ypTop;
     short dxp;
@@ -63,7 +63,7 @@ class TMAP : public TMAP_PAR
     {
     } // can't instantiate directly; must use PtmapRead
 #ifdef NOT_YET_REVIEWED
-    void TMAP::_SortInverseTable(byte *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi);
+    void TMAP::_SortInverseTable(uint8_t *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi);
 #endif // NOT_YET_REVIEWED
   public:
     ~TMAP(void);
@@ -97,7 +97,7 @@ class TMAP : public TMAP_PAR
     bool FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr = pvNil);
 
     // Creates a TMAP from the width, height, and an array of bytes
-    static PTMAP PtmapNew(byte *prgbPixels, long dxWidth, long dxHeight);
+    static PTMAP PtmapNew(uint8_t *prgbPixels, long dxWidth, long dxHeight);
 
     // Some useful file methods
     long CbOnFile(void)
@@ -108,7 +108,7 @@ class TMAP : public TMAP_PAR
 
 #ifdef NOT_YET_REVIEWED
     // Useful shade-table type method
-    byte *PrgbBuildInverseTable(void);
+    uint8_t *PrgbBuildInverseTable(void);
 #endif // NOT_YET_REVIEWED
 };
 

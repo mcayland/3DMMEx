@@ -121,7 +121,7 @@ HWND GOB::_HwndNewMdi(PSTZ pstzTitle)
     OffsetRect(&rcs, _cact * 20, _cact * 20);
     _cact = (_cact + 1) % 5;
 
-    hwnd = (HWND)NewCWindow(pvNil, &rcs, (byte *)pstzTitle, fTrue, documentProc, GrafPtr(-1), fTrue, 0);
+    hwnd = (HWND)NewCWindow(pvNil, &rcs, (uint8_t *)pstzTitle, fTrue, documentProc, GrafPtr(-1), fTrue, 0);
     if (hNil != hwnd && pvNil != vpmubCur)
         vpmubCur->FAddListCid(cidChooseWnd, (long)hwnd, pstzTitle);
     return hwnd;
@@ -243,7 +243,7 @@ void GOB::SetHwndName(PSTZ pstz)
     {
         vpmubCur->FChangeListCid(cidChooseWnd, (long)_hwnd, pvNil, (long)_hwnd, pstz);
     }
-    SetWTitle(&_hwnd->port, (byte *)pstz);
+    SetWTitle(&_hwnd->port, (uint8_t *)pstz);
 }
 
 /***************************************************************************

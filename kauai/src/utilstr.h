@@ -149,22 +149,22 @@ inline long CchTotSz(const PSZ psz)
 inline long CchSt(PST pst)
 {
     AssertSt(pst);
-    return (long)(byte)pst[0];
+    return (long)(uint8_t)pst[0];
 }
 inline long CchTotSt(PST pst)
 {
     AssertSt(pst);
-    return (long)(byte)pst[0] + kcchExtraSt;
+    return (long)(uint8_t)pst[0] + kcchExtraSt;
 }
 inline long CchStz(PSTZ pstz)
 {
     AssertStz(pstz);
-    return (long)(byte)pstz[0];
+    return (long)(uint8_t)pstz[0];
 }
 inline long CchTotStz(PSTZ pstz)
 {
     AssertStz(pstz);
-    return (long)(byte)pstz[0] + kcchExtraStz;
+    return (long)(uint8_t)pstz[0] + kcchExtraStz;
 }
 
 inline achar *PrgchSt(PST pst)

@@ -471,8 +471,8 @@ void _AssertMbh(MBH *pmbh)
         Assert(pmbh->pmbhNext->pmbhPrev == pmbh, "wrong prev in next");
     }
 
-    ((byte *)&sw)[0] = *(byte *)PvAddBv(pmbh, pmbh->cb - 2);
-    ((byte *)&sw)[1] = *(byte *)PvAddBv(pmbh, pmbh->cb - 1);
+    ((uint8_t *)&sw)[0] = *(uint8_t *)PvAddBv(pmbh, pmbh->cb - 2);
+    ((uint8_t *)&sw)[1] = *(uint8_t *)PvAddBv(pmbh, pmbh->cb - 1);
     Assert(sw == kswMagicMem, "bad tail magic number");
     vmutxMem.Leave();
 }

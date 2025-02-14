@@ -290,7 +290,7 @@ void BKGD::_SetupLights(PGL pgllite)
         qlite = (LITE *)pgllite->QvGet(ilite);
         pbact = &_prgbactLight[ilite];
         pblit = &_prgblitLight[ilite];
-        pblit->type = (byte)qlite->lt;
+        pblit->type = (uint8_t)qlite->lt;
         pblit->colour = kbrcLight;
         pblit->attenuation_c = qlite->rIntensity;
         pbact->type = BR_ACTOR_LIGHT;

@@ -172,7 +172,7 @@ void CHSE::DumpParentCmd(CTG ctgPar, CNO cnoPar, CHID chid)
 /***************************************************************************
     Dump a bitmap directive
 ***************************************************************************/
-void CHSE::DumpBitmapCmd(byte bTransparent, long dxp, long dyp, PSTN pstnFile)
+void CHSE::DumpBitmapCmd(uint8_t bTransparent, long dxp, long dyp, PSTN pstnFile)
 {
     AssertThis(fchseDump);
     AssertPo(pstnFile, 0);
@@ -224,7 +224,7 @@ void CHSE::_DumpBsf(long cactTab)
     AssertThis(fchseDump);
     AssertIn(cactTab, 0, kcchMaxStn + 1);
 
-    byte rgb[8], bT;
+    uint8_t rgb[8], bT;
     STN stn1;
     STN stn2;
     long cact;

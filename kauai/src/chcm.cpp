@@ -175,14 +175,14 @@ void CHCM::_Error(long ert, const PSZ pszMessage)
 /***************************************************************************
     Checks that lw could be accepted under the current numerical mode.
 ***************************************************************************/
-void CHCM::_GetRgbFromLw(long lw, byte *prgb)
+void CHCM::_GetRgbFromLw(long lw, uint8_t *prgb)
 {
     AssertThis(0);
     AssertPvCb(prgb, SIZEOF(long));
 
     switch (_cbNum)
     {
-    case SIZEOF(byte):
+    case SIZEOF(uint8_t):
         if (lw < -128 || lw > kbMax)
             _Error(ertRangeByte);
         prgb[0] = B0Lw(lw);
@@ -272,7 +272,7 @@ bool CHCM::_FGetCleanTok(TOK *ptok, bool fEofOk)
             _sm = smSt;
             break;
         case ttModeByte:
-            _cbNum = SIZEOF(byte);
+            _cbNum = SIZEOF(uint8_t);
             break;
         case ttModeShort:
             _cbNum = SIZEOF(short);
@@ -460,7 +460,7 @@ void CHCM::_AppendString(PSTN pstnValue)
 
     void *pv;
     long cb;
-    byte rgb[kcbMaxDataStn];
+    uint8_t rgb[kcbMaxDataStn];
 
     switch (_sm)
     {
@@ -496,7 +496,7 @@ void CHCM::_AppendString(PSTN pstnValue)
 void CHCM::_AppendNumber(long lwValue)
 {
     AssertThis(0);
-    byte rgb[SIZEOF(long)];
+    uint8_t rgb[SIZEOF(long)];
 
     _GetRgbFromLw(lwValue, rgb);
     if (!FError() && !_bsf.FReplace(rgb, _cbNum, _bsf.IbMac(), 0))
@@ -620,7 +620,7 @@ void CHCM::_ParseBodyAlign(void)
     if (!FError())
     {
         // actually do the padding
-        byte rgb[100];
+        uint8_t rgb[100];
         long cb;
         long ibMac = _bsf.IbMac();
         long ibMacNew = LwRoundAway(ibMac, tok.lw);
@@ -775,7 +775,7 @@ void CHCM::_ParseBodyBitmap(bool fPack, bool fMask, CTG ctg, CNO cno)
         goto LFail;
     }
 
-    if (pvNil == (pmbmp = MBMP::PmbmpReadNative(&fni, (byte)rgphp[0].lw, rgphp[1].lw, rgphp[2].lw,
+    if (pvNil == (pmbmp = MBMP::PmbmpReadNative(&fni, (uint8_t)rgphp[0].lw, rgphp[1].lw, rgphp[2].lw,
                                                 fMask ? fmbmpMask : fmbmpNil)))
     {
         STN stn;
@@ -892,10 +892,10 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     // These are for parsing a Windows cursor file
     struct CURDIR
     {
-        byte dxp;
-        byte dyp;
-        byte bZero1;
-        byte bZero2;
+        uint8_t dxp;
+        uint8_t dyp;
+        uint8_t bZero1;
+        uint8_t bZero2;
         short xp;
         short yp;
         long cb;
@@ -927,7 +927,7 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     long ccurdir, cbBits;
     CURF curf;
     short rgsw[3];
-    byte *prgb;
+    uint8_t *prgb;
     CURDIR *pcurdir;
     CURH *pcurh;
     PGG pggcurf = pvNil;
@@ -965,7 +965,7 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     }
     ReleasePpo(&floSrc.pfil);
 
-    prgb = (byte *)PvLockHq(hq);
+    prgb = (uint8_t *)PvLockHq(hq);
     pcurdir = (CURDIR *)prgb;
     if (pvNil == (pggcurf = GG::PggNew(SIZEOF(CURF), ccurdir)))
     {
@@ -984,8 +984,8 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
             goto LFail;
         }
         curf.curt = curtMonochrome;
-        curf.xp = (byte)pcurdir->xp;
-        curf.yp = (byte)pcurdir->yp;
+        curf.xp = (uint8_t)pcurdir->xp;
+        curf.yp = (uint8_t)pcurdir->yp;
         curf.dxp = pcurdir->dxp;
         curf.dyp = pcurdir->dyp;
 
@@ -1181,7 +1181,7 @@ void CHCM::_ParseBodyList(bool fPack, bool fAl, CTG ctg, CNO cno)
     PHP rgphp[1];
     long cphp;
     long cbEntry, cb;
-    byte *prgb;
+    uint8_t *prgb;
     long iv, iiv;
     BLCK blck;
     PGLB pglb = pvNil;
@@ -1261,7 +1261,7 @@ void CHCM::_ParseBodyList(bool fPack, bool fAl, CTG ctg, CNO cno)
         else
         {
             Assert(iv == pglb->IvMac() - 1, "what?");
-            prgb = (byte *)pglb->PvLock(iv);
+            prgb = (uint8_t *)pglb->PvLock(iv);
             if (cb > 0)
                 _bsf.FetchRgb(0, cb, prgb);
             if (cb < cbEntry)
@@ -1312,7 +1312,7 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
     PHP rgphp[1];
     long cphp;
     long cbFixed, cb;
-    byte *prgb;
+    uint8_t *prgb;
     long iv, iiv;
     BLCK blck;
     bool fFree;
@@ -1395,7 +1395,7 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
             else
             {
                 Assert(iv == pggb->IvMac() - 1, "what?");
-                prgb = (byte *)pggb->PvFixedLock(iv);
+                prgb = (uint8_t *)pggb->PvFixedLock(iv);
                 if (cb > 0)
                     _bsf.FetchRgb(0, cb, prgb);
                 if (cb < cbFixed)
@@ -1421,7 +1421,7 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
             _Error(ertOom);
         else
         {
-            prgb = (byte *)pggb->PvLock(iv);
+            prgb = (uint8_t *)pggb->PvLock(iv);
             _bsf.FetchRgb(0, cb, prgb);
             pggb->Unlock();
         }

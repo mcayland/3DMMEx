@@ -216,7 +216,7 @@ long _TtFromCh(achar ch);
 long _TtFromCh(achar ch)
 {
     AssertIn(ch, kchMinTok, kchMinTok + SIZEOF(_rgtt) / SIZEOF(_rgtt[0]));
-    return _rgtt[(byte)ch - kchMinTok];
+    return _rgtt[(uint8_t)ch - kchMinTok];
 }
 
 #define kchMinDouble ChLit('&')
@@ -283,7 +283,7 @@ long _TtFromChCh(achar ch1, achar ch2)
 {
     if (ch1 == ch2)
     {
-        return FIn(ch1, kchMinDouble, kchLastDouble + 1) ? _rgttDouble[(byte)ch1 - kchMinDouble] : ttNil;
+        return FIn(ch1, kchMinDouble, kchLastDouble + 1) ? _rgttDouble[(uint8_t)ch1 - kchMinDouble] : ttNil;
     }
 
     if (ch2 == ChLit('='))
@@ -733,7 +733,7 @@ bool LEXB::FGetTok(PTOK ptok)
                 }
                 break;
             }
-            ptok->lw = (ptok->lw << 8) + (byte)ch;
+            ptok->lw = (ptok->lw << 8) + (uint8_t)ch;
             cch++;
         }
         // constant too long

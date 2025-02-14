@@ -39,7 +39,7 @@ void ACR::_SetFore(void)
 {
     AssertThis(facrRgb | facrIndex);
     SCR scr;
-    byte b;
+    uint8_t b;
 
     if (B3Lw(_lu) == kbIndexAcr)
         PmForeColor(B0Lw(_lu));
@@ -62,7 +62,7 @@ void ACR::_SetBack(void)
 {
     AssertThis(facrRgb | facrIndex);
     SCR scr;
-    byte b;
+    uint8_t b;
 
     if (B3Lw(_lu) == kbIndexAcr)
         PmBackColor(B0Lw(_lu));
@@ -176,7 +176,7 @@ void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
         rcs.left = (qd.screenBits.bounds.left + qd.screenBits.bounds.right) / 2;
         rcs.bottom = rcs.top + 1;
         rcs.right = rcs.left + 1;
-        hwnd = (HWND)NewCWindow(pvNil, &rcs, (byte *)"\p", fTrue, plainDBox, GrafPtr(-1), fTrue, 0);
+        hwnd = (HWND)NewCWindow(pvNil, &rcs, (uint8_t *)"\p", fTrue, plainDBox, GrafPtr(-1), fTrue, 0);
         if (hNil != hwnd)
             DisposeWindow((PPRT)hwnd);
     }
@@ -354,7 +354,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     If this is an offscreen bitmap, return the pointer to the pixels and
     optionally get the bounds. Must balance with a call to Unlock().
 ***************************************************************************/
-byte *GPT::PrgbLockPixels(RC *prc)
+uint8_t *GPT::PrgbLockPixels(RC *prc)
 {
     AssertThis(0);
     AssertNilOrVarMem(prc);
@@ -368,7 +368,7 @@ byte *GPT::PrgbLockPixels(RC *prc)
     if (pvNil != prc)
         *prc = _rcOff;
 
-    return (byte *)(*hpix)->baseAddr;
+    return (uint8_t *)(*hpix)->baseAddr;
 }
 
 /***************************************************************************
@@ -502,7 +502,7 @@ void GPT::HiliteRcs(RCS *prcs, GDD *pgdd)
     Set(pgdd->prcsClip);
     ForeColor(blackColor);
     pgdd->acrBack._SetBack();
-    *(byte *)0x938 &= 0x7f; /* use color highlighting */
+    *(uint8_t *)0x938 &= 0x7f; /* use color highlighting */
     InvertRect(prcs);
     Restore();
 }
@@ -1071,7 +1071,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
 
         Lock();
         hpix = _Hpix();
-        pmbmp->Draw((byte *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rcT.Dyp(), prcs->left, prcs->top, &rc,
+        pmbmp->Draw((uint8_t *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rcT.Dyp(), prcs->left, prcs->top, &rc,
                     _pregnClip);
         Unlock();
     }
@@ -1096,7 +1096,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
         Assert(pgpt->_rcOff == rc, 0);
         pgpt->Lock();
         hpix = pgpt->_Hpix();
-        pmbmp->DrawMask((byte *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
+        pmbmp->DrawMask((uint8_t *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
                         prcs->top - ptDst.yp);
 
         // set the mask bits to black
@@ -1122,7 +1122,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
             _pregnClip->Offset(-ptDst.xp, -ptDst.yp);
         pgpt->Lock();
         hpix = pgpt->_Hpix();
-        pmbmp->Draw((byte *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
+        pmbmp->Draw((uint8_t *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
                     prcs->top - ptDst.yp, &rc, _pregnClip);
         if (pvNil != _pregnClip)
             _pregnClip->Offset(ptDst.xp, ptDst.yp);
@@ -1170,7 +1170,7 @@ bool NTL::FInit(void)
     long ftcT;
     long cstz, istz;
 
-    hmenu = NewMenu(1001, (byte *)"\pFont");
+    hmenu = NewMenu(1001, (uint8_t *)"\pFont");
     AddResMenu(hmenu, 'FONT');
     cstz = CountMItems(hmenu);
     if ((_pgst = GST::PgstNew(size(long), cstz + 1, (cstz + 1) * 15)) == pvNil)
@@ -1178,8 +1178,8 @@ bool NTL::FInit(void)
 
     for (istz = 0; istz < cstz; istz++)
     {
-        GetItem(hmenu, istz + 1, (byte *)st);
-        GetFNum((byte *)st, &ftc);
+        GetItem(hmenu, istz + 1, (uint8_t *)st);
+        GetFNum((uint8_t *)st, &ftc);
         ftcT = ftc;
         AssertDo(!_pgst->FFindSt(st, &istz, fgstUserSorted), "font already found!");
         if (!_pgst->FInsertSt(istz, st, &ftcT))
@@ -1187,7 +1187,7 @@ bool NTL::FInit(void)
     }
 
     // add the system font
-    GetFontName(0, (byte *)st);
+    GetFontName(0, (uint8_t *)st);
     ftcT = 0;
     if (!_pgst->FFindSt(st, &_onnSystem, fgstUserSorted) && !_pgst->FInsertSt(_onnSystem, st, &ftcT))
     {

@@ -1962,7 +1962,7 @@ struct GOKFL
     RC rc;
     long lwAcrFore;
     long lwAcrBack;
-    byte rgbPat[8];
+    uint8_t rgbPat[8];
 };
 VERIFY_STRUCT_SIZE(GOKFL, 36);
 const BOM kbomGokfl = 0x5FFF0000;
@@ -2644,7 +2644,7 @@ bool GORV::_FInit(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno)
     STN stn;
     FNI fni;
     RC rc;
-    byte bT;
+    uint8_t bT;
 
     pcfl = pcrf->Pcfl();
     if (!pcfl->FFind(ctg, cno, &blck) || !blck.FUnpackData() || blck.Cb() < 2 || !blck.FReadRgb(&bT, 1, 0) ||

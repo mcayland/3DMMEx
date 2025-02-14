@@ -118,13 +118,13 @@ void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
 {
     AssertNilOrPo(pglclr, 0);
     Assert(pvNil == pglclr || pglclr->CbEntry() == SIZEOF(CLR), "wrong CbEntry");
-    byte rgb[SIZEOF(LOGPALETTE) + 256 * SIZEOF(PALETTEENTRY)];
+    uint8_t rgb[SIZEOF(LOGPALETTE) + 256 * SIZEOF(PALETTEENTRY)];
     LOGPALETTE *ppal = (LOGPALETTE *)rgb;
     PALETTEENTRY pe;
     long ipe, ipeLim;
     long cclr;
     CLR clr;
-    byte rgbT[256 / 8];
+    uint8_t rgbT[256 / 8];
 
     if (pvNil == _prgclr)
     {
@@ -616,7 +616,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     DeleteObject(hbmpOld);
 
     pgpt->_hbmp = hbmp;
-    pgpt->_prgbPixels = (byte *)pvBits;
+    pgpt->_prgbPixels = (uint8_t *)pvBits;
     pgpt->_cbitPixel = cbitPixel;
     pgpt->_cbRow = cbRow;
     pgpt->_ptBase = prc->PtTopLeft();
@@ -665,7 +665,7 @@ void GPT::SetOffscreenColors(PGL pglclr)
     If this is an offscreen bitmap, return the pointer to the pixels and
     optionally get the bounds. Must balance with a call to Unlock().
 ***************************************************************************/
-byte *GPT::PrgbLockPixels(RC *prc)
+uint8_t *GPT::PrgbLockPixels(RC *prc)
 {
     AssertThis(0);
     AssertNilOrVarMem(prc);
@@ -927,7 +927,7 @@ void GPT::DrawLine(PTS *ppts1, PTS *ppts2, GDD *pgdd)
     // create an OLY to fill
     long dxp, dyp, dypPen;
     PTS *pptsDst;
-    byte rgbOly[kcbOlyBase + 6 * SIZEOF(PTS)];
+    uint8_t rgbOly[kcbOlyBase + 6 * SIZEOF(PTS)];
     OLY *poly = (OLY *)rgbOly;
 
     poly->cpts = 6;

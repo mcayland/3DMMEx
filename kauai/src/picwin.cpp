@@ -82,7 +82,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
     if (rc.FEmpty() || ppich->cb != cb)
         hpic = hNil;
     else
-        hpic = SetEnhMetaFileBits(cb - SIZEOF(PICH), (byte *)(ppich + 1));
+        hpic = SetEnhMetaFileBits(cb - SIZEOF(PICH), (uint8_t *)(ppich + 1));
     UnlockHq(hq);
     FreePhq(&hq);
     if (hNil == hpic)
@@ -128,7 +128,7 @@ bool PIC::FWrite(PBLCK pblck)
         return fFalse;
     ppich->rc = _rc;
     ppich->cb = cbTot;
-    fT = (GetEnhMetaFileBits(_hpic, cb, (byte *)(ppich + 1)) == (ulong)cb) && pblck->FWrite(ppich);
+    fT = (GetEnhMetaFileBits(_hpic, cb, (uint8_t *)(ppich + 1)) == (ulong)cb) && pblck->FWrite(ppich);
     FreePpv((void **)&ppich);
     return fT;
 }
@@ -254,7 +254,7 @@ HPIC PIC::_HpicReadWmf(FNI *pfni)
     }
 
     // convert the old style metafile to an enhanced metafile
-    hpic = SetWinMetaFileBits(cb, (byte *)pv, hNil, pvNil);
+    hpic = SetWinMetaFileBits(cb, (uint8_t *)pv, hNil, pvNil);
     FreePpv(&pv);
 
     return hpic;

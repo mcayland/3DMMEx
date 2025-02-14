@@ -136,7 +136,7 @@ inline BRS BrsDiv(BRS r1, BRS r2) // Safety net: Prevent ovfl on division of int
 // colour.h additions
 
 // Color conversion: straight RGB to RGB and RGB to grey
-#define BR_DK_TO_BR(dk) BR_COLOUR_RGB((byte)((dk).r * 256.0), (byte)((dk).g * 256.0), (byte)((dk).b * 256.0))
+#define BR_DK_TO_BR(dk) BR_COLOUR_RGB((uint8_t)((dk).r * 256.0), (uint8_t)((dk).g * 256.0), (uint8_t)((dk).b * 256.0))
 #define BR_DKRGB_TO_FRGRAY(dk) BrScalarToUFraction(BrFloatToScalar(((dk).r * 0.30 + (dk).g * 0.59 + (dk).b * 0.11)))
 
 // angles.h additions

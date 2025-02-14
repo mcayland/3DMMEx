@@ -939,7 +939,7 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
     long igrfbit;
     ushort fbit;
     ushort *pgrfbit;
-    byte bT;
+    uint8_t bT;
 
     ClearPb(&mkey, SIZEOF(mkey));
     ClearPb(rgmev, SIZEOF(rgmev));
@@ -1010,7 +1010,7 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
         switch (pmev->dwEvent >> 24)
         {
         case MEVT_SHORTMSG:
-            bT = (byte)pmev->dwEvent;
+            bT = (uint8_t)pmev->dwEvent;
 
             // The high nibble of bT is the status value
             // The low nibble is the channel
@@ -1564,7 +1564,7 @@ bool WMS::_FOpen(void)
     mt.cbStruct = SIZEOF(mt);
     mt.dwTimeDiv = 1000;
 
-    if (MMSYSERR_NOERROR != (*_pfnProperty)(_hms, (byte *)&mt, MIDIPROP_SET | MIDIPROP_TIMEDIV))
+    if (MMSYSERR_NOERROR != (*_pfnProperty)(_hms, (uint8_t *)&mt, MIDIPROP_SET | MIDIPROP_TIMEDIV))
     {
         (*_pfnClose)(_hms);
     LFail:

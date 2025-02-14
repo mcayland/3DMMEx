@@ -101,7 +101,7 @@ void DLG::SetValues(long iditMin, long iditLim)
     STN stn;
     long lw;
     long cb, cbT, ib;
-    byte *prgb;
+    uint8_t *prgb;
 
     if (_pgob == pvNil)
     {
@@ -139,7 +139,7 @@ void DLG::SetValues(long iditMin, long iditLim)
                 _SetEditText(idit, &stn);
                 break;
             }
-            prgb = (byte *)PvLock(idit);
+            prgb = (uint8_t *)PvLock(idit);
             if (!stn.FSetData(prgb, cb, &cbT))
             {
                 Bug("bad combo item");

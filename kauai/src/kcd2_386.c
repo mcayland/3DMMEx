@@ -83,8 +83,8 @@ void Setup(void)
 {
     fprintf(output, "	// Setup\n"
                     "	long cbTot;\n"
-                    "	byte *pbLimDst = (byte *)pvDst + cbDst;\n"
-                    "	byte *pbLimSrc = (byte *)pvSrc + cbSrc - kcbTailKcd2;\n\n"
+                    "	uint8_t *pbLimDst = (uint8_t *)pvDst + cbDst;\n"
+                    "	uint8_t *pbLimSrc = (uint8_t *)pvSrc + cbSrc - kcbTailKcd2;\n\n"
                     "__asm\n"
                     "	{\n"
                     "	mov edi,pvDst\n"

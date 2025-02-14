@@ -137,7 +137,7 @@ ZBMP::~ZBMP(void)
 /***************************************************************************
     Draw the ZBMP into prgbPixels
 ***************************************************************************/
-void ZBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp));
@@ -146,8 +146,8 @@ void ZBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, 
 
     long yp;
     long cbRowCopy;
-    byte *pbSrc;
-    byte *pbDst;
+    uint8_t *pbSrc;
+    uint8_t *pbDst;
     REGSC regsc;
     RC rcZbmp = _rc;
     RC rcRegnBounds;
@@ -198,7 +198,7 @@ void ZBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, 
     Draw the ZBMP into prgbPixels, squashing the clip region vertically by
     two (for BWLD's "half mode")
 ***************************************************************************/
-void ZBMP::DrawHalf(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::DrawHalf(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp / 2));
@@ -207,8 +207,8 @@ void ZBMP::DrawHalf(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypR
 
     long yp;
     long cbRowCopy;
-    byte *pbSrc;
-    byte *pbDst;
+    uint8_t *pbSrc;
+    uint8_t *pbDst;
     REGSC regsc;
     RC rcZbmp = _rc;
     RC rcRegnBounds;

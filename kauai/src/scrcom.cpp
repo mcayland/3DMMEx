@@ -655,7 +655,7 @@ void SCCB::_EndOp(void)
         // set the count of longs in the previous op
         AssertIn(ilw - _ilwOpLast - 1, 1, kclwLimPush);
         _pscpt->_pgllw->Get(_ilwOpLast, &lw);
-        lw = LwHighLow(SuHighLow(B3Lw(lw), (byte)(ilw - _ilwOpLast - 1)), SuLow(lw));
+        lw = LwHighLow(SuHighLow(B3Lw(lw), (uint8_t)(ilw - _ilwOpLast - 1)), SuLow(lw));
         _pscpt->_pgllw->Put(_ilwOpLast, &lw);
     }
 }
@@ -666,7 +666,7 @@ void SCCB::_EndOp(void)
 void SCCB::_PushVarOp(long op, RTVN *prtvn)
 {
     AssertThis(0);
-    Assert((long)(byte)op == op, "bad opcode");
+    Assert((long)(uint8_t)op == op, "bad opcode");
     AssertVarMem(prtvn);
     long lw;
 
@@ -2732,8 +2732,8 @@ void RTVN::SetFromStn(PSTN pstn)
 {
     AssertThisMem();
     AssertPo(pstn, 0);
-    byte rgb[8];
-    byte bT;
+    uint8_t rgb[8];
+    uint8_t bT;
     long lw, ib, ibDst, cbit;
     long cch = pstn->Cch();
     PSZ psz = pstn->Psz();
@@ -2753,7 +2753,7 @@ void RTVN::SetFromStn(PSTN pstn)
             bT = 0;
         else
         {
-            bT = (byte)(schar)psz[ib];
+            bT = (uint8_t)(schar)psz[ib];
             if (FIn(bT, '0', '9' + 1))
                 bT -= '0' - 1;
             else if (FIn(bT, 'A', 'Z' + 1))
@@ -2789,19 +2789,19 @@ void RTVN::GetStn(PSTN pstn)
 {
     AssertThisMem();
     AssertPo(pstn, 0);
-    byte rgb[8];
-    byte bT;
+    uint8_t rgb[8];
+    uint8_t bT;
     long ib;
 
     // unpack the individual bytes
-    rgb[0] = (byte)((lu1 & 0x0000FC00) >> 10);
-    rgb[1] = (byte)((lu1 & 0x000003F0) >> 4);
-    rgb[2] = (byte)(((lu1 & 0x0000000F) << 2) | ((lu2 & 0xC0000000) >> 30));
-    rgb[3] = (byte)((lu2 & 0x3F000000) >> 24);
-    rgb[4] = (byte)((lu2 & 0x00FC0000) >> 18);
-    rgb[5] = (byte)((lu2 & 0x0003F000) >> 12);
-    rgb[6] = (byte)((lu2 & 0x00000FC0) >> 6);
-    rgb[7] = (byte)(lu2 & 0x0000003F);
+    rgb[0] = (uint8_t)((lu1 & 0x0000FC00) >> 10);
+    rgb[1] = (uint8_t)((lu1 & 0x000003F0) >> 4);
+    rgb[2] = (uint8_t)(((lu1 & 0x0000000F) << 2) | ((lu2 & 0xC0000000) >> 30));
+    rgb[3] = (uint8_t)((lu2 & 0x3F000000) >> 24);
+    rgb[4] = (uint8_t)((lu2 & 0x00FC0000) >> 18);
+    rgb[5] = (uint8_t)((lu2 & 0x0003F000) >> 12);
+    rgb[6] = (uint8_t)((lu2 & 0x00000FC0) >> 6);
+    rgb[7] = (uint8_t)(lu2 & 0x0000003F);
 
     // convert the bytes to characters and append them to the stn
     pstn->SetNil();

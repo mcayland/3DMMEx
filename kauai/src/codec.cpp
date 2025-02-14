@@ -156,7 +156,7 @@ bool CODM::FGetCfmtFromBlck(PBLCK pblck, long *pcfmt)
     AssertPo(pblck, 0);
     AssertVarMem(pcfmt);
 
-    byte rgb[4];
+    uint8_t rgb[4];
 
     TrashVar(pcfmt);
     if (pblck->Cb(fTrue) < 2 * SIZEOF(rgb))
@@ -260,7 +260,7 @@ bool CODM::_FCode(long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, l
     AssertPvCb(pvDst, cbDst);
     AssertVarMem(pcbDst);
 
-    byte *prgb;
+    uint8_t *prgb;
     PCODC pcodc;
 
     if (cfmtNil != cfmt)
@@ -287,7 +287,7 @@ bool CODM::_FCode(long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, l
             return fTrue;
         }
 
-        prgb = (byte *)pvDst;
+        prgb = (uint8_t *)pvDst;
         if (!pcodc->FConvert(fTrue, cfmt, pvSrc, cbSrc, prgb + kcbCodecHeader, cbDst - kcbCodecHeader, pcbDst))
         {
             return fFalse;
@@ -312,7 +312,7 @@ bool CODM::_FCode(long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, l
             return fFalse;
 
         // get the format and decompressed size
-        prgb = (byte *)pvSrc;
+        prgb = (uint8_t *)pvSrc;
         cfmt = LwFromBytes(prgb[0], prgb[1], prgb[2], prgb[3]);
         *pcbDst = LwFromBytes(prgb[4], prgb[5], prgb[6], prgb[7]);
         if (!FIn(*pcbDst, 1, pvNil == pvDst ? kcbMax : cbDst + 1))

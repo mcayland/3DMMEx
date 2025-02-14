@@ -17,7 +17,7 @@ ASSERTNAME
 /***************************************************************************
     Fill a block with a specific byte value.
 ***************************************************************************/
-void FillPb(void *pv, long cb, byte b)
+void FillPb(void *pv, long cb, uint8_t b)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv, cb);
@@ -77,10 +77,10 @@ LDone:
 
 #else //! IN_80386
 
-    byte *pb1, *pb2;
-    byte b;
+    uint8_t *pb1, *pb2;
+    uint8_t b;
 
-    for (pb2 = (pb1 = (byte *)pv) + cb - 1; pb1 < pb2;)
+    for (pb2 = (pb1 = (uint8_t *)pv) + cb - 1; pb1 < pb2;)
     {
         b = *pb1;
         *pb1++ = *pb2;
@@ -263,9 +263,9 @@ LDone:
 
 #else //! IN_80386
 
-    byte *pb1 = (byte *)pv1;
-    byte *pb2 = (byte *)pv2;
-    byte b;
+    uint8_t *pb1 = (uint8_t *)pv1;
+    uint8_t *pb2 = (uint8_t *)pv2;
+    uint8_t b;
 
     Assert(pb1 + cb <= pb2 || pb2 + cb <= pb1, "blocks overlap");
     while (cb-- > 0)
@@ -333,7 +333,7 @@ long CbEqualRgb(const void *pv1, const void *pv2, long cb)
 
 #ifdef IN_80386
 
-    byte *pb;
+    uint8_t *pb;
 
     __asm {
         // edi -> memory to swap, first pointer
@@ -369,7 +369,7 @@ LMiss:
 		mov		pb,edi
     }
 
-    return pb - (byte *)pv1;
+    return pb - (uint8_t *)pv1;
 
 LHit:
     // We matched all the way to the end.
@@ -377,8 +377,8 @@ LHit:
 
 #else //! IN_80386
 
-    const byte *pb1 = (const byte *)pv1;
-    const byte *pb2 = (const byte *)pv2;
+    const uint8_t *pb1 = (const uint8_t *)pv1;
+    const uint8_t *pb2 = (const uint8_t *)pv2;
 
     // Compare the buffers four bytes at a time
     if (cb >= 4)
@@ -393,10 +393,10 @@ LHit:
         }
 
         // Start single byte comparison after last dword match
-        pb1 = (byte *)plw1;
-        pb2 = (byte *)plw2;
+        pb1 = (uint8_t *)plw1;
+        pb2 = (uint8_t *)plw2;
 
-        long cbMatch = (pb1 - (byte *)pv1);
+        long cbMatch = (pb1 - (uint8_t *)pv1);
         cb = cb - cbMatch;
     }
 
@@ -405,7 +405,7 @@ LHit:
     {
         // do nothing
     }
-    return pb1 - (byte *)pv1;
+    return pb1 - (uint8_t *)pv1;
 
 #endif //! IN_80386
 }
@@ -426,7 +426,7 @@ ulong FcmpCompareRgb(const void *pv1, const void *pv2, long cb)
     if (cb == cbMatch)
         return fcmpEq;
 
-    return ((byte *)pv1)[cbMatch] < ((byte *)pv2)[cbMatch] ? fcmpLt : fcmpGt;
+    return ((uint8_t *)pv1)[cbMatch] < ((uint8_t *)pv2)[cbMatch] ? fcmpLt : fcmpGt;
 }
 
 /***************************************************************************
@@ -437,7 +437,7 @@ void CopyPb(const void *pv1, void *pv2, long cb)
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);
     AssertPvCb(pv2, cb);
-    Assert((byte *)pv1 + cb <= (byte *)pv2 || (byte *)pv2 + cb <= (byte *)pv1, "blocks overlap");
+    Assert((uint8_t *)pv1 + cb <= (uint8_t *)pv2 || (uint8_t *)pv2 + cb <= (uint8_t *)pv1, "blocks overlap");
 
     memcpy(pv2, pv1, cb);
 }

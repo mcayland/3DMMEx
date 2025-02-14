@@ -136,7 +136,7 @@ bool MUB::_FFetchRes(ulong ridMenuBar)
             rtg = 0;
             mni.cid = cidNil;
             mni.lw0 = 0;
-            GetItem(mnu.hnsmu, imni + 1, (byte *)stName);
+            GetItem(mnu.hnsmu, imni + 1, (uint8_t *)stName);
             pchLim = pvNil;
             chList = chNil;
             for (cch = CchSt(stName), pch = PrgchSt(stName); cch--; pch++)
@@ -167,7 +167,7 @@ bool MUB::_FFetchRes(ulong ridMenuBar)
                         SetStCch(stName, 1);
                         stName[1] = ' ';
                     }
-                    SetItem(mnu.hnsmu, imni + 1, (byte *)stName);
+                    SetItem(mnu.hnsmu, imni + 1, (uint8_t *)stName);
                 }
                 if (!mnu.pglmni->FInsert(imni, &mni))
                     goto LFail;
@@ -344,8 +344,8 @@ void MUB::Clean(void)
             if (_FFindMlst(imnu, imni))
             {
                 // need the item name in a GG
-                GetItem(mnu.hnsmu, imni + 1, (byte *)st);
-                cch = (long)*(byte *)st;
+                GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
+                cch = (long)*(uint8_t *)st;
                 if ((cmd.pgg = GG::PggNew(0, 1, cch)) != pvNil)
                     AssertDo(cmd.pgg->FInsert(0, cch, st + 1), 0);
             }
@@ -450,8 +450,8 @@ bool MUB::_FGetCmdFromCode(long lwCode, CMD *pcmd)
     if (fNeedName)
     {
         // need the item name in a GG
-        GetItem(mnu.hnsmu, imni + 1, (byte *)st);
-        cch = (long)*(byte *)st;
+        GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
+        cch = (long)*(uint8_t *)st;
         if (pvNil == (pcmd->pgg = GG::PggNew(0, 1, cch)))
             return fFalse;
         AssertDo(pcmd->pgg->FInsert(0, cch, st + 1), 0);
@@ -555,7 +555,7 @@ bool MUB::_FInsertMni(long imnu, long imni, long cid, long lw0, PSTZ pstz)
     if (!mnu.pglmni->FInsert(imni, &mni))
         return fFalse;
     cmni = CountMItems(mnu.hnsmu);
-    InsMenuItem(mnu.hnsmu, (byte *)pstz, (short)imni);
+    InsMenuItem(mnu.hnsmu, (uint8_t *)pstz, (short)imni);
     if (CountMItems(mnu.hnsmu) != cmni + 1)
     {
         mnu.pglmni->Delete(imni);
@@ -633,7 +633,7 @@ bool MUB::FRemoveListCid(long cid, long lw0, PSTZ pstz)
             }
             else
             {
-                GetItem(mnu.hnsmu, imni + 1, (byte *)st);
+                GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
                 if (!FEqualSt(st, pstz))
                     continue;
             }
@@ -783,7 +783,7 @@ bool MUB::FChangeListCid(long cid, long lwOld, PSTZ pstzOld, long lwNew, PSTZ ps
             }
             else
             {
-                GetItem(mnu.hnsmu, imni + 1, (byte *)st);
+                GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
                 if (!FEqualSt(st, pstzOld))
                     continue;
                 mnu.pglmni->Get(imni, &mni);
@@ -793,7 +793,7 @@ bool MUB::FChangeListCid(long cid, long lwOld, PSTZ pstzOld, long lwNew, PSTZ ps
             if (pvNil != pstzNew)
             {
                 // change the string
-                SetItem(mnu.hnsmu, imni + 1, (byte *)pstzNew);
+                SetItem(mnu.hnsmu, imni + 1, (uint8_t *)pstzNew);
             }
         }
     }

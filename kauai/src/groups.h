@@ -59,13 +59,13 @@ class GRPB : public GRPB_PAR
     long _cbMinGrow2;
     long _ivMac;
 
-    byte *_Qb1(long ib)
+    uint8_t *_Qb1(long ib)
     {
-        return (byte *)QvFromHq(_hqData1) + ib;
+        return (uint8_t *)QvFromHq(_hqData1) + ib;
     }
-    byte *_Qb2(long ib)
+    uint8_t *_Qb2(long ib)
     {
-        return (byte *)QvFromHq(_hqData2) + ib;
+        return (uint8_t *)QvFromHq(_hqData2) + ib;
     }
     long _Cb1(void)
     {
@@ -205,7 +205,7 @@ class AL : public AL_PAR
 
   private:
     // section 2 of the data contains a bit array
-    byte *_Qgrfbit(long iv)
+    uint8_t *_Qgrfbit(long iv)
     {
         return _Qb2(IbFromIbit(iv));
     }

@@ -1542,7 +1542,7 @@ bool DCD::FCmdAddBitmapChunk(PCMD pcmd)
     long lnOld;
     FNI fni;
     bool fCreated;
-    byte bTransparent;
+    uint8_t bTransparent;
     long xp, yp;
     bool fMask = pcmd->cid != cidAddMbmpChunk;
     PBACO pbaco = pvNil;
@@ -1571,7 +1571,7 @@ bool DCD::FCmdAddBitmapChunk(PCMD pcmd)
     {
         goto LErrDlg;
     }
-    bTransparent = (byte)lw;
+    bTransparent = (uint8_t)lw;
 
     if (!pdlg->FGetLwFromEdit(kiditXPosMbmp, &lw))
         goto LErrDlg;
@@ -2848,7 +2848,7 @@ bool DCD::FCmdFilterChunk(PCMD pcmd)
         while (stnT.Cch() < 4)
             stnT.FAppendCh(kchSpace);
         prgch = stnT.Psz();
-        ctg = LwFromBytes((byte)prgch[0], (byte)prgch[1], (byte)prgch[2], (byte)prgch[3]);
+        ctg = LwFromBytes((uint8_t)prgch[0], (uint8_t)prgch[1], (uint8_t)prgch[2], (uint8_t)prgch[3]);
         _sel.FAddCtgFilter(ctg);
     }
 
@@ -2932,7 +2932,7 @@ bool FGetCtgFromStn(CTG *pctg, PSTN pstn)
     CopyPb(pstn->Psz(), rgch, pstn->Cch() * SIZEOF(achar));
 
     // first character becomes the high byte
-    *pctg = LwFromBytes((byte)rgch[0], (byte)rgch[1], (byte)rgch[2], (byte)rgch[3]);
+    *pctg = LwFromBytes((uint8_t)rgch[0], (uint8_t)rgch[1], (uint8_t)rgch[2], (uint8_t)rgch[3]);
     return fTrue;
 }
 

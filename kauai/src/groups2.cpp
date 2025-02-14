@@ -402,7 +402,7 @@ bool GSTB::FFindExtra(const void *prgbFind, PSTN pstn, long *pistn)
     AssertNilOrVarMem(pistn);
 
     long istn;
-    byte *qbExtra;
+    uint8_t *qbExtra;
     long cbExtra = CbExtra();
     long ivMac = IvMac();
 
@@ -415,7 +415,7 @@ bool GSTB::FFindExtra(const void *prgbFind, PSTN pstn, long *pistn)
 
     for (istn = 0; istn < ivMac; istn++)
     {
-        qbExtra = (byte *)_Qbst(istn) + SIZEOF(long);
+        qbExtra = (uint8_t *)_Qbst(istn) + SIZEOF(long);
         if (FEqualRgb(prgbFind, qbExtra, cbExtra))
         {
             if (pstn != pvNil)
@@ -443,9 +443,9 @@ void GSTB::GetExtra(long istn, void *pv)
     Assert(_cbEntry > SIZEOF(long), "no extra data");
     AssertPvCb(pv, _cbEntry - SIZEOF(long));
 
-    byte *qb;
+    uint8_t *qb;
 
-    qb = (byte *)_Qbst(istn) + SIZEOF(long);
+    qb = (uint8_t *)_Qbst(istn) + SIZEOF(long);
     CopyPb(qb, pv, _cbEntry - SIZEOF(long));
 }
 
@@ -460,9 +460,9 @@ void GSTB::PutExtra(long istn, void *pv)
     Assert(_cbEntry > SIZEOF(long), "no extra data");
     AssertPvCb(pv, _cbEntry - SIZEOF(long));
 
-    byte *qb;
+    uint8_t *qb;
 
-    qb = (byte *)_Qbst(istn) + SIZEOF(long);
+    qb = (uint8_t *)_Qbst(istn) + SIZEOF(long);
     CopyPb(pv, qb, _cbEntry - SIZEOF(long));
     AssertThis(0);
 }
@@ -504,7 +504,7 @@ void GSTB::_RemoveSt(long bst)
     AssertIn(bst, 0, _bstMac);
 
     long cb;
-    byte *qb;
+    uint8_t *qb;
 
     qb = _Qb1(bst);
     cb = CchTotSt((PST)qb) * SIZEOF(achar);
@@ -537,7 +537,7 @@ void GSTB::_SwapBytesRgbst(void)
     else
     {
         long cbst;
-        byte *qb;
+        uint8_t *qb;
 
         for (cbst = _ivMac, qb = _Qb2(0); cbst-- > 0; qb += _cbEntry)
             SwapBytesRglw(qb, 1);
@@ -552,7 +552,7 @@ void GSTB::_TranslateGrst(short osk, bool fToCur)
 {
     AssertOsk(osk);
     long bst;
-    byte *qb;
+    uint8_t *qb;
 
     if (CbCharOsk(osk) != CbCharOsk(koskCur))
     {
@@ -615,7 +615,7 @@ bool GSTB::_FTranslateGrst(short osk)
         if (cbChar == SIZEOF(schar))
         {
             schar chs = *(schar *)PvAddBv(pvSrc, bstOld);
-            cch = (long)(byte)chs;
+            cch = (long)(uint8_t)chs;
         }
         else
         {
@@ -857,7 +857,7 @@ bool GST::FInsertRgch(long istn, const achar *prgch, long cch, const void *pvExt
     AssertPvCb(prgch, cch * SIZEOF(achar));
     AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(long));
 
-    byte *qb;
+    uint8_t *qb;
 
     if (!_FEnsureSizes(_bstMac + (cch + 1) * SIZEOF(achar), LwMul(_ivMac + 1, _cbEntry), fgrpNil))
     {
@@ -865,7 +865,7 @@ bool GST::FInsertRgch(long istn, const achar *prgch, long cch, const void *pvExt
     }
 
     // make room for the entry
-    qb = (byte *)_Qbst(istn);
+    qb = (uint8_t *)_Qbst(istn);
     if (istn < _ivMac)
         BltPb(qb, qb + _cbEntry, LwMul(_ivMac - istn, _cbEntry));
     *(long *)qb = _bstMac;
@@ -909,10 +909,10 @@ void GST::Delete(long istn)
     AssertThis(fobjAssertFull);
     AssertIn(istn, 0, _ivMac);
 
-    byte *qb;
+    uint8_t *qb;
     long bst;
 
-    qb = (byte *)_Qbst(istn);
+    qb = (uint8_t *)_Qbst(istn);
     bst = *(long *)qb;
     if (istn < --_ivMac)
         BltPb(qb + _cbEntry, qb, LwMul(_ivMac - istn, _cbEntry));
@@ -1037,7 +1037,7 @@ bool AST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
     AssertNilOrVarMem(pistn);
 
     long ibst;
-    byte *qb;
+    uint8_t *qb;
 
     if (_cbstFree > 0)
     {
@@ -1065,7 +1065,7 @@ bool AST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
     }
 
     // fill in the bst and extra data
-    qb = (byte *)_Qbst(ibst);
+    qb = (uint8_t *)_Qbst(ibst);
     *(long *)qb = _bstMac;
     if (SIZEOF(long) < _cbEntry)
     {
@@ -1096,10 +1096,10 @@ void AST::Delete(long istn)
     AssertIn(istn, 0, _ivMac);
     Assert(!FFree(istn), "entry already free!");
 
-    byte *qb;
+    uint8_t *qb;
     long bst;
 
-    qb = (byte *)_Qbst(istn);
+    qb = (uint8_t *)_Qbst(istn);
     bst = *(long *)qb;
 
     if (istn == _ivMac - 1)

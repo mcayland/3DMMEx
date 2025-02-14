@@ -16,14 +16,14 @@ RTCLASS(MTRL)
 RTCLASS(CMTL)
 
 // REVIEW *****: kiclrBaseDefault and kcclrDefault are palette-specific
-const byte kiclrBaseDefault = 15; // base index of default color
-const byte kcclrDefault = 15;     // count of shades in default color
+const uint8_t kiclrBaseDefault = 15; // base index of default color
+const uint8_t kcclrDefault = 15;     // count of shades in default color
 
 const br_ufraction kbrufKaDefault = BR_UFRACTION(0.10);
 const br_ufraction kbrufKdDefault = BR_UFRACTION(0.60);
 const br_ufraction kbrufKsDefault = BR_UFRACTION(0.60);
 const BRS krPowerDefault = BR_SCALAR(50);
-const byte kbOpaque = 0xff;
+const uint8_t kbOpaque = 0xff;
 
 PTMAP MTRL::_ptmapShadeTable = pvNil; // shade table for all MTRLs
 
@@ -74,11 +74,11 @@ PMTRL MTRL::PmtrlNew(long iclrBase, long cclr)
     if (ivNil == iclrBase)
         pmtrl->_pbmtl->index_base = kiclrBaseDefault;
     else
-        pmtrl->_pbmtl->index_base = (byte)iclrBase;
+        pmtrl->_pbmtl->index_base = (uint8_t)iclrBase;
     if (ivNil == cclr)
         pmtrl->_pbmtl->index_range = kcclrDefault;
     else
-        pmtrl->_pbmtl->index_range = (byte)cclr;
+        pmtrl->_pbmtl->index_range = (uint8_t)cclr;
     pmtrl->_pbmtl->opacity = kbOpaque; // all socrates objects are opaque
     pmtrl->_pbmtl->flags = BR_MATF_LIGHT | BR_MATF_GOURAUD;
     BrMaterialAdd(pmtrl->_pbmtl);

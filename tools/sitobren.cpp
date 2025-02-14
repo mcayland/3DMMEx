@@ -1329,7 +1329,7 @@ bool S2B::_FDoTtBackgroundS2B(void)
     bkgdf.bo = kboCur;
     bkgdf.osk = koskCur;
     Assert(iPalBase >= 0 && iPalBase <= kbMax, "Palette base out of range");
-    bkgdf.bIndexBase = (byte)iPalBase;
+    bkgdf.bIndexBase = (uint8_t)iPalBase;
 
     _ctgPar = kctgBkgd;
     _cnoPar = cnoBkgd;
@@ -2440,9 +2440,9 @@ PBMHR S2B::_PbmhrFromModel(Model *pmodel, BMAT34 *pbmat34, PBMHR *ppbmhr, PBMHR 
             pbmhrCur->mtrlf.brc = 0; // unused by Socrates
             Assert(crng.lwBase < kbMax, "Color index base too high");
             Assert(crng.lwRange < kbMax, "Color index range too high");
-            pbmhrCur->mtrlf.bIndexBase = (byte)crng.lwBase;
+            pbmhrCur->mtrlf.bIndexBase = (uint8_t)crng.lwBase;
             /* Brender color range is defined by max val rather than count */
-            pbmhrCur->mtrlf.cIndexRange = (byte)crng.lwRange - 1;
+            pbmhrCur->mtrlf.cIndexRange = (uint8_t)crng.lwRange - 1;
             pbmhrCur->mtrlf.rPower = BrIntToScalar(50); // REVIEW peted: need real val here
         }
     }
@@ -4211,7 +4211,7 @@ Debug(bool _fTableValid = fFalse;)
     /* Compute the hash value for each 8-bit byte value */
     for (icrc = 0; icrc < 256; icrc++)
     {
-        byte bcrc = (byte)icrc;
+        uint8_t bcrc = (uint8_t)icrc;
 
         _rgluHashCrc[bcrc] = _LuHashBytesNoTable(0, &bcrc, 1);
     }
@@ -4233,7 +4233,7 @@ Debug(bool _fTableValid = fFalse;)
 ************************************************************ PETED ***********/
 uint S2B::_LuHashBytesNoTable(uint luHash, void *pv, long cb)
 {
-    byte *pb = (byte *)pv;
+    uint8_t *pb = (uint8_t *)pv;
     int ibit;
 
     while (cb--)
@@ -4262,8 +4262,8 @@ uint S2B::_LuHashBytesNoTable(uint luHash, void *pv, long cb)
 ************************************************************ PETED ***********/
 uint S2B::_LuHashBytes(uint luHash, void *pv, long cb)
 {
-    byte *pb = (byte *)pv;
-    byte bCval;
+    uint8_t *pb = (uint8_t *)pv;
+    uint8_t bCval;
 
     Assert(_fTableValid, "Can't use table hashing with uninited table");
 
@@ -4838,10 +4838,10 @@ bool FAssertProc(PSZ pszFile, long lwLine, PSZ pszMessage, void *pv, long cb)
             switch (cb)
             {
             default: {
-                byte *pb;
-                byte *pbLim;
+                uint8_t *pb;
+                uint8_t *pbLim;
 
-                for (pb = (byte *)pv, pbLim = pb + cb; pb < pbLim; pb++)
+                for (pb = (uint8_t *)pv, pbLim = pb + cb; pb < pbLim; pb++)
                     fprintf(stderr, "%02x", (int)*pb);
             }
             break;

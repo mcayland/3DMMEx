@@ -118,7 +118,7 @@ bool SPLC::_FEnsureDll(SC_LID sclid)
 
     if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, (byte *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, (uint8_t *)sz, (ulong *)&cb))
     {
         RegCloseKey(hkey);
         goto LError;
@@ -178,7 +178,7 @@ bool SPLC::_FEnsureMainDict(SC_LID sclid, PFNI pfni)
 
     if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, (byte *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, (uint8_t *)sz, (ulong *)&cb))
     {
         RegCloseKey(hkey);
         goto LError;
@@ -234,7 +234,7 @@ bool SPLC::_FEnsureUserDict(PSTN pstnCustom, PFNI pfniDef)
 
     if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, (byte *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, (uint8_t *)sz, (ulong *)&cb))
     {
         RegCloseKey(hkey);
     LNoKey:
@@ -354,7 +354,7 @@ bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PS
     SC_SRB srb;
     SC_SEC sec;
     SZ sz;
-    byte bRate;
+    uint8_t bRate;
 
     pstnReplace->SetNil();
     *pichMinBad = *pichLimBad = cch;

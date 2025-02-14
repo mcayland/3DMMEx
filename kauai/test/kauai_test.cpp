@@ -129,11 +129,11 @@ TEST(KauaiTests, TestMem)
         rghq[ihq] = hq;
         EXPECT_EQ(CbOfHq(hq), cb);
 
-        FillPb(QvFromHq(hq), cb, (byte)cb);
+        FillPb(QvFromHq(hq), cb, (uint8_t)cb);
         if (cb > 0)
         {
-            EXPECT_EQ(*(byte *)QvFromHq(hq), (byte)cb);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), cb - 1), (byte)cb);
+            EXPECT_EQ(*(uint8_t *)QvFromHq(hq), (uint8_t)cb);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), cb - 1), (uint8_t)cb);
         }
 
         EXPECT_EQ(PvLockHq(hq), QvFromHq(hq));
@@ -144,8 +144,8 @@ TEST(KauaiTests, TestMem)
             EXPECT_EQ(CbOfHq(hqT), cb);
             if (cb > 0)
             {
-                EXPECT_EQ(*(byte *)QvFromHq(hqT), (byte)cb);
-                EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hqT), cb - 1), (byte)cb);
+                EXPECT_EQ(*(uint8_t *)QvFromHq(hqT), (uint8_t)cb);
+                EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hqT), cb - 1), (uint8_t)cb);
             }
             FreePhq(&hqT);
         }
@@ -169,10 +169,10 @@ TEST(KauaiTests, TestMem)
         hq = rghq[ihq];
         if (cb > 0)
         {
-            EXPECT_EQ(*(byte *)QvFromHq(hq), (byte)cb);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), cb - 1), (byte)cb);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), cb), 0);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), 2 * cb - 1), 0);
+            EXPECT_EQ(*(uint8_t *)QvFromHq(hq), (uint8_t)cb);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), cb - 1), (uint8_t)cb);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), cb), 0);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), 2 * cb - 1), 0);
         }
     }
 
@@ -312,7 +312,7 @@ TEST(KauaiTests, TestGg)
     PGG pgg;
     ulong grf;
     long cb, iv;
-    byte *qb;
+    uint8_t *qb;
     PSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
 
@@ -329,7 +329,7 @@ TEST(KauaiTests, TestGg)
     for (iv = pgg->IvMac(); iv--;)
     {
         cb = pgg->Cb(iv);
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         EXPECT_TRUE(FEqualRgb(psz, qb, cb));
         grf |= 1L << cb;
         if (cb & 1)
@@ -343,7 +343,7 @@ TEST(KauaiTests, TestGg)
         cb = pgg->Cb(iv);
         EXPECT_TRUE(!(cb & 1));
         pgg->Get(iv, rgch);
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         EXPECT_TRUE(FEqualRgb(rgch, qb, cb));
         EXPECT_TRUE(FEqualRgb(rgch, psz, cb));
         grf |= 1L << cb;
@@ -361,7 +361,7 @@ TEST(KauaiTests, TestGg)
         grf |= 1L << cb;
         pgg->DeleteRgb(iv, LwMin(cb, iv), cb);
 
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         EXPECT_TRUE(FEqualRgb(psz, qb, cb));
     }
     EXPECT_EQ(grf, 0x00010554);

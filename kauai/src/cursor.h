@@ -25,12 +25,12 @@ enum
 struct CURF
 {
     long curt; // type of cursor
-    byte xp;   // hot spot
-    byte yp;
-    byte dxp; // size - either 16 or 32 and they should match
-    byte dyp;
-    // byte rgbAnd[];
-    // byte rgbXor[];
+    uint8_t xp; // hot spot
+    uint8_t yp;
+    uint8_t dxp; // size - either 16 or 32 and they should match
+    uint8_t dyp;
+    // uint8_t rgbAnd[];
+    // uint8_t rgbXor[];
 };
 VERIFY_STRUCT_SIZE(CURF, 8);
 const BOM kbomCurf = 0xC0000000;

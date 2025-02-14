@@ -211,7 +211,7 @@ class CHCM : public CHCM_PAR
     };
 
     void _Error(long ert, PSZ pszMessage = pvNil);
-    void _GetRgbFromLw(long lw, byte *prgb);
+    void _GetRgbFromLw(long lw, uint8_t *prgb);
     void _ErrorOnData(PSZ pszPreceed);
     bool _FParseParenHeader(PHP *prgphp, long cphpMax, long *pcphp);
     bool _FGetCleanTok(TOK *ptok, bool fEofOk = fFalse);

@@ -43,7 +43,7 @@ class ZBMP : public ZBMP_PAR
     RC _rc;      // bounding rectangle of ZBMP
     long _cbRow; // bytes per row
     long _cb;    // count of bytes in Z buffer
-    byte *_prgb; // Z buffer
+    uint8_t *_prgb; // Z buffer
     ZBMP(void)
     {
     }
@@ -55,7 +55,7 @@ class ZBMP : public ZBMP_PAR
     static bool FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
     ~ZBMP(void);
 
-    byte *Prgb(void)
+    uint8_t *Prgb(void)
     {
         return _prgb;
     }
@@ -64,9 +64,9 @@ class ZBMP : public ZBMP_PAR
         return _cbRow;
     }
 
-    void Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
+    void Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
               PREGN pregnClip = pvNil);
-    void DrawHalf(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
+    void DrawHalf(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
                   PREGN pregnClip = pvNil);
 
     bool FWrite(PCFL pcfl, CTG ctg, CNO *pcno);

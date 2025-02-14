@@ -38,7 +38,7 @@ bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     long dxp, dyp, dzpT;
     long dzpBest;
     long cbRowDst, cbRowSrc, cbT;
-    byte *prgb, *qrgb;
+    uint8_t *prgb, *qrgb;
     PCURS pcurs = pvNil;
 
     *pcb = SIZEOF(CURS);
@@ -95,7 +95,7 @@ bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
         goto LFail;
 
     FillPb(prgb, LwMul(cbRowDst, dyp), 0xFF);
-    qrgb = (byte *)pggcurf->QvGet(icurfBest);
+    qrgb = (uint8_t *)pggcurf->QvGet(icurfBest);
     cbT = LwMin(cbRowSrc, cbRowDst);
     for (dzpT = LwMin(dyp, curf.dyp); dzpT-- > 0;)
     {

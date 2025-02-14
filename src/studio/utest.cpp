@@ -557,13 +557,13 @@ bool APP::_FEnsureOS(void)
     AssertBaseThis(0);
 #ifdef WIN
     DWORD dwVersion;
-    byte bVersionMajor;
-    byte bVersionMinor;
+    uint8_t bVersionMajor;
+    uint8_t bVersionMinor;
     PDLG pdlg;
 
     dwVersion = GetVersion();
-    bVersionMinor = (byte)((dwVersion & 0x0000ff00) >> 8);
-    bVersionMajor = (byte)(dwVersion & 0x000000ff);
+    bVersionMinor = (uint8_t)((dwVersion & 0x0000ff00) >> 8);
+    bVersionMajor = (uint8_t)(dwVersion & 0x000000ff);
 
     if (bVersionMajor >= 4 || (bVersionMajor == 3 && bVersionMinor >= 51))
         return fTrue;
@@ -1463,7 +1463,7 @@ bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfre
             dwType = REG_DWORD;
         }
 
-        lwRet = RegSetValueEx(hkey, pszValueName, NULL, dwType, (byte *)pvData, dwCbData);
+        lwRet = RegSetValueEx(hkey, pszValueName, NULL, dwType, (uint8_t *)pvData, dwCbData);
         if (lwRet != ERROR_SUCCESS)
         {
 #ifdef DEBUG
@@ -1476,7 +1476,7 @@ bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfre
     }
     else
     {
-        lwRet = RegQueryValueEx(hkey, pszValueName, NULL, &dwType, (byte *)pvData, &dwCbData);
+        lwRet = RegQueryValueEx(hkey, pszValueName, NULL, &dwType, (uint8_t *)pvData, &dwCbData);
         if (lwRet != ERROR_SUCCESS)
         {
             if (lwRet == ERROR_FILE_NOT_FOUND && fSetDefault)
@@ -3531,10 +3531,10 @@ bool APP::_FDisplaySwitchSupported(void)
 
 #ifdef WIN
     DWORD dwVersion;
-    byte bVersionMajor;
+    uint8_t bVersionMajor;
 
     dwVersion = GetVersion();
-    bVersionMajor = (byte)(dwVersion & 0x000000ff);
+    bVersionMajor = (uint8_t)(dwVersion & 0x000000ff);
     // FOONE: We don't care if it's NT or not, major version 4.0 means win95 and up or NT4.0 and up.
     if (bVersionMajor >= 4)
         return fTrue;

@@ -100,7 +100,7 @@ void APT::MoveOrigin(long dxp, long dyp)
     dyp = (ulong)dyp % 8;
     if (dxp != 0)
     {
-        byte *pb;
+        uint8_t *pb;
 
         for (pb = rgb + 8; pb-- != rgb;)
             *pb = (*pb >> dxp) | (*pb << (8 - dxp));
@@ -1216,9 +1216,9 @@ void GNV::_PaletteTrans(PGL pglclrOld, PGL pglclrNew, long lwNum, long lwDen, PG
         if (pvNil != pglclrNew)
             pglclrNew->Get(iclr, &clrNew);
 
-        clrOld.bRed += (byte)LwMulDiv((long)clrNew.bRed - clrOld.bRed, lwNum, lwDen);
-        clrOld.bGreen += (byte)LwMulDiv((long)clrNew.bGreen - clrOld.bGreen, lwNum, lwDen);
-        clrOld.bBlue += (byte)LwMulDiv((long)clrNew.bBlue - clrOld.bBlue, lwNum, lwDen);
+        clrOld.bRed += (uint8_t)LwMulDiv((long)clrNew.bRed - clrOld.bRed, lwNum, lwDen);
+        clrOld.bGreen += (uint8_t)LwMulDiv((long)clrNew.bGreen - clrOld.bGreen, lwNum, lwDen);
+        clrOld.bBlue += (uint8_t)LwMulDiv((long)clrNew.bBlue - clrOld.bBlue, lwNum, lwDen);
         pglclrTrans->Put(iclr, &clrOld);
     }
 
@@ -1516,16 +1516,16 @@ void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC 
     AssertIn(crcHeight, 0, kcbMax);
 
     ulong tsStart, dtsT;
-    byte bFill;
+    uint8_t bFill;
     long cbRowSrc, cbRowDst;
     RND rnd;
     long lw, cact, irc, crc, crcFill, crcT;
     RC rc1, rc2;
     bool fOnScreen;
     long dibExtra, dibRow, ibExtra;
-    byte *pbRow;
-    byte *prgbDst = pvNil;
-    byte *prgbSrc = pvNil;
+    uint8_t *pbRow;
+    uint8_t *prgbDst = pvNil;
+    uint8_t *prgbSrc = pvNil;
     PGNV pgnv = pvNil;
     PGL pglclrOld = pvNil;
     PGL pglclrTrans = pvNil;
@@ -1583,7 +1583,7 @@ void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC 
         if (acrFill != kacrClear)
         {
             // get the byte value to fill with
-            byte bT = prgbDst[0];
+            uint8_t bT = prgbDst[0];
 
             rc1.Set(prcDst->xpLeft, prcDst->ypTop, prcDst->xpLeft + 1, prcDst->ypTop + 1);
             pgnv->FillRc(&rc1, acrFill);
@@ -2424,7 +2424,7 @@ OGN::OGN(void) : GL(SIZEOF(PT))
     This does a 2x stretch blt, clipped to prcClip and pregnClip. The
     clipping is expressed in destination coordinates.
 ***************************************************************************/
-void DoubleStretch(byte *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, byte *prgbDst, long cbRowDst, long dypDst,
+void DoubleStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
                    long xpDst, long ypDst, RC *prcClip, PREGN pregnClip)
 {
     AssertPvCb(prgbSrc, LwMul(cbRowSrc, dypSrc));
@@ -2563,10 +2563,10 @@ LDone2:
 #undef lwTReg
 #else  //! IN_80386
        // copy two rows to the destination in C code
-            byte *pbSrc = prgbSrc + (xpOn >> 1);
-            byte *pbDst = prgbDst + xpOn;
-            byte *pbDst2 = pbDst + cbRowDst;
-            byte bT;
+            uint8_t *pbSrc = prgbSrc + (xpOn >> 1);
+            uint8_t *pbDst = prgbDst + xpOn;
+            uint8_t *pbDst2 = pbDst + cbRowDst;
+            uint8_t bT;
             long cactLoop;
 
             if (xpOn & 1)
@@ -2684,9 +2684,9 @@ LDone1:
 #undef lwTReg
 #else  //! IN_80386
        // copy just one row to the destination in C code
-            byte bT;
-            byte *pbSrc = prgbSrc + (xpOn >> 1);
-            byte *pbDst = prgbDst + xpOn;
+            uint8_t bT;
+            uint8_t *pbSrc = prgbSrc + (xpOn >> 1);
+            uint8_t *pbDst = prgbDst + xpOn;
             long cactLoop;
 
             if (xpOn & 1)
@@ -2736,7 +2736,7 @@ LDone1:
     This does a 2x vertical and 1x horizontal stretch blt, clipped to prcClip
     and pregnClip. The clipping is expressed in destination coordinates.
 ***************************************************************************/
-void DoubleVertStretch(byte *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, byte *prgbDst, long cbRowDst, long dypDst,
+void DoubleVertStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
                        long xpDst, long ypDst, RC *prcClip, PREGN pregnClip)
 {
     AssertPvCb(prgbSrc, LwMul(cbRowSrc, dypSrc));

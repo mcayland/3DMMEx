@@ -146,7 +146,7 @@ const short kswBackSccb = 0xA; // we can be read back to this version
 const short kswMinSccb = 0xA;  // we can read back to this version
 
 // high byte of a label value
-const byte kbLabel = 0xCC;
+const uint8_t kbLabel = 0xCC;
 
 /***************************************************************************
     Run-time variable name.  The first 8 characters of the name are

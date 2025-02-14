@@ -230,7 +230,7 @@ bool _FGetLwFromSzs(PSZS pszs, long *plw)
 
     *plw = 0;
     for (ich = 0; ich < stn.Cch(); ich++)
-        *plw = (*plw << 8) + (byte)stn.Prgch()[ich];
+        *plw = (*plw << 8) + (uint8_t)stn.Prgch()[ich];
 
     return fTrue;
 }
@@ -271,10 +271,10 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
             switch (cb)
             {
             default: {
-                byte *pb;
-                byte *pbLim;
+                uint8_t *pb;
+                uint8_t *pbLim;
 
-                for (pb = (byte *)pv, pbLim = pb + cb; pb < pbLim; pb++)
+                for (pb = (uint8_t *)pv, pbLim = pb + cb; pb < pbLim; pb++)
                     fprintf(stderr, "%02x", (int)*pb);
             }
             break;

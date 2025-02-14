@@ -62,8 +62,8 @@ class MBMP : public MBMP_PAR
     {
         short bo;
         short osk;
-        byte fMask;
-        byte bFill;       // if fMask, the color value to use
+        uint8_t fMask;
+        uint8_t bFill;    // if fMask, the color value to use
         short swReserved; // should be zero on file
         RC rc;
         long cb; // length of whole chunk, including the header
@@ -73,8 +73,8 @@ class MBMP : public MBMP_PAR
     MBMP(void)
     {
     }
-    virtual bool _FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, byte bTransparent,
-                        ulong grfmbmp = fmbmpNil, byte bDefault = 0);
+    virtual bool _FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
+                        ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 
     short *_Qrgcb(void)
     {
@@ -88,17 +88,17 @@ class MBMP : public MBMP_PAR
   public:
     ~MBMP(void);
 
-    static PMBMP PmbmpNew(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, byte bTransparent,
-                          ulong grfmbmp = fmbmpNil, byte bDefault = 0);
-    static PMBMP PmbmpReadNative(FNI *pfni, byte bTransparent = 0, long xp = 0, long yp = 0, ulong grfmbmp = fmbmpNil,
-                                 byte bDefault = 0);
+    static PMBMP PmbmpNew(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
+                          ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
+    static PMBMP PmbmpReadNative(FNI *pfni, uint8_t bTransparent = 0, long xp = 0, long yp = 0,
+                                 ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 
     static PMBMP PmbmpRead(PBLCK pblck);
 
     void GetRc(RC *prc);
-    void Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
+    void Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
               PREGN pregnClip = pvNil);
-    void DrawMask(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil);
+    void DrawMask(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil);
     bool FPtIn(long xp, long yp);
 
     virtual bool FWrite(PBLCK pblck);
@@ -110,10 +110,10 @@ class MBMP : public MBMP_PAR
 const BOM kbomMbmph = 0xAFFC0000;
 
 // reads a bitmap from the given file
-bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, bool *pfUpsideDown,
-                 byte bTransparent = 0);
+bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, bool *pfUpsideDown,
+                 uint8_t bTransparent = 0);
 
 // writes a bitmap file
-bool FWriteBitmap(FNI *pfni, byte *prgb, PGL pglclr, long dxp, long dyp, bool fUpsideDown = fTrue);
+bool FWriteBitmap(FNI *pfni, uint8_t *prgb, PGL pglclr, long dxp, long dyp, bool fUpsideDown = fTrue);
 
 #endif //! MBMP_H

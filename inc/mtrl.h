@@ -34,8 +34,8 @@ struct MTRLF
     br_ufraction brufKa; // ambient component
     br_ufraction brufKd; // diffuse component
     br_ufraction brufKs; // specular component
-    byte bIndexBase;     // base of palette for this color
-    byte cIndexRange;    // count of entries in palette for this color
+    uint8_t bIndexBase;  // base of palette for this color
+    uint8_t cIndexRange; // count of entries in palette for this color
     BRS rPower;          // specular exponent
 };
 VERIFY_STRUCT_SIZE(MTRLF, 20);

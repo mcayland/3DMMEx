@@ -24,8 +24,8 @@ struct MIDEV
     long cb;      // number of bytes to send (in rgbSend)
     long lwTempo; // the current tempo - at a tempo change, cb will be 0
     union {
-        byte rgbSend[4]; // bytes to send if pvLong is nil
-        long lwSend;     // for convenience
+        uint8_t rgbSend[4]; // bytes to send if pvLong is nil
+        long lwSend;        // for convenience
     };
 };
 typedef MIDEV *PMIDEV;
@@ -46,14 +46,14 @@ class MSTP : public MSTP_PAR
   protected:
     ulong _tsCur;
     long _lwTempo;
-    byte *_prgb;
-    byte *_pbLim;
-    byte *_pbCur;
-    byte _bStatus;
+    uint8_t *_prgb;
+    uint8_t *_pbLim;
+    uint8_t *_pbCur;
+    uint8_t _bStatus;
 
     Debug(long _cactLongLock;) PMIDS _pmids;
 
-    bool _FReadVar(byte **ppbCur, long *plw);
+    bool _FReadVar(uint8_t **ppbCur, long *plw);
 
   public:
     MSTP(void);
@@ -82,7 +82,7 @@ class MIDS : public MIDS_PAR
 
     MIDS(void);
 
-    static long _CbEncodeLu(ulong lu, byte *prgb);
+    static long _CbEncodeLu(ulong lu, uint8_t *prgb);
 
   public:
     static bool FReadMids(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);

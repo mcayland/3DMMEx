@@ -81,9 +81,9 @@ class TXHD : public TXHD_PAR
     ~TXHD(void);
 
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil, ulong grftxhd = ftxhdNil);
-    virtual bool _FOpenArg(long icact, byte sprm, short bo, short osk);
-    virtual bool _FGetObjectRc(long icact, byte sprm, PGNV pgnv, PCHP pchp, RC *prc);
-    virtual bool _FDrawObject(long icact, byte sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
+    virtual bool _FOpenArg(long icact, uint8_t sprm, short bo, short osk);
+    virtual bool _FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
+    virtual bool _FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
 
   public:
     static PTXHD PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil,
@@ -99,8 +99,8 @@ class TXHD : public TXHD_PAR
     {
         return _prca;
     }
-    bool FGroupText(long cp1, long cp2, byte bGroup, CNO cnoTopic = cnoNil, PSTN pstnTopic = pvNil);
-    bool FGrouped(long cp, long *pcpMin = pvNil, long *pcpLim = pvNil, byte *pbGroup = pvNil, CNO *pcnoTopic = pvNil,
+    bool FGroupText(long cp1, long cp2, uint8_t bGroup, CNO cnoTopic = cnoNil, PSTN pstnTopic = pvNil);
+    bool FGrouped(long cp, long *pcpMin = pvNil, long *pcpLim = pvNil, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil,
                   PSTN pstnTopic = pvNil);
 
     void GetHtop(PHTOP phtop);
@@ -123,7 +123,7 @@ class TXHG : public TXHG_PAR
     CMD_MAP_DEC(TXHG)
 
   protected:
-    byte _bTrack;
+    uint8_t _bTrack;
     CNO _cnoTrack;
     long _hidBase;
     ulong _grfcust;
@@ -131,7 +131,7 @@ class TXHG : public TXHG_PAR
 
     TXHG(PWOKS pwoks, PTXHD ptxhd, PGCB pgcb);
     virtual bool _FInit(void);
-    virtual bool _FRunScript(byte bGroup, ulong grfcust, long hidHit, achar ch, CNO cnoTopic = cnoNil,
+    virtual bool _FRunScript(uint8_t bGroup, ulong grfcust, long hidHit, achar ch, CNO cnoTopic = cnoNil,
                              long *plwRet = pvNil);
 
   public:
@@ -145,8 +145,8 @@ class TXHG : public TXHG_PAR
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdBadKey(PCMD_BADKEY pcmd);
-    virtual bool FGroupFromPt(long xp, long yp, byte *pbGroup = pvNil, CNO *pcnoTopic = pvNil);
-    virtual void DoHit(byte bGroup, CNO cnoTopic, ulong grfcust, long hidHit);
+    virtual bool FGroupFromPt(long xp, long yp, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil);
+    virtual void DoHit(uint8_t bGroup, CNO cnoTopic, ulong grfcust, long hidHit);
     virtual void SetCursor(ulong grfcust);
 };
 
@@ -188,11 +188,11 @@ class HBTN : public HBTN_PAR
   protected:
     HBTN(GCB *pgcb);
 
-    byte _bGroup;
+    uint8_t _bGroup;
     CNO _cnoTopic;
 
   public:
-    static PHBTN PhbtnNew(PWOKS pwoks, PGOB pgobPar, long hid, CNO cno, PRCA prca, byte bGroup, CNO cnoTopic,
+    static PHBTN PhbtnNew(PWOKS pwoks, PGOB pgobPar, long hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic,
                           long xpLeft, long ypBottom);
 
     virtual bool FPtIn(long xp, long yp);

@@ -509,7 +509,7 @@ class DCH : public DCH_PAR
     void _InvertSel(PGNV pgnv);
     void _InvertIbRange(PGNV pgnv, long ib1, long ib2, bool fHex);
 
-    bool _FReplace(byte *prgb, long cb, long ibMin, long ibLim, bool fHalfSel = fFalse);
+    bool _FReplace(uint8_t *prgb, long cb, long ibMin, long ibLim, bool fHalfSel = fFalse);
     void _InvalAllDch(long ib, long cbIns, long cbDel);
     void _InvalIb(long ib, long cbIns, long cbDel);
 

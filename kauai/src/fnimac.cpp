@@ -86,7 +86,7 @@ bool FNI::FGetSave(FTG ftg, PST pstPrompt, PST pstDefault)
 
     SFR sfr;
 
-    StandardPutFile((byte *)pstPrompt, (byte *)pstDefault, &sfr);
+    StandardPutFile((uint8_t *)pstPrompt, (uint8_t *)pstDefault, &sfr);
     if (sfr.sfGood)
     {
         _fss = sfr.sfFile;
@@ -206,7 +206,7 @@ bool FNI::FBuild(long lwVol, long lwDir, PSTZ pstz, FTG ftg)
     if (ftg == kftgDir)
         pstz = pvNil;
 
-    err = FSMakeFSSpec((short)lwVol, lwDir, (byte *)pstz, &fss);
+    err = FSMakeFSSpec((short)lwVol, lwDir, (uint8_t *)pstz, &fss);
     if (ftg == kftgDir)
     {
         // a directory (it had better exist)
@@ -289,7 +289,7 @@ bool FNI::TExists(void)
 
     ClearPb(&iob, size(iob));
     CopySt((achar *)_fss.name, st);
-    iob.hFileInfo.ioNamePtr = (byte *)st;
+    iob.hFileInfo.ioNamePtr = (uint8_t *)st;
     iob.hFileInfo.ioVRefNum = _fss.vRefNum;
     iob.hFileInfo.ioDirID = _fss.parID;
     if ((err = PBGetCatInfo(&iob, fFalse)) != noErr)
@@ -393,7 +393,7 @@ bool FNI::FDownDir(PSTZ pstz, ulong grffni)
     short err;
 
     // make the fss
-    err = FSMakeFSSpec(_fss.vRefNum, _lwDir, (byte *)pstz, &fss);
+    err = FSMakeFSSpec(_fss.vRefNum, _lwDir, (uint8_t *)pstz, &fss);
     if (noErr == err)
     {
         // exists, make sure it is a directory and get the directory id
@@ -452,7 +452,7 @@ bool FNI::FUpDir(PSTZ pstz, ulong grffni)
 
     ClearPb(&iob, size(iob));
     iob.dirInfo.ioFDirIndex = -1; // ignore name, look at vol/dir
-    iob.dirInfo.ioNamePtr = (byte *)pstz;
+    iob.dirInfo.ioNamePtr = (uint8_t *)pstz;
     iob.dirInfo.ioVRefNum = _fss.vRefNum;
     iob.dirInfo.ioDrDirID = _lwDir;
     if (PBGetCatInfo(&iob, fFalse) != noErr)
@@ -676,7 +676,7 @@ bool FNE::FNextFni(FNI *pfni, ulong *pgrffneOut, ulong grffneIn)
         achar stz[kcbMaxStz];
 
         ClearPb(&iob, size(iob));
-        iob.hFileInfo.ioNamePtr = (byte *)stz;
+        iob.hFileInfo.ioNamePtr = (uint8_t *)stz;
         iob.hFileInfo.ioVRefNum = (short)_fesCur.lwVol;
         iob.hFileInfo.ioDirID = _fesCur.lwDir;
         iob.hFileInfo.ioFDirIndex = (short)++_fesCur.iv;

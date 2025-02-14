@@ -1015,7 +1015,7 @@ void CCG::Draw(PGNV pgnv, RC *prcClip)
             switch (iscr)
             {
             default:
-                acr.SetToIndex((byte)iscr);
+                acr.SetToIndex((uint8_t)iscr);
                 pgnv->FillRc(&rcT, acr);
                 break;
 
@@ -1063,7 +1063,7 @@ bool CCG::_FGetAcrFromPt(long xp, long yp, ACR *pacr, RC *prc, long *piscr)
     default:
         if (!FIn(iscr, 1, 256))
             return fFalse;
-        pacr->SetToIndex((byte)iscr);
+        pacr->SetToIndex((uint8_t)iscr);
         break;
 
     case 0:

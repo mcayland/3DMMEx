@@ -95,23 +95,23 @@ inline ulong LuHighLow(ushort suHigh, ushort suLow)
 {
     return ((ulong)suHigh << 16) | (ulong)suLow;
 }
-inline byte B0Lw(long lw)
+inline uint8_t B0Lw(long lw)
 {
-    return (byte)lw;
+    return (uint8_t)lw;
 }
-inline byte B1Lw(long lw)
+inline uint8_t B1Lw(long lw)
 {
-    return (byte)(lw >> 8);
+    return (uint8_t)(lw >> 8);
 }
-inline byte B2Lw(long lw)
+inline uint8_t B2Lw(long lw)
 {
-    return (byte)(lw >> 16);
+    return (uint8_t)(lw >> 16);
 }
-inline byte B3Lw(long lw)
+inline uint8_t B3Lw(long lw)
 {
-    return (byte)(lw >> 24);
+    return (uint8_t)(lw >> 24);
 }
-inline long LwFromBytes(byte b3, byte b2, byte b1, byte b0)
+inline long LwFromBytes(uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0)
 {
     return ((long)b3 << 24) | ((long)b2 << 16) | ((long)b1 << 8) | (long)b0;
 }
@@ -125,19 +125,19 @@ inline ushort SuLow(long lw)
     return (ushort)lw;
 }
 
-inline byte BHigh(short sw)
+inline uint8_t BHigh(short sw)
 {
-    return (byte)((ushort)sw >> 8);
+    return (uint8_t)((ushort)sw >> 8);
 }
-inline byte BLow(short sw)
+inline uint8_t BLow(short sw)
 {
-    return (byte)sw;
+    return (uint8_t)sw;
 }
-inline short SwHighLow(byte bHigh, byte bLow)
+inline short SwHighLow(uint8_t bHigh, uint8_t bLow)
 {
     return ((short)bHigh << 8) | (short)bLow;
 }
-inline ushort SuHighLow(byte bHigh, byte bLow)
+inline ushort SuHighLow(uint8_t bHigh, uint8_t bLow)
 {
     return ((ushort)bHigh << 8) | (ushort)bLow;
 }
@@ -281,7 +281,7 @@ inline long CbFromCbit(long cbit)
 {
     return (cbit + 7) / 8;
 }
-inline byte Fbit(long ibit)
+inline uint8_t Fbit(long ibit)
 {
     return 1 << (ibit & 0x0007);
 }

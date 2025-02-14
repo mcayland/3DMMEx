@@ -138,7 +138,7 @@ class LEXB : public LEXB_PAR
 
     ulong _GrfctCh(achar ch)
     {
-        return (uchar)ch < 128 ? _mpchgrfct[(byte)ch] : fctNil;
+        return (uchar)ch < 128 ? _mpchgrfct[(uint8_t)ch] : fctNil;
     }
     bool _FFetchRgch(achar *prgch, long cch = 1);
     void _Advance(long cch = 1)

@@ -33,8 +33,8 @@ MBMP::~MBMP(void)
     the upper-left corner).  bTransparent should be the pixel value for the
     transparent color for the MBMP.
 ***************************************************************************/
-PMBMP MBMP::PmbmpNew(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, byte bTransparent,
-                     ulong grfmbmp, byte bDefault)
+PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
+                     ulong grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -53,8 +53,8 @@ PMBMP MBMP::PmbmpNew(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
 /***************************************************************************
     Initialize the MBMP based on the given pixels.
 ***************************************************************************/
-bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, byte bTransparent,
-                  ulong grfmbmp, byte bDefault)
+bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
+                  ulong grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -63,8 +63,8 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
     Assert(!prc->FEmpty() && prc->xpLeft >= 0 && prc->xpRight <= cbRow && prc->ypTop >= 0 && prc->ypBottom <= dyp,
            "Invalid rectangle");
     short *qrgcb;
-    byte *pb, *pbRow, *pbLimRow;
-    byte *qbDst, *qbDstPrev;
+    uint8_t *pb, *pbRow, *pbLimRow;
+    uint8_t *qbDst, *qbDstPrev;
     long cbPixelData, cbPrev, cbOpaque, cbRun;
     long dibRow;
     bool fTrans, fMask;
@@ -165,7 +165,7 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
 
     // now actually construct the pixel data
     qrgcb = _Qrgcb();
-    qbDst = (byte *)PvAddBv(qrgcb, _cbRgcb);
+    qbDst = (uint8_t *)PvAddBv(qrgcb, _cbRgcb);
     pbRow = prgbPixels + LwMul(cbRow, ((grfmbmp & fmbmpUpsideDown) ? dyp - rc.ypTop - 1 : rc.ypTop));
     for (yp = rc.ypTop; yp < rc.ypBottom; pbRow += dibRow, yp++)
     {
@@ -189,7 +189,7 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
             {
                 if (fTrans && pb == pbLimRow)
                     break;
-                *qbDst++ = (byte)cbRun;
+                *qbDst++ = (uint8_t)cbRun;
                 if (!fTrans)
                 {
                     if (!fMask)
@@ -237,10 +237,10 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
     transparent. The bitmap file must be uncompressed and have a bit depth
     of 8.  The palette information is be ignored.
 ****************************************************************************/
-PMBMP MBMP::PmbmpReadNative(FNI *pfni, byte bTransparent, long xp, long yp, ulong grfmbmp, byte bDefault)
+PMBMP MBMP::PmbmpReadNative(FNI *pfni, uint8_t bTransparent, long xp, long yp, ulong grfmbmp, uint8_t bDefault)
 {
     AssertPo(pfni, ffniFile);
-    byte *prgb;
+    uint8_t *prgb;
     RC rc;
     long dxp, dyp;
     bool fUpsideDown;
@@ -320,10 +320,10 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
 #ifdef DEBUG
     // verify the rgcb and rgb
     long ccb, cb, dxp;
-    byte *qb;
+    uint8_t *qb;
     bool fMask = pmbmp->_Qmbmph()->fMask;
     short *qcb = pmbmp->_Qrgcb();
-    byte *qbRow = (byte *)PvAddBv(qcb, cbRgcb);
+    uint8_t *qbRow = (uint8_t *)PvAddBv(qcb, cbRgcb);
 
     cbTot -= SIZEOF(MBMPH) + cbRgcb;
     for (ccb = rc.Dyp(); ccb-- > 0;)
@@ -413,7 +413,7 @@ void MBMP::GetRc(RC *prc)
 bool MBMP::FPtIn(long xp, long yp)
 {
     AssertThis(0);
-    byte *qb, *qbLim;
+    uint8_t *qb, *qbLim;
     short *qcb;
     short cb;
     MBMPH *qmbmph;
@@ -423,7 +423,7 @@ bool MBMP::FPtIn(long xp, long yp)
         return fFalse;
 
     qcb = _Qrgcb();
-    qb = (byte *)PvAddBv(qcb, _cbRgcb);
+    qb = (uint8_t *)PvAddBv(qcb, _cbRgcb);
     for (yp -= qmbmph->rc.ypTop; yp-- > 0;)
         qb += *qcb++;
 
@@ -528,7 +528,7 @@ bool MBMP::FReadMbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
             pfUpsideDown	--	fTrue if the bitmap is upside down
         returns fTrue if it succeeds
 ***************************************************************************/
-bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, bool *pfUpsideDown, byte bTransparent)
+bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, bool *pfUpsideDown, uint8_t bTransparent)
 {
     AssertPo(pfni, ffniFile);
     AssertNilOrVarMem(pprgb);
@@ -626,8 +626,8 @@ bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, 
 
     if (fRle)
     {
-        byte *pbSrc, *pbDst, *prgbSrc, *pbLimSrc, *pbLimDst;
-        byte bT;
+        uint8_t *pbSrc, *pbDst, *prgbSrc, *pbLimSrc, *pbLimDst;
+        uint8_t bT;
         long xp, cbT;
         long cbRowDst = CbRoundToLong(rc.xpRight);
 
@@ -768,7 +768,7 @@ LDone:
 
     Arguments:
         FNI *pfni         -- the name of the file to write
-        byte *prgb        -- the bits in the bitmap
+        uint8_t *prgb     -- the bits in the bitmap
         PGL pglclr        -- the palette of the bitmap
         long dxp          -- the width of the bitmap
         long dyp          -- the height of the bitmap
@@ -776,7 +776,7 @@ LDone:
 
     Returns: fTrue if it could write the file
 ***************************************************************************/
-bool FWriteBitmap(FNI *pfni, byte *prgb, PGL pglclr, long dxp, long dyp, bool fUpsideDown)
+bool FWriteBitmap(FNI *pfni, uint8_t *prgb, PGL pglclr, long dxp, long dyp, bool fUpsideDown)
 {
     AssertPo(pfni, ffniFile);
     AssertVarMem(prgb);
@@ -840,7 +840,7 @@ bool FWriteBitmap(FNI *pfni, byte *prgb, PGL pglclr, long dxp, long dyp, bool fU
     Assert((ulong)fpCur == bmh.bmfh.bfOffBits, "Current file pos is wrong");
     if (fUpsideDown)
     {
-        byte *pbCur;
+        uint8_t *pbCur;
         long cbRow = CbRoundToLong(dxp);
 
         pbCur = prgb + dyp * cbRow;

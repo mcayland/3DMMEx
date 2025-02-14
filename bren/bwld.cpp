@@ -357,8 +357,8 @@ bool BWLD::FSetBackground(PCRF pcrf, CTG ctgRGB, CNO cnoRGB, CTG ctgZ, CNO cnoZ)
         // ZBMP, it is necessary to reduce it in code here.
         PGPT pgptFull;
         long yp;
-        byte *pbSrc;
-        byte *pbDst;
+        uint8_t *pbSrc;
+        uint8_t *pbDst;
         long cbRowSrc;
         long cbRowDst;
         pgptFull = GPT::PgptNewOffscreen(&_rcView, kcbitPixelRGB);
@@ -533,7 +533,7 @@ void BWLD::Prerender(void)
 
     Render();
 
-    _pzbmpWorking->Draw((byte *)_pzbmpBackground->Prgb(), _pzbmpBackground->CbRow(), _rcBuffer.Dyp(), 0, 0, &_rcBuffer,
+    _pzbmpWorking->Draw((uint8_t *)_pzbmpBackground->Prgb(), _pzbmpBackground->CbRow(), _rcBuffer.Dyp(), 0, 0, &_rcBuffer,
                         pvNil);
 
     // Need to detach _pzbmpBackground from the CRF so when we unprerender,
@@ -573,8 +573,8 @@ void BWLD::_CleanWorkingBuffers(void)
     long xpLeft;
     RC rcRegnBounds;
     RC rcClippedRegnBounds;
-    byte *pbSrc;
-    byte *pbDst;
+    uint8_t *pbSrc;
+    uint8_t *pbDst;
     long cbRowCopy;
     RC rc;
     long cbRowSrc, cbRowDst;
@@ -585,7 +585,7 @@ void BWLD::_CleanWorkingBuffers(void)
         return;
 
     // Clean the Z buffer
-    _pzbmpBackground->Draw((byte *)_bpmpZ.pixels, _bpmpZ.row_bytes, _bpmpZ.height, 0, 0, &rcClippedRegnBounds,
+    _pzbmpBackground->Draw((uint8_t *)_bpmpZ.pixels, _bpmpZ.row_bytes, _bpmpZ.height, 0, 0, &rcClippedRegnBounds,
                            _pregnDirtyWorking);
 
     // Clean the RGB buffer

@@ -405,7 +405,7 @@ bool FLO::FCopy(PFLO pfloDst)
 {
     AssertThis(ffloReadable);
     AssertPo(pfloDst, 0);
-    byte rgb[1024];
+    uint8_t rgb[1024];
     long cbBlock, cbT;
     void *pv;
     bool fRet = fFalse;
@@ -496,8 +496,8 @@ bool FLO::FTranslate(short osk)
 {
     AssertThis(0);
     short oskSig;
-    byte rgbSrc[512];
-    byte rgbDst[1024];
+    uint8_t rgbSrc[512];
+    uint8_t rgbDst[1024];
     void *pvSrc;
     void *pvDst;
     long cchDst, cch;
@@ -793,7 +793,7 @@ HQ BLCK::HqFree(bool fPackedOk)
 
         if (_ibMin > 0)
         {
-            byte *qrgb = (byte *)QvFromHq(hq);
+            uint8_t *qrgb = (uint8_t *)QvFromHq(hq);
             BltPb(qrgb + _ibMin, qrgb, _ibLim - _ibMin);
             _ibLim -= _ibMin;
         }
@@ -931,7 +931,7 @@ bool BLCK::FReadRgb(void *pv, long cb, long ib, bool fPackedOk)
 
     if (hqNil != _hq)
     {
-        CopyPb((byte *)QvFromHq(_hq) + ib + _ibMin, pv, cb);
+        CopyPb((uint8_t *)QvFromHq(_hq) + ib + _ibMin, pv, cb);
         return fTrue;
     }
 
@@ -964,7 +964,7 @@ bool BLCK::FWriteRgb(const void *pv, long cb, long ib, bool fPackedOk)
 
     if (hqNil != _hq)
     {
-        CopyPb(pv, (byte *)QvFromHq(_hq) + ib + _ibMin, cb);
+        CopyPb(pv, (uint8_t *)QvFromHq(_hq) + ib + _ibMin, cb);
         return fTrue;
     }
 
@@ -1000,7 +1000,7 @@ bool BLCK::FReadHq(HQ *phq, long cb, long ib, bool fPackedOk)
     {
         if (!FAllocHq(phq, cb, fmemNil, mprNormal))
             return fFalse;
-        CopyPb((byte *)QvFromHq(_hq) + ib + _ibMin, QvFromHq(*phq), cb);
+        CopyPb((uint8_t *)QvFromHq(_hq) + ib + _ibMin, QvFromHq(*phq), cb);
         return fTrue;
     }
 
@@ -1034,7 +1034,7 @@ bool BLCK::FWriteHq(HQ hq, long ib, bool fPackedOk)
 
     if (hqNil != _hq)
     {
-        CopyPb(QvFromHq(hq), (byte *)QvFromHq(_hq) + ib + _ibMin, cb);
+        CopyPb(QvFromHq(hq), (uint8_t *)QvFromHq(_hq) + ib + _ibMin, cb);
         return fTrue;
     }
 
@@ -1103,7 +1103,7 @@ bool BLCK::FWriteToBlck(PBLCK pblckDst, bool fPackedOk)
     if (hqNil != pblckDst->_hq)
     {
         bool fRet;
-        fRet = FReadRgb((byte *)PvLockHq(pblckDst->_hq) + pblckDst->_ibMin, cb, 0, fTrue);
+        fRet = FReadRgb((uint8_t *)PvLockHq(pblckDst->_hq) + pblckDst->_ibMin, cb, 0, fTrue);
         UnlockHq(pblckDst->_hq);
         return fRet;
     }

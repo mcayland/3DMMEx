@@ -247,7 +247,7 @@ bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *p
     AssertVarMem(pcpMin);
     AssertVarMem(pcpLim);
     const long kcbCharSet = 256 / 8;
-    byte grfbitUsed[kcbCharSet];
+    uint8_t grfbitUsed[kcbCharSet];
     long ibit;
     const achar *pch, *pchLast;
     achar ch;
@@ -268,7 +268,7 @@ bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *p
     ClearPb(grfbitUsed, SIZEOF(grfbitUsed));
     for (pch = prgch; pch <= pchLast; pch++)
     {
-        ibit = (long)(byte)*pch;
+        ibit = (long)(uint8_t)*pch;
         AssertIn(ibit, 0, 256);
         grfbitUsed[IbFromIbit(ibit)] |= Fbit(ibit);
     }
@@ -284,7 +284,7 @@ bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *p
                 ch = ChLower(ch);
 
             // see if the character is used anywhere within the search string
-            ibit = (long)(byte)ch;
+            ibit = (long)(uint8_t)ch;
             if (!(grfbitUsed[IbFromIbit(ibit)] & Fbit(ibit)))
             {
                 // this character isn't anywhere in the search string,
@@ -1232,11 +1232,11 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     Do any necessary munging of the AG entry on open. Return false if
     we don't recognize this argument type.
 ***************************************************************************/
-bool TXRD::_FOpenArg(long icact, byte sprm, short bo, short osk)
+bool TXRD::_FOpenArg(long icact, uint8_t sprm, short bo, short osk)
 {
     AssertBaseThis(0);
     long onn, cb;
-    byte *prgb;
+    uint8_t *prgb;
     STN stn;
 
     cb = _pagcact->Cb(icact);
@@ -1250,7 +1250,7 @@ bool TXRD::_FOpenArg(long icact, byte sprm, short bo, short osk)
             return fFalse;
         }
         _pagcact->GetRgb(icact, SIZEOF(long), SIZEOF(short), &osk);
-        prgb = (byte *)PvAddBv(_pagcact->PvLock(icact), SIZEOF(long) + SIZEOF(short));
+        prgb = (uint8_t *)PvAddBv(_pagcact->PvLock(icact), SIZEOF(long) + SIZEOF(short));
         if (!stn.FSetData(prgb, cb))
         {
             Bug("bad font entry");
@@ -1448,7 +1448,7 @@ bool TXRD::_FFindMpe(ulong spcp, MPE *pmpe, long *pcpLim, long *pimpe)
     long impe, impeMin, impeLim;
     bool fRet;
     MPE mpe;
-    byte sprm = _SprmFromSpcp(spcp);
+    uint8_t sprm = _SprmFromSpcp(spcp);
 
     for (impeMin = 0, impeLim = _pglmpe->IvMac(); impeMin < impeLim;)
     {
@@ -1503,7 +1503,7 @@ bool TXRD::_FFindMpe(ulong spcp, MPE *pmpe, long *pcpLim, long *pimpe)
 /***************************************************************************
     Fetch the impe'th property, returning all the relevant info about it.
 ***************************************************************************/
-bool TXRD::_FFetchProp(long impe, byte *psprm, long *plw, long *pcpMin, long *pcpLim)
+bool TXRD::_FFetchProp(long impe, uint8_t *psprm, long *plw, long *pcpMin, long *pcpLim)
 {
     MPE mpe;
 
@@ -1544,7 +1544,7 @@ void TXRD::_AdjustMpe(long cp, long ccpIns, long ccpDel)
     AssertIn(ccpDel, 0, kcbMax);
     MPE *qmpe;
     long impe, impeMin, cpT;
-    byte sprm;
+    uint8_t sprm;
     bool fBefore, fKeep;
 
     _cpMinChp = _cpLimChp = _cpMinPap = _cpLimPap = 0;
@@ -1653,7 +1653,7 @@ void TXRD::_AdjustMpe(long cp, long ccpIns, long ccpDel)
     already there, increment its reference count. Otherwise, set its
     reference count to 1.
 ***************************************************************************/
-bool TXRD::_FEnsureInAg(byte sprm, void *pv, long cb, long *pjv)
+bool TXRD::_FEnsureInAg(uint8_t sprm, void *pv, long cb, long *pjv)
 {
     AssertIn(cb, 1, kcbMax);
     AssertPvCb(pv, cb);
@@ -1749,7 +1749,7 @@ void TXRD::_AddRefInAg(long jv)
     Static method: return true iff the given sprm has its argument in
     the _pagcact.
 ***************************************************************************/
-bool TXRD::_FSprmInAg(byte sprm)
+bool TXRD::_FSprmInAg(uint8_t sprm)
 {
     if (sprm < sprmMinChpClient || FIn(sprm, sprmMinPap, sprmMinPapClient))
     {
@@ -1766,7 +1766,7 @@ bool TXRD::_FSprmInAg(byte sprm)
     If the sprm allocates stuff in the ag, release it. The inverse operation
     of _AddRefSprmLw.
 ***************************************************************************/
-void TXRD::_ReleaseSprmLw(byte sprm, long lw)
+void TXRD::_ReleaseSprmLw(uint8_t sprm, long lw)
 {
     if (lw > 0 && _FSprmInAg(sprm))
         _ReleaseInAg(lw);
@@ -1776,7 +1776,7 @@ void TXRD::_ReleaseSprmLw(byte sprm, long lw)
     If the sprm allocates stuff in the ag, addref it. The inverse operation
     of _ReleaseSprmLw.
 ***************************************************************************/
-void TXRD::_AddRefSprmLw(byte sprm, long lw)
+void TXRD::_AddRefSprmLw(uint8_t sprm, long lw)
 {
     if (lw > 0 && _FSprmInAg(sprm))
         _AddRefInAg(lw);
@@ -1793,7 +1793,7 @@ bool TXRD::_FGetRgspvmFromChp(PCHP pchp, PCHP pchpDiff, SPVM *prgspvm, long *pcs
     AssertNilOrVarMem(pchpDiff);
     AssertPvCb(prgspvm, LwMul(SIZEOF(SPVM), sprmLimChp - sprmMinChp));
     AssertVarMem(pcspvm);
-    byte sprm;
+    uint8_t sprm;
     long ispvm;
     SPVM spvm;
 
@@ -1829,7 +1829,7 @@ bool TXRD::_FGetRgspvmFromPap(PPAP ppap, PPAP ppapDiff, SPVM *prgspvm, long *pcs
     AssertNilOrVarMem(ppapDiff);
     AssertPvCb(prgspvm, LwMul(SIZEOF(SPVM), sprmLimPap - sprmMinPap));
     AssertVarMem(pcspvm);
-    byte sprm;
+    uint8_t sprm;
     long ispvm;
     SPVM spvm;
 
@@ -1998,7 +1998,7 @@ void TXRD::_ApplyRgspvm(long cp, long ccp, SPVM *prgspvm, long cspvm)
     values of pchpOld and pchpNew differ for the given sprm. Returns
     tMaybe on error.
 ***************************************************************************/
-tribool TXRD::_TGetLwFromChp(byte sprm, PCHP pchpNew, PCHP pchpOld, long *plw, long *plwMask)
+tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw, long *plwMask)
 {
     AssertIn(sprm, sprmMinChp, sprmLimChp);
     AssertVarMem(pchpNew);
@@ -2015,12 +2015,12 @@ tribool TXRD::_TGetLwFromChp(byte sprm, PCHP pchpNew, PCHP pchpOld, long *plw, l
 
     case sprmStyle:
         *plw = LwHighLow((short)(pchpNew->dypFont - _dypFontDef),
-                         SwHighLow((byte)pchpNew->dypOffset, (byte)pchpNew->grfont));
+                         SwHighLow((uint8_t)pchpNew->dypOffset, (uint8_t)pchpNew->grfont));
         if (pvNil != pchpOld)
         {
             *plwMask = LwHighLow(
                 -(pchpOld->dypFont != pchpNew->dypFont),
-                SwHighLow(-(pchpNew->dypOffset != pchpOld->dypOffset), (byte)(pchpOld->grfont ^ pchpNew->grfont)));
+                SwHighLow(-(pchpNew->dypOffset != pchpOld->dypOffset), (uint8_t)(pchpOld->grfont ^ pchpNew->grfont)));
         }
         break;
 
@@ -2035,7 +2035,7 @@ tribool TXRD::_TGetLwFromChp(byte sprm, PCHP pchpNew, PCHP pchpOld, long *plw, l
             STN stn;
             long cb;
             short osk = koskCur;
-            byte rgb[kcbMaxDataStn + SIZEOF(long) + SIZEOF(short)];
+            uint8_t rgb[kcbMaxDataStn + SIZEOF(long) + SIZEOF(short)];
 
             CopyPb(&pchpNew->onn, rgb, SIZEOF(long));
             CopyPb(&osk, rgb + SIZEOF(long), SIZEOF(short));
@@ -2087,7 +2087,7 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
     AssertNilOrVarMem(pcpMin);
     AssertNilOrVarMem(pcpLim);
     MPE mpe;
-    byte sprm;
+    uint8_t sprm;
     ulong spcp;
     long cpLimT;
     long cb;
@@ -2124,9 +2124,9 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
         case sprmFont:
             if (mpe.lw > 0)
             {
-                byte *qrgb;
+                uint8_t *qrgb;
 
-                qrgb = (byte *)_pagcact->QvGet(mpe.lw - 1, &cb);
+                qrgb = (uint8_t *)_pagcact->QvGet(mpe.lw - 1, &cb);
                 cb -= SIZEOF(long) + SIZEOF(short); // onn, osk
                 if (!FIn(cb, 0, kcbMaxDataStn + 1))
                 {
@@ -2241,7 +2241,7 @@ void TXRD::_GetParaBounds(long *pcpMin, long *pcpLim, bool fExpand)
     values of pchpOld and pchpNew differ for the given sprm. Returns
     tMaybe on error.
 ***************************************************************************/
-tribool TXRD::_TGetLwFromPap(byte sprm, PPAP ppapNew, PPAP ppapOld, long *plw, long *plwMask)
+tribool TXRD::_TGetLwFromPap(uint8_t sprm, PPAP ppapNew, PPAP ppapOld, long *plw, long *plwMask)
 {
     AssertIn(sprm, sprmMinPap, sprmLimPap);
     AssertVarMem(ppapNew);
@@ -2306,7 +2306,7 @@ void TXRD::FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
     AssertNilOrVarMem(pcpMin);
     AssertNilOrVarMem(pcpLim);
     MPE mpe;
-    byte sprm;
+    uint8_t sprm;
     ulong spcp;
     long cpLimT;
     bool fRet;
@@ -2858,7 +2858,7 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long c
     {
         // object properties
         long cp;
-        byte sprm;
+        uint8_t sprm;
         long impe, impeNew;
         MPE mpe, mpeNew;
         void *pv;
@@ -2897,7 +2897,7 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long c
     Copy properties from a TXRD to this one. Properties from sprmMin to
     sprmLim are copied.
 ***************************************************************************/
-void TXRD::_CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccpDst, byte sprmMin, byte sprmLim)
+void TXRD::_CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccpDst, uint8_t sprmMin, uint8_t sprmLim)
 {
     AssertThis(0);
     AssertPo(ptxrd, 0);
@@ -2906,7 +2906,7 @@ void TXRD::_CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccp
     AssertIn(ccpSrc, 1, ptxrd->CpMac() + 1 - cpSrc);
     AssertIn(ccpDst, 1, CpMac() + 1 - cpDst);
     SPVM spvm;
-    byte sprm;
+    uint8_t sprm;
     long impe;
     long cpMin, cpLim;
     bool fRet;
@@ -3021,7 +3021,7 @@ bool TXRD::FFetchObject(long cpMin, long *pcp, void **ppv, long *pcb)
         AssertIn(mpe.lw, 0, _pagcact->IvMac());
         cb = _pagcact->Cb(mpe.lw);
         if (FAllocPv(ppv, cb, fmemNil, mprNormal))
-            CopyPb((byte *)_pagcact->QvGet(mpe.lw), *ppv, cb);
+            CopyPb((uint8_t *)_pagcact->QvGet(mpe.lw), *ppv, cb);
     }
 
     return fTrue;
@@ -3144,7 +3144,7 @@ bool TXRD::FGetObjectRc(long cp, PGNV pgnv, PCHP pchp, RC *prc)
 /***************************************************************************
     Get the object bounds from the AG entry.
 ***************************************************************************/
-bool TXRD::_FGetObjectRc(long icact, byte sprm, PGNV pgnv, PCHP pchp, RC *prc)
+bool TXRD::_FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc)
 {
     AssertIn(icact, 0, _pagcact->IvMac());
     Assert(sprm >= sprmObject, 0);
@@ -3180,7 +3180,7 @@ bool TXRD::FDrawObject(long cp, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *pr
 /***************************************************************************
     Draw the object.
 ***************************************************************************/
-bool TXRD::_FDrawObject(long icact, byte sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip)
+bool TXRD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip)
 {
     AssertIn(icact, 0, _pagcact->IvMac());
     Assert(sprm >= sprmObject, 0);

@@ -27,7 +27,7 @@ int __cdecl main(int cpszs, char **prgpszs)
     FNE fne;
     FNI fniDir, fni;
     FTG rgftg[2];
-    byte rgb[512];
+    uint8_t rgb[512];
     FP fpMac, fp;
     long cbTot, clnTot, ib, cbT, cln;
     PFIL pfil;
@@ -121,10 +121,10 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
             switch (cb)
             {
             default: {
-                byte *pb;
-                byte *pbLim;
+                uint8_t *pb;
+                uint8_t *pbLim;
 
-                for (pb = (byte *)pv, pbLim = pb + cb; pb < pbLim; pb++)
+                for (pb = (uint8_t *)pv, pbLim = pb + cb; pb < pbLim; pb++)
                     printf("%2x", (int)*pb);
             }
             break;
@@ -183,7 +183,7 @@ bool FFindPrime(long lwMax, long lwMaxRoot, long *plwPrime, long *plwRoot)
     AssertIn(lwMax, 3, kcbMax);
     AssertVarMem(plwPrime);
     AssertVarMem(plwRoot);
-    byte *prgb;
+    uint8_t *prgb;
     long cb;
     long lw, ibit, lwT, clwHit;
 

@@ -120,7 +120,7 @@ RTCLASS(COST)
 // Specification of hilite color.  REVIEW *****: should these
 // values (or the PBMTL itself?) be passed in by the client?
 const br_colour kbrcHilite = BR_COLOUR_RGB(255, 255, 255);
-const byte kbOpaque = 0xff;
+const uint8_t kbOpaque = 0xff;
 const br_ufraction kbrufKaHilite = BR_UFRACTION(0.10);
 const br_ufraction kbrufKdHilite = BR_UFRACTION(0.60);
 const br_ufraction kbrufKsHilite = BR_UFRACTION(0.60);
@@ -1037,7 +1037,7 @@ void BODY::GetBcbBounds(BCB *pbcb, bool fWorld)
     AssertVarMem(pbcb);
 
     BRB brb;
-    byte type = _PbactHilite()->type;
+    uint8_t type = _PbactHilite()->type;
     long ibv3;
     br_vector3 bv3;
 

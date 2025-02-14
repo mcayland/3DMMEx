@@ -401,8 +401,8 @@ void AssertIn(long lw, long lwMin, long lwLim)
 ***************************************************************************/
 void SwapBytesBom(void *pv, BOM bom)
 {
-    byte b;
-    byte *pb = (byte *)pv;
+    uint8_t b;
+    uint8_t *pb = (uint8_t *)pv;
 
     Assert(SIZEOF(short) == 2 && SIZEOF(long) == 4, "code broken");
     while (bom != 0)
@@ -446,8 +446,8 @@ void SwapBytesRgsw(void *psw, long csw)
     AssertIn(csw, 0, kcbMax);
     AssertPvCb(psw, LwMul(csw, SIZEOF(short)));
 
-    byte b;
-    byte *pb = (byte *)psw;
+    uint8_t b;
+    uint8_t *pb = (uint8_t *)psw;
 
     Assert(SIZEOF(short) == 2, "code broken");
     for (; csw > 0; csw--, pb += 2)
@@ -466,8 +466,8 @@ void SwapBytesRglw(void *plw, long clw)
     AssertIn(clw, 0, kcbMax);
     AssertPvCb(plw, LwMul(clw, SIZEOF(long)));
 
-    byte b;
-    byte *pb = (byte *)plw;
+    uint8_t b;
+    uint8_t *pb = (uint8_t *)plw;
 
     Assert(SIZEOF(long) == 4, "code broken");
     for (; clw > 0; clw--, pb += 4)
