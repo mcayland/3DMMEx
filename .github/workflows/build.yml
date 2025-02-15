@@ -38,10 +38,8 @@ jobs:
         with:
           name: Build Artifacts
           path: |
-            build/x86-msvc-relwithdebinfo
-            !build/x86-msvc-relwithdebinfo/_CPack_Packages
-            !build/x86-msvc-relwithdebinfo/chomp/studio/*.chk
-            !build/x86-msvc-relwithdebinfo/*.zip
+            build/x86-msvc-relwithdebinfo/src/3dmovie.pdb
+            build/x86-msvc-relwithdebinfo/src/chomp/studio/*.i
       - name: Upload Release
         uses: actions/upload-artifact@v4
         with:
