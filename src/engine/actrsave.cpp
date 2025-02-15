@@ -26,8 +26,8 @@ const CHID kchidGgae = 0;
 
 struct ACTF // Actor chunk on file
 {
-    short bo;        // Byte order
-    short osk;       // OS kind
+    int16_t bo;     // Byte order
+    int16_t osk;     // OS kind
     XYZ dxyzFullRte; // Translation of the route
     long arid;       // Unique id assigned to this actor.
     long nfrmFirst;  // First frame in this actor's stage life
@@ -320,7 +320,7 @@ bool ACTR::_FReadRoute(PCFL pcfl, CNO cno)
     AssertPo(pcfl, 0);
 
     BLCK blck;
-    short bo;
+    int16_t bo;
 
     if (!pcfl->FFind(kctgPath, cno, &blck))
         return fFalse;
@@ -344,7 +344,7 @@ bool ACTR::_FReadEvents(PCFL pcfl, CNO cno)
     AssertPo(pcfl, 0);
 
     BLCK blck;
-    short bo;
+    int16_t bo;
 
     if (!pcfl->FFind(kctgGgae, cno, &blck))
         return fFalse;
@@ -485,7 +485,7 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
 
     ACTF actf;
     BLCK blck;
-    short bo;
+    int16_t bo;
     PTAG ptag;
     PGL pgltag;
     PGG pggaev = pvNil;

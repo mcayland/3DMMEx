@@ -188,10 +188,10 @@ void CHCM::_GetRgbFromLw(long lw, uint8_t *prgb)
         prgb[0] = B0Lw(lw);
         break;
 
-    case SIZEOF(short):
+    case SIZEOF(int16_t):
         if ((lw < kswMin) || (lw > ksuMax))
             _Error(ertRangeShort);
-        *(short *)prgb = SwLow(lw);
+        *(int16_t *)prgb = SwLow(lw);
         break;
 
     default:
@@ -275,7 +275,7 @@ bool CHCM::_FGetCleanTok(TOK *ptok, bool fEofOk)
             _cbNum = SIZEOF(uint8_t);
             break;
         case ttModeShort:
-            _cbNum = SIZEOF(short);
+            _cbNum = SIZEOF(int16_t);
             break;
         case ttModeLong:
             _cbNum = SIZEOF(long);
@@ -896,8 +896,8 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
         uint8_t dyp;
         uint8_t bZero1;
         uint8_t bZero2;
-        short xp;
-        short yp;
+        int16_t xp;
+        int16_t yp;
         long cb;
         long bv;
     };
@@ -907,8 +907,8 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
         long cbCurh;
         long dxp;
         long dyp;
-        short swOne1;
-        short swOne2;
+        int16_t swOne1;
+        int16_t swOne2;
         long lwZero1;
         long lwZero2;
         long lwZero3;
@@ -926,7 +926,7 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     TOK tok;
     long ccurdir, cbBits;
     CURF curf;
-    short rgsw[3];
+    int16_t rgsw[3];
     uint8_t *prgb;
     CURDIR *pcurdir;
     CURH *pcurh;
@@ -1008,9 +1008,9 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
             // need to consolidate the bits, because they are stored 4 bytes per
             // row (2 bytes wasted) instead of 2 bytes per row.
             long csw = 32;
-            short *pswSrc, *pswDst;
+            int16_t *pswSrc, *pswDst;
 
-            pswSrc = pswDst = (short *)(pcurh + 1);
+            pswSrc = pswDst = (int16_t *)(pcurh + 1);
             while (csw-- != 0)
             {
                 *pswDst++ = *pswSrc++;
@@ -1145,14 +1145,14 @@ bool CHCM::_FParseData(PTOK ptok)
             case ttBo:
                 // insert the current byte order
                 cbNum = _cbNum;
-                _cbNum = SIZEOF(short);
+                _cbNum = SIZEOF(int16_t);
                 _AppendNumber(kboCur);
                 _cbNum = cbNum;
                 break;
             case ttOsk:
                 // insert the current osk
                 cbNum = _cbNum;
-                _cbNum = SIZEOF(short);
+                _cbNum = SIZEOF(int16_t);
                 _AppendNumber(_osk);
                 _cbNum = cbNum;
                 break;
@@ -2637,7 +2637,7 @@ bool CHDC::_FDumpList(PBLCK pblck, bool fAl)
     AssertPo(pblck, fblckReadable);
 
     PGLB pglb;
-    short bo, osk;
+    int16_t bo, osk;
     long cfmt;
     bool fPacked = pblck->FPacked(&cfmt);
 
@@ -2689,7 +2689,7 @@ bool CHDC::_FDumpGroup(PBLCK pblck, bool fAg)
     AssertPo(pblck, fblckReadable);
 
     PGGB pggb;
-    short bo, osk;
+    int16_t bo, osk;
     long cfmt;
     bool fPacked = pblck->FPacked(&cfmt);
 
@@ -2741,7 +2741,7 @@ bool CHDC::_FDumpStringTable(PBLCK pblck, bool fAst)
     AssertPo(pblck, fblckReadable);
 
     PGSTB pgstb;
-    short bo, osk;
+    int16_t bo, osk;
     long cfmt;
     bool fPacked = pblck->FPacked(&cfmt);
     bool fRet;

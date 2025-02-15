@@ -75,8 +75,8 @@ const long kSndChannels = 1;
 ****************************************/
 struct MSNDF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long sty;        // sound type
     long vlmDefault; // default volume
     bool fInvalid;   // Invalid flag

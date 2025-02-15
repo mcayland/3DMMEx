@@ -32,14 +32,14 @@ struct MBH
     MBH *pmbhPrev;                // previous allocated block (in doubly linked list)
     MBH *pmbhNext;                // next allocated block
     long rglwStack[kclwStackMbh]; // the EBP/A6 chain
-    short cactRef;                // for marking memory
-    short swMagic;                // magic number, to detect memory trashing
+    int16_t cactRef;              // for marking memory
+    int16_t swMagic;              // magic number, to detect memory trashing
 };
 
 // memory block footer
 struct MBF
 {
-    short swMagic; // magic number, to detect memory trashing
+    int16_t swMagic; // magic number, to detect memory trashing
 };
 
 MBH *_pmbhFirst; // head of the doubly linked list
@@ -449,7 +449,7 @@ priv void _UnlinkMbh(MBH *pmbh, MBH *pmbhOld)
 ***************************************************************************/
 void _AssertMbh(MBH *pmbh)
 {
-    short sw;
+    int16_t sw;
 
     if (vcactSuspendCheckPointers != 0)
         return;

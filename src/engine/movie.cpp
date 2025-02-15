@@ -142,28 +142,28 @@ END_CMD_MAP_NIL()
 // A file written by this version of movie.cpp receives this cvn.  Any
 // file with this cvn value has exactly the same file format
 //
-const short kcvnCur = 2;
+const int16_t kcvnCur = 2;
 
 //
 // A file written by this version of movie.cpp can be read by any version
 // of movie.cpp whose kcvnCur is >= to this (this should be <= kcvnCur)
 //
-const short kcvnBack = 2;
+const int16_t kcvnBack = 2;
 
 //
 // A file whose cvn is less than kcvnMin cannot be directly read by
 // this version of movie.cpp (maybe a converter will read it).
 // (this should be <= kcvnCur)
 //
-const short kcvnMin = 1;
+const int16_t kcvnMin = 1;
 
 //
 // Movie file prefix
 //
 struct MFP
 {
-    short bo;  // byte order
-    short osk; // which system wrote this
+    int16_t bo; // byte order
+    int16_t osk; // which system wrote this
     DVER dver; // chunky file version
 };
 const BOM kbomMfp = 0x55000000;
@@ -264,8 +264,8 @@ PMVIE MVIE::PmvieNew(bool fHalfMode, PMCC pmcc, FNI *pfni, CNO cno)
     TAGL *ptagl;
     PCFL pcfl = pvNil;
     BLCK blck;
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     PGST pgstSource;
 
     //
@@ -459,7 +459,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, long *paridLim)
     Assert(*ppgst == pvNil, "Overwriting existing GST");
     AssertNilOrVarMem(paridLim);
 
-    short bo;
+    int16_t bo;
     long imactr, imactrMac;
     PCFL pcfl = pcrf->Pcfl();
     KID kid;

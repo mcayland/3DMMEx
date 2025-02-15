@@ -186,11 +186,11 @@ PPIC PIC::PpicReadNative(FNI *pfni)
 typedef struct _MEFH
 {
     DWORD lwKey;
-    short w1;
-    short xpLeft;
-    short ypTop;
-    short xpRight;
-    short ypBottom;
+    int16_t w1;
+    int16_t xpLeft;
+    int16_t ypTop;
+    int16_t xpRight;
+    int16_t ypBottom;
     WORD w2;
     DWORD dw1;
     WORD w3;

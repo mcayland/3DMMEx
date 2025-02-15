@@ -183,7 +183,7 @@ uint16_t LEXB::_mpchgrfct[128] = {
 
 // token values for single characters
 #define kchMinTok ChLit('!')
-short _rgtt[] = {
+int16_t _rgtt[] = {
     // ! " # $ % & '
     ttLNot, ttNil, ttPound, ttDollar, ttMod, ttBAnd, ttNil,
     // ( ) * + , - . /
@@ -221,7 +221,7 @@ long _TtFromCh(achar ch)
 
 #define kchMinDouble ChLit('&')
 #define kchLastDouble ChLit('|')
-short _rgttDouble[] = {
+int16_t _rgttDouble[] = {
     // & '
     ttLAnd, ttNil,
     // ( ) * + , - . /
@@ -249,7 +249,7 @@ short _rgttDouble[] = {
 
 #define kchMinEqual ChLit('!')
 #define kchLastEqual ChLit('|')
-short _rgttEqual[] = {
+int16_t _rgttEqual[] = {
     // ! " # $ % & '
     ttNe, ttNil, ttNil, ttNil, ttAMod, ttABAnd, ttNil,
     // ( ) * + , - . /

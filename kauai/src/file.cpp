@@ -492,10 +492,10 @@ bool FLO::FWriteHq(HQ hq, long dfp)
     If the text changes, creates a temp file and redirects the flo to the
     temp file (and releases a ref count on the pfil).
 ***************************************************************************/
-bool FLO::FTranslate(short osk)
+bool FLO::FTranslate(int16_t osk)
 {
     AssertThis(0);
-    short oskSig;
+    int16_t oskSig;
     uint8_t rgbSrc[512];
     uint8_t rgbDst[1024];
     void *pvSrc;

@@ -105,8 +105,8 @@ class GRPB : public GRPB_PAR
     virtual void Delete(long iv) = 0;
 
     // writing
-    virtual bool FWriteFlo(PFLO pflo, short bo = kboCur, short osk = koskCur);
-    virtual bool FWrite(PBLCK pblck, short bo = kboCur, short osk = koskCur) = 0;
+    virtual bool FWriteFlo(PFLO pflo, int16_t bo = kboCur, int16_t osk = koskCur);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur) = 0;
     virtual long CbOnFile(void) = 0;
 };
 
@@ -151,13 +151,13 @@ class GL : public GL_PAR
 
   protected:
     GL(long cb);
-    bool _FRead(PBLCK pblck, short *pbo, short *posk);
+    bool _FRead(PBLCK pblck, int16_t *pbo, int16_t *posk);
 
   public:
     // static methods
     static PGL PglNew(long cb, long cvInit = 0);
-    static PGL PglRead(PBLCK pblck, short *pbo = pvNil, short *posk = pvNil);
-    static PGL PglRead(PFIL pfil, FP fp, long cb, short *pbo = pvNil, short *posk = pvNil);
+    static PGL PglRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PGL PglRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PGL PglDup(void);
@@ -165,7 +165,7 @@ class GL : public GL_PAR
     // methods required by parent class
     virtual bool FAdd(void *pv, long *piv = pvNil);
     virtual void Delete(long iv);
-    virtual bool FWrite(PBLCK pblck, short bo = kboCur, short osk = koskCur);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
     virtual long CbOnFile(void);
     virtual bool FFree(long iv);
 
@@ -212,13 +212,13 @@ class AL : public AL_PAR
 
   protected:
     AL(long cb);
-    bool _FRead(PBLCK pblck, short *pbo, short *posk);
+    bool _FRead(PBLCK pblck, int16_t *pbo, int16_t *posk);
 
   public:
     // static methods
     static PAL PalNew(long cb, long cvInit = 0);
-    static PAL PalRead(PBLCK pblck, short *pbo = pvNil, short *posk = pvNil);
-    static PAL PalRead(PFIL pfil, FP fp, long cb, short *pbo = pvNil, short *posk = pvNil);
+    static PAL PalRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PAL PalRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PAL PalDup(void);
@@ -226,7 +226,7 @@ class AL : public AL_PAR
     // methods required by parent class
     virtual bool FAdd(void *pv, long *piv = pvNil);
     virtual void Delete(long iv);
-    virtual bool FWrite(PBLCK pblck, short bo = kboCur, short osk = koskCur);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
     virtual long CbOnFile(void);
     virtual bool FFree(long iv);
 
@@ -267,13 +267,13 @@ class GGB : public GGB_PAR
     {
         return (LOC *)_Qb2(LwMul(iloc, SIZEOF(LOC)));
     }
-    bool _FRead(PBLCK pblck, short *pbo, short *posk);
+    bool _FRead(PBLCK pblck, int16_t *pbo, int16_t *posk);
 
     bool _FDup(PGGB pggbDst);
 
   public:
     // methods required by parent class
-    virtual bool FWrite(PBLCK pblck, short bo = kboCur, short osk = koskCur);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
     virtual long CbOnFile(void);
     virtual bool FFree(long iv);
 
@@ -325,8 +325,8 @@ class GG : public GG_PAR
   public:
     // static methods
     static PGG PggNew(long cbFixed = 0, long cvInit = 0, long cbInit = 0);
-    static PGG PggRead(PBLCK pblck, short *pbo = pvNil, short *posk = pvNil);
-    static PGG PggRead(PFIL pfil, FP fp, long cb, short *pbo = pvNil, short *posk = pvNil);
+    static PGG PggRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PGG PggRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PGG PggDup(void);
@@ -360,8 +360,8 @@ class AG : public AG_PAR
   public:
     // static methods
     static PAG PagNew(long cbFixed = 0, long cvInit = 0, long cbInit = 0);
-    static PAG PagRead(PBLCK pblck, short *pbo = pvNil, short *posk = pvNil);
-    static PAG PagRead(PFIL pfil, FP fp, long cb, short *pbo = pvNil, short *posk = pvNil);
+    static PAG PagRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PAG PagRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PAG PagDup(void);
@@ -415,15 +415,15 @@ class GSTB : public GSTB_PAR
     void _RemoveSt(long bst);
     void _AppendRgch(const achar *prgch, long cch);
     void _SwapBytesRgbst(void);
-    void _TranslateGrst(short osk, bool fToCur);
-    bool _FTranslateGrst(short osk);
-    bool _FRead(PBLCK pblck, short *pbo, short *posk);
+    void _TranslateGrst(int16_t osk, bool fToCur);
+    bool _FTranslateGrst(int16_t osk);
+    bool _FRead(PBLCK pblck, int16_t *pbo, int16_t *posk);
 
     bool _FDup(PGSTB pgstbDst);
 
   public:
     // methods required by parent class
-    virtual bool FWrite(PBLCK pblck, short bo = kboCur, short osk = koskCur);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
     virtual long CbOnFile(void);
     virtual bool FFree(long istn);
 
@@ -472,8 +472,8 @@ class GST : public GST_PAR
   public:
     // static methods
     static PGST PgstNew(long cbExtra = 0, long cstnInit = 0, long cchInit = 0);
-    static PGST PgstRead(PBLCK pblck, short *pbo = pvNil, short *posk = pvNil);
-    static PGST PgstRead(PFIL pfil, FP fp, long cb, short *pbo = pvNil, short *posk = pvNil);
+    static PGST PgstRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PGST PgstRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PGST PgstDup(void);
@@ -507,8 +507,8 @@ class AST : public AST_PAR
   public:
     // static methods
     static PAST PastNew(long cbExtra = 0, long cstnInit = 0, long cchInit = 0);
-    static PAST PastRead(PBLCK pblck, short *pbo = pvNil, short *posk = pvNil);
-    static PAST PastRead(PFIL pfil, FP fp, long cb, short *pbo = pvNil, short *posk = pvNil);
+    static PAST PastRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PAST PastRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PAST PastDup(void);

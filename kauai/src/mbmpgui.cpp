@@ -38,7 +38,7 @@ void MBMP::Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRe
 
     long yp, dxpT, xpOn;
     uint8_t *qbRowSrc, *qbLastSrc, *pbOff;
-    short *qcb;
+    int16_t *qcb;
     uint8_t bFill;
     long lwFill;
     REGSC regsc;
@@ -290,7 +290,7 @@ LFill:
     long yp, dxp, dypT, dxpT;
     uint8_t *qbRowSrc, *qbSrc, *qbLastSrc;
     uint8_t *pbOn, *pbOff, *pbDst;
-    short *qcb;
+    int16_t *qcb;
     REGSC regsc;
     RC rcClip(0, 0, cbRow, dyp);
     MBMPH *qmbmph = _Qmbmph();
@@ -428,7 +428,7 @@ void MBMP::DrawMask(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long 
 
     long yp, xp, dxp;
     uint8_t *qbRowSrc, *qbSrc, *qbLimSrc;
-    short *qcb;
+    int16_t *qcb;
     bool fTrans;
     long ib, ibNext;
     uint8_t bMask, bMaskNext;

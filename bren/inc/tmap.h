@@ -14,17 +14,17 @@ const CTG kctgTxxf = 'TXXF';
 // tmap on file
 struct TMAPF
 {
-    short bo;
-    short osk;
-    short cbRow;
+    int16_t bo;
+    int16_t osk;
+    int16_t cbRow;
     uint8_t type;
     uint8_t grftmap;
-    short xpLeft;
-    short ypTop;
-    short dxp;
-    short dyp;
-    short xpOrigin;
-    short ypOrigin;
+    int16_t xpLeft;
+    int16_t ypTop;
+    int16_t dxp;
+    int16_t dyp;
+    int16_t xpOrigin;
+    int16_t ypOrigin;
     // void *rgb; 		// pixels follow immediately after TMAPF
 };
 VERIFY_STRUCT_SIZE(TMAPF, 20);
@@ -33,8 +33,8 @@ const ulong kbomTmapf = 0x54555000;
 /* A TeXture XransForm on File */
 typedef struct _txxff
 {
-    short bo;  // byte order
-    short osk; // OS kind
+    int16_t bo; // byte order
+    int16_t osk; // OS kind
     BMAT23 bmat23;
 } TXXFF, *PTXXFF;
 VERIFY_STRUCT_SIZE(TXXFF, 28);

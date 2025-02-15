@@ -60,11 +60,11 @@ class MBMP : public MBMP_PAR
     // MBMP header on file
     struct MBMPH
     {
-        short bo;
-        short osk;
+        int16_t bo;
+        int16_t osk;
         uint8_t fMask;
         uint8_t bFill;    // if fMask, the color value to use
-        short swReserved; // should be zero on file
+        int16_t swReserved; // should be zero on file
         RC rc;
         long cb; // length of whole chunk, including the header
     };
@@ -76,9 +76,9 @@ class MBMP : public MBMP_PAR
     virtual bool _FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
                         ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 
-    short *_Qrgcb(void)
+    int16_t *_Qrgcb(void)
     {
-        return (short *)PvAddBv(QvFromHq(_hqrgb), SIZEOF(MBMPH));
+        return (int16_t *)PvAddBv(QvFromHq(_hqrgb), SIZEOF(MBMPH));
     }
     MBMPH *_Qmbmph(void)
     {

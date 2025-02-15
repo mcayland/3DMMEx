@@ -96,7 +96,7 @@ LDone:
 void ReverseRgsw(void *pv, long csw)
 {
     AssertIn(csw, 0, kcbMax);
-    AssertPvCb(pv, csw * SIZEOF(short));
+    AssertPvCb(pv, csw * SIZEOF(int16_t));
 
 #ifdef IN_80386
 

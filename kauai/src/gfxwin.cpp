@@ -505,7 +505,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
 
     // the three longs are for 16 and 32 bit dibs.
     if (!FAllocPv((void **)&pbmi,
-                  SIZEOF(BITMAPINFO) + LwMul(cclr, LwMax(SIZEOF(short), SIZEOF(RGBQUAD))) + LwMul(3, SIZEOF(long)),
+                  SIZEOF(BITMAPINFO) + LwMul(cclr, LwMax(SIZEOF(int16_t), SIZEOF(RGBQUAD))) + LwMul(3, SIZEOF(long)),
                   fmemClear, mprNormal))
     {
         goto LFail;
@@ -515,7 +515,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     pbmi->bmiHeader.biWidth = prc->Dxp();
     pbmi->bmiHeader.biHeight = -prc->Dyp();
     pbmi->bmiHeader.biPlanes = 1;
-    pbmi->bmiHeader.biBitCount = (short)cbitPixel;
+    pbmi->bmiHeader.biBitCount = (int16_t)cbitPixel;
     pbmi->bmiHeader.biCompression = (cbitPixel == 16 || cbitPixel == 32) ? BI_BITFIELDS : BI_RGB;
     cbRow = LwRoundAway(LwMulDivAway(prc->Dxp(), cbitPixel, 8), SIZEOF(long));
     pbmi->bmiHeader.biSizeImage = LwMul(prc->Dyp(), cbRow);
@@ -568,7 +568,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
             pe.peFlags = PC_EXPLICIT;
             for (ipe = 0; ipe < 256; ipe++)
             {
-                *(short *)&pe = (short)ipe;
+                *(int16_t *)&pe = (int16_t)ipe;
                 ppal->palPalEntry[ipe] = pe;
             }
             ppal->palNumEntries = 256;
@@ -586,12 +586,12 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
         }
         else
         {
-            short *psw = (short *)pbmi->bmiColors;
+            int16_t *psw = (int16_t *)pbmi->bmiColors;
             long isw;
 
             lwUsage = DIB_PAL_COLORS;
             for (isw = 0; isw < cclr;)
-                *psw++ = (short)isw++;
+                *psw++ = (int16_t)isw++;
         }
     }
 
@@ -1365,7 +1365,7 @@ void GPT::GetRcsFromRgch(RCS *prcs, const achar *prgch, long cch, PTS pts, DSF *
 void GPT::_SetAptBrush(APT *papt)
 {
     AssertVarMem(papt);
-    short rgw[8];
+    int16_t rgw[8];
     long iw;
     HBRUSH hbr;
     HBITMAP hbmp;

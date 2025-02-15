@@ -159,7 +159,7 @@ bool BKGD::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     BKGDF bkgdf;
     KID kid;
     PGL pgllite = pvNil;
-    short bo;
+    int16_t bo;
 
     _ccam = _Ccam(pcfl, ctg, cno); // compute # of views in this background
     _icam = ivNil;

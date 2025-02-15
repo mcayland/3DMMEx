@@ -41,8 +41,8 @@ const BRS kdyrLeading = BR_SCALAR(0.5); // vertical space between chars
 ****************************************/
 struct TDFF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long cch;
     BRS dyrMax;
     // These variable-length arrays follow the TDFF in the TDF chunk

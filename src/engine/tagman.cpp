@@ -188,7 +188,7 @@ bool TAGM::_FFindSid(long sid, long *pistn)
     Add source title string table entries to tag manager, if it doesn't
     already know them.
 ***************************************************************************/
-bool TAGM::FMergeGstSource(PGST pgst, short bo, short osk)
+bool TAGM::FMergeGstSource(PGST pgst, int16_t bo, int16_t osk)
 {
     AssertThis(0);
     AssertPo(pgst, 0);

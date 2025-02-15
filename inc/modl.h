@@ -17,10 +17,10 @@
 // Model on file:
 struct MODLF
 {
-    short bo;
-    short osk;
-    short cver; // count of vertices
-    short cfac; // count of faces
+    int16_t bo;
+    int16_t osk;
+    int16_t cver; // count of vertices
+    int16_t cfac; // count of faces
     BRS rRadius;
     BRB brb; // bounds
     BVEC3 bvec3Pivot;

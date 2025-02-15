@@ -68,8 +68,8 @@ class GOKD : public GOKD_PAR
 // GOK construction descriptor on file - these are stored in chunky resource files
 struct GOKDF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long gokk;
     // LOP rglop[];		ends with a default entry (hidPar == hidNil)
     // CUME rgcume[];	the cursor map

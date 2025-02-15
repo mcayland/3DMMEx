@@ -19,7 +19,7 @@
 // used for asserts and limiting memory
 const uint8_t kbGarbage = 0xA3; // new blocks are filled with this
 const long kcbMax = 0x08000000; // 128 Megabytes
-const short kswMagicMem = (short)0xA253;
+const int16_t kswMagicMem = (int16_t)0xA253;
 const long klwMagicMem = (long)0xA253A253;
 
 /***************************************************************************
@@ -36,7 +36,7 @@ extern bool _fInAlloc;
 #ifdef MAC
 typedef Handle HN;
 // version of SetHandleSize that returns an error code
-inline short ErrSetHandleSize(HN hn, Size cb)
+inline int16_t ErrSetHandleSize(HN hn, Size cb)
 {
     SetHandleSize(hn, cb);
     return MemError();

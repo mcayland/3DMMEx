@@ -93,7 +93,7 @@ class NTL : public NTL_PAR
     HFONT HfntCreate(DSF *pdsf);
 #endif // WIN
 #ifdef MAC
-    short FtcFromOnn(long onn);
+    int16_t FtcFromOnn(long onn);
 #endif // MAC
 
     bool FInit(void);
@@ -103,7 +103,7 @@ class NTL : public NTL_PAR
     }
     void GetStn(long onn, PSTN pstn);
     bool FGetOnn(PSTN pstn, long *ponn);
-    long OnnMapStn(PSTN pstn, short osk = koskCur);
+    long OnnMapStn(PSTN pstn, int16_t osk = koskCur);
     long OnnMac(void);
     bool FFixedPitch(long onn);
 
@@ -305,7 +305,7 @@ extern APT vaptDkGray;
 struct OLY // pOLYgon
 {
 #ifdef MAC
-    short cb; // size of the whole thing
+    int16_t cb; // size of the whole thing
     RCS rcs;  // bounding rectangle
     PTS rgpts[1];
 
@@ -658,8 +658,8 @@ class GPT : public GPT_PAR
     HGD _hgd;
     PPRT _pprtSav; // may be a GWorldPtr
     HGD _hgdSav;
-    short _cactLock;  // lock count for pixels (if offscreen)
-    short _cbitPixel; // depth of bitmap (if offscreen)
+    int16_t _cactLock; // lock count for pixels (if offscreen)
+    int16_t _cbitPixel; // depth of bitmap (if offscreen)
     bool _fSet : 1;
     bool _fOffscreen : 1;
     bool _fNoClip : 1;
@@ -677,7 +677,7 @@ class GPT : public GPT_PAR
     void _FillPoly(HQ *phqoly);
     void _FramePoly(HQ *phqoly);
     void _DrawLine(PTS *prgpts);
-    void _GetRcsFromRgch(RCS *prcs, achar *prgch, short cch, PTS *ppts, DSF *pdsf);
+    void _GetRcsFromRgch(RCS *prcs, achar *prgch, int16_t cch, PTS *ppts, DSF *pdsf);
 #endif // MAC
 
     // low level draw routine

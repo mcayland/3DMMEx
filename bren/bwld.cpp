@@ -138,7 +138,7 @@ bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
         return fFalse;
     Assert(kcbitPixelZ == 16, "change _bpmpZ.type");
     _bpmpZ.type = BR_PMT_DEPTH_16;
-    _bpmpZ.row_bytes = (short)LwMul(dxp, kcbPixelZ);
+    _bpmpZ.row_bytes = (int16_t)LwMul(dxp, kcbPixelZ);
     _bpmpZ.width = (uint16_t)dxp;
     _bpmpZ.height = (uint16_t)dyp;
     _bpmpZ.origin_x = dxp / 2;
@@ -162,7 +162,7 @@ bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
         return fFalse;
     Assert(kcbitPixelRGB == 8, "change _bpmpRGB.type");
     _bpmpRGB.type = BR_PMT_INDEX_8;
-    _bpmpRGB.row_bytes = (short)LwMul(dxp, kcbPixelRGB);
+    _bpmpRGB.row_bytes = (int16_t)LwMul(dxp, kcbPixelRGB);
     _bpmpRGB.width = (uint16_t)dxp;
     _bpmpRGB.height = (uint16_t)dyp;
     _bpmpRGB.origin_x = dxp / 2;
@@ -307,9 +307,9 @@ inline void SqueezePb(void *pvSrc, void *pvDst, long cbSrc)
     AssertPvCb(pvSrc, cbSrc);
     AssertPvCb(pvDst, cbSrc / 2);
 
-    Assert(SIZEOF(short) == kcbPixelZ, 0);
-    short *pswSrc = (short *)pvSrc;
-    short *pswDst = (short *)pvDst;
+    Assert(SIZEOF(int16_t) == kcbPixelZ, 0);
+    int16_t *pswSrc = (int16_t *)pvSrc;
+    int16_t *pswDst = (int16_t *)pvDst;
 
     while (cbSrc != 0)
     {

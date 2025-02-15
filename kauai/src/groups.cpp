@@ -171,7 +171,7 @@ bool GRPB::_FDup(PGRPB pgrpbDst, long cb1, long cb2)
 /***************************************************************************
     Write a group to a flo.
 ***************************************************************************/
-bool GRPB::FWriteFlo(PFLO pflo, short bo, short osk)
+bool GRPB::FWriteFlo(PFLO pflo, int16_t bo, int16_t osk)
 {
     BLCK blck(pflo);
     return FWrite(&blck, bo, osk);
@@ -392,7 +392,7 @@ PGL GL::PglNew(long cb, long cvInit)
 /***************************************************************************
     Read a list from a block and return it.
 ***************************************************************************/
-PGL GL::PglRead(PBLCK pblck, short *pbo, short *posk)
+PGL GL::PglRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pbo);
@@ -417,7 +417,7 @@ PGL GL::PglRead(PBLCK pblck, short *pbo, short *posk)
 /***************************************************************************
     Read a list from file and return it.
 ***************************************************************************/
-PGL GL::PglRead(PFIL pfil, FP fp, long cb, short *pbo, short *posk)
+PGL GL::PglRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PglRead(&blck, pbo, posk);
@@ -462,8 +462,8 @@ PGL GL::PglDup(void)
 // List on file
 struct GLF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long cbEntry;
     long ivMac;
 };
@@ -482,7 +482,7 @@ long GL::CbOnFile(void)
 /***************************************************************************
     Write the list to disk.
 ***************************************************************************/
-bool GL::FWrite(PBLCK pblck, short bo, short osk)
+bool GL::FWrite(PBLCK pblck, int16_t bo, int16_t osk)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -507,7 +507,7 @@ bool GL::FWrite(PBLCK pblck, short bo, short osk)
 /***************************************************************************
     Read list data from disk.
 ***************************************************************************/
-bool GL::_FRead(PBLCK pblck, short *pbo, short *posk)
+bool GL::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -750,7 +750,7 @@ PAL AL::PalNew(long cb, long cvInit)
 /***************************************************************************
     Read an allocated list from the block and return it.
 ***************************************************************************/
-PAL AL::PalRead(PBLCK pblck, short *pbo, short *posk)
+PAL AL::PalRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pbo);
@@ -776,7 +776,7 @@ PAL AL::PalRead(PBLCK pblck, short *pbo, short *posk)
 /***************************************************************************
     Read an allocated list from file and return it.
 ***************************************************************************/
-PAL AL::PalRead(PFIL pfil, FP fp, long cb, short *pbo, short *posk)
+PAL AL::PalRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PalRead(&blck, pbo, posk);
@@ -813,8 +813,8 @@ PAL AL::PalDup(void)
 // Allocated list on file
 struct ALF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long cbEntry;
     long ivMac;
     long cvFree;
@@ -835,7 +835,7 @@ long AL::CbOnFile(void)
 /***************************************************************************
     Write the list to disk.
 ***************************************************************************/
-bool AL::FWrite(PBLCK pblck, short bo, short osk)
+bool AL::FWrite(PBLCK pblck, int16_t bo, int16_t osk)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pblck, 0);
@@ -861,7 +861,7 @@ bool AL::FWrite(PBLCK pblck, short bo, short osk)
 /***************************************************************************
     Read allocated list data from the block.
 ***************************************************************************/
-bool AL::_FRead(PBLCK pblck, short *pbo, short *posk)
+bool AL::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -1113,8 +1113,8 @@ bool GGB::_FDup(PGGB pggbDst)
 // group on file
 struct GGF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long ilocMac;
     long bvMac;
     long clocFree;
@@ -1136,7 +1136,7 @@ long GGB::CbOnFile(void)
     Write the group to disk.  The client must ensure that the data in the
     GGB has the correct byte order (as specified by the bo).
 ***************************************************************************/
-bool GGB::FWrite(PBLCK pblck, short bo, short osk)
+bool GGB::FWrite(PBLCK pblck, int16_t bo, int16_t osk)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pblck, 0);
@@ -1173,7 +1173,7 @@ bool GGB::FWrite(PBLCK pblck, short bo, short osk)
 /***************************************************************************
     Read group data from disk.
 ***************************************************************************/
-bool GGB::_FRead(PBLCK pblck, short *pbo, short *posk)
+bool GGB::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -1182,7 +1182,7 @@ bool GGB::_FRead(PBLCK pblck, short *pbo, short *posk)
 
     GGF ggf;
     long cbT;
-    short bo;
+    int16_t bo;
     long cb;
     bool fRet = fFalse;
 
@@ -1857,7 +1857,7 @@ PGG GG::PggNew(long cbFixed, long cvInit, long cbInit)
 /***************************************************************************
     Read a group from a block and return it.
 ***************************************************************************/
-PGG GG::PggRead(PBLCK pblck, short *pbo, short *posk)
+PGG GG::PggRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pbo);
@@ -1882,7 +1882,7 @@ PGG GG::PggRead(PBLCK pblck, short *pbo, short *posk)
 /***************************************************************************
     Read a group from file and return it.
 ***************************************************************************/
-PGG GG::PggRead(PFIL pfil, FP fp, long cb, short *pbo, short *posk)
+PGG GG::PggRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PggRead(&blck, pbo, posk);
@@ -2111,7 +2111,7 @@ PAG AG::PagNew(long cbFixed, long cvInit, long cbInit)
 /***************************************************************************
     Read an allocated group from a block and return it.
 ***************************************************************************/
-PAG AG::PagRead(PBLCK pblck, short *pbo, short *posk)
+PAG AG::PagRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pbo);
@@ -2136,7 +2136,7 @@ PAG AG::PagRead(PBLCK pblck, short *pbo, short *posk)
 /***************************************************************************
     Read an allocated group from file and return it.
 ***************************************************************************/
-PAG AG::PagRead(PFIL pfil, FP fp, long cb, short *pbo, short *posk)
+PAG AG::PagRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PagRead(&blck, pbo, posk);

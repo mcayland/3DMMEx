@@ -26,8 +26,8 @@ long vcactAV = kswMax;
 const long kclwStackDoi = 10;
 struct DOI
 {
-    short swMagic;      // magic number == kswMagicMem
-    short cactRef;      // for marking memory and asserting on unused objects
+    int16_t swMagic;    // magic number == kswMagicMem
+    int16_t cactRef;    // for marking memory and asserting on unused objects
     PSZS pszsFile;      // file NewObj appears in
     long lwLine;        // line NewObj appears on
     long cbTot;         // total size of the block, including the DOI

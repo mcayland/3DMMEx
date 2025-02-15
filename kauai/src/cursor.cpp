@@ -34,7 +34,7 @@ bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     PGG pggcurf;
     long icurf, icurfBest;
     CURF curf;
-    short bo;
+    int16_t bo;
     long dxp, dyp, dzpT;
     long dzpBest;
     long cbRowDst, cbRowSrc, cbT;

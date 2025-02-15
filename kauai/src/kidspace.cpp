@@ -837,7 +837,7 @@ bool GOK::_FEnterState(long sno)
     _DeferGorp(fTrue);
 
     // change the state number
-    _sno = (short)sno;
+    _sno = (int16_t)sno;
 
     // put it in gmsNil
     if (!_FSetGmsCore(gmsNil, factNil, &fStable))
@@ -1189,7 +1189,7 @@ bool GOK::FCmdTrackMouse(PCMD_MOUSE pcmd)
             return fTrue;
 
         _grfcust = pcmd->grfcust;
-        _cactMouse = (short)pcmd->cact;
+        _cactMouse = (int16_t)pcmd->cact;
         if (!_FAdjustGms(_mpgmsgmseMouseDown))
             return fTrue;
         SetCursor(pcmd->grfcust);
@@ -1957,8 +1957,8 @@ void GORP::Stream(bool fStream)
 // a FILL chunk
 struct GOKFL
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     RC rc;
     long lwAcrFore;
     long lwAcrBack;
@@ -2231,7 +2231,7 @@ PGORT GORT::PgortNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno)
     }
 
     if (kboOther == gotil.bo)
-        SwapBytesRgsw(&gotil, SIZEOF(gotil) / SIZEOF(short));
+        SwapBytesRgsw(&gotil, SIZEOF(gotil) / SIZEOF(int16_t));
 
 #pragma warning(push)
 #pragma warning(disable : 4804)
@@ -2465,11 +2465,11 @@ bool GORT::FPtIn(long xp, long yp)
     Map the point from flexed coordinates to zero based mbmp coordinates
     for hit testing.
 ***************************************************************************/
-void GORT::_MapZpToMbmp(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRightFlex)
+void GORT::_MapZpToMbmp(long *pzp, int16_t *prgdzp, long dzpLeftFlex, long dzpRightFlex)
 {
     AssertThis(0);
     AssertVarMem(pzp);
-    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(short)));
+    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(int16_t)));
     long dzp;
 
     if (*pzp < (dzp = prgdzp[idzpLeft]))
@@ -2506,12 +2506,12 @@ void GORT::SetDxpDyp(long dxpPref, long dypPref)
 /***************************************************************************
     Compute the flex values in one direction.
 ***************************************************************************/
-void GORT::_ComputeFlexZp(long *pdzpLeftFlex, long *pdzpRightFlex, long dzp, short *prgdzp)
+void GORT::_ComputeFlexZp(long *pdzpLeftFlex, long *pdzpRightFlex, long dzp, int16_t *prgdzp)
 {
     AssertThis(0);
     AssertVarMem(pdzpLeftFlex);
     AssertVarMem(pdzpRightFlex);
-    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(short)));
+    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(int16_t)));
 
     *pdzpRightFlex = LwMax(0, dzp - prgdzp[idzpLeft] - prgdzp[idzpMid] - prgdzp[idzpRight]);
     *pdzpLeftFlex = LwMulDiv(*pdzpRightFlex, prgdzp[idzpLeftFlex], prgdzp[idzpLeftFlex] + prgdzp[idzpRightFlex]);
@@ -2565,11 +2565,11 @@ void GORT::GetRc(RC *prc)
     Map the point from MBMP coordinates to flexed coordinates for setting the
     registration point. WARNING: this is not the inverse of _MapZpToMbmp.
 ***************************************************************************/
-void GORT::_MapZpFlex(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRightFlex)
+void GORT::_MapZpFlex(long *pzp, int16_t *prgdzp, long dzpLeftFlex, long dzpRightFlex)
 {
     AssertThis(0);
     AssertVarMem(pzp);
-    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(short)));
+    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(int16_t)));
     long dzp;
 
     if (*pzp < (dzp = prgdzp[idzpLeft]))

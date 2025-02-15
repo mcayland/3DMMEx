@@ -68,17 +68,17 @@ struct PAP
 {
     uint8_t jc;
     uint8_t nd;
-    short dxpTab;
-    short numLine;
-    short dypExtraLine;
-    short numAfter;
-    short dypExtraAfter;
+    int16_t dxpTab;
+    int16_t numLine;
+    int16_t dypExtraLine;
+    int16_t numAfter;
+    int16_t dypExtraAfter;
 };
 typedef PAP *PPAP;
-const short kdenLine = 256;
-const short kdenAfter = 256;
-const short kdxpTabDef = (kdzpInch / 4);
-const short kdxpDocDef = (kdzpInch * 6);
+const int16_t kdenLine = 256;
+const int16_t kdenAfter = 256;
+const int16_t kdxpTabDef = (kdzpInch / 4);
+const int16_t kdxpDocDef = (kdzpInch * 6);
 
 const achar kchObject = 1;
 
@@ -109,8 +109,8 @@ class TXTB : public TXTB_PAR
 
     TXTB(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
     ~TXTB(void);
-    virtual bool _FInit(PFNI pfni = pvNil, PBSF pbsf = pvNil, short osk = koskCur);
-    virtual bool _FLoad(short osk = koskCur);
+    virtual bool _FInit(PFNI pfni = pvNil, PBSF pbsf = pvNil, int16_t osk = koskCur);
+    virtual bool _FLoad(int16_t osk = koskCur);
     virtual achar _ChFetch(long cp);
     virtual void _CacheRange(long cpMin, long cpLim);
     virtual void _InvalCache(long cp, long ccpIns, long ccpDel);
@@ -145,7 +145,7 @@ class TXTB : public TXTB_PAR
 
     virtual void FetchRgch(long cp, long ccp, achar *prgch);
     virtual bool FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, ulong grfdoc = fdocUpdate);
-    virtual bool FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, short osk = koskCur,
+    virtual bool FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk = koskCur,
                              ulong grfdoc = fdocUpdate);
     virtual bool FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc = fdocUpdate);
     virtual bool FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel,
@@ -186,7 +186,7 @@ class TXPD : public TXPD_PAR
     TXPD(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
 
   public:
-    static PTXPD PtxpdNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, short osk = koskCur, PDOCB pdocb = pvNil,
+    static PTXPD PtxpdNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, int16_t osk = koskCur, PDOCB pdocb = pvNil,
                           ulong grfdoc = fdocNil);
 
     virtual PDDG PddgNew(PGCB pgcb);
@@ -270,8 +270,8 @@ class TXRD : public TXRD_PAR
     // rich text document properties
     struct RDOP
     {
-        short bo;
-        short oskFont;
+        int16_t bo;
+        int16_t oskFont;
         long dxpDef;
         long dypFont;
         long lwAcrBack;
@@ -286,7 +286,7 @@ class TXRD : public TXRD_PAR
 
     long _onnDef; // default font and font size
     long _dypFontDef;
-    short _oskFont;  // osk for the default font
+    int16_t _oskFont; // osk for the default font
     STN _stnFontDef; // name of default font
 
     // cached CHP and PAP (from FetchChp and FetchPap)
@@ -302,7 +302,7 @@ class TXRD : public TXRD_PAR
     ~TXRD(void);
     bool _FInit(PFNI pfni = pvNil, CTG ctg = kctgRichText);
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText);
-    virtual bool _FOpenArg(long icact, uint8_t sprm, short bo, short osk);
+    virtual bool _FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk);
 
     ulong _SpcpFromSprmCp(uint8_t sprm, long cp)
     {
@@ -355,14 +355,14 @@ class TXRD : public TXRD_PAR
                    bool fExpand = fTrue, ulong grfdoc = fdocUpdate);
 
     virtual bool FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, ulong grfdoc = fdocUpdate);
-    virtual bool FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, short osk = koskCur,
+    virtual bool FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk = koskCur,
                              ulong grfdoc = fdocUpdate);
     virtual bool FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc = fdocUpdate);
     virtual bool FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel,
                               ulong grfdoc = fdocUpdate);
     bool FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, PCHP pchp, PPAP ppap = pvNil,
                       ulong grfdoc = fdocUpdate);
-    bool FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap = pvNil, short osk = koskCur,
+    bool FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap = pvNil, int16_t osk = koskCur,
                      ulong grfdoc = fdocUpdate);
     bool FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, PCHP pchp, PPAP ppap = pvNil,
                      ulong grfdoc = fdocUpdate);
@@ -443,10 +443,10 @@ class TXTG : public TXTG_PAR
     {
         long cpMin;  // the cp of the first character in this line
         long dypTot; // the total height of lines up to this line
-        short ccp;
-        short xpLeft;
-        short dyp;
-        short dypAscent;
+        int16_t ccp;
+        int16_t xpLeft;
+        int16_t dyp;
+        int16_t dypAscent;
     };
 
     PTXTB _ptxtb;

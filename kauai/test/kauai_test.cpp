@@ -38,21 +38,21 @@ void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMsg)
 
 TEST(KauaiTests, TestInt)
 {
-    EXPECT_EQ(SwHigh(0x12345678), (short)0x1234);
-    EXPECT_EQ(SwHigh(0xABCDEF01), (short)0xABCD);
-    EXPECT_EQ(SwLow(0x12345678), (short)0x5678);
-    EXPECT_EQ(SwLow(0xABCDEF01), (short)0xEF01);
+    EXPECT_EQ(SwHigh(0x12345678), (int16_t)0x1234);
+    EXPECT_EQ(SwHigh(0xABCDEF01), (int16_t)0xABCD);
+    EXPECT_EQ(SwLow(0x12345678), (int16_t)0x5678);
+    EXPECT_EQ(SwLow(0xABCDEF01), (int16_t)0xEF01);
 
     EXPECT_EQ(LwHighLow(0x1234, 0x5678), 0x12345678);
-    EXPECT_EQ(LwHighLow((short)0xABCD, (short)0xEF01), 0xABCDEF01);
+    EXPECT_EQ(LwHighLow((int16_t)0xABCD, (int16_t)0xEF01), 0xABCDEF01);
 
     EXPECT_EQ(BHigh(0x1234), 0x12);
-    EXPECT_EQ(BHigh((short)0xABCD), 0xAB);
+    EXPECT_EQ(BHigh((int16_t)0xABCD), 0xAB);
     EXPECT_EQ(BLow(0x1234), 0x34);
-    EXPECT_EQ(BLow((short)0xABCD), 0xCD);
+    EXPECT_EQ(BLow((int16_t)0xABCD), 0xCD);
 
-    EXPECT_EQ(SwHighLow(0x12, 0x56), (short)0x1256);
-    EXPECT_EQ(SwHighLow(0xAB, 0xEF), (short)0xABEF);
+    EXPECT_EQ(SwHighLow(0x12, 0x56), (int16_t)0x1256);
+    EXPECT_EQ(SwHighLow(0xAB, 0xEF), (int16_t)0xABEF);
 
     EXPECT_EQ(SwMin(kswMax, kswMin), kswMin);
     EXPECT_EQ(SwMin(kswMin, kswMax), kswMin);
@@ -189,12 +189,12 @@ TEST(KauaiTests, TestMem)
 
 TEST(KauaiTests, TestGl)
 {
-    short sw;
+    int16_t sw;
     long isw;
-    short *qsw;
+    int16_t *qsw;
     PGL pglsw;
 
-    pglsw = GL::PglNew(SIZEOF(short));
+    pglsw = GL::PglNew(SIZEOF(int16_t));
     if (pvNil == pglsw)
     {
         Bug("PglNew failed");
@@ -210,7 +210,7 @@ TEST(KauaiTests, TestGl)
 
     for (isw = 0; isw < 10; isw++)
     {
-        qsw = (short *)pglsw->QvGet(isw);
+        qsw = (int16_t *)pglsw->QvGet(isw);
         EXPECT_EQ(*qsw, isw);
         pglsw->Get(isw, &sw);
         EXPECT_EQ(sw, isw);
@@ -224,11 +224,11 @@ TEST(KauaiTests, TestGl)
     {
         pglsw->Get(isw, &sw);
         EXPECT_EQ(sw, isw * 2 + 1);
-        sw = (short)isw * 100;
+        sw = (int16_t)isw * 100;
         pglsw->Put(isw, &sw);
-        qsw = (short *)pglsw->QvGet(isw);
+        qsw = (int16_t *)pglsw->QvGet(isw);
         EXPECT_EQ(*qsw, isw * 100);
-        *qsw = (short)isw;
+        *qsw = (int16_t)isw;
     }
 
     EXPECT_EQ(pglsw->IvMac(), 5);
@@ -237,7 +237,7 @@ TEST(KauaiTests, TestGl)
 
     for (isw = 5; isw-- != 0;)
     {
-        sw = (short)isw;
+        sw = (int16_t)isw;
         pglsw->FInsert(isw, &sw);
     }
 
@@ -394,7 +394,7 @@ TEST(KauaiTests, TestCfl)
         CTG ctg;
         CNO cno;
         PSZ psz;
-        short relPar1, relPar2;
+        int16_t relPar1, relPar2;
     };
 
     const CTG kctgLan = 0x41414141;
@@ -413,7 +413,7 @@ TEST(KauaiTests, TestCfl)
     FNI fni, fniDst;
     PCFL pcfl, pcflDst;
     BLCK blck;
-    short rel;
+    int16_t rel;
     long icki;
     CNO cno;
     CKI cki;

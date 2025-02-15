@@ -1784,8 +1784,8 @@ void TBXG::AssertValid(ulong grf)
 //
 struct TBOXH
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long nfrmFirst;
     long nfrmMax;
     long xpLeft;

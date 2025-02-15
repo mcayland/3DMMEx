@@ -510,7 +510,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *pl
                         pt.xp += xp;
                         pt.yp += yp;
                         GOB::PgobScreen()->MapPt(&pt, cooGlobal, cooLocal);
-                        *plwRet = LwHighLow((short)pt.xp, (short)pt.yp);
+                        *plwRet = LwHighLow((int16_t)pt.xp, (int16_t)pt.yp);
                         return fTrue;
                     }
                 }

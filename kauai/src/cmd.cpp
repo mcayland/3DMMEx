@@ -467,7 +467,7 @@ void CEX::Play(PCFL pcfl, CNO cno)
     AssertThis(0);
     AssertPo(pcfl, 0);
     BLCK blck;
-    short bo, osk;
+    int16_t bo, osk;
 
     if (_rs != rsNormal)
     {
@@ -551,7 +551,7 @@ bool CEX::_FReadCmd(PCMD pcmd)
     {
         BLCK blck;
         KID kid;
-        short bo, osk;
+        int16_t bo, osk;
 
         Assert(cmdf.cact <= 1, 0);
 

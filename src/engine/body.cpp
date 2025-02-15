@@ -140,9 +140,9 @@ PBACT BODY::_pbactClosestClicked;
 BODY *BODY::PbodyNew(PGL pglibactPar, PGL pglibset)
 {
     AssertPo(pglibactPar, 0);
-    Assert(pglibactPar->CbEntry() == SIZEOF(short), "bad pglibactPar");
+    Assert(pglibactPar->CbEntry() == SIZEOF(int16_t), "bad pglibactPar");
     AssertPo(pglibset, 0);
-    Assert(pglibset->CbEntry() == SIZEOF(short), "bad pglibset");
+    Assert(pglibset->CbEntry() == SIZEOF(int16_t), "bad pglibset");
 
     BODY *pbody;
 
@@ -196,17 +196,17 @@ bool BODY::_FInitShape(PGL pglibactPar, PGL pglibset)
 {
     AssertBaseThis(0);
     AssertPo(pglibactPar, 0);
-    Assert(pglibactPar->CbEntry() == SIZEOF(short), "bad pglibactPar");
+    Assert(pglibactPar->CbEntry() == SIZEOF(int16_t), "bad pglibactPar");
     AssertPo(pglibset, 0);
-    Assert(pglibset->CbEntry() == SIZEOF(short), "bad pglibset");
-    Assert(pglibactPar->IvMac() == 0 || ivNil == *(short *)pglibactPar->QvGet(0), "bad first item in pglibactPar");
+    Assert(pglibset->CbEntry() == SIZEOF(int16_t), "bad pglibset");
+    Assert(pglibactPar->IvMac() == 0 || ivNil == *(int16_t *)pglibactPar->QvGet(0), "bad first item in pglibactPar");
     Assert(pglibactPar->IvMac() == pglibset->IvMac(), "pglibactPar must be same size as pglibset");
 
     BACT *pbact;
     BACT *pbactPar;
-    short ibactPar;
-    short ibact;
-    short ibset;
+    int16_t ibactPar;
+    int16_t ibact;
+    int16_t ibset;
 
     // Copy pglibset into _pglibset
     _pglibset = pglibset->PglDup();
@@ -1198,7 +1198,7 @@ void BODY::AssertValid(ulong grf)
     Assert(pvNil == _PbactRoot()->model, "BODY root shouldn't have a model!!");
     Assert(pvNil == _PbactRoot()->material, "BODY root shouldn't have a material!!");
     AssertPo(_pglibset, 0);
-    Assert(_pglibset->CbEntry() == SIZEOF(short), "bad _pglibset");
+    Assert(_pglibset->CbEntry() == SIZEOF(int16_t), "bad _pglibset");
 
     if (grf & fobjAssertFull)
     {

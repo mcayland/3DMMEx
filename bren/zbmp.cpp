@@ -271,10 +271,10 @@ bool ZBMP::FWrite(PCFL pcfl, CTG ctg, CNO *pcno)
 
     zbmpf.bo = kboCur;
     zbmpf.osk = koskCur;
-    zbmpf.xpLeft = (short)_rc.xpLeft;
-    zbmpf.ypTop = (short)_rc.ypTop;
-    zbmpf.dxp = (short)_rc.Dxp();
-    zbmpf.dyp = (short)_rc.Dyp();
+    zbmpf.xpLeft = (int16_t)_rc.xpLeft;
+    zbmpf.ypTop = (int16_t)_rc.ypTop;
+    zbmpf.dxp = (int16_t)_rc.Dxp();
+    zbmpf.dyp = (int16_t)_rc.Dyp();
 
     if (!pcfl->FAdd(SIZEOF(ZBMPF) + _cb, ctg, pcno, &blck))
         return fFalse;

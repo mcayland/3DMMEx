@@ -18,8 +18,8 @@
 // CMTL on File
 struct CMTLF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long ibset; // which body part set this CMTL attaches to
 };
 VERIFY_STRUCT_SIZE(CMTLF, 8);
@@ -28,8 +28,8 @@ const BOM kbomCmtlf = 0x5c000000;
 // material on file (MTRL chunk)
 struct MTRLF
 {
-    short bo;            // byte order
-    short osk;           // OS kind
+    int16_t bo;          // byte order
+    int16_t osk;         // OS kind
     br_colour brc;       // RGB color
     br_ufraction brufKa; // ambient component
     br_ufraction brufKd; // diffuse component

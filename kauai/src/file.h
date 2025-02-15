@@ -20,8 +20,8 @@
     Byte order issues
 ****************************************/
 
-const short kboCur = 0x0001;
-const short kboOther = 0x0100;
+const int16_t kboCur = 0x0001;
+const int16_t kboOther = 0x0100;
 
 /****************************************
     Basic types
@@ -78,7 +78,7 @@ class FIL : public FIL_PAR
     long _el;
 
 #ifdef MAC
-    short _fref;
+    int16_t _fref;
 #elif defined(WIN)
     HANDLE _hfile;
 #endif // WIN
@@ -201,7 +201,7 @@ struct FLO
     {
         return FReadHq(phq, cb, 0);
     }
-    bool FTranslate(short osk);
+    bool FTranslate(int16_t osk);
 
     ASSERT
 };

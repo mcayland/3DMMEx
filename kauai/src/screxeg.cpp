@@ -132,7 +132,7 @@ PGL *SCEG::_PpglrtvmRemote(long lw)
 /***************************************************************************
     Return the current version number of the script compiler.
 ***************************************************************************/
-short SCEG::_SwCur(void)
+int16_t SCEG::_SwCur(void)
 {
     return kswCurSccg;
 }
@@ -141,7 +141,7 @@ short SCEG::_SwCur(void)
     Return the min version number of the script compiler. Read can read
     scripts back to this version.
 ***************************************************************************/
-short SCEG::_SwMin(void)
+int16_t SCEG::_SwMin(void)
 {
     return kswMinSccg;
 }

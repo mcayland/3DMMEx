@@ -233,7 +233,7 @@ long STN::CbData(void)
 {
     AssertThis(0);
 
-    return SIZEOF(short) + (Cch() + 2) * SIZEOF(achar);
+    return SIZEOF(int16_t) + (Cch() + 2) * SIZEOF(achar);
 }
 
 /***************************************************************************
@@ -244,10 +244,10 @@ void STN::GetData(void *pv)
 {
     AssertThis(0);
     AssertPvCb(pv, CbData());
-    short osk = koskCur;
+    int16_t osk = koskCur;
 
-    CopyPb(&osk, pv, SIZEOF(short));
-    CopyPb(_rgch, PvAddBv(pv, SIZEOF(short)), (Cch() + 2) * SIZEOF(achar));
+    CopyPb(&osk, pv, SIZEOF(int16_t));
+    CopyPb(_rgch, PvAddBv(pv, SIZEOF(int16_t)), (Cch() + 2) * SIZEOF(achar));
 }
 
 /***************************************************************************
@@ -259,7 +259,7 @@ bool STN::FWrite(PBLCK pblck, long ib)
     AssertPo(pblck, 0);
     long cbWrite = CbData();
     long cbTot = pblck->Cb();
-    short osk = koskCur;
+    int16_t osk = koskCur;
 
     if (!FIn(ib, 0, cbTot - cbWrite + 1))
     {
@@ -269,7 +269,7 @@ bool STN::FWrite(PBLCK pblck, long ib)
 
     if (!pblck->FWriteRgb(&osk, SIZEOF(osk), ib))
         return fFalse;
-    if (!pblck->FWriteRgb(_rgch, cbWrite - SIZEOF(short), ib + SIZEOF(short)))
+    if (!pblck->FWriteRgb(_rgch, cbWrite - SIZEOF(int16_t), ib + SIZEOF(int16_t)))
         return fFalse;
 
     return fTrue;
@@ -286,13 +286,13 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
     AssertNilOrVarMem(pcbRead);
     long cch, ich, ibT, cbT;
     wchar chw;
-    short osk;
+    int16_t osk;
 
     ibT = 0;
-    if (cbMax < SIZEOF(short) + ibT)
+    if (cbMax < SIZEOF(int16_t) + ibT)
         goto LFail;
-    CopyPb(pv, &osk, SIZEOF(short));
-    ibT += SIZEOF(short);
+    CopyPb(pv, &osk, SIZEOF(int16_t));
+    ibT += SIZEOF(int16_t);
 
     if (osk == koskCur)
     {
@@ -392,7 +392,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
     AssertNilOrVarMem(pcbRead);
 
     long cch, ich, ibT, cbT, cbMax;
-    short osk;
+    int16_t osk;
     schar chs;
     wchar chw;
     uint8_t rgb[kcbMaxDataStn];
@@ -402,9 +402,9 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
     cbMax = pblck->Cb();
 
     ibT = ib;
-    if (cbMax < SIZEOF(short) + ibT || !pblck->FReadRgb(&osk, SIZEOF(short), ibT))
+    if (cbMax < SIZEOF(int16_t) + ibT || !pblck->FReadRgb(&osk, SIZEOF(int16_t), ibT))
         goto LFail;
-    ibT += SIZEOF(short);
+    ibT += SIZEOF(int16_t);
 
     if (osk == koskCur)
     {
@@ -1219,7 +1219,7 @@ void LowerRgchw(wchar *prgchw, long cchw)
 /***************************************************************************
     Translate text from the indicated source character set to koskCur.
 ***************************************************************************/
-long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDst, long cchMaxDst)
+long CchTranslateRgb(const void *pvSrc, long cbSrc, int16_t oskSrc, achar *prgchDst, long cchMaxDst)
 {
     AssertPvCb(pvSrc, cbSrc);
     AssertOsk(oskSrc);
@@ -1397,7 +1397,7 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
     is true, the translation is from osk to koskCur, otherwise from koskCur
     to osk.
 ***************************************************************************/
-void TranslateRgch(achar *prgch, long cch, short osk, bool fToCur)
+void TranslateRgch(achar *prgch, long cch, int16_t osk, bool fToCur)
 {
     AssertPvCb(prgch, cch);
     AssertOsk(osk);
@@ -1478,7 +1478,7 @@ ulong GrfchFromCh(achar ch)
 /***************************************************************************
     Validate an osk.
 ***************************************************************************/
-void AssertOsk(short osk)
+void AssertOsk(int16_t osk)
 {
     switch (osk)
     {

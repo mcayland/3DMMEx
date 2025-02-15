@@ -16,7 +16,7 @@
 #ifndef KIDSPACE_H
 #define KIDSPACE_H
 
-#define ChidFromSnoDchid(sno, dchid) LwHighLow((short)(sno), (short)(dchid))
+#define ChidFromSnoDchid(sno, dchid) LwHighLow((int16_t)(sno), (int16_t)(dchid))
 
 /***************************************************************************
     Graphical object representation.  A bitmap, fill, tiled bitmap, etc.
@@ -136,17 +136,17 @@ class GORT : public GORT_PAR
     // a TILE chunk
     struct GOTIL
     {
-        short bo;
-        short osk;
-        short rgdxp[idzpLimGort];
-        short rgdyp[idzpLimGort];
+        int16_t bo;
+        int16_t osk;
+        int16_t rgdxp[idzpLimGort];
+        int16_t rgdyp[idzpLimGort];
     };
 
     PCRF _pcrf;
     CTG _ctg;
     CNO _cno;
-    short _rgdxp[idzpLimGort];
-    short _rgdyp[idzpLimGort];
+    int16_t _rgdxp[idzpLimGort];
+    int16_t _rgdyp[idzpLimGort];
 
     long _dxpLeftFlex;
     long _dxpRightFlex;
@@ -159,9 +159,9 @@ class GORT : public GORT_PAR
 
     ~GORT(void);
     void _DrawRow(PGNV pgnv, PMBMP pmbmp, RC *prcRow, RC *prcClip, long dxp, long dyp);
-    void _ComputeFlexZp(long *pdzpLeftFlex, long *pdzpRightFlex, long dzp, short *prgdzp);
-    void _MapZpToMbmp(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRightFlex);
-    void _MapZpFlex(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRightFlex);
+    void _ComputeFlexZp(long *pdzpLeftFlex, long *pdzpRightFlex, long dzp, int16_t *prgdzp);
+    void _MapZpToMbmp(long *pzp, int16_t *prgdzp, long dzpLeftFlex, long dzpRightFlex);
+    void _MapZpFlex(long *pzp, int16_t *prgdzp, long dzpLeftFlex, long dzpRightFlex);
 
   public:
     static PGORT PgortNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
@@ -310,8 +310,8 @@ class GOK : public GOK_PAR
     PRCA _prca;   // Chunky resource chain
     PCRF _pcrf;   // Chunky resource file
 
-    short _sno;       // state number
-    short _cactMouse; // mouse click count of last mouse down
+    int16_t _sno;     // state number
+    int16_t _cactMouse; // mouse click count of last mouse down
     ulong _grfcust;   // cursor state at last mouse down
     long _gmsCur;     // gob mouse tracking state
 

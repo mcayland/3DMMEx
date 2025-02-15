@@ -164,8 +164,8 @@ class SCEB : public SCEB_PAR
     virtual PGL _PglrtvmRemote(long lw);
     virtual PGL *_PpglrtvmRemote(long lw);
 
-    virtual short _SwCur(void);
-    virtual short _SwMin(void);
+    virtual int16_t _SwCur(void);
+    virtual int16_t _SwMin(void);
 
 #ifdef DEBUG
     void _WarnSz(PSZ psz, ...);

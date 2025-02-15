@@ -19,11 +19,11 @@
 ****************************************/
 struct BKGDF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     uint8_t bIndexBase;
     uint8_t bPad;
-    short swPad;
+    int16_t swPad;
 };
 VERIFY_STRUCT_SIZE(BKGDF, 8);
 const BOM kbomBkgdf = 0x50000000;
@@ -57,12 +57,12 @@ VERIFY_STRUCT_SIZE(APOS, 12);
 
 struct CAM
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     BRS zrHither; // Hither (near) plane
     BRS zrYon;    // Yon (far) plane
     BRA aFov;     // Field of view
-    short swPad;
+    int16_t swPad;
     APOS apos;
     BMAT34 bmat34Cam; // Camera view matrix
     // APOS rgapos[];
@@ -87,8 +87,8 @@ const BOM kbomCam = BomField(
 ****************************************/
 struct BDS
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long vlm;
     bool fLoop;
     TAG tagSnd;

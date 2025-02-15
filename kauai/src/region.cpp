@@ -1176,7 +1176,7 @@ HRGN REGN::HrgnCreate(void)
     long yp;
     long cb;
     long xp1, xp2;
-    short *psw;
+    int16_t *psw;
 
     regsc1.Init(this, &_rc);
     rc = _rc;
@@ -1184,7 +1184,7 @@ HRGN REGN::HrgnCreate(void)
     regsc2.Init(this, &rc);
     for (yp = _rc.ypTop, cb = SIZEOF(Region);;)
     {
-        cb += SIZEOF(short);
+        cb += SIZEOF(int16_t);
         xp1 = regsc1.XpCur();
         xp2 = regsc2.XpCur();
         for (;;)
@@ -1199,38 +1199,38 @@ HRGN REGN::HrgnCreate(void)
             }
             else if (xp1 < xp2)
             {
-                cb += SIZEOF(short);
+                cb += SIZEOF(int16_t);
                 xp1 = regsc1.XpFetch();
             }
             else
             {
-                cb += SIZEOF(short);
+                cb += SIZEOF(int16_t);
                 xp2 = regsc2.XpFetch();
             }
         }
-        cb += SIZEOF(short);
+        cb += SIZEOF(int16_t);
         if (yp >= _rc.ypBottom)
             break;
         yp += regsc1.DypCur();
         regsc1.ScanNext(regsc1.DypCur());
         regsc2.ScanNext(regsc2.DypCur());
     }
-    cb += SIZEOF(short);
+    cb += SIZEOF(int16_t);
 
     if (hNil == (hrgn = (HRGN)NewHandle(cb)))
         return hNil;
 
     HLock((HN)hrgn);
-    (*hrgn)->rgnSize = (short)cb;
+    (*hrgn)->rgnSize = (int16_t)cb;
     (*hrgn)->rgnBBox = RCS(_rc);
 
     regsc1.Init(this, &_rc);
     rc = _rc;
     rc.ypTop--;
     regsc2.Init(this, &rc);
-    for (yp = _rc.ypTop, psw = (short *)((*hrgn) + 1);;)
+    for (yp = _rc.ypTop, psw = (int16_t *)((*hrgn) + 1);;)
     {
-        *psw++ = (short)yp;
+        *psw++ = (int16_t)yp;
         xp1 = regsc1.XpCur();
         xp2 = regsc2.XpCur();
         for (;;)
@@ -1245,12 +1245,12 @@ HRGN REGN::HrgnCreate(void)
             }
             else if (xp1 < xp2)
             {
-                *psw++ = (short)xp1;
+                *psw++ = (int16_t)xp1;
                 xp1 = regsc1.XpFetch();
             }
             else
             {
-                *psw++ = (short)xp2;
+                *psw++ = (int16_t)xp2;
                 xp2 = regsc2.XpFetch();
             }
         }
@@ -1278,7 +1278,7 @@ HRGN REGN::HrgnEnsure(void)
     {
         if (_dptRgn.xp != 0 || _dptRgn.yp != 0)
         {
-            OffsetRgn(_hrgn, (short)_dptRgn.xp, (short)_dptRgn.yp);
+            OffsetRgn(_hrgn, (int16_t)_dptRgn.xp, (int16_t)_dptRgn.yp);
             _dptRgn.xp = _dptRgn.yp = 0;
         }
         return _hrgn;

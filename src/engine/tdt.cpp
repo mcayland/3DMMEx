@@ -69,8 +69,8 @@ bool TDT::FSetActionNames(PGST pgstAction)
 ****************************************/
 struct TDTF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long tdts;
     TAG tagTdf;
 };
@@ -371,10 +371,10 @@ PGL TDT::_PglibactParBuild(void)
 
     long cch = _stn.Cch();
     long ich;
-    short ibactPar = ivNil;
+    int16_t ibactPar = ivNil;
     PGL pglibactPar;
 
-    pglibactPar = GL::PglNew(SIZEOF(short), cch); // ibacts are shorts
+    pglibactPar = GL::PglNew(SIZEOF(int16_t), cch); // ibacts are shorts
     if (pvNil == pglibactPar)
         return pvNil;
     AssertDo(pglibactPar->FSetIvMac(cch), "PglNew should have ensured space!");
@@ -393,10 +393,10 @@ PGL TDT::_PglibsetBuild(void)
 
     long cch = _stn.Cch();
     long ich;
-    short ibset = 0;
+    int16_t ibset = 0;
     PGL pglibset;
 
-    pglibset = GL::PglNew(SIZEOF(short), cch);
+    pglibset = GL::PglNew(SIZEOF(int16_t), cch);
     if (pvNil == pglibset)
         return pvNil;
     AssertDo(pglibset->FSetIvMac(cch), "PglNew should have ensured space!");
@@ -567,8 +567,8 @@ PGG TDT::_PggcelBuild(long tda)
         cel.dwr = (tda == tdaWalk ? kdwrStepWalk : kdwrStep);
         for (ich = 0; ich < cch; ich++)
         {
-            prgcps[ich].chidModl = (short)ich;
-            prgcps[ich].imat34 = (short)(LwMul(icel, cch) + ich);
+            prgcps[ich].chidModl = (int16_t)ich;
+            prgcps[ich].imat34 = (int16_t)(LwMul(icel, cch) + ich);
         }
         if (!pggcel->FAdd(LwMul(cch, SIZEOF(CPS)), &iv, prgcps, &cel))
             goto LFail;

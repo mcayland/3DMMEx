@@ -62,7 +62,7 @@ bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
     AssertVarMem(prc);
     Assert(!prc->FEmpty() && prc->xpLeft >= 0 && prc->xpRight <= cbRow && prc->ypTop >= 0 && prc->ypBottom <= dyp,
            "Invalid rectangle");
-    short *qrgcb;
+    int16_t *qrgcb;
     uint8_t *pb, *pbRow, *pbLimRow;
     uint8_t *qbDst, *qbDstPrev;
     long cbPixelData, cbPrev, cbOpaque, cbRun;
@@ -72,7 +72,7 @@ bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
     RC rc = *prc;
 
     // allocate enough space for the rgcb
-    if (!FAllocHq(&_hqrgb, SIZEOF(MBMPH) + LwMul(rc.Dyp(), SIZEOF(short)), fmemNil, mprNormal))
+    if (!FAllocHq(&_hqrgb, SIZEOF(MBMPH) + LwMul(rc.Dyp(), SIZEOF(int16_t)), fmemNil, mprNormal))
     {
         return fFalse;
     }
@@ -141,7 +141,7 @@ bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
         {
             // set the row length in the rgcb.
             AssertIn(cbPixelData - cbPrev, 2 + !fMask, kswMax + 1);
-            qrgcb[yp - rc.ypTop] = (short)(cbPixelData - cbPrev);
+            qrgcb[yp - rc.ypTop] = (int16_t)(cbPixelData - cbPrev);
             ypLim = yp + 1;
         }
     }
@@ -155,9 +155,9 @@ bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
     }
 
     // reallocate the _hqrgb to the size actually needed
-    AssertIn(LwMul(rc.Dyp(), SIZEOF(short)), 0, CbOfHq(_hqrgb) - SIZEOF(MBMPH) + 1);
+    AssertIn(LwMul(rc.Dyp(), SIZEOF(int16_t)), 0, CbOfHq(_hqrgb) - SIZEOF(MBMPH) + 1);
 
-    _cbRgcb = LwMul(rc.Dyp(), SIZEOF(short));
+    _cbRgcb = LwMul(rc.Dyp(), SIZEOF(int16_t));
     if (!FResizePhq(&_hqrgb, _cbRgcb + SIZEOF(MBMPH) + cbPixelData, fmemNil, mprNormal))
     {
         return fFalse;
@@ -214,7 +214,7 @@ bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
         // Set the row length in the rgcb.
         cbRun = qbDst - qbDstPrev;
         AssertIn(cbRun, 2 + !fMask, qrgcb[yp - rc.ypTop] + 1);
-        qrgcb[yp - rc.ypTop] = (short)cbRun;
+        qrgcb[yp - rc.ypTop] = (int16_t)cbRun;
     }
 
     // shrink _hqrgb to the actual size needed
@@ -297,7 +297,7 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
         qmbmph->rc.ypBottom = rc.ypTop;
     }
 
-    cbRgcb = LwMul(rc.Dyp(), SIZEOF(short));
+    cbRgcb = LwMul(rc.Dyp(), SIZEOF(int16_t));
     if (SIZEOF(MBMPH) + cbRgcb > cbTot)
         goto LFail;
 
@@ -322,7 +322,7 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
     long ccb, cb, dxp;
     uint8_t *qb;
     bool fMask = pmbmp->_Qmbmph()->fMask;
-    short *qcb = pmbmp->_Qrgcb();
+    int16_t *qcb = pmbmp->_Qrgcb();
     uint8_t *qbRow = (uint8_t *)PvAddBv(qcb, cbRgcb);
 
     cbTot -= SIZEOF(MBMPH) + cbRgcb;
@@ -414,8 +414,8 @@ bool MBMP::FPtIn(long xp, long yp)
 {
     AssertThis(0);
     uint8_t *qb, *qbLim;
-    short *qcb;
-    short cb;
+    int16_t *qcb;
+    int16_t cb;
     MBMPH *qmbmph;
 
     qmbmph = _Qmbmph();
@@ -450,7 +450,7 @@ void MBMP::AssertValid(ulong grf)
 {
     long ccb;
     long cbTot;
-    short *qcb;
+    int16_t *qcb;
     RC rc;
 
     MBMP_PAR::AssertValid(0);
@@ -458,7 +458,7 @@ void MBMP::AssertValid(ulong grf)
 
     rc = _Qmbmph()->rc;
     ccb = rc.Dyp();
-    Assert(_cbRgcb == LwMul(rc.Dyp(), SIZEOF(short)), "_cbRgcb wrong");
+    Assert(_cbRgcb == LwMul(rc.Dyp(), SIZEOF(int16_t)), "_cbRgcb wrong");
     cbTot = 0;
     qcb = _Qrgcb();
     while (ccb-- > 0)

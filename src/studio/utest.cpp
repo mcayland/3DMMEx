@@ -1512,8 +1512,8 @@ bool APP::_FDisplayHomeLogo(void)
     BLCK blck;
     PGL pglclr;
     PMBMP pmbmp;
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
 
     if (!_pcfl->FFind(kctgColorTable, kcnoGlcrInit, &blck))
         return fFalse;
@@ -1693,8 +1693,8 @@ PGST APP::_PgstRead(CNO cno)
 
     PGST pgst;
     BLCK blck;
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long istn;
     long lwExtra;
 

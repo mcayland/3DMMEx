@@ -1180,27 +1180,27 @@ void TXTG::_CalcLine(long cpMin, long dypBase, LIN *plin)
         plin->xpLeft = 0;
         break;
     case jcRight:
-        plin->xpLeft = (short)(dxpDoc - run.xpLim);
+        plin->xpLeft = (int16_t)(dxpDoc - run.xpLim);
         break;
     case jcCenter:
         plin->xpLeft = (dxpDoc - run.xpLim) / 2;
         break;
     }
 
-    plin->ccp = (short)(run.cpLim - cpMin);
-    plin->dyp = (short)(run.dypAscent + run.dypDescent);
+    plin->ccp = (int16_t)(run.cpLim - cpMin);
+    plin->dyp = (int16_t)(run.dypAscent + run.dypDescent);
     if (pap.numLine != kdenLine)
-        plin->dyp = (short)LwMulDiv(plin->dyp, pap.numLine, kdenLine);
+        plin->dyp = (int16_t)LwMulDiv(plin->dyp, pap.numLine, kdenLine);
     plin->dyp += pap.dypExtraLine;
     if (_ptxtb->FMinPara(run.cpLim) || run.cpLim == _ptxtb->CpMac())
     {
         if (pap.numAfter != kdenAfter)
-            plin->dyp = (short)LwMulDiv(plin->dyp, pap.numAfter, kdenAfter);
+            plin->dyp = (int16_t)LwMulDiv(plin->dyp, pap.numAfter, kdenAfter);
         plin->dyp += pap.dypExtraAfter;
     }
     if (plin->dyp <= 0)
         plin->dyp = 1;
-    plin->dypAscent = (short)run.dypAscent;
+    plin->dypAscent = (int16_t)run.dypAscent;
     if (plin->dypAscent <= 0)
         plin->dypAscent = 1;
     plin->cpMin = cpMin;
@@ -2608,7 +2608,7 @@ void TXLG::_FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
     AssertNilOrVarMem(pcpLim);
 
     ClearPb(ppap, SIZEOF(PAP));
-    ppap->dxpTab = (short)LwMul(_cchTab, _dxpChar);
+    ppap->dxpTab = (int16_t)LwMul(_cchTab, _dxpChar);
     ppap->numLine = kdenLine;
     ppap->numAfter = kdenAfter;
     if (pvNil != pcpMin)
@@ -2773,7 +2773,7 @@ void TXRG::SetDxpTab(long dxp)
     cpMin = LwMin(cpAnchor = _cpAnchor, cpOther = _cpOther);
     cpLim = LwMax(_cpAnchor, _cpOther);
 
-    papNew.dxpTab = (short)dxp;
+    papNew.dxpTab = (int16_t)dxp;
     _SwitchSel(fFalse, ginNil);
     if (!((PTXRD)_ptxtb)->FApplyPap(cpMin, cpLim - cpMin, &papNew, &papOld, &cpMin, &cpLim))
     {

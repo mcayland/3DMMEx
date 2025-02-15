@@ -666,7 +666,7 @@ HQ GNV::_HqolyCreate(POGN pogn, ulong grfogn)
 
     poly = (OLY *)PvLockHq(hqoly);
 #ifdef MAC
-    poly->cb = (short)cb;
+    poly->cb = (int16_t)cb;
     Assert(cb == poly->cb, "polygon too big");
     poly->rcs.left = kswMax;
     poly->rcs.right = kswMin;
@@ -2211,7 +2211,7 @@ bool NTL::FGetOnn(PSTN pstn, long *ponn)
     possible.
     REVIEW shonk: implement font mapping for real.
 ***************************************************************************/
-long NTL::OnnMapStn(PSTN pstn, short osk)
+long NTL::OnnMapStn(PSTN pstn, int16_t osk)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2527,8 +2527,8 @@ LGetCount2:
 LLoop2:
                     // al = *pbSrcReg++;
                     // ah = al;
-                    // *(short *)pbDstReg = ax;
-                    // *(short *)pbDst2Reg = ax;
+                    // *(int16_t *)pbDstReg = ax;
+                    // *(int16_t *)pbDst2Reg = ax;
                     // pbDstReg += 2;
                     // pbDst2Reg += 2;
 				mov		al,[pbSrcReg]
@@ -2655,7 +2655,7 @@ LGetCount1:
 LLoop1:
                     // al = *pbSrcReg++;
                     // ah = al;
-                    // *(short *)pbDstReg = ax;
+                    // *(int16_t *)pbDstReg = ax;
                     // pbDstReg += 2;
 				mov		al,[pbSrcReg]
 				inc		pbSrcReg

@@ -53,14 +53,14 @@ bool DLG::_FInit(void)
     long idit, csit;
     bool fAddDit;
     DIT dit;
-    short *psw;
-    short swClass;
+    int16_t *psw;
+    int16_t swClass;
     DLGTEMPLATE dtm;
     DLGITEMTEMPLATE ditm;
     bool fRet = fFalse;
 
     if ((hn = (HN)FindResource(vwig.hinst, MIR(_rid), RT_DIALOG)) == hNil ||
-        (hn = (HN)LoadResource(vwig.hinst, (HRSRC)hn)) == hNil || (psw = (short *)LockResource(hn)) == pvNil)
+        (hn = (HN)LoadResource(vwig.hinst, (HRSRC)hn)) == hNil || (psw = (int16_t *)LockResource(hn)) == pvNil)
     {
         PushErc(ercDlgCantFind);
         return fFalse;
@@ -68,7 +68,7 @@ bool DLG::_FInit(void)
 
     // get and skip the dtm
     dtm = *(DLGTEMPLATE *)psw;
-    psw = (short *)PvAddBv(psw, SIZEOF(dtm));
+    psw = (int16_t *)PvAddBv(psw, SIZEOF(dtm));
 
     // get the number of items and ensure space in the GGDIT
     Assert(dtm.cdit > 0, "no items in this dialog");
@@ -116,7 +116,7 @@ bool DLG::_FInit(void)
 
         // get and skip the ditm
         ditm = *(DLGITEMTEMPLATE *)psw;
-        psw = (short *)PvAddBv(psw, SIZEOF(ditm));
+        psw = (int16_t *)PvAddBv(psw, SIZEOF(ditm));
 
         // get and skip the class
         if (*psw == -1)
@@ -141,7 +141,7 @@ bool DLG::_FInit(void)
         }
 
         // the next word is a size of extra stuff
-        psw = (short *)PvAddBv(psw, psw[0] + SIZEOF(short));
+        psw = (int16_t *)PvAddBv(psw, psw[0] + SIZEOF(int16_t));
 
         // We should be at the end of this item (except for possible padding).
         // Now figure out what to do with the item.

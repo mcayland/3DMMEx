@@ -97,7 +97,7 @@ TXTB::~TXTB(void)
 /***************************************************************************
     Initializer for the base text document class.
 ***************************************************************************/
-bool TXTB::_FInit(PFNI pfni, PBSF pbsf, short osk)
+bool TXTB::_FInit(PFNI pfni, PBSF pbsf, int16_t osk)
 {
     AssertNilOrPo(pfni, ffniFile);
     AssertNilOrPo(pbsf, 0);
@@ -138,7 +138,7 @@ bool TXTB::_FInit(PFNI pfni, PBSF pbsf, short osk)
 /***************************************************************************
     Load the document from its file
 ***************************************************************************/
-bool TXTB::_FLoad(short osk)
+bool TXTB::_FLoad(int16_t osk)
 {
     // initialize the BSF to just point to the file
     FLO flo;
@@ -758,7 +758,7 @@ bool TXTB::FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, ul
 /***************************************************************************
     Replace cp to cp + ccpDel with the characters in the given FLO.
 ***************************************************************************/
-bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, short osk, ulong grfdoc)
+bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, ulong grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, 0);
@@ -898,7 +898,7 @@ TXPD::TXPD(PDOCB pdocb, ulong grfdoc) : TXPD_PAR(pdocb, grfdoc)
 /***************************************************************************
     Static method to create a new plain text document.
 ***************************************************************************/
-PTXPD TXPD::PtxpdNew(PFNI pfni, PBSF pbsf, short osk, PDOCB pdocb, ulong grfdoc)
+PTXPD TXPD::PtxpdNew(PFNI pfni, PBSF pbsf, int16_t osk, PDOCB pdocb, ulong grfdoc)
 {
     AssertNilOrPo(pfni, ffniFile);
     AssertNilOrPo(pbsf, 0);
@@ -1138,7 +1138,7 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     long icact;
     long cact;
     RDOP rdop;
-    short bo, osk;
+    int16_t bo, osk;
 
     if (!TXRD_PAR::_FInit())
         return fFalse;
@@ -1175,12 +1175,12 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
 
     // get the text
     if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgText, &kid) || !pcfl->FFindFlo(kid.cki.ctg, kid.cki.cno, &floText) ||
-        floText.cb < SIZEOF(short) || !floText.FReadRgb(&osk, SIZEOF(short), 0))
+        floText.cb < SIZEOF(int16_t) || !floText.FReadRgb(&osk, SIZEOF(int16_t), 0))
     {
         return fFalse;
     }
-    floText.fp += SIZEOF(short);
-    floText.cb -= SIZEOF(short);
+    floText.fp += SIZEOF(int16_t);
+    floText.cb -= SIZEOF(int16_t);
     floText.pfil->AddRef();
     pfilT = floText.pfil;
     if (!floText.FTranslate(osk) || !_pbsf->FReplaceFlo(&floText, fCopyText && pfilT == floText.pfil, 0, CpMac() - 1))
@@ -1232,7 +1232,7 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     Do any necessary munging of the AG entry on open. Return false if
     we don't recognize this argument type.
 ***************************************************************************/
-bool TXRD::_FOpenArg(long icact, uint8_t sprm, short bo, short osk)
+bool TXRD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
 {
     AssertBaseThis(0);
     long onn, cb;
@@ -1243,14 +1243,14 @@ bool TXRD::_FOpenArg(long icact, uint8_t sprm, short bo, short osk)
     switch (sprm)
     {
     case sprmFont:
-        cb -= SIZEOF(long) + SIZEOF(short); // onn, osk
+        cb -= SIZEOF(long) + SIZEOF(int16_t); // onn, osk
         if (cb < 0)
         {
             Bug("bad font entry");
             return fFalse;
         }
-        _pagcact->GetRgb(icact, SIZEOF(long), SIZEOF(short), &osk);
-        prgb = (uint8_t *)PvAddBv(_pagcact->PvLock(icact), SIZEOF(long) + SIZEOF(short));
+        _pagcact->GetRgb(icact, SIZEOF(long), SIZEOF(int16_t), &osk);
+        prgb = (uint8_t *)PvAddBv(_pagcact->PvLock(icact), SIZEOF(long) + SIZEOF(int16_t));
         if (!stn.FSetData(prgb, cb))
         {
             Bug("bad font entry");
@@ -1366,7 +1366,7 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     BLCK blck, blckText;
     CNO cno, cnoText;
     long cb;
-    short osk = koskCur;
+    int16_t osk = koskCur;
 
     pcki->ctg = kctgRichText;
     rdop.bo = kboCur;
@@ -1386,13 +1386,13 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     }
 
     // add the text chunk and write it
-    if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, _pbsf->IbMac() - SIZEOF(achar) + SIZEOF(short), kctgText, &cnoText,
+    if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, _pbsf->IbMac() - SIZEOF(achar) + SIZEOF(int16_t), kctgText, &cnoText,
                          &blckText) ||
-        !blckText.FWriteRgb(&osk, SIZEOF(short), 0))
+        !blckText.FWriteRgb(&osk, SIZEOF(int16_t), 0))
     {
         goto LFail;
     }
-    AssertDo(blckText.FMoveMin(SIZEOF(short)), 0);
+    AssertDo(blckText.FMoveMin(SIZEOF(int16_t)), 0);
     if (!_pbsf->FWriteRgb(&blckText))
         goto LFail;
 
@@ -2014,7 +2014,7 @@ tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw
         break;
 
     case sprmStyle:
-        *plw = LwHighLow((short)(pchpNew->dypFont - _dypFontDef),
+        *plw = LwHighLow((int16_t)(pchpNew->dypFont - _dypFontDef),
                          SwHighLow((uint8_t)pchpNew->dypOffset, (uint8_t)pchpNew->grfont));
         if (pvNil != pchpOld)
         {
@@ -2031,16 +2031,16 @@ tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw
             *plw = 0;
         else
         {
-            // data for sprmFont is: long onn, short osk, stn data
+            // data for sprmFont is: long onn, int16_t osk, stn data
             STN stn;
             long cb;
-            short osk = koskCur;
-            uint8_t rgb[kcbMaxDataStn + SIZEOF(long) + SIZEOF(short)];
+            int16_t osk = koskCur;
+            uint8_t rgb[kcbMaxDataStn + SIZEOF(long) + SIZEOF(int16_t)];
 
             CopyPb(&pchpNew->onn, rgb, SIZEOF(long));
-            CopyPb(&osk, rgb + SIZEOF(long), SIZEOF(short));
+            CopyPb(&osk, rgb + SIZEOF(long), SIZEOF(int16_t));
             vntl.GetStn(pchpNew->onn, &stn);
-            cb = SIZEOF(long) + SIZEOF(short);
+            cb = SIZEOF(long) + SIZEOF(int16_t);
             stn.GetData(rgb + cb);
             cb += stn.CbData();
             if (!_FEnsureInAg(sprm, rgb, cb, plw))
@@ -2127,7 +2127,7 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
                 uint8_t *qrgb;
 
                 qrgb = (uint8_t *)_pagcact->QvGet(mpe.lw - 1, &cb);
-                cb -= SIZEOF(long) + SIZEOF(short); // onn, osk
+                cb -= SIZEOF(long) + SIZEOF(int16_t); // onn, osk
                 if (!FIn(cb, 0, kcbMaxDataStn + 1))
                 {
                     Warn("bad group element");
@@ -2631,7 +2631,7 @@ bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpS
 /***************************************************************************
     Replace cp to cp + ccpDel with the characters in the given FLO.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, short osk, ulong grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, ulong grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, 0);
@@ -2674,7 +2674,7 @@ bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, short osk, u
     Replace cp to cp + ccpDel with the characters in the given FLO, using
     the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap, short osk, ulong grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap, int16_t osk, ulong grfdoc)
 {
     AssertThis(0);
     AssertPo(pflo, 0);

@@ -404,7 +404,7 @@ void SwapBytesBom(void *pv, BOM bom)
     uint8_t b;
     uint8_t *pb = (uint8_t *)pv;
 
-    Assert(SIZEOF(short) == 2 && SIZEOF(long) == 4, "code broken");
+    Assert(SIZEOF(long) == 4, "code broken");
     while (bom != 0)
     {
         if (bom & 0x80000000L)
@@ -444,12 +444,11 @@ void SwapBytesBom(void *pv, BOM bom)
 void SwapBytesRgsw(void *psw, long csw)
 {
     AssertIn(csw, 0, kcbMax);
-    AssertPvCb(psw, LwMul(csw, SIZEOF(short)));
+    AssertPvCb(psw, LwMul(csw, SIZEOF(int16_t)));
 
     uint8_t b;
     uint8_t *pb = (uint8_t *)psw;
 
-    Assert(SIZEOF(short) == 2, "code broken");
     for (; csw > 0; csw--, pb += 2)
     {
         b = pb[1];
@@ -500,7 +499,7 @@ void AssertBomRglw(BOM bom, long cb)
 }
 
 /***************************************************************************
-    Asserts that the given BOM indicates a struct having cb/SIZEOF(short) shorts
+    Asserts that the given BOM indicates a struct having cb/SIZEOF(int16_t) shorts
     to be swapped (so SwapBytesRgsw can legally be used on an array of
     these).
 ***************************************************************************/
@@ -509,8 +508,8 @@ void AssertBomRgsw(BOM bom, long cb)
     BOM bomT;
     long csw;
 
-    csw = cb / SIZEOF(short);
-    Assert(cb == csw * SIZEOF(short), "cb is not a multiple of SIZEOF(short)");
+    csw = cb / SIZEOF(int16_t);
+    Assert(cb == csw * SIZEOF(int16_t), "cb is not a multiple of SIZEOF(int16_t)");
     AssertIn(csw, 1, 17);
     bomT = 0x55555555 << 2 * (16 - csw);
     Assert(bomT == bom, "wrong bom");
@@ -1132,7 +1131,7 @@ void USAC::Scale(ulong luScale)
 /***************************************************************************
     Set the DVER structure.
 ***************************************************************************/
-void DVER::Set(short swCur, short swBack)
+void DVER::Set(int16_t swCur, int16_t swBack)
 {
     _swBack = swBack;
     _swCur = swCur;
@@ -1142,7 +1141,7 @@ void DVER::Set(short swCur, short swBack)
     Determines if the DVER structure is compatible with (swCur and swMin).
     Asserts that 0 <= swMin <= swCur.
 ***************************************************************************/
-bool DVER::FReadable(short swCur, short swMin)
+bool DVER::FReadable(int16_t swCur, int16_t swMin)
 {
     AssertIn(_swBack, 0, _swCur + 1);
     AssertIn(_swCur, 0, kswMax);

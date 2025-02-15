@@ -16,12 +16,12 @@
 // ZBMP on file
 struct ZBMPF
 {
-    short bo;
-    short osk;
-    short xpLeft;
-    short ypTop;
-    short dxp;
-    short dyp;
+    int16_t bo;
+    int16_t osk;
+    int16_t xpLeft;
+    int16_t ypTop;
+    int16_t dxp;
+    int16_t dyp;
     // void *rgb; 		// pixels follow immediately after ZBMPF
 };
 VERIFY_STRUCT_SIZE(ZBMPF, 12);

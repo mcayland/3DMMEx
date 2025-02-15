@@ -373,7 +373,7 @@ void SCEB::_AddStrings(PGST pgst)
 /***************************************************************************
     Return the current version number of the script compiler.
 ***************************************************************************/
-short SCEB::_SwCur(void)
+int16_t SCEB::_SwCur(void)
 {
     AssertBaseThis(0);
     return kswCurSccb;
@@ -383,7 +383,7 @@ short SCEB::_SwCur(void)
     Return the min version number of the script compiler.  Read can read
     scripts back to this version.
 ***************************************************************************/
-short SCEB::_SwMin(void)
+int16_t SCEB::_SwMin(void)
 {
     AssertBaseThis(0);
     return kswMinSccb;
@@ -1044,7 +1044,7 @@ bool _FReadStringReg(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     AssertVarMem(pcb);
     PGST pgst;
     PCABO pcabo;
-    short bo;
+    int16_t bo;
 
     *pcb = pblck->Cb(fTrue);
     if (pvNil == ppbaco)
@@ -1389,7 +1389,7 @@ bool SCPT::FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, 
 PSCPT SCPT::PscptRead(PCFL pcfl, CTG ctg, CNO cno)
 {
     AssertPo(pcfl, 0);
-    short bo;
+    int16_t bo;
     KID kid;
     BLCK blck;
     PSCPT pscpt = pvNil;

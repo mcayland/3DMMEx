@@ -70,8 +70,8 @@ bool GSTB::_FDup(PGSTB pgstbDst)
 // string table on file
 struct GSTF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long cbEntry;
     long ibstMac;
     long bstMac;
@@ -96,7 +96,7 @@ long GSTB::CbOnFile(void)
     strings are actually saved in the corresponding osk with the same sized
     characters.
 ***************************************************************************/
-bool GSTB::FWrite(PBLCK pblck, short bo, short osk)
+bool GSTB::FWrite(PBLCK pblck, int16_t bo, int16_t osk)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pblck, 0);
@@ -151,7 +151,7 @@ bool GSTB::FWrite(PBLCK pblck, short bo, short osk)
 /***************************************************************************
     Read string table data from a block.
 ***************************************************************************/
-bool GSTB::_FRead(PBLCK pblck, short *pbo, short *posk)
+bool GSTB::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -160,7 +160,7 @@ bool GSTB::_FRead(PBLCK pblck, short *pbo, short *posk)
 
     GSTF gstf;
     long cbT;
-    short bo;
+    int16_t bo;
     long cb;
     bool fRet = fFalse;
 
@@ -548,7 +548,7 @@ void GSTB::_SwapBytesRgbst(void)
     Translate the strings to/from the platform osk.  This only works if
     CbCharOsk(osk) == CbCharOsk(koskCur) (it asserts otherwise).
 ***************************************************************************/
-void GSTB::_TranslateGrst(short osk, bool fToCur)
+void GSTB::_TranslateGrst(int16_t osk, bool fToCur)
 {
     AssertOsk(osk);
     long bst;
@@ -571,7 +571,7 @@ void GSTB::_TranslateGrst(short osk, bool fToCur)
 /***************************************************************************
     Translate the strings to the current osk.
 ***************************************************************************/
-bool GSTB::_FTranslateGrst(short osk)
+bool GSTB::_FTranslateGrst(int16_t osk)
 {
     AssertOsk(osk);
     void *pvSrc;
@@ -730,7 +730,7 @@ PGST GST::PgstNew(long cbExtra, long cstnInit, long cchInit)
 /***************************************************************************
     Read a string table from a block and return it.
 ***************************************************************************/
-PGST GST::PgstRead(PBLCK pblck, short *pbo, short *posk)
+PGST GST::PgstRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pbo);
@@ -755,7 +755,7 @@ PGST GST::PgstRead(PBLCK pblck, short *pbo, short *posk)
 /***************************************************************************
     Read a string table from file and return it.
 ***************************************************************************/
-PGST GST::PgstRead(PFIL pfil, FP fp, long cb, short *pbo, short *posk)
+PGST GST::PgstRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PgstRead(&blck, pbo, posk);
@@ -976,7 +976,7 @@ PAST AST::PastNew(long cbExtra, long cstnInit, long cchInit)
 /***************************************************************************
     Read an allocated string table from a block and return it.
 ***************************************************************************/
-PAST AST::PastRead(PBLCK pblck, short *pbo, short *posk)
+PAST AST::PastRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 {
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pbo);
@@ -1001,7 +1001,7 @@ PAST AST::PastRead(PBLCK pblck, short *pbo, short *posk)
 /***************************************************************************
     Read an allocated string table from file and return it.
 ***************************************************************************/
-PAST AST::PastRead(PFIL pfil, FP fp, long cb, short *pbo, short *posk)
+PAST AST::PastRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck;
     return PastRead(&blck, pbo, posk);

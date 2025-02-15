@@ -44,8 +44,8 @@ class SCEG : public SCEG_PAR
     virtual PGL *_PpglrtvmGlobal(void);
     virtual PGL *_PpglrtvmRemote(long lw);
 
-    virtual short _SwCur(void);
-    virtual short _SwMin(void);
+    virtual int16_t _SwCur(void);
+    virtual int16_t _SwMin(void);
 
     void _DoAlert(long op);
     void _SetColorTable(CHID chid);

@@ -28,25 +28,25 @@
     OS kind for string translation - these should always have their high
     and low bytes equal.
 ***************************************************************************/
-const short oskNil = 0; // signifies unknown
-const short koskSbMac = 0x0202;
-const short koskSbWin = 0x0303;
-const short koskUniMac = 0x0404; // big endian unicode
-const short koskUniWin = 0x0505; // little endian unicode
+const int16_t oskNil = 0; // signifies unknown
+const int16_t koskSbMac = 0x0202;
+const int16_t koskSbWin = 0x0303;
+const int16_t koskUniMac = 0x0404; // big endian unicode
+const int16_t koskUniWin = 0x0505; // little endian unicode
 
 #ifdef UNICODE
-const short koskMac = koskUniMac;
-const short koskWin = koskUniWin;
+const int16_t koskMac = koskUniMac;
+const int16_t koskWin = koskUniWin;
 #else  //! UNICODE
-const short koskMac = koskSbMac;
-const short koskWin = koskSbWin;
+const int16_t koskMac = koskSbMac;
+const int16_t koskWin = koskSbWin;
 #endif //! UNICODE
-const short koskCur = MacWin(koskMac, koskWin);
-const short koskSb = MacWin(koskSbMac, koskSbWin);
-const short koskUni = MacWin(koskUniMac, koskUniWin);
+const int16_t koskCur = MacWin(koskMac, koskWin);
+const int16_t koskSb = MacWin(koskSbMac, koskSbWin);
+const int16_t koskUni = MacWin(koskUniMac, koskUniWin);
 
 #ifdef DEBUG
-void AssertOsk(short osk);
+void AssertOsk(int16_t osk);
 #else //! DEBUG
 #define AssertOsk(osk)
 #endif //! DEBUG
@@ -54,7 +54,7 @@ void AssertOsk(short osk);
 /***************************************************************************
     Return the number of bytes a character occupies in the given osk.
 ***************************************************************************/
-inline long CbCharOsk(short osk)
+inline long CbCharOsk(int16_t osk)
 {
     switch (osk)
     {
@@ -93,7 +93,7 @@ const long kcchTotSt = kcchMaxSt + kcchExtraSt;
 const long kcchTotStz = kcchMaxStz + kcchExtraStz;
 
 const long kcchMaxStn = 255;
-const long kcbMaxDataStn = kcchTotStz * SIZEOF(wchar) + SIZEOF(short);
+const long kcbMaxDataStn = kcchTotStz * SIZEOF(wchar) + SIZEOF(int16_t);
 
 enum
 {
@@ -264,22 +264,22 @@ inline achar ChLower(achar ch)
     Translation from one OS to another (eg, Win to Mac, single byte to
     unicode, etc).
 ***************************************************************************/
-long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDst, long cchMaxDst);
+long CchTranslateRgb(const void *pvSrc, long cbSrc, int16_t oskSrc, achar *prgchDst, long cchMaxDst);
 
 /***************************************************************************
     These APIs assert if osk specifies a different sized character than
     koskCur uses.
 ***************************************************************************/
-void TranslateRgch(achar *prgch, long cch, short osk, bool fToCur = fTrue);
-inline void TranslateSt(PST pst, short osk, bool fToCur = fTrue)
+void TranslateRgch(achar *prgch, long cch, int16_t osk, bool fToCur = fTrue);
+inline void TranslateSt(PST pst, int16_t osk, bool fToCur = fTrue)
 {
     TranslateRgch(pst + 1, CchSt(pst), osk, fToCur);
 }
-inline void TranslateStz(PSTZ pstz, short osk, bool fToCur = fTrue)
+inline void TranslateStz(PSTZ pstz, int16_t osk, bool fToCur = fTrue)
 {
     TranslateRgch(pstz + 1, CchStz(pstz), osk, fToCur);
 }
-inline void TranslateSz(PSZ psz, short osk, bool fToCur = fTrue)
+inline void TranslateSz(PSZ psz, int16_t osk, bool fToCur = fTrue)
 {
     TranslateRgch(psz, CchSz(psz), osk, fToCur);
 }

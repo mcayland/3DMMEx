@@ -228,10 +228,10 @@ enum
 // expression tree node - for in-fix compilation
 struct ETN
 {
-    short tt;     // the token type
-    short op;     // operator (or function) to generate
-    short opl;    // operator precedence level
-    short grfop;  // flags
+    int16_t tt;   // the token type
+    int16_t op;   // operator (or function) to generate
+    int16_t opl;  // operator precedence level
+    int16_t grfop; // flags
     long lwValue; // value if a ttLong; an istn if a ttName
     long ietn1;   // indices into _pgletnTree for the operands
     long ietn2;
@@ -527,7 +527,7 @@ bool SCCB::_FGetTok(PTOK ptok)
     a virtual method so subclasses of SCCB can provide their own
     version numbers.
 ***************************************************************************/
-short SCCB::_SwCur(void)
+int16_t SCCB::_SwCur(void)
 {
     AssertBaseThis(0);
     return kswCurSccb;
@@ -537,7 +537,7 @@ short SCCB::_SwCur(void)
     Return the back version number of the script compiler.  Versions
     back to here can read this script.
 ***************************************************************************/
-short SCCB::_SwBack(void)
+int16_t SCCB::_SwBack(void)
 {
     AssertBaseThis(0);
     return kswBackSccb;
@@ -547,7 +547,7 @@ short SCCB::_SwBack(void)
     Return the min version number of the script compiler.  We can read
     scripts back to this version.
 ***************************************************************************/
-short SCCB::_SwMin(void)
+int16_t SCCB::_SwMin(void)
 {
     AssertBaseThis(0);
     return kswMinSccb;
@@ -621,7 +621,7 @@ void SCCB::_PushString(PSTN pstn)
 void SCCB::_PushOp(long op)
 {
     AssertThis(0);
-    Assert((long)(short)op == op, "bad opcode");
+    Assert((long)(int16_t)op == op, "bad opcode");
     long lw;
 
     if (_fError)
@@ -630,7 +630,7 @@ void SCCB::_PushOp(long op)
     AssertPo(_pscpt, 0);
     _EndOp(); // complete the previous opcode
     _ilwOpLast = _pscpt->_pgllw->IvMac();
-    lw = LwHighLow(0, (short)op);
+    lw = LwHighLow(0, (int16_t)op);
     if (!_pscpt->_pgllw->FPush(&lw))
         _ReportError(_pszOom);
     _fForceOp = fFalse;
@@ -1032,13 +1032,13 @@ enum
 // token-operator map entry
 struct TOME
 {
-    short tt;
-    short grfop;
-    short op;
-    short oplResolve;
-    short oplMinRes;
-    short ttPop;
-    short oplPush;
+    int16_t tt;
+    int16_t grfop;
+    int16_t op;
+    int16_t oplResolve;
+    int16_t oplMinRes;
+    int16_t ttPop;
+    int16_t oplPush;
 };
 
 #define _TomeCore(tt, grfop, op, oplRes, oplMin, ttPop, oplPush)                                                       \
@@ -2482,7 +2482,7 @@ void SCCB::_CompileIn(void)
         }
 
         ClearPb(&etn, SIZEOF(etn));
-        etn.tt = (short)tok.tt;
+        etn.tt = (int16_t)tok.tt;
         etn.lwValue = tok.lw;
         etn.op = ptome->op;
         etn.opl = ptome->oplPush;

@@ -380,9 +380,9 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     struct MIDHED
     {
         MIDCHD midchd;
-        short swFmt;
-        short ctrk;
-        short swDiv;
+        int16_t swFmt;
+        int16_t ctrk;
+        int16_t swDiv;
     };
     VERIFY_STRUCT_SIZE(MIDHED, 14);
 #define kbomMidhed 0xF5400000

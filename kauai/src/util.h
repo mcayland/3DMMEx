@@ -76,8 +76,8 @@ typedef HCURSOR HCRS;
 const uint8_t kbMax = 0xFF;
 const uint8_t kbMin = 0;
 
-const short kswMax = (short)0x7FFF;
-const short kswMin = -kswMax; // so -kswMin is positive
+const int16_t kswMax = (int16_t)0x7FFF;
+const int16_t kswMin = -kswMax; // so -kswMin is positive
 const uint16_t ksuMax = 0xFFFF;
 const uint16_t ksuMin = 0;
 

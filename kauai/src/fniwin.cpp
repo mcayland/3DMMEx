@@ -233,10 +233,10 @@ bool FNI::FSearchInPath(PSTN pstn, PSTN pstnEnv)
 bool FNI::FGetUnique(FTG ftg)
 {
     AssertThis(ffniFile | ffniDir);
-    static short _dsw = 0;
+    static int16_t _dsw = 0;
     STN stn;
     STN stnOld;
-    short sw;
+    int16_t sw;
     long cact;
 
     if (Ftg() == kftgDir)
@@ -244,7 +244,7 @@ bool FNI::FGetUnique(FTG ftg)
     else
         GetLeaf(&stnOld);
 
-    sw = (short)TsCurrentSystem() + ++_dsw;
+    sw = (int16_t)TsCurrentSystem() + ++_dsw;
     for (cact = 20; cact != 0; cact--, sw += ++_dsw)
     {
         stn.FFormatSz(PszLit("Temp%04x"), (long)sw);

@@ -36,8 +36,8 @@ const BOM kbomHtop = 0xFFF00000;
 // help topic on file
 struct HTOPF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     HTOP htop;
 };
 
@@ -81,7 +81,7 @@ class TXHD : public TXHD_PAR
     ~TXHD(void);
 
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil, ulong grftxhd = ftxhdNil);
-    virtual bool _FOpenArg(long icact, uint8_t sprm, short bo, short osk);
+    virtual bool _FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk);
     virtual bool _FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
     virtual bool _FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
 

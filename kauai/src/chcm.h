@@ -198,8 +198,8 @@ class CHCM : public CHCM_PAR
     PCHLX _pchlx; // lexer for compiling
     long _sm;     // current string mode
     long _cbNum;  // current numerical size (1, 2, or 4)
-    short _bo;    // current byte order and osk
-    short _osk;
+    int16_t _bo;  // current byte order and osk
+    int16_t _osk;
     PMSNK _pmsnkError; // error message sink
     long _cactError;   // how many errors we've encountered
 
@@ -275,8 +275,8 @@ class CHDC : public CHDC_PAR
     long _ert;  // error type
     PCFL _pcfl; // the chunky file to read from
     BSF _bsf;   // temporary buffer for the chunk data
-    short _bo;  // current byte order and osk
-    short _osk;
+    int16_t _bo; // current byte order and osk
+    int16_t _osk;
     CHSE _chse; // chunky source emitter
 
   protected:

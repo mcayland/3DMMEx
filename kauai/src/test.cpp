@@ -216,7 +216,7 @@ void TestGl(void)
     short *qsw;
     PGL pglsw;
 
-    pglsw = GL::PglNew(SIZEOF(short));
+    pglsw = GL::PglNew(SIZEOF(int16_t));
     if (pvNil == pglsw)
     {
         Bug("PglNew failed");

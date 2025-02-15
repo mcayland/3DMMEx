@@ -90,8 +90,8 @@ const auto kbomLong = 0xC0000000;
 //
 struct SCENH
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long nfrmLast;
     long nfrmFirst;
     TRANS trans;
@@ -3769,7 +3769,7 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
     long isevStart = 0;
     SEV sev;
     PSEV qsev;
-    short bo;
+    int16_t bo;
     PACTR pactr;
     PTBOX ptbox;
     CHID chid;
@@ -5067,7 +5067,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
     KID kid;
     long isev;
     PSEV qsev;
-    short bo;
+    int16_t bo;
     PGG pggsev;
     TAG tag;
     TAG tagBkgd;

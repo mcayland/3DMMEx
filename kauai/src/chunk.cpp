@@ -88,11 +88,11 @@ ASSERTNAME
 
 // A file written by this version of chunk.cpp receives this cvn.  Any
 // file with this cvn value has exactly the same file format
-const short kcvnCur = 5;
+const int16_t kcvnCur = 5;
 
 // A file written by this version of chunk.cpp can be read by any version
 // of chunk.cpp whose kcvnCur is >= to this (this should be <= kcvnCur)
-const short kcvnBack = 4;
+const int16_t kcvnBack = 4;
 
 // A file whose cvn is less than kcvnMin cannot be directly read by
 // this version of chunk.cpp (maybe a converter will read it).
@@ -101,7 +101,7 @@ const short kcvnBack = 4;
 // _FReadIndex can be removed!
 // NOTE: (ShonK, 8/21/95): if this is >= 4, the fOldIndex handling in
 // _FReadIndex can be removed!
-const short kcvnMin = 1;
+const int16_t kcvnMin = 1;
 
 const auto kcvnMinStnNames = 3;
 const auto kcvnMinGrfcrp = 4;
@@ -116,8 +116,8 @@ struct CFP
     long lwMagic;   // identifies this as a chunky file
     CTG ctgCreator; // program that created this file
     DVER dver;      // chunky file version
-    short bo;       // byte order
-    short osk;      // which system wrote this
+    int16_t bo;     // byte order
+    int16_t osk;    // which system wrote this
 
     FP fpMac;     // logical end of file
     FP fpIndex;   // location of chunky index
@@ -575,8 +575,8 @@ PCFL CFL::PcflFromFni(FNI *pfni)
 ***************************************************************************/
 struct ECDF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     CTG ctg;
     CHID chid;
     long cb;
@@ -1331,8 +1331,8 @@ bool CFL::_FReadIndex(void)
 
     CFP cfp;
     FP fpMac;
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long cbVar;
     long cbRgch;
     long icrp, ccrp;
@@ -1582,8 +1582,8 @@ void CFL::_ReadFreeMap(void)
     Assert(_fFreeMapNotRead, "free map already read");
     Assert(!_fInvalidMainFile, 0);
 
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long cfsm;
 
     // clear this even if reading the free map fails - so we don't try to

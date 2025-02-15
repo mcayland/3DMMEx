@@ -141,9 +141,9 @@ struct AROP
 
 // script version numbers
 // if you bump these, also bump the numbers in scrcomg.h
-const short kswCurSccb = 0xA;  // this version
-const short kswBackSccb = 0xA; // we can be read back to this version
-const short kswMinSccb = 0xA;  // we can read back to this version
+const int16_t kswCurSccb = 0xA; // this version
+const int16_t kswBackSccb = 0xA; // we can be read back to this version
+const int16_t kswMinSccb = 0xA;  // we can read back to this version
 
 // high byte of a label value
 const uint8_t kbLabel = 0xCC;
@@ -216,9 +216,9 @@ class SCCB : public SCCB_PAR
     void _PushLabelRequestLw(long lw);
 
     virtual void _ReportError(PSZ psz);
-    virtual short _SwCur(void);
-    virtual short _SwBack(void);
-    virtual short _SwMin(void);
+    virtual int16_t _SwCur(void);
+    virtual int16_t _SwBack(void);
+    virtual int16_t _SwMin(void);
 
     virtual bool _FGetTok(PTOK ptok);
 

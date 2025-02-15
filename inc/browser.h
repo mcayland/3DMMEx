@@ -72,8 +72,8 @@ class BRCN : public BRCN_PAR
 *************************************/
 struct TFC
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     union {
         struct
         {

@@ -79,15 +79,15 @@ inline long LwBound(long lw, long lwMin, long lwMax)
 }
 void SortLw(long *plw1, long *plw2);
 
-inline short SwHigh(long lw)
+inline int16_t SwHigh(long lw)
 {
-    return (short)(lw >> 16);
+    return (int16_t)(lw >> 16);
 }
-inline short SwLow(long lw)
+inline int16_t SwLow(long lw)
 {
-    return (short)lw;
+    return (int16_t)lw;
 }
-inline long LwHighLow(short swHigh, short swLow)
+inline long LwHighLow(int16_t swHigh, int16_t swLow)
 {
     return ((long)swHigh << 16) | (long)(uint16_t)swLow;
 }
@@ -125,32 +125,32 @@ inline uint16_t SuLow(long lw)
     return (uint16_t)lw;
 }
 
-inline uint8_t BHigh(short sw)
+inline uint8_t BHigh(int16_t sw)
 {
     return (uint8_t)((uint16_t)sw >> 8);
 }
-inline uint8_t BLow(short sw)
+inline uint8_t BLow(int16_t sw)
 {
     return (uint8_t)sw;
 }
-inline short SwHighLow(uint8_t bHigh, uint8_t bLow)
+inline int16_t SwHighLow(uint8_t bHigh, uint8_t bLow)
 {
-    return ((short)bHigh << 8) | (short)bLow;
+    return ((int16_t)bHigh << 8) | (int16_t)bLow;
 }
 inline uint16_t SuHighLow(uint8_t bHigh, uint8_t bLow)
 {
     return ((uint16_t)bHigh << 8) | (uint16_t)bLow;
 }
 
-inline short SwTruncLw(long lw)
+inline int16_t SwTruncLw(long lw)
 {
-    return lw <= kswMax ? (lw >= kswMin ? (short)lw : kswMin) : kswMax;
+    return lw <= kswMax ? (lw >= kswMin ? (int16_t)lw : kswMin) : kswMax;
 }
-inline short SwMin(short sw1, short sw2)
+inline int16_t SwMin(int16_t sw1, int16_t sw2)
 {
     return sw1 < sw2 ? sw1 : sw2;
 }
-inline short SwMax(short sw1, short sw2)
+inline int16_t SwMax(int16_t sw1, int16_t sw2)
 {
     return sw1 >= sw2 ? sw1 : sw2;
 }
@@ -179,7 +179,7 @@ inline ulong LuMax(ulong lu1, ulong lu2)
     return lu1 >= lu2 ? lu1 : lu2;
 }
 
-inline short SwAbs(short sw)
+inline int16_t SwAbs(int16_t sw)
 {
     return sw < 0 ? -sw : sw;
 }
@@ -188,7 +188,7 @@ inline long LwAbs(long lw)
     return lw < 0 ? -lw : lw;
 }
 
-inline long LwMulSw(short sw1, short sw2)
+inline long LwMulSw(int16_t sw1, int16_t sw2)
 {
     return (long)sw1 * sw2;
 }
@@ -275,7 +275,7 @@ inline long CbRoundToLong(long cb)
 }
 inline long CbRoundToShort(long cb)
 {
-    return (cb + SIZEOF(short) - 1) & ~(long)(SIZEOF(short) - 1);
+    return (cb + SIZEOF(int16_t) - 1) & ~(long)(SIZEOF(int16_t) - 1);
 }
 inline long CbFromCbit(long cbit)
 {
@@ -822,11 +822,11 @@ class RAT
 ***************************************************************************/
 struct DVER
 {
-    short _swCur;
-    short _swBack;
+    int16_t _swCur;
+    int16_t _swBack;
 
-    void Set(short swCur, short swBack);
-    bool FReadable(short swCur, short swMin);
+    void Set(int16_t swCur, int16_t swBack);
+    bool FReadable(int16_t swCur, int16_t swMin);
 };
 
 #endif // UTILINT_H

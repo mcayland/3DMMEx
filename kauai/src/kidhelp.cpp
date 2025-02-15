@@ -180,7 +180,7 @@ LFail:
     Do any necessary munging of the AG entry on open.  Return false if
     we don't recognize this argument type.
 ***************************************************************************/
-bool TXHD::_FOpenArg(long icact, uint8_t sprm, short bo, short osk)
+bool TXHD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
 {
     CTG ctg;
     CNO cno;

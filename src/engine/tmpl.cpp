@@ -147,7 +147,7 @@ bool ACTN::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     KID kid;
     BLCK blck;
     ACTNF actnf;
-    short bo;
+    int16_t bo;
     long icel;
 
     if (!pcfl->FFind(ctg, cno, &blck) || !blck.FUnpackData())
@@ -177,7 +177,7 @@ bool ACTN::_FInit(PCFL pcfl, CTG ctg, CNO cno)
         for (icel = 0; icel < _pggcel->IvMac(); icel++)
         {
             SwapBytesRglw(_pggcel->QvFixedGet(icel), SIZEOF(CEL) / SIZEOF(long));
-            SwapBytesRgsw(_pggcel->QvGet(icel), _pggcel->Cb(icel) / SIZEOF(short));
+            SwapBytesRgsw(_pggcel->QvGet(icel), _pggcel->Cb(icel) / SIZEOF(int16_t));
         }
     }
 
@@ -419,10 +419,10 @@ bool TMPL::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     AssertPo(pcfl, 0);
 
     KID kid;
-    short bo;
+    int16_t bo;
     BLCK blck;
     long ibact;
-    short ibset;
+    int16_t ibset;
 
     if (!_FReadTmplf(pcfl, ctg, cno))
         return fFalse;
@@ -435,7 +435,7 @@ bool TMPL::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     _pglibactPar = GL::PglRead(&blck, &bo);
     if (pvNil == _pglibactPar)
         return fFalse;
-    Assert(_pglibactPar->CbEntry() == SIZEOF(short), "Bad _pglibactPar!");
+    Assert(_pglibactPar->CbEntry() == SIZEOF(int16_t), "Bad _pglibactPar!");
     if (kboOther == bo)
         SwapBytesRgsw(_pglibactPar->QvGet(0), _pglibactPar->IvMac());
 
@@ -447,7 +447,7 @@ bool TMPL::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     _pglibset = GL::PglRead(&blck, &bo);
     if (pvNil == _pglibset)
         return fFalse;
-    Assert(_pglibset->CbEntry() == SIZEOF(short), "Bad TMPL _pglibset!");
+    Assert(_pglibset->CbEntry() == SIZEOF(int16_t), "Bad TMPL _pglibset!");
     if (kboOther == bo)
         SwapBytesRgsw(_pglibset->QvGet(0), _pglibset->IvMac());
 
@@ -672,7 +672,7 @@ bool TMPL::FSetActnCel(BODY *pbody, long anid, long celn, BRS *pdwr)
     long icel;
     ACTN *pactn = pvNil;
     CEL cel;
-    short ibprt;
+    int16_t ibprt;
     long cbprt = _pglibactPar->IvMac();
     CPS cps;
     PMODL *prgpmodl = pvNil;
@@ -938,8 +938,8 @@ bool TMPL::FIbsetAccOfIbset(long ibset, long *pibsetAcc)
     long ibsetT;
     long ibact;
     long ibactPar;
-    short ibsetOfIbact;
-    short ibsetOfIbactPar;
+    int16_t ibsetOfIbact;
+    int16_t ibsetOfIbactPar;
 
     if (FBsetIsAccessory(ibset))
     {
@@ -954,12 +954,12 @@ bool TMPL::FIbsetAccOfIbset(long ibset, long *pibsetAcc)
             // for each ibact in ibsetT, see if its parent is in ibset
             for (ibact = 0; ibact < _pglibactPar->IvMac(); ibact++)
             {
-                ibsetOfIbact = *(short *)_pglibset->QvGet(ibact);
+                ibsetOfIbact = *(int16_t *)_pglibset->QvGet(ibact);
                 if (ibsetT == ibsetOfIbact)
                 {
                     // see if ibact's parent in ibset
-                    ibactPar = *(short *)_pglibactPar->QvGet(ibact);
-                    ibsetOfIbactPar = *(short *)_pglibset->QvGet(ibactPar);
+                    ibactPar = *(int16_t *)_pglibactPar->QvGet(ibact);
+                    ibsetOfIbactPar = *(int16_t *)_pglibset->QvGet(ibactPar);
                     if (ibsetOfIbactPar == ibset)
                     {
                         // so ibset is a parent bset of ibsetT

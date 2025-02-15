@@ -186,7 +186,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
             break;
 
             case 2:
-                fprintf(stderr, "%04x", (int)*(short *)pv);
+                fprintf(stderr, "%04x", (int)*(int16_t *)pv);
                 break;
 
             case 4:

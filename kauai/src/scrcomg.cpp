@@ -304,7 +304,7 @@ bool SCCG::_FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar,
 /***************************************************************************
     Return the current version number of the script compiler.
 ***************************************************************************/
-short SCCG::_SwCur(void)
+int16_t SCCG::_SwCur(void)
 {
     return kswCurSccg;
 }
@@ -313,7 +313,7 @@ short SCCG::_SwCur(void)
     Return the back version number of the script compiler.  Versions
     back to here can read this script.
 ***************************************************************************/
-short SCCG::_SwBack(void)
+int16_t SCCG::_SwBack(void)
 {
     return kswBackSccg;
 }
@@ -322,7 +322,7 @@ short SCCG::_SwBack(void)
     Return the min version number of the script compiler.  We can read
     scripts back to this version.
 ***************************************************************************/
-short SCCG::_SwMin(void)
+int16_t SCCG::_SwMin(void)
 {
     return kswMinSccg;
 }

@@ -28,8 +28,8 @@
 ****************************************/
 struct CPS
 {
-    short chidModl; // CHID (under TMPL chunk) of model for this body part
-    short imat34;   // index into ACTN's GL of transforms
+    int16_t chidModl; // CHID (under TMPL chunk) of model for this body part
+    int16_t imat34;   // index into ACTN's GL of transforms
 };
 VERIFY_STRUCT_SIZE(CPS, 4);
 const BOM kbomCps = 0x50000000;
@@ -53,12 +53,12 @@ const BOM kbomCel = 0xf0000000;
 // template on file
 struct TMPLF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     BRA xaRest; // reminder: BRAs are shorts
     BRA yaRest;
     BRA zaRest;
-    short swPad; // so grftmpl (and the whole TMPLF) is long-aligned
+    int16_t swPad; // so grftmpl (and the whole TMPLF) is long-aligned
     ulong grftmpl;
 };
 VERIFY_STRUCT_SIZE(TMPLF, 16);
@@ -67,8 +67,8 @@ VERIFY_STRUCT_SIZE(TMPLF, 16);
 // action chunk on file
 struct ACTNF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     long grfactn;
 };
 VERIFY_STRUCT_SIZE(ACTNF, 8);

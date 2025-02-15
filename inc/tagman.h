@@ -121,7 +121,7 @@ class TAGM : public TAGM_PAR
 
     // GstSource stuff:
     PGST PgstSource(void);
-    bool FMergeGstSource(PGST pgst, short bo, short osk);
+    bool FMergeGstSource(PGST pgst, int16_t bo, int16_t osk);
     bool FAddStnSource(PSTN pstnMerged, long sid);
     bool FGetSid(PSTN pstn, long *psid); // pstn can be short or long
 
