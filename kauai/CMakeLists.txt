@@ -384,8 +384,11 @@ gtest_discover_tests(KauaiTest)
 
 # Utilities
 
+# Add a meta target to build all Kauai tools
+add_custom_target(tools)
+
 # Chelp: Help editor
-add_executable(chelp WIN32)
+add_executable(chelp WIN32 EXCLUDE_FROM_ALL)
 target_sources(chelp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chtop.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelp.cpp"
@@ -415,9 +418,10 @@ target_link_libraries(chelp
     KauaiSpell
     KauaiPic
 )
+add_dependencies(tools chelp)
 
 # Frame Tester
-add_executable(ft WIN32)
+add_executable(ft WIN32 EXCLUDE_FROM_ALL)
 target_sources(ft PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/src/test.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/ft.rc"
@@ -440,9 +444,10 @@ target_link_libraries(
     KauaiMbmpIO
     KauaiPic
 )
+add_dependencies(tools ft)
 
 # Utility Tester
-add_executable(ut)
+add_executable(ut EXCLUDE_FROM_ALL)
 target_sources(ut PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/src/ut.cpp"
 )
@@ -453,6 +458,7 @@ target_link_libraries(
     KauaiGroup
     KauaiFile
 )
+add_dependencies(tools ut)
 
 # Chomp compiler
 add_executable(chomp)
@@ -468,9 +474,10 @@ target_link_libraries(
     KauaiSound
     KauaiPic
 )
+add_dependencies(tools chomp)
 
 # Chunk Editor
-add_executable(ched WIN32)
+add_executable(ched WIN32 EXCLUDE_FROM_ALL)
 target_sources(ched PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/ched.rc"
     "${PROJECT_SOURCE_DIR}/kauai/tools/chdoc.cpp"
@@ -494,9 +501,10 @@ target_link_libraries(ched
     KauaiPic
     KauaiChcm
 )
+add_dependencies(tools ched)
 
 # mkmbmp
-add_executable(mkmbmp)
+add_executable(mkmbmp EXCLUDE_FROM_ALL)
 target_sources(mkmbmp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/mkmbmp.cpp"
 )
@@ -508,9 +516,10 @@ target_link_libraries(
     KauaiGroup
     KauaiMbmpIO
 )
+add_dependencies(tools mkmbmp)
 
 # kpack
-add_executable(kpack)
+add_executable(kpack EXCLUDE_FROM_ALL)
 target_sources(kpack PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/kpack.cpp"
 )
@@ -521,9 +530,10 @@ target_link_libraries(
     KauaiFile
     KauaiGroup
 )
+add_dependencies(tools kpack)
 
 # Chmerge: Chunky merge tool
-add_executable(chmerge)
+add_executable(chmerge EXCLUDE_FROM_ALL)
 target_sources(chmerge PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chmerge.cpp"
 )
@@ -534,9 +544,10 @@ target_link_libraries(
     KauaiFile
     KauaiGroup
 )
+add_dependencies(tools chmerge)
 
 # Chelpdmp: Chunky help dumper tool
-add_executable(chelpdmp)
+add_executable(chelpdmp EXCLUDE_FROM_ALL)
 target_sources(chelpdmp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelpdmp.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelpexp.cpp"
@@ -552,3 +563,4 @@ target_link_libraries(chelpdmp
     KauaiScrExe
     KauaiChse
 )
+add_dependencies(tools chelpdmp)
