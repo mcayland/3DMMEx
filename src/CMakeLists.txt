@@ -12,9 +12,11 @@ target_sources(brender
 )
 target_include_directories(brender PUBLIC "${PROJECT_SOURCE_DIR}/BREN/INC")
 target_link_libraries(brender
-  PUBLIC
-    kauai
-    BRender::Libraries)
+    PUBLIC
+    KauaiBase
+    KauaiGroup
+    BRender::Libraries
+)
 
 add_library(engine)
 target_sources(engine
@@ -40,7 +42,14 @@ target_sources(engine
 )
 target_include_directories(engine PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/INC>)
-target_link_libraries(engine PUBLIC kauai brender)
+target_link_libraries(engine
+    PUBLIC
+    KauaiBase
+    KauaiGui
+    KauaiDoc
+    KauaiRichText
+    brender
+)
 
 # On non-windows WIN32 is a no-op
 add_executable(studio WIN32)
@@ -89,7 +98,17 @@ target_chomp_sources(studio
   "${PROJECT_SOURCE_DIR}/src/shared/shared.cht"
   "${PROJECT_SOURCE_DIR}/src/shared/sharecd.cht")
 
-target_link_libraries(studio PRIVATE engine)
+target_link_libraries(studio
+    PUBLIC
+    KauaiBase
+    KauaiGui
+    KauaiKid
+    KauaiDlg
+    engine
+
+    $<$<PLATFORM_ID:Windows>:mpr> # Required for WNetGetUser()
+)
+
 set_property(TARGET studio PROPERTY OUTPUT_NAME 3dmovie)
 target_link_options(studio BEFORE PRIVATE $<$<LINK_LANG_AND_ID:CXX,MSVC>:/MANIFESTUAC:NO>)
 target_link_options(studio BEFORE PRIVATE "/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'")

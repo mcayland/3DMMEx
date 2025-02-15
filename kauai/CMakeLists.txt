@@ -4,11 +4,11 @@ if (ENABLE_ASM_X86)
     # Generate Kauai decoders for Intel x86
     add_executable(kcdc-386 EXCLUDE_FROM_ALL)
     target_sources(kcdc-386 PRIVATE "${PROJECT_SOURCE_DIR}/kauai/src/kcdc_386.c")
-    target_include_directories(kcdc-386 PRIVATE $<TARGET_PROPERTY:kauai,INCLUDE_DIRECTORIES>)
+    target_include_directories(kcdc-386 PRIVATE $<TARGET_PROPERTY:KauaiBase,INCLUDE_DIRECTORIES>)
 
     add_executable(kcd2-386 EXCLUDE_FROM_ALL)
     target_sources(kcd2-386 PRIVATE "${PROJECT_SOURCE_DIR}/kauai/src/kcd2_386.c")
-    target_include_directories(kcd2-386 PRIVATE $<TARGET_PROPERTY:kauai,INCLUDE_DIRECTORIES>)
+    target_include_directories(kcd2-386 PRIVATE $<TARGET_PROPERTY:KauaiBase,INCLUDE_DIRECTORIES>)
 
     add_custom_command(
         OUTPUT "${PROJECT_BINARY_DIR}/generated/kauai/src/kcdc_386.h"
@@ -27,6 +27,364 @@ if (ENABLE_ASM_X86)
     )
 endif()
 
+add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4430>)
+
+# Base: Base files required for all Kauai projects
+add_library(KauaiBase
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilglob.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/util.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/base.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilcopy.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilerro.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilint.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilmem.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilrnd.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/utilstr.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/mssio.cpp"
+
+    # Windows implementations
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/memwin.cpp>
+)
+target_include_directories(
+    KauaiBase
+    PUBLIC
+    "${PROJECT_SOURCE_DIR}/kauai/src"
+)
+target_link_libraries(
+    KauaiBase
+    PUBLIC
+    $<$<PLATFORM_ID:Windows>:winmm>
+)
+target_compile_definitions(
+    KauaiBase
+    PUBLIC
+    _LPCVOID_DEFINED
+    STRICT
+)
+
+# Groups: Collection classes
+add_library(KauaiGroup
+    "${PROJECT_SOURCE_DIR}/kauai/src/groups.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/groups2.cpp"
+)
+target_link_libraries(
+    KauaiGroup
+    PUBLIC
+    KauaiBase
+)
+
+# File: File and chunky file stuff
+add_library(KauaiFile
+    "${PROJECT_SOURCE_DIR}/kauai/src/chunk.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/codec.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/codkauai.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/crf.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/file.cpp"
+
+    # Windows implementations
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/filewin.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/fniwin.cpp>
+)
+if (ENABLE_ASM_X86)
+    target_sources(
+        KauaiFile
+        PRIVATE
+        "${PROJECT_BINARY_DIR}/generated/kauai/src/kcdc_386.h"
+        "${PROJECT_BINARY_DIR}/generated/kauai/src/kcd2_386.h"
+    )
+    target_include_directories(
+        KauaiFile
+        PRIVATE
+        "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/generated/kauai/src>"
+    )
+endif()
+target_link_libraries(
+    KauaiFile
+    PUBLIC
+    KauaiGroup
+)
+
+# Stream
+add_library(KauaiStream
+    "${PROJECT_SOURCE_DIR}/kauai/src/stream.cpp"
+)
+target_link_libraries(
+    KauaiStream
+    PUBLIC
+    KauaiGroup
+)
+
+# Lexer: Lexing classes
+add_library(KauaiLexer
+    "${PROJECT_SOURCE_DIR}/kauai/src/lex.cpp"
+)
+target_link_libraries(
+    KauaiLexer
+    PUBLIC
+    KauaiStream
+)
+
+# Scrcom: Script compiler
+add_library(KauaiScrCom
+    "${PROJECT_SOURCE_DIR}/kauai/src/scrcom.cpp"
+)
+target_link_libraries(
+    KauaiScrCom
+    PUBLIC
+    KauaiLexer
+    KauaiScrExe
+)
+
+# Kidcom: Script compiler for Kidspace scripts
+add_library(KauaiKidCom
+    "${PROJECT_SOURCE_DIR}/kauai/src/scrcomg.cpp"
+)
+target_link_libraries(
+    KauaiKidCom
+    PUBLIC
+    KauaiScrCom
+)
+
+# ScrExe: Script interpreter
+add_library(KauaiScrExe
+    "${PROJECT_SOURCE_DIR}/kauai/src/screxe.cpp"
+)
+
+# MbmpIO: Masked bitmap IO support
+add_library(KauaiMbmpIO
+    "${PROJECT_SOURCE_DIR}/kauai/src/mbmp.cpp"
+)
+target_link_libraries(
+    KauaiMbmpIO
+    PUBLIC
+    KauaiFile
+)
+
+# Chse: Chunky source emitter
+add_library(KauaiChse
+    "${PROJECT_SOURCE_DIR}/kauai/src/chse.cpp"
+)
+target_link_libraries(
+    KauaiChse
+    PUBLIC
+    KauaiGroup
+)
+
+# Chcm: Chunky compiler and decompiler classes
+add_library(
+    KauaiChcm
+    "${PROJECT_SOURCE_DIR}/kauai/src/chcm.cpp"
+)
+target_link_libraries(
+    KauaiChcm
+    PUBLIC
+    KauaiLexer
+    KauaiChse
+    KauaiMbmpIO
+    KauaiKidCom
+)
+
+# Sound
+add_library(
+    KauaiSound
+    "${PROJECT_SOURCE_DIR}/kauai/src/sndm.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/midi.cpp"
+)
+target_link_libraries(
+    KauaiSound
+    PUBLIC
+    KauaiGroup
+    KauaiStream
+    3DMMForever::AudioMan
+    $<$<PLATFORM_ID:Windows>:msacm32>
+    $<$<PLATFORM_ID:Windows>:winmm>
+)
+
+if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
+
+    # The static library requires a stub for some old MSVC floating-point division helper functions
+    add_library(
+        FDivStub
+        "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"
+    )
+    target_link_libraries(
+        KauaiSound
+        PRIVATE
+        FDivStub
+    )
+endif()
+
+# Pic: vector graphics support
+add_library(KauaiPic
+    "${PROJECT_SOURCE_DIR}/kauai/src/pic.cpp"
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/picwin.cpp>
+)
+target_link_libraries(
+    KauaiPic
+    PUBLIC
+    KauaiBase
+)
+
+# Spell: Spell checker interface
+add_library(KauaiSpell
+    "${PROJECT_SOURCE_DIR}/kauai/src/spell.cpp"
+)
+target_link_libraries(
+    KauaiSpell
+    PUBLIC
+    KauaiBase
+    KauaiGroup
+)
+
+# Video: video playback
+add_library(KauaiVideo
+    "${PROJECT_SOURCE_DIR}/kauai/src/video.cpp"
+)
+target_link_libraries(
+    KauaiVideo
+    PUBLIC
+    KauaiGui
+    $<$<PLATFORM_ID:Windows>:Vfw32>
+)
+
+# GUI
+add_library(KauaiGui
+    "${PROJECT_SOURCE_DIR}/kauai/src/appb.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/clok.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/cmd.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/cursor.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/gfx.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/gob.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/mbmpgui.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/region.cpp"
+
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/appbwin.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gfxwin.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/menuwin.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gobwin.cpp>
+)
+target_link_libraries(
+    KauaiGui
+    PUBLIC
+    KauaiBase
+    KauaiGroup
+    KauaiMbmpIO
+    KauaiSound
+    KauaiVideo
+    KauaiPic
+)
+target_include_directories(
+    KauaiGui
+    PUBLIC
+    "${PROJECT_SOURCE_DIR}/kauai/src"
+)
+
+# Dlg: Dialog support
+add_library(KauaiDlg
+    "${PROJECT_SOURCE_DIR}/kauai/src/dlg.cpp"
+
+    # Windows implementation
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/dlgwin.cpp>
+)
+target_link_libraries(
+    KauaiDlg
+    PUBLIC
+    KauaiGui
+)
+
+# Ctl: Control support
+add_library(KauaiCtl
+    "${PROJECT_SOURCE_DIR}/kauai/src/ctl.cpp"
+)
+target_link_libraries(
+    KauaiCtl
+    PUBLIC
+    KauaiGui
+)
+
+# Doc: Base document class support
+add_library(KauaiDoc
+    "${PROJECT_SOURCE_DIR}/kauai/src/docb.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/clip.cpp"
+)
+target_link_libraries(
+    KauaiDoc
+    PRIVATE
+    KauaiCtl
+)
+
+# RichText: Rich text document support
+add_library(KauaiRichText
+    "${PROJECT_SOURCE_DIR}/kauai/src/rtxt.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/rtxt2.cpp"
+)
+target_link_libraries(
+    KauaiRichText
+    PUBLIC
+    KauaiDoc
+    KauaiStream
+)
+
+# TextEdit: Edit controls
+add_library(KauaiTextEdit
+    "${PROJECT_SOURCE_DIR}/kauai/src/text.cpp"
+)
+target_link_libraries(
+    KauaiTextEdit
+    PUBLIC
+    KauaiGui
+    KauaiStream
+)
+
+# PlainText: Plain line-based text document
+add_library(KauaiPlainText
+    "${PROJECT_SOURCE_DIR}/kauai/src/textdoc.cpp"
+)
+target_link_libraries(
+    KauaiPlainText
+    PUBLIC
+    KauaiDoc
+    KauaiStream
+)
+
+
+# Kid: Kidspace and help balloon stuff
+add_library(KauaiKid
+    "${PROJECT_SOURCE_DIR}/kauai/src/kidworld.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/kidhelp.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/kidspace.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/src/screxeg.cpp"
+)
+target_link_libraries(
+    KauaiKid
+    PUBLIC
+    KauaiGui
+    KauaiScrExe
+    KauaiScrCom
+    KauaiTextEdit
+)
+
+# Unit tests
+add_executable(KauaiTest
+    "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
+)
+target_link_libraries(
+    KauaiTest
+    PUBLIC
+    KauaiBase
+    KauaiFile
+    KauaiGroup
+    GTest::gtest_main
+)
+gtest_discover_tests(KauaiTest)
+
+# Utilities
+
+# Chelp: Help editor
 add_executable(chelp WIN32)
 target_sources(chelp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chtop.cpp"
@@ -34,28 +392,82 @@ target_sources(chelp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelpexp.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelp.rc"
 )
-target_include_directories(chelp PRIVATE $<TARGET_PROPERTY:kauai,INCLUDE_DIRECTORIES>)
-target_link_libraries(chelp PRIVATE $<TARGET_NAME_IF_EXISTS:kauai>)
+target_link_libraries(chelp
+    PRIVATE
+    KauaiBase
+    KauaiGui
+    KauaiGroup
+    KauaiMbmpIO
+    KauaiSound
+    KauaiVideo
+    KauaiKid
+    KauaiScrExe
+    KauaiRichText
+    KauaiDoc
+    KauaiStream
+    KauaiFile
+    KauaiChse
+    KauaiDlg
+    KauaiScrCom
+    KauaiLexer
+    KauaiCtl
+    KauaiTextEdit
+    KauaiSpell
+    KauaiPic
+)
 
-# Kauai test applications
+# Frame Tester
 add_executable(ft WIN32)
 target_sources(ft PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/src/test.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/ft.rc"
     "${PROJECT_SOURCE_DIR}/kauai/src/ft.cpp"
 )
-target_link_libraries(ft PRIVATE kauai)
+target_link_libraries(
+    ft
+    PRIVATE
+    KauaiBase
+    KauaiGroup
+    KauaiFile
+    KauaiGui
+    KauaiDoc
+    KauaiStream
+    KauaiSound
+    KauaiDlg
+    KauaiCtl
+    KauaiTextEdit
+    KauaiRichText
+    KauaiMbmpIO
+    KauaiPic
+)
 
+# Utility Tester
 add_executable(ut)
 target_sources(ut PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/src/ut.cpp"
 )
-target_link_libraries(ut PRIVATE kauai)
+target_link_libraries(
+    ut
+    PRIVATE
+    KauaiBase
+    KauaiGroup
+    KauaiFile
+)
 
+# Chomp compiler
 add_executable(chomp)
-target_sources(chomp PRIVATE "${PROJECT_SOURCE_DIR}/kauai/tools/chomp.cpp")
-target_include_directories(chomp PRIVATE $<TARGET_PROPERTY:kauai,INCLUDE_DIRECTORIES>)
-target_link_libraries(chomp PRIVATE $<TARGET_NAME_IF_EXISTS:kauai>)
+target_sources(chomp
+    PRIVATE
+    "${PROJECT_SOURCE_DIR}/kauai/tools/chomp.cpp"
+)
+target_link_libraries(
+    chomp
+    PRIVATE
+    KauaiBase
+    KauaiChcm
+    KauaiSound
+    KauaiPic
+)
 
 # Chunk Editor
 add_executable(ched WIN32)
@@ -69,147 +481,74 @@ target_sources(ched PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chpic.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/tools/chtxt.cpp"
 )
-target_link_libraries(ched PRIVATE kauai)
+target_link_libraries(ched
+    PRIVATE
+    KauaiGui
+    KauaiDlg
+    KauaiKid
+    KauaiKidCom
+    KauaiDoc
+    KauaiTextEdit
+    KauaiRichText
+    KauaiPlainText
+    KauaiPic
+    KauaiChcm
+)
 
 # mkmbmp
 add_executable(mkmbmp)
 target_sources(mkmbmp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/mkmbmp.cpp"
 )
-target_link_libraries(mkmbmp PRIVATE kauai)
+target_link_libraries(
+    mkmbmp
+    PRIVATE
+    KauaiBase
+    KauaiFile
+    KauaiGroup
+    KauaiMbmpIO
+)
 
 # kpack
 add_executable(kpack)
 target_sources(kpack PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/kpack.cpp"
 )
-target_link_libraries(kpack PRIVATE kauai)
+target_link_libraries(
+    kpack
+    PRIVATE
+    KauaiBase
+    KauaiFile
+    KauaiGroup
+)
 
-# chmerge
+# Chmerge: Chunky merge tool
 add_executable(chmerge)
 target_sources(chmerge PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chmerge.cpp"
 )
-target_link_libraries(chmerge PRIVATE kauai)
+target_link_libraries(
+    chmerge
+    PRIVATE
+    KauaiBase
+    KauaiFile
+    KauaiGroup
+)
 
-# chelpdmp
+# Chelpdmp: Chunky help dumper tool
 add_executable(chelpdmp)
 target_sources(chelpdmp PRIVATE
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelpdmp.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/tools/chelpexp.cpp"
 )
-target_link_libraries(chelpdmp PRIVATE kauai)
-
-add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4430>)
-add_library(kauai)
-target_include_directories(
-  kauai
-    PUBLIC
-      "${PROJECT_SOURCE_DIR}/kauai/src"
-      "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/generated/kauai/src>")
-
-target_sources(kauai
-  PRIVATE
-    "${PROJECT_SOURCE_DIR}/kauai/src/appb.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/base.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/chcm.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/chse.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/chunk.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/clip.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/clok.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/cmd.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/codec.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/codkauai.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/crf.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/ctl.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/cursor.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/dlg.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/docb.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/file.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/frame.rc"
-    "${PROJECT_SOURCE_DIR}/kauai/src/gfx.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/gob.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/groups.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/groups2.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/kidhelp.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/kidspace.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/kidworld.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/lex.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mbmp.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mbmpgui.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/midi.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mssio.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/pic.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/region.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/rtxt.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/rtxt2.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/scrcom.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/scrcomg.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/screxe.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/screxeg.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/sndm.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/spell.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/stream.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/text.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/textdoc.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/util.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilcopy.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilerro.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilglob.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilint.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilmem.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilrnd.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/utilstr.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/video.cpp"
-
-    # Windows implementations
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/appbwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/dlgwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/filewin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/fniwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gfxwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/memwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/menuwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/picwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gobwin.cpp>
-
-    # Stubs for Visual C++ 2.1 CRT functions
-    "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"   
-)
-
-if (ENABLE_ASM_X86)
-    target_sources(
-        kauai
-        PRIVATE
-        "${PROJECT_BINARY_DIR}/generated/kauai/src/kcdc_386.h"
-        "${PROJECT_BINARY_DIR}/generated/kauai/src/kcd2_386.h"
-    )
-endif()
-
-target_compile_definitions(kauai PUBLIC
-  _LPCVOID_DEFINED
-  STRICT)
-
-target_link_libraries(kauai
-  PUBLIC
-    3DMMForever::AudioMan
-    $<$<PLATFORM_ID:Windows>:Msacm32>
-    $<$<PLATFORM_ID:Windows>:Vfw32>
-    $<$<PLATFORM_ID:Windows>:Winmm>
-    $<$<PLATFORM_ID:Windows>:mpr>)
-
-# Unit tests
-add_executable(kauai_test
-    "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
-)
-target_link_libraries(
-    kauai_test
+target_link_libraries(chelpdmp
     PRIVATE
-    kauai
-    GTest::gtest_main
+    KauaiBase
+    KauaiFile
+    KauaiGroup
+    KauaiLexer
+    KauaiStream
+    KauaiScrCom
+    KauaiScrExe
+    KauaiChse
 )
-gtest_discover_tests(kauai_test)
