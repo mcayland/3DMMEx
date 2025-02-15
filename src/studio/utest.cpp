@@ -4276,7 +4276,7 @@ void APP::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
     Handle Windows messages for the main app window. Return true iff the
     default window proc should _NOT_ be called.
 ***************************************************************************/
-bool APP::_FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APP::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
 {
     AssertBaseThis(0);
     AssertVarMem(plwRet);

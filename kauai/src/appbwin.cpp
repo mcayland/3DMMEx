@@ -339,7 +339,7 @@ void APPB::_ShutDownViewer(void)
 /***************************************************************************
     Main window procedure (a static method).
 ***************************************************************************/
-LRESULT CALLBACK APPB::_LuWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw)
+LRESULT CALLBACK APPB::_LuWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw)
 {
     AssertNilOrPo(vpappb, 0);
     long lwRet;
@@ -356,7 +356,7 @@ LRESULT CALLBACK APPB::_LuWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw)
     Handle Windows messages for the main app window. Return true iff the
     default window proc should _NOT_ be called.
 ***************************************************************************/
-bool APPB::_FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);
@@ -585,7 +585,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *pl
 /***************************************************************************
     MDI window proc (a static method).
 ***************************************************************************/
-LRESULT CALLBACK APPB::_LuMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw)
+LRESULT CALLBACK APPB::_LuMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw)
 {
     AssertNilOrPo(vpappb, 0);
     long lwRet;
@@ -602,7 +602,7 @@ LRESULT CALLBACK APPB::_LuMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM l
     Handle MDI window messages. Returns true iff the default window proc
     should _NOT_ be called.
 ***************************************************************************/
-bool APPB::_FMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APPB::_FMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);
@@ -638,7 +638,7 @@ bool APPB::_FMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwR
     Common stuff between the two window procs. Returns true if the default
     window proc should _NOT_ be called.
 ***************************************************************************/
-bool APPB::_FCommonWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APPB::_FCommonWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);

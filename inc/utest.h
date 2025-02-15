@@ -219,7 +219,7 @@ class APP : public APP_PAR
     virtual void _Activate(bool fActive);
     virtual bool _FGetNextEvt(PEVT pevt);
 #ifdef WIN
-    virtual bool _FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
+    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet);
 #endif // WIN
 
   public:

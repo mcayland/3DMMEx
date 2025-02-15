@@ -191,12 +191,12 @@ class APPB : public APPB_PAR
 
 // window procs
 #ifdef WIN
-    static LRESULT CALLBACK _LuWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lParam);
-    static LRESULT CALLBACK _LuMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK _LuWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK _LuMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam);
 
-    virtual bool _FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
-    virtual bool _FMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
-    virtual bool _FCommonWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
+    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet);
+    virtual bool _FMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet);
+    virtual bool _FCommonWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet);
 
     // remove ourself from the clipboard viewer chain
     void _ShutDownViewer(void);

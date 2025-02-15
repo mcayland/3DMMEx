@@ -272,7 +272,7 @@ BOOL CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
             goto LFail;
 
         // create a timer so we can do idle processing
-        if (SetTimer(hdlg, (uint)hdlg, 10, pvNil) == 0)
+        if (SetTimer(hdlg, (UINT_PTR)hdlg, 10, pvNil) == 0)
             goto LFail;
 
         // create a container gob and attach the hdlg
@@ -361,7 +361,7 @@ BOOL CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
 
             // remove the pdlg property and kill the timer
             RemoveProp(hdlg, _szDlgProp);
-            KillTimer(hdlg, (uint)hdlg);
+            KillTimer(hdlg, (UINT_PTR)hdlg);
 
             EndDialog(hdlg, idit);
             return fTrue;
