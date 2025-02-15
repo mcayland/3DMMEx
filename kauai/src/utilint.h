@@ -89,9 +89,9 @@ inline short SwLow(long lw)
 }
 inline long LwHighLow(short swHigh, short swLow)
 {
-    return ((long)swHigh << 16) | (long)(ushort)swLow;
+    return ((long)swHigh << 16) | (long)(uint16_t)swLow;
 }
-inline ulong LuHighLow(ushort suHigh, ushort suLow)
+inline ulong LuHighLow(uint16_t suHigh, uint16_t suLow)
 {
     return ((ulong)suHigh << 16) | (ulong)suLow;
 }
@@ -116,18 +116,18 @@ inline long LwFromBytes(uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0)
     return ((long)b3 << 24) | ((long)b2 << 16) | ((long)b1 << 8) | (long)b0;
 }
 
-inline ushort SuHigh(long lw)
+inline uint16_t SuHigh(long lw)
 {
-    return (ushort)((ulong)lw >> 16);
+    return (uint16_t)((ulong)lw >> 16);
 }
-inline ushort SuLow(long lw)
+inline uint16_t SuLow(long lw)
 {
-    return (ushort)lw;
+    return (uint16_t)lw;
 }
 
 inline uint8_t BHigh(short sw)
 {
-    return (uint8_t)((ushort)sw >> 8);
+    return (uint8_t)((uint16_t)sw >> 8);
 }
 inline uint8_t BLow(short sw)
 {
@@ -137,9 +137,9 @@ inline short SwHighLow(uint8_t bHigh, uint8_t bLow)
 {
     return ((short)bHigh << 8) | (short)bLow;
 }
-inline ushort SuHighLow(uint8_t bHigh, uint8_t bLow)
+inline uint16_t SuHighLow(uint8_t bHigh, uint8_t bLow)
 {
-    return ((ushort)bHigh << 8) | (ushort)bLow;
+    return ((uint16_t)bHigh << 8) | (uint16_t)bLow;
 }
 
 inline short SwTruncLw(long lw)
@@ -154,11 +154,11 @@ inline short SwMax(short sw1, short sw2)
 {
     return sw1 >= sw2 ? sw1 : sw2;
 }
-inline ushort SuMin(ushort su1, ushort su2)
+inline uint16_t SuMin(uint16_t su1, uint16_t su2)
 {
     return su1 < su2 ? su1 : su2;
 }
-inline ushort SuMax(ushort su1, ushort su2)
+inline uint16_t SuMax(uint16_t su1, uint16_t su2)
 {
     return su1 >= su2 ? su1 : su2;
 }

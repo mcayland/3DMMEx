@@ -284,7 +284,7 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
     FillPb(pmpsuibStart, LwMul(SIZEOF(long), 0x10000), 0xCC);
     for (ibSrc = 0; ibSrc < cbSrc - 1; ibSrc++)
     {
-        ushort suCur = ((ushort)prgbSrc[ibSrc]) << 8 | (ushort)prgbSrc[ibSrc + 1];
+        uint16_t suCur = ((uint16_t)prgbSrc[ibSrc]) << 8 | (uint16_t)prgbSrc[ibSrc + 1];
         ibTest = pmpsuibStart[suCur];
         pmpsuibStart[suCur] = ibSrc;
         pmpibibNext[ibSrc] = ibTest;
@@ -608,7 +608,7 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
     FillPb(pmpsuibStart, LwMul(SIZEOF(long), 0x10000), 0xCC);
     for (ibSrc = 0; ibSrc < cbSrc - 1; ibSrc++)
     {
-        ushort suCur = ((ushort)prgbSrc[ibSrc]) << 8 | (ushort)prgbSrc[ibSrc + 1];
+        uint16_t suCur = ((uint16_t)prgbSrc[ibSrc]) << 8 | (uint16_t)prgbSrc[ibSrc + 1];
         ibTest = pmpsuibStart[suCur];
         pmpsuibStart[suCur] = ibSrc;
         pmpibibNext[ibSrc] = ibTest;

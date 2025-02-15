@@ -1305,13 +1305,13 @@ ulong LuVolScale(ulong luVol, long vlm)
 {
     Assert(kvlmFull == 0x10000, "this code assumes kvlmFull is 0x10000");
     ulong luHigh, luLow;
-    ushort suHigh, suLow;
+    uint16_t suHigh, suLow;
 
     MulLu(SuLow(luVol), vlm, &luHigh, &luLow);
-    suLow = (luHigh > 0) ? (ushort)(-1) : SuHigh(luLow);
+    suLow = (luHigh > 0) ? (uint16_t)(-1) : SuHigh(luLow);
 
     MulLu(SuHigh(luVol), vlm, &luHigh, &luLow);
-    suHigh = (luHigh > 0) ? (ushort)(-1) : SuHigh(luLow);
+    suHigh = (luHigh > 0) ? (uint16_t)(-1) : SuHigh(luLow);
 
     return LuHighLow(suHigh, suLow);
 }

@@ -20,7 +20,7 @@ RTCLASS(LEXB)
 achar _szPoundLine[] = PszLit("#line");
 #define kcchPoundLine (CvFromRgv(_szPoundLine) - 1)
 
-ushort LEXB::_mpchgrfct[128] = {
+uint16_t LEXB::_mpchgrfct[128] = {
     // 0x00 - 0x07
     fctNil,
     fctNil,

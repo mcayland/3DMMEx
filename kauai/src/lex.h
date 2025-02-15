@@ -119,7 +119,7 @@ class LEXB : public LEXB_PAR
     MARKMEM
 
   protected:
-    static ushort _mpchgrfct[];
+    static uint16_t _mpchgrfct[];
 
     PFIL _pfil; // exactly one of _pfil, _pbsf should be non-nil
     PBSF _pbsf;

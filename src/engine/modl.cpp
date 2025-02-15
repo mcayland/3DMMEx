@@ -173,8 +173,8 @@ bool MODL::_FInit(PBLCK pblck)
         }
 
         _pbmdl->flags = BR_MODF_PREPREPARED;
-        _pbmdl->nprepared_vertices = (ushort)modlf.cver;
-        _pbmdl->nprepared_faces = (ushort)modlf.cfac;
+        _pbmdl->nprepared_vertices = (uint16_t)modlf.cver;
+        _pbmdl->nprepared_faces = (uint16_t)modlf.cfac;
 
         // The following code assumes that there is no material data
         // in the models.  If there is material data, the code will have

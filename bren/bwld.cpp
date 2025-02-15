@@ -139,8 +139,8 @@ bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
     Assert(kcbitPixelZ == 16, "change _bpmpZ.type");
     _bpmpZ.type = BR_PMT_DEPTH_16;
     _bpmpZ.row_bytes = (short)LwMul(dxp, kcbPixelZ);
-    _bpmpZ.width = (ushort)dxp;
-    _bpmpZ.height = (ushort)dyp;
+    _bpmpZ.width = (uint16_t)dxp;
+    _bpmpZ.height = (uint16_t)dyp;
     _bpmpZ.origin_x = dxp / 2;
     _bpmpZ.origin_y = dyp / 2;
     _bpmpZ.pixels = _pzbmpWorking->Prgb();
@@ -163,8 +163,8 @@ bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
     Assert(kcbitPixelRGB == 8, "change _bpmpRGB.type");
     _bpmpRGB.type = BR_PMT_INDEX_8;
     _bpmpRGB.row_bytes = (short)LwMul(dxp, kcbPixelRGB);
-    _bpmpRGB.width = (ushort)dxp;
-    _bpmpRGB.height = (ushort)dyp;
+    _bpmpRGB.width = (uint16_t)dxp;
+    _bpmpRGB.height = (uint16_t)dyp;
     _bpmpRGB.origin_x = dxp / 2;
     _bpmpRGB.origin_y = dyp / 2;
     _bpmpRGB.pixels = _pgptWorking->PrgbLockPixels();

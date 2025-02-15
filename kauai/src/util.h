@@ -76,11 +76,10 @@ typedef HCURSOR HCRS;
 const uint8_t kbMax = 0xFF;
 const uint8_t kbMin = 0;
 
-typedef unsigned short ushort;
 const short kswMax = (short)0x7FFF;
 const short kswMin = -kswMax; // so -kswMin is positive
-const ushort ksuMax = 0xFFFF;
-const ushort ksuMin = 0;
+const uint16_t ksuMax = 0xFFFF;
+const uint16_t ksuMin = 0;
 
 typedef unsigned int uint;
 
@@ -105,7 +104,7 @@ typedef char schar;
 const schar kschMax = (schar)0x7F;
 const schar kschMin = (schar)0x80;
 #endif //! MAC
-typedef ushort wchar;
+typedef uint16_t wchar;
 const wchar kwchMax = ksuMax;
 const wchar kwchMin = ksuMin;
 #ifdef UNICODE

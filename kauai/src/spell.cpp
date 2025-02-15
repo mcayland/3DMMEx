@@ -365,7 +365,7 @@ bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PS
     }
 
     ClearPb(&sib, SIZEOF(sib));
-    sib.cch = (ushort)cch;
+    sib.cch = (uint16_t)cch;
     sib.lrgch = prgch;
     sib.cMdr = 1;
     sib.lrgMdr = &_mdrs.mdr;
@@ -434,7 +434,7 @@ bool SPLC::FSuggest(achar *prgch, long cch, bool fFirst, PSTN pstn)
     }
 
     ClearPb(&sib, SIZEOF(sib));
-    sib.cch = (ushort)cch;
+    sib.cch = (uint16_t)cch;
     sib.lrgch = prgch;
     sib.cMdr = 1;
     sib.lrgMdr = &_mdrs.mdr;

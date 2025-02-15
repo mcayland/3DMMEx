@@ -1004,7 +1004,7 @@ void RTW::Draw(PGNV pgnv, RC *prcClip)
 
 long _LwSqrt(long lw)
 {
-    ushort wHi, wLo, wMid;
+    uint16_t wHi, wLo, wMid;
     long lwT;
 
     AssertVar(lw >= 0, "sqrt of negative", &lw);

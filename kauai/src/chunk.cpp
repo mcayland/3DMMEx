@@ -222,8 +222,8 @@ struct CRPSM
     CKI cki;          // chunk id
     FP fp;            // location on file
     ulong luGrfcrpCb; // low byte is the grfcrp, high 3 bytes is cb
-    ushort ckid;      // number of owned chunks
-    ushort ccrpRef;   // number of owners of this chunk
+    uint16_t ckid;    // number of owned chunks
+    uint16_t ccrpRef; // number of owners of this chunk
 
     long BvRgch(void)
     {
@@ -276,7 +276,7 @@ const BOM kbomCrpsm = kbomCrpbgGrfcrp;
 typedef CRPSM CRP;
 typedef CRPBG CRPOTH;
 const long kcbMaxCrp = kcbMaxCrpsm;
-typedef ushort CKID;
+typedef uint16_t CKID;
 const long kckidMax = ksuMax;
 const BOM kbomCrp = kbomCrpsm;
 

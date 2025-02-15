@@ -917,12 +917,12 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
     // controller changes.
     struct MKEY
     {
-        ushort grfbitProgram;
-        ushort grfbitChannelPressure;
-        ushort grfbitPitchWheel;
-        ushort fTempo : 1;
+        uint16_t grfbitProgram;
+        uint16_t grfbitChannelPressure;
+        uint16_t grfbitPitchWheel;
+        uint16_t fTempo : 1;
 
-        ushort rggrfbitControl[120];
+        uint16_t rggrfbitControl[120];
     };
 
     MKEY mkey;
@@ -937,8 +937,8 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
     long cb;
     ulong dts;
     long igrfbit;
-    ushort fbit;
-    ushort *pgrfbit;
+    uint16_t fbit;
+    uint16_t *pgrfbit;
     uint8_t bT;
 
     ClearPb(&mkey, SIZEOF(mkey));

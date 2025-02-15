@@ -345,7 +345,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
 
         if (osk == MacWin(koskUniWin, koskUniMac))
             SwapBytesRgsw(&chw, 1);
-        cch = (long)(ushort)chw;
+        cch = (long)(uint16_t)chw;
 
         if (cch > kcchMaxStn || ibT + (cch + 1) * SIZEOF(wchar) > cbMax)
             goto LFail;
@@ -457,7 +457,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
 
         if (osk == MacWin(koskUniWin, koskUniMac))
             SwapBytesRgsw(&chw, 1);
-        cch = (long)(ushort)chw;
+        cch = (long)(uint16_t)chw;
 
         if (cch > kcchMaxStn || ibT + (cch + 1) * SIZEOF(wchar) > cbMax ||
             !pblck->FReadRgb(rgb, (cch + 1) * SIZEOF(wchar), ibT) || ((wchar *)rgb)[cch] != 0)

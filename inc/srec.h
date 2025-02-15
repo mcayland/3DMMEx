@@ -57,11 +57,11 @@ class RIFF
         _dwFmtTag = FMT__TAG;
         _dwFmtLength = sizeof(WAVEFORMATEX);
         _wfx.wFormatTag = WAVE_FORMAT_PCM;
-        _wfx.nChannels = (ushort)cchan;
+        _wfx.nChannels = (uint16_t)cchan;
         _wfx.nSamplesPerSec = csampSec;
         _wfx.nAvgBytesPerSec = csampSec * cbSample * cchan;
-        _wfx.nBlockAlign = (ushort)cchan * (ushort)cbSample;
-        _wfx.wBitsPerSample = (ushort)LwMul(8, cbSample);
+        _wfx.nBlockAlign = (uint16_t)cchan * (uint16_t)cbSample;
+        _wfx.wBitsPerSample = (uint16_t)LwMul(8, cbSample);
         _wfx.cbSize = 0;
         _dwDataTag = DATA_TAG;
         _dwDataLength = dwLength;

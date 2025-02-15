@@ -623,7 +623,7 @@ bool GSTB::_FTranslateGrst(short osk)
             CopyPb(PvAddBv(pvSrc, bstOld), &chw, SIZEOF(wchar));
             if (osk == MacWin(koskUniWin, koskUniMac))
                 SwapBytesRgsw(&chw, 1);
-            cch = (long)(ushort)chw;
+            cch = (long)(uint16_t)chw;
         }
 
         if (!FIn(cch, 0, kcchMaxSt + 1) || bstOld + (cch + 1) * cbChar > cbSrc)
