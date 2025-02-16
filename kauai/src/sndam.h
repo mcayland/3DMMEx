@@ -47,7 +47,7 @@ class SDAM : public SDAM_PAR
     ASSERT
 
   protected:
-    ulong _luVolSys;
+    DWORD _luVolSys;
     long _vlm;
     bool _fAudioManInited : 1;
 
