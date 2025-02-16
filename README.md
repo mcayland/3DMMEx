@@ -30,7 +30,8 @@ Use CMake to build the project. The project includes a CMakePresets.json file th
   * Clang builds: Choose a `x86-clang-*` preset to compile with Clang instead of the Microsoft Visual C++ compiler
 * Run `cmake --build build\<preset-name> --target install`
   * The `--target install` is optional but recommended. This will create a directory `dist\<preset-name>` with the directory layout required for 3DMM to run.
-  * Kauai development tools (eg. Chelp, Ched) are not built by default.
+  * Kauai development tools (eg. Chelp, Ched) are not built by default. You can build them by building the `tools` target.
+* To run tests, run `ctest --test-dir build\<preset-name>`
 * To build a release package, run `cmake --build build\<preset-name> --target dist`
   * A ZIP archive containing a portable install is created in the build directory.
   * If WiX is installed, an MSI package is also created.
