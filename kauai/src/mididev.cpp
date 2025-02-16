@@ -45,7 +45,7 @@ class MIDO : public MIDO_PAR
 
     // system volume level - to be saved and restored. The volume we set
     // is always relative to this
-    ulong _luVolSys;
+    DWORD _luVolSys;
 
     long _vlmBase; // our current volume relative to _luVolSys.
     long _vlm;     // our current volume relative to _vlmBase
