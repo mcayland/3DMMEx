@@ -386,9 +386,9 @@ class MPQUE : public MPQUE_PAR
     virtual void _PauseQueue(long isndinMin);
     virtual void _ResumeQueue(long isndinMin);
 
-    static ulong __stdcall _ThreadProc(void *pv);
+    static DWORD __stdcall _ThreadProc(LPVOID pv);
 
-    ulong _LuThread(void);
+    DWORD _LuThread(void);
     void _DoEvent(bool fRestart, long *pdtsWait);
     bool _FGetEvt(void);
     bool _FStartQueue(void);
@@ -485,7 +485,7 @@ PMPQUE MPQUE::PmpqueNew(void)
 bool MPQUE::_FInit(void)
 {
     AssertBaseThis(0);
-    ulong luThread;
+    DWORD luThread;
 
     if (!MPQUE_PAR::_FInit())
         return fFalse;
@@ -593,7 +593,7 @@ void MPQUE::_ResumeQueue(long isndinMin)
 /***************************************************************************
     AT: Static method. Thread function for the midi thread object.
 ***************************************************************************/
-ulong __stdcall MPQUE::_ThreadProc(void *pv)
+DWORD __stdcall MPQUE::_ThreadProc(LPVOID pv)
 {
     PMPQUE pmpque = (PMPQUE)pv;
 
@@ -605,7 +605,7 @@ ulong __stdcall MPQUE::_ThreadProc(void *pv)
 /***************************************************************************
     AT: The midi playback thread.
 ***************************************************************************/
-ulong MPQUE::_LuThread(void)
+DWORD MPQUE::_LuThread(void)
 {
     AssertThis(0);
     bool fRestart;
