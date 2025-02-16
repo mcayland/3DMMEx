@@ -106,7 +106,7 @@ bool SPLC::_FEnsureDll(SC_LID sclid)
     AssertVar(_hlib == hNil, "why is _hlib not nil?", &_hlib);
 
     HKEY hkey;
-    long cb, lwType;
+    DWORD cb, lwType;
     STN stn;
     SZ sz;
 
@@ -116,9 +116,9 @@ bool SPLC::_FEnsureDll(SC_LID sclid)
         goto LError;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, pvNil, &cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, (uint8_t *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, (uint8_t *)sz, &cb))
     {
         RegCloseKey(hkey);
         goto LError;
@@ -166,7 +166,7 @@ bool SPLC::_FEnsureMainDict(SC_LID sclid, PFNI pfni)
 
 #ifdef WIN
     HKEY hkey;
-    long cb, lwType;
+    DWORD cb, lwType;
     STN stn;
     SZ sz;
 
@@ -176,9 +176,9 @@ bool SPLC::_FEnsureMainDict(SC_LID sclid, PFNI pfni)
         goto LError;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, pvNil, &cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, (uint8_t *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, (uint8_t *)sz, &cb))
     {
         RegCloseKey(hkey);
         goto LError;
