@@ -574,7 +574,7 @@ PMSMIX MSMIX::PmsmixNew(void)
 bool MSMIX::_FInit(void)
 {
     AssertBaseThis(0);
-    ulong luThread;
+    DWORD luThread;
 
     if (pvNil == (_pglmsos = GL::PglNew(SIZEOF(MSOS))))
         return fFalse;
@@ -1138,7 +1138,7 @@ void MSMIX::_Notify(void *pvData, PMDWS pmdws)
 /***************************************************************************
     AT: Static method. Thread function for the MSMIX object.
 ***************************************************************************/
-ulong __stdcall MSMIX::_ThreadProc(void *pv)
+DWORD __stdcall MSMIX::_ThreadProc(LPVOID pv)
 {
     PMSMIX pmsmix = (PMSMIX)pv;
 
@@ -1151,7 +1151,7 @@ ulong __stdcall MSMIX::_ThreadProc(void *pv)
     AT: This thread just sleeps until the next sound is due to expire, then
     wakes up and nukes any expired sounds.
 ***************************************************************************/
-ulong MSMIX::_LuThread(void)
+DWORD MSMIX::_LuThread(void)
 {
     AssertThis(0);
     ulong tsCur;
@@ -1429,7 +1429,7 @@ PWMS WMS::PwmsNew(PFNMIDI pfn, ulong luUser)
 bool WMS::_FInit(void)
 {
     OSVERSIONINFO osv;
-    ulong luThread;
+    DWORD luThread;
 
     // Make sure we're on Win95 and not NT, since the API exists on NT 3.51
     // but it fails.
@@ -1911,7 +1911,7 @@ void WMS::_Notify(HMS hms, PMH pmh)
     just waits for the event to be triggered, indicating that we got
     a callback from the midiStream stuff and it's time to do our callbacks.
 ***************************************************************************/
-ulong __stdcall WMS::_ThreadProc(void *pv)
+DWORD __stdcall WMS::_ThreadProc(LPVOID pv)
 {
     PWMS pwms = (PWMS)pv;
 
@@ -1924,7 +1924,7 @@ ulong __stdcall WMS::_ThreadProc(void *pv)
     AT: This thread just sleeps until the next sound is due to expire, then
     wakes up and nukes any expired sounds.
 ***************************************************************************/
-ulong WMS::_LuThread(void)
+DWORD WMS::_LuThread(void)
 {
     AssertThis(0);
 
@@ -2042,7 +2042,7 @@ POMS OMS::PomsNew(PFNMIDI pfn, ulong luUser)
 bool OMS::_FInit(void)
 {
     AssertBaseThis(0);
-    ulong luThread;
+    DWORD luThread;
 
     if (pvNil == (_pglmsb = GL::PglNew(SIZEOF(MSB))))
         return fFalse;
@@ -2228,7 +2228,7 @@ void OMS::StopPlaying(void)
 /***************************************************************************
     AT: Static method. Thread function for the midi stream object.
 ***************************************************************************/
-ulong __stdcall OMS::_ThreadProc(void *pv)
+DWORD __stdcall OMS::_ThreadProc(void *pv)
 {
     POMS poms = (POMS)pv;
 
@@ -2240,7 +2240,7 @@ ulong __stdcall OMS::_ThreadProc(void *pv)
 /***************************************************************************
     AT: The midi stream playback thread.
 ***************************************************************************/
-ulong OMS::_LuThread(void)
+DWORD OMS::_LuThread(void)
 {
     AssertThis(0);
     MSB msb;

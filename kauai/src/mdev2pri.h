@@ -174,8 +174,8 @@ class MSMIX : public MSMIX_PAR
     static void _MidiProc(ulong luUser, void *pvData, ulong luData);
     void _Notify(void *pvData, PMDWS pmdws);
 
-    static ulong __stdcall _ThreadProc(void *pv);
-    ulong _LuThread(void);
+    static DWORD __stdcall _ThreadProc(void *pv);
+    DWORD _LuThread(void);
 
   public:
     static PMSMIX PmsmixNew(void);
@@ -319,8 +319,8 @@ class WMS : public WMS_PAR
     static void __stdcall _MidiProc(HMS hms, ulong msg, ulong luUser, ulong lu1, ulong lu2);
     void _Notify(HMS hms, PMH pmh);
 
-    static ulong __stdcall _ThreadProc(void *pv);
-    ulong _LuThread(void);
+    static DWORD __stdcall _ThreadProc(void *pv);
+    DWORD _LuThread(void);
 
   public:
     static PWMS PwmsNew(PFNMIDI pfn, ulong luUser);
@@ -378,8 +378,8 @@ class OMS : public OMS_PAR
     virtual bool _FOpen(void);
     virtual bool _FClose(void);
 
-    static ulong __stdcall _ThreadProc(void *pv);
-    ulong _LuThread(void);
+    static DWORD __stdcall _ThreadProc(void *pv);
+    DWORD _LuThread(void);
     void _ReleaseBuffers(void);
 
   public:
