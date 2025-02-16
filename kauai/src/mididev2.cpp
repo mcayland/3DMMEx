@@ -1260,7 +1260,7 @@ void MISI::_Reset(void)
 void MISI::_GetSysVol(void)
 {
     Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
-    ulong lu0, lu1, lu2;
+    DWORD lu0, lu1, lu2;
 
     switch (_tBogusDriver)
     {
@@ -1313,7 +1313,7 @@ void MISI::_GetSysVol(void)
 void MISI::_SetSysVol(ulong luVol)
 {
     Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
-    midiOutSetVolume(_hms, luVol);
+    midiOutSetVolume(_hms, DWORD(luVol));
 }
 
 /***************************************************************************
