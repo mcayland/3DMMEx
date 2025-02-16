@@ -219,7 +219,7 @@ class MISI : public MISI_PAR
     // system volume level - to be saved and restored. The volume we set
     // is always relative to this
     tribool _tBogusDriver; // to indicate whether midiOutGetVolume really works
-    ulong _luVolSys;
+    DWORD _luVolSys;
     long _vlmBase; // our current volume relative to _luVolSys.
 
     MISI(PFNMIDI pfn, ulong luUser);
