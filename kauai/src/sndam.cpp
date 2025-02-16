@@ -26,7 +26,7 @@ ASSERTNAME
 long SDAM::vcbMaxMemWave = 40 * 1024;
 
 static IAMMixer *_pamix; // the audioman mixer
-static ulong _luGroup;   // the group number
+static DWORD _luGroup;   // the group number
 static bool _fGrouped;   // whether new sounds are grouped
 static long _cactGroup;  // group nesting count
 
