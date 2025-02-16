@@ -219,7 +219,7 @@ bool FIL::FReadRgb(void *pv, long cb, FP fp)
     AssertIn(fp, 0, klwMax);
     AssertPvCb(pv, cb);
 
-    long cbT;
+    DWORD cbT;
     bool fRet = fFalse;
 
     if (cb <= 0)
@@ -237,7 +237,7 @@ bool FIL::FReadRgb(void *pv, long cb, FP fp)
         goto LRet;
 
     Assert(dfp >= cb, "read past EOF");
-    if (!ReadFile(_hfile, pv, cb, (ulong *)&cbT, pvNil) || cb != cbT)
+    if (!ReadFile(_hfile, pv, cb, &cbT, pvNil) || cb != cbT)
     {
         PushErc(ercFileGeneral);
         _el = kelRead;
@@ -261,7 +261,7 @@ bool FIL::FWriteRgb(const void *pv, long cb, FP fp)
     AssertIn(fp, 0, klwMax);
     AssertPvCb(pv, cb);
 
-    long cbT;
+    DWORD cbT;
     bool fRet = fFalse;
 
     if (cb <= 0)
@@ -279,7 +279,7 @@ bool FIL::FWriteRgb(const void *pv, long cb, FP fp)
         goto LRet;
 
     _fWrote = fTrue;
-    if (!WriteFile(_hfile, pv, cb, (ulong *)&cbT, pvNil) || cb != cbT)
+    if (!WriteFile(_hfile, pv, cb, &cbT, pvNil) || cb != cbT)
     {
         PushErc(ercFileGeneral);
         _el = kelWrite;
