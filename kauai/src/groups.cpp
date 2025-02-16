@@ -54,7 +54,7 @@ GRPB::~GRPB(void)
     Ensure that the two sections are at least the given cb's large.
     if (grfgrp & fgrpShrink), makes them exact.
 ***************************************************************************/
-bool GRPB::_FEnsureSizes(long cbMin1, long cbMin2, ulong grfgrp)
+bool GRPB::_FEnsureSizes(long cbMin1, long cbMin2, uint32_t grfgrp)
 {
     AssertThis(0);
     Assert(cbMin1 >= 0 && cbMin2 >= 0, "negative sizes");
@@ -105,7 +105,7 @@ bool GRPB::_FEnsureHqCb(HQ *phq, long cb, long cbMinGrow, long *pcb)
     AssertIn(*pcb, 0, kcbMax);
 
     // limit the size
-    if ((ulong)cb >= kcbMax)
+    if ((uint32_t)cb >= kcbMax)
         return fFalse;
 
     AssertIn(cb, *pcb + 1, kcbMax);
@@ -256,7 +256,7 @@ bool GRPB::_FReadData(PBLCK pblck, long cb1, long cb2, long ib)
 /***************************************************************************
     Assert the validity of the grpb stuff.
 ***************************************************************************/
-void GRPB::AssertValid(ulong grfobj)
+void GRPB::AssertValid(uint32_t grfobj)
 {
     GRPB_PAR::AssertValid(grfobj | fobjAllocated);
     AssertIn(_cb1, 0, kcbMax);
@@ -360,7 +360,7 @@ void GLB::SetMinGrow(long cvAdd)
 /***************************************************************************
     Assert the validity of a list (GL or AL).
 ***************************************************************************/
-void GLB::AssertValid(ulong grfobj)
+void GLB::AssertValid(uint32_t grfobj)
 {
     GLB_PAR::AssertValid(grfobj);
     AssertIn(_cbEntry, 1, kcbMax);
@@ -711,7 +711,7 @@ bool GL::FSetIvMac(long ivMacNew)
     fgrpShrink is set, will shrink the list if it has more than cvAdd
     available entries.
 ***************************************************************************/
-bool GL::FEnsureSpace(long cvAdd, ulong grfgrp)
+bool GL::FEnsureSpace(long cvAdd, uint32_t grfgrp)
 {
     AssertThis(0);
     AssertIn(cvAdd, 0, kcbMax);
@@ -936,7 +936,7 @@ bool AL::FFree(long iv)
     fgrpShrink is set, will try to shrink the list if it has more than
     cvAdd available entries.
 ***************************************************************************/
-bool AL::FEnsureSpace(long cvAdd, ulong grfgrp)
+bool AL::FEnsureSpace(long cvAdd, uint32_t grfgrp)
 {
     AssertIn(cvAdd, 0, kcbMax);
     AssertThis(0);
@@ -1056,7 +1056,7 @@ void AL::Delete(long iv)
 /***************************************************************************
     Check the validity of an allocated list.
 ***************************************************************************/
-void AL::AssertValid(ulong grfobj)
+void AL::AssertValid(uint32_t grfobj)
 {
     long cT, iv;
 
@@ -1257,7 +1257,7 @@ bool GGB::FFree(long iv)
     If there is more than enough room and fgrpShrink is passed, the GST
     will shrink.
 ***************************************************************************/
-bool GGB::FEnsureSpace(long cvAdd, long cbAdd, ulong grfgrp)
+bool GGB::FEnsureSpace(long cvAdd, long cbAdd, uint32_t grfgrp)
 {
     AssertThis(0);
     AssertIn(cvAdd, 0, kcbMax);
@@ -1792,7 +1792,7 @@ void GGB::Merge(long ivSrc, long ivDst)
 /***************************************************************************
     Validate a group.
 ***************************************************************************/
-void GGB::AssertValid(ulong grfobj)
+void GGB::AssertValid(uint32_t grfobj)
 {
     LOC loc;
     long iloc;
@@ -2078,7 +2078,7 @@ void GG::Swap(long iv1, long iv2)
 /***************************************************************************
     Validate a group.
 ***************************************************************************/
-void GG::AssertValid(ulong grfobj)
+void GG::AssertValid(uint32_t grfobj)
 {
     GG_PAR::AssertValid(grfobj);
     AssertVar(_clocFree == cvNil, "bad _clocFree in GG", &_clocFree);
@@ -2274,7 +2274,7 @@ void AG::Delete(long iv)
 /***************************************************************************
     Validate a group.
 ***************************************************************************/
-void AG::AssertValid(ulong grfobj)
+void AG::AssertValid(uint32_t grfobj)
 {
     AG_PAR::AssertValid(grfobj);
     AssertIn(_clocFree, 0, LwMax(1, _ivMac));

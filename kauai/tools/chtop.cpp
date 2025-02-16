@@ -425,7 +425,7 @@ PHETD HEDO::PhetdOpenPrev(PHETD phetd)
 /***************************************************************************
     Assert the validity of the HEDO.
 ***************************************************************************/
-void HEDO::AssertValid(ulong grf)
+void HEDO::AssertValid(uint32_t grf)
 {
     HEDO_PAR::AssertValid(grf);
     AssertPo(_pcfl, 0);
@@ -509,7 +509,7 @@ void TSEL::Adjust(void)
 /***************************************************************************
     Assert the validity of the sel.
 ***************************************************************************/
-void TSEL::AssertValid(ulong grf)
+void TSEL::AssertValid(uint32_t grf)
 {
     TSEL_PAR::AssertValid(0);
     AssertPo(_pcfl, 0);
@@ -726,7 +726,7 @@ void HEDG::_ShowSel(void)
 /***************************************************************************
     Handle a mouse down in our content.
 ***************************************************************************/
-void HEDG::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void HEDG::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     long icki, ickiNew;
@@ -838,7 +838,7 @@ long HEDG::_ScvMax(bool fVert)
 /***************************************************************************
     Handle enabling/disabling HEDG commands.
 ***************************************************************************/
-bool HEDG::FEnableHedgCmd(PCMD pcmd, ulong *pgrfeds)
+bool HEDG::FEnableHedgCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -1617,7 +1617,7 @@ bool HEDG::FCmdDump(PCMD pcmd)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void HEDG::AssertValid(ulong grf)
+void HEDG::AssertValid(uint32_t grf)
 {
     HEDG_PAR::AssertValid(0);
     AssertPo(&_tsel, 0);
@@ -2145,7 +2145,7 @@ void HETD::GetHtopStn(long istn, PSTN pstn)
 /***************************************************************************
     Assert the validity of a HETD.
 ***************************************************************************/
-void HETD::AssertValid(ulong grf)
+void HETD::AssertValid(uint32_t grf)
 {
     HETD_PAR::AssertValid(0);
     AssertNilOrPo(_pcfl, 0);
@@ -2509,7 +2509,7 @@ bool HETG::_FCopySel(PDOCB *ppdocb)
     Draw extra stuff for the line. In our case we put a box around grouped
     text.
 ***************************************************************************/
-void HETG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, ulong grftxtg)
+void HETG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, uint32_t grftxtg)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
@@ -2696,7 +2696,7 @@ bool HETG::FCmdLineSpacing(PCMD pcmd)
 /***************************************************************************
     Handle enabling/disabling HETG commands.
 ***************************************************************************/
-bool HETG::FEnableHetgCmd(PCMD pcmd, ulong *pgrfeds)
+bool HETG::FEnableHetgCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -3474,7 +3474,7 @@ HTRU::HTRU(GCB *pgcb, PTXTG ptxtg) : HTRU_PAR(pgcb)
     Create a new text ruler.
 ***************************************************************************/
 PHTRU HTRU::PhtruNew(GCB *pgcb, PTXTG ptxtg, long dxpTab, long dxpDoc, long dypDoc, long xpLeft, long onn, long dypFont,
-                     ulong grfont)
+                     uint32_t grfont)
 {
     AssertVarMem(pgcb);
     AssertPo(ptxtg, 0);
@@ -3715,7 +3715,7 @@ void HTRU::SetDypHeight(long dyp)
 /***************************************************************************
     Assert the validity of a HTRU.
 ***************************************************************************/
-void HTRU::AssertValid(ulong grf)
+void HTRU::AssertValid(uint32_t grf)
 {
     HTRU_PAR::AssertValid(0);
     AssertPo(_ptxtg, 0);

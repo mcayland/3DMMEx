@@ -833,7 +833,7 @@ bool APE::FGetMaterial(long ibset, tribool *pfMtrl, long *pcmid, TAG *ptagMtrl)
 /***************************************************************************
     Assert the validity of the APE.
 ***************************************************************************/
-void APE::AssertValid(ulong grf)
+void APE::AssertValid(uint32_t grf)
 {
     APE_PAR::AssertValid(fobjAllocated);
     AssertPo(_pbwld, 0);

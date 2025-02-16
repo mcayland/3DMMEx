@@ -289,7 +289,7 @@ bool ZBMP::FWrite(PCFL pcfl, CTG ctg, CNO *pcno)
 /***************************************************************************
     Assert the validity of the ZBMP.
 ***************************************************************************/
-void ZBMP::AssertValid(ulong grf)
+void ZBMP::AssertValid(uint32_t grf)
 {
     ZBMP_PAR::AssertValid(fobjAllocated);
     AssertPvCb(_prgb, _cb);

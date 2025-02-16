@@ -184,7 +184,7 @@ void ERS::Flush(long erc)
 /***************************************************************************
     Assert the error stack is valid.
 ***************************************************************************/
-void ERS::AssertValid(ulong grf)
+void ERS::AssertValid(uint32_t grf)
 {
     ERS_PAR::AssertValid(0);
     AssertIn(_cerd, 0, kcerdMax + 1);

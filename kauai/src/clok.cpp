@@ -86,7 +86,7 @@ PCLOK CLOK::_pclokFirst;
     that this clock should reset itself to zero on key or mouse input.
     fclokNoSlip specifies that the clok should not let time slip.
 ***************************************************************************/
-CLOK::CLOK(long hid, ulong grfclok) : CMH(hid)
+CLOK::CLOK(long hid, uint32_t grfclok) : CMH(hid)
 {
     _pclokNext = _pclokFirst;
     _pclokFirst = this;
@@ -167,7 +167,7 @@ void CLOK::RemoveCmh(PCMH pcmh)
 /***************************************************************************
     Start the clock.
 ***************************************************************************/
-void CLOK::Start(ulong tim)
+void CLOK::Start(uint32_t tim)
 {
     AssertThis(0);
     _timBase = _timCur = tim;
@@ -194,7 +194,7 @@ void CLOK::Stop(void)
     last computed time value is returned, otherwise the time is computed
     from the current application time.
 ***************************************************************************/
-ulong CLOK::TimCur(bool fAdjustForDelay)
+uint32_t CLOK::TimCur(bool fAdjustForDelay)
 {
     AssertThis(0);
 
@@ -250,7 +250,7 @@ bool CLOK::FCmdAll(PCMD pcmd)
     CMD cmd;
     long ialad;
     ALAD alad;
-    ulong tsCur, timCur;
+    uint32_t tsCur, timCur;
 
     _dtimAlarm = 0;
     if (pcmd->cid == cidAlarm)
@@ -347,7 +347,7 @@ bool CLOK::FCmdAll(PCMD pcmd)
 /***************************************************************************
     Assert the validity of a CLOK.
 ***************************************************************************/
-void CLOK::AssertValid(ulong grf)
+void CLOK::AssertValid(uint32_t grf)
 {
     CLOK_PAR::AssertValid(0);
     AssertNilOrPo(_pglalad, 0);

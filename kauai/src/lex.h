@@ -136,7 +136,7 @@ class LEXB : public LEXB_PAR
     bool _fSkipToNextLine : 1;
     bool _fUnionStrings : 1;
 
-    ulong _GrfctCh(achar ch)
+    uint32_t _GrfctCh(achar ch)
     {
         return (uchar)ch < 128 ? _mpchgrfct[(uint8_t)ch] : fctNil;
     }

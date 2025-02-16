@@ -66,7 +66,7 @@ CODM::~CODM(void)
 /***************************************************************************
     Assert the validity of a CODM.
 ***************************************************************************/
-void CODM::AssertValid(ulong grf)
+void CODM::AssertValid(uint32_t grf)
 {
     CODM_PAR::AssertValid(0);
     Assert(cfmtNil != _cfmtDef, "nil default compression");

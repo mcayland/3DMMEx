@@ -71,7 +71,7 @@ class MUB : public MUB_PAR
     bool _FFindMlst(long imnu, long imni, MLST *pmlst = pvNil, long *pimlst = pvNil);
     bool _FGetCmdFromCode(long lwCode, CMD *pcmd);
     void _Free(void);
-    bool _FFetchRes(ulong ridMenuBar);
+    bool _FFetchRes(uint32_t ridMenuBar);
 #endif // MAC
 
 #ifdef WIN
@@ -103,7 +103,7 @@ class MUB : public MUB_PAR
   public:
     ~MUB(void);
 
-    static PMUB PmubNew(ulong ridMenuBar);
+    static PMUB PmubNew(uint32_t ridMenuBar);
 
     virtual void Set(void);
     virtual void Clean(void);

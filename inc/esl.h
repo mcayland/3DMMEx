@@ -269,7 +269,7 @@ class ESLR : public ESLR_PAR
     CLOK _clok;        // Clock to limit sound length
     bool _fRecording;  // Are we recording right now?
     bool _fPlaying;    // Are we playing back the recording?
-    ulong _tsStartRec; // Time at which we started recording
+    uint32_t _tsStartRec; // Time at which we started recording
 
   protected:
     ESLR(PGCB pgcb) : ESL(pgcb), _clok(HidUnique())

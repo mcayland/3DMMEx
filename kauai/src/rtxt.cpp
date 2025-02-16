@@ -42,7 +42,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Assert the validity of the rich text doc.
 ***************************************************************************/
-void TXTB::AssertValid(ulong grfobj)
+void TXTB::AssertValid(uint32_t grfobj)
 {
     achar ch;
     long ibMac;
@@ -79,7 +79,7 @@ void TXTB::MarkMem(void)
 /***************************************************************************
     Constructor for the base text document class
 ***************************************************************************/
-TXTB::TXTB(PDOCB pdocb, ulong grfdoc) : TXTB_PAR(pdocb, grfdoc)
+TXTB::TXTB(PDOCB pdocb, uint32_t grfdoc) : TXTB_PAR(pdocb, grfdoc)
 {
     _acrBack = kacrWhite;
     _dxpDef = kdxpDocDef;
@@ -504,7 +504,7 @@ void TXTB::FetchRgch(long cp, long ccp, achar *prgch)
 bool TXTB::FMinPara(long cp)
 {
     AssertThis(0);
-    ulong grfch;
+    uint32_t grfch;
 
     if (cp <= 0)
         return cp == 0;
@@ -538,7 +538,7 @@ bool TXTB::FMinPara(long cp)
 long TXTB::CpMinPara(long cp)
 {
     AssertThis(0);
-    ulong grfch;
+    uint32_t grfch;
     long cpOrig;
     long dcpLine = 1;
 
@@ -577,7 +577,7 @@ long TXTB::CpMinPara(long cp)
 long TXTB::CpLimPara(long cp)
 {
     AssertThis(0);
-    ulong grfch;
+    uint32_t grfch;
     bool fCr = fFalse;
     long cpLim = CpMac();
 
@@ -672,7 +672,7 @@ long TXTB::CpNext(long cp, bool fWord)
     Invalidate all DDGs on this text doc. Also dirties the document.
     Should be called by any code that edits the document.
 ***************************************************************************/
-void TXTB::InvalAllDdg(long cp, long ccpIns, long ccpDel, ulong grfdoc)
+void TXTB::InvalAllDdg(long cp, long ccpIns, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac() + 1);
@@ -699,7 +699,7 @@ void TXTB::InvalAllDdg(long cp, long ccpIns, long ccpDel, ulong grfdoc)
 /***************************************************************************
     Set the background color of the document.
 ***************************************************************************/
-void TXTB::SetAcrBack(ACR acr, ulong grfdoc)
+void TXTB::SetAcrBack(ACR acr, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(&acr, 0);
@@ -737,7 +737,7 @@ void TXTB::SetDxpDef(long dxp)
     Replace cp to cp + ccpDel with ccpIns characters from prgch. If ccpIns
     is zero, prgch can be nil. The last character should never be replaced.
 ***************************************************************************/
-bool TXTB::FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, ulong grfdoc)
+bool TXTB::FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ccpIns, 0, kcbMax);
@@ -758,7 +758,7 @@ bool TXTB::FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, ul
 /***************************************************************************
     Replace cp to cp + ccpDel with the characters in the given FLO.
 ***************************************************************************/
-bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, ulong grfdoc)
+bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, 0);
@@ -785,7 +785,7 @@ bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk,
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc.
 ***************************************************************************/
-bool TXTB::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc)
+bool TXTB::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pbsfSrc, 0);
@@ -809,7 +809,7 @@ bool TXTB::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long c
     Replace cp to cpDst + ccpDel with ccpSrc characters from ptxtbSrc starting
     at cpSrc.
 ***************************************************************************/
-bool TXTB::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc)
+bool TXTB::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
 {
     AssertPo(ptxtbSrc, 0);
     AssertIn(cpSrc, 0, ptxtbSrc->CpMac() + 1);
@@ -891,14 +891,14 @@ void TXTB::ExportFormats(PCLIP pclip)
 /***************************************************************************
     Constructor for plain text doc.
 ***************************************************************************/
-TXPD::TXPD(PDOCB pdocb, ulong grfdoc) : TXPD_PAR(pdocb, grfdoc)
+TXPD::TXPD(PDOCB pdocb, uint32_t grfdoc) : TXPD_PAR(pdocb, grfdoc)
 {
 }
 
 /***************************************************************************
     Static method to create a new plain text document.
 ***************************************************************************/
-PTXPD TXPD::PtxpdNew(PFNI pfni, PBSF pbsf, int16_t osk, PDOCB pdocb, ulong grfdoc)
+PTXPD TXPD::PtxpdNew(PFNI pfni, PBSF pbsf, int16_t osk, PDOCB pdocb, uint32_t grfdoc)
 {
     AssertNilOrPo(pfni, ffniFile);
     AssertNilOrPo(pbsf, 0);
@@ -996,7 +996,7 @@ bool TXPD::FSaveToFni(FNI *pfni, bool fSetFni)
 /***************************************************************************
     Constructor for a rich text document.
 ***************************************************************************/
-TXRD::TXRD(PDOCB pdocb, ulong grfdoc) : TXRD_PAR(pdocb, grfdoc)
+TXRD::TXRD(PDOCB pdocb, uint32_t grfdoc) : TXRD_PAR(pdocb, grfdoc)
 {
 }
 
@@ -1014,7 +1014,7 @@ TXRD::~TXRD(void)
 /***************************************************************************
     Assert the validity of a TXRD.
 ***************************************************************************/
-void TXRD::AssertValid(ulong grfobj)
+void TXRD::AssertValid(uint32_t grfobj)
 {
     TXRD_PAR::AssertValid(grfobj);
     AssertPo(_pglmpe, 0);
@@ -1027,7 +1027,7 @@ void TXRD::AssertValid(ulong grfobj)
         MPE mpePrev, mpe;
         long impe;
 
-        mpePrev.spcp = (ulong)-1;
+        mpePrev.spcp = (uint32_t)-1;
         for (impe = _pglmpe->IvMac(); impe-- > 0;)
         {
             _pglmpe->Get(impe, &mpe);
@@ -1439,7 +1439,7 @@ PDDG TXRD::PddgNew(PGCB pgcb)
     Look for an MPE for the given spcp. Return false iff there isn't one.
     In either event, fill pimpe with where one would go if it did exist.
 ***************************************************************************/
-bool TXRD::_FFindMpe(ulong spcp, MPE *pmpe, long *pcpLim, long *pimpe)
+bool TXRD::_FFindMpe(uint32_t spcp, MPE *pmpe, long *pcpLim, long *pimpe)
 {
     AssertThis(0);
     AssertNilOrVarMem(pmpe);
@@ -1691,7 +1691,7 @@ bool TXRD::_FEnsureInAg(uint8_t sprm, void *pv, long cb, long *pjv)
     }
 
     // need to add it
-    cact = (((ulong)sprm) << 24) | 1;
+    cact = (((uint32_t)sprm) << 24) | 1;
     if (!_pagcact->FAdd(cb, pjv, pv, &cact))
     {
         TrashVar(pjv);
@@ -2088,7 +2088,7 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
     AssertNilOrVarMem(pcpLim);
     MPE mpe;
     uint8_t sprm;
-    ulong spcp;
+    uint32_t spcp;
     long cpLimT;
     long cb;
     bool fRet;
@@ -2161,7 +2161,7 @@ LDone:
 /***************************************************************************
     Apply the given character properties to the given range of characters.
 ***************************************************************************/
-bool TXRD::FApplyChp(long cp, long ccp, PCHP pchp, PCHP pchpDiff, ulong grfdoc)
+bool TXRD::FApplyChp(long cp, long ccp, PCHP pchp, PCHP pchpDiff, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cp, 0, CpMac() - 1);
@@ -2307,7 +2307,7 @@ void TXRD::FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
     AssertNilOrVarMem(pcpLim);
     MPE mpe;
     uint8_t sprm;
-    ulong spcp;
+    uint32_t spcp;
     long cpLimT;
     bool fRet;
 
@@ -2363,7 +2363,7 @@ LDone:
     paragraph.
 ***************************************************************************/
 bool TXRD::FApplyPap(long cp, long ccp, PPAP ppap, PPAP ppapDiff, long *pcpMin, long *pcpLim, bool fExpand,
-                     ulong grfdoc)
+                     uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cp, 0, CpMac());
@@ -2482,7 +2482,7 @@ LDone:
     Replace cp to cp + ccpDel with ccpIns characters from prgch. If ccpIns
     is zero, prgch can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, ulong grfdoc)
+bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ccpIns, 0, kcbMax);
@@ -2516,7 +2516,7 @@ bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, ulong gr
     the given chp and pap. If ccpIns is zero, prgch can be nil. pchp
     and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, PCHP pchp, PPAP ppap, ulong grfdoc)
+bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, PCHP pchp, PPAP ppap, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertIn(ccpIns, 0, kcbMax);
@@ -2535,7 +2535,7 @@ bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, PCHP pch
     and/or ppap can be nil.
 ***************************************************************************/
 bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpSrc, long ccpIns, long cp, long ccpDel,
-                         PCHP pchp, PPAP ppap, ulong grfdoc)
+                         PCHP pchp, PPAP ppap, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ccpIns, 0, kcbMax);
@@ -2631,7 +2631,7 @@ bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpS
 /***************************************************************************
     Replace cp to cp + ccpDel with the characters in the given FLO.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, ulong grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, 0);
@@ -2674,7 +2674,7 @@ bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk,
     Replace cp to cp + ccpDel with the characters in the given FLO, using
     the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap, int16_t osk, ulong grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap, int16_t osk, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(pflo, 0);
@@ -2696,7 +2696,7 @@ bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, P
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc.
 ***************************************************************************/
-bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc)
+bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pbsfSrc, 0);
@@ -2732,7 +2732,7 @@ bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long c
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
 bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, PCHP pchp, PPAP ppap,
-                       ulong grfdoc)
+                       uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(pbsfSrc, 0);
@@ -2750,7 +2750,7 @@ bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long c
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc)
+bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(ptxtbSrc, 0);
@@ -2770,7 +2770,7 @@ bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, lon
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
 bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, PCHP pchp, PPAP ppap,
-                        ulong grfdoc)
+                        uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(ptxtbSrc, 0);
@@ -2793,7 +2793,7 @@ bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, lon
     REVIEW shonk: this doesn't preserve font size if the two docs have
     different default font sizes!
 ***************************************************************************/
-bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long ccpDel, ulong grfdoc)
+bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(ptxrd, 0);
@@ -3030,7 +3030,7 @@ bool TXRD::FFetchObject(long cpMin, long *pcp, void **ppv, long *pcb)
 /***************************************************************************
     Insert a picture into the rich text document.
 ***************************************************************************/
-bool TXRD::FInsertObject(void *pv, long cb, long cp, long ccpDel, PCHP pchp, ulong grfdoc)
+bool TXRD::FInsertObject(void *pv, long cb, long cp, long ccpDel, PCHP pchp, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPvCb(pv, cb);
@@ -3086,7 +3086,7 @@ bool TXRD::FInsertObject(void *pv, long cb, long cp, long ccpDel, PCHP pchp, ulo
 /***************************************************************************
     Insert a picture into the rich text document.
 ***************************************************************************/
-bool TXRD::FApplyObjectProps(void *pv, long cb, long cp, ulong grfdoc)
+bool TXRD::FApplyObjectProps(void *pv, long cb, long cp, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPvCb(pv, cb);
@@ -3133,7 +3133,7 @@ bool TXRD::FGetObjectRc(long cp, PGNV pgnv, PCHP pchp, RC *prc)
     AssertVarMem(pchp);
     AssertVarMem(prc);
     MPE mpe;
-    ulong spcp = _SpcpFromSprmCp(sprmObject, cp);
+    uint32_t spcp = _SpcpFromSprmCp(sprmObject, cp);
 
     if (!_FFindMpe(spcp, &mpe) || _CpFromSpcp(mpe.spcp) != cp)
         return fFalse;
@@ -3169,7 +3169,7 @@ bool TXRD::FDrawObject(long cp, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *pr
     AssertVarMem(pchp);
     AssertVarMem(prcClip);
     MPE mpe;
-    ulong spcp = _SpcpFromSprmCp(sprmObject, cp);
+    uint32_t spcp = _SpcpFromSprmCp(sprmObject, cp);
 
     if (!_FFindMpe(spcp, &mpe) || _CpFromSpcp(mpe.spcp) != cp)
         return fFalse;
@@ -3361,7 +3361,7 @@ bool RTUN::FCombine(PRTUN prtun)
 /***************************************************************************
     Assert the validity of a RTUN.
 ***************************************************************************/
-void RTUN::AssertValid(ulong grf)
+void RTUN::AssertValid(uint32_t grf)
 {
     RTUN_PAR::AssertValid(grf);
     AssertNilOrPo(_ptxrd, 0);

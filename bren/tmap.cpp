@@ -444,7 +444,7 @@ void TMAP::_SortInverseTable(uint8_t *prgb, long cbRgb, BRCLR brclrLo, BRCLR brc
 /***************************************************************************
     Assert the validity of the TMAP.
 ***************************************************************************/
-void TMAP::AssertValid(ulong grf)
+void TMAP::AssertValid(uint32_t grf)
 {
     TMAP_PAR::AssertValid(fobjAllocated);
     if (!_fImported)

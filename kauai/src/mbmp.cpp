@@ -34,7 +34,7 @@ MBMP::~MBMP(void)
     transparent color for the MBMP.
 ***************************************************************************/
 PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
-                     ulong grfmbmp, uint8_t bDefault)
+                     uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -54,7 +54,7 @@ PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xp
     Initialize the MBMP based on the given pixels.
 ***************************************************************************/
 bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
-                  ulong grfmbmp, uint8_t bDefault)
+                  uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -237,7 +237,7 @@ bool MBMP::_FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
     transparent. The bitmap file must be uncompressed and have a bit depth
     of 8.  The palette information is be ignored.
 ****************************************************************************/
-PMBMP MBMP::PmbmpReadNative(FNI *pfni, uint8_t bTransparent, long xp, long yp, ulong grfmbmp, uint8_t bDefault)
+PMBMP MBMP::PmbmpReadNative(FNI *pfni, uint8_t bTransparent, long xp, long yp, uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertPo(pfni, ffniFile);
     uint8_t *prgb;
@@ -446,7 +446,7 @@ bool MBMP::FPtIn(long xp, long yp)
 /***************************************************************************
     Assert the validity of a MBMP.
 ***************************************************************************/
-void MBMP::AssertValid(ulong grf)
+void MBMP::AssertValid(uint32_t grf)
 {
     long ccb;
     long cbTot;
@@ -837,7 +837,7 @@ bool FWriteBitmap(FNI *pfni, uint8_t *prgb, PGL pglclr, long dxp, long dyp, bool
     pglclr->Unlock();
 
     /* Write the bits */
-    Assert((ulong)fpCur == bmh.bmfh.bfOffBits, "Current file pos is wrong");
+    Assert((uint32_t)fpCur == bmh.bmfh.bfOffBits, "Current file pos is wrong");
     if (fUpsideDown)
     {
         uint8_t *pbCur;

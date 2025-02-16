@@ -20,9 +20,9 @@
     These must be unsigned longs!  We sort on them and assume in the code
     that they are unsinged.
 ***************************************************************************/
-typedef ulong CTG;  // chunk tag/type
-typedef ulong CNO;  // chunk number
-typedef ulong CHID; // child chunk id
+typedef uint32_t CTG; // chunk tag/type
+typedef uint32_t CNO; // chunk number
+typedef uint32_t CHID; // child chunk id
 
 enum
 {
@@ -121,7 +121,7 @@ class CFL : public CFL_PAR
     CFL(void);
     ~CFL(void);
 
-    static ulong _GrffilFromGrfcfl(ulong grfcfl);
+    static uint32_t _GrffilFromGrfcfl(uint32_t grfcfl);
 
     bool _FReadIndex(void);
     tribool _TValidIndex(void);
@@ -157,8 +157,8 @@ class CFL : public CFL_PAR
     {
         return _pcflFirst;
     }
-    static PCFL PcflOpen(FNI *pfni, ulong grfcfl);
-    static PCFL PcflCreate(FNI *pfni, ulong grfcfl);
+    static PCFL PcflOpen(FNI *pfni, uint32_t grfcfl);
+    static PCFL PcflCreate(FNI *pfni, uint32_t grfcfl);
     static PCFL PcflCreateTemp(FNI *pfni = pvNil);
     static PCFL PcflFromFni(FNI *pfni);
 
@@ -169,7 +169,7 @@ class CFL : public CFL_PAR
 #endif // CHUNK_STATS
 
     virtual void Release(void);
-    bool FSetGrfcfl(ulong grfcfl, ulong grfcflMask = (ulong)~0);
+    bool FSetGrfcfl(uint32_t grfcfl, uint32_t grfcflMask = (uint32_t)~0);
     void Mark(void)
     {
         _fMark = fTrue;
@@ -319,7 +319,7 @@ class CGE : public CGE_PAR
     ~CGE(void);
 
     void Init(PCFL pcfl, CTG ctg, CNO cno);
-    bool FNextKid(KID *pkid, CKI *pckiPar, ulong *pgrfcgeOut, ulong grfcgeIn);
+    bool FNextKid(KID *pkid, CKI *pckiPar, uint32_t *pgrfcgeOut, uint32_t grfcgeIn);
 };
 
 #ifdef CHUNK_STATS

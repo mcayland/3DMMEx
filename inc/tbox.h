@@ -165,7 +165,7 @@ class TBXG : public TBXG_PAR
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
     virtual bool FCmdClip(PCMD pcmd);
-    virtual bool FEnableDdgCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual long _DxpDoc(void);
     virtual void _NewRc(void);
@@ -192,7 +192,7 @@ enum
     kfchpBold = 0x04,
     kfchpItalic = 0x08
 };
-const ulong kgrfchpAll = (kfchpOnn | kfchpDypFont | kfchpBold | kfchpItalic);
+const uint32_t kgrfchpAll = (kfchpOnn | kfchpDypFont | kfchpBold | kfchpItalic);
 
 //
 //
@@ -268,7 +268,7 @@ class TBOX : public TBOX_PAR
     bool FSetAcrText(ACR acr);
     bool FSetOnnText(long onn);
     bool FSetDypFontText(long dypFont);
-    bool FSetStyleText(ulong grfont);
+    bool FSetStyleText(uint32_t grfont);
     void SetStartFrame(long nfrm);
     void SetOnnDef(long onn)
     {
@@ -278,7 +278,7 @@ class TBOX : public TBOX_PAR
     {
         _dypFontDef = dypFont;
     }
-    void FetchChpSel(PCHP pchp, ulong *pgrfchp);
+    void FetchChpSel(PCHP pchp, uint32_t *pgrfchp);
     void AttachToMouse(void);
 
     //

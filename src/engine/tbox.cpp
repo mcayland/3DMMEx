@@ -940,7 +940,7 @@ void TBXB::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void TBXB::AssertValid(ulong grf)
+void TBXB::AssertValid(uint32_t grf)
 {
     TBXB_PAR::AssertValid(fobjAllocated);
 }
@@ -1466,7 +1466,7 @@ bool TBXG::FCmdClip(PCMD pcmd)
  * 	fTrue if it handled the command, else fFalse.
  *
  **************************************************************************/
-bool TBXG::FEnableDdgCmd(PCMD pcmd, ulong *pgrfeds)
+bool TBXG::FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -1763,7 +1763,7 @@ void TBXG::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void TBXG::AssertValid(ulong grf)
+void TBXG::AssertValid(uint32_t grf)
 {
     TBXG_PAR::AssertValid(fobjAllocated);
     AssertPo(_ptbxb, 0);
@@ -2592,7 +2592,7 @@ bool TBOX::FSetDypFontText(long dypFont)
     Returns:  fTrue if it succeeds
 
 ************************************************************ PETED ***********/
-bool TBOX::FSetStyleText(ulong grfont)
+bool TBOX::FSetStyleText(uint32_t grfont)
 {
     AssertThis(0);
 
@@ -2651,10 +2651,10 @@ bool TBOX::FSetOnnText(long onn)
 
     Arguments:
         PCHP pchp       --  the CHP to take the formatting info
-        ulong *pgrfchp  --  bitfield that indicates which formatting attributes
+        uint32_t *pgrfchp  --  bitfield that indicates which formatting attributes
             hold for the entire selection.
 ************************************************************ PETED ***********/
-void TBOX::FetchChpSel(PCHP pchp, ulong *pgrfchp)
+void TBOX::FetchChpSel(PCHP pchp, uint32_t *pgrfchp)
 {
     AssertVarMem(pchp);
     AssertVarMem(pgrfchp);
@@ -2944,7 +2944,7 @@ void TBOX::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void TBOX::AssertValid(ulong grf)
+void TBOX::AssertValid(uint32_t grf)
 {
     TBOX_PAR::AssertValid(fobjAllocated);
     if (PddgGet(0) != pvNil)
@@ -3079,7 +3079,7 @@ void TUNT::MarkMem(void)
 /***************************************************************************
     Assert the validity of the TUNT.
 ***************************************************************************/
-void TUNT::AssertValid(ulong grf)
+void TUNT::AssertValid(uint32_t grf)
 {
     TUNT_PAR::AssertValid(fobjAllocated);
 }
@@ -3206,7 +3206,7 @@ void TUNS::MarkMem(void)
 /***************************************************************************
     Assert the validity of the TUNS.
 ***************************************************************************/
-void TUNS::AssertValid(ulong grf)
+void TUNS::AssertValid(uint32_t grf)
 {
     TUNS_PAR::AssertValid(fobjAllocated);
 }
@@ -3349,7 +3349,7 @@ void TUNH::MarkMem(void)
 /***************************************************************************
     Assert the validity of the TUNH.
 ***************************************************************************/
-void TUNH::AssertValid(ulong grf)
+void TUNH::AssertValid(uint32_t grf)
 {
     TUNH_PAR::AssertValid(fobjAllocated);
 }
@@ -3523,7 +3523,7 @@ void TUND::MarkMem(void)
 /***************************************************************************
     Assert the validity of the TUND.
 ***************************************************************************/
-void TUND::AssertValid(ulong grf)
+void TUND::AssertValid(uint32_t grf)
 {
     AssertBaseThis(0);
 }
@@ -3645,7 +3645,7 @@ void TUNC::MarkMem(void)
 /***************************************************************************
     Assert the validity of the TUNC.
 ***************************************************************************/
-void TUNC::AssertValid(ulong grf)
+void TUNC::AssertValid(uint32_t grf)
 {
     AssertBaseThis(0);
 }
@@ -3781,7 +3781,7 @@ void TCLP::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void TCLP::AssertValid(ulong grf)
+void TCLP::AssertValid(uint32_t grf)
 {
     TCLP_PAR::AssertValid(fobjAllocated);
     AssertPo(_ptbox, 0);

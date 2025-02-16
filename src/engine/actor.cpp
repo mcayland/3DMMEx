@@ -840,7 +840,7 @@ bool ACTR::_FGetStatic(long anid, bool *pfStatic)
     AssertIn(anid, 0, klwMax);
     AssertVarMem(pfStatic);
 
-    ulong grfactn;
+    uint32_t grfactn;
 
     if (!_ptmpl->FGetGrfactn(anid, &grfactn))
         return fFalse;
@@ -1004,7 +1004,7 @@ bool ACTR::_FDoAevCore(long iaev)
     {
     case aetActn:
         AEVACTN aevactn;
-        ulong grfactn;
+        uint32_t grfactn;
 
         _pggaev->Get(iaev, &aevactn);
 
@@ -1751,7 +1751,7 @@ bool ACTR::FAddOnStageCore(void)
     else
     {
         // Not the earliest Add.  Gather earlier events	and insert them
-        ulong grfaet = faetActn | faetCost | faetPull | faetSize | faetRotF;
+        uint32_t grfaet = faetActn | faetCost | faetPull | faetSize | faetRotF;
         if (!_FAddAevFromPrev(_iaevCur - 1, grfaet))
             return fFalse;
     }
@@ -1782,7 +1782,7 @@ bool ACTR::FAddOnStageCore(void)
     NOTE: This is optimized to add only the latest event of each given type.
 
 ***************************************************************************/
-bool ACTR::_FAddAevFromPrev(long iaevLim, ulong grfaet)
+bool ACTR::_FAddAevFromPrev(long iaevLim, uint32_t grfaet)
 {
     AssertBaseThis(0);
     AssertIn(iaevLim, 0, _pggaev->IvMac() + 1);
@@ -2274,7 +2274,7 @@ bool ACTR::_FUnfreeze(void)
     If ordering other than this is desired, separate calls must be made.
 
 ***************************************************************************/
-void ACTR::SetAddOrient(BRA xa, BRA ya, BRA za, ulong grfbra, XYZ *pdxyz)
+void ACTR::SetAddOrient(BRA xa, BRA ya, BRA za, uint32_t grfbra, XYZ *pdxyz)
 {
     AssertThis(0);
     AssertIn(_iaevAddCur, 0, _pggaev->IvMac());
@@ -2434,11 +2434,11 @@ bool ACTR::FRotate(BRA xa, BRA ya, BRA za, bool fFromHereFwd)
     Insert normalize transformation events into the event list
 
 ***************************************************************************/
-bool ACTR::FNormalizeCore(ulong grfnorm)
+bool ACTR::FNormalizeCore(uint32_t grfnorm)
 {
     AssertThis(0);
     long rScaleStepOld = _xfrm.rScaleStep;
-    ulong faet;
+    uint32_t faet;
     long cbVar = 0;
 
     if (grfnorm & fnormRotate)
@@ -2498,7 +2498,7 @@ bool ACTR::FScale(BRS rScale)
 {
     AssertThis(0);
 
-    ulong faet = faetNil;
+    uint32_t faet = faetNil;
     long rScaleStep;
     long rScaleStepOld = _xfrm.rScaleStep;
 
@@ -2677,7 +2677,7 @@ bool ACTR::FPull(BRS rScaleX, BRS rScaleY, BRS rScaleZ)
     location (set by GoToFrame, ie, determined by _rtelCur).
 
 ***************************************************************************/
-bool ACTR::FTweakRoute(BRS dxr, BRS dyr, BRS dzr, ulong grfmaf)
+bool ACTR::FTweakRoute(BRS dxr, BRS dyr, BRS dzr, uint32_t grfmaf)
 {
     AssertThis(0);
 
@@ -2735,7 +2735,7 @@ void ACTR::_UpdateXyzRte(void)
     Return *pfmoved indicating whether or not the path moved.
 
 ***************************************************************************/
-bool ACTR::FMoveRoute(BRS dxr, BRS dyr, BRS dzr, bool *pfMoved, ulong grfmaf)
+bool ACTR::FMoveRoute(BRS dxr, BRS dyr, BRS dzr, bool *pfMoved, uint32_t grfmaf)
 {
     AssertThis(0);
     AssertNilOrVarMem(pfMoved);
@@ -2744,7 +2744,7 @@ bool ACTR::FMoveRoute(BRS dxr, BRS dyr, BRS dzr, bool *pfMoved, ulong grfmaf)
     AEV *paev;
     long iaev;
     bool fMoved;
-    ulong grfbra;
+    uint32_t grfbra;
     XYZ dxyz;
     BRS yrCurOld;
     BRA xa;
@@ -2968,7 +2968,7 @@ void ACTR::_LoadAddOrien(AEVADD *paevadd, bool fNoReset)
         grfaet == faetNil or types of events to nuke along the way
 
 ***************************************************************************/
-void ACTR::_PrepXfrmFill(long aet, void *pvVar, long cbVar, long iaevMin, long iaevCmp, ulong grfaet)
+void ACTR::_PrepXfrmFill(long aet, void *pvVar, long cbVar, long iaevMin, long iaevCmp, uint32_t grfaet)
 {
     AssertBaseThis(0);
     Assert(aet == aetSize || aet == aetRotF || aet == aetPull, "Illegal argument aet");
@@ -3190,7 +3190,7 @@ void ACTR::_RemoveAev(long iaev, bool fUpdateState)
     regardless of the value of the celn.
 
 ***************************************************************************/
-void ACTR::_PrepActnFill(long iaevMin, long anidPrev, long anidNew, ulong grfaet)
+void ACTR::_PrepActnFill(long iaevMin, long anidPrev, long anidNew, uint32_t grfaet)
 {
     AssertBaseThis(0);
     AssertIn(iaevMin, 0, _pggaev->IvMac() + 1);
@@ -3736,7 +3736,7 @@ void ACTR::_MatrixRotUpdate(XYZ *pxyz, BMAT34 *pbmat34)
     NOTE: *pbmat34 is not pre-initialized
 
 ***************************************************************************/
-void ACTR::_CalcRteOrient(BMAT34 *pbmat34, BRA *pxa, BRA *pya, BRA *pza, ulong *pgrfbra)
+void ACTR::_CalcRteOrient(BMAT34 *pbmat34, BRA *pxa, BRA *pya, BRA *pza, uint32_t *pgrfbra)
 {
     AssertBaseThis(0);
     AssertNilOrVarMem(pbmat34);
@@ -3871,7 +3871,7 @@ void ACTR::_UpdateXyzTan(XYZ *pxyz, long irpt, long rw)
     which can be done using additional arguments.
 
 ***************************************************************************/
-void ACTR::_ApplyRotFromVec(XYZ *pxyz, BMAT34 *pbmat34, BRA *pxa, BRA *pya, BRA *pza, ulong *pgrfbra)
+void ACTR::_ApplyRotFromVec(XYZ *pxyz, BMAT34 *pbmat34, BRA *pxa, BRA *pya, BRA *pza, uint32_t *pgrfbra)
 {
     AssertBaseThis(0);
     AssertNilOrVarMem(pbmat34);
@@ -4279,7 +4279,7 @@ bool ACTR::_FIsStalled(long iaevFirst, RTEL *prtel, long *piaevLast)
     down to initialize the timing of the recording session
 
 ***************************************************************************/
-bool ACTR::FIsRecordValid(BRS dxr, BRS dyr, BRS dzr, ulong tsCurrent)
+bool ACTR::FIsRecordValid(BRS dxr, BRS dyr, BRS dzr, uint32_t tsCurrent)
 {
     AssertThis(0);
 
@@ -4305,7 +4305,7 @@ bool ACTR::FIsRecordValid(BRS dxr, BRS dyr, BRS dzr, ulong tsCurrent)
     On failure, actor is restored from pactrRestore
 
 ***************************************************************************/
-bool ACTR::FBeginRecord(ulong tsCurrent, bool fReplace, PACTR pactrRestore)
+bool ACTR::FBeginRecord(uint32_t tsCurrent, bool fReplace, PACTR pactrRestore)
 {
     AssertThis(0);
     Assert(tsCurrent >= 0, "Invalid type");
@@ -4417,7 +4417,7 @@ LFail:
     NOTE: On failure, actor is restored from pactrRestore
 
 ***************************************************************************/
-bool ACTR::FRecordMove(BRS dxr, BRS dyr, BRS dzr, ulong grfmaf, ulong tsCurrent, bool *pfStepFrm, bool *pfStepRte,
+bool ACTR::FRecordMove(BRS dxr, BRS dyr, BRS dzr, uint32_t grfmaf, uint32_t tsCurrent, bool *pfStepFrm, bool *pfStepRte,
                        PACTR pactrRestore)
 {
     AssertThis(0);
@@ -4991,7 +4991,7 @@ void ACTR::_SaveCurPathOrien(void)
 
     RPT rpt;
     AEV aev;
-    ulong grfbra = 0;
+    uint32_t grfbra = 0;
 
     if (_iaevAddCur >= 0 && !_ptmpl->FIsTdt())
     {
@@ -5483,7 +5483,7 @@ bool ACTR::FChangeTagTmpl(TAG *ptagTmplNew)
     Assert the validity of the ACTR.
 
 ***************************************************************************/
-void ACTR::AssertValid(ulong grfobj)
+void ACTR::AssertValid(uint32_t grfobj)
 {
 
     ACTR_PAR::AssertValid(fobjAllocated);

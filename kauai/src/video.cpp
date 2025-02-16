@@ -320,7 +320,7 @@ void GVDS::GetRc(RC *prc)
 /***************************************************************************
     Assert the validity of a GVDS.
 ***************************************************************************/
-void GVDS::AssertValid(ulong grf)
+void GVDS::AssertValid(uint32_t grf)
 {
     GVDS_PAR::AssertValid(0);
     AssertPo(_pgobBase, 0);
@@ -704,7 +704,7 @@ void GVDW::GetRc(RC *prc)
 /***************************************************************************
     Assert the validity of a GVDW.
 ***************************************************************************/
-void GVDW::AssertValid(ulong grf)
+void GVDW::AssertValid(uint32_t grf)
 {
     GVDW_PAR::AssertValid(0);
     Assert(_hwndMovie != hNil, 0);

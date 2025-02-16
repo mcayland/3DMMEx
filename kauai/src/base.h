@@ -92,10 +92,10 @@ void AssertUnmarkedObjs(void);
 #define NewObj new (__szsFile, __LINE__)
 void UnmarkAllObjs(void);
 
-const ulong fobjNil = 0x00000000L;
-const ulong fobjNotAllocated = 0x40000000L;
-const ulong fobjAllocated = 0x20000000L;
-const ulong fobjAssertFull = 0x10000000L;
+const uint32_t fobjNil = 0x00000000L;
+const uint32_t fobjNotAllocated = 0x40000000L;
+const uint32_t fobjAllocated = 0x20000000L;
+const uint32_t fobjAssertFull = 0x10000000L;
 
 extern long vcactSuspendAssertValid;
 extern long vcactAVSave;
@@ -172,7 +172,7 @@ inline void ResumeAssertValid(void)
     virtual void MarkMem(void);
 #define ASSERT                                                                                                         \
   public:                                                                                                              \
-    void AssertValid(ulong grf);
+    void AssertValid(uint32_t grf);
 #define NOCOPY(cls)                                                                                                    \
   private:                                                                                                             \
     cls &operator=(cls &robj)                                                                                          \

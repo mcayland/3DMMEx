@@ -103,7 +103,7 @@ CHCM::~CHCM(void)
 /***************************************************************************
     Assert that the CHCM is a valid object.
 ***************************************************************************/
-void CHCM::AssertValid(ulong grf)
+void CHCM::AssertValid(uint32_t grf)
 {
     CHCM_PAR::AssertValid(grf);
     AssertNilOrPo(_pcfl, 0);
@@ -2417,7 +2417,7 @@ bool CHLX::_FDoSet(PTOK ptok)
             break;
         case ttAShr:
             // do logical shift
-            lw = (ulong)lw >> ptok->lw;
+            lw = (uint32_t)lw >> ptok->lw;
             break;
         case ttAShl:
             lw <<= ptok->lw;
@@ -2438,7 +2438,7 @@ bool CHLX::_FDoSet(PTOK ptok)
 /***************************************************************************
     Assert that the CHLX is a valid object.
 ***************************************************************************/
-void CHLX::AssertValid(ulong grf)
+void CHLX::AssertValid(uint32_t grf)
 {
     CHLX_PAR::AssertValid(grf);
     AssertNilOrPo(_pgstVariables, 0);
@@ -2477,7 +2477,7 @@ CHDC::~CHDC(void)
 /***************************************************************************
     Assert the validity of a CHDC.
 ***************************************************************************/
-void CHDC::AssertValid(ulong grf)
+void CHDC::AssertValid(uint32_t grf)
 {
     CHDC_PAR::AssertValid(0);
     AssertNilOrPo(_pcfl, 0);

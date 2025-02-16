@@ -50,7 +50,7 @@ void FrameMain(void)
 /***************************************************************************
     Assert the validity of a APP.
 ***************************************************************************/
-void APP::AssertValid(ulong grf)
+void APP::AssertValid(uint32_t grf)
 {
     APP_PAR::AssertValid(0);
     AssertNilOrPo(_pcrm, 0);
@@ -77,7 +77,7 @@ void APP::MarkMem(void)
     Initialize the app.  Add some stuff to the menus and do the command
     line parsing thing.
 ***************************************************************************/
-bool APP::_FInit(ulong grfapp, ulong grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
 {
     static long _rgdypFont[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28, 32, 36, 0};
 
@@ -215,7 +215,7 @@ void APP::GetStnAppName(PSTN pstn)
     Update the given window.  *prc is the bounding rectangle of the update
     region.
 ***************************************************************************/
-void APP::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
+void APP::UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp)
 {
     AssertThis(0);
     PGOB pgob;
@@ -233,7 +233,7 @@ void APP::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
 /***************************************************************************
     Do a fast update of the gob and its descendents into the given gpt.
 ***************************************************************************/
-void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp, PGPT pgpt)
+void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp, PGPT pgpt)
 {
     AssertThis(0);
 
@@ -452,7 +452,7 @@ bool APP::FLoadResFile(PFNI pfni)
 /***************************************************************************
     Check or uncheck the language as appropriate.
 ***************************************************************************/
-bool APP::FEnableChooseLanguage(PCMD pcmd, ulong *pgrfeds)
+bool APP::FEnableChooseLanguage(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
@@ -544,7 +544,7 @@ LID::~LID(void)
 /***************************************************************************
     Assert the validity of a LID.
 ***************************************************************************/
-void LID::AssertValid(ulong grf)
+void LID::AssertValid(uint32_t grf)
 {
     LID_PAR::AssertValid(0);
     AssertPo(_pcrm, 0);
@@ -717,7 +717,7 @@ LIG::LIG(PLID plid, GCB *pgcb) : LIG_PAR(plid, pgcb)
 /***************************************************************************
     Assert the validity of a LIG.
 ***************************************************************************/
-void LIG::AssertValid(ulong grf)
+void LIG::AssertValid(uint32_t grf)
 {
     LIG_PAR::AssertValid(0);
     AssertPo(_pscb, 0);
@@ -913,7 +913,7 @@ bool LIG::FCmdScroll(PCMD pcmd)
     The mouse was clicked in the LIG.  Insert the object in the active
     DDG.
 ***************************************************************************/
-void LIG::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void LIG::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     long icki;
@@ -970,7 +970,7 @@ CCG::CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, long cacrRow) : CCG_PAR(pgcb)
     Handle mousedown in a CCG.  Set the foreground or background color of
     the text in the active of DDG of the ptxhd.
 ***************************************************************************/
-void CCG::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void CCG::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     PHETG phetg;
@@ -1157,7 +1157,7 @@ bool CCG::FCmdMouseMove(PCMD_MOUSE pcmd)
 /***************************************************************************
     Assert the validity of a CCG.
 ***************************************************************************/
-void CCG::AssertValid(ulong grf)
+void CCG::AssertValid(uint32_t grf)
 {
     CCG_PAR::AssertValid(0);
     AssertPo(_ptxhd, 0);

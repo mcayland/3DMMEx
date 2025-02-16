@@ -13,17 +13,17 @@
 #include "util.h"
 ASSERTNAME
 
-const ulong kfpError = 0xFFFFFFFF;
-priv HANDLE _HfileOpen(PSZ pszFile, bool fCreate, ulong grffil);
+const uint32_t kfpError = 0xFFFFFFFF;
+priv HANDLE _HfileOpen(PSZ pszFile, bool fCreate, uint32_t grffil);
 
 /***************************************************************************
     Open or create the file by calling CreateFile.  Returns hBadWin on
     failure.
 ***************************************************************************/
-priv HANDLE _HfileOpen(PSZ psz, bool fCreate, ulong grffil)
+priv HANDLE _HfileOpen(PSZ psz, bool fCreate, uint32_t grffil)
 {
-    ulong luAccess = GENERIC_READ;
-    ulong luShare = 0;
+    uint32_t luAccess = GENERIC_READ;
+    uint32_t luShare = 0;
 
     if (grffil & ffilWriteEnable)
         luAccess |= GENERIC_WRITE;
@@ -40,7 +40,7 @@ priv HANDLE _HfileOpen(PSZ psz, bool fCreate, ulong grffil)
     Open or create the file.  If the file is already open, sets the
     permissions according to grffil.
 ***************************************************************************/
-bool FIL::_FOpen(bool fCreate, ulong grffil)
+bool FIL::_FOpen(bool fCreate, uint32_t grffil)
 {
     AssertBaseThis(0);
     bool fRet = fFalse;

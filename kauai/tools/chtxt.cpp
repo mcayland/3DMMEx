@@ -12,14 +12,14 @@ ASSERTNAME
 /***************************************************************************
     Constructor for a chunky text doc.
 ***************************************************************************/
-CHTXD::CHTXD(PDOCB pdocb, ulong grfdoc) : CHTXD_PAR(pdocb, grfdoc)
+CHTXD::CHTXD(PDOCB pdocb, uint32_t grfdoc) : CHTXD_PAR(pdocb, grfdoc)
 {
 }
 
 /***************************************************************************
     Create a new chunky text doc.
 ***************************************************************************/
-PCHTXD CHTXD::PchtxdNew(PFNI pfni, PBSF pbsf, short osk, PDOCB pdocb, ulong grfdoc)
+PCHTXD CHTXD::PchtxdNew(PFNI pfni, PBSF pbsf, short osk, PDOCB pdocb, uint32_t grfdoc)
 {
     AssertNilOrPo(pfni, ffniFile);
     AssertNilOrPo(pbsf, 0);
@@ -52,7 +52,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Constructor.
 ***************************************************************************/
-CHTDD::CHTDD(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab)
+CHTDD::CHTDD(PTXTB ptxtb, PGCB pgcb, long onn, uint32_t grfont, long dypFont, long cchTab)
     : CHTDD_PAR(ptxtb, pgcb, onn, grfont, dypFont, cchTab)
 {
     _fMark = fFalse;
@@ -61,7 +61,7 @@ CHTDD::CHTDD(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long 
 /***************************************************************************
     Create a new one.
 ***************************************************************************/
-PCHTDD CHTDD::PchtddNew(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab)
+PCHTDD CHTDD::PchtddNew(PTXTB ptxtb, PGCB pgcb, long onn, uint32_t grfont, long dypFont, long cchTab)
 {
     PCHTDD pchtdd;
 

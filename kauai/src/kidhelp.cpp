@@ -28,7 +28,7 @@ const achar kchHelpString = '~';
 /***************************************************************************
     Constructor for a help text document.
 ***************************************************************************/
-TXHD::TXHD(PRCA prca, PDOCB pdocb, ulong grfdoc) : TXHD_PAR(pdocb, grfdoc)
+TXHD::TXHD(PRCA prca, PDOCB pdocb, uint32_t grfdoc) : TXHD_PAR(pdocb, grfdoc)
 {
     AssertPo(prca, 0);
     _prca = prca;
@@ -51,7 +51,7 @@ TXHD::~TXHD(void)
 /***************************************************************************
     Assert the validity of a TXHD.
 ***************************************************************************/
-void TXHD::AssertValid(ulong grf)
+void TXHD::AssertValid(uint32_t grf)
 {
     TXHD_PAR::AssertValid(0);
     AssertPo(_prca, 0);
@@ -72,7 +72,7 @@ void TXHD::MarkMem(void)
     Static method to read a help text document from the given (pcfl, ctg, cno)
     and using the given prca as the source for pictures and buttons.
 ***************************************************************************/
-PTXHD TXHD::PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, ulong grftxhd)
+PTXHD TXHD::PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, uint32_t grftxhd)
 {
     AssertPo(prca, 0);
     AssertPo(pcfl, 0);
@@ -91,7 +91,7 @@ PTXHD TXHD::PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, 
 /***************************************************************************
     Read the given chunk into this TXRD.
 ***************************************************************************/
-bool TXHD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, ulong grftxhd)
+bool TXHD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, uint32_t grftxhd)
 {
     AssertPo(pcfl, 0);
     AssertNilOrPo(pstrg, 0);
@@ -435,7 +435,7 @@ bool TXHD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp,
 /***************************************************************************
     Insert a picture into the help text document.
 ***************************************************************************/
-bool TXHD::FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp, ulong grfdoc)
+bool TXHD::FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPvCb(pvExtra, cbExtra);
@@ -467,7 +467,7 @@ bool TXHD::FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long cc
     Insert a new button
 ***************************************************************************/
 bool TXHD::FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp,
-                         ulong grfdoc)
+                         uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPvCb(pvExtra, cbExtra);
@@ -884,7 +884,7 @@ bool TXHG::FGroupFromPt(long xp, long yp, uint8_t *pbGroup, CNO *pcnoTopic)
 /***************************************************************************
     A child button was hit, take action.
 ***************************************************************************/
-void TXHG::DoHit(uint8_t bGroup, CNO cnoTopic, ulong grfcust, long hidHit)
+void TXHG::DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, long hidHit)
 {
     AssertThis(0);
     long lwRet = 0;
@@ -901,7 +901,7 @@ void TXHG::DoHit(uint8_t bGroup, CNO cnoTopic, ulong grfcust, long hidHit)
     Run the script. Returns false iff the TXHG doesn't exist after
     running the script.
 ***************************************************************************/
-bool TXHG::_FRunScript(uint8_t bGroup, ulong grfcust, long hidHit, achar ch, CNO cnoTopic, long *plwRet)
+bool TXHG::_FRunScript(uint8_t bGroup, uint32_t grfcust, long hidHit, achar ch, CNO cnoTopic, long *plwRet)
 {
     AssertThis(0);
     AssertNilOrVarMem(plwRet);
@@ -956,7 +956,7 @@ bool TXHG::FCmdMouseMove(PCMD_MOUSE pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    ulong grfcust = _pwoks->GrfcustAdjust(pcmd->grfcust);
+    uint32_t grfcust = _pwoks->GrfcustAdjust(pcmd->grfcust);
 
     if (FGroupFromPt(pcmd->xp, pcmd->yp))
         grfcust |= fcustHotText;
@@ -968,7 +968,7 @@ bool TXHG::FCmdMouseMove(PCMD_MOUSE pcmd)
 /***************************************************************************
     Set the cursor for this TXHG and the given cursor state.
 ***************************************************************************/
-void TXHG::SetCursor(ulong grfcust)
+void TXHG::SetCursor(uint32_t grfcust)
 {
     AssertThis(0);
     PGOB pgob;

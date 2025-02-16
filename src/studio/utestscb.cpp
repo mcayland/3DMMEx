@@ -338,7 +338,7 @@ void MSCB::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void MSCB::AssertValid(ulong grf)
+void MSCB::AssertValid(uint32_t grf)
 {
     MSCB_PAR::AssertValid(fobjAllocated);
 }

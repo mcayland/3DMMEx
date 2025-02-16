@@ -1175,7 +1175,7 @@ bool STDIO::FCmdCreatePopup(PCMD pcmd)
 
     CKI ckiRoot;
     long cid, kid, thumSel = ivNil;
-    ulong grfchp;
+    uint32_t grfchp;
     BWS bws = kbwsCnoRoot;
     CHP chp;
     PTBOX ptbox;
@@ -1361,12 +1361,12 @@ bool STDIO::FCmdTextSetStyle(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    ulong grfont;
+    uint32_t grfont;
     PMVU pmvu = _pmvie->PmvuCur();
 
     grfont = pmvu->GrfontStyleTextCur();
-    grfont &= ~((ulong)pcmd->rglw[0]);
-    grfont |= (ulong)pcmd->rglw[1];
+    grfont &= ~((uint32_t)pcmd->rglw[0]);
+    grfont |= (uint32_t)pcmd->rglw[1];
 
     _pmvie->SetStyleTextCur(grfont);
     pmvu->SetTool(toolTboxStyle);
@@ -2728,7 +2728,7 @@ void STDIO::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void STDIO::AssertValid(ulong grf)
+void STDIO::AssertValid(uint32_t grf)
 {
     STDIO_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pmvie, 0);
@@ -2838,7 +2838,7 @@ bool SMCC::FQueryPurgeSounds(void)
 /***************************************************************************
     Assert the validity of the SMCC
 ***************************************************************************/
-void SMCC::AssertValid(ulong grf)
+void SMCC::AssertValid(uint32_t grf)
 {
     SMCC_PAR::AssertValid(0);
     AssertPo(_psscb, 0);

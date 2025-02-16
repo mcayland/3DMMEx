@@ -59,7 +59,7 @@ struct TMPLF
     BRA yaRest;
     BRA zaRest;
     int16_t swPad; // so grftmpl (and the whole TMPLF) is long-aligned
-    ulong grftmpl;
+    uint32_t grftmpl;
 };
 VERIFY_STRUCT_SIZE(TMPLF, 16);
 #define kbomTmplf 0x554c0000
@@ -72,7 +72,7 @@ struct ACTNF
     long grfactn;
 };
 VERIFY_STRUCT_SIZE(ACTNF, 8);
-const ulong kbomActnf = 0x5c000000;
+const uint32_t kbomActnf = 0x5c000000;
 
 // grfactn flags
 enum
@@ -100,7 +100,7 @@ class ACTN : public ACTN_PAR
     PGG _pggcel;    // GG of CELs; variable part is a rgcps[]
     PGL _pglbmat34; // GL of transformation matrices used in this action
     PGL _pgltagSnd; // GL of motion-match sounds for this action
-    ulong _grfactn; // various flags for this action
+    uint32_t _grfactn; // various flags for this action
 
   protected:
     ACTN(void)
@@ -109,11 +109,11 @@ class ACTN : public ACTN_PAR
     bool _FInit(PCFL pcfl, CTG ctg, CNO cno);
 
   public:
-    static PACTN PactnNew(PGG pggcel, PGL pglbmat34, ulong grfactn);
+    static PACTN PactnNew(PGG pggcel, PGL pglbmat34, uint32_t grfactn);
     static bool FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
     ~ACTN(void);
 
-    ulong Grfactn(void)
+    uint32_t Grfactn(void)
     {
         return _grfactn;
     }
@@ -155,7 +155,7 @@ class TMPL : public TMPL_PAR
     BRA _xaRest; // Rest orientation
     BRA _yaRest;
     BRA _zaRest;
-    ulong _grftmpl;
+    uint32_t _grftmpl;
     PGL _pglibactPar; // GL of parent IDs (shorts) to build BODY
     PGL _pglibset;    // GL of body-part-set IDs to build BODY
     PGG _pggcmid;     // List of costumes for each body part set
@@ -199,7 +199,7 @@ class TMPL : public TMPL_PAR
     } // count of actions
     virtual bool FGetActnName(long anid, PSTN pstn);
     bool FSetActnCel(PBODY pbody, long anid, long celn, BRS *pdwr = pvNil);
-    bool FGetGrfactn(long anid, ulong *pgrfactn);
+    bool FGetGrfactn(long anid, uint32_t *pgrfactn);
     bool FGetDwrActnCel(long anid, long celn, BRS *pdwr);
     bool FGetCcelActn(long anid, long *pccel);
     bool FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag);

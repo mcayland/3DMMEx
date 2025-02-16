@@ -315,7 +315,7 @@ LFail:
 /***************************************************************************
     Flush user generated events from the system event queue.
 ***************************************************************************/
-void APPB::FlushUserEvents(ulong grfevt)
+void APPB::FlushUserEvents(uint32_t grfevt)
 {
     AssertThis(0);
     EVT evt;
@@ -955,7 +955,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
     {
         // can't use a dialog - it may cause grid - lock
         long sid;
-        ulong grfmb;
+        uint32_t grfmb;
 
         stn0.FAppendSz(PszLit("\n"));
         stn0.FAppendStn(&stn1);
@@ -1015,7 +1015,7 @@ tribool APPB::TGiveAlertSz(const PSZ psz, long bk, long cok)
     AssertSz(psz);
 
     long sid;
-    ulong grfmb;
+    uint32_t grfmb;
     HWND hwnd;
 
     grfmb = MB_APPLMODAL;

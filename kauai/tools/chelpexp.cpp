@@ -32,7 +32,7 @@ bool FExportHelpText(PCFL pcfl, PMSNK pmsnk)
     CKI cki, ckiPar;
     KID kid;
     CGE cge;
-    ulong grfcge;
+    uint32_t grfcge;
     HTOPF htopf;
     CHSE chse;
     STN stn, stnT;

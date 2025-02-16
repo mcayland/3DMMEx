@@ -152,7 +152,7 @@ struct SSE
     }
     PSSE PsseAddTagChid(PTAG ptag, long chid);
     PSSE PsseDup(void);
-    void PlayAllSounds(PMVIE pmvie, ulong dtsStart = 0);
+    void PlayAllSounds(PMVIE pmvie, uint32_t dtsStart = 0);
     void SwapBytes(void)
     {
         long itagc;
@@ -767,7 +767,7 @@ void SCEN::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SCEN.
 ***************************************************************************/
-void SCEN::AssertValid(ulong grf)
+void SCEN::AssertValid(uint32_t grf)
 {
     long isev;
     SEV sev;
@@ -1227,7 +1227,7 @@ void SCEN::_EndPrerendering(void)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FReplayFrm(ulong grfscen)
+bool SCEN::FReplayFrm(uint32_t grfscen)
 {
     AssertThis(0);
 
@@ -1349,7 +1349,7 @@ void SCEN::InvalFrmRange(void)
  *	fTrue if the event was played, fFalse in the case of failure.
  *
  ****************************************************/
-bool SCEN::_FPlaySev(PSEV psev, void *qvVar, ulong grfscen)
+bool SCEN::_FPlaySev(PSEV psev, void *qvVar, uint32_t grfscen)
 {
     AssertThis(0);
     AssertVarMem(psev);
@@ -2204,8 +2204,8 @@ void SCEN::PlayBkgdSnd(void)
 {
     AssertThis(0);
 
-    ulong dtsStart;
-    ulong dfrm;
+    uint32_t dtsStart;
+    uint32_t dfrm;
 
     if (pvNil != _psseBkgd)
     {
@@ -5934,7 +5934,7 @@ void SUNT::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNT.
 ***************************************************************************/
-void SUNT::AssertValid(ulong grf)
+void SUNT::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -6103,7 +6103,7 @@ void SUNS::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNS.
 ***************************************************************************/
-void SUNS::AssertValid(ulong grf)
+void SUNS::AssertValid(uint32_t grf)
 {
     SUNS_PAR::AssertValid(grf);
     if (_psse != pvNil)
@@ -6335,7 +6335,7 @@ void SUNA::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNA.
 ***************************************************************************/
-void SUNA::AssertValid(ulong grf)
+void SUNA::AssertValid(uint32_t grf)
 {
     AssertPo(_pactr, 0);
 }
@@ -6574,7 +6574,7 @@ void SUNX::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNX.
 ***************************************************************************/
-void SUNX::AssertValid(ulong grf)
+void SUNX::AssertValid(uint32_t grf)
 {
     AssertPo(_ptbox, 0);
 }
@@ -6687,7 +6687,7 @@ void SUNR::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNR.
 ***************************************************************************/
-void SUNR::AssertValid(ulong grf)
+void SUNR::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -6800,7 +6800,7 @@ void SUNP::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNP.
 ***************************************************************************/
-void SUNP::AssertValid(ulong grf)
+void SUNP::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -6941,7 +6941,7 @@ void SUNK::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNK.
 ***************************************************************************/
-void SUNK::AssertValid(ulong grf)
+void SUNK::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -7138,7 +7138,7 @@ void SUNC::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNC.
 ***************************************************************************/
-void SUNC::AssertValid(ulong grf)
+void SUNC::AssertValid(uint32_t grf)
 {
     AssertNilOrPo(_pcrf, grf);
 }
@@ -7293,7 +7293,7 @@ PSSE SSE::PsseDup(void)
 /***************************************************************************
     Play all sounds in this SSE	-> Enqueue the sounds in the SSE
 ***************************************************************************/
-void SSE::PlayAllSounds(PMVIE pmvie, ulong dtsStart)
+void SSE::PlayAllSounds(PMVIE pmvie, uint32_t dtsStart)
 {
     PMSND pmsnd;
     long itag;

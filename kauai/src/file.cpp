@@ -24,7 +24,7 @@ RTCLASS(MSFIL)
 /***************************************************************************
     Constructor for a file.
 ***************************************************************************/
-FIL::FIL(FNI *pfni, ulong grffil)
+FIL::FIL(FNI *pfni, uint32_t grffil)
 {
     AssertPo(pfni, ffniFile);
     _fni = *pfni;
@@ -52,7 +52,7 @@ FIL::~FIL(void)
 /***************************************************************************
     Static method to open an existing file.  Increments the open count.
 ***************************************************************************/
-PFIL FIL::PfilOpen(FNI *pfni, ulong grffil)
+PFIL FIL::PfilOpen(FNI *pfni, uint32_t grffil)
 {
     AssertPo(pfni, ffniFile);
     PFIL pfil;
@@ -86,7 +86,7 @@ PFIL FIL::PfilOpen(FNI *pfni, ulong grffil)
 /***************************************************************************
     Create a new file.  Increments the open count.
 ***************************************************************************/
-PFIL FIL::PfilCreate(FNI *pfni, ulong grffil)
+PFIL FIL::PfilCreate(FNI *pfni, uint32_t grffil)
 {
     AssertPo(pfni, ffniFile);
     PFIL pfil;
@@ -168,7 +168,7 @@ PFIL FIL::PfilFromFni(FNI *pfni)
     Set the file flags according to grffil and grffilMask.  Write enabling
     is only set, never cleared.  Same with marking.
 ***************************************************************************/
-bool FIL::FSetGrffil(ulong grffil, ulong grffilMask)
+bool FIL::FSetGrffil(uint32_t grffil, uint32_t grffilMask)
 {
     AssertThis(0);
     bool fRet = fFalse;
@@ -332,7 +332,7 @@ void FIL::ShutDown(void)
 /***************************************************************************
     Validate a pfil.
 ***************************************************************************/
-void FIL::AssertValid(ulong grf)
+void FIL::AssertValid(uint32_t grf)
 {
     PFIL pfil;
 
@@ -611,7 +611,7 @@ LFail:
 /***************************************************************************
     Assert this is a valif FLO.
 ***************************************************************************/
-void FLO::AssertValid(ulong grfflo)
+void FLO::AssertValid(uint32_t grfflo)
 {
     AssertPo(pfil, 0);
     AssertIn(fp, 0, kcbMax);
@@ -1289,7 +1289,7 @@ long BLCK::CbMem(void)
 /***************************************************************************
     Assert the validity of a BLCK.
 ***************************************************************************/
-void BLCK::AssertValid(ulong grfblck)
+void BLCK::AssertValid(uint32_t grfblck)
 {
     BLCK_PAR::AssertValid(0);
 
@@ -1351,7 +1351,7 @@ MSFIL::~MSFIL(void)
 /***************************************************************************
     Assert the validity of a MSFIL.
 ***************************************************************************/
-void MSFIL::AssertValid(ulong grf)
+void MSFIL::AssertValid(uint32_t grf)
 {
     MSFIL_PAR::AssertValid(0);
     AssertNilOrPo(_pfil, 0);

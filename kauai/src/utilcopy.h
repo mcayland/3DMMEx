@@ -28,7 +28,7 @@ void SwapPb(void *pv1, void *pv2, long cb);
 void MoveElement(void *prgv, long cbElement, long ivSrc, long ivTarget);
 bool FEqualRgb(const void *pv1, const void *pv2, long cb);
 long CbEqualRgb(const void *pv1, const void *pv2, long cbMax);
-ulong FcmpCompareRgb(const void *pv1, const void *pv2, long cb);
+uint32_t FcmpCompareRgb(const void *pv1, const void *pv2, long cb);
 
 #ifdef DEBUG
 #define SwapVars(pv1, pv2)                                                                                             \

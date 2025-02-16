@@ -29,7 +29,7 @@ END_CMD_MAP_NIL()
 RTCLASS(SCRT)
 
 #ifdef DEBUG
-void SCRT::AssertValid(ulong grf)
+void SCRT::AssertValid(uint32_t grf)
 {
     SCRT_PAR::AssertValid(0);
     if (_iscenMac > 0)
@@ -771,7 +771,7 @@ long SCRT::_LwFromTrans(TRANS trans)
 RTCLASS(GOMP)
 
 #ifdef DEBUG
-void GOMP::AssertValid(ulong grf)
+void GOMP::AssertValid(uint32_t grf)
 {
     GOMP_PAR::AssertValid(0);
     AssertNilOrPo(_pmbmp, 0);

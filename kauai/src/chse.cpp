@@ -70,7 +70,7 @@ void CHSE::Uninit(void)
 /***************************************************************************
     Assert the validity of a CHSE.
 ***************************************************************************/
-void CHSE::AssertValid(ulong grfchse)
+void CHSE::AssertValid(uint32_t grfchse)
 {
     CHSE_PAR::AssertValid(0);
     AssertPo(&_bsf, 0);

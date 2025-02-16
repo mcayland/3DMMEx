@@ -85,9 +85,9 @@ ADST::ADST(void)
     Allocates a new moveable block.
 ***************************************************************************/
 #ifdef DEBUG
-bool FAllocHqDebug(HQ *phq, long cb, ulong grfmem, long mpr, schar *pszsFile, long lwLine)
+bool FAllocHqDebug(HQ *phq, long cb, uint32_t grfmem, long mpr, schar *pszsFile, long lwLine)
 #else  //! DEBUG
-bool FAllocHq(HQ *phq, long cb, ulong grfmem, long mpr)
+bool FAllocHq(HQ *phq, long cb, uint32_t grfmem, long mpr)
 #endif //! DEBUG
 {
     AssertVarMem(phq);
@@ -157,7 +157,7 @@ bool FAllocHq(HQ *phq, long cb, ulong grfmem, long mpr)
     Resizes the given hq.  *phq may change (on Windows).  If fhqClear,
     clears any newly added space.
 ***************************************************************************/
-bool FResizePhq(HQ *phq, long cb, ulong grfmem, long mpr)
+bool FResizePhq(HQ *phq, long cb, uint32_t grfmem, long mpr)
 {
     AssertVarMem(phq);
     AssertHq(*phq);

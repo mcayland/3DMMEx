@@ -21,7 +21,7 @@ RTCLASS(TXDD)
 /***************************************************************************
     Constructor for a text document.
 ***************************************************************************/
-TXDC::TXDC(PDOCB pdocb, ulong grfdoc) : DOCB(pdocb, grfdoc)
+TXDC::TXDC(PDOCB pdocb, uint32_t grfdoc) : DOCB(pdocb, grfdoc)
 {
     _pbsf = pvNil;
     _pfil = pvNil;
@@ -39,7 +39,7 @@ TXDC::~TXDC(void)
 /***************************************************************************
     Create a new document based on the given text file and or text stream.
 ***************************************************************************/
-PTXDC TXDC::PtxdcNew(PFNI pfni, PBSF pbsf, PDOCB pdocb, ulong grfdoc)
+PTXDC TXDC::PtxdcNew(PFNI pfni, PBSF pbsf, PDOCB pdocb, uint32_t grfdoc)
 {
     AssertNilOrPo(pfni, ffniFile);
     AssertNilOrPo(pbsf, 0);
@@ -177,7 +177,7 @@ bool TXDC::FSaveToFni(FNI *pfni, bool fSetFni)
 /***************************************************************************
     Assert the validity of a TXDC.
 ***************************************************************************/
-void TXDC::AssertValid(ulong grf)
+void TXDC::AssertValid(uint32_t grf)
 {
     TXDC_PAR::AssertValid(0);
     AssertPo(_pbsf, 0);
@@ -198,7 +198,7 @@ void TXDC::MarkMem(void)
 /***************************************************************************
     Constructor for a text document display gob.
 ***************************************************************************/
-TXDD::TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, ulong grfont, long dypFont) : DDG(pdocb, pgcb)
+TXDD::TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfont, long dypFont) : DDG(pdocb, pgcb)
 {
     AssertPo(pbsf, 0);
     Assert(vntl.FValidOnn(onn), "bad onn");
@@ -231,7 +231,7 @@ TXDD::~TXDD(void)
 /***************************************************************************
     Create a new TXDD.
 ***************************************************************************/
-PTXDD TXDD::PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, ulong grfont, long dypFont)
+PTXDD TXDD::PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfont, long dypFont)
 {
     PTXDD ptxdd;
 
@@ -1410,7 +1410,7 @@ bool TXDD::FCmdKey(PCMD_KEY pcmd)
     const long kcchInsBuf = 64;
     AssertThis(0);
     AssertVarMem(pcmd);
-    ulong grfcust;
+    uint32_t grfcust;
     long vkDone;
     long dich, dln, ichLim, ichT, ichMin;
     achar ch;
@@ -1795,7 +1795,7 @@ bool TXDD::_FPaste(PCLIP pclip, bool fDoIt, long cid)
 /***************************************************************************
     Assert the validity of a TXDD.
 ***************************************************************************/
-void TXDD::AssertValid(ulong grf)
+void TXDD::AssertValid(uint32_t grf)
 {
     // REVIEW shonk: fill in more
     TXDD_PAR::AssertValid(0);

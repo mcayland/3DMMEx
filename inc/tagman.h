@@ -132,7 +132,7 @@ class TAGM : public TAGM_PAR
     bool FCacheTagToHD(PTAG ptag, bool fCacheChildChunks = fTrue);
     PBACO PbacoFetch(PTAG ptag, PFNRPO pfnrpo, bool fUseCD = fFalse);
     void ClearCache(long sid = sidNil,
-                    ulong grftagm = ftagmFile | ftagmMemory); // sidNil clears all caches
+                    uint32_t grftagm = ftagmFile | ftagmMemory); // sidNil clears all caches
 
     // For ksidUseCrf tags:
     static bool FOpenTag(PTAG ptag, PCRF pcrfDest, PCFL pcflSrc = pvNil);
@@ -140,7 +140,7 @@ class TAGM : public TAGM_PAR
     static void DupTag(PTAG ptag); // call this when you're copying a tag
     static void CloseTag(PTAG ptag);
 
-    static ulong FcmpCompareTags(PTAG ptag1, PTAG ptag2);
+    static uint32_t FcmpCompareTags(PTAG ptag1, PTAG ptag2);
 };
 
 #endif // TAGM_H

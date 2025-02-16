@@ -27,7 +27,7 @@ class DHEX : public DHEX_PAR
   protected:
     BSF _bsf;
 
-    DHEX(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil) : DHEX_PAR(pdocb, grfdoc)
+    DHEX(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil) : DHEX_PAR(pdocb, grfdoc)
     {
     }
 
@@ -72,7 +72,7 @@ PDDG DHEX::PddgNew(PGCB pgcb)
 /***************************************************************************
     Assert the validity of a DHEX.
 ***************************************************************************/
-void DHEX::AssertValid(ulong grf)
+void DHEX::AssertValid(uint32_t grf)
 {
     DHEX_PAR::AssertValid(0);
     AssertPo(&_bsf, 0);
@@ -279,7 +279,7 @@ void DCH::_DrawHeader(PGNV pgnv)
 bool DCH::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
-    ulong grfcust;
+    uint32_t grfcust;
     long dibSel, dibDel, ibLim;
     long cact;
     CMD cmd;
@@ -935,7 +935,7 @@ long DCH::_IbFromPt(long xp, long yp, tribool *ptHex, bool *pfRight)
 /***************************************************************************
     Handle a mouse down in our content.
 ***************************************************************************/
-void DCH::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DCH::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     tribool tHex;
@@ -1091,7 +1091,7 @@ bool DCH::_FPaste(PCLIP pclip, bool fDoIt, long cid)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DCH::AssertValid(ulong grf)
+void DCH::AssertValid(uint32_t grf)
 {
     DCH_PAR::AssertValid(0);
     AssertPo(_pbsf, 0);
@@ -1202,7 +1202,7 @@ bool DOCH::_FWrite(PBLCK pblck, bool fRedirect)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DOCH::AssertValid(ulong grf)
+void DOCH::AssertValid(uint32_t grf)
 {
     DOCH_PAR::AssertValid(0);
     AssertPo(&_bsf, 0);

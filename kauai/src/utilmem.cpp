@@ -126,9 +126,9 @@ void DMAGL::Free(long cbT)
     Allocates a fixed block.
 ***************************************************************************/
 #ifdef DEBUG
-bool FAllocPvDebug(void **ppv, long cb, ulong grfmem, long mpr, PSZS pszsFile, long lwLine, DMAGL *pdmagl)
+bool FAllocPvDebug(void **ppv, long cb, uint32_t grfmem, long mpr, PSZS pszsFile, long lwLine, DMAGL *pdmagl)
 #else  //! DEBUG
-bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr)
+bool FAllocPv(void **ppv, long cb, uint32_t grfmem, long mpr)
 #endif //! DEBUG
 {
     AssertVarMem(ppv);
@@ -245,9 +245,9 @@ bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr)
     newly added space.
 ***************************************************************************/
 #ifdef DEBUG
-bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr, DMAGL *pdmagl)
+bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, uint32_t grfmem, long mpr, DMAGL *pdmagl)
 #else  //! DEBUG
-bool _FResizePpv(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr)
+bool _FResizePpv(void **ppv, long cbNew, long cbOld, uint32_t grfmem, long mpr)
 #endif //! DEBUG
 {
     AssertVarMem(ppv);

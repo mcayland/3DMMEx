@@ -156,8 +156,8 @@ const uint8_t kbLabel = 0xCC;
 ***************************************************************************/
 struct RTVN
 {
-    ulong lu1;
-    ulong lu2;
+    uint32_t lu1;
+    uint32_t lu2;
 
     void SetFromStn(PSTN pstn);
     void GetStn(PSTN pstn);
@@ -232,14 +232,14 @@ class SCCB : public SCCB_PAR
     // in-fix compiler routines
     virtual void _CompileIn(void);
     bool _FResolveToOpl(long opl, long oplMin, long *pietn);
-    void _EmitCode(long ietnTop, ulong grfscc, long *pclwArg);
+    void _EmitCode(long ietnTop, uint32_t grfscc, long *pclwArg);
     void _EmitVarAccess(long ietn, RTVN *prtvn, long *popPush, long *popPop, long *pclwStack);
     virtual bool _FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar, bool *pfVoid);
     bool _FGetArop(PSTN pstn, AROP *prgarop, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar,
                    bool *pfVoid);
     void _PushLabelRequestIetn(long ietn);
     void _AddLabelIetn(long ietn);
-    void _PushOpFromName(long ietn, ulong grfscc, long clwArg);
+    void _PushOpFromName(long ietn, uint32_t grfscc, long clwArg);
     void _GetIstnNameFromIetn(long ietn, long *pistn);
     void _GetRtvnFromName(long istn, RTVN *prtvn);
     bool _FKeyWord(PSTN pstn);

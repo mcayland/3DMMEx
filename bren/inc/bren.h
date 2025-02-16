@@ -120,7 +120,7 @@ inline BRS BrsDiv(BRS r1, BRS r2) // Safety net: Prevent ovfl on division of int
     if (LwAbs((long)r2) < rDivMin)
         return ((r1 > 0 == r2 > 0) ? BR_SCALAR_MAX : BR_SCALAR_MIN);
     BRS rRcp = BR_RCP(r2);
-    ulong lwT = (((ulong)BR_ABS(r1)) >> 16) * (((ulong)BR_ABS(rRcp)) >> 16);
+    uint32_t lwT = (((uint32_t)BR_ABS(r1)) >> 16) * (((uint32_t)BR_ABS(rRcp)) >> 16);
     if (lwT < 65536)
         return (BRS)BR_MUL(r1, rRcp);
     return ((r1 > 0 == r2 > 0) ? BR_SCALAR_MAX : BR_SCALAR_MIN);

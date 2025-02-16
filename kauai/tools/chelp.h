@@ -50,17 +50,17 @@ class APP : public APP_PAR
     PLID _plidPicture;
     PLID _plidButton;
 
-    virtual bool _FInit(ulong grfapp, ulong grfgob, long ginDef);
-    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp = fappNil, PGPT pgpt = pvNil);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, long ginDef);
+    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
 
   public:
     virtual void GetStnAppName(PSTN pstn);
-    virtual void UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp = fappNil);
+    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
 
     virtual bool FCmdOpen(PCMD pcmd);
     virtual bool FCmdLoadResFile(PCMD pcmd);
     virtual bool FCmdChooseLanguage(PCMD pcmd);
-    virtual bool FEnableChooseLanguage(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableChooseLanguage(PCMD pcmd, uint32_t *pgrfeds);
 
     PLIG PligNew(bool fButton, PGCB pgcb, PTXHD ptxhd);
     bool FLoadResFile(PFNI pfni);
@@ -135,7 +135,7 @@ class LIG : public LIG_PAR
 
     PLID Plid(void);
     void Refresh(void);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdScroll(PCMD pcmd);
 };
@@ -165,7 +165,7 @@ class CCG : public CCG_PAR
   public:
     CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, long cacrRow = kcacrCcg);
 
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
 
@@ -333,11 +333,11 @@ class HEDG : public HEDG_PAR
     static PHEDG PhedgNew(PHEDO phedo, PCFL pcfl, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual bool FCmdKey(PCMD_KEY pcmd);
 
     virtual void InvalCno(CNO cno);
-    virtual bool FEnableHedgCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableHedgCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdNewTopic(PCMD pcmd);
     virtual bool FCmdEditTopic(PCMD pcmd);
     virtual bool FCmdDeleteTopic(PCMD pcmd);
@@ -430,7 +430,7 @@ class HETG : public HETG_PAR
     virtual PTRUL _PtrulNew(PGCB pgcb);
 
     // override _DrawLinExtra so we can put boxes around grouped text.
-    virtual void _DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, ulong grftxtg);
+    virtual void _DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, uint32_t grftxtg);
 
   public:
     static PHETG PhetgNew(PHETD phetd, PGCB pgcb);
@@ -444,7 +444,7 @@ class HETG : public HETG_PAR
     virtual bool FCmdGroupText(PCMD pcmd);
     virtual bool FCmdFormatPicture(PCMD pcmd);
     virtual bool FCmdFormatButton(PCMD pcmd);
-    virtual bool FEnableHetgCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableHetgCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdEditHtop(PCMD pcmd);
     virtual bool FCmdInsertEdit(PCMD pcmd);
     virtual bool FCmdFormatEdit(PCMD pcmd);
@@ -497,13 +497,13 @@ class HTRU : public HTRU_PAR
     long _rtt;
     long _onn;
     long _dypFont;
-    ulong _grfont;
+    uint32_t _grfont;
 
     HTRU(GCB *pgcb, PTXTG ptxtg);
 
   public:
     static PHTRU PhtruNew(GCB *pgcb, PTXTG ptxtg, long dxpTab, long dxpDoc, long dypDoc, long xpLeft, long onn,
-                          long dypFont, ulong grfont);
+                          long dypFont, uint32_t grfont);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);

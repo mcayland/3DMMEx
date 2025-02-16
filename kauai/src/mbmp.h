@@ -74,7 +74,7 @@ class MBMP : public MBMP_PAR
     {
     }
     virtual bool _FInit(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
-                        ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
+                        uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 
     int16_t *_Qrgcb(void)
     {
@@ -89,9 +89,9 @@ class MBMP : public MBMP_PAR
     ~MBMP(void);
 
     static PMBMP PmbmpNew(uint8_t *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, uint8_t bTransparent,
-                          ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
+                          uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
     static PMBMP PmbmpReadNative(FNI *pfni, uint8_t bTransparent = 0, long xp = 0, long yp = 0,
-                                 ulong grfmbmp = fmbmpNil, uint8_t bDefault = 0);
+                                 uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 
     static PMBMP PmbmpRead(PBLCK pblck);
 

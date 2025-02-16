@@ -49,7 +49,7 @@ class SSCB : public SSCB_PAR
     // Frame descriptor
     struct FDSC
     {
-        ulong ts;
+        uint32_t ts;
         long cfrm;
     };
 

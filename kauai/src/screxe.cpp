@@ -87,7 +87,7 @@ void SCEB::Free(void)
 /***************************************************************************
     Assert the validity of a SCEB.
 ***************************************************************************/
-void SCEB::AssertValid(ulong grfsceb)
+void SCEB::AssertValid(uint32_t grfsceb)
 {
     SCEB_PAR::AssertValid(0);
     if (grfsceb & fscebRunnable)
@@ -268,8 +268,8 @@ bool SCEB::FResume(long *plwReturn, bool *pfPaused)
                 goto LFail;
             }
             clwPush--;
-            rtvn.lu1 = (ulong)lw & 0x0000FFFF;
-            rtvn.lu2 = *(ulong *)_pscpt->_pgllw->QvGet(_ilwCur++);
+            rtvn.lu1 = (uint32_t)lw & 0x0000FFFF;
+            rtvn.lu2 = *(uint32_t *)_pscpt->_pgllw->QvGet(_ilwCur++);
             ilw = _ilwCur;
             if (!_FExecVarOp(op, &rtvn))
                 goto LFail;
@@ -504,10 +504,10 @@ bool SCEB::_FExecOp(long op)
         _Push(lw1 - 1);
         break;
     case kopShr:
-        _Push((ulong)_LwPop() >> lw1);
+        _Push((uint32_t)_LwPop() >> lw1);
         break;
     case kopShl:
-        _Push((ulong)_LwPop() << lw1);
+        _Push((uint32_t)_LwPop() << lw1);
         break;
     case kopBOr:
         _Push(_LwPop() | lw1);
@@ -786,7 +786,7 @@ void SCEB::_WarnSz(PSZ psz, ...)
     STN stn1, stn2;
     SZS szs;
 
-    stn1.FFormatRgch(psz, CchSz(psz), (ulong *)(&psz + 1));
+    stn1.FFormatRgch(psz, CchSz(psz), (uint32_t *)(&psz + 1));
     stn2.FFormatSz(PszLit("Script ('%f', 0x%x, %d): %s"), _pscpt->Ctg(), _pscpt->Cno(), _ilwCur, &stn1);
     stn2.GetSzs(szs);
     Warn(szs);
@@ -1516,7 +1516,7 @@ bool SCPT::FSaveToChunk(PCFL pcfl, CTG ctg, CNO cno, bool fPack)
 /***************************************************************************
     Assert the validity of a SCPT.
 ***************************************************************************/
-void SCPT::AssertValid(ulong grf)
+void SCPT::AssertValid(uint32_t grf)
 {
     SCPT_PAR::AssertValid(0);
     AssertPo(_pgllw, 0);
@@ -1557,7 +1557,7 @@ STRG::~STRG(void)
 /***************************************************************************
     Assert the validity of a STRG.
 ***************************************************************************/
-void STRG::AssertValid(ulong grf)
+void STRG::AssertValid(uint32_t grf)
 {
     STRG_PAR::AssertValid(0);
     AssertNilOrPo(_pgst, 0);

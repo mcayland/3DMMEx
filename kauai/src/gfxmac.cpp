@@ -101,7 +101,7 @@ void GPT::Flush(void)
 
     REVIEW shonk: Mac: implement fpalInitAnim and fpalAnimate.
 ***************************************************************************/
-void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
+void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
 {
     AssertNilOrPo(pglclr, 0);
     long cclr, iclr, iv;
@@ -1141,7 +1141,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
 /***************************************************************************
     Test the validity of the port.
 ***************************************************************************/
-void GPT::AssertValid(ulong grf)
+void GPT::AssertValid(uint32_t grf)
 {
     GPT_PAR::AssertValid(0);
     AssertIn(_cactRef, 1, kcbMax);

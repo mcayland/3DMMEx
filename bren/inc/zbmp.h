@@ -25,7 +25,7 @@ struct ZBMPF
     // void *rgb; 		// pixels follow immediately after ZBMPF
 };
 VERIFY_STRUCT_SIZE(ZBMPF, 12);
-const ulong kbomZbmpf = 0x55500000;
+const uint32_t kbomZbmpf = 0x55500000;
 
 /****************************************
     ZBMP class

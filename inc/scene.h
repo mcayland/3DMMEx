@@ -143,7 +143,7 @@ class SCEN : public SCEN_PAR
     PGG _pggsevStart;     // List of frame independent events.
     PMVIE _pmvie;         // Movie this scene is a part of.
     PBKGD _pbkgd;         // Background for this scene.
-    ulong _grfscen;       // Disabled functionality.
+    uint32_t _grfscen;    // Disabled functionality.
     PACTR _pactrSelected; // Currently selected actor, if any
     PTBOX _ptboxSelected; // Currently selected tbox, if any
     TRANS _trans;         // Transition at the end of the scene.
@@ -161,7 +161,7 @@ class SCEN : public SCEN_PAR
     //
     // Event stuff
     //
-    bool _FPlaySev(PSEV psev, void *qvVar, ulong grfscen); // Plays a single scene event.
+    bool _FPlaySev(PSEV psev, void *qvVar, uint32_t grfscen); // Plays a single scene event.
     bool _FUnPlaySev(PSEV psev, void *qvVar);              // Undoes a single scene event.
     bool _FAddSev(PSEV psev, long cbVar, void *pvVar);     // Adds scene event to the current frame.
     void _MoveBackFirstFrame(long nfrm);
@@ -218,7 +218,7 @@ class SCEN : public SCEN_PAR
     {
         return (_nfrmLast);
     }
-    bool FReplayFrm(ulong grfscen); // Replay events in this scene.
+    bool FReplayFrm(uint32_t grfscen); // Replay events in this scene.
 
     //
     // Undo accessor functions
@@ -265,11 +265,11 @@ class SCEN : public SCEN_PAR
     //
     // State functions
     //
-    void Disable(ulong grfscen) // Disables functionality.
+    void Disable(uint32_t grfscen) // Disables functionality.
     {
         _grfscen |= grfscen;
     }
-    void Enable(ulong grfscen) // Enables functionality.
+    void Enable(uint32_t grfscen) // Enables functionality.
     {
         _grfscen &= ~grfscen;
     }

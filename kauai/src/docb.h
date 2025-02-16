@@ -83,11 +83,11 @@ class DOCB : public DOCB_PAR
     bool _FFindDdg(PDDG pddg, long *pipddg);
     virtual tribool _TQuerySave(bool fForce);
 
-    DOCB(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    DOCB(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
     ~DOCB(void);
 
   public:
-    static bool FQueryCloseAll(ulong grfdoc);
+    static bool FQueryCloseAll(uint32_t grfdoc);
     static PDOCB PdocbFromFni(FNI *pfni);
 
     static PDOCB PdocbFirst(void)
@@ -115,7 +115,7 @@ class DOCB : public DOCB_PAR
 
     // low level calls - generally not for public consumption
     virtual PDMW PdmwNew(PGCB pgcb);
-    virtual PDSG PdsgNew(PDMW pdwm, PDSG pdsgSplit, ulong grfdsg, long rel);
+    virtual PDSG PdsgNew(PDMW pdwm, PDSG pdsgSplit, uint32_t grfdsg, long rel);
     virtual PDDG PddgNew(PGCB pgcb);
 
     // DDG management - only to be called by DDGs
@@ -134,7 +134,7 @@ class DOCB : public DOCB_PAR
 
     virtual void UpdateName(void);
     virtual void GetName(PSTN pstn);
-    virtual bool FQueryClose(ulong grfdoc);
+    virtual bool FQueryClose(uint32_t grfdoc);
     virtual bool FQueryCloseDmd(PDMD pdmd);
     virtual bool FSave(long cid = cidSave);
 
@@ -208,7 +208,7 @@ class DTE : public DTE_PAR
   public:
     DTE(void);
     void Init(PDOCB pdocb);
-    bool FNextDoc(PDOCB *ppdocb, ulong *pgrfdteOut, ulong grfdteIn = fdteNil);
+    bool FNextDoc(PDOCB *ppdocb, uint32_t *pgrfdteOut, uint32_t grfdteIn = fdteNil);
 };
 
 /***************************************************************************
@@ -272,7 +272,7 @@ class DDG : public DDG_PAR
     virtual bool FCmdCloseDoc(PCMD pcmd);
     virtual bool FCmdSave(PCMD pcmd);
     virtual bool FCmdClip(PCMD pcmd);
-    virtual bool FEnableDdgCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdUndo(PCMD pcmd);
 };
 
@@ -357,7 +357,7 @@ class DMW : public DMW_PAR
         return _pdocb;
     }
 
-    bool FAddDsg(PDSG pdsg, PDSG pdsgSplit, ulong grfdsg, long rel);
+    bool FAddDsg(PDSG pdsg, PDSG pdsgSplit, uint32_t grfdsg, long rel);
     void RemoveDsg(PDSG pdsg);
     long Cdsg(void);
 
@@ -391,10 +391,10 @@ class DSG : public DSG_PAR
     DSG(PGCB pgcb);
     ~DSG(void);
 
-    virtual bool _FInit(PDSG pdsgSplit, ulong grfdsg, long rel);
+    virtual bool _FInit(PDSG pdsgSplit, uint32_t grfdsg, long rel);
 
   public:
-    static PDSG PdsgNew(PDMW pdmw, PDSG pdsgSplit, ulong grfdsg, long rel);
+    static PDSG PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, long rel);
     virtual void GetMinMax(RC *prcMinMax);
 
     PDMW Pdmw(void)
@@ -402,7 +402,7 @@ class DSG : public DSG_PAR
         return (PDMW)PgobPar();
     }
 
-    virtual void Split(ulong grfdsg, long rel);
+    virtual void Split(uint32_t grfdsg, long rel);
     virtual bool FCmdScroll(PCMD pcmd);
 };
 
@@ -436,10 +436,10 @@ class DSSP : public DSSP_PAR
     {
         return SCB::DxpNormal() / 2;
     }
-    static PDSSP PdsspNew(PDSG pdsg, ulong grfdssp);
+    static PDSSP PdsspNew(PDSG pdsg, uint32_t grfdssp);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
 };
 
 enum
@@ -471,7 +471,7 @@ class DSSM : public DSSM_PAR
     static PDSSM PdssmNew(PDSG pdsg);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     tribool TVert(void);
 };
 

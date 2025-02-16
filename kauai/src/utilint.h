@@ -37,9 +37,9 @@ enum
     fcmpGt = 0x0002,
     fcmpLt = 0x0004,
 };
-const ulong kgrfcmpGe = (fcmpEq | fcmpGt);
-const ulong kgrfcmpLe = (fcmpEq | fcmpLt);
-const ulong kgrfcmpNe = (fcmpGt | fcmpLt);
+const uint32_t kgrfcmpGe = (fcmpEq | fcmpGt);
+const uint32_t kgrfcmpLe = (fcmpEq | fcmpLt);
+const uint32_t kgrfcmpNe = (fcmpGt | fcmpLt);
 
 #define FPure(f) ((f) != fFalse)
 #define ivNil (-1L)
@@ -91,9 +91,9 @@ inline long LwHighLow(int16_t swHigh, int16_t swLow)
 {
     return ((long)swHigh << 16) | (long)(uint16_t)swLow;
 }
-inline ulong LuHighLow(uint16_t suHigh, uint16_t suLow)
+inline uint32_t LuHighLow(uint16_t suHigh, uint16_t suLow)
 {
-    return ((ulong)suHigh << 16) | (ulong)suLow;
+    return ((uint32_t)suHigh << 16) | (uint32_t)suLow;
 }
 inline uint8_t B0Lw(long lw)
 {
@@ -118,7 +118,7 @@ inline long LwFromBytes(uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0)
 
 inline uint16_t SuHigh(long lw)
 {
-    return (uint16_t)((ulong)lw >> 16);
+    return (uint16_t)((uint32_t)lw >> 16);
 }
 inline uint16_t SuLow(long lw)
 {
@@ -170,11 +170,11 @@ inline long LwMax(long lw1, long lw2)
 {
     return lw1 >= lw2 ? lw1 : lw2;
 }
-inline ulong LuMin(ulong lu1, ulong lu2)
+inline uint32_t LuMin(uint32_t lu1, uint32_t lu2)
 {
     return lu1 < lu2 ? lu1 : lu2;
 }
-inline ulong LuMax(ulong lu1, ulong lu2)
+inline uint32_t LuMax(uint32_t lu1, uint32_t lu2)
 {
     return lu1 >= lu2 ? lu1 : lu2;
 }
@@ -201,9 +201,9 @@ inline long LwMulSw(int16_t sw1, int16_t sw2)
 extern "C"
 {
     long __cdecl LwMulDiv(long lw, long lwMul, long lwDiv);
-    void __cdecl MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow);
-    ulong __cdecl LuMulDiv(ulong lu, ulong luMul, ulong luDiv);
-    void __cdecl MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow);
+    void __cdecl MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow);
+    uint32_t __cdecl LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv);
+    void __cdecl MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 }
 long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem);
 
@@ -241,9 +241,9 @@ inline long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem)
     return lw;
 }
 
-void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow);
-ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv);
-void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow);
+void MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow);
+uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv);
+void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 
 #else //! MC_68020 && !IN_80386
 
@@ -252,16 +252,16 @@ void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow);
 ***************************************************************************/
 long LwMulDiv(long lw, long lwMul, long lwDiv);
 long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem);
-void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow);
-ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv);
-void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow);
+void MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow);
+uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv);
+void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 
 #endif //! MC_68020 && !IN_80386
 
 long LwMulDivAway(long lw, long lwMul, long lwDiv);
-ulong LuMulDivAway(ulong lu, ulong luMul, ulong luDiv);
+uint32_t LuMulDivAway(uint32_t lu, uint32_t luMul, uint32_t luDiv);
 
-ulong FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2);
+uint32_t FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2);
 
 long LwDivAway(long lwNum, long lwDen);
 long LwDivClosest(long lwNum, long lwDen);
@@ -291,7 +291,7 @@ inline long IbFromIbit(long ibit)
 }
 
 long LwGcd(long lw1, long lw2);
-ulong LuGcd(ulong lu1, ulong lu2);
+uint32_t LuGcd(uint32_t lu1, uint32_t lu2);
 
 bool FAdjustIv(long *piv, long iv, long cvIns, long cvDel);
 
@@ -311,7 +311,7 @@ inline long LwMul(long lw1, long lw2)
 ****************************************/
 
 // byte order mask
-typedef ulong BOM;
+typedef uint32_t BOM;
 
 void SwapBytesBom(void *pv, BOM bom);
 void SwapBytesRgsw(void *psw, long csw);
@@ -424,7 +424,7 @@ class PT
     void Map(RC *prcSrc, RC *prcDst);
     PT PtMap(RC *prcSrc, RC *prcDst);
 
-    void Transform(ulong grfpt);
+    void Transform(uint32_t grfpt);
 };
 
 class RC
@@ -530,7 +530,7 @@ class RC
     // map the rectangle from prcSrc to prcDst coordinates
     void Map(RC *prcSrc, RC *prcDst);
 
-    void Transform(ulong grfpt);
+    void Transform(uint32_t grfpt);
 
     long Dxp(void)
     {

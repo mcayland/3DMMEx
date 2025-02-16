@@ -22,7 +22,7 @@ ASSERTNAME
         ffilWriteEnable | ffilDenyRead | ffilDenyWrite
         ffilDenyWrite
 ***************************************************************************/
-bool FIL::_FOpen(bool fCreate, ulong grffil)
+bool FIL::_FOpen(bool fCreate, uint32_t grffil)
 {
     AssertBaseThis(0);
     AssertPo(&_fni, ffniFile);

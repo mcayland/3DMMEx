@@ -424,7 +424,7 @@ SPLOT::~SPLOT(void)
 }
 
 #ifdef DEBUG
-void SPLOT::AssertValid(ulong grf)
+void SPLOT::AssertValid(uint32_t grf)
 {
     SPLOT_PAR::AssertValid(grf);
     AssertPo(_pglclrSav, 0);

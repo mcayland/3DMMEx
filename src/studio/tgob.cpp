@@ -240,7 +240,7 @@ void TGOB::MarkMem(void)
  *		Nothing.
  *
 \*****************************************************************************/
-void TGOB::AssertValid(ulong grf)
+void TGOB::AssertValid(uint32_t grf)
 {
     TGOB_PAR::AssertValid(fobjAllocated);
 }

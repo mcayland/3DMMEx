@@ -1184,7 +1184,7 @@ void BODY::GetPosition(BRS *pxr, BRS *pyr, BRS *pzr)
 /***************************************************************************
     Assert the validity of the BODY.
 ***************************************************************************/
-void BODY::AssertValid(ulong grf)
+void BODY::AssertValid(uint32_t grf)
 {
     long ibact;
     long ibset;
@@ -1372,7 +1372,7 @@ void COST::Set(PBODY pbody, bool fAllowDifferentShape)
 /***************************************************************************
     Assert the validity of the COST.
 ***************************************************************************/
-void COST::AssertValid(ulong grf)
+void COST::AssertValid(uint32_t grf)
 {
     long ibset;
     BASE *po;

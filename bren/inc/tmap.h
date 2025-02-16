@@ -28,7 +28,7 @@ struct TMAPF
     // void *rgb; 		// pixels follow immediately after TMAPF
 };
 VERIFY_STRUCT_SIZE(TMAPF, 20);
-const ulong kbomTmapf = 0x54555000;
+const uint32_t kbomTmapf = 0x54555000;
 
 /* A TeXture XransForm on File */
 typedef struct _txxff

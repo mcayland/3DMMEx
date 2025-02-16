@@ -177,7 +177,7 @@ class MSND : public MSND_PAR
         return _fNoSound;
     }
 
-    void Play(long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr = fFalse, ulong dtsStart = 0);
+    void Play(long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr = fFalse, uint32_t dtsStart = 0);
 };
 
 /****************************************
@@ -204,7 +204,7 @@ struct SQE
     long spr;       // Priority
     bool fActr;     // Actor vs Scene (to generate unique class)
     PMSND pmsnd;    // PMSND
-    ulong dtsStart; // How far into the sound to start playing
+    uint32_t dtsStart; // How far into the sound to start playing
 };
 
 class MSQ : public MSQ_PAR
@@ -228,7 +228,7 @@ class MSQ : public MSQ_PAR
     static PMSQ PmsqNew(void);
 
     bool FEnqueue(PMSND pmsnd, long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr = fFalse,
-                  ulong dtsStart = 0, bool fLowPri = fFalse);
+                  uint32_t dtsStart = 0, bool fLowPri = fFalse);
     void PlayMsq(void);  // Destroys queue as it plays
     void FlushMsq(void); // Without playing the sounds
     bool FCmdAlarm(PCMD pcmd);

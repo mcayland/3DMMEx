@@ -297,7 +297,7 @@ BRS TDF::DyrChar(long ich)
 /***************************************************************************
     Assert the validity of the TDF.
 ***************************************************************************/
-void TDF::AssertValid(ulong grf)
+void TDF::AssertValid(uint32_t grf)
 {
     TDF_PAR::AssertValid(fobjAllocated);
     AssertIn(_cch, 0, klwMax);

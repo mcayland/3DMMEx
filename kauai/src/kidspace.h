@@ -312,7 +312,7 @@ class GOK : public GOK_PAR
 
     int16_t _sno;     // state number
     int16_t _cactMouse; // mouse click count of last mouse down
-    ulong _grfcust;   // cursor state at last mouse down
+    uint32_t _grfcust;  // cursor state at last mouse down
     long _gmsCur;     // gob mouse tracking state
 
     bool _fRect : 1;          // whether to use rectangular hit testing exclusively
@@ -358,11 +358,11 @@ class GOK : public GOK_PAR
     virtual bool _FInit(PWOKS pwoks, CNO cno, PRCA prca);
 
     virtual bool _FAdjustGms(struct GMSE *pmpgmsgmse);
-    virtual bool _FSetGmsCore(long gms, ulong grfact, bool *pfStable);
-    virtual bool _FSetGms(long gms, ulong grfact);
+    virtual bool _FSetGmsCore(long gms, uint32_t grfact, bool *pfStable);
+    virtual bool _FSetGms(long gms, uint32_t grfact);
 
     virtual bool _FEnterState(long sno);
-    virtual bool _FSetRep(CHID chid, ulong grfgok = fgokKillAnim, CTG ctg = ctgNil, long dxp = 0, long dyp = 0,
+    virtual bool _FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, long dxp = 0, long dyp = 0,
                           bool *pfSet = pvNil);
     virtual bool _FAdvanceFrame(void);
 
@@ -398,7 +398,7 @@ class GOK : public GOK_PAR
     void SetNoSlip(bool fNoSlip);
     void SetHidToolTip(long hidSrc);
 
-    virtual void SetCursor(ulong grfcust);
+    virtual void SetCursor(uint32_t grfcust);
     virtual bool FPtIn(long xp, long yp);
     virtual bool FPtInBounds(long xp, long yp);
     virtual void Draw(PGNV pgnv, RC *prcClip);
@@ -421,8 +421,8 @@ class GOK : public GOK_PAR
     virtual bool FRunScriptCno(CNO cno, long *prglw = pvNil, long clw = 0, long *plwReturn = pvNil,
                                tribool *ptSuccess = pvNil);
     virtual bool FChangeState(long sno);
-    virtual bool FSetRep(CHID chid, ulong grfgok = fgokKillAnim, CTG ctg = ctgNil, long dxp = 0, long dyp = 0,
-                         ulong dtim = 0);
+    virtual bool FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, long dxp = 0, long dyp = 0,
+                         uint32_t dtim = 0);
 
     virtual bool FPlay(void);
     virtual bool FPlaying(void);
@@ -431,7 +431,7 @@ class GOK : public GOK_PAR
     virtual long NfrMac(void);
     virtual long NfrCur(void);
 
-    virtual long SiiPlaySound(CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl);
+    virtual long SiiPlaySound(CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, uint32_t dtsStart, long spr, long scl);
     virtual long SiiPlayMouseSound(CTG ctg, CNO cno);
 
     virtual void Suspend(void);

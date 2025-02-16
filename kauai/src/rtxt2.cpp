@@ -119,7 +119,7 @@ class CHR
 /***************************************************************************
     Assert the validity of a CHR.
 ***************************************************************************/
-void CHR::AssertValid(ulong grf)
+void CHR::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertPo(_ptxtb, 0);
@@ -203,7 +203,7 @@ void CHR::Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, long cpMin, long cp
 void CHR::GetNextRun(bool fMustAdvance)
 {
     AssertThis(0);
-    ulong grfch;
+    uint32_t grfch;
     achar ch;
     RC rc;
 
@@ -509,7 +509,7 @@ TXTG::~TXTG(void)
 /***************************************************************************
     Assert the validity of a TXTG.
 ***************************************************************************/
-void TXTG::AssertValid(ulong grf)
+void TXTG::AssertValid(uint32_t grf)
 {
     TXTG_PAR::AssertValid(0);
     AssertPo(_pgllin, 0);
@@ -1697,7 +1697,7 @@ void TXTG::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Draws some lines of the document.
 ***************************************************************************/
-void TXTG::DrawLines(PGNV pgnv, RC *prcClip, long dxp, long dyp, long ilinMin, long ilinLim, ulong grftxtg)
+void TXTG::DrawLines(PGNV pgnv, RC *prcClip, long dxp, long dyp, long ilinMin, long ilinLim, uint32_t grftxtg)
 {
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
@@ -1789,7 +1789,7 @@ void TXTG::DrawLines(PGNV pgnv, RC *prcClip, long dxp, long dyp, long ilinMin, l
     Gives a subclass an opportunity to draw extra stuff associated with
     the line. Default does nothing.
 ***************************************************************************/
-void TXTG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, ulong grftxtg)
+void TXTG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, uint32_t grftxtg)
 {
 }
 
@@ -2159,7 +2159,7 @@ bool TXTG::FCmdKey(PCMD_KEY pcmd)
     const long kcchInsBuf = 64;
     AssertThis(0);
     AssertVarMem(pcmd);
-    ulong grfcust;
+    uint32_t grfcust;
     long vkDone;
     long ichLim;
     long cact;
@@ -2507,7 +2507,7 @@ void TXTG::GetNaturalSize(long *pdxp, long *pdyp)
 /***************************************************************************
     Constructor for the plain line text document display gob.
 ***************************************************************************/
-TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab) : TXLG_PAR(ptxtb, pgcb)
+TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, long onn, uint32_t grfont, long dypFont, long cchTab) : TXLG_PAR(ptxtb, pgcb)
 {
     RC rc;
     achar ch = kchSpace;
@@ -2525,7 +2525,7 @@ TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cc
 /***************************************************************************
     Static method to create a new plain line text doc display gob.
 ***************************************************************************/
-PTXLG TXLG::PtxlgNew(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab)
+PTXLG TXLG::PtxlgNew(PTXTB ptxtb, PGCB pgcb, long onn, uint32_t grfont, long dypFont, long cchTab)
 {
     PTXLG ptxlg;
 
@@ -2733,7 +2733,7 @@ PTXRG TXRG::PtxrgNew(PTXRD ptxrd, PGCB pgcb)
 /***************************************************************************
     Assert the validity of a TXRG.
 ***************************************************************************/
-void TXRG::AssertValid(ulong grf)
+void TXRG::AssertValid(uint32_t grf)
 {
     TXRG_PAR::AssertValid(0);
     AssertNilOrPo(_ptrul, 0);
@@ -2998,7 +2998,7 @@ bool TXRG::FApplyChp(PCHP pchp, PCHP pchpDiff)
     AssertNilOrVarMem(pchpDiff);
 
     long cpMin, cpLim, cpAnchor, cpOther;
-    ulong grfont;
+    uint32_t grfont;
 
     cpMin = LwMin(cpAnchor = _cpAnchor, cpOther = _cpOther);
     cpLim = LwMax(_cpAnchor, _cpOther);
@@ -3090,7 +3090,7 @@ bool TXRG::FCmdApplyProperty(PCMD pcmd)
     {
     case cidPlain:
         chpNew.grfont = fontNil;
-        chpOld.grfont = (ulong)~fontNil;
+        chpOld.grfont = (uint32_t)~fontNil;
         goto LApplyChp;
     case cidBold:
         chpNew.grfont ^= fontBold;
@@ -3237,7 +3237,7 @@ bool TXRG::FSetColor(ACR *pacrFore, ACR *pacrBack)
 /***************************************************************************
     Enable, check/uncheck property commands.
 ***************************************************************************/
-bool TXRG::FEnablePropCmd(PCMD pcmd, ulong *pgrfeds)
+bool TXRG::FEnablePropCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     PAP pap;
     bool fCheck;

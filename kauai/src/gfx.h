@@ -23,7 +23,7 @@
 struct DSF
 {
     long onn;     // Font number.
-    ulong grfont; // Font style.
+    uint32_t grfont; // Font style.
     long dyp;     // Font height in points.
     long tah;     // Horizontal Text Alignment
     long tav;     // Vertical Text Alignment
@@ -66,7 +66,7 @@ enum
 const long onnNil = -1;
 
 #ifdef WIN
-int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, ulong luType, LPARAM luParam);
+int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, UINT luType, LPARAM luParam);
 #endif // WIN
 
 #define NTL_PAR BASE
@@ -80,7 +80,7 @@ class NTL : public NTL_PAR
 
   private:
 #ifdef WIN
-    friend int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, ulong luType, LPARAM luParam);
+    friend int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, UINT luType, LPARAM luParam);
 #endif // WIN
     PGST _pgst;
     long _onnSystem;
@@ -148,8 +148,8 @@ enum
     kbSpecialAcr = 0xFF
 };
 
-const ulong kluAcrInvert = 0xFF000000L;
-const ulong kluAcrClear = 0xFFFFFFFFL;
+const uint32_t kluAcrInvert = 0xFF000000L;
+const uint32_t kluAcrClear = 0xFFFFFFFFL;
 
 // Abstract ColoR
 class ACR
@@ -158,7 +158,7 @@ class ACR
     ASSERT
 
   private:
-    ulong _lu;
+    uint32_t _lu;
 
 #ifdef WIN
     SCR _Scr(void);
@@ -370,8 +370,8 @@ class OGN : public OGN_PAR
         return (PT *)QvGet(ipt);
     }
 
-    POGN PognTraceOgn(POGN pogn, ulong grfogn);
-    POGN PognTraceRgpt(PT *prgpt, long cpt, ulong grfogn);
+    POGN PognTraceOgn(POGN pogn, uint32_t grfogn);
+    POGN PognTraceRgpt(PT *prgpt, long cpt, uint32_t grfogn);
 
     // static methods
     static POGN PognNew(long cvInit = 0);
@@ -395,7 +395,7 @@ enum
 // graphics drawing data
 struct GDD
 {
-    ulong grfgdd;  // what to do
+    uint32_t grfgdd; // what to do
     APT apt;       // pattern to use
     ACR acrFore;   // foreground color (used for solid fills also)
     ACR acrBack;   // background color
@@ -438,8 +438,8 @@ class GNV : public GNV_PAR
     void _Init(PGPT pgpt);
     bool _FMapRcRcs(RC *prc, RCS *prcs);
     void _MapPtPts(long xp, long yp, PTS *ppts);
-    HQ _HqolyCreate(POGN pogn, ulong grfogn);
-    HQ _HqolyFrame(POGN pogn, ulong grfogn);
+    HQ _HqolyCreate(POGN pogn, uint32_t grfogn);
+    HQ _HqolyFrame(POGN pogn, uint32_t grfogn);
 
     // transition related methods
     bool _FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, long cbitPixel = 0);
@@ -531,9 +531,9 @@ class GNV : public GNV_PAR
     void ClipToSrc(void);
 
     // Text & font.
-    void SetFont(long onn, ulong grfont, long dypFont, long tah = tahLeft, long tav = tavTop);
+    void SetFont(long onn, uint32_t grfont, long dypFont, long tah = tahLeft, long tav = tavTop);
     void SetOnn(long onn);
-    void SetFontStyle(ulong grfont);
+    void SetFontStyle(uint32_t grfont);
     void SetFontSize(long dyp);
     void SetFontAlign(long tah, long tav);
     void GetDsf(DSF *pdsf);
@@ -550,12 +550,12 @@ class GNV : public GNV_PAR
     void DrawMbmp(PMBMP pmbmp, RC *prc);
 
     // transitions
-    void Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr = pvNil);
-    void Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr = pvNil);
-    void Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts,
+    void Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
+    void Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
+    void Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
                   PGL pglclr = pvNil);
-    void Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr = pvNil);
-    void Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts,
+    void Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
+    void Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
               PGL pglclr = pvNil);
 };
 
@@ -713,7 +713,7 @@ class GPT : public GPT_PAR
     static void MarkStaticMem(void);
 #endif // DEBUG
 
-    static void SetActiveColors(PGL pglclr, ulong grfpal);
+    static void SetActiveColors(PGL pglclr, uint32_t grfpal);
     static PGL PglclrGetPalette(void);
     static void Flush(void);
 

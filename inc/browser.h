@@ -82,8 +82,8 @@ struct TFC
         };
         struct
         {
-            ulong grfontMask;
-            ulong grfont;
+            uint32_t grfontMask;
+            uint32_t grfont;
         };
         struct
         {
@@ -273,8 +273,8 @@ struct THD
         {
             long lwFill1; // sid
             long lwFill2; // pcrf
-            ulong grfontMask;
-            ulong grfont;
+            uint32_t grfontMask;
+            uint32_t grfont;
         };
         struct
         {

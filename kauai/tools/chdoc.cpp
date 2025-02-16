@@ -268,7 +268,7 @@ bool DOC::FGetFniSave(FNI *pfni)
 /***************************************************************************
     Assert the validity of the DOC.
 ***************************************************************************/
-void DOC::AssertValid(ulong grf)
+void DOC::AssertValid(uint32_t grf)
 {
     DOC_PAR::AssertValid(grf);
     AssertPo(_pcfl, 0);
@@ -496,7 +496,7 @@ bool DOCE::_FSaveToChunk(CTG ctg, CNO cno, bool fRedirect)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DOCE::AssertValid(ulong grf)
+void DOCE::AssertValid(uint32_t grf)
 {
     DOCE_PAR::AssertValid(0);
     AssertPo(_pcfl, 0);
@@ -643,7 +643,7 @@ void DCLB::GetMinMax(RC *prcMinMax)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DCLB::AssertValid(ulong grf)
+void DCLB::AssertValid(uint32_t grf)
 {
     DCLB_PAR::AssertValid(0);
     AssertIn(_dypLine, 1, 1000);
@@ -786,7 +786,7 @@ void DCD::Draw(PGNV pgnv, RC *prcClip)
     CKI cki;
     KID kid;
     BLCK blck;
-    ulong grfsel;
+    uint32_t grfsel;
     SEL sel = _sel;
 
     pgnv->ClipRc(prcClip);
@@ -953,7 +953,7 @@ void DCD::_ShowSel(void)
 /***************************************************************************
     Handle a mouse down in our content.
 ***************************************************************************/
-void DCD::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DCD::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     PGOB pgob;
@@ -963,7 +963,7 @@ void DCD::MouseDown(long xp, long yp, long cact, ulong grfcust)
     long ln, lnNew;
     CKI cki, ckiNew;
     KID kid;
-    ulong grfsel;
+    uint32_t grfsel;
 
     ln = _sel.Ln();
     if (lnNil != (lnNew = _LnFromYp(yp)))
@@ -1102,7 +1102,7 @@ bool DCD::FCmdReopen(PCMD pcmd)
     PDOCB pdocb;
     CKI cki;
     KID kid;
-    ulong grfsel;
+    uint32_t grfsel;
     long lnOld;
 
     if (tYes != vpappb->TGiveAlertSz(PszLit("Nuke all changes since the last save?"), bkYesNo, cokQuestion))
@@ -1151,7 +1151,7 @@ bool DCD::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
     long ln, lnLim, lnNew, cln;
-    ulong grfsel;
+    uint32_t grfsel;
     KID kid;
     CKI cki;
     RC rc;
@@ -1264,7 +1264,7 @@ long DCD::_ScvMax(bool fVert)
 /***************************************************************************
     Handle enabling/disabling DCD commands.
 ***************************************************************************/
-bool DCD::FEnableDcdCmd(PCMD pcmd, ulong *pgrfeds)
+bool DCD::FEnableDcdCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -2667,7 +2667,7 @@ bool DCD::_FCopySel(PDOCB *ppdocb)
 ***************************************************************************/
 void DCD::_ClearSel(void)
 {
-    ulong grfsel;
+    uint32_t grfsel;
     CMD cmd;
 
     grfsel = _sel.GrfselGetCkiKid(pvNil, pvNil);
@@ -2784,7 +2784,7 @@ bool DCD::FCmdFilterChunk(PCMD pcmd)
     STN stn;
     STN stnT;
     PDLG pdlg;
-    ulong grfsel;
+    uint32_t grfsel;
     CKI cki;
     KID kid;
     CTG ctg;
@@ -2894,7 +2894,7 @@ bool DCD::FCmdCloneChunk(PCMD pcmd)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DCD::AssertValid(ulong grf)
+void DCD::AssertValid(uint32_t grf)
 {
     DCD_PAR::AssertValid(0);
     AssertPo(&_sel, 0);
@@ -3025,7 +3025,7 @@ void SEL::_SetNil(void)
     Get the cki and kid. Return which of the elements are valid. One or
     both of pcki, pkid may be nil.
 ***************************************************************************/
-ulong SEL::GrfselGetCkiKid(CKI *pcki, KID *pkid)
+uint32_t SEL::GrfselGetCkiKid(CKI *pcki, KID *pkid)
 {
     AssertThis(0);
     AssertNilOrVarMem(pcki);
@@ -3378,7 +3378,7 @@ bool SEL::_FFilter(CTG ctg, CNO cno)
 /***************************************************************************
     Assert the validity of the sel.
 ***************************************************************************/
-void SEL::AssertValid(ulong grf)
+void SEL::AssertValid(uint32_t grf)
 {
     SEL_PAR::AssertValid(0);
     AssertPo(_pcfl, 0);

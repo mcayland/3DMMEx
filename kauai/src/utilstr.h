@@ -183,14 +183,14 @@ inline PSZ PszStz(PSTZ pstz)
     be used only for internal sorting (for binary search etc).
 ***************************************************************************/
 bool FEqualRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2);
-ulong FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2);
+uint32_t FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2);
 
 /***************************************************************************
     User level (case insensitive, locale aware) comparison and sorting.
 ***************************************************************************/
-bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, ulong grfstn = fstnIgnoreCase);
-ulong FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2,
-                          ulong grfstn = fstnIgnoreCase);
+bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, uint32_t grfstn = fstnIgnoreCase);
+uint32_t FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2,
+                             uint32_t grfstn = fstnIgnoreCase);
 
 /***************************************************************************
     Upper and lower case utilies
@@ -310,7 +310,7 @@ enum
     fchTab = 0x20,
 };
 
-ulong GrfchFromCh(achar ch);
+uint32_t GrfchFromCh(achar ch);
 
 /***************************************************************************
     The hexadecimal digits 0 - 9, A - F.
@@ -451,22 +451,22 @@ class STN
     {
         return FEqualRgch(pstn->Prgch(), pstn->Cch());
     }
-    bool FEqualUserRgch(const achar *prgch, long cch, ulong grfstn = fstnIgnoreCase);
-    bool FEqualUserSz(const PSZ psz, ulong grfstn = fstnIgnoreCase)
+    bool FEqualUserRgch(const achar *prgch, long cch, uint32_t grfstn = fstnIgnoreCase);
+    bool FEqualUserSz(const PSZ psz, uint32_t grfstn = fstnIgnoreCase)
     {
         return FEqualUserRgch(psz, CchSz(psz), grfstn);
     }
-    bool FEqualUser(PSTN pstn, ulong grfstn = fstnIgnoreCase)
+    bool FEqualUser(PSTN pstn, uint32_t grfstn = fstnIgnoreCase)
     {
         return FEqualUserRgch(pstn->Prgch(), pstn->Cch(), grfstn);
     }
 
     // for sorting
-    ulong FcmpCompare(PSTN pstn)
+    uint32_t FcmpCompare(PSTN pstn)
     {
         return ::FcmpCompareRgch(Prgch(), Cch(), pstn->Prgch(), pstn->Cch());
     }
-    ulong FcmpCompareUser(PSTN pstn, ulong grfstn = fstnIgnoreCase)
+    uint32_t FcmpCompareUser(PSTN pstn, uint32_t grfstn = fstnIgnoreCase)
     {
         return ::FcmpCompareUserRgch(Prgch(), Cch(), pstn->Prgch(), pstn->Cch(), grfstn);
     }
@@ -480,7 +480,7 @@ class STN
 
     bool FFormat(PSTN pstnFormat, ...);
     bool FFormatSz(const PSZ pszFormat, ...);
-    bool FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData);
+    bool FFormatRgch(const achar *prgchFormat, long cchFormat, uint32_t *prgluData);
     bool FGetLw(long *plw, long lwBase = 0);
     bool FExpandControls(void);
 };

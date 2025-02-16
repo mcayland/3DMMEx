@@ -84,7 +84,7 @@ bool SPLC::_FInit(SC_LID sclid, PSTN pstnCustom)
     wsc.rgParaBreak[0] = kchReturn;
     Win(wsc.rgParaBreak[1] = kchLineFeed;)
 
-        if (secNOERRORS != SpellInit(&_splid, &wsc)) return fFalse;
+        if (secNOERRORS != SpellInit((SC_SPLID *)&_splid, &wsc)) return fFalse;
     _fSplidValid = fTrue;
 
     if (!_FEnsureMainDict(sclid, &fni))
@@ -232,9 +232,9 @@ bool SPLC::_FEnsureUserDict(PSTN pstnCustom, PFNI pfniDef)
         goto LNoKey;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (LPDWORD)&lwType, pvNil, (LPDWORD)&cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, (uint8_t *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (LPDWORD)&lwType, (uint8_t *)sz, (LPDWORD)&cb))
     {
         RegCloseKey(hkey);
     LNoKey:
@@ -321,7 +321,7 @@ bool SPLC::_FLoadUserDictionary(PSZ psz, SC_UDR *pudr, bool fCreate)
 /***************************************************************************
     Set spelling options.
 ***************************************************************************/
-bool SPLC::FSetOptions(ulong grfsplc)
+bool SPLC::FSetOptions(uint32_t grfsplc)
 {
     AssertThis(0);
 
@@ -753,7 +753,7 @@ SC_SEC SPLC::SpellCloseUdr(SC_SPLID splid, SC_UDR udr, SC_BOOL fForce)
 /***************************************************************************
     Assert the validity of a SPLC.
 ***************************************************************************/
-void SPLC::AssertValid(ulong grf)
+void SPLC::AssertValid(uint32_t grf)
 {
     SPLC_PAR::AssertValid(0);
 }

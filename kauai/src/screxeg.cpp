@@ -42,7 +42,7 @@ SCEG::SCEG(PWOKS pwoks, PRCA prca, PGOB pgob) : SCEG_PAR(prca, pwoks->Pstrg())
 /***************************************************************************
     Assert the validity of a SCEG.
 ***************************************************************************/
-void SCEG::AssertValid(ulong grf)
+void SCEG::AssertValid(uint32_t grf)
 {
     SCEG_PAR::AssertValid(0);
     Assert(hidNil != _hid, 0);

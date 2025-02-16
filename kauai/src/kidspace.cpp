@@ -226,7 +226,7 @@ enum
 struct GMSE
 {
     Debug(long gms;) long gmsDst;
-    ulong grfact;
+    uint32_t grfact;
 };
 
 #ifdef DEBUG
@@ -481,7 +481,7 @@ bool GOK::_FAdjustGms(GMSE *pmpgmsgmse)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FSetGms(long gms, ulong grfact)
+bool GOK::_FSetGms(long gms, uint32_t grfact)
 {
     AssertThis(0);
     AssertIn(gms, gmsNil, kgmsLim);
@@ -520,7 +520,7 @@ bool GOK::_FSetGms(long gms, ulong grfact)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FSetGmsCore(long gms, ulong grfact, bool *pfStable)
+bool GOK::_FSetGmsCore(long gms, uint32_t grfact, bool *pfStable)
 {
     AssertThis(0);
     AssertIn(gms, gmsNil, kgmsLim);
@@ -584,7 +584,7 @@ bool GOK::_FSetGmsCore(long gms, ulong grfact, bool *pfStable)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FSetRep(CHID chid, ulong grfgok, CTG ctg, long dxp, long dyp, bool *pfSet)
+bool GOK::_FSetRep(CHID chid, uint32_t grfgok, CTG ctg, long dxp, long dyp, bool *pfSet)
 {
     AssertThis(0);
     long ikid;
@@ -702,7 +702,7 @@ bool GOK::_FAdvanceFrame(void)
 
     bool fExists, fRet, fPaused;
     PWOKS pwoks = _pwoks;
-    ulong dtim = 0;
+    uint32_t dtim = 0;
     PSCEG psceg = _pscegAnim;
     long grid = Grid();
 
@@ -1144,7 +1144,7 @@ bool GOK::FCmdMouseMove(PCMD_MOUSE pcmd)
 /***************************************************************************
     Set the cursor for this GOK and the given cursor state.
 ***************************************************************************/
-void GOK::SetCursor(ulong grfcust)
+void GOK::SetCursor(uint32_t grfcust)
 {
     AssertThis(0);
     PGOK pgok;
@@ -1456,7 +1456,7 @@ bool GOK::FChangeState(long sno)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::FSetRep(CHID chid, ulong grfgok, CTG ctg, long dxp, long dyp, ulong dtim)
+bool GOK::FSetRep(CHID chid, uint32_t grfgok, CTG ctg, long dxp, long dyp, uint32_t dtim)
 {
     AssertThis(0);
 
@@ -1713,7 +1713,7 @@ long GOK::NfrCur(void)
     Play a sound and attach the sound to this GOK so that when the GOK
     goes away, the sound will be killed.
 ***************************************************************************/
-long GOK::SiiPlaySound(CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+long GOK::SiiPlaySound(CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, uint32_t dtsStart, long spr, long scl)
 {
     AssertThis(0);
 
@@ -1842,7 +1842,7 @@ void GOK::Stream(bool fStream)
 /***************************************************************************
     Assert the validity of a GOK.
 ***************************************************************************/
-void GOK::AssertValid(ulong grf)
+void GOK::AssertValid(uint32_t grf)
 {
     GOK_PAR::AssertValid(0);
     AssertPo(_pwoks, 0);
@@ -2831,7 +2831,7 @@ void GORV::Resume(void)
 /***************************************************************************
     Assert the validity of a GORV.
 ***************************************************************************/
-void GORV::AssertValid(ulong grf)
+void GORV::AssertValid(uint32_t grf)
 {
     GORV_PAR::AssertValid(0);
     AssertPo(_pgvid, 0);

@@ -103,7 +103,7 @@ class SCB : public SCB_PAR
     SCB(PGCB pgcb) : CTL(pgcb)
     {
     }
-    bool _FCreate(long val, long valMin, long valMax, ulong grfscb);
+    bool _FCreate(long val, long valMin, long valMax, uint32_t grfscb);
 
 #ifdef MAC
     virtual void _ActivateHwnd(bool fActive);
@@ -112,9 +112,9 @@ class SCB : public SCB_PAR
   public:
     static long DxpNormal(void);
     static long DypNormal(void);
-    static void GetStandardRc(ulong grfscb, RC *prcAbs, RC *prcRel);
-    static void GetClientRc(ulong grfscb, RC *prcAbs, RC *prcRel);
-    static PSCB PscbNew(PGCB pgcb, ulong grfscb, long val = 0, long valMin = 0, long valMax = 0);
+    static void GetStandardRc(uint32_t grfscb, RC *prcAbs, RC *prcRel);
+    static void GetClientRc(uint32_t grfscb, RC *prcAbs, RC *prcRel);
+    static PSCB PscbNew(PGCB pgcb, uint32_t grfscb, long val = 0, long valMin = 0, long valMax = 0);
 
     void SetVal(long val, bool fRedraw = fTrue);
     void SetValMinMax(long val, long valMin, long valMax, bool fRedraw = fTrue);
@@ -133,7 +133,7 @@ class SCB : public SCB_PAR
     }
 
 #ifdef MAC
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
 #endif // MAC
 #ifdef WIN
     virtual void TrackScroll(long sb, long lwVal);
@@ -158,7 +158,7 @@ class WSB : public WSB_PAR
 #endif // MAC
 
   public:
-    static PWSB PwsbNew(PGOB pgob, ulong grfgob);
+    static PWSB PwsbNew(PGOB pgob, uint32_t grfgob);
 
 #ifdef MAC
     virtual void Draw(PGNV pgnv, RC *prcClip);

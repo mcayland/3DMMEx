@@ -158,8 +158,8 @@ class MVU : public MVU_PAR
     //   do all its own undo objects (e.g. Growing over a long drag could become
     //   a StartGrow/Grow/EndGrow sequence).  This also effects _pactrRestore.
     PAUND _paund;        // Actor undo object to save from mouse down to drag.
-    ulong _tsLast;       // Last time a cell was recorded.
-    ulong _tsLastSample; // Last time mouse/kbd sampled
+    uint32_t _tsLast;    // Last time a cell was recorded.
+    uint32_t _tsLastSample; // Last time mouse/kbd sampled
     RC _rcFrame;         // Frame for creating a text box.
 
     BRS _rgrAxis[3][3];   // Conversion from mouse points to 3D points.
@@ -178,7 +178,7 @@ class MVU : public MVU_PAR
     ACR _acr;         // Color for painting text.
     long _onn;        // Font for text
     long _dypFont;    // Font size for text
-    ulong _grfont;    // Font style for text
+    uint32_t _grfont; // Font style for text
     long _lwLastTime; // State variable for the last time through.
 
     MVU(PDOCB pdocb, PGCB pgcb) : DDG(pdocb, pgcb)
@@ -329,11 +329,11 @@ class MVU : public MVU_PAR
     {
         return _dypFont;
     }
-    void SetStyleTextCur(ulong grfont)
+    void SetStyleTextCur(uint32_t grfont)
     {
         _grfont = grfont;
     }
-    ulong GrfontStyleTextCur(void)
+    uint32_t GrfontStyleTextCur(void)
     {
         return _grfont;
     }
@@ -580,7 +580,7 @@ class MVIE : public MVIE_PAR
     PBWLD _pbwld;   // The brender world for this movie
     PMSQ _pmsq;     // Message Sound Queue
     CLOK _clok;     // Clock for playing the film
-    ulong _tsStart; // Time last play started.
+    uint32_t _tsStart; // Time last play started.
     long _cnfrm;    // Number of frames since last play started.
 
     PMCC _pmcc; // Parameters and callbacks.
@@ -705,7 +705,7 @@ class MVIE : public MVIE_PAR
     void SetPaintAcr(ACR acr);                                   // Sets color that painting will occur with.
     void SetOnnTextCur(long onn);                                // Sets font that text will be in
     void SetDypFontTextCur(long dypFont);                        // Sets font size that text will be in
-    void SetStyleTextCur(ulong grfont);                          // Sets font style that text will be in
+    void SetStyleTextCur(uint32_t grfont);                       // Sets font style that text will be in
     bool FInsActr(PTAG ptag);                                    // Insert an actor into the scene.
     bool FRemActr(void);                                         // Remove selected actor from scene.
     bool FAddOnstage(long arid);                                 // Bring this actor onto the stage.
@@ -957,7 +957,7 @@ class MVIE : public MVIE_PAR
     {
         return _cnfrm;
     }
-    ulong TsStart(void)
+    uint32_t TsStart(void)
     {
         return _tsStart;
     }

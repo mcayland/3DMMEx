@@ -33,9 +33,9 @@ VERIFY_STRUCT_SIZE(LOP, 16);
 // cursor map entry
 struct CUME
 {
-    ulong grfcustMask; // what cursor states this CUME is good for
-    ulong grfcust;
-    ulong grfbitSno; // what button states this CUME is good for
+    uint32_t grfcustMask; // what cursor states this CUME is good for
+    uint32_t grfcust;
+    uint32_t grfbitSno; // what button states this CUME is good for
     CNO cnoCurs;     // the cursor to use
     CHID chidScript; // execution script (absolute)
     long cidDefault; // default command
@@ -57,7 +57,7 @@ class GOKD : public GOKD_PAR
 
   public:
     virtual long Gokk(void) = 0;
-    virtual bool FGetCume(ulong grfcust, long sno, CUME *pcume) = 0;
+    virtual bool FGetCume(uint32_t grfcust, long sno, CUME *pcume) = 0;
     virtual void GetLop(long hidPar, LOP *plop) = 0;
 };
 
@@ -102,7 +102,7 @@ class GKDS : public GKDS_PAR
     ~GKDS(void);
 
     virtual long Gokk(void);
-    virtual bool FGetCume(ulong grfcust, long sno, CUME *pcume);
+    virtual bool FGetCume(uint32_t grfcust, long sno, CUME *pcume);
     virtual void GetLop(long hidPar, LOP *plop);
 };
 
@@ -121,7 +121,7 @@ class WOKS : public WOKS_PAR
   protected:
     PSTRG _pstrg;
     STRG _strg;
-    ulong _grfcust;
+    uint32_t _grfcust;
 
     CLOK _clokAnim;
     CLOK _clokNoSlip;
@@ -148,9 +148,9 @@ class WOKS : public WOKS_PAR
     virtual tribool TGiveAlert(PSTN pstn, long bk, long cok);
     virtual void Print(PSTN pstn);
 
-    virtual ulong GrfcustCur(bool fAsynch = fFalse);
-    virtual void ModifyGrfcust(ulong grfcustOr, ulong grfcustXor);
-    virtual ulong GrfcustAdjust(ulong grfcust);
+    virtual uint32_t GrfcustCur(bool fAsynch = fFalse);
+    virtual void ModifyGrfcust(uint32_t grfcustOr, uint32_t grfcustXor);
+    virtual uint32_t GrfcustAdjust(uint32_t grfcust);
 
     virtual bool FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet);
     virtual PCLOK PclokAnim(void)

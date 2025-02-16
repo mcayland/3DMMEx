@@ -282,7 +282,7 @@ long DOCG::_CbOnFile(void)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DOCG::AssertValid(ulong grf)
+void DOCG::AssertValid(uint32_t grf)
 {
     DOCG_PAR::AssertValid(0);
     AssertPo(_pgrpb, 0);
@@ -602,7 +602,7 @@ bool DCGB::FCmdKey(PCMD_KEY pcmd)
     Handle mouse-down in a DCGB - track the mouse and select the last
     item the mouse is over.
 ***************************************************************************/
-void DCGB::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DCGB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     bool fDown;
@@ -649,7 +649,7 @@ void DCGB::MouseDown(long xp, long yp, long cact, ulong grfcust)
 /***************************************************************************
     Handle enabling/disabling commands.
 ***************************************************************************/
-bool DCGB::FEnableDcgbCmd(PCMD pcmd, ulong *pgrfeds)
+bool DCGB::FEnableDcgbCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     bool fT;
 
@@ -742,7 +742,7 @@ void DCGB::_DeleteIv(long iv)
 /***************************************************************************
     Assert the validity of a DCGB.
 ***************************************************************************/
-void DCGB::AssertValid(ulong grf)
+void DCGB::AssertValid(uint32_t grf)
 {
     // REVIEW shonk: fill out
     DCGB_PAR::AssertValid(0);
@@ -1550,7 +1550,7 @@ HQ DOCI::_HqRead(void)
 /***************************************************************************
     Assert the validity of a DOCI.
 ***************************************************************************/
-void DOCI::AssertValid(ulong grf)
+void DOCI::AssertValid(uint32_t grf)
 {
     DOCI_PAR::AssertValid(0);
     AssertPo(_pgrpb, 0);

@@ -1048,7 +1048,7 @@ void ACLP::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void ACLP::AssertValid(ulong grf)
+void ACLP::AssertValid(uint32_t grf)
 {
     ACLP_PAR::AssertValid(fobjAllocated);
     _pactr->AssertValid(grf);
@@ -1177,7 +1177,7 @@ bool ACTR::FAddOnStage(void)
     Normalize an actor.
 
 ***************************************************************************/
-bool ACTR::FNormalize(ulong grfnorm)
+bool ACTR::FNormalize(uint32_t grfnorm)
 {
     AssertThis(0);
 
@@ -1576,7 +1576,7 @@ void AUND::MarkMem(void)
 /***************************************************************************
     Assert the validity of the AUND.
 ***************************************************************************/
-void AUND::AssertValid(ulong grf)
+void AUND::AssertValid(uint32_t grf)
 {
     AssertNilOrPo(_pactr, 0);
 }

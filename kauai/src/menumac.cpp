@@ -38,7 +38,7 @@ MUB::~MUB(void)
 /***************************************************************************
     Static method to load and set a new menu bar.
 ***************************************************************************/
-PMUB MUB::PmubNew(ulong ridMenuBar)
+PMUB MUB::PmubNew(uint32_t ridMenuBar)
 {
     PMUB pmub;
 
@@ -77,7 +77,7 @@ void MUB::_Free(void)
     Loads the menu bar with the given resource id and makes this MUB the
     current one.  Can only be called once per mub.
 ***************************************************************************/
-bool MUB::_FFetchRes(ulong ridMenuBar)
+bool MUB::_FFetchRes(uint32_t ridMenuBar)
 {
     SMB **hnsmb;
     MNU mnu;
@@ -318,7 +318,7 @@ void MUB::Clean(void)
 {
     AssertThis(0);
     long imnu, imni;
-    ulong grfeds;
+    uint32_t grfeds;
     MNU mnu;
     MNI mni;
     CMD cmd;

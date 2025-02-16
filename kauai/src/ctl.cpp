@@ -170,7 +170,7 @@ void CTL::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Static method to create a scroll bar.
 ***************************************************************************/
-PSCB SCB::PscbNew(PGCB pgcb, ulong grfscb, long val, long valMin, long valMax)
+PSCB SCB::PscbNew(PGCB pgcb, uint32_t grfscb, long val, long valMin, long valMax)
 {
     Assert(FPure(grfscb & fscbHorz) != FPure(grfscb & fscbVert), "exactly one of (fscbHorz,fscbVert) should be set");
     PSCB pscb;
@@ -230,7 +230,7 @@ long SCB::DypNormal(void)
     Get the standard rectangles for document window scroll bars.  grfscb
     should contain fscbHorz or fscbVert.
 ***************************************************************************/
-void SCB::GetStandardRc(ulong grfscb, RC *prcAbs, RC *prcRel)
+void SCB::GetStandardRc(uint32_t grfscb, RC *prcAbs, RC *prcRel)
 {
     if (FPure(grfscb & fscbVert))
     {
@@ -256,7 +256,7 @@ void SCB::GetStandardRc(ulong grfscb, RC *prcAbs, RC *prcRel)
     Get the standard client window rectangle (assuming the given set of
     scroll bars).
 ***************************************************************************/
-void SCB::GetClientRc(ulong grfscb, RC *prcAbs, RC *prcRel)
+void SCB::GetClientRc(uint32_t grfscb, RC *prcAbs, RC *prcRel)
 {
     prcRel->ypTop = prcRel->xpLeft = krelZero;
     prcRel->ypBottom = prcRel->xpRight = krelOne;
@@ -270,7 +270,7 @@ void SCB::GetClientRc(ulong grfscb, RC *prcAbs, RC *prcRel)
 /***************************************************************************
     Create the actual system scroll bar.
 ***************************************************************************/
-bool SCB::_FCreate(long val, long valMin, long valMax, ulong grfscb)
+bool SCB::_FCreate(long val, long valMin, long valMax, uint32_t grfscb)
 {
     Assert(_Hctl() == hNil, "scb already created");
     RC rc;
@@ -396,7 +396,7 @@ void SCB::_ActivateHwnd(bool fActive)
 /***************************************************************************
     Handle mouse tracking for a scroll bar.
 ***************************************************************************/
-void SCB::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void SCB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     PTS pts;
     short in;
@@ -569,7 +569,7 @@ LEndScroll:
 /***************************************************************************
     Static method to create a window size box.
 ***************************************************************************/
-PWSB WSB::PwsbNew(PGOB pgob, ulong grfgob)
+PWSB WSB::PwsbNew(PGOB pgob, uint32_t grfgob)
 {
     RC rcRel, rcAbs;
     PWSB pwsb;

@@ -114,7 +114,7 @@ static PALETTEENTRY _rgpe[20] = {
     fpalAnimate means animate the palette with the new colors, don't do
         a normal palette set.
 ***************************************************************************/
-void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
+void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
 {
     AssertNilOrPo(pglclr, 0);
     Assert(pvNil == pglclr || pglclr->CbEntry() == SIZEOF(CLR), "wrong CbEntry");
@@ -1747,7 +1747,7 @@ void GPT::DrawDib(HDRAWDIB hdd, BITMAPINFOHEADER *pbi, RCS *prcs, GDD *pgdd)
 /***************************************************************************
     Test the validity of the port.
 ***************************************************************************/
-void GPT::AssertValid(ulong grf)
+void GPT::AssertValid(uint32_t grf)
 {
     GPT_PAR::AssertValid(0);
     HBRUSH hbr;
@@ -1804,7 +1804,7 @@ bool NTL::FInit(void)
     AssertDo(hNil != (hfnt = (HFONT)GetStockObject(SYSTEM_FONT)), "Can't get system font");
     AssertDo(GetObject(hfnt, SIZEOF(lgf), &lgf) != 0, "Can't get logical font");
     if (!_pgst->FAddRgch(lgf.lfFaceName, CchSz(lgf.lfFaceName), &lgf) ||
-        !EnumFonts(vwig.hdcApp, pvNil, _FEnumFont, (LPARAM)_pgst))
+        !EnumFonts(vwig.hdcApp, pvNil, (FONTENUMPROC)_FEnumFont, (LPARAM)_pgst))
     {
     LFail:
         PushErc(ercGfxNoFontList);
@@ -1821,7 +1821,7 @@ bool NTL::FInit(void)
     -- Font enumuration callback.
     -- If font is TrueType, it is added to the GST.
 ***************************************************************************/
-int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, ulong luType, LPARAM luParam)
+int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, uint32_t luType, LPARAM luParam)
 {
     long istz;
     PGST pgst = (PGST)luParam;

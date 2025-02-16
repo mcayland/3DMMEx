@@ -363,7 +363,7 @@ class SEL : public SEL_PAR
     {
         return _ln;
     }
-    ulong GrfselGetCkiKid(CKI *pcki, KID *pkid);
+    uint32_t GrfselGetCkiKid(CKI *pcki, KID *pkid);
 
     bool FSetLn(long ln);
     bool FAdvance(void);
@@ -435,10 +435,10 @@ class DCD : public DCD_PAR
     static void InvalAllDcd(PDOCB pdocb, PCFL pcfl, CKI *pcki = pvNil, KID *pkid = pvNil);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual bool FCmdKey(PCMD_KEY pcmd);
 
-    virtual bool FEnableDcdCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDcdCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdAddChunk(PCMD pcmd);
     virtual bool FCmdDeleteChunk(PCMD pcmd);
     virtual bool FCmdAdoptChunk(PCMD pcmd);
@@ -524,7 +524,7 @@ class DCH : public DCH_PAR
     static PDCH PdchNew(PDOCB pdocb, PBSF pbsf, bool fFixed, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual bool FCmdKey(PCMD_KEY pcmd);
 };
 
@@ -576,9 +576,9 @@ class DCGB : public DCGB_PAR
   public:
     static void InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, long iv, long cvIns, long cvDel);
     virtual bool FCmdKey(PCMD_KEY pcmd);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
 
-    virtual bool FEnableDcgbCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDcgbCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdEditItem(PCMD pcmd);
     virtual bool FCmdDeleteItem(PCMD pcmd);
     virtual bool FCmdAddItem(PCMD pcmd) = 0;
@@ -715,11 +715,11 @@ typedef class CHTXD *PCHTXD;
 class CHTXD : public CHTXD_PAR
 {
   protected:
-    CHTXD(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    CHTXD(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
 
   public:
     static PCHTXD PchtxdNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, short osk = koskCur, PDOCB pdocb = pvNil,
-                            ulong grfdoc = fdocNil);
+                            uint32_t grfdoc = fdocNil);
 
     virtual PDDG PddgNew(PGCB pgcb);
 };
@@ -735,10 +735,10 @@ class CHTDD : public CHTDD_PAR
     CMD_MAP_DEC(CHTDD)
 
   protected:
-    CHTDD(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab);
+    CHTDD(PTXTB ptxtb, PGCB pgcb, long onn, uint32_t grfont, long dypFont, long cchTab);
 
   public:
-    static PCHTDD PchtddNew(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab);
+    static PCHTDD PchtddNew(PTXTB ptxtb, PGCB pgcb, long onn, uint32_t grfont, long dypFont, long cchTab);
 
     virtual bool FCmdCompileChunky(PCMD pcmd);
     virtual bool FCmdCompileScript(PCMD pcmd);

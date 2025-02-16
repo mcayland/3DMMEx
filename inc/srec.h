@@ -95,7 +95,7 @@ class SREC : public SREC_PAR
     long _csampSec; // sampling rate (number of samples per second)
     long _cchan;    // 1 = mono, 2 = stereo
     long _cbSample; // bytes per sample (1 = 8 bit, 2 = 16 bit, etc)
-    ulong _dtsMax;  // maximum length to record
+    uint32_t _dtsMax; // maximum length to record
     bool _fRecording;
     bool _fPlaying;
     bool _fHaveSound;   // have you recorded a sound yet?
@@ -114,11 +114,11 @@ class SREC : public SREC_PAR
     static void _WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
 
   protected:
-    bool _FInit(long csampSec, long cchan, long cbSample, ulong dtsMax);
+    bool _FInit(long csampSec, long cchan, long cbSample, uint32_t dtsMax);
     void _UpdateStatus(void);
 
   public:
-    static PSREC PsrecNew(long csampSec, long cchan, long cbSample, ulong dtsMax);
+    static PSREC PsrecNew(long csampSec, long cchan, long cbSample, uint32_t dtsMax);
     ~SREC(void);
 
     bool FStart(void);

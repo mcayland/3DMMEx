@@ -28,7 +28,7 @@ long SNDV::_siiLast;
     reading is valid should set this so other devices can use the same
     value.
 ***************************************************************************/
-ulong vluSysVolFake = (ulong)-1;
+uint32_t vluSysVolFake = (uint32_t)-1;
 
 /***************************************************************************
     Start a synchronized group.
@@ -75,7 +75,7 @@ SNDM::~SNDM(void)
 /***************************************************************************
     Assert the validity of a SNDM.
 ***************************************************************************/
-void SNDM::AssertValid(ulong grf)
+void SNDM::AssertValid(uint32_t grf)
 {
     SNDM_PAR::AssertValid(0);
     AssertPo(_pglsndmpe, 0);
@@ -320,7 +320,8 @@ long SNDM::VlmCur(void)
 /***************************************************************************
     Play the given sound.
 ***************************************************************************/
-long SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+long SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, uint32_t dtsStart, long spr,
+                   long scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
@@ -543,7 +544,7 @@ SNDMQ::~SNDMQ(void)
 /***************************************************************************
     Assert the validity of a SNDMQ.
 ***************************************************************************/
-void SNDMQ::AssertValid(ulong grf)
+void SNDMQ::AssertValid(uint32_t grf)
 {
     SNDMQ_PAR::AssertValid(0);
     AssertPo(_pglsnqd, 0);
@@ -683,7 +684,7 @@ void SNDMQ::Suspend(bool fSuspend)
 /***************************************************************************
     Play the given sound.
 ***************************************************************************/
-long SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+long SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, uint32_t dtsStart, long spr, long scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
@@ -900,7 +901,7 @@ SNQUE::~SNQUE(void)
 /***************************************************************************
     Assert the validity of a SNQUE.
 ***************************************************************************/
-void SNQUE::AssertValid(ulong grf)
+void SNQUE::AssertValid(uint32_t grf)
 {
     SNQUE_PAR::AssertValid(0);
 
@@ -988,7 +989,7 @@ void SNQUE::_Flush(void)
 /***************************************************************************
     Put the given sound on the queue.
 ***************************************************************************/
-void SNQUE::Enqueue(long sii, PRCA prca, CTG ctg, CNO cno, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+void SNQUE::Enqueue(long sii, PRCA prca, CTG ctg, CNO cno, long vlm, long cactPlay, uint32_t dtsStart, long spr, long scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
@@ -1301,10 +1302,10 @@ void SNQUE::Flush(void)
 /***************************************************************************
     Scale the given system volume by the given Kauai volume.
 ***************************************************************************/
-ulong LuVolScale(ulong luVol, long vlm)
+uint32_t LuVolScale(uint32_t luVol, long vlm)
 {
     Assert(kvlmFull == 0x10000, "this code assumes kvlmFull is 0x10000");
-    ulong luHigh, luLow;
+    uint32_t luHigh, luLow;
     uint16_t suHigh, suLow;
 
     MulLu(SuLow(luVol), vlm, &luHigh, &luLow);

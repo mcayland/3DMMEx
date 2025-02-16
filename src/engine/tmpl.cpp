@@ -72,7 +72,7 @@ RTCLASS(TMPL)
 /***************************************************************************
     Create a new action
 ***************************************************************************/
-PACTN ACTN::PactnNew(PGG pggcel, PGL pglbmat34, ulong grfactn)
+PACTN ACTN::PactnNew(PGG pggcel, PGL pglbmat34, uint32_t grfactn)
 {
     AssertPo(pggcel, 0);
     AssertPo(pglbmat34, 0);
@@ -286,7 +286,7 @@ void ACTN::GetMatrix(long imat34, BMAT34 *pbmat34)
 /***************************************************************************
     Assert the validity of the ACTN.
 ***************************************************************************/
-void ACTN::AssertValid(ulong grf)
+void ACTN::AssertValid(uint32_t grf)
 {
     ACTN_PAR::AssertValid(fobjAllocated);
     AssertPo(_pggcel, 0);
@@ -804,7 +804,7 @@ bool TMPL::FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag)
 /***************************************************************************
     Retrieves the distance travelled by cel celn of action anid.
 ***************************************************************************/
-bool TMPL::FGetGrfactn(long anid, ulong *pgrfactn)
+bool TMPL::FGetGrfactn(long anid, uint32_t *pgrfactn)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
@@ -1027,7 +1027,7 @@ void TMPL::GetName(PSTN pstn)
 /***************************************************************************
     Assert the validity of the TMPL.
 ***************************************************************************/
-void TMPL::AssertValid(ulong grftmpl)
+void TMPL::AssertValid(uint32_t grftmpl)
 {
     long ibset;
     long ccmid;

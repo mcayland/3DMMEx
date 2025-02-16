@@ -291,7 +291,7 @@ SCCB::~SCCB(void)
 /***************************************************************************
     Assert the validity of a SCCB.
 ***************************************************************************/
-void SCCB::AssertValid(ulong grf)
+void SCCB::AssertValid(uint32_t grf)
 {
     SCCB_PAR::AssertValid(0);
     AssertNilOrPo(_plexb, 0);
@@ -1558,10 +1558,10 @@ bool SCCB::_FCombineConstValues(long op, long lw1, long lw2, long *plw)
             *plw = op == kopDiv ? lw1 / lw2 : lw1 % lw2;
         break;
     case kopShr:
-        *plw = (ulong)lw1 >> lw2;
+        *plw = (uint32_t)lw1 >> lw2;
         break;
     case kopShl:
-        *plw = (ulong)lw1 << lw2;
+        *plw = (uint32_t)lw1 << lw2;
         break;
     case kopBOr:
         *plw = lw1 | lw2;
@@ -1611,7 +1611,7 @@ bool SCCB::_FCombineConstValues(long op, long lw1, long lw2, long *plw)
 
     This is highly recursive, so limit the stack space needed.
 ***************************************************************************/
-void SCCB::_EmitCode(long ietnTop, ulong grfscc, long *pclwArg)
+void SCCB::_EmitCode(long ietnTop, uint32_t grfscc, long *pclwArg)
 {
     AssertThis(0);
     AssertPo(_pgletnTree, 0);
@@ -2210,7 +2210,7 @@ void SCCB::_EmitVarAccess(long ietn, RTVN *prtvn, long *popPush, long *popPop, l
 /***************************************************************************
     Push the opcode for a function and verify parameters and return type.
 ***************************************************************************/
-void SCCB::_PushOpFromName(long ietn, ulong grfscc, long clwArg)
+void SCCB::_PushOpFromName(long ietn, uint32_t grfscc, long clwArg)
 {
     AssertThis(0);
     long istn;
@@ -2613,7 +2613,7 @@ bool SCCB::FDisassemble(PSCPT pscpt, PMSNK pmsnk, PMSNK pmsnkError)
                 goto LFail;
             }
             clwPush--;
-            rtvn.lu1 = (ulong)SuLow(lw);
+            rtvn.lu1 = (uint32_t)SuLow(lw);
             pgllw->Get(ilw++, &rtvn.lu2);
             if (rtvn.lu1 == 0)
             {
@@ -2777,7 +2777,7 @@ void RTVN::SetFromStn(PSTN pstn)
             cbit -= 8;
     }
 
-    // put the bytes together into the rtvn's ulongs.
+    // put the bytes together into the rtvn's uint32_ts.
     lu1 = LwFromBytes(0, 0, rgb[0], rgb[1]);
     lu2 = LwFromBytes(rgb[2], rgb[3], rgb[4], rgb[5]);
 }

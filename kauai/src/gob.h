@@ -92,7 +92,7 @@ struct GCB
 {
     long _hid;
     PGOB _pgob;
-    ulong _grfgob;
+    uint32_t _grfgob;
     long _gin;
     RC _rcAbs;
     RC _rcRel;
@@ -100,11 +100,11 @@ struct GCB
     GCB(void)
     {
     }
-    GCB(long hid, PGOB pgob, ulong grfgob = fgobNil, long gin = kginDefault, RC *prcAbs = pvNil, RC *prcRel = pvNil)
+    GCB(long hid, PGOB pgob, uint32_t grfgob = fgobNil, long gin = kginDefault, RC *prcAbs = pvNil, RC *prcRel = pvNil)
     {
         Set(hid, pgob, grfgob, gin, prcAbs, prcRel);
     }
-    void Set(long hid, PGOB pgob, ulong grfgob = fgobNil, long gin = kginDefault, RC *prcAbs = pvNil,
+    void Set(long hid, PGOB pgob, uint32_t grfgob = fgobNil, long gin = kginDefault, RC *prcAbs = pvNil,
              RC *prcRel = pvNil);
 };
 typedef GCB *PGCB;
@@ -170,7 +170,7 @@ class GOB : public GOB_PAR
     }
 
   public:
-    static bool FInitScreen(ulong grfgob, long ginDef);
+    static bool FInitScreen(uint32_t grfgob, long ginDef);
     static void ShutDown(void);
     static PGOB PgobScreen(void)
     {
@@ -259,8 +259,8 @@ class GOB : public GOB_PAR
     void Scroll(RC *prc, long dxp, long dyp, long gin, RC *prcBad1 = pvNil, RC *prcBad2 = pvNil);
 
     virtual void Clean(void);
-    virtual void DrawTree(PGPT pgpt, RC *prc, RC *prcUpdate, ulong grfgob);
-    virtual void DrawTreeRgn(PGPT pgpt, RC *prc, REGN *pregn, ulong grfgob);
+    virtual void DrawTree(PGPT pgpt, RC *prc, RC *prcUpdate, uint32_t grfgob);
+    virtual void DrawTreeRgn(PGPT pgpt, RC *prc, REGN *pregn, uint32_t grfgob);
     virtual void Draw(PGNV pgnv, RC *prcClip);
 
     // mouse handling and hit testing
@@ -268,7 +268,7 @@ class GOB : public GOB_PAR
     virtual PGOB PgobFromPt(long xp, long yp, PT *pptLocal = pvNil);
     virtual bool FPtIn(long xp, long yp);
     virtual bool FPtInBounds(long xp, long yp);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual long ZpDragRc(RC *prc, bool fVert, long zp, long zpMin, long zpLim, long zpMinActive, long zpLimActive);
     void SetCurs(PCURS pcurs);
     void SetCursCno(PRCA prca, CNO cno);
@@ -355,8 +355,8 @@ class GTE : public GTE_PAR
 
   public:
     GTE(void);
-    void Init(PGOB pgob, ulong grfgte);
-    bool FNextGob(PGOB *ppgob, ulong *pgrfgteOut, ulong grfgteIn);
+    void Init(PGOB pgob, uint32_t grfgte);
+    bool FNextGob(PGOB *ppgob, uint32_t *pgrfgteOut, uint32_t grfgteIn);
 };
 
 #endif //! GOB_H

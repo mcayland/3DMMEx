@@ -33,7 +33,7 @@ long vcactRealize;
 ***************************************************************************/
 void ACR::SetFromLw(long lw)
 {
-    _lu = (ulong)lw;
+    _lu = (uint32_t)lw;
     AssertThis(0);
 }
 
@@ -65,7 +65,7 @@ void ACR::GetClr(CLR *pclr)
 /***************************************************************************
     Assert that the acr is a valid color.
 ***************************************************************************/
-void ACR::AssertValid(ulong grfacr)
+void ACR::AssertValid(uint32_t grfacr)
 {
     switch (B3Lw(_lu))
     {
@@ -95,9 +95,9 @@ void ACR::AssertValid(ulong grfacr)
 ***************************************************************************/
 void APT::MoveOrigin(long dxp, long dyp)
 {
-    // this cast to ulong works because 2^32 is a multiple of 8.
-    dxp = (ulong)dxp % 8;
-    dyp = (ulong)dyp % 8;
+    // this cast to uint32_t works because 2^32 is a multiple of 8.
+    dxp = (uint32_t)dxp % 8;
+    dyp = (uint32_t)dyp % 8;
     if (dxp != 0)
     {
         uint8_t *pb;
@@ -199,7 +199,7 @@ void GNV::SetGobRc(PGOB pgob)
 /***************************************************************************
     Assert the validity of the gnv
 ***************************************************************************/
-void GNV::AssertValid(ulong grf)
+void GNV::AssertValid(uint32_t grf)
 {
     GNV_PAR::AssertValid(0);
     AssertPo(_pgpt, 0);
@@ -640,7 +640,7 @@ void GNV::FramePolyLine(POGN pogn, ACR acr)
     Convert an OGN into a polygon record (hqoly).  This maps the points and
     optionally closes the polygon and/or calculates the bounds (Mac only).
 ***************************************************************************/
-HQ GNV::_HqolyCreate(POGN pogn, ulong grfogn)
+HQ GNV::_HqolyCreate(POGN pogn, uint32_t grfogn)
 {
     AssertThis(0);
     AssertPo(pogn, 0);
@@ -707,7 +707,7 @@ HQ GNV::_HqolyCreate(POGN pogn, ulong grfogn)
     path (which we'll tell GDI to fill).  On the Mac, this just calls
     _HqolyCreate.
 ***************************************************************************/
-HQ GNV::_HqolyFrame(POGN pogn, ulong grfogn)
+HQ GNV::_HqolyFrame(POGN pogn, uint32_t grfogn)
 {
 #ifdef WIN
     AssertThis(0);
@@ -987,7 +987,7 @@ void GNV::SetPenSize(long dxpPen, long dypPen)
 /***************************************************************************
     Set the current font info.
 ***************************************************************************/
-void GNV::SetFont(long onn, ulong grfont, long dypFont, long tah, long tav)
+void GNV::SetFont(long onn, uint32_t grfont, long dypFont, long tah, long tav)
 {
     AssertThis(0);
     _dsf.onn = onn;
@@ -1011,7 +1011,7 @@ void GNV::SetOnn(long onn)
 /***************************************************************************
     Set the current font style.
 ***************************************************************************/
-void GNV::SetFontStyle(ulong grfont)
+void GNV::SetFontStyle(uint32_t grfont)
 {
     AssertThis(0);
     _dsf.grfont = grfont;
@@ -1145,9 +1145,9 @@ void GNV::CopyPixels(PGNV pgnvSrc, RC *prcSrc, RC *prcDst)
     _pgpt->CopyPixels(pgnvSrc->_pgpt, &rcsSrc, &rcsDst, &_gdd);
 }
 
-ulong _mpgfdgrfpt[4] = {fptNegateXp, fptNil, fptNegateYp | fptTranspose, fptTranspose};
+uint32_t _mpgfdgrfpt[4] = {fptNegateXp, fptNil, fptNegateYp | fptTranspose, fptTranspose};
 
-ulong _mpgfdgrfptInv[4] = {fptNegateXp, fptNil, fptNegateXp | fptTranspose, fptTranspose};
+uint32_t _mpgfdgrfptInv[4] = {fptNegateXp, fptNil, fptNegateXp | fptTranspose, fptTranspose};
 
 /***************************************************************************
     Get the old palette in *ppglclrOld, allocate a transitionary palette
@@ -1254,7 +1254,7 @@ bool GNV::_FEnsureTempGnv(PGNV *ppgnv, RC *prc)
     size.  gfd indicates which direction the wipe is.  If pglclr is not
     nil and acrFill is clear, the palette transition is gradual.
 ***************************************************************************/
-void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr)
+void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -1263,8 +1263,8 @@ void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulon
     AssertVarMem(prcDst);
     AssertNilOrPo(pglclr, 0);
 
-    ulong grfpt, grfptInv;
-    ulong tsStart, dtsT;
+    uint32_t grfpt, grfptInv;
+    uint32_t tsStart, dtsT;
     long dxp, dxpTot;
     long cact;
     RC rcSrc, rcDst;
@@ -1342,7 +1342,7 @@ void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulon
     Slide the source gnv onto this one.  The source and destination
     rectangles must be the same size.
 ***************************************************************************/
-void GNV::Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr)
+void GNV::Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -1351,8 +1351,8 @@ void GNV::Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulo
     AssertVarMem(prcDst);
     AssertNilOrPo(pglclr, 0);
 
-    ulong grfpt, grfptInv;
-    ulong dtsT, tsStart;
+    uint32_t grfpt, grfptInv;
+    uint32_t dtsT, tsStart;
     long cact;
     long dxp, dxpTot, dxpOld;
     RC rcSrc, rcDst;
@@ -1484,7 +1484,7 @@ inline long _LwNextDissolve(long lw)
     lw = (lw << 15) - lw;
 
     // mod by 2^16 + 1
-    lw = (lw & 0x0000FFFFL) - (long)((ulong)lw >> 16);
+    lw = (lw & 0x0000FFFFL) - (long)((uint32_t)lw >> 16);
     if (lw < 0)
         lw += klwPrime;
 
@@ -1503,7 +1503,7 @@ inline long _LwNextDissolve(long lw)
     and destination rectangles must be the same size.  If pgnvSrc is nil,
     just dissolve into the solid color.  Each portion is done in dts time.
 ***************************************************************************/
-void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts,
+void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
                    PGL pglclr)
 {
     AssertThis(0);
@@ -1515,7 +1515,7 @@ void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC 
     AssertIn(crcWidth, 0, kcbMax);
     AssertIn(crcHeight, 0, kcbMax);
 
-    ulong tsStart, dtsT;
+    uint32_t tsStart, dtsT;
     uint8_t bFill;
     long cbRowSrc, cbRowDst;
     RND rnd;
@@ -1783,7 +1783,7 @@ void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC 
     the maximum number of palette interpolations to do.  It doesn't make
     sense for this to be bigger than 256.  If it's zero, we'll use 256.
 ***************************************************************************/
-void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr)
+void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertIn(cactMax, 0, 257);
@@ -1793,7 +1793,7 @@ void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, 
     AssertVarMem(prcDst);
     AssertNilOrPo(pglclr, 0);
 
-    ulong tsStart;
+    uint32_t tsStart;
     long cact, cactOld;
     CLR clr;
     PGL pglclrOld = pvNil;
@@ -1849,7 +1849,7 @@ void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, 
     intermediate color of acrFill (if not clear).  xp, yp are the focus
     point of the iris (in destination coordinates).
 ***************************************************************************/
-void GNV::Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, ulong dts, PGL pglclr)
+void GNV::Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -1858,7 +1858,7 @@ void GNV::Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc
     AssertVarMem(prcDst);
     AssertNilOrPo(pglclr, 0);
 
-    ulong tsStart, dtsT;
+    uint32_t tsStart, dtsT;
     RC rc, rcOld, rcDst;
     PT pt, ptBase;
     long cact;
@@ -2112,7 +2112,7 @@ void GPT::MarkMem(void)
 /******************************************************************************
     Assert the validity of a polygon descriptor.
 ******************************************************************************/
-void OLY::AssertValid(ulong grf)
+void OLY::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertPvCb(rgpts, LwMul(Cpts(), SIZEOF(PTS)));
@@ -2121,7 +2121,7 @@ void OLY::AssertValid(ulong grf)
 /******************************************************************************
     Assert the validity of the font description.
 ******************************************************************************/
-void DSF::AssertValid(ulong grf)
+void DSF::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertIn(dyp, 1, kswMax);
@@ -2159,7 +2159,7 @@ NTL::~NTL(void)
 /***************************************************************************
     Assert the validity of the font list.
 ***************************************************************************/
-void NTL::AssertValid(ulong grf)
+void NTL::AssertValid(uint32_t grf)
 {
     NTL_PAR::AssertValid(0);
     AssertPo(_pgst, 0);
@@ -2235,7 +2235,7 @@ long NTL::OnnMac(void)
     Create a new polygon by tracing the outline of this one with a
     convex polygon.
 ***************************************************************************/
-POGN OGN::PognTraceOgn(POGN pogn, ulong grfogn)
+POGN OGN::PognTraceOgn(POGN pogn, uint32_t grfogn)
 {
     AssertThis(0);
     AssertPo(pogn, 0);
@@ -2250,7 +2250,7 @@ POGN OGN::PognTraceOgn(POGN pogn, ulong grfogn)
     Create a new polygon by tracing the outline of this one with a
     convex polygon.
 ***************************************************************************/
-POGN OGN::PognTraceRgpt(PT *prgpt, long cpt, ulong grfogn)
+POGN OGN::PognTraceRgpt(PT *prgpt, long cpt, uint32_t grfogn)
 {
     AssertThis(0);
     AssertIn(cpt, 2, kcbMax);

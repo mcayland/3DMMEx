@@ -34,12 +34,12 @@ class TXDC : public TXDC_PAR
     PBSF _pbsf;
     PFIL _pfil;
 
-    TXDC(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    TXDC(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
     ~TXDC(void);
     bool _FInit(PFNI pfni = pvNil, PBSF pbsf = pvNil);
 
   public:
-    static PTXDC PtxdcNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    static PTXDC PtxdcNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
 
     PBSF Pbsf(void)
     {
@@ -76,13 +76,13 @@ class TXDD : public TXDD_PAR
     long _ichAnchor;
     long _ichOther;
     bool _fSelOn : 1;
-    ulong _tsSel;
+    uint32_t _tsSel;
     long _xpSel;
     bool _fXpValid;
 
     // the font
     long _onn;
-    ulong _grfont;
+    uint32_t _grfont;
     long _dypFont;
     long _dypLine;
     long _dxpTab;
@@ -92,7 +92,7 @@ class TXDD : public TXDD_PAR
     long _ichMinCache;
     long _ichLimCache;
 
-    TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, ulong grfont, long dypFont);
+    TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfont, long dypFont);
     ~TXDD(void);
     virtual bool _FInit(void);
     virtual void _NewRc(void);
@@ -139,7 +139,7 @@ class TXDD : public TXDD_PAR
     virtual bool _FPaste(PCLIP pclip, bool fDoIt, long cid);
 
   public:
-    static PTXDD PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, ulong grfont, long dypFont);
+    static PTXDD PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfont, long dypFont);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);

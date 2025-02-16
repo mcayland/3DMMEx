@@ -285,7 +285,7 @@ bool TAGL::FCacheTags(void)
 /***************************************************************************
     Assert the validity of the TAGL.
 ***************************************************************************/
-void TAGL::AssertValid(ulong grf)
+void TAGL::AssertValid(uint32_t grf)
 {
     TAGL_PAR::AssertValid(fobjAllocated);
     AssertPo(_pggtagf, 0);

@@ -845,8 +845,8 @@ bool TAGM::FCacheTagToHD(PTAG ptag, bool fCacheChildChunks)
         // chunks.
         CGE cge;
         KID kid;
-        ulong grfcgeIn = 0;
-        ulong grfcgeOut;
+        uint32_t grfcgeIn = 0;
+        uint32_t grfcgeOut;
 
         cge.Init(pcfl, ptag->ctg, ptag->cno);
         while (cge.FNextKid(&kid, pvNil, &grfcgeOut, grfcgeIn))
@@ -904,7 +904,7 @@ PBACO TAGM::PbacoFetch(PTAG ptag, PFNRPO pfnrpo, bool fUseCD)
 /***************************************************************************
     Clear the cache for source sid.  If sid is sidNil, clear all caches.
 ***************************************************************************/
-void TAGM::ClearCache(long sid, ulong grftagm)
+void TAGM::ClearCache(long sid, uint32_t grftagm)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -1067,7 +1067,7 @@ void TAGM::CloseTag(PTAG ptag)
 /***************************************************************************
     Compare two tags.  Tags are sorted first by sid, then CTG, then CNO.
 ***************************************************************************/
-ulong TAGM::FcmpCompareTags(PTAG ptag1, PTAG ptag2)
+uint32_t TAGM::FcmpCompareTags(PTAG ptag1, PTAG ptag2)
 {
     AssertVarMem(ptag1);
     Assert(ptag1->sid >= 0, "Invalid sid");
@@ -1101,7 +1101,7 @@ ulong TAGM::FcmpCompareTags(PTAG ptag1, PTAG ptag2)
 /***************************************************************************
     Assert the validity of the TAGM.
 ***************************************************************************/
-void TAGM::AssertValid(ulong grf)
+void TAGM::AssertValid(uint32_t grf)
 {
     long isfs;
     SFS sfs;

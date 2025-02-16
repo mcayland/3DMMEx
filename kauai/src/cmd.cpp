@@ -40,7 +40,7 @@ long CMH::_hidLast;
 /***************************************************************************
     Assert the validity of a CMD.
 ***************************************************************************/
-void CMD::AssertValid(ulong grf)
+void CMD::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertNilOrPo(pgg, 0);
@@ -107,7 +107,7 @@ CMH::~CMH(void)
 /***************************************************************************
     Assert the validity of a CMH.
 ***************************************************************************/
-void CMH::AssertValid(ulong grf)
+void CMH::AssertValid(uint32_t grf)
 {
     CMH_PAR::AssertValid(0);
     Assert(_hid != hidNil, 0);
@@ -118,7 +118,7 @@ void CMH::AssertValid(ulong grf)
     Protected virtual function to find a CMME (command map entry) for the
     given command id.
 ***************************************************************************/
-bool CMH::_FGetCmme(long cid, ulong grfcmmWanted, CMME *pcmme)
+bool CMH::_FGetCmme(long cid, uint32_t grfcmmWanted, CMME *pcmme)
 {
     AssertThis(0);
     AssertVarMem(pcmme);
@@ -169,7 +169,7 @@ bool CMH::FDoCmd(PCMD pcmd)
     AssertThis(0);
     AssertPo(pcmd, 0);
     CMME cmme;
-    ulong grfcmm;
+    uint32_t grfcmm;
 
     if (pvNil == pcmd->pcmh)
         grfcmm = fcmmNobody;
@@ -189,13 +189,13 @@ bool CMH::FDoCmd(PCMD pcmd)
     doesn't normally handle the command, this returns false (and does
     nothing else). Otherwise sets the grfeds and returns true.
 ***************************************************************************/
-bool CMH::FEnableCmd(PCMD pcmd, ulong *pgrfeds)
+bool CMH::FEnableCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
     AssertVarMem(pgrfeds);
     CMME cmme;
-    ulong grfcmm;
+    uint32_t grfcmm;
 
     if (pvNil == pcmd->pcmh)
         grfcmm = fcmmNobody;
@@ -614,7 +614,7 @@ bool CEX::_FCmhOk(PCMH pcmh)
     get first crack at commands. It is legal for a handler to be in the
     list more than once (even with the same cmhl value).
 ***************************************************************************/
-bool CEX::FAddCmh(PCMH pcmh, long cmhl, ulong grfcmm)
+bool CEX::FAddCmh(PCMH pcmh, long cmhl, uint32_t grfcmm)
 {
     AssertThis(0);
     AssertPo(pcmh, 0);
@@ -1058,7 +1058,7 @@ bool CEX::FDispatchNextCmd(void)
 /***************************************************************************
     Give the handler a crack at enabling/disabling the command.
 ***************************************************************************/
-bool CEX::_FEnableCmd(PCMH pcmh, PCMD pcmd, ulong *pgrfeds)
+bool CEX::_FEnableCmd(PCMH pcmh, PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertPo(pcmh, 0);
     AssertPo(pcmd, 0);
@@ -1074,13 +1074,13 @@ bool CEX::_FEnableCmd(PCMH pcmh, PCMD pcmd, ulong *pgrfeds)
     Determines whether the given command is currently enabled. This is
     normally used for menu graying/checking etc and toolbar enabling/status.
 ***************************************************************************/
-ulong CEX::GrfedsForCmd(PCMD pcmd)
+uint32_t CEX::GrfedsForCmd(PCMD pcmd)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
     long icmhe, ccmhe;
     CMHE cmhe;
-    ulong grfeds;
+    uint32_t grfeds;
 
     // pipe it through the command handlers, then to the target
     for (icmhe = 0, ccmhe = _pglcmhe->IvMac(); icmhe < ccmhe; icmhe++)
@@ -1122,7 +1122,7 @@ LDone:
     Determines whether the given command is currently enabled. This is
     normally used for menu graying/checking etc and toolbar enabling/status.
 ***************************************************************************/
-ulong CEX::GrfedsForCid(long cid, PCMH pcmh, PGG pgg, long lw0, long lw1, long lw2, long lw3)
+uint32_t CEX::GrfedsForCid(long cid, PCMH pcmh, PGG pgg, long lw0, long lw1, long lw2, long lw3)
 {
     AssertThis(0);
     Assert(cid != cidNil, 0);
@@ -1247,7 +1247,7 @@ void CEX::SetModalGob(PGOB pgob)
 /***************************************************************************
     Assert the validity of the command dispatcher
 ***************************************************************************/
-void CEX::AssertValid(ulong grf)
+void CEX::AssertValid(uint32_t grf)
 {
     CEX_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglcmhe, 0);

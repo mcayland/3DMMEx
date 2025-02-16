@@ -293,7 +293,7 @@ void BASE::operator delete(void *pv, schar *pszsFile, long lwLine)
 /***************************************************************************
     Assert the this pointer is valid.
 ***************************************************************************/
-void BASE::AssertValid(ulong grfobj)
+void BASE::AssertValid(uint32_t grfobj)
 {
     AssertVarMem(this);
     AssertIn(_cactRef, 0, kcbMax);
@@ -584,7 +584,7 @@ void BLL::_Attach(void *ppbllPrev)
 /***************************************************************************
     Check the links.
 ***************************************************************************/
-void BLL::AssertValid(ulong grf)
+void BLL::AssertValid(uint32_t grf)
 {
     BLL_PAR::AssertValid(grf);
 

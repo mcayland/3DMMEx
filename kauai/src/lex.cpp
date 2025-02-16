@@ -355,7 +355,7 @@ LEXB::~LEXB(void)
 /***************************************************************************
     Assert the validity of a LEXB.
 ***************************************************************************/
-void LEXB::AssertValid(ulong grf)
+void LEXB::AssertValid(uint32_t grf)
 {
     LEXB_PAR::AssertValid(0);
     AssertNilOrPo(_pfil, 0);
@@ -605,7 +605,7 @@ bool LEXB::FGetTok(PTOK ptok)
     AssertThis(0);
     AssertVarMem(ptok);
     achar ch, ch2;
-    ulong grfct;
+    uint32_t grfct;
     long cch;
 
     ptok->stn.SetNil();
@@ -831,7 +831,7 @@ bool LEXB::_FReadHex(long *plw)
     AssertThis(0);
     AssertVarMem(plw);
     achar ch;
-    ulong grfct;
+    uint32_t grfct;
 
     *plw = 0;
     if (!_FFetchRgch(&ch) || !((grfct = _GrfctCh(ch)) & fctHex))

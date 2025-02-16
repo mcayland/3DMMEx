@@ -30,8 +30,8 @@ static DWORD _luGroup;   // the group number
 static bool _fGrouped;   // whether new sounds are grouped
 static long _cactGroup;  // group nesting count
 
-static ulong _luFormat;    // format mixer is in
-static ulong _luCacheTime; // buffer size for mixer
+static uint32_t _luFormat; // format mixer is in
+static uint32_t _luCacheTime; // buffer size for mixer
 
 RTCLASS(SDAM)
 RTCLASS(CAMS)
@@ -224,7 +224,7 @@ PSTBL STBL::PstblNew(FLO *pflo, bool fPacked)
 /***************************************************************************
     Assert the validity of a STBL.
 ***************************************************************************/
-void STBL::AssertValid(ulong grf)
+void STBL::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertPo(&_blck, 0);
@@ -330,7 +330,7 @@ PCAMS CAMS::PcamsNewLoop(PCAMS pcamsSrc, long cactPlay)
 /***************************************************************************
     Assert the validity of a CAMS.
 ***************************************************************************/
-void CAMS::AssertValid(ulong grf)
+void CAMS::AssertValid(uint32_t grf)
 {
     CAMS_PAR::AssertValid(0);
     AssertPo(_pstbl, 0);
@@ -371,7 +371,7 @@ void AMNOT::Set(PAMQUE pamque)
 /***************************************************************************
     Assert the validity of a AMNOT.
 ***************************************************************************/
-void AMNOT::AssertValid(ulong grf)
+void AMNOT::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertNilOrVarMem(_pamque);
@@ -450,7 +450,7 @@ AMQUE::~AMQUE(void)
 /***************************************************************************
     Assert the validity of a AMQUE.
 ***************************************************************************/
-void AMQUE::AssertValid(ulong grf)
+void AMQUE::AssertValid(uint32_t grf)
 {
     AMQUE_PAR::AssertValid(0);
     Assert(pvNil != _pchan, 0);
@@ -579,7 +579,7 @@ void AMQUE::_Queue(long isndinMin)
             _pchan->Stop();
 
             // set the volume
-            _pchan->SetVolume(LuVolScale((ulong)(-1), sndin.vlm));
+            _pchan->SetVolume(LuVolScale((uint32_t)(-1), sndin.vlm));
 
             // if the sound is in memory
             if (((PCAMS)sndin.pbaco)->FInMemory())
@@ -694,7 +694,7 @@ void AMQUE::Notify(LPSOUND psnd)
 SDAM::SDAM(void)
 {
     _vlm = kvlmFull;
-    _luVolSys = (ulong)(-1);
+    _luVolSys = (uint32_t)(-1);
 }
 
 /***************************************************************************
@@ -712,7 +712,7 @@ SDAM::~SDAM(void)
 /***************************************************************************
     Assert the validity of a SDAM.
 ***************************************************************************/
-void SDAM::AssertValid(ulong grf)
+void SDAM::AssertValid(uint32_t grf)
 {
     SDAM_PAR::AssertValid(0);
     Assert(_pamix != pvNil, 0);

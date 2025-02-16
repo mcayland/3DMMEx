@@ -179,7 +179,7 @@ class AMQUE : public AMQUE_PAR
   protected:
     MUTX _mutx;         // restricts access to member variables
     IAMChannel *_pchan; // the audioman channel
-    ulong _tsStart;     // when we started the current sound
+    uint32_t _tsStart;  // when we started the current sound
     AMNOT _amnot;       // notify sink
 
     AMQUE(void);

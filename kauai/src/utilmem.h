@@ -90,7 +90,7 @@ enum
 void FreePhq(HQ *phq);
 long CbOfHq(HQ hq);
 bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr);
-bool FResizePhq(HQ *phq, long cb, ulong grfmem, long mpr);
+bool FResizePhq(HQ *phq, long cb, uint32_t grfmem, long mpr);
 void *PvLockHq(HQ hq);
 void UnlockHq(HQ hq);
 
@@ -128,7 +128,7 @@ extern long vcactSuspendCheckPointers;
 #define SuspendCheckPointers() vcactSuspendCheckPointers++;
 #define ResumeCheckPointers() vcactSuspendCheckPointers--;
 
-bool FAllocHqDebug(HQ *phq, long cb, ulong grfmem, long mpr, schar *pszsFile, long lwLine);
+bool FAllocHqDebug(HQ *phq, long cb, uint32_t grfmem, long mpr, schar *pszsFile, long lwLine);
 #define FAllocHq(phq, cb, grfmem, mpr) FAllocHqDebug(phq, cb, grfmem, mpr, __szsFile, __LINE__)
 void *QvFromHq(HQ hq);
 
@@ -142,7 +142,7 @@ void _UnmarkAllHqs(void);
 #else //! DEBUG
 
 #define FAllocHqDebug(phq, cb, grfmem, mpr, pszsFile, luLine) FAllocHq(phq, cb, grfmem, mpr)
-bool FAllocHq(HQ *phq, long cb, ulong grfmem, long mpr);
+bool FAllocHq(HQ *phq, long cb, uint32_t grfmem, long mpr);
 #ifdef MAC
 inline void *QvFromHq(HQ hq)
 {
@@ -166,12 +166,12 @@ inline void *QvFromHq(HQ hq)
 #ifdef DEBUG
 
 // allocation routine
-bool FAllocPvDebug(void **ppv, long cb, ulong grfmem, long mpr, schar *pszsFile, long lwLine, DMAGL *pdmagl);
+bool FAllocPvDebug(void **ppv, long cb, uint32_t grfmem, long mpr, schar *pszsFile, long lwLine, DMAGL *pdmagl);
 #define FAllocPv(ppv, cb, grfmem, mpr) FAllocPvDebug(ppv, cb, grfmem, mpr, __szsFile, __LINE__, &vdmglob.dmaglPv)
 
 // resizing routine - WIN only
 #ifdef WIN
-bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr, DMAGL *pdmagl);
+bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, uint32_t grfmem, long mpr, DMAGL *pdmagl);
 #endif // WIN
 
 // freeing routine
@@ -190,12 +190,12 @@ void MarkPv(void *pv);
 
 // allocation routine
 #define FAllocPvDebug(ppv, cb, grfmem, mpr, pszsFile, luLine, pdmagl) FAllocPv(ppv, cb, grfmem, mpr)
-bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr);
+bool FAllocPv(void **ppv, long cb, uint32_t grfmem, long mpr);
 
 // resizing routine - WIN only
 #ifdef WIN
 #define _FResizePpvDebug(ppv, cbNew, cbOld, grfmem, mpr, pdmagl) _FResizePpv(ppv, cbNew, cbOld, grfmem, mpr)
-bool _FResizePpv(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr);
+bool _FResizePpv(void **ppv, long cbNew, long cbOld, uint32_t grfmem, long mpr);
 #endif // WIN
 
 // freeing routine

@@ -167,7 +167,7 @@ bool ESL::FCmdDismiss(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the ESL.
 ***************************************************************************/
-void ESL::AssertValid(ulong grf)
+void ESL::AssertValid(uint32_t grf)
 {
     ESL_PAR::AssertValid(fobjAllocated);
 }
@@ -669,7 +669,7 @@ LFail:
 /***************************************************************************
     Assert the validity of the ESLT.
 ***************************************************************************/
-void ESLT::AssertValid(ulong grf)
+void ESLT::AssertValid(uint32_t grf)
 {
     ESLT_PAR::AssertValid(fobjAllocated);
     AssertPo(_pmvie, 0);
@@ -801,7 +801,7 @@ bool SNE::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long g
 /***************************************************************************
     Assert the validity of the SNE.
 ***************************************************************************/
-void SNE::AssertValid(ulong grf)
+void SNE::AssertValid(uint32_t grf)
 {
     SNE_PAR::AssertValid(fobjAllocated);
     AssertBasePo(_peslt, 0);
@@ -1027,7 +1027,7 @@ LFail:
 /***************************************************************************
     Assert the validity of the ESLA.
 ***************************************************************************/
-void ESLA::AssertValid(ulong grf)
+void ESLA::AssertValid(uint32_t grf)
 {
     ESLA_PAR::AssertValid(fobjAllocated);
     AssertPo(_pmvie, 0);
@@ -1424,7 +1424,7 @@ bool ESLL::_FAcceptChanges(bool *pfDismissEasel)
 /***************************************************************************
     Assert the validity of the ESLL.
 ***************************************************************************/
-void ESLL::AssertValid(ulong grf)
+void ESLL::AssertValid(uint32_t grf)
 {
     ESLL_PAR::AssertValid(fobjAllocated);
 }
@@ -1597,7 +1597,7 @@ LSND::~LSND(void)
 /***************************************************************************
     Assert the validity of the LSND.
 ***************************************************************************/
-void LSND::AssertValid(ulong grf)
+void LSND::AssertValid(uint32_t grf)
 {
     LSND_PAR::AssertValid(0);
     AssertNilOrPo(_pgltag, 0);
@@ -1956,7 +1956,7 @@ LFail:
 /***************************************************************************
     Assert the validity of the ESLR.
 ***************************************************************************/
-void ESLR::AssertValid(ulong grf)
+void ESLR::AssertValid(uint32_t grf)
 {
     ESLL_PAR::AssertValid(fobjAllocated);
     AssertPo(_psrec, 0);

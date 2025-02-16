@@ -46,7 +46,7 @@ class SNDV : public SNDV_PAR
     virtual long VlmCur(void) = 0;
 
     virtual long SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn = ksqnNone, long vlm = kvlmFull, long cactPlay = 1,
-                         ulong dtsStart = 0, long spr = 0, long scl = sclNil) = 0;
+                         uint32_t dtsStart = 0, long spr = 0, long scl = sclNil) = 0;
 
     virtual void Stop(long sii) = 0;
     virtual void StopAll(long sqn = sqnNil, long scl = sclNil) = 0;
@@ -111,7 +111,7 @@ class SNDM : public SNDM_PAR
     virtual long VlmCur(void);
 
     virtual long SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn = ksqnNone, long vlm = kvlmFull, long cactPlay = 1,
-                         ulong dtsStart = 0, long spr = 0, long scl = sclNil);
+                         uint32_t dtsStart = 0, long spr = 0, long scl = sclNil);
 
     virtual void Stop(long sii);
     virtual void StopAll(long sqn = sqnNil, long scl = sclNil);
@@ -172,7 +172,7 @@ class SNDMQ : public SNDMQ_PAR
     virtual void Suspend(bool fSuspend);
 
     virtual long SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn = ksqnNone, long vlm = kvlmFull, long cactPlay = 1,
-                         ulong dtsStart = 0, long spr = 0, long scl = sclNil);
+                         uint32_t dtsStart = 0, long spr = 0, long scl = sclNil);
 
     virtual void Stop(long sii);
     virtual void StopAll(long sqn = sqnNil, long scl = sclNil);
@@ -198,7 +198,7 @@ struct SNDIN
     long sii;       // the sound instance id
     long vlm;       // volume to play at
     long cactPlay;  // how many times to play
-    ulong dtsStart; // offset to start at
+    uint32_t dtsStart; // offset to start at
     long spr;       // sound priority
     long scl;       // sound class
 
@@ -236,7 +236,7 @@ class SNQUE : public SNQUE_PAR
   public:
     ~SNQUE(void);
 
-    void Enqueue(long sii, PRCA prca, CTG ctg, CNO cno, long vlm, long cactPlay, ulong dtsStart, long spr, long scl);
+    void Enqueue(long sii, PRCA prca, CTG ctg, CNO cno, long vlm, long cactPlay, uint32_t dtsStart, long spr, long scl);
 
     long SprCur(void);
     void Stop(long sii);
@@ -250,7 +250,7 @@ class SNQUE : public SNQUE_PAR
     void Flush(void);
 };
 
-extern ulong LuVolScale(ulong luVolSys, long vlm);
-extern ulong vluSysVolFake;
+extern uint32_t LuVolScale(uint32_t luVolSys, long vlm);
+extern uint32_t vluSysVolFake;
 
 #endif //! SNDM_H

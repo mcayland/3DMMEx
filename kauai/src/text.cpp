@@ -25,7 +25,7 @@ const long kdxpInsetSled = 2;
 /***************************************************************************
     Constructor for edit control parameter block.
 ***************************************************************************/
-EDPAR::EDPAR(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont, long dypFont,
+EDPAR::EDPAR(long hid, PGOB pgob, uint32_t grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, uint32_t grfont, long dypFont,
              long tah, long tav, ACR acrFore, ACR acrBack, long cmhl)
     : _gcb(hid, pgob, grfgob, gin, prcAbs, prcRel)
 {
@@ -42,7 +42,7 @@ EDPAR::EDPAR(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel
 /***************************************************************************
     Set the data in the EDPAR.
 ***************************************************************************/
-void EDPAR::Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont,
+void EDPAR::Set(long hid, PGOB pgob, uint32_t grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, uint32_t grfont,
                 long dypFont, long tah, long tav, ACR acrFore, ACR acrBack, long cmhl)
 {
     _gcb.Set(hid, pgob, grfgob, gin, prcAbs, prcRel);
@@ -59,7 +59,7 @@ void EDPAR::Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prc
 /***************************************************************************
     Set the font portion of the EDPAR.
 ***************************************************************************/
-void EDPAR::SetFont(long onn, ulong grfont, long dypFont, long tah, long tav, ACR acrFore, ACR acrBack)
+void EDPAR::SetFont(long onn, uint32_t grfont, long dypFont, long tah, long tav, ACR acrFore, ACR acrBack)
 {
     _onn = onn;
     _grfont = grfont;
@@ -198,7 +198,7 @@ bool EDCB::FCmdKey(PCMD_KEY pcmd)
     const long kcchInsBuf = 64;
     AssertThis(0);
     AssertVarMem(pcmd);
-    ulong grfcust;
+    uint32_t grfcust;
     long vkDone;
     long dich, ichLim;
     long dlnSel, ln, lnMac;
@@ -846,7 +846,7 @@ long EDCB::_IchNext(long ich, bool fWord)
 /***************************************************************************
     Assert the validity of the EDCB
 ***************************************************************************/
-void EDCB::AssertValid(ulong grf)
+void EDCB::AssertValid(uint32_t grf)
 {
     EDCB_PAR::AssertValid(0);
     AssertIn(_ichAnchor, 0, kcbMax);
@@ -1074,7 +1074,7 @@ long EDPL::_XpOrigin(void)
 /***************************************************************************
     Assert the validity of a single-line edit control.
 ***************************************************************************/
-void EDPL::AssertValid(ulong grf)
+void EDPL::AssertValid(uint32_t grf)
 {
     EDPL_PAR::AssertValid(0);
     Assert(vntl.FValidOnn(_onn), 0);
@@ -1274,7 +1274,7 @@ long EDSL::CchFetch(achar *prgch, long ich, long cchWant)
 /***************************************************************************
     Assert the validity of a single-line edit control.
 ***************************************************************************/
-void EDSL::AssertValid(ulong grf)
+void EDSL::AssertValid(uint32_t grf)
 {
     long ich;
 
@@ -1569,7 +1569,7 @@ long EDML::_LnReformat(long lnMin, long *pclnDel, long *pclnIns)
 ***************************************************************************/
 bool EDML::_FFilterCh(achar ch)
 {
-    ulong grfch = GrfchFromCh(ch);
+    uint32_t grfch = GrfchFromCh(ch);
 
     return !(fchControl & grfch) || (fchBreak & grfch);
 }
@@ -1593,7 +1593,7 @@ long EDML::CchFetch(achar *prgch, long ich, long cchWant)
 /***************************************************************************
     Assert the validity of a multi-line edit control.
 ***************************************************************************/
-void EDML::AssertValid(ulong grf)
+void EDML::AssertValid(uint32_t grf)
 {
     EDML_PAR::AssertValid(0);
     AssertPo(_pglich, 0);
@@ -1695,7 +1695,7 @@ long EDMW::_LnReformat(long lnMin, long *pclnDel, long *pclnIns)
     long ich, cich, ivMin, ivLim, iv, ichNew;
     long iichCur;
     long lnCur;
-    ulong grfch;
+    uint32_t grfch;
     achar *prgch;
     long clnIns = 0, clnDel = 0;
 
@@ -1833,7 +1833,7 @@ long EDMW::_CichGetBreakables(achar *prgch, long ich, long *prgich, long cichMax
     AssertPvCb(prgch, IchMac() * SIZEOF(achar));
     AssertPvCb(prgich, LwMul(cichMax, SIZEOF(long)));
     long cich;
-    ulong grfch;
+    uint32_t grfch;
 
     for (cich = 0; ich < IchMac(); ich++)
     {

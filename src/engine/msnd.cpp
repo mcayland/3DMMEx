@@ -673,7 +673,7 @@ long MSND::Spr(long tool)
     Play this sound
 
 ***************************************************************************/
-void MSND::Play(long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr, ulong dtsStart)
+void MSND::Play(long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr, uint32_t dtsStart)
 {
     AssertThis(0);
 
@@ -747,7 +747,7 @@ PMSQ MSQ::PmsqNew(void)
     Enqueue a sound	in the MSQ.  Overwrites sounds of the same type.
 
 ***************************************************************************/
-bool MSQ::FEnqueue(PMSND pmsnd, long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr, ulong dtsStart,
+bool MSQ::FEnqueue(PMSND pmsnd, long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr, uint32_t dtsStart,
                    bool fLowPri)
 {
     AssertThis(0);
@@ -904,7 +904,7 @@ MSQ::~MSQ(void)
 /***************************************************************************
     Assert the validity of the MSND.
 ***************************************************************************/
-void MSND::AssertValid(ulong grf)
+void MSND::AssertValid(uint32_t grf)
 {
     MSND_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_prca, 0);
@@ -925,7 +925,7 @@ void MSND::MarkMem(void)
 /***************************************************************************
     Assert the validity of the MSQ.
 ***************************************************************************/
-void MSQ::AssertValid(ulong grf)
+void MSQ::AssertValid(uint32_t grf)
 {
     MSQ_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglsqe, 0);

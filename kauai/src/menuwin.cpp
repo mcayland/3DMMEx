@@ -33,7 +33,7 @@ MUB::~MUB(void)
 /***************************************************************************
     Static method to load and set a new menu bar.
 ***************************************************************************/
-PMUB MUB::PmubNew(ulong ridMenuBar)
+PMUB MUB::PmubNew(uint32_t ridMenuBar)
 {
     PMUB pmub;
 
@@ -78,7 +78,7 @@ void MUB::Set(void)
 void MUB::Clean(void)
 {
     long imnu, imni, cmnu;
-    ulong grfeds;
+    uint32_t grfeds;
     HMENU hmenu;
     long wcid;
     CMD cmd;

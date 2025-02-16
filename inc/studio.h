@@ -75,7 +75,7 @@ class STDIO : public STDIO_PAR
     STDIO(PGCB pgcb) : GOB(pgcb){};
     bool _FOpenStudio(bool fPaletteFade);
     void _SetToolStates(void);
-    bool _FBuildMenuCidCtg(long cid, CTG ctg, PGL pgl, ulong grfHotKey, ulong grfNum, bool fNew);
+    bool _FBuildMenuCidCtg(long cid, CTG ctg, PGL pgl, uint32_t grfHotKey, uint32_t grfNum, bool fNew);
     PBRCN _PbrcnFromBrwdid(long brwdid);
 #ifdef BUG1959
     bool _FLoadMovie(PFNI pfni, CNO cno, bool *pfClosedOld);

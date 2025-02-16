@@ -57,7 +57,7 @@ APPB::~APPB(void)
 /***************************************************************************
     Calls _FInit and if successful, calls _Loop then _CleanUp.
 ***************************************************************************/
-void APPB::Run(ulong grfapp, ulong grfgob, long ginDef)
+void APPB::Run(uint32_t grfapp, uint32_t grfgob, long ginDef)
 {
     AssertThis(0);
 
@@ -199,7 +199,7 @@ void APPB::EndLongOp(bool fAll)
     returned is the actual current values at the hardware level, ie, not
     synchronized with the command stream.
 ***************************************************************************/
-ulong APPB::GrfcustCur(bool fAsync)
+uint32_t APPB::GrfcustCur(bool fAsync)
 {
     AssertThis(0);
 
@@ -227,7 +227,7 @@ ulong APPB::GrfcustCur(bool fAsync)
     Modify the current cursor/modifier state.  Doesn't affect the key
     states or mouse state.
 ***************************************************************************/
-void APPB::ModifyGrfcust(ulong grfcustOr, ulong grfcustXor)
+void APPB::ModifyGrfcust(uint32_t grfcustOr, uint32_t grfcustXor)
 {
     AssertThis(0);
 
@@ -401,7 +401,7 @@ bool APPB::FCmdIdle(PCMD pcmd)
         // check to see if the mouse moved
         PT pt;
         bool fDown;
-        ulong grfcust;
+        uint32_t grfcust;
         CMD_MOUSE cmd;
 
         pgob->GetPtMouse(&pt, &fDown);
@@ -512,7 +512,7 @@ void APPB::ResetToolTip(void)
 /***************************************************************************
     Enable app level commands
 ***************************************************************************/
-bool APPB::FEnableAppCmd(PCMD pcmd, ulong *pgrfeds)
+bool APPB::FEnableAppCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -558,7 +558,7 @@ bool APPB::FCmdChooseWnd(PCMD pcmd)
 /***************************************************************************
     Application initialization.
 ***************************************************************************/
-bool APPB::_FInit(ulong grfapp, ulong grfgob, long ginDef)
+bool APPB::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
 {
     AssertThis(0);
 
@@ -747,7 +747,7 @@ void APPB::TopOfLoop(void)
         _fRefresh = fFalse;
         GTE gte;
         PGOB pgob;
-        ulong grfgte;
+        uint32_t grfgte;
 
         gte.Init(GOB::PgobScreen(), fgteNil);
         while (gte.FNextGob(&pgob, &grfgte, fgteNil))
@@ -769,7 +769,7 @@ void APPB::TopOfLoop(void)
     Update the given window.  *prc is the bounding rectangle of the update
     region.
 ***************************************************************************/
-void APPB::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
+void APPB::UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp)
 {
     AssertThis(0);
     Assert(hNil != hwnd, "nil hwnd in UpdateHwnd");
@@ -1162,7 +1162,7 @@ void APPB::UpdateMarked(void)
 /***************************************************************************
     Do a fast update of the gob and its descendents into the given gpt.
 ***************************************************************************/
-void APPB::_FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp, PGPT pgpt)
+void APPB::_FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp, PGPT pgpt)
 {
     AssertThis(0);
     AssertPo(pgob, 0);
@@ -1208,7 +1208,7 @@ void APPB::_FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp, PGPT pgpt)
     If pglclr is not nil, this AddRef's it and holds onto it until after
     the transition is done.
 ***************************************************************************/
-void APPB::SetGft(long gft, long lwGft, ulong dts, PGL pglclr, ACR acr)
+void APPB::SetGft(long gft, long lwGft, uint32_t dts, PGL pglclr, ACR acr)
 {
     AssertThis(0);
     AssertNilOrPo(pglclr, 0);
@@ -1724,7 +1724,7 @@ bool APPB::FAllowScreenSaver(void)
 /***************************************************************************
     Assert the validity of a APPB.
 ***************************************************************************/
-void APPB::AssertValid(ulong grf)
+void APPB::AssertValid(uint32_t grf)
 {
     APPB_PAR::AssertValid(0);
 

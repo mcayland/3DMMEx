@@ -20,7 +20,7 @@ typedef class MIDS *PMIDS;
 // midi event
 struct MIDEV
 {
-    ulong ts;     // time stamp of this event
+    uint32_t ts;  // time stamp of this event
     long cb;      // number of bytes to send (in rgbSend)
     long lwTempo; // the current tempo - at a tempo change, cb will be 0
     union {
@@ -44,7 +44,7 @@ class MSTP : public MSTP_PAR
     MARKMEM
 
   protected:
-    ulong _tsCur;
+    uint32_t _tsCur;
     long _lwTempo;
     uint8_t *_prgb;
     uint8_t *_pbLim;
@@ -59,7 +59,7 @@ class MSTP : public MSTP_PAR
     MSTP(void);
     ~MSTP(void);
 
-    void Init(PMIDS pmids, ulong tsStart = 0, long lwTempo = 500000);
+    void Init(PMIDS pmids, uint32_t tsStart = 0, long lwTempo = 500000);
     bool FGetEvent(PMIDEV pmidev, bool fAdvance = fTrue);
 };
 
@@ -82,7 +82,7 @@ class MIDS : public MIDS_PAR
 
     MIDS(void);
 
-    static long _CbEncodeLu(ulong lu, uint8_t *prgb);
+    static long _CbEncodeLu(uint32_t lu, uint8_t *prgb);
 
   public:
     static bool FReadMids(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);

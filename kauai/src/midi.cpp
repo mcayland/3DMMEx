@@ -40,7 +40,7 @@ MSTP::~MSTP(void)
     Initialize this midi stream parser to the given midi stream and use the
     given time as the start time.
 ***************************************************************************/
-void MSTP::Init(PMIDS pmids, ulong tsStart, long lwTempo)
+void MSTP::Init(PMIDS pmids, uint32_t tsStart, long lwTempo)
 {
     AssertThis(0);
     AssertNilOrPo(pmids, 0);
@@ -84,7 +84,7 @@ bool MSTP::FGetEvent(PMIDEV pmidev, bool fAdvance)
     MIDEV midev;
     long cbT;
     long ibSend;
-    ulong tsCur;
+    uint32_t tsCur;
 
     ClearPb(&midev, SIZEOF(midev));
     midev.lwTempo = _lwTempo;
@@ -251,7 +251,7 @@ bool MSTP::_FReadVar(uint8_t **ppbCur, long *plw)
 /***************************************************************************
     Assert the validity of a MSTP.
 ***************************************************************************/
-void MSTP::AssertValid(ulong grf)
+void MSTP::AssertValid(uint32_t grf)
 {
     MSTP_PAR::AssertValid(0);
     if (pvNil == _pmids)
@@ -293,7 +293,7 @@ MIDS::~MIDS(void)
 /***************************************************************************
     Assert the validity of a MIDS.
 ***************************************************************************/
-void MIDS::AssertValid(ulong grf)
+void MIDS::AssertValid(uint32_t grf)
 {
     MIDS_PAR::AssertValid(0);
     AssertHq(_hqrgb);
@@ -402,12 +402,12 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     bool fSmpte;
     BSM bsm;
     RAT ratTempo;
-    ulong tsTempo, tsRawTempo, tsLast, ts, dts;
+    uint32_t tsTempo, tsRawTempo, tsLast, ts, dts;
     uint8_t rgbT[5];
     long cbT;
     bool fSeq;
     long imidtr, imidtrMin;
-    ulong tsMin;
+    uint32_t tsMin;
     PMIDS pmids = pvNil;
     PGL pglmidtr = pvNil;
 
@@ -643,7 +643,7 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     Static method to convert a long to its midi file variable length
     equivalent.
 ***************************************************************************/
-long MIDS::_CbEncodeLu(ulong lu, uint8_t *prgb)
+long MIDS::_CbEncodeLu(uint32_t lu, uint8_t *prgb)
 {
     AssertNilOrVarMem(prgb);
 

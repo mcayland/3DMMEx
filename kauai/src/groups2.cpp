@@ -32,7 +32,7 @@ RTCLASS(AST)
 /***************************************************************************
     Constructor for a base string table.
 ***************************************************************************/
-GSTB::GSTB(long cbExtra, ulong grfgst)
+GSTB::GSTB(long cbExtra, uint32_t grfgst)
 {
     AssertIn(cbExtra, 0, kcbMax);
     Assert(cbExtra % SIZEOF(long) == 0, "cbExtra not multiple of SIZEOF(long)");
@@ -220,7 +220,7 @@ LFail:
     a total of cchAdd characters.  If there is more than enough room and
     fgrpShrink is passed, the GSTB may shrink.
 ***************************************************************************/
-bool GSTB::FEnsureSpace(long cstnAdd, long cchAdd, ulong grfgrp)
+bool GSTB::FEnsureSpace(long cstnAdd, long cchAdd, uint32_t grfgrp)
 {
     AssertThis(0);
     AssertIn(cstnAdd, 0, kcbMax);
@@ -348,7 +348,7 @@ void GSTB::GetStn(long istn, PSTN pstn)
 /***************************************************************************
     Find the given stn in the string table.
 ***************************************************************************/
-bool GSTB::FFindStn(PSTN pstn, long *pistn, ulong grfgst)
+bool GSTB::FFindStn(PSTN pstn, long *pistn, uint32_t grfgst)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -361,7 +361,7 @@ bool GSTB::FFindStn(PSTN pstn, long *pistn, ulong grfgst)
     search.  GST overrides this to do a binary search if fgstSorted is
     passed in grfgst.
 ***************************************************************************/
-bool GSTB::FFindRgch(const achar *prgch, long cch, long *pistn, ulong grfgst)
+bool GSTB::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcchMaxGst + 1);
@@ -666,7 +666,7 @@ bool GSTB::FFree(long istn)
 /***************************************************************************
     Validate a string table.
 ***************************************************************************/
-void GSTB::AssertValid(ulong grfobj)
+void GSTB::AssertValid(uint32_t grfobj)
 {
     long ibst;
     long cchTot, cbstFree;
@@ -806,7 +806,7 @@ bool GST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
     is passed in, this does a binary search for the string; otherwise it
     does a linear search.
 ***************************************************************************/
-bool GST::FFindRgch(const achar *prgch, long cch, long *pistn, ulong grfgst)
+bool GST::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcchMaxGst);
@@ -818,7 +818,7 @@ bool GST::FFindRgch(const achar *prgch, long cch, long *pistn, ulong grfgst)
 
     // the table should be sorted, so do a binary search
     long ivMin, ivLim, iv;
-    ulong fcmp;
+    uint32_t fcmp;
     achar *qst;
 
     for (ivMin = 0, ivLim = _ivMac; ivMin < ivLim;)
@@ -943,7 +943,7 @@ void GST::Move(long ivSrc, long ivTarget)
 /***************************************************************************
     Validate a string table.
 ***************************************************************************/
-void GST::AssertValid(ulong grfobj)
+void GST::AssertValid(uint32_t grfobj)
 {
     GST_PAR::AssertValid(grfobj);
     AssertVar(_cbstFree == cvNil, "bad _cbstFree in GST", &_cbstFree);
@@ -1123,7 +1123,7 @@ void AST::Delete(long istn)
 /***************************************************************************
     Validate a string table.
 ***************************************************************************/
-void AST::AssertValid(ulong grfobj)
+void AST::AssertValid(uint32_t grfobj)
 {
     AST_PAR::AssertValid(grfobj);
     AssertIn(_cbstFree, 0, LwMax(1, _ivMac));

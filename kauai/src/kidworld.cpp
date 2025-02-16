@@ -107,7 +107,7 @@ GKDS::~GKDS(void)
 /***************************************************************************
     Assert the validity of a GKDS.
 ***************************************************************************/
-void GKDS::AssertValid(ulong grf)
+void GKDS::AssertValid(uint32_t grf)
 {
     LOP *qrglop;
 
@@ -143,13 +143,13 @@ long GKDS::Gokk(void)
 /***************************************************************************
     Look for a cursor map entry in this GKDS.
 ***************************************************************************/
-bool GKDS::FGetCume(ulong grfcust, long sno, CUME *pcume)
+bool GKDS::FGetCume(uint32_t grfcust, long sno, CUME *pcume)
 {
     AssertThis(0);
     AssertVarMem(pcume);
     CUME *qcume;
     long ccume;
-    ulong fbitSno = (1L << (sno & 0x1F));
+    uint32_t fbitSno = (1L << (sno & 0x1F));
 
     if (0 == _ccume)
         return fFalse;
@@ -217,7 +217,7 @@ WOKS::~WOKS(void)
 /***************************************************************************
     Assert the validity of a WOKS.
 ***************************************************************************/
-void WOKS::AssertValid(ulong grf)
+void WOKS::AssertValid(uint32_t grf)
 {
     WOKS_PAR::AssertValid(0);
     AssertPo(&_strg, 0);
@@ -425,7 +425,7 @@ void WOKS::Print(PSTN pstn)
     Return the current cursor state. This takes the frame cursor state from
     vpappb and the rest from this kidspace world.
 ***************************************************************************/
-ulong WOKS::GrfcustCur(bool fAsynch)
+uint32_t WOKS::GrfcustCur(bool fAsynch)
 {
     AssertThis(0);
 
@@ -436,7 +436,7 @@ ulong WOKS::GrfcustCur(bool fAsynch)
     Modify the current cursor state. This sets the frame values in vpappb
     and the rest in this kidspace world.
 ***************************************************************************/
-void WOKS::ModifyGrfcust(ulong grfcustOr, ulong grfcustXor)
+void WOKS::ModifyGrfcust(uint32_t grfcustOr, uint32_t grfcustXor)
 {
     AssertThis(0);
 
@@ -451,7 +451,7 @@ void WOKS::ModifyGrfcust(ulong grfcustOr, ulong grfcustXor)
     Adjust the given grfcust (take the Frame bits from it and combine with
     our other bits).
 ***************************************************************************/
-ulong WOKS::GrfcustAdjust(ulong grfcust)
+uint32_t WOKS::GrfcustAdjust(uint32_t grfcust)
 {
     AssertThis(0);
 
@@ -473,7 +473,7 @@ bool WOKS::FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet)
     PWOKS pwoksModal;
     GTE gte;
     PGOB pgob;
-    ulong grfgte;
+    uint32_t grfgte;
     bool fRet = fFalse;
 
     gte.Init(this, fgteNil);

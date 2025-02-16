@@ -747,7 +747,7 @@ bool BWLD::FClickedActor(long xp, long yp, BACT **ppbact)
 /***************************************************************************
     Assert the validity of the BWLD.
 ***************************************************************************/
-void BWLD::AssertValid(ulong grf)
+void BWLD::AssertValid(uint32_t grf)
 {
     BWLD_PAR::AssertValid(fobjAllocated);
     AssertPo(_pgptWorking, 0);

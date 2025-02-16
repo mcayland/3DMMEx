@@ -57,7 +57,7 @@ class MIDO : public MIDO_PAR
     bool _fSetVol : 1;  // whether the volume needs set
 
     void _GetSysVol(void);
-    void _SetSysVol(ulong luVol);
+    void _SetSysVol(uint32_t luVol);
     void _SetSysVlm(void);
     void _Reset(void);
 
@@ -69,7 +69,7 @@ class MIDO : public MIDO_PAR
     void SetVlm(long vlm);
     long VlmCur(void);
 
-    bool FPlay(long sii, long spr, MIDEV *pmidev, long vlm, ulong grfmido);
+    bool FPlay(long sii, long spr, MIDEV *pmidev, long vlm, uint32_t grfmido);
     void Transition(long siiOld, long siiNew, long sprNew);
     void Close(long sii);
 };
@@ -85,7 +85,7 @@ MIDO::MIDO(void)
 {
     _hmo = hNil;
     _sii = siiNil;
-    _luVolSys = (ulong)(-1);
+    _luVolSys = (uint32_t)(-1);
     _vlmBase = _vlm = kvlmFull;
     _fSetVol = fFalse;
 
@@ -121,7 +121,7 @@ void MIDO::_GetSysVol(void)
 /***************************************************************************
     Set the system volume level.
 ***************************************************************************/
-void MIDO::_SetSysVol(ulong luVol)
+void MIDO::_SetSysVol(uint32_t luVol)
 {
     Assert(hNil != _hmo, "calling _SetSysVol with nil _hmo");
     midiOutSetVolume(_hmo, luVol);
@@ -134,7 +134,7 @@ void MIDO::_SetSysVol(ulong luVol)
 ***************************************************************************/
 void MIDO::_SetSysVlm(void)
 {
-    ulong luVol;
+    uint32_t luVol;
 
     luVol = LuVolScale(_luVolSys, _vlmBase);
     luVol = LuVolScale(luVol, _vlm);
@@ -235,7 +235,7 @@ long MIDO::VlmCur(void)
     Play the given midi event. Returns false iff the midi stream should be
     started over from the beginning in fast forward mode.
 ***************************************************************************/
-bool MIDO::FPlay(long sii, long spr, MIDEV *pmidev, long vlm, ulong grfmido)
+bool MIDO::FPlay(long sii, long spr, MIDEV *pmidev, long vlm, uint32_t grfmido)
 {
     AssertThis(0);
     AssertVarMem(pmidev);
@@ -369,8 +369,8 @@ class MPQUE : public MPQUE_PAR
     long _spr;
     long _vlm;      // volume to play back at
     MIDEV _midev;   // current midi event
-    ulong _tsStart; // time current sound was started
-    ulong _grfmido; // options for midi output device
+    uint32_t _tsStart; // time current sound was started
+    uint32_t _grfmido; // options for midi output device
 
     bool _fMidevValid : 1; // is _midev valid?
     bool _fDone : 1;       // should the thread terminate?
@@ -438,7 +438,7 @@ MPQUE::~MPQUE(void)
 /***************************************************************************
     Assert the validity of a MPQUE.
 ***************************************************************************/
-void MPQUE::AssertValid(ulong grf)
+void MPQUE::AssertValid(uint32_t grf)
 {
     _mutx.Enter();
 
@@ -726,7 +726,7 @@ bool MPQUE::_FStartQueue(void)
 bool MPQUE::_FGetEvt(void)
 {
     AssertThis(0);
-    ulong ts;
+    uint32_t ts;
     SNDIN sndin;
 
     if (_fMidevValid)

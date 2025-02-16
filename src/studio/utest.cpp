@@ -38,16 +38,16 @@ ASSERTNAME
 // #define PERF_TEST
 
 // Duration to display homelogo
-const ulong kdtsHomeLogo = 4 * kdtsSecond;
+const uint32_t kdtsHomeLogo = 4 * kdtsSecond;
 
 // Duration to display splash screen
-const ulong kdtsSplashScreen = 4 * kdtsSecond;
+const uint32_t kdtsSplashScreen = 4 * kdtsSecond;
 
 // Duration before res-switch dialog cancels itself
-const ulong kdtsMaxResSwitchDlg = 15 * kdtsSecond;
+const uint32_t kdtsMaxResSwitchDlg = 15 * kdtsSecond;
 
 // 2MB cache per source for TAGM
-const ulong kcbCacheTagm = 2048 * 1024;
+const uint32_t kcbCacheTagm = 2048 * 1024;
 
 static PSZ kpszAppWndCls = PszLit("3DMOVIE");
 const PSZ kpszOpenFile = PszLit("3DMMOpen.tmp");
@@ -90,12 +90,12 @@ void FrameMain(void)
         gracefully from a crash.
 
     Arguments:
-        ulong grfapp -- app flags
-        ulong grfgob -- GOB flags
+        uint32_t grfapp -- app flags
+        uint32_t grfgob -- GOB flags
         long ginDef  -- default GOB invalidation
 
 ************************************************************ PETED ***********/
-void APP::Run(ulong grfapp, ulong grfgob, long ginDef)
+void APP::Run(uint32_t grfapp, uint32_t grfgob, long ginDef)
 {
     /* Don't bother w/ AssertThis; we'd have to use AssertBaseThis, or
         possibly the parent's AssertValid, which gets done almost right
@@ -173,12 +173,12 @@ struct DBINFO
 /***************************************************************************
     Init the APP
 ***************************************************************************/
-bool APP::_FInit(ulong grfapp, ulong grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
 {
     AssertBaseThis(0);
 
-    ulong tsHomeLogo;
-    ulong tsSplashScreen;
+    uint32_t tsHomeLogo;
+    uint32_t tsSplashScreen;
     FNI fniUserDoc;
     long fFirstTimeUser;
 
@@ -1400,14 +1400,14 @@ bool APP::_FWriteUserData(void)
         PSZ pszValueName  --  The value name
         void *pvData      --  pointer to buffer to read or write key into or from
         long cbData       --  size of the buffer
-        ulong grfreg      --  flags describing what we should do
+        uint32_t grfreg   --  flags describing what we should do
         bool *pfNoValue  --  optional parameter, takes whether a real registry
                               error occurred or not
 
     Returns:  fTrue if all actions necessary could be performed
 
 ************************************************************ PETED ***********/
-bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfreg, bool *pfNoValue)
+bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, uint32_t grfreg, bool *pfNoValue)
 {
     AssertBaseThis(0);
     AssertSz(pszValueName);
@@ -2072,10 +2072,10 @@ bool APP::_FDetermineIfSlowCPU(void)
     PGPT pgptOff = pvNil;
     RC rc1;
     RC rc2;
-    ulong ts;
-    ulong dts1;
-    ulong dts2;
-    ulong dts3;
+    uint32_t ts;
+    uint32_t dts1;
+    uint32_t dts2;
+    uint32_t dts3;
     long i;
     char *pch1 = pvNil;
     char *pch2 = pvNil;
@@ -2601,7 +2601,7 @@ bool APP::FCmdDeactivate(PCMD pcmd)
     PWOKS pwoksModal;
     GTE gte;
     PGOB pgob;
-    ulong grfgte;
+    uint32_t grfgte;
     long lwRet;
     CMD_MOUSE cmd;
     PT pt;
@@ -2980,7 +2980,7 @@ bool APP::FCmdPortfolioOpen(PCMD pcmd)
     long idsTitle, idsFilterLabel, idsFilterExt;
     FNI fniUsersDir;
     PFNI pfni;
-    ulong grfPrevType;
+    uint32_t grfPrevType;
     CNO cnoWave = cnoNil;
 
     // Set up strings specific to this use of the portfolio.
@@ -4223,7 +4223,7 @@ bool APP::_FGetNextEvt(PEVT pevt)
 /***************************************************************************
     Override default _FastUpdate to optionally skip offscreen buffer
 ***************************************************************************/
-void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp, PGPT pgpt)
+void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp, PGPT pgpt)
 {
     AssertBaseThis(0);
 
@@ -4246,7 +4246,7 @@ void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp, PGPT pgpt)
 /***************************************************************************
     Override default UpdateHwnd to optionally skip offscreen buffer
 ***************************************************************************/
-void APP::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
+void APP::UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp)
 {
     AssertBaseThis(0); // APP may not be completely valid
 
@@ -4615,7 +4615,7 @@ void APP::PopCurs(void)
 /***************************************************************************
     Assert the validity of the APP
 ***************************************************************************/
-void APP::AssertValid(ulong grf)
+void APP::AssertValid(uint32_t grf)
 {
     APP_PAR::AssertValid(0);
     AssertNilOrPo(_pstdio, 0);
@@ -4754,7 +4754,7 @@ bool KWA::FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet)
 /***************************************************************************
     Assert the validity of the KWA
 ***************************************************************************/
-void KWA::AssertValid(ulong grf)
+void KWA::AssertValid(uint32_t grf)
 {
     KWA_PAR::AssertValid(0);
     AssertNilOrPo(_pmbmp, 0);

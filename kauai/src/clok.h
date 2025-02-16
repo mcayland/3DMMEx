@@ -38,32 +38,32 @@ class CLOK : public CLOK_PAR
     struct ALAD
     {
         PCMH pcmh;
-        ulong tim;
+        uint32_t tim;
         long lw;
     };
 
     static PCLOK _pclokFirst;
 
     PCLOK _pclokNext;
-    ulong _tsBase;
-    ulong _timBase;
-    ulong _timCur;    // current time
-    ulong _dtimAlarm; // processing alarms up to _timCur + _dtimAlarm
-    ulong _timNext;   // next alarm time to process (for speed)
-    ulong _grfclok;
+    uint32_t _tsBase;
+    uint32_t _timBase;
+    uint32_t _timCur; // current time
+    uint32_t _dtimAlarm; // processing alarms up to _timCur + _dtimAlarm
+    uint32_t _timNext;   // next alarm time to process (for speed)
+    uint32_t _grfclok;
     PGL _pglalad; // the registered alarms
 
   public:
-    CLOK(long hid, ulong grfclok = fclokNil);
+    CLOK(long hid, uint32_t grfclok = fclokNil);
     ~CLOK(void);
     static PCLOK PclokFromHid(long hid);
     static void BuryCmh(PCMH pcmh);
     void RemoveCmh(PCMH pcmh);
 
-    void Start(ulong tim);
+    void Start(uint32_t tim);
     void Stop(void);
-    ulong TimCur(bool fAdjustForDelay = fFalse);
-    ulong DtimAlarm(void)
+    uint32_t TimCur(bool fAdjustForDelay = fFalse);
+    uint32_t DtimAlarm(void)
     {
         return _dtimAlarm;
     }

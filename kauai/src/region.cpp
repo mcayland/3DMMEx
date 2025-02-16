@@ -1293,7 +1293,7 @@ HRGN REGN::HrgnEnsure(void)
 /***************************************************************************
     Assert the validity of a REGN.
 ***************************************************************************/
-void REGN::AssertValid(ulong grf)
+void REGN::AssertValid(uint32_t grf)
 {
     REGN_PAR::AssertValid(0);
     AssertNilOrPo(_pglxp, 0);

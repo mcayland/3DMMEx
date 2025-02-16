@@ -35,7 +35,7 @@ enum
     fedsCheck = 8,
     fedsBullet = 16
 };
-const ulong kgrfedsMark = fedsUncheck | fedsCheck | fedsBullet;
+const uint32_t kgrfedsMark = fedsUncheck | fedsCheck | fedsBullet;
 
 // command
 #define kclwCmd 4 // if this ever changes, change the CMD_TYPE macro also
@@ -91,7 +91,7 @@ enum
     fcmmNobody = 2,
     fcmmOthers = 4,
 };
-const ulong kgrfcmmAll = fcmmThis | fcmmNobody | fcmmOthers;
+const uint32_t kgrfcmmAll = fcmmThis | fcmmNobody | fcmmOthers;
 
 // for including a command map in this class
 #define CMD_MAP_DEC(cls)                                                                                               \
@@ -150,7 +150,7 @@ class CMH : public CMH_PAR
     typedef bool (CMH::*PFNCMD)(PCMD pcmd);
 
     // command enabler function
-    typedef bool (CMH::*PFNEDS)(PCMD pcmd, ulong *pgrfeds);
+    typedef bool (CMH::*PFNEDS)(PCMD pcmd, uint32_t *pgrfeds);
 
     // command map entry
     struct CMME
@@ -158,7 +158,7 @@ class CMH : public CMH_PAR
         long cid;
         PFNCMD pfncmd;
         PFNEDS pfneds;
-        ulong grfcmm;
+        uint32_t grfcmm;
     };
 
     // command map
@@ -171,7 +171,7 @@ class CMH : public CMH_PAR
     CMD_MAP_DEC(CMH)
 
   protected:
-    virtual bool _FGetCmme(long cid, ulong grfcmmWanted, CMME *pcmme);
+    virtual bool _FGetCmme(long cid, uint32_t grfcmmWanted, CMME *pcmme);
 
   public:
     CMH(long hid);
@@ -179,7 +179,7 @@ class CMH : public CMH_PAR
 
     // return indicates whether the command was handled, not success
     virtual bool FDoCmd(PCMD pcmd);
-    virtual bool FEnableCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableCmd(PCMD pcmd, uint32_t *pgrfeds);
 
     long Hid(void)
     {
@@ -219,7 +219,7 @@ class CEX : public CEX_PAR
     {
         PCMH pcmh;
         long cmhl;
-        ulong grfcmm;
+        uint32_t grfcmm;
     };
 
     // command recording/playback state
@@ -271,7 +271,7 @@ class CEX : public CEX_PAR
     virtual tribool _TGetNextCmd(void);
     virtual bool _FSendCmd(PCMH pcmh);
     virtual void _CleanUpCmd(void);
-    virtual bool _FEnableCmd(PCMH pcmh, PCMD pcmd, ulong *pgrfeds);
+    virtual bool _FEnableCmd(PCMH pcmh, PCMD pcmd, uint32_t *pgrfeds);
 
     // command recording and playback
     bool _FReadCmd(PCMD pcmd);
@@ -297,7 +297,7 @@ class CEX : public CEX_PAR
     void RecordCmd(PCMD pcmd);
 
     // managing the filter list
-    virtual bool FAddCmh(PCMH pcmh, long cmhl, ulong grfcmm = fcmmNobody);
+    virtual bool FAddCmh(PCMH pcmh, long cmhl, uint32_t grfcmm = fcmmNobody);
     virtual void RemoveCmh(PCMH pcmh, long cmhl);
     virtual void BuryCmh(PCMH pcmh);
 
@@ -314,8 +314,9 @@ class CEX : public CEX_PAR
     virtual void FlushCid(long cid);
 
     // menu marking
-    virtual ulong GrfedsForCmd(PCMD pcmd);
-    virtual ulong GrfedsForCid(long cid, PCMH pcmh = pvNil, PGG pgg = pvNil, long lw0 = 0, long lw1 = 0, long lw2 = 0,
+    virtual uint32_t GrfedsForCmd(PCMD pcmd);
+    virtual uint32_t GrfedsForCid(long cid, PCMH pcmh = pvNil, PGG pgg = pvNil, long lw0 = 0, long lw1 = 0,
+                                  long lw2 = 0,
                                long lw3 = 0);
 
     // mouse tracking

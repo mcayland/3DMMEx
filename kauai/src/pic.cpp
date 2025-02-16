@@ -115,7 +115,7 @@ bool PIC::FPutInCfl(PCFL pcfl, CTG ctg, CNO cno, CHID chid)
 /***************************************************************************
     Assert the validity of a PIC.
 ***************************************************************************/
-void PIC::AssertValid(ulong grf)
+void PIC::AssertValid(uint32_t grf)
 {
     PIC_PAR::AssertValid(0);
     Assert(_hpic != hNil, "bad hpic");

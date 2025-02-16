@@ -171,7 +171,7 @@ struct CRPBG
         };
 
         // for cvn >= kcvnMinGrfcrp
-        ulong grfcrp;
+        uint32_t grfcrp;
     };
 
     long BvRgch(void)
@@ -183,19 +183,19 @@ struct CRPBG
         return cbVar - BvRgch();
     }
 
-    ulong Grfcrp(ulong grfcrpMask = (ulong)(-1))
+    uint32_t Grfcrp(uint32_t grfcrpMask = (uint32_t)(-1))
     {
         return grfcrp & grfcrpMask;
     }
-    void ClearGrfcrp(ulong grfcrpT)
+    void ClearGrfcrp(uint32_t grfcrpT)
     {
         grfcrp &= ~grfcrpT;
     }
-    void SetGrfcrp(ulong grfcrpT)
+    void SetGrfcrp(uint32_t grfcrpT)
     {
         grfcrp |= grfcrpT;
     }
-    void AssignGrfcrp(ulong grfcrpT, ulong grfcrpMask = (ulong)(-1))
+    void AssignGrfcrp(uint32_t grfcrpT, uint32_t grfcrpMask = (uint32_t)(-1))
     {
         grfcrp = grfcrp & ~grfcrpMask | grfcrpT & grfcrpMask;
     }
@@ -216,12 +216,12 @@ const BOM kbomCrpbgBytes = 0xFFFE0000L;
 // variable part of group element is an rgkid and stn data (the name)
 const long kcbMaxCrpsm = 0x00FFFFFF;
 const long kcbitGrfcrp = 8;
-const ulong kgrfcrpAll = (1 << kcbitGrfcrp) - 1;
+const uint32_t kgrfcrpAll = (1 << kcbitGrfcrp) - 1;
 struct CRPSM
 {
     CKI cki;          // chunk id
     FP fp;            // location on file
-    ulong luGrfcrpCb; // low byte is the grfcrp, high 3 bytes is cb
+    uint32_t luGrfcrpCb; // low byte is the grfcrp, high 3 bytes is cb
     uint16_t ckid;    // number of owned chunks
     uint16_t ccrpRef; // number of owners of this chunk
 
@@ -234,19 +234,19 @@ struct CRPSM
         return cbVar - BvRgch();
     }
 
-    ulong Grfcrp(ulong grfcrpMask = (ulong)(-1))
+    uint32_t Grfcrp(uint32_t grfcrpMask = (uint32_t)(-1))
     {
         return luGrfcrpCb & grfcrpMask & kgrfcrpAll;
     }
-    void ClearGrfcrp(ulong grfcrpT)
+    void ClearGrfcrp(uint32_t grfcrpT)
     {
         luGrfcrpCb &= ~(grfcrpT & kgrfcrpAll);
     }
-    void SetGrfcrp(ulong grfcrpT)
+    void SetGrfcrp(uint32_t grfcrpT)
     {
         luGrfcrpCb |= grfcrpT & kgrfcrpAll;
     }
-    void AssignGrfcrp(ulong grfcrpT, ulong grfcrpMask = (ulong)(-1))
+    void AssignGrfcrp(uint32_t grfcrpT, uint32_t grfcrpMask = (uint32_t)(-1))
     {
         luGrfcrpCb = luGrfcrpCb & ~(grfcrpMask & kgrfcrpAll) | grfcrpT & grfcrpMask & kgrfcrpAll;
     }
@@ -356,11 +356,11 @@ CFL::~CFL(void)
     Static method: open an existing file as a chunky file.  Increments the
     open count.
 ***************************************************************************/
-PCFL CFL::PcflOpen(FNI *pfni, ulong grfcfl)
+PCFL CFL::PcflOpen(FNI *pfni, uint32_t grfcfl)
 {
     AssertPo(pfni, ffniFile);
     PCFL pcfl;
-    ulong grffil;
+    uint32_t grffil;
 
     Assert(!(grfcfl & fcflTemp), "can't open a file as temp");
     if (pvNil != (pcfl = PcflFromFni(pfni)))
@@ -459,9 +459,9 @@ bool CFL::FReopen(void)
     Static method to get file options corresponding to the given chunky
     file options.
 ***************************************************************************/
-ulong CFL::_GrffilFromGrfcfl(ulong grfcfl)
+uint32_t CFL::_GrffilFromGrfcfl(uint32_t grfcfl)
 {
-    ulong grffil = ffilDenyWrite;
+    uint32_t grffil = ffilDenyWrite;
 
     if (grfcfl & fcflWriteEnable)
         grffil |= ffilWriteEnable | ffilDenyRead;
@@ -475,11 +475,11 @@ ulong CFL::_GrffilFromGrfcfl(ulong grfcfl)
 /***************************************************************************
     Static method: create a new file.  Increments the open count.
 ***************************************************************************/
-PCFL CFL::PcflCreate(FNI *pfni, ulong grfcfl)
+PCFL CFL::PcflCreate(FNI *pfni, uint32_t grfcfl)
 {
     AssertPo(pfni, ffniFile);
     PCFL pcfl;
-    ulong grffil;
+    uint32_t grffil;
 
     grfcfl |= fcflWriteEnable;
     grffil = _GrffilFromGrfcfl(grfcfl);
@@ -581,7 +581,7 @@ struct ECDF
     CHID chid;
     long cb;
     long ckid;
-    ulong grfcrp;
+    uint32_t grfcrp;
 };
 VERIFY_STRUCT_SIZE(ECDF, 24);
 const BOM kbomEcdf = 0x5FFC0000L;
@@ -600,7 +600,7 @@ bool CFL::FWriteChunkTree(CTG ctg, CNO cno, PFIL pfilDst, FP fpDst, long *pcb)
     FLO floSrc, floDst;
     KID kid;
     CKI ckiPar;
-    ulong grfcge;
+    uint32_t grfcge;
 
     if (pvNil != pcb)
         *pcb = 0;
@@ -902,10 +902,10 @@ void CFL::CloseUnmarked(void)
     can only fail if fcflWriteEnable is specified and we can't make
     the base file write enabled.
 ***************************************************************************/
-bool CFL::FSetGrfcfl(ulong grfcfl, ulong grfcflMask)
+bool CFL::FSetGrfcfl(uint32_t grfcfl, uint32_t grfcflMask)
 {
     AssertThis(0);
-    ulong grffil, grffilMask;
+    uint32_t grffil, grffilMask;
 
     grfcfl &= grfcflMask;
     grffil = _GrffilFromGrfcfl(grfcfl);
@@ -988,7 +988,7 @@ void CFL::Release(void)
     of the index.  If fcflGraph, does fcflFull and checks the graph structure
     for cycles.
 ***************************************************************************/
-void CFL::AssertValid(ulong grfcfl)
+void CFL::AssertValid(uint32_t grfcfl)
 {
     CFL_PAR::AssertValid(fobjAllocated);
     bool fFirstCrp;
@@ -1191,7 +1191,7 @@ tribool CFL::_TValidIndex(void)
     long icrp, icrpT;
     CRP *qcrp;
     CGE cge;
-    ulong grfcge, grfcgeIn;
+    uint32_t grfcge, grfcgeIn;
     KID kid;
     long cbVar;
     long ccrpRefTot;
@@ -1432,7 +1432,7 @@ bool CFL::_FReadIndex(void)
 
             if (fOldIndex)
             {
-                ulong grfcrp = fcrpNil;
+                uint32_t grfcrp = fcrpNil;
 
                 if (pcrpbg->fLoner)
                     grfcrp |= fcrpLoner;
@@ -2689,8 +2689,8 @@ void CFL::SwapData(CTG ctg1, CNO cno1, CTG ctg2, CNO cno2)
     CRP *qcrp1, *qcrp2;
     FP fp;
     long cb;
-    ulong grfcrpT;
-    const ulong kgrfcrpMask = fcrpOnExtra | fcrpPacked | fcrpForest;
+    uint32_t grfcrpT;
+    const uint32_t kgrfcrpMask = fcrpOnExtra | fcrpPacked | fcrpForest;
 
     if (!_FFindCtgCno(ctg1, cno1, &icrp1) || !_FFindCtgCno(ctg2, cno2, &icrp2))
     {
@@ -2843,7 +2843,7 @@ void CFL::Delete(CTG ctg, CNO cno)
     AssertThis(0);
     long icrp;
     CGE cge;
-    ulong grfcgeIn, grfcge;
+    uint32_t grfcgeIn, grfcge;
     KID kid;
     CRP *qcrp;
 
@@ -2971,7 +2971,7 @@ tribool CFL::TIsDescendent(CTG ctg, CNO cno, CTG ctgSub, CNO cnoSub)
     AssertThis(0);
     CGE cge;
     KID kid;
-    ulong grfcge;
+    uint32_t grfcge;
 
     if (CckiRef(ctgSub, cnoSub) == 0)
         return tNo;
@@ -3827,7 +3827,7 @@ bool CFL::_FCopy(CTG ctgSrc, CNO cnoSrc, PCFL pcflDst, CNO *pcnoDst, bool fClone
     KID kid;
     CKI ckiPar;
     BLCK blckSrc;
-    ulong grfcge, grfcgeIn;
+    uint32_t grfcge, grfcgeIn;
     CNOM cnom, cnomPar;
     STN stn;
     CRP *qcrp;
@@ -3990,7 +3990,7 @@ bool CFL::_FFindMatch(CTG ctgSrc, CNO cnoSrc, PCFL pcflDst, CNO *pcnoDst)
     CGE cgeSrc, cgeDst;
     KID kidSrc, kidDst;
     CKI ckiParSrc, ckiParDst;
-    ulong grfcgeSrc, grfcgeDst;
+    uint32_t grfcgeSrc, grfcgeDst;
     bool fKidSrc, fKidDst;
 
     if (this == pcflDst || rtiNil == (rtiSrc = _Rti(ctgSrc, cnoSrc)))
@@ -4291,7 +4291,7 @@ CGE::~CGE(void)
 /***************************************************************************
     Assert the validity of the cge
 ***************************************************************************/
-void CGE::AssertValid(ulong grf)
+void CGE::AssertValid(uint32_t grf)
 {
     CGE_PAR::AssertValid(0);
     AssertIn(_es, esStart, esDone + 1);
@@ -4354,7 +4354,7 @@ void CGE::Init(PCFL pcfl, CTG ctg, CNO cno)
         fcgeRoot:  *pkid is valid (except the chid value); *pckiPar is
             invalid; the node is the root of the enumeration
 ***************************************************************************/
-bool CGE::FNextKid(KID *pkid, CKI *pckiPar, ulong *pgrfcgeOut, ulong grfcgeIn)
+bool CGE::FNextKid(KID *pkid, CKI *pckiPar, uint32_t *pgrfcgeOut, uint32_t grfcgeIn)
 {
     AssertThis(0);
     AssertVarMem(pkid);

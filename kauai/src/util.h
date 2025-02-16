@@ -81,11 +81,10 @@ const int16_t kswMin = -kswMax; // so -kswMin is positive
 const uint16_t ksuMax = 0xFFFF;
 const uint16_t ksuMin = 0;
 
-typedef unsigned long ulong;
 const long klwMax = 0x7FFFFFFF;
 const long klwMin = -klwMax; // so -klwMin is positive
-const ulong kluMax = 0xFFFFFFFF;
-const ulong kluMin = 0;
+const uint32_t kluMax = 0xFFFFFFFF;
+const uint32_t kluMin = 0;
 
 // typedef int bool;
 

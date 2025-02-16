@@ -216,7 +216,7 @@ bool STN::FEqualRgch(const achar *prgch, long cch)
 /***************************************************************************
     Do user level string equality testing with the options given in grfstn.
 ***************************************************************************/
-bool STN::FEqualUserRgch(const achar *prgch, long cch, ulong grfstn)
+bool STN::FEqualUserRgch(const achar *prgch, long cch, uint32_t grfstn)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -555,7 +555,7 @@ bool STN::FFormat(PSTN pstnFormat, ...)
     AssertThis(0);
     AssertPo(pstnFormat, 0);
 
-    return FFormatRgch(pstnFormat->Prgch(), pstnFormat->Cch(), (ulong *)(&pstnFormat + 1));
+    return FFormatRgch(pstnFormat->Prgch(), pstnFormat->Cch(), (uint32_t *)(&pstnFormat + 1));
 }
 
 /***************************************************************************
@@ -566,13 +566,13 @@ bool STN::FFormatSz(const PSZ pszFormat, ...)
     AssertThis(0);
     AssertSz(pszFormat);
 
-    return FFormatRgch(pszFormat, CchSz(pszFormat), (ulong *)(&pszFormat + 1));
+    return FFormatRgch(pszFormat, CchSz(pszFormat), (uint32_t *)(&pszFormat + 1));
 }
 
 /***************************************************************************
     Core routine for sprintf functionality.
 ***************************************************************************/
-bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData)
+bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, uint32_t *prgluData)
 {
     AssertThis(0);
     AssertIn(cchFormat, 0, kcchMaxStn + 1);
@@ -591,13 +591,13 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
     long cch;
     long cchMin;
     long ivArg;
-    ulong lu, luRad;
+    uint32_t lu, luRad;
     achar ch;
     achar rgchT[kcchMaxStn];
     const achar *prgchTerm;
     achar *prgchTermMut;
     achar chSign, chPad;
-    ulong dwo;
+    uint32_t dwo;
     PSTN pstn;
     bool fRet = fFalse;
 
@@ -685,7 +685,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
 
         // code after the switch assumes that prgchTerm points to the
         // characters to add to the stream and cch is the number of characters
-        AssertPvCb(prgluData, LwMul(ivArg + 1, SIZEOF(ulong)));
+        AssertPvCb(prgluData, LwMul(ivArg + 1, SIZEOF(uint32_t)));
         lu = prgluData[ivArg++];
         prgchTerm = rgchT;
         switch (ch)
@@ -952,7 +952,7 @@ LFail:
 /***************************************************************************
     Assert the validity of a STN.
 ***************************************************************************/
-void STN::AssertValid(ulong grf)
+void STN::AssertValid(uint32_t grf)
 {
     AssertThisMem();
 
@@ -1031,7 +1031,7 @@ bool FEqualRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2)
     (non-user) sorting only!  The sorting is byte-order independent.
     fcmpLt means that string 1 is less than string 2.
 ***************************************************************************/
-ulong FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2)
+uint32_t FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
@@ -1059,7 +1059,7 @@ ulong FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long 
 /***************************************************************************
     User level equality testing of strings.
 ***************************************************************************/
-bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, ulong grfstn)
+bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, uint32_t grfstn)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
@@ -1100,7 +1100,7 @@ bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cc
 /***************************************************************************
     Do user level string comparison with the given options.
 ***************************************************************************/
-ulong FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, ulong grfstn)
+uint32_t FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, uint32_t grfstn)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
@@ -1429,7 +1429,7 @@ void TranslateRgch(achar *prgch, long cch, int16_t osk, bool fToCur)
 
     REVIEW shonk: make GrfchFromCh handle all unicode characters.
 ***************************************************************************/
-ulong GrfchFromCh(achar ch)
+uint32_t GrfchFromCh(achar ch)
 {
     switch ((uchar)ch)
     {

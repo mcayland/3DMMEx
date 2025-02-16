@@ -395,7 +395,7 @@ MTRL::~MTRL(void)
 /***************************************************************************
     Assert the validity of the MTRL.
 ***************************************************************************/
-void MTRL::AssertValid(ulong grf)
+void MTRL::AssertValid(uint32_t grf)
 {
     MTRL_PAR::AssertValid(fobjAllocated);
 
@@ -671,7 +671,7 @@ bool CMTL::FHasModels(void)
 /***************************************************************************
     Assert the validity of the CMTL
 ***************************************************************************/
-void CMTL::AssertValid(ulong grf)
+void CMTL::AssertValid(uint32_t grf)
 {
     long imtrl;
 

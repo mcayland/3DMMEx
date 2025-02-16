@@ -295,12 +295,12 @@ FTG FNI::Ftg(void)
 /***************************************************************************
     Return the volume kind for the given fni.
 ***************************************************************************/
-ulong FNI::Grfvk(void)
+uint32_t FNI::Grfvk(void)
 {
     AssertThis(ffniDir | ffniFile);
     STN stn;
     PSZ psz;
-    ulong grfvk = fvkNil;
+    uint32_t grfvk = fvkNil;
 
     psz = _stnFile.Psz();
     if (_stnFile.Cch() < 3 || psz[1] != ':' || psz[2] != '\\' && psz[2] != '/')
@@ -432,7 +432,7 @@ tribool FNI::TExists(void)
     AssertThis(ffniFile | ffniDir);
     STN stn;
     PSTN pstn;
-    ulong lu;
+    uint32_t lu;
 
     // strip off the trailing slash (if a directory).
     pstn = &_stnFile;
@@ -542,7 +542,7 @@ bool FNI::FSameDir(FNI *pfni)
     and/or moving into it.  Specify ffniCreateDir to create it if it
     doesn't exist.  Specify ffniMoveTo to make the fni refer to it.
 ***************************************************************************/
-bool FNI::FDownDir(PSTN pstn, ulong grffni)
+bool FNI::FDownDir(PSTN pstn, uint32_t grffni)
 {
     AssertThis(ffniDir);
     AssertPo(pstn, 0);
@@ -582,7 +582,7 @@ bool FNI::FDownDir(PSTN pstn, ulong grffni)
     Gets the lowest directory name (if pstn is not nil) and optionally
     moves the fni up a level (if ffniMoveToDir is specified).
 ***************************************************************************/
-bool FNI::FUpDir(PSTN pstn, ulong grffni)
+bool FNI::FUpDir(PSTN pstn, uint32_t grffni)
 {
     AssertThis(ffniDir);
     AssertNilOrPo(pstn, 0);
@@ -633,7 +633,7 @@ bool FNI::FUpDir(PSTN pstn, ulong grffni)
 /***************************************************************************
     Assert validity of the FNI.
 ***************************************************************************/
-void FNI::AssertValid(ulong grffni)
+void FNI::AssertValid(uint32_t grffni)
 {
     FNI_PAR::AssertValid(0);
     AssertPo(&_stnFile, 0);
@@ -786,7 +786,7 @@ priv void _CleanFtg(FTG *pftg, PSTN pstnExt)
     ftgNew = 0;
     for (ichs = 0; ichs < kcchsMaxExt; ichs++)
     {
-        chs = (schar)((ulong)*pftg >> (ichs * 8));
+        chs = (schar)((uint32_t)*pftg >> (ichs * 8));
         fZero |= (chs == 0);
         if (!fZero)
         {
@@ -846,7 +846,7 @@ void FNE::_Free(void)
 /***************************************************************************
     Initialize the fne to do an enumeration.
 ***************************************************************************/
-bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
+bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, uint32_t grffne)
 {
     AssertThis(0);
     AssertNilOrVarMem(pfniDir);
@@ -907,7 +907,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
 /***************************************************************************
     Get the next FNI in the enumeration.
 ***************************************************************************/
-bool FNE::FNextFni(FNI *pfni, ulong *pgrffneOut, ulong grffneIn)
+bool FNE::FNextFni(FNI *pfni, uint32_t *pgrffneOut, uint32_t grffneIn)
 {
     AssertThis(0);
     AssertVarMem(pfni);
@@ -1068,7 +1068,7 @@ bool FNE::_FPop(void)
 /***************************************************************************
     Assert the validity of a FNE.
 ***************************************************************************/
-void FNE::AssertValid(ulong grf)
+void FNE::AssertValid(uint32_t grf)
 {
     FNE_PAR::AssertValid(0);
     if (_fInited)

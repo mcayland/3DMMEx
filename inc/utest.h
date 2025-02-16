@@ -207,14 +207,14 @@ class APP : public APP_PAR
 #endif // WIN
 
     // APPB methods that we override
-    virtual bool _FInit(ulong grfapp, ulong grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, long ginDef);
     virtual bool _FInitOS(void);
     virtual bool _FInitMenu(void)
     {
         return fTrue;
     } // no menubar
     virtual void _CopyPixels(PGNV pgvnSrc, RC *prcSrc, PGNV pgnvDst, RC *prcDst);
-    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp = fappNil, PGPT pgpt = pvNil);
+    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
     virtual void _CleanUp(void);
     virtual void _Activate(bool fActive);
     virtual bool _FGetNextEvt(PEVT pevt);
@@ -234,8 +234,8 @@ class APP : public APP_PAR
     virtual long DypTextDef(void);
     virtual tribool TQuerySaveDoc(PDOCB pdocb, bool fForce);
     virtual void Quit(bool fForce);
-    virtual void UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp = fappNil);
-    virtual void Run(ulong grfapp, ulong grfgob, long ginDef);
+    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
+    virtual void Run(uint32_t grfapp, uint32_t grfgob, long ginDef);
 #ifdef BUG1085
     virtual void HideCurs(void);
     virtual void ShowCurs(void);
@@ -364,7 +364,7 @@ class APP : public APP_PAR
     void EnableAccel(void);
 
     // Registry access function
-    bool FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, ulong grfreg = fregSetDefault,
+    bool FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, uint32_t grfreg = fregSetDefault,
                        bool *pfNoValue = pvNil);
 
     // Movie handoff routines

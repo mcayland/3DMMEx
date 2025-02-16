@@ -101,7 +101,7 @@ class FNI : public FNI_PAR
     void SetNil(void);
 
     FTG Ftg(void);
-    ulong Grfvk(void); // volume kind (floppy/net/CD/etc)
+    uint32_t Grfvk(void); // volume kind (floppy/net/CD/etc)
     bool FChangeFtg(FTG ftg);
 
     bool FSetLeaf(PSTN pstn, FTG ftg = ftgNil);
@@ -115,8 +115,8 @@ class FNI : public FNI_PAR
 
     bool FDir(void);
     bool FSameDir(PFNI pfni);
-    bool FDownDir(PSTN pstn, ulong grffni);
-    bool FUpDir(PSTN pstn, ulong grffni);
+    bool FDownDir(PSTN pstn, uint32_t grffni);
+    bool FUpDir(PSTN pstn, uint32_t grffni);
 };
 
 #ifdef MAC
@@ -166,7 +166,7 @@ class FNE : public FNE_PAR
         FNI fni; // directory fni
         HN hn;   // for enumerating files/directories
         WIN32_FIND_DATA wfd;
-        ulong grfvol; // which volumes are available (for enumerating volumes)
+        uint32_t grfvol; // which volumes are available (for enumerating volumes)
         long chVol;   // which volume we're on (for enumerating volumes)
 #endif                // WIN
     };
@@ -188,8 +188,8 @@ class FNE : public FNE_PAR
     FNE(void);
     ~FNE(void);
 
-    bool FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne = ffneNil);
-    bool FNextFni(FNI *pfni, ulong *pgrffneOut = pvNil, ulong grffneIn = ffneNil);
+    bool FInit(FNI *pfniDir, FTG *prgftg, long cftg, uint32_t grffne = ffneNil);
+    bool FNextFni(FNI *pfni, uint32_t *pgrffneOut = pvNil, uint32_t grffneIn = ffneNil);
 };
 
 #endif //! FNI_H

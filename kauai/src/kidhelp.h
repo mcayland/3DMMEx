@@ -77,24 +77,24 @@ class TXHD : public TXHD_PAR
     HTOP _htop;         // our gob creation information
     bool _fHideButtons; // whether to draw buttons
 
-    TXHD(PRCA prca, PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    TXHD(PRCA prca, PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
     ~TXHD(void);
 
-    virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil, ulong grftxhd = ftxhdNil);
+    virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil, uint32_t grftxhd = ftxhdNil);
     virtual bool _FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk);
     virtual bool _FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
     virtual bool _FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
 
   public:
     static PTXHD PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil,
-                                ulong grftxhd = ftxhdExpandStrings);
+                                uint32_t grftxhd = ftxhdExpandStrings);
 
     virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse);
 
     bool FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp = pvNil,
-                        ulong grfdoc = fdocUpdate);
+                        uint32_t grfdoc = fdocUpdate);
     bool FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp = pvNil,
-                       ulong grfdoc = fdocUpdate);
+                       uint32_t grfdoc = fdocUpdate);
     PRCA Prca(void)
     {
         return _prca;
@@ -126,12 +126,12 @@ class TXHG : public TXHG_PAR
     uint8_t _bTrack;
     CNO _cnoTrack;
     long _hidBase;
-    ulong _grfcust;
+    uint32_t _grfcust;
     PWOKS _pwoks;
 
     TXHG(PWOKS pwoks, PTXHD ptxhd, PGCB pgcb);
     virtual bool _FInit(void);
-    virtual bool _FRunScript(uint8_t bGroup, ulong grfcust, long hidHit, achar ch, CNO cnoTopic = cnoNil,
+    virtual bool _FRunScript(uint8_t bGroup, uint32_t grfcust, long hidHit, achar ch, CNO cnoTopic = cnoNil,
                              long *plwRet = pvNil);
 
   public:
@@ -146,8 +146,8 @@ class TXHG : public TXHG_PAR
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdBadKey(PCMD_BADKEY pcmd);
     virtual bool FGroupFromPt(long xp, long yp, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil);
-    virtual void DoHit(uint8_t bGroup, CNO cnoTopic, ulong grfcust, long hidHit);
-    virtual void SetCursor(ulong grfcust);
+    virtual void DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, long hidHit);
+    virtual void SetCursor(uint32_t grfcust);
 };
 
 /***************************************************************************

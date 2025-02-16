@@ -19,7 +19,7 @@ PGOB GOB::_pgobScreen;
     Create the screen gob.  If fgobEnsureHwnd is set, ensures that the
     screen gob has an OS window associated with it.
 ***************************************************************************/
-bool GOB::FInitScreen(ulong grfgob, long ginDef)
+bool GOB::FInitScreen(uint32_t grfgob, long ginDef)
 {
     PGOB pgob;
     GCB gcb(khidScreen, pvNil);
@@ -73,7 +73,7 @@ PGOB GOB::PgobFromHwnd(HWND hwnd)
     // indicated that GetProp is very slow.
     Assert(hwnd != hNil, "nil hwnd");
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     PGOB pgob;
 
     gte.Init(_pgobScreen, fgteNil);

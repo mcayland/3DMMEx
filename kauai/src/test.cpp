@@ -349,7 +349,7 @@ void TestFil(void)
 void TestGg(void)
 {
     PGG pgg;
-    ulong grf;
+    uint32_t grf;
     long cb, iv;
     uint8_t *qb;
     PSZ psz = PszLit("0123456789ABCDEFG");

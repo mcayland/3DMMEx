@@ -32,7 +32,7 @@ cBegin nogen
 cEnd nogen
 
 
-;	void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow)
+;	void MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow)
 ;
 ;	Multiplies 2 longs to get a 64 bit (signed) value.  Assumes a 68020
 ;	or better.
@@ -55,7 +55,7 @@ cBegin nogen
 cEnd nogen
 
 
-;	ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv)
+;	uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv)
 ;
 ;	Multiply lu by luMul and divide by luDiv without losing precision.
 ;	Assumes a 68020 or better.
@@ -77,7 +77,7 @@ cBegin nogen
 cEnd nogen
 
 
-;	void MulLu(long lu1, long lu2, ulong *pluHigh, ulong *pluLow)
+;	void MulLu(long lu1, long lu2, uint32_t *pluHigh, uint32_t *pluLow)
 ;
 ;	Multiplies 2 unsigned longs to get a 64 bit (unsigned) value.  Assumes a
 ;	68020 or better.

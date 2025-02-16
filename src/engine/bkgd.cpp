@@ -633,7 +633,7 @@ LFail:
 /***************************************************************************
     Assert the validity of the BKGD.
 ***************************************************************************/
-void BKGD::AssertValid(ulong grf)
+void BKGD::AssertValid(uint32_t grf)
 {
     BKGD_PAR::AssertValid(fobjAllocated);
     AssertIn(_cbactLight, 1, 100); // 100 is sanity check

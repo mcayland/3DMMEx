@@ -75,7 +75,7 @@ class GRPB : public GRPB_PAR
     {
         return _cb2;
     }
-    bool _FEnsureSizes(long cbMin1, long cbMin2, ulong grfgrp);
+    bool _FEnsureSizes(long cbMin1, long cbMin2, uint32_t grfgrp);
     bool _FWrite(PBLCK pblck, void *pv, long cb, long cb1, long cb2);
     bool _FReadData(PBLCK pblck, long ib, long cb1, long cb2);
     bool _FDup(PGRPB pgrpbDst, long cb1, long cb2);
@@ -173,7 +173,7 @@ class GL : public GL_PAR
     void Delete(long iv, long cv);
     bool FInsert(long iv, void *pv = pvNil, long cv = 1);
     bool FSetIvMac(long ivMacNew);
-    bool FEnsureSpace(long cvAdd, ulong grfgrp = fgrpNil);
+    bool FEnsureSpace(long cvAdd, uint32_t grfgrp = fgrpNil);
     void Move(long ivSrc, long ivTarget);
     bool FPush(void *pv)
     {
@@ -231,7 +231,7 @@ class AL : public AL_PAR
     virtual bool FFree(long iv);
 
     // new methods
-    bool FEnsureSpace(long cvAdd, ulong grfgrp = fgrpNil);
+    bool FEnsureSpace(long cvAdd, uint32_t grfgrp = fgrpNil);
     void DeleteAll(void);
 };
 
@@ -277,7 +277,7 @@ class GGB : public GGB_PAR
     virtual long CbOnFile(void);
     virtual bool FFree(long iv);
 
-    bool FEnsureSpace(long cvAdd, long cbAdd, ulong grfgrp = fgrpNil);
+    bool FEnsureSpace(long cvAdd, long cbAdd, uint32_t grfgrp = fgrpNil);
     void SetMinGrow(long cvAdd, long cbAdd);
 
     virtual bool FAdd(long cb, long *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil) = 0;
@@ -401,7 +401,7 @@ class GSTB : public GSTB_PAR
     long _cbstFree; // this is cvNil for non-allocated GSTBs
 
   protected:
-    GSTB(long cbExtra, ulong grfgst);
+    GSTB(long cbExtra, uint32_t grfgst);
 
     long _Bst(long ibst)
     {
@@ -427,11 +427,11 @@ class GSTB : public GSTB_PAR
     virtual long CbOnFile(void);
     virtual bool FFree(long istn);
 
-    bool FEnsureSpace(long cstnAdd, long cchAdd, ulong grfgrp = fgrpNil);
+    bool FEnsureSpace(long cstnAdd, long cchAdd, uint32_t grfgrp = fgrpNil);
     void SetMinGrow(long cstnAdd, long cchAdd);
 
     virtual bool FAddRgch(const achar *prgch, long cch, const void *pvExtra = pvNil, long *pistn = pvNil) = 0;
-    virtual bool FFindRgch(const achar *prgch, long cch, long *pistn, ulong grfgst = fgstNil);
+    virtual bool FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst = fgstNil);
 
     long IstnMac(void)
     {
@@ -447,7 +447,7 @@ class GSTB : public GSTB_PAR
     bool FPutStn(long istn, PSTN pstn);
     void GetRgch(long istn, achar *prgch, long cchMax, long *pcch);
     void GetStn(long istn, PSTN pstn);
-    bool FFindStn(PSTN pstn, long *pistn, ulong grfgst = fgstNil);
+    bool FFindStn(PSTN pstn, long *pistn, uint32_t grfgst = fgstNil);
 
     void GetExtra(long istn, void *pv);
     void PutExtra(long istn, void *pv);
@@ -480,7 +480,7 @@ class GST : public GST_PAR
 
     // methods required by parent class
     virtual bool FAddRgch(const achar *prgch, long cch, const void *pvExtra = pvNil, long *pistn = pvNil);
-    virtual bool FFindRgch(const achar *prgch, long cch, long *pistn, ulong grfgst = fgstNil);
+    virtual bool FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst = fgstNil);
     virtual void Delete(long istn);
 
     // new methods

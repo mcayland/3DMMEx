@@ -82,7 +82,7 @@ long BACO::CbOnFile(void)
 /***************************************************************************
     Assert the validity of a BACO.
 ***************************************************************************/
-void BACO::AssertValid(ulong grf)
+void BACO::AssertValid(uint32_t grf)
 {
     BACO_PAR::AssertValid(fobjAllocated);
     Assert(!_fAttached || pvNil != _pcrf, "attached baco has no crf");
@@ -720,7 +720,7 @@ bool CRF::_FPurgeCb(long cbPurge, long crepLast)
 /***************************************************************************
     Assert the validity of a CRF (chunky resource file).
 ***************************************************************************/
-void CRF::AssertValid(ulong grf)
+void CRF::AssertValid(uint32_t grf)
 {
     CRF_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglcre, 0);
@@ -960,7 +960,7 @@ PCRF CRM::PcrfGet(long icrf)
 /***************************************************************************
     Check the sanity of the CRM
 ***************************************************************************/
-void CRM::AssertValid(ulong grfobj)
+void CRM::AssertValid(uint32_t grfobj)
 {
     CRM_PAR::AssertValid(grfobj | fobjAllocated);
     AssertPo(_pglpcrf, 0);
@@ -1027,7 +1027,7 @@ bool GHQ::FReadGhq(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long
 /***************************************************************************
     Assert the validity of a GHQ.
 ***************************************************************************/
-void GHQ::AssertValid(ulong grf)
+void GHQ::AssertValid(uint32_t grf)
 {
     GHQ_PAR::AssertValid(grf);
     if (hqNil != hq)
@@ -1048,7 +1048,7 @@ void GHQ::MarkMem(void)
 /***************************************************************************
     Assert the validity of a CABO.
 ***************************************************************************/
-void CABO::AssertValid(ulong grf)
+void CABO::AssertValid(uint32_t grf)
 {
     CABO_PAR::AssertValid(grf);
     AssertNilOrPo(po, 0);

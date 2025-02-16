@@ -196,7 +196,7 @@ bool BSM::_FEnsureSize(long cbMin, bool fShrink)
 /***************************************************************************
     Assert the validity of a byte stream (BSF).
 ***************************************************************************/
-void BSM::AssertValid(ulong grf)
+void BSM::AssertValid(uint32_t grf)
 {
     BSM_PAR::AssertValid(grf);
     AssertIn(_ibMac, 0, kcbMax);
@@ -894,7 +894,7 @@ LShrinkGg:
 /***************************************************************************
     Assert the validity of a byte stream (BSF).
 ***************************************************************************/
-void BSF::AssertValid(ulong grfobj)
+void BSF::AssertValid(uint32_t grfobj)
 {
     BSF_PAR::AssertValid(grfobj);
     if (pvNil == _pggflo)

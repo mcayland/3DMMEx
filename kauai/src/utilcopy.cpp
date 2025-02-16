@@ -414,7 +414,7 @@ LHit:
     Compare the two buffers byte for byte and return an fcmp indicating
     their relationship to each other.
 ***************************************************************************/
-ulong FcmpCompareRgb(const void *pv1, const void *pv2, long cb)
+uint32_t FcmpCompareRgb(const void *pv1, const void *pv2, long cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);

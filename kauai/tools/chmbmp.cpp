@@ -89,7 +89,7 @@ bool DOCMBMP::_FRead(PBLCK pblck)
 /***************************************************************************
     Assert the validity of a DOCMBMP.
 ***************************************************************************/
-void DOCMBMP::AssertValid(ulong grf)
+void DOCMBMP::AssertValid(uint32_t grf)
 {
     DOCMBMP_PAR::AssertValid(0);
     AssertPo(_pmbmp, 0);
@@ -167,7 +167,7 @@ void DCMBMP::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Assert the validity of a DCMBMP.
 ***************************************************************************/
-void DCMBMP::AssertValid(ulong grf)
+void DCMBMP::AssertValid(uint32_t grf)
 {
     DCMBMP_PAR::AssertValid(0);
     AssertPo(_pmbmp, 0);

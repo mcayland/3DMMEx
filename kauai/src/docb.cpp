@@ -45,7 +45,7 @@ RTCLASS(UNDB)
 /***************************************************************************
     Constructor for DOCB
 ***************************************************************************/
-DOCB::DOCB(PDOCB pdocb, ulong grfdoc) : CMH(khidDoc)
+DOCB::DOCB(PDOCB pdocb, uint32_t grfdoc) : CMH(khidDoc)
 {
     _pdocbChd = pvNil;
     if (pvNil == pdocb)
@@ -179,7 +179,7 @@ DOCB::~DOCB(void)
 /***************************************************************************
     Static method: calls FQueryClose on all open docs.
 ***************************************************************************/
-bool DOCB::FQueryCloseAll(ulong grfdoc)
+bool DOCB::FQueryCloseAll(uint32_t grfdoc)
 {
     PDOCB pdocb;
 
@@ -198,12 +198,12 @@ bool DOCB::FQueryCloseAll(ulong grfdoc)
     (assume yes) if fdocAssumeYes is set.  Doesn't assume doc is fni
     based (calls FSave() to perform the save).
 ***************************************************************************/
-bool DOCB::FQueryClose(ulong grfdoc)
+bool DOCB::FQueryClose(uint32_t grfdoc)
 {
     tribool tRet;
     DTE dte;
     PDOCB pdocb;
-    ulong grfdte;
+    uint32_t grfdte;
     bool fForce = FPure(grfdoc & fdocForceClose);
 
     dte.Init(this);
@@ -525,7 +525,7 @@ PDMW DOCB::PdmwNew(PGCB pgcb)
 /***************************************************************************
     Create a new DSG for the doc in the given DMW.
 ***************************************************************************/
-PDSG DOCB::PdsgNew(PDMW pdmw, PDSG pdsgSplit, ulong grfdsg, long rel)
+PDSG DOCB::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, long rel)
 {
     AssertThis(fobjAssertFull);
     return DSG::PdsgNew(pdmw, pdsgSplit, grfdsg, rel);
@@ -568,7 +568,7 @@ void DOCB::GetName(PSTN pstn)
 void DOCB::UpdateName(void)
 {
     DTE dte;
-    ulong grfdte;
+    uint32_t grfdte;
     STN stn;
     long ipddg;
     PDDG pddg;
@@ -784,7 +784,7 @@ bool DOCB::FGetFormat(long cls, PDOCB *ppdocb)
 /***************************************************************************
     Assert validity of a DOCB
 ***************************************************************************/
-void DOCB::AssertValid(ulong grfdocb)
+void DOCB::AssertValid(uint32_t grfdocb)
 {
     long ipddg;
     PDDG pddg;
@@ -869,7 +869,7 @@ void DTE::Init(PDOCB pdocb)
     Goes to the next node in the sub tree being enumerated.  Returns false
     iff the enumeration is done.
 ***************************************************************************/
-bool DTE::FNextDoc(PDOCB *ppdocb, ulong *pgrfdteOut, ulong grfdte)
+bool DTE::FNextDoc(PDOCB *ppdocb, uint32_t *pgrfdteOut, uint32_t grfdte)
 {
     PDOCB pdocbT;
 
@@ -1059,7 +1059,7 @@ void DDG::_Activate(bool fActive)
 /***************************************************************************
     Handles enabling/disabling of common Ddg commands.
 ***************************************************************************/
-bool DDG::FEnableDdgCmd(PCMD pcmd, ulong *pgrfeds)
+bool DDG::FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
 
@@ -1307,7 +1307,7 @@ void DDG::_NewRc(void)
 /***************************************************************************
     Assert the validity of a DDG.
 ***************************************************************************/
-void DDG::AssertValid(ulong grfobj)
+void DDG::AssertValid(uint32_t grfobj)
 {
     DDG_PAR::AssertValid(grfobj | fobjAllocated);
     AssertPo(_pdocb, grfobj & fobjAssertFull);
@@ -1392,7 +1392,7 @@ void DMD::ActivateNext(PDDG pddg)
 {
     AssertThis(fobjAssertFull);
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     PGOB pgob;
 
     if (_fFreeing)
@@ -1515,7 +1515,7 @@ void DMW::_NewRc(void)
     Add the dsg to the dmw (the dsg is already a child gob - we now promote
     it to a full fledged child dsg).
 ***************************************************************************/
-bool DMW::FAddDsg(PDSG pdsg, PDSG pdsgSplit, ulong grfdsg, long rel)
+bool DMW::FAddDsg(PDSG pdsg, PDSG pdsgSplit, uint32_t grfdsg, long rel)
 {
     AssertThis(fobjAssertFull);
     AssertIn(rel, 0, krelOne + 1);
@@ -1988,7 +1988,7 @@ tribool DMW::TVert(PDSG pdsg)
 /***************************************************************************
     Assert the validity of the DMW.
 ***************************************************************************/
-void DMW::AssertValid(ulong grfobj)
+void DMW::AssertValid(uint32_t grfobj)
 {
     long cdsed, idsed;
     DSED dsed;
@@ -2090,7 +2090,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Static method to create a new DSG.
 ***************************************************************************/
-PDSG DSG::PdsgNew(PDMW pdmw, PDSG pdsgSplit, ulong grfdsg, long rel)
+PDSG DSG::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, long rel)
 {
     AssertPo(pdmw, 0);
     Assert(pvNil != pdsgSplit || pdmw->Cdsg() == 0, "must split an existing DSG");
@@ -2129,7 +2129,7 @@ DSG::~DSG(void)
 /***************************************************************************
     Create the scroll bars, the DDG and do any other DSG initialization.
 ***************************************************************************/
-bool DSG::_FInit(PDSG pdsgSplit, ulong grfdsg, long rel)
+bool DSG::_FInit(PDSG pdsgSplit, uint32_t grfdsg, long rel)
 {
     Assert(pvNil != pdsgSplit || Pdmw()->Cdsg() == 0, "must split an existing DSG");
     PDMW pdmw;
@@ -2198,7 +2198,7 @@ void DSG::GetMinMax(RC *prcMinMax)
 /***************************************************************************
     Split the DSG into two dsg's.
 ***************************************************************************/
-void DSG::Split(ulong grfdsg, long rel)
+void DSG::Split(uint32_t grfdsg, long rel)
 {
     AssertThis(fobjAssertFull);
     PDMW pdmw;
@@ -2228,7 +2228,7 @@ bool DSG::FCmdScroll(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the DSG.
 ***************************************************************************/
-void DSG::AssertValid(ulong grfobj)
+void DSG::AssertValid(uint32_t grfobj)
 {
     PDMW pdmw;
 
@@ -2249,7 +2249,7 @@ DSSP::DSSP(PGCB pgcb) : GOB(pgcb)
 /***************************************************************************
     Static method to create a new split box.
 ***************************************************************************/
-PDSSP DSSP::PdsspNew(PDSG pdsg, ulong grfdssp)
+PDSSP DSSP::PdsspNew(PDSG pdsg, uint32_t grfdssp)
 {
     Assert(FPure(grfdssp & fdsspHorz) != FPure(grfdssp & fdsspVert),
            "must specify exactly one of (fdsspVert,fdsspHorz)");
@@ -2293,7 +2293,7 @@ void DSSP::Draw(PGNV pgnv, RC *prcClip)
     See if the parent DSG can be split.  If so, track the mouse and draw
     the gray outline until the user releases the mouse.
 ***************************************************************************/
-void DSSP::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DSSP::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
 
@@ -2382,7 +2382,7 @@ void DSSM::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Track the mouse and change the split location.
 ***************************************************************************/
-void DSSM::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DSSM::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     long zp, zpMin, zpLast, zpOrig, dzpMinDsg, dzp;

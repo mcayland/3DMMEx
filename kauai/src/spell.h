@@ -61,7 +61,7 @@ class SPLC : public SPLC_PAR
     bool _fSplidValid : 1;
     bool _fMdrsValid : 1;
     bool _fUdrValid : 1;
-    ulong _splid;
+    uint32_t _splid;
     SC_MDRS _mdrs;
     SC_UDR _udr;
 
@@ -119,7 +119,7 @@ class SPLC : public SPLC_PAR
     ~SPLC(void);
     static PSPLC PsplcNew(SC_LID sclid, PSTN pstnCustom = pvNil);
 
-    virtual bool FSetOptions(ulong grfsplc);
+    virtual bool FSetOptions(uint32_t grfsplc);
     virtual bool FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PSTN pstn, long *pscrs);
     virtual bool FSuggest(achar *prgch, long cch, bool fFirst, PSTN pstn);
 

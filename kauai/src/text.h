@@ -23,7 +23,7 @@ class EDPAR
   public:
     GCB _gcb;
     long _onn;
-    ulong _grfont;
+    uint32_t _grfont;
     long _dypFont;
     long _tah;
     long _tav;
@@ -34,12 +34,12 @@ class EDPAR
     EDPAR(void)
     {
     }
-    EDPAR(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont, long dypFont,
+    EDPAR(long hid, PGOB pgob, uint32_t grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, uint32_t grfont, long dypFont,
           long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack, ACR acrBack = kacrWhite, long cmhl = 0);
 
-    void Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont, long dypFont,
+    void Set(long hid, PGOB pgob, uint32_t grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, uint32_t grfont, long dypFont,
              long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack, ACR acrBack = kacrWhite, long cmhl = 0);
-    void SetFont(long onn, ulong grfont, long dypFont, long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack,
+    void SetFont(long onn, uint32_t grfont, long dypFont, long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack,
                  ACR acrBack = kacrWhite);
 };
 
@@ -69,7 +69,7 @@ class EDCB : public EDCB_PAR
     bool _fMark : 1;
     bool _fClear : 1;
 
-    ulong _tsSel;
+    uint32_t _tsSel;
     long _xpSel; // for avoiding migration when changing selection by lines
 
     // the origin
@@ -148,7 +148,7 @@ class EDPL : public EDPL_PAR
   protected:
     // drawing parameters
     long _onn;
-    ulong _grfont;
+    uint32_t _grfont;
     long _dypFont;
     long _tah;
     long _tav;

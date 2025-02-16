@@ -175,7 +175,7 @@ struct MACTR
 {
     long arid;
     long cactRef;
-    ulong grfbrws; // browser properties
+    uint32_t grfbrws; // browser properties
     TAG tagTmpl;
 };
 
@@ -694,7 +694,7 @@ void MVIE::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void MVIE::AssertValid(ulong grf)
+void MVIE::AssertValid(uint32_t grf)
 {
     MVIE_PAR::AssertValid(fobjAllocated);
 
@@ -3285,7 +3285,7 @@ void MVIE::SetDypFontTextCur(long dypFont)
         long grfont  --  the new textbox font style
 
 ************************************************************ PETED ***********/
-void MVIE::SetStyleTextCur(ulong grfont)
+void MVIE::SetStyleTextCur(uint32_t grfont)
 {
     AssertThis(0);
 
@@ -4197,7 +4197,7 @@ bool MVIE::FCmdRender(PCMD pcmd)
     PMVU pmvu;
     PTBOX ptbox;
     long itbox;
-    ulong tsCur = TsCurrent();
+    uint32_t tsCur = TsCurrent();
 
     pmvu = (PMVU)PddgGet(0);
     AssertPo(pmvu, 0);
@@ -4992,7 +4992,7 @@ bool MVIE::_FAddMvieToRollCall(CNO cno, long aridMin)
     /* Remap all the arids on the file */
     if (aridMin > 0)
     {
-        ulong grfcge, grfcgeIn = fcgeNil;
+        uint32_t grfcge, grfcgeIn = fcgeNil;
         PGL pglcno;
         CKI ckiParLast = {ctgNil, cnoNil}, ckiPar;
         KID kid;
@@ -6748,7 +6748,7 @@ void MVU::_PositionActr(BRS dxrWld, BRS dyrWld, BRS dzrWld)
     PSCEN pscen;
     bool fMoved;
     PACTR pactr = pvNil;
-    ulong grfmaf = fmafOrient;
+    uint32_t grfmaf = fmafOrient;
 
     pmvie = Pmvie();
     AssertPo(pmvie, 0);
@@ -6801,7 +6801,7 @@ void MVU::_ActorClicked(PACTR pactr, bool fDown)
     AssertThis(0);
     AssertPo(pactr, 0);
 
-    ulong grftmpl = 0;
+    uint32_t grftmpl = 0;
 
     if (pactr->Ptmpl()->FIsTdt())
     {
@@ -7310,7 +7310,7 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     // is down, the number of pixels moved is the number of seconds
     // since the keyboard was last sampled times kdwrMousePerSecond.
     //
-    ulong dts = LwMax(1, TsCurrent() - _tsLastSample);
+    uint32_t dts = LwMax(1, TsCurrent() - _tsLastSample);
     BRS drSec = BrsDiv(BrIntToScalar(dts), BR_SCALAR(kdtsSecond));
     if (GetKeyState(VK_UP) < 0)
     {
@@ -7394,7 +7394,7 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
         break;
 
     case toolCompose: {
-        ulong grfmaf = fmafNil;
+        uint32_t grfmaf = fmafNil;
         bool fMoved{};
 
         if (_fRespectGround)
@@ -7572,8 +7572,8 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     case toolRecordSameAction: {
         bool fLonger;
         bool fStep;
-        ulong tsCurrent = TsCurrent();
-        ulong grfmaf = 0;
+        uint32_t tsCurrent = TsCurrent();
+        uint32_t grfmaf = 0;
         bool fFrozen = FPure((pcmd->grfcust & fcustShift) && !(pcmd->grfcust & fcustCmd));
 
         if ((pactr->Ptmpl() != _ptmplTool) && !(_ptmplTool->FIsTdt() && pactr->Ptmpl()->FIsTdt()))
@@ -8533,7 +8533,7 @@ bool MVU::FCmdRollOff(PCMD pcmd)
  *  None.
  *
  **************************************************************************/
-void MVU::AssertValid(ulong grf)
+void MVU::AssertValid(uint32_t grf)
 {
     MVU_PAR::AssertValid(fobjAllocated);
 }
@@ -8727,7 +8727,7 @@ void MUNS::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void MUNS::AssertValid(ulong grf)
+void MUNS::AssertValid(uint32_t grf)
 {
     AssertNilOrPo(_pscen, 0);
 }
@@ -8745,7 +8745,7 @@ void MUNS::AssertValid(ulong grf)
  *  None.
  *
  **************************************************************************/
-void MUNB::AssertValid(ulong grf)
+void MUNB::AssertValid(uint32_t grf)
 {
     MUNB_PAR::AssertValid(fobjAllocated);
     AssertPo(_pmvie, 0);

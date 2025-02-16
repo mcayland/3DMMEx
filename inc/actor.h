@@ -63,7 +63,7 @@ const long smmNil = -1;                                            // Not motion
 const BRS kdwrNil = BR_SCALAR(-1.0);                               // flags use of template cel stepsize
 const BRS kzrDefault = BR_SCALAR(-25.0);                           // initial default z position
 const BRS kdwrMax = BR_SCALAR(32767.0);                            // large BRS value
-const ulong kdtsThreshRte = (kdtsSecond >> 2) + (kdtsSecond >> 1); // time threshhold before record in place
+const uint32_t kdtsThreshRte = (kdtsSecond >> 2) + (kdtsSecond >> 1); // time threshhold before record in place
 const BRS kdwrThreshRte = BR_SCALAR(2.0);                          // distance threshhold before entering record mode
 const long kcaevInit = 10;
 const BRS kdwrFast = BR_SCALAR(3.0);       // delta world coord change for fast mouse move
@@ -351,7 +351,7 @@ class ACTR : public ACTR_PAR
     XYZ _dxyzFullRte; // Origin of the route
     long _nfrmFirst;  // klwMax -or- First frame : Set	when event created
     long _arid;       // Unique id assigned to this actor.
-    ulong _grfactn;   // Cached current grfactn
+    uint32_t _grfactn; // Cached current grfactn
 
     // Frame Dependent State Information
     XYZ _dxyzRte;            //_dxyzFullRte + _dxyzSubRte : Set when Add processed
@@ -378,7 +378,7 @@ class ACTR : public ACTR_PAR
 
     // Path Recording State Information
     RTEL _rtelInsert;        // Joining information
-    ulong _tsInsert;         // Starting time of route recording
+    uint32_t _tsInsert;      // Starting time of route recording
     bool _fModeRecord : 1;   // Record a route mode
     bool _fRejoin : 1;       // Rerecord is extending a subpath from the end
     bool _fPathInserted : 1; // More path inserted
@@ -422,7 +422,7 @@ class ACTR : public ACTR_PAR
     bool _FUnfreeze(void); // insert unfreeze event
     void _Hide(void);
     bool _FInsertGgRpt(long irpt, RPT *prpt, BRS dwrPrior = rZero);
-    bool _FAddAevFromPrev(long iaevLim, ulong grfaet);
+    bool _FAddAevFromPrev(long iaevLim, uint32_t grfaet);
     bool _FAddAevFromLater(void);
     bool _FFindNextAevAet(long aet, long iaevCur, long *piaevAdd);
     bool _FFindPrevAevAet(long aet, long iaevCur, long *piaevAdd);
@@ -434,15 +434,15 @@ class ACTR : public ACTR_PAR
     void _UpdateXyzRte(void);
     bool _FInsertAev(long iaev, long cbNew, void *pvVar, void *paev, bool fUpdateState = fTrue);
     void _RemoveAev(long iaev, bool fUpdateState = fTrue);
-    void _PrepXfrmFill(long aet, void *pvVar, long cbVar, long iaevMin, long iaevCmp = ivNil, ulong grfaet = faetNil);
-    void _PrepActnFill(long iaevMin, long anidPrev, long anidNew, ulong grfaet);
+    void _PrepXfrmFill(long aet, void *pvVar, long cbVar, long iaevMin, long iaevCmp = ivNil, uint32_t grfaet = faetNil);
+    void _PrepActnFill(long iaevMin, long anidPrev, long anidNew, uint32_t grfaet);
     void _PrepCostFill(long iaevMin, AEVCOST *paevcost);
     void _AdjustAevForRteIns(long irptAdjust, long iaevMin);
     void _AdjustAevForRteDel(long irptAdjust, long iaevMin);
     bool _FInsertStop(void);
-    void _CalcRteOrient(BMAT34 *pbmat34, BRA *pxa = pvNil, BRA *pya = pvNil, BRA *pza = pvNil, ulong *pgrfbra = pvNil);
+    void _CalcRteOrient(BMAT34 *pbmat34, BRA *pxa = pvNil, BRA *pya = pvNil, BRA *pza = pvNil, uint32_t *pgrfbra = pvNil);
     void _ApplyRotFromVec(XYZ *pxyz, BMAT34 *pbmat34, BRA *pxa = pvNil, BRA *pya = pvNil, BRA *pza = pvNil,
-                          ulong *grfbra = pvNil);
+                          uint32_t *grfbra = pvNil);
     void _SaveCurPathOrien(void);
     void _LoadAddOrien(AEVADD *paevadd, bool fNoReset = fFalse);
     BRA _BraAvgAngle(BRA a1, BRA a2, BRS rw);
@@ -564,7 +564,7 @@ class ACTR : public ACTR_PAR
         AssertBaseThis(0);
         return FPure(_fModeRecord);
     }
-    bool FIsRecordValid(BRS dxr, BRS dyr, BRS dzr, ulong tsCurrent);
+    bool FIsRecordValid(BRS dxr, BRS dyr, BRS dzr, uint32_t tsCurrent);
     PTMPL Ptmpl(void)
     {
         AssertBaseThis(0);
@@ -633,8 +633,8 @@ class ACTR : public ACTR_PAR
     bool FSetCostumeCore(long ibsetClicked, TAG *ptag, long cmid, tribool fCustom);
     bool FSetStep(BRS dwrStep);
     bool FRotate(BRA xa, BRA ya, BRA za, bool fFromHereFwd);
-    bool FNormalizeCore(ulong grfnorm);
-    void SetAddOrient(BRA xa, BRA ya, BRA za, ulong grfbra, XYZ *pdxyz = pvNil);
+    bool FNormalizeCore(uint32_t grfnorm);
+    void SetAddOrient(BRA xa, BRA ya, BRA za, uint32_t grfbra, XYZ *pdxyz = pvNil);
     bool FScale(BRS rScaleStep);
     bool FPull(BRS rScaleX, BRS rScaleY, BRS rScaleZ);
     void DeleteFwdCore(bool fDeleteAll, bool *pfAlive = pvNil, long iaevCur = ivNil);
@@ -654,7 +654,7 @@ class ACTR : public ACTR_PAR
     bool FCopy(PACTR *ppactr, bool fEntireScene = fFalse);    // Duplicate actor from this frame on
     bool FCopyRte(PACTR *ppactr, bool fEntireScene = fFalse); // Duplicate path from this frame on
     bool FPasteRte(PACTR pactr);                              // Paste from clipboard from this frame on
-    bool FNormalize(ulong grfnorm);
+    bool FNormalize(uint32_t grfnorm);
     bool FPaste(long nfrm, SCEN *pscen);
     bool FDelete(bool *pfAlive, bool fDeleteAll);
 
@@ -668,17 +668,17 @@ class ACTR : public ACTR_PAR
     bool FResolveAllSndTags(CNO cnoScen);
 
     // Route Definition
-    void SetTsInsert(ulong tsCurrent)
+    void SetTsInsert(uint32_t tsCurrent)
     {
         AssertBaseThis(0);
         _tsInsert = tsCurrent;
     }
-    bool FBeginRecord(ulong tsCurrent, bool fReplace, PACTR pactrRestore);
-    bool FRecordMove(BRS dxr, BRS dyr, BRS dzr, ulong grfmaf, ulong tsCurrent, bool *pfLonger, bool *pfStep,
+    bool FBeginRecord(uint32_t tsCurrent, bool fReplace, PACTR pactrRestore);
+    bool FRecordMove(BRS dxr, BRS dyr, BRS dzr, uint32_t grfmaf, uint32_t tsCurrent, bool *pfLonger, bool *pfStep,
                      PACTR pactrRestore);
     bool FEndRecord(bool fReplace, PACTR pactrRestore);
-    bool FTweakRoute(BRS dxr, BRS dyr, BRS dzr, ulong grfmaf = fmafNil);
-    bool FMoveRoute(BRS dxr, BRS dyr, BRS dzr, bool *pfMoved = pvNil, ulong grfmaf = fmafNil);
+    bool FTweakRoute(BRS dxr, BRS dyr, BRS dzr, uint32_t grfmaf = fmafNil);
+    bool FMoveRoute(BRS dxr, BRS dyr, BRS dzr, bool *pfMoved = pvNil, uint32_t grfmaf = fmafNil);
 };
 
 //

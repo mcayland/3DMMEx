@@ -69,7 +69,7 @@ class GVDS : public GVDS_PAR
 
     PGOB _pgobBase;
     RC _rcPlay;
-    ulong _tsPlay;
+    uint32_t _tsPlay;
 
     bool _fPlaying;
 

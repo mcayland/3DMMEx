@@ -222,7 +222,7 @@ bool TATR::FCmdRewind(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the TATR.
 ***************************************************************************/
-void TATR::AssertValid(ulong grf)
+void TATR::AssertValid(uint32_t grf)
 {
     TATR_PAR::AssertValid(fobjAllocated);
     if (grf & ftatrMvie)

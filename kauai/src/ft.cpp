@@ -31,7 +31,7 @@ class APP : public APP_PAR
     CMD_MAP_DEC(APP)
 
   protected:
-    virtual bool _FInit(ulong grfapp, ulong grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, long ginDef);
 
   public:
     virtual void GetStnAppName(PSTN pstn);
@@ -51,9 +51,9 @@ class APP : public APP_PAR
 #endif // WIN
 #ifdef MAC
     bool FCmdSetScreen(PCMD pcmd);
-    bool FEnableScreen(PCMD pcmd, ulong *pgrfeds);
+    bool FEnableScreen(PCMD pcmd, uint32_t *pgrfeds);
 #endif // MAC
-    bool FEnableMacro(PCMD pcmd, ulong *pgrfeds);
+    bool FEnableMacro(PCMD pcmd, uint32_t *pgrfeds);
 };
 
 BEGIN_CMD_MAP(APP, APPB)
@@ -114,7 +114,7 @@ void APP::GetStnAppName(PSTN pstn)
 /***************************************************************************
     Initialize the app.
 ***************************************************************************/
-bool APP::_FInit(ulong grfapp, ulong grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
 {
     if (!APP_PAR::_FInit(grfapp, grfgob, ginDef))
         return fFalse;
@@ -191,7 +191,7 @@ class GFRC : public GFRC_PAR
     GFRC(PGCB pgcb, ACR acr, bool fOval);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
 };
 
 RTCLASS(GPRC)
@@ -391,7 +391,7 @@ void GFRC::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     The mouse hit us - so die.
 ***************************************************************************/
-void GFRC::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void GFRC::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     if (Hid() != 99)
     {
@@ -670,7 +670,7 @@ class TTW : public TTW_PAR
     {
     }
     static TTW *PttwNew(void);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     void Draw(PGNV pgnv, RC *prcClip);
 };
 
@@ -769,7 +769,7 @@ void TTW::Draw(PGNV pgnv, RC *prcClip)
     pgnv->ClipRc(pvNil);
 }
 
-void TTW::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void TTW::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     RC rc;
     GNV gnv(this);
@@ -794,7 +794,7 @@ class RTW : public RTW_PAR
     {
         _cact = 0;
     }
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     static RTW *PrtwNew(void);
 };
@@ -907,7 +907,7 @@ bool APP::FCmdTimeTestRc(PCMD pcmd)
 /******************************************************************************
     Perform the test.
 ******************************************************************************/
-void RTW::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void RTW::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     GNV gnv(this);
     long iact;
@@ -916,7 +916,7 @@ void RTW::MouseDown(long xp, long yp, long cact, ulong grfcust)
     POGN pogn;
     long xp1, xp2, xp3, yp1, yp2, yp3;
     APT apt = {0xFF, 0x01, 0x7D, 0x45, 0x5D, 0x41, 0x7F, 0x00};
-    ulong ts;
+    uint32_t ts;
     STN stn;
 
     if (pvNil == (pogn = OGN::PognNew(8)))
@@ -1081,7 +1081,7 @@ bool APP::FCmdMacro(PCMD pcmd)
 /***************************************************************************
     Handles enabling of macro recording and playback commands.
 ***************************************************************************/
-bool APP::FEnableMacro(PCMD pcmd, ulong *pgrfeds)
+bool APP::FEnableMacro(PCMD pcmd, uint32_t *pgrfeds)
 {
     if (vpcex->FRecording() || vpcex->FPlaying())
         *pgrfeds = fedsDisable;
@@ -1189,7 +1189,7 @@ class DDP : public DDG
     static DDP *PddpNew(DOCP *pdocp, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
 
     void DrawRc(PGNV pgnv);
     void DrawNumbers(PGNV pgnv);
@@ -1319,7 +1319,7 @@ void DDP::DrawNumbers(PGNV pgnv)
 /***************************************************************************
     Track the mouse and drag the square.
 ***************************************************************************/
-void DDP::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DDP::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     DOCP *pdocp = (DOCP *)_pdocb;
     PT pt(xp, yp);
@@ -1934,7 +1934,7 @@ bool APP::FCmdSetScreen(PCMD pcmd)
 /***************************************************************************
     Set the menu stuff for the screen resolutions.
 ***************************************************************************/
-bool APP::FEnableScreen(PCMD pcmd, ulong *pgrfeds)
+bool APP::FEnableScreen(PCMD pcmd, uint32_t *pgrfeds)
 {
     long cbitPixel;
     bool fColor;
@@ -1994,7 +1994,7 @@ class TAN : public TAN_PAR
   protected:
     static long _cact;
     APT _apt;
-    ulong _dtim;
+    uint32_t _dtim;
 
     TAN(PGCB pgcb);
 

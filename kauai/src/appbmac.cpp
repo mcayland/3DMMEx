@@ -13,7 +13,7 @@
 #include "frame.h"
 ASSERTNAME
 
-ulong _GrfcustFromEvt(PEVT pevt);
+uint32_t _GrfcustFromEvt(PEVT pevt);
 
 // by default grow the stack by 8K and call MoreMasters 10 times
 const long _cbExtraStackDef = 0x2000L;
@@ -406,12 +406,12 @@ bool APPB::FGetNextKeyFromOsQueue(PCMD_KEY pcmd)
 /***************************************************************************
     Returns the grfcust for the given event.
 ***************************************************************************/
-ulong _GrfcustFromEvt(PEVT pevt)
+uint32_t _GrfcustFromEvt(PEVT pevt)
 {
     AssertThis(0);
     AssertVarMem(pevt);
 
-    ulong grfcust = 0;
+    uint32_t grfcust = 0;
 
     if (pevt->modifiers & (cmdKey | controlKey))
         grfcust |= fcustCmd;

@@ -33,7 +33,7 @@ long GOB::_gridLast;
 /***************************************************************************
     Fill in the elements of the GCB.
 ***************************************************************************/
-void GCB::Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel)
+void GCB::Set(long hid, PGOB pgob, uint32_t grfgob, long gin, RC *prcAbs, RC *prcRel)
 {
     Assert(hidNil != hid, "bad hid");
     AssertNilOrPo(pgob, 0);
@@ -194,7 +194,7 @@ void GOB::ActivateHwnd(HWND hwnd, bool fActive)
         pgob->SendBehind(pvNil);
 
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
 
     gte.Init(pgob, fgteBackToFront);
     while (gte.FNextGob(&pgob, &grfgte, fgteNil))
@@ -458,7 +458,7 @@ void GOB::Scroll(RC *prc, long dxp, long dyp, long gin, RC *prcBad1, RC *prcBad2
     PT dpt(0, 0);
     PGOB pgob, pgobT;
     GTE gte;
-    ulong grfgte, grfgteIn;
+    uint32_t grfgte, grfgteIn;
     bool fFound;
 
     if (kginDefault == gin)
@@ -643,7 +643,7 @@ void GOB::Scroll(RC *prc, long dxp, long dyp, long gin, RC *prcBad1, RC *prcBad2
     intersect prcClip will be drawn.  prcClip is in the GOB's local
     coordinates.
 ***************************************************************************/
-void GOB::DrawTree(PGPT pgpt, RC *prc, RC *prcClip, ulong grfgob)
+void GOB::DrawTree(PGPT pgpt, RC *prc, RC *prcClip, uint32_t grfgob)
 {
     AssertThis(0);
     AssertNilOrPo(pgpt, 0);
@@ -675,7 +675,7 @@ void GOB::DrawTree(PGPT pgpt, RC *prc, RC *prcClip, ulong grfgob)
 
     GNV gnv(pgpt);
     GTE gte;
-    ulong grfgte, grfgteIn;
+    uint32_t grfgte, grfgteIn;
     PGOB pgob;
 
     gte.Init(this, fgteBackToFront);
@@ -750,7 +750,7 @@ void GOB::DrawTree(PGPT pgpt, RC *prc, RC *prcClip, ulong grfgob)
     rectangle based at (0, 0).  Only GOB's that intersect pregn will be
     drawn.  pregn is in the GOB's local coordinates.
 ***************************************************************************/
-void GOB::DrawTreeRgn(PGPT pgpt, RC *prc, REGN *pregn, ulong grfgob)
+void GOB::DrawTreeRgn(PGPT pgpt, RC *prc, REGN *pregn, uint32_t grfgob)
 {
     AssertThis(0);
     AssertNilOrPo(pgpt, 0);
@@ -780,7 +780,7 @@ void GOB::DrawTreeRgn(PGPT pgpt, RC *prc, REGN *pregn, ulong grfgob)
 
     GNV gnv(pgpt);
     GTE gte;
-    ulong grfgte, grfgteIn;
+    uint32_t grfgte, grfgteIn;
     PGOB pgob;
     PREGN pregnClip;
     PREGN pregnClipGob = pvNil;
@@ -1252,7 +1252,7 @@ bool GOB::FPtInBounds(long xp, long yp)
     Default mouse down handler just enqueues a cidActivateSel, cidSelIdle and
     a cidTrackMouse command.
 ***************************************************************************/
-void GOB::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void GOB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 {
     AssertThis(0);
     Assert(grfcust & fcustMouse, "grfcust wrong");
@@ -1279,7 +1279,7 @@ void GOB::_SetRcCur(void)
 {
     PGOB pgob;
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     RC rc, rcVis;
 
     // invalidate the original rc
@@ -1430,7 +1430,7 @@ PGOB GOB::PgobFromCls(long cls)
 {
     AssertThis(0);
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     PGOB pgob;
 
     gte.Init(this, fgteNil);
@@ -1494,7 +1494,7 @@ PGOB GOB::PgobFromHid(long hid)
 {
     AssertThis(0);
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     PGOB pgob;
 
     gte.Init(this, fgteNil);
@@ -1545,7 +1545,7 @@ PGOB GOB::PgobFromGrid(long grid)
 {
     AssertThis(0);
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     PGOB pgob;
 
     gte.Init(this, fgteNil);
@@ -1805,7 +1805,7 @@ long GOB::LwState(void)
 /***************************************************************************
     Assert the validity of the GOB.
 ***************************************************************************/
-void GOB::AssertValid(ulong grf)
+void GOB::AssertValid(uint32_t grf)
 {
     GOB_PAR::AssertValid(0);
     if (hNil != _hwnd)
@@ -1836,7 +1836,7 @@ void GOB::MarkGobTree(void)
 {
     GTE gte;
     PGOB pgob;
-    ulong grfgte;
+    uint32_t grfgte;
 
     gte.Init(this, fgteNil);
     while (gte.FNextGob(&pgob, &grfgte, fgteNil))
@@ -1858,7 +1858,7 @@ GTE::GTE(void)
 /***************************************************************************
     Initialize a GOB tree enumerator.
 ***************************************************************************/
-void GTE::Init(PGOB pgob, ulong grfgte)
+void GTE::Init(PGOB pgob, uint32_t grfgte)
 {
     _pgobRoot = pgob;
     _pgobCur = pvNil;
@@ -1870,7 +1870,7 @@ void GTE::Init(PGOB pgob, ulong grfgte)
     Goes to the next node in the sub tree being enumerated.  Returns false
     iff the enumeration is done.
 ***************************************************************************/
-bool GTE::FNextGob(PGOB *ppgob, ulong *pgrfgteOut, ulong grfgte)
+bool GTE::FNextGob(PGOB *ppgob, uint32_t *pgrfgteOut, uint32_t grfgte)
 {
     PGOB pgobT;
 

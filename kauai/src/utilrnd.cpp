@@ -21,7 +21,7 @@ RTCLASS(SFL)
     Constructs a pseudo-random number generator.  If luSeed is zero,
     generates a seed from the current system time (TsCurrentSystem).
 ***************************************************************************/
-RND::RND(ulong luSeed)
+RND::RND(uint32_t luSeed)
 {
     if (0 == luSeed)
     {
@@ -44,7 +44,7 @@ long RND::LwNext(long lwLim)
     // high bits are more random than the low ones
     // See Knuth vol 2, page 102, line 24 of table 1.
     // value of kdluRand doesn't matter much
-    const ulong kluRandMul = 1566083941L;
+    const uint32_t kluRandMul = 1566083941L;
     const long kdluRand = 2531011L;
     long lw;
 
@@ -52,7 +52,7 @@ long RND::LwNext(long lwLim)
 
     // multiply lw by lwLim and divide by 2^32
 #ifdef IN_80386
-    ulong luSeedT = _luSeed;
+    uint32_t luSeedT = _luSeed;
     __asm
     {
 		mov		eax,luSeedT
@@ -73,7 +73,7 @@ long RND::LwNext(long lwLim)
 /***************************************************************************
     Constructs a shuffled array.
 ***************************************************************************/
-SFL::SFL(ulong luSeed) : RND(luSeed)
+SFL::SFL(uint32_t luSeed) : RND(luSeed)
 {
     _clw = 0;
     _ilw = 0;
@@ -95,7 +95,7 @@ SFL::~SFL(void)
 /***************************************************************************
     Assert the validity of a SFL.
 ***************************************************************************/
-void SFL::AssertValid(ulong grf)
+void SFL::AssertValid(uint32_t grf)
 {
     SFL_PAR::AssertValid(0);
     if (_hqrglw != hqNil)

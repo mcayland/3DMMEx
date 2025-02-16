@@ -295,7 +295,7 @@ PACTN TDT::_PactnBuild(long tda)
     PACTN pactn;
     PGG pggcel;
     PGL pglbmat34 = pvNil;
-    ulong grfactn;
+    uint32_t grfactn;
 
     pggcel = _PggcelBuild(tda);
     if (pvNil == pggcel)
@@ -1036,7 +1036,7 @@ void TDT::_ApplyShape(BMAT34 *pbmat34, long tdts, long cch, long ich, BRS xrChar
 /***************************************************************************
     Assert the validity of the TDT.
 ***************************************************************************/
-void TDT::AssertValid(ulong grf)
+void TDT::AssertValid(uint32_t grf)
 {
     TDT_PAR::AssertValid(fobjAllocated);
     AssertPo(_pgstAction, 0); // must set _pgstAction before creating TDTs

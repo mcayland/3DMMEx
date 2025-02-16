@@ -135,7 +135,7 @@ int __cdecl main(int cpsz, achar *prgpsz[])
     FILE *pfileDst = pvNil;
     MSSIO *pmssioErr = pvNil, *pmssioDst = pvNil;
     S2B *ps2b = pvNil;
-    ulong grfs2b = fs2bNil;
+    uint32_t grfs2b = fs2bNil;
 
     fSwapHand = fFalse;
     mdVerbose = kmdQuiet;
@@ -400,7 +400,7 @@ void S2B::AssertValidBmhr(PBMHR pbmhr)
     }
 }
 
-void S2B::AssertValid(ulong grf)
+void S2B::AssertValid(uint32_t grf)
 {
     S2B_PAR::AssertValid(grf);
     AssertPo(_ps2blx, grf);
@@ -425,7 +425,7 @@ void S2B::AssertValid(ulong grf)
     AssertNilOrPvCb(_prgcps, size(CPS) * _cMesh);
 }
 
-void S2BLX::AssertValid(ulong grf)
+void S2BLX::AssertValid(uint32_t grf)
 {
     S2BLX_PAR::AssertValid(grf);
 }
@@ -697,7 +697,7 @@ void S2B::_DumpHeader(CTG ctg, CNO cno, PSTN pstnName, bool fPack)
 |		fTrue if it succeeds, fFalse otherwise
 |
 -------------------------------------------------------------PETED-----------*/
-bool S2B::FConvertSI(PMSNK pmsnkErr, PMSNK pmsnkDst, PFNI pfniInc, ulong grfs2b)
+bool S2B::FConvertSI(PMSNK pmsnkErr, PMSNK pmsnkDst, PFNI pfniInc, uint32_t grfs2b)
 {
     bool fGotTok, fHaveActor = fFalse, fRet = fFalse;
 

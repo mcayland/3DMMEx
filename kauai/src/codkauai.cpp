@@ -157,8 +157,8 @@ class BITA
 
   public:
     void Set(void *pvDst, long cbDst);
-    bool FWriteBits(ulong lu, long cbit);
-    bool FWriteLogEncoded(ulong lu);
+    bool FWriteBits(uint32_t lu, long cbit);
+    bool FWriteLogEncoded(uint32_t lu);
     long Ibit(void)
     {
         return _ibit;
@@ -184,7 +184,7 @@ void BITA::Set(void *pvDst, long cbDst)
 /***************************************************************************
     Write some bits.
 ***************************************************************************/
-bool BITA::FWriteBits(ulong lu, long cbit)
+bool BITA::FWriteBits(uint32_t lu, long cbit)
 {
     long cb;
 
@@ -230,12 +230,12 @@ bool BITA::FWriteBits(ulong lu, long cbit)
 /***************************************************************************
     Write the value logarithmically encoded.
 ***************************************************************************/
-bool BITA::FWriteLogEncoded(ulong lu)
+bool BITA::FWriteLogEncoded(uint32_t lu)
 {
     Assert(lu > 0 && !(lu & 0x80000000), "bad value to encode logarithmically");
     long cbit;
 
-    for (cbit = 1; (ulong)(1L << cbit) <= lu; cbit++)
+    for (cbit = 1; (uint32_t)(1L << cbit) <= lu; cbit++)
         ;
     cbit--;
 
@@ -352,13 +352,13 @@ bool KCDC::_FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
         if (cbMatch == 1)
         {
             // literal
-            if (!bita.FWriteBits((ulong)prgbSrc[ibSrc] << 1, 9))
+            if (!bita.FWriteBits((uint32_t)prgbSrc[ibSrc] << 1, 9))
                 goto LFail;
         }
         else
         {
             // find the offset
-            ulong luCode, luLen;
+            uint32_t luCode, luLen;
             long cbit;
 
             luCode = ibSrc - ibMatch;
@@ -474,7 +474,7 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
 #else //! IN_80386
 
     long cb, dib, ibit, cbit;
-    ulong luCur;
+    uint32_t luCur;
     uint8_t *pbT;
     uint8_t *pbDst = (uint8_t *)pvDst;
     uint8_t *pbLimDst = (uint8_t *)pvDst + cbDst;
@@ -482,7 +482,7 @@ bool KCDC::_FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbD
 
 #define _FTest(ibit) (luCur & (1L << (ibit)))
 #ifdef LITTLE_ENDIAN
-#define _Advance(cb) ((pbSrc += (cb)), (luCur = *(ulong *)(pbSrc - 4)))
+#define _Advance(cb) ((pbSrc += (cb)), (luCur = *(uint32_t *)(pbSrc - 4)))
 #else //! LITTLE_ENDIAN
 #define _Advance(cb) ((pbSrc += (cb)), (luCur = LwFromBytes(pbSrc[-1], pbSrc[-2], pbSrc[-3], pbSrc[-4])))
 #endif //! LITTLE_ENDIAN
@@ -720,7 +720,7 @@ bool KCDC::_FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
             AssertIn(cbMatch, 2 + (ibSrc - ibMatch >= kdibMinKcdc3), kcbMaxLenKcdc + 1);
 
             // find the offset
-            ulong luCode, luLen;
+            uint32_t luCode, luLen;
             long cbit;
 
             luCode = ibSrc - ibMatch;
@@ -836,7 +836,7 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
 #else //! IN_80386
 
     long cb, dib, ibit, cbit;
-    ulong luCur;
+    uint32_t luCur;
     uint8_t bT;
     uint8_t *pbT;
     uint8_t *pbDst = (uint8_t *)pvDst;
@@ -848,7 +848,7 @@ bool KCDC::_FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcb
 
 #define _FTest(ibit) (luCur & (1L << (ibit)))
 #ifdef LITTLE_ENDIAN
-#define _Advance(cb) ((pbSrc += (cb)), (luCur = *(ulong *)(pbSrc - 4)))
+#define _Advance(cb) ((pbSrc += (cb)), (luCur = *(uint32_t *)(pbSrc - 4)))
 #else //! LITTLE_ENDIAN
 #define _Advance(cb) ((pbSrc += (cb)), (luCur = LwFromBytes(pbSrc[-1], pbSrc[-2], pbSrc[-3], pbSrc[-4])))
 #endif //! LITTLE_ENDIAN

@@ -3562,7 +3562,7 @@ void BCLS::MarkMem(void)
     Assert the validity of the BRCN
 
  ****************************************************/
-void BRCN::AssertValid(ulong grfobj)
+void BRCN::AssertValid(uint32_t grfobj)
 {
     BRCN_PAR::AssertValid(fobjAllocated);
 }
@@ -3572,7 +3572,7 @@ void BRCN::AssertValid(ulong grfobj)
     Assert the validity of the BRCNL
 
  ****************************************************/
-void BRCNL::AssertValid(ulong grfobj)
+void BRCNL::AssertValid(uint32_t grfobj)
 {
     BRCNL_PAR::AssertValid(fobjAllocated);
 }
@@ -3582,12 +3582,12 @@ void BRCNL::AssertValid(ulong grfobj)
     BCL AssertValid
 
  ****************************************************/
-void BCLS::AssertValid(ulong grf)
+void BCLS::AssertValid(uint32_t grf)
 {
     BCLS_PAR::AssertValid(grf);
     AssertPo(_pgst, 0);
 }
-void BCL::AssertValid(ulong grf)
+void BCL::AssertValid(uint32_t grf)
 {
     BCL_PAR::AssertValid(grf);
     AssertPo(_pglthd, 0);
@@ -3598,7 +3598,7 @@ void BCL::AssertValid(ulong grf)
     Assert the validity of the BRWD
 
  ****************************************************/
-void BRWD::AssertValid(ulong grfobj)
+void BRWD::AssertValid(uint32_t grfobj)
 {
     BRWD_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pbrcn, 0);
@@ -3609,7 +3609,7 @@ void BRWD::AssertValid(ulong grfobj)
     Assert the validity of the BRWL
 
  ****************************************************/
-void BRWL::AssertValid(ulong grfobj)
+void BRWL::AssertValid(uint32_t grfobj)
 {
 
     BRWL_PAR::AssertValid(fobjAllocated);
@@ -3623,7 +3623,7 @@ void BRWL::AssertValid(ulong grfobj)
     Assert the validity of the BRWR
 
  ****************************************************/
-void BRWR::AssertValid(ulong grfobj)
+void BRWR::AssertValid(uint32_t grfobj)
 {
 
     BRWR_PAR::AssertValid(fobjAllocated);
@@ -3635,7 +3635,7 @@ void BRWR::AssertValid(ulong grfobj)
     Assert the validity of the BRWI
 
  ****************************************************/
-void BRWI::AssertValid(ulong grfobj)
+void BRWI::AssertValid(uint32_t grfobj)
 {
 
     BRWI_PAR::AssertValid(fobjAllocated);
@@ -3647,7 +3647,7 @@ void BRWI::AssertValid(ulong grfobj)
     Assert the validity of the BRWT
 
  ****************************************************/
-void BRWT::AssertValid(ulong grfobj)
+void BRWT::AssertValid(uint32_t grfobj)
 {
     BRWT_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pgst, 0);
@@ -3658,7 +3658,7 @@ void BRWT::AssertValid(ulong grfobj)
     Assert the validity of the BRWA
 
  ****************************************************/
-void BRWA::AssertValid(ulong grfobj)
+void BRWA::AssertValid(uint32_t grfobj)
 {
     BRWA_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pape, 0);

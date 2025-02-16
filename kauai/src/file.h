@@ -39,7 +39,7 @@ enum
     ffilTemp = 0x10,
     ffilMark = 0x20
 };
-const ulong kgrffilPerm = ffilWriteEnable | ffilDenyWrite | ffilDenyRead;
+const uint32_t kgrffilPerm = ffilWriteEnable | ffilDenyWrite | ffilDenyRead;
 
 // file error levels - in order of severity
 enum
@@ -74,7 +74,7 @@ class FIL : public FIL_PAR
     bool _fOpen : 1;
     bool _fEverOpen : 1;
     bool _fWrote : 1;
-    ulong _grffil; // permissions, mark and temp flags
+    uint32_t _grffil; // permissions, mark and temp flags
     long _el;
 
 #ifdef MAC
@@ -84,10 +84,10 @@ class FIL : public FIL_PAR
 #endif // WIN
 
     // private methods
-    FIL(FNI *pfni, ulong grffil);
+    FIL(FNI *pfni, uint32_t grffil);
     ~FIL(void);
 
-    bool _FOpen(bool fCreate, ulong grffil);
+    bool _FOpen(bool fCreate, uint32_t grffil);
     void _Close(bool fFinal = fFalse);
     void _SetFpPos(FP fp);
 
@@ -106,8 +106,8 @@ class FIL : public FIL_PAR
     {
         return _pfilFirst;
     }
-    static PFIL PfilOpen(FNI *pfni, ulong grffil = ffilDenyWrite);
-    static PFIL PfilCreate(FNI *pfni, ulong grffil = ffilWriteEnable | ffilDenyWrite);
+    static PFIL PfilOpen(FNI *pfni, uint32_t grffil = ffilDenyWrite);
+    static PFIL PfilCreate(FNI *pfni, uint32_t grffil = ffilWriteEnable | ffilDenyWrite);
     static PFIL PfilCreateTemp(FNI *pfni = pvNil);
     static PFIL PfilFromFni(FNI *pfni);
 
@@ -125,8 +125,8 @@ class FIL : public FIL_PAR
     {
         _el = el;
     }
-    bool FSetGrffil(ulong grffil, ulong grffilMask = ~0);
-    ulong GrffilCur(void)
+    bool FSetGrffil(uint32_t grffil, uint32_t grffilMask = ~0);
+    uint32_t GrffilCur(void)
     {
         return _grffil;
     }

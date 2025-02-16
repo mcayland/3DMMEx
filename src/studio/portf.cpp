@@ -35,7 +35,7 @@ ASSERTNAME
 
 ***************************************************************************/
 bool FPortDisplayWithIds(FNI *pfni, bool fOpen, long lFilterLabel, long lFilterExt, long lTitle, LPCTSTR lpstrDefExt,
-                         PSTN pstnDefFileName, FNI *pfniInitialDir, ulong grfPrevType, CNO cnoWave)
+                         PSTN pstnDefFileName, FNI *pfniInitialDir, uint32_t grfPrevType, CNO cnoWave)
 {
     STN stnTitle;
     STN stnFilterLabel;
@@ -113,7 +113,7 @@ bool FPortDisplayWithIds(FNI *pfni, bool fOpen, long lFilterLabel, long lFilterE
             FALSE	- User canceled portfolio.
 
 ***************************************************************************/
-bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pfniInitialDir, ulong grfPrevType,
+bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pfniInitialDir, uint32_t grfPrevType,
                      CNO cnoWave)
 {
     SZ szFile;
@@ -231,7 +231,7 @@ bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pf
 
 ***************************************************************************/
 bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR lpstrDefExt, PSTN pstnDefFileName,
-                     ulong grfPrevType, CNO cnoWave)
+                     uint32_t grfPrevType, CNO cnoWave)
 {
     DLGINFO diPortfolio;
     OPENFILENAME ofn;

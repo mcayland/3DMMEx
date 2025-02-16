@@ -178,7 +178,7 @@ bool MP::FCmdSelIdle(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the MP.
 ***************************************************************************/
-void MP::AssertValid(ulong grf)
+void MP::AssertValid(uint32_t grf)
 {
     MP_PAR::AssertValid(fobjAllocated);
     AssertBasePo(_pcmh, 0);
@@ -353,7 +353,7 @@ bool MPFNT::FCmdSelIdle(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the MPFNT.
 ***************************************************************************/
-void MPFNT::AssertValid(ulong grf)
+void MPFNT::AssertValid(uint32_t grf)
 {
     MPFNT_PAR::AssertValid(0);
 }

@@ -28,7 +28,7 @@ long LwGcd(long lw1, long lw2)
 /***************************************************************************
     Calculates the GCD of two unsigned longs.
 ***************************************************************************/
-ulong LuGcd(ulong lu1, ulong lu2)
+uint32_t LuGcd(uint32_t lu1, uint32_t lu2)
 {
     // Euclidean algorithm - keep mod'ing until we hit zero
     if (lu1 == 0)
@@ -97,7 +97,7 @@ long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem)
 /***************************************************************************
     Multiply two longs to get a 64 bit (signed) result.
 ***************************************************************************/
-void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow)
+void MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow)
 {
 #ifdef IN_80386
     __asm
@@ -134,7 +134,7 @@ void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow)
 /***************************************************************************
     Multiply lu by luMul and divide by luDiv without losing precision.
 ***************************************************************************/
-ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv)
+uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv)
 {
     Assert(luDiv != 0, "divide by zero error");
 
@@ -153,14 +153,14 @@ ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv)
 
     dou = (double)lu * luMul / luDiv;
     Assert(dou <= kluMax && dou >= 0, "overflow in LuMulDiv");
-    return (ulong)dou;
+    return (uint32_t)dou;
 #endif //! IN_80386
 }
 
 /***************************************************************************
     Multiply two unsigned longs to get a 64 bit (unsigned) result.
 ***************************************************************************/
-void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow)
+void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow)
 {
 #ifdef IN_80386
     __asm
@@ -176,7 +176,7 @@ void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow)
     double dou;
 
     dou = (double)lu1 * lu2;
-    *pluHigh = (ulong)(dou / ((double)0x10000 * 0x10000));
+    *pluHigh = (uint32_t)(dou / ((double)0x10000 * 0x10000));
     *pluLow = dou - *pluHigh * ((double)0x10000 * 0x10000);
 #endif //! IN_80386
 }
@@ -208,10 +208,10 @@ long LwMulDivAway(long lw, long lwMul, long lwDiv)
     Does a multiply and divide without losing precision, rounding away from
     zero during the divide.
 ***************************************************************************/
-ulong LuMulDivAway(ulong lu, ulong luMul, ulong luDiv)
+uint32_t LuMulDivAway(uint32_t lu, uint32_t luMul, uint32_t luDiv)
 {
     Assert(luDiv != 0, "divide by zero error");
-    ulong luT;
+    uint32_t luT;
 
     // get rid of common factors
     if (1 < (luT = LuGcd(lu, luDiv)))
@@ -322,10 +322,10 @@ long LwRoundClosest(long lwSrc, long lwBase)
     Returns fcmpGt, fcmpEq or fcmpLt according to whether (lwNum1 / lwDen2)
     is greater than, equal to or less than (lwNum2 / lwDen2).
 ***************************************************************************/
-ulong FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2)
+uint32_t FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2)
 {
     long lwHigh1, lwHigh2; // must be signed
-    ulong luLow1, luLow2;  // must be unsigned
+    uint32_t luLow1, luLow2; // must be unsigned
 
     MulLw(lwNum1, lwDen2, &lwHigh1, &luLow1);
     MulLw(lwNum2, lwDen1, &lwHigh2, &luLow2);
@@ -589,7 +589,7 @@ PT PT::PtMap(RC *prcSrc, RC *prcDst)
     Transform the xp and yp values according to grfpt.  Negating comes
     before transposition.
 ***************************************************************************/
-void PT::Transform(ulong grfpt)
+void PT::Transform(uint32_t grfpt)
 {
     AssertThisMem();
     long zp;
@@ -781,7 +781,7 @@ void RC::Map(RC *prcSrc, RC *prcDst)
     Transform the xp and yp values according to grfpt.  Negating comes
     before transposition.
 ***************************************************************************/
-void RC::Transform(ulong grfpt)
+void RC::Transform(uint32_t grfpt)
 {
     AssertThisMem();
     long zp;
@@ -1066,7 +1066,7 @@ bool RC::FMapToCell(long xp, long yp, long crcWidth, long crcHeight, long *pircW
 /***************************************************************************
     Asserts the validity of a fraction.
 ***************************************************************************/
-void RAT::AssertValid(ulong grf)
+void RAT::AssertValid(uint32_t grf)
 {
     AssertIn(_lwDen, 1, klwMax);
     long lwGcd = LwGcd(_lwNum, _lwDen);
@@ -1088,14 +1088,14 @@ USAC::USAC(void)
 /***************************************************************************
     Return the current application time.
 ***************************************************************************/
-ulong USAC::TsCur(void)
+uint32_t USAC::TsCur(void)
 {
     AssertThisMem();
-    ulong dtsSys = TsCurrentSystem() - _tsBaseSys;
+    uint32_t dtsSys = TsCurrentSystem() - _tsBaseSys;
 
     if (_luScale != kluTimeScaleNormal)
     {
-        ulong luHigh;
+        uint32_t luHigh;
         MulLu(dtsSys, _luScale, &luHigh, &dtsSys);
         dtsSys = LwHighLow(SuLow(luHigh), SuHigh(dtsSys));
     }
@@ -1106,10 +1106,10 @@ ulong USAC::TsCur(void)
 /***************************************************************************
     Scale the time.
 ***************************************************************************/
-void USAC::Scale(ulong luScale)
+void USAC::Scale(uint32_t luScale)
 {
     AssertThisMem();
-    ulong tsSys, dts;
+    uint32_t tsSys, dts;
 
     if (luScale == _luScale)
         return;
@@ -1119,7 +1119,7 @@ void USAC::Scale(ulong luScale)
     dts = tsSys - _tsBaseSys;
     if (_luScale != kluTimeScaleNormal)
     {
-        ulong luHigh;
+        uint32_t luHigh;
         MulLu(dts, _luScale, &luHigh, &dts);
         dts = LwHighLow(SuLow(luHigh), SuHigh(dts));
     }

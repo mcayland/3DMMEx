@@ -418,7 +418,7 @@ LFail:
 /***************************************************************************
     Assert the validity of the MODL.
 ***************************************************************************/
-void MODL::AssertValid(ulong grf)
+void MODL::AssertValid(uint32_t grf)
 {
     MODL_PAR::AssertValid(fobjAllocated);
     AssertVarMem(_pbmdl);

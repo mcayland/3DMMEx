@@ -128,7 +128,7 @@ bool PIC::FWrite(PBLCK pblck)
         return fFalse;
     ppich->rc = _rc;
     ppich->cb = cbTot;
-    fT = (GetEnhMetaFileBits(_hpic, cb, (uint8_t *)(ppich + 1)) == (ulong)cb) && pblck->FWrite(ppich);
+    fT = (GetEnhMetaFileBits(_hpic, cb, (uint8_t *)(ppich + 1)) == (uint32_t)cb) && pblck->FWrite(ppich);
     FreePpv((void **)&ppich);
     return fT;
 }

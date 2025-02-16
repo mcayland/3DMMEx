@@ -412,7 +412,7 @@ void CLIP::_ExportCur(void)
 /***************************************************************************
     Assert the validity of a CLIP.
 ***************************************************************************/
-void CLIP::AssertValid(ulong grf)
+void CLIP::AssertValid(uint32_t grf)
 {
     CLIP_PAR::AssertValid(0);
     AssertNilOrPo(_pdocb, 0);

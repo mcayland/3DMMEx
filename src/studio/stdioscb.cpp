@@ -562,7 +562,7 @@ void SSCB::Update(void)
 #ifdef SHOW_FPS
     {
         long cfrmTail, cfrmCur;
-        ulong tsTail, tsCur;
+        uint32_t tsTail, tsCur;
         float fps;
 
         /* Get current info */
@@ -679,7 +679,7 @@ void SSCB::MarkMem(void)
  *		Nothing.
  *
 \*****************************************************************************/
-void SSCB::AssertValid(ulong grf)
+void SSCB::AssertValid(uint32_t grf)
 {
     SSCB_PAR::AssertValid(fobjAllocated);
 }
