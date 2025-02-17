@@ -17,7 +17,7 @@ ASSERTNAME
  * @param cb Size of optional data
  * @return fFalse to not break into the debugger
  */
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t cb)
 {
     ADD_FAILURE_AT(pszsFile, lwLine) << pszsMsg;
     return fFalse;
@@ -30,7 +30,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
  * @param lwLine Source line number
  * @param pszsMsg Warning message
  */
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMsg)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
 {
     // TODO: log warning messages somewhere
 }
@@ -116,7 +116,7 @@ TEST(KauaiTests, TestMem)
 #define kchq 18
     HQ rghq[kchq];
     HQ hqT, hq;
-    long cb, ihq;
+    int32_t cb, ihq;
 
     FillPb(rghq, SIZEOF(rghq), 0);
 
@@ -190,7 +190,7 @@ TEST(KauaiTests, TestMem)
 TEST(KauaiTests, TestGl)
 {
     int16_t sw;
-    long isw;
+    int32_t isw;
     int16_t *qsw;
     PGL pglsw;
 
@@ -311,7 +311,7 @@ TEST(KauaiTests, TestGg)
 {
     PGG pgg;
     uint32_t grf;
-    long cb, iv;
+    int32_t cb, iv;
     uint8_t *qb;
     PSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
@@ -414,7 +414,7 @@ TEST(KauaiTests, TestCfl)
     PCFL pcfl, pcflDst;
     BLCK blck;
     int16_t rel;
-    long icki;
+    int32_t icki;
     CNO cno;
     CKI cki;
     EREL *perel, *perelPar;
@@ -520,8 +520,8 @@ TEST(KauaiTests, TestCfl)
 
 TEST(KauaiTests, TestErs)
 {
-    const long cercTest = 30;
-    long erc, ercT;
+    const int32_t cercTest = 30;
+    int32_t erc, ercT;
 
     vpers->Clear();
     ASSERT_EQ(vpers->Cerc(), 0) << "bad count of error codes on stack";

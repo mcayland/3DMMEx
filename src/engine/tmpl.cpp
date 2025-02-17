@@ -105,7 +105,7 @@ LFail:
 /***************************************************************************
     A PFNRPO (chunky resource reader function) to read an ACTN from a file
 ***************************************************************************/
-bool ACTN::FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool ACTN::FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -148,7 +148,7 @@ bool ACTN::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     BLCK blck;
     ACTNF actnf;
     int16_t bo;
-    long icel;
+    int32_t icel;
 
     if (!pcfl->FFind(ctg, cno, &blck) || !blck.FUnpackData())
         return fFalse;
@@ -176,7 +176,7 @@ bool ACTN::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     {
         for (icel = 0; icel < _pggcel->IvMac(); icel++)
         {
-            SwapBytesRglw(_pggcel->QvFixedGet(icel), SIZEOF(CEL) / SIZEOF(long));
+            SwapBytesRglw(_pggcel->QvFixedGet(icel), SIZEOF(CEL) / SIZEOF(int32_t));
             SwapBytesRgsw(_pggcel->QvGet(icel), _pggcel->Cb(icel) / SIZEOF(int16_t));
         }
     }
@@ -192,7 +192,7 @@ bool ACTN::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     AssertBomRglw(kbomBmat34, SIZEOF(BMAT34));
     if (kboOther == bo)
     {
-        SwapBytesRglw(_pglbmat34->QvGet(0), LwMul(_pglbmat34->IvMac(), SIZEOF(BMAT34) / SIZEOF(long)));
+        SwapBytesRglw(_pglbmat34->QvGet(0), LwMul(_pglbmat34->IvMac(), SIZEOF(BMAT34) / SIZEOF(int32_t)));
     }
 
     // read (optional) GL of motion-match sounds (chid 0, ctg kctgGlms):
@@ -206,7 +206,7 @@ bool ACTN::_FInit(PCFL pcfl, CTG ctg, CNO cno)
         AssertBomRglw(kbomTag, SIZEOF(TAG));
         if (kboOther == bo)
         {
-            SwapBytesRglw(_pgltagSnd->QvGet(0), LwMul(_pgltagSnd->IvMac(), SIZEOF(TAG) / SIZEOF(long)));
+            SwapBytesRglw(_pgltagSnd->QvGet(0), LwMul(_pgltagSnd->IvMac(), SIZEOF(TAG) / SIZEOF(int32_t)));
         }
     }
 
@@ -226,7 +226,7 @@ ACTN::~ACTN(void)
 /***************************************************************************
     Get a CEL
 ***************************************************************************/
-void ACTN::GetCel(long icel, CEL *pcel)
+void ACTN::GetCel(int32_t icel, CEL *pcel)
 {
     AssertThis(0);
     AssertIn(icel, 0, Ccel());
@@ -238,7 +238,7 @@ void ACTN::GetCel(long icel, CEL *pcel)
 /***************************************************************************
     Get a CPS
 ***************************************************************************/
-void ACTN::GetCps(long icel, long icps, CPS *pcps)
+void ACTN::GetCps(int32_t icel, int32_t icps, CPS *pcps)
 {
     AssertThis(0);
     AssertIn(icel, 0, Ccel());
@@ -253,7 +253,7 @@ void ACTN::GetCps(long icel, long icps, CPS *pcps)
     Get a sound for icel.  If there is no sound, ptag's CTG is set to
     ctgNil.
 ***************************************************************************/
-void ACTN::GetSnd(long icel, PTAG ptag)
+void ACTN::GetSnd(int32_t icel, PTAG ptag)
 {
     AssertThis(0);
     AssertIn(icel, 0, Ccel());
@@ -273,7 +273,7 @@ void ACTN::GetSnd(long icel, PTAG ptag)
 /***************************************************************************
     Get a transformation matrix
 ***************************************************************************/
-void ACTN::GetMatrix(long imat34, BMAT34 *pbmat34)
+void ACTN::GetMatrix(int32_t imat34, BMAT34 *pbmat34)
 {
     AssertThis(0);
     AssertIn(imat34, 0, _pglbmat34->IvMac());
@@ -310,7 +310,7 @@ void ACTN::MarkMem(void)
 /***************************************************************************
     A PFNRPO (chunky resource reader function) to read TMPL objects.
 ***************************************************************************/
-bool TMPL::FReadTmpl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool TMPL::FReadTmpl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -421,7 +421,7 @@ bool TMPL::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     KID kid;
     int16_t bo;
     BLCK blck;
-    long ibact;
+    int32_t ibact;
     int16_t ibset;
 
     if (!_FReadTmplf(pcfl, ctg, cno))
@@ -489,24 +489,24 @@ bool TMPL::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     _pggcmid = GG::PggRead(&blck, &bo);
     if (pvNil == _pggcmid)
         return fFalse;
-    Assert(_pggcmid->CbFixed() == SIZEOF(long), "Bad TMPL _pggcmid");
+    Assert(_pggcmid->CbFixed() == SIZEOF(int32_t), "Bad TMPL _pggcmid");
     Assert(_pggcmid->IvMac() == _cbset, "Bad TMPL _pggcmid");
     if (kboOther == bo)
     {
         for (ibset = 0; ibset < _cbset; ibset++)
         {
             SwapBytesRglw(_pggcmid->QvFixedGet(ibset), 1);
-            SwapBytesRglw(_pggcmid->QvGet(ibset), *(long *)_pggcmid->QvFixedGet(ibset));
+            SwapBytesRglw(_pggcmid->QvGet(ibset), *(int32_t *)_pggcmid->QvFixedGet(ibset));
         }
     }
     return fTrue;
 // REVIEW *****: temp code until Pete converts our TMPL content
 LBuildGgcm:
-    long ikid;
+    int32_t ikid;
     PCMTL pcmtl;
     PCRF pcrf;
-    long rgcmid[50];
-    long ccmid;
+    int32_t rgcmid[50];
+    int32_t ccmid;
 
     Warn("missing GGCM...building one on the fly");
 
@@ -514,7 +514,7 @@ LBuildGgcm:
     if (pvNil == pcrf)
         return fFalse;
 
-    _pggcmid = GG::PggNew(SIZEOF(long));
+    _pggcmid = GG::PggNew(SIZEOF(int32_t));
     if (pvNil == _pggcmid)
     {
         ReleasePpo(&pcrf);
@@ -541,7 +541,7 @@ LBuildGgcm:
             }
             ReleasePpo(&pcmtl);
         }
-        if (!_pggcmid->FAdd(ccmid * SIZEOF(long), pvNil, rgcmid, &ccmid))
+        if (!_pggcmid->FAdd(ccmid * SIZEOF(int32_t), pvNil, rgcmid, &ccmid))
         {
             ReleasePpo(&pcrf);
             return fFalse;
@@ -604,7 +604,7 @@ PBODY TMPL::PbodyCreate(void)
 /***************************************************************************
     Fills in the name of the given action
 ***************************************************************************/
-bool TMPL::FGetActnName(long anid, PSTN pstn)
+bool TMPL::FGetActnName(int32_t anid, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
@@ -620,7 +620,7 @@ bool TMPL::FGetActnName(long anid, PSTN pstn)
 /***************************************************************************
     Reads an ACTN chunk from disk
 ***************************************************************************/
-PACTN TMPL::_PactnFetch(long anid)
+PACTN TMPL::_PactnFetch(int32_t anid)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
@@ -662,18 +662,18 @@ PMODL TMPL::_PmodlFetch(CHID chidModl)
     matrices for the given cel of the given action.  Also returns the
     distance to the next cel in *pdwr.
 ***************************************************************************/
-bool TMPL::FSetActnCel(BODY *pbody, long anid, long celn, BRS *pdwr)
+bool TMPL::FSetActnCel(BODY *pbody, int32_t anid, int32_t celn, BRS *pdwr)
 {
     AssertThis(0);
     AssertPo(pbody, 0);
     AssertIn(anid, 0, _cactn);
     AssertNilOrVarMem(pdwr);
 
-    long icel;
+    int32_t icel;
     ACTN *pactn = pvNil;
     CEL cel;
     int16_t ibprt;
-    long cbprt = _pglibactPar->IvMac();
+    int32_t cbprt = _pglibactPar->IvMac();
     CPS cps;
     PMODL *prgpmodl = pvNil;
     BMAT34 bmat34;
@@ -733,14 +733,14 @@ LEnd:
 /***************************************************************************
     Retrieves the distance travelled by cel celn of action anid.
 ***************************************************************************/
-bool TMPL::FGetDwrActnCel(long anid, long celn, BRS *pdwr)
+bool TMPL::FGetDwrActnCel(int32_t anid, int32_t celn, BRS *pdwr)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
     AssertVarMem(pdwr);
 
     ACTN *pactn;
-    long icel;
+    int32_t icel;
     CEL cel;
 
     pactn = _PactnFetch(anid);
@@ -758,7 +758,7 @@ bool TMPL::FGetDwrActnCel(long anid, long celn, BRS *pdwr)
 /***************************************************************************
     Retrieves the number of cels in this action
 ***************************************************************************/
-bool TMPL::FGetCcelActn(long anid, long *pccel)
+bool TMPL::FGetCcelActn(int32_t anid, int32_t *pccel)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
@@ -777,7 +777,7 @@ bool TMPL::FGetCcelActn(long anid, long *pccel)
 /***************************************************************************
     Retrieves the number of cels in this action
 ***************************************************************************/
-bool TMPL::FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag)
+bool TMPL::FGetSndActnCel(int32_t anid, int32_t celn, bool *pfSoundExists, PTAG ptag)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
@@ -785,7 +785,7 @@ bool TMPL::FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag)
     AssertVarMem(ptag);
 
     ACTN *pactn;
-    long icel;
+    int32_t icel;
 
     *pfSoundExists = fFalse;
     pactn = _PactnFetch(anid);
@@ -804,7 +804,7 @@ bool TMPL::FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag)
 /***************************************************************************
     Retrieves the distance travelled by cel celn of action anid.
 ***************************************************************************/
-bool TMPL::FGetGrfactn(long anid, uint32_t *pgrfactn)
+bool TMPL::FGetGrfactn(int32_t anid, uint32_t *pgrfactn)
 {
     AssertThis(0);
     AssertIn(anid, 0, _cactn);
@@ -843,8 +843,8 @@ bool TMPL::FSetDefaultCost(BODY *pbody)
     AssertThis(0);
     AssertPo(pbody, 0);
 
-    long ibset;
-    long cmid;
+    int32_t ibset;
+    int32_t cmid;
     PCMTL *prgpcmtl;
     bool fRet = fFalse;
 
@@ -876,26 +876,26 @@ LEnd:
 /***************************************************************************
     Returns the number of custom materials available for ibset
 ***************************************************************************/
-long TMPL::CcmidOfBset(long ibset)
+int32_t TMPL::CcmidOfBset(int32_t ibset)
 {
     AssertThis(0);
     AssertIn(ibset, 0, _cbset);
 
-    return *(long *)_pggcmid->QvFixedGet(ibset);
+    return *(int32_t *)_pggcmid->QvFixedGet(ibset);
 }
 
 /***************************************************************************
     Returns the icmid'th CMID available for ibset
 ***************************************************************************/
-long TMPL::CmidOfBset(long ibset, long icmid)
+int32_t TMPL::CmidOfBset(int32_t ibset, int32_t icmid)
 {
     AssertThis(0);
     AssertIn(ibset, 0, _cbset);
     AssertIn(icmid, 0, CcmidOfBset(ibset));
 
-    long *prgcmid;
+    int32_t *prgcmid;
 
-    prgcmid = (long *)_pggcmid->QvGet(ibset);
+    prgcmid = (int32_t *)_pggcmid->QvGet(ibset);
     return prgcmid[icmid];
 }
 
@@ -903,12 +903,12 @@ long TMPL::CmidOfBset(long ibset, long icmid)
     Tells whether ibset holds accessories by checking to see if one of
     its costumes has model children.
 ***************************************************************************/
-bool TMPL::FBsetIsAccessory(long ibset)
+bool TMPL::FBsetIsAccessory(int32_t ibset)
 {
     AssertThis(0);
     AssertIn(ibset, 0, _cbset);
 
-    long cmid;
+    int32_t cmid;
     KID kid;
 
     if (pvNil == Pcrf())
@@ -929,15 +929,15 @@ bool TMPL::FBsetIsAccessory(long ibset)
     if ibset is the parent of an accessory, that accessory is returned in
     *pibsetAcc.
 ***************************************************************************/
-bool TMPL::FIbsetAccOfIbset(long ibset, long *pibsetAcc)
+bool TMPL::FIbsetAccOfIbset(int32_t ibset, int32_t *pibsetAcc)
 {
     AssertThis(0);
     AssertIn(ibset, 0, _cbset);
     AssertVarMem(pibsetAcc);
 
-    long ibsetT;
-    long ibact;
-    long ibactPar;
+    int32_t ibsetT;
+    int32_t ibact;
+    int32_t ibactPar;
     int16_t ibsetOfIbact;
     int16_t ibsetOfIbactPar;
 
@@ -977,7 +977,7 @@ bool TMPL::FIbsetAccOfIbset(long ibset, long *pibsetAcc)
     See if cmid1 and cmid2 are for the same accessory by comparing child
     model chunks
 ***************************************************************************/
-bool TMPL::FSameAccCmids(long cmid1, long cmid2)
+bool TMPL::FSameAccCmids(int32_t cmid1, int32_t cmid2)
 {
     AssertThis(0);
 
@@ -995,7 +995,7 @@ bool TMPL::FSameAccCmids(long cmid1, long cmid2)
 /***************************************************************************
     Get a custom material.  The cmid is really the chid under the TMPL.
 ***************************************************************************/
-PCMTL TMPL::PcmtlFetch(long cmid)
+PCMTL TMPL::PcmtlFetch(int32_t cmid)
 {
     AssertThis(0);
     AssertIn(cmid, 0, _ccmid);
@@ -1029,8 +1029,8 @@ void TMPL::GetName(PSTN pstn)
 ***************************************************************************/
 void TMPL::AssertValid(uint32_t grftmpl)
 {
-    long ibset;
-    long ccmid;
+    int32_t ibset;
+    int32_t ccmid;
 
     TMPL_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglibactPar, 0);
@@ -1042,8 +1042,8 @@ void TMPL::AssertValid(uint32_t grftmpl)
     Assert(_pggcmid->IvMac() == _cbset, 0);
     for (ibset = 0; ibset < _cbset; ibset++)
     {
-        ccmid = *(long *)_pggcmid->QvFixedGet(ibset);
-        Assert(_pggcmid->Cb(ibset) / SIZEOF(long) == ccmid, 0);
+        ccmid = *(int32_t *)_pggcmid->QvFixedGet(ibset);
+        Assert(_pggcmid->Cb(ibset) / SIZEOF(int32_t) == ccmid, 0);
     }
 }
 

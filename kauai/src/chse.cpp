@@ -143,7 +143,7 @@ void CHSE::DumpBlck(PBLCK pblck)
 /***************************************************************************
     Dump raw data from memory.
 ***************************************************************************/
-void CHSE::DumpRgb(void *prgb, long cb, long cactTab)
+void CHSE::DumpRgb(void *prgb, int32_t cb, int32_t cactTab)
 {
     AssertThis(fchseDump);
     AssertIn(cb, 0, kcbMax);
@@ -172,14 +172,14 @@ void CHSE::DumpParentCmd(CTG ctgPar, CNO cnoPar, CHID chid)
 /***************************************************************************
     Dump a bitmap directive
 ***************************************************************************/
-void CHSE::DumpBitmapCmd(uint8_t bTransparent, long dxp, long dyp, PSTN pstnFile)
+void CHSE::DumpBitmapCmd(uint8_t bTransparent, int32_t dxp, int32_t dyp, PSTN pstnFile)
 {
     AssertThis(fchseDump);
     AssertPo(pstnFile, 0);
 
     STN stn;
 
-    stn.FFormatSz(PszLit("BITMAP(%d, %d, %d) \"%s\""), (long)bTransparent, dxp, dyp, pstnFile);
+    stn.FFormatSz(PszLit("BITMAP(%d, %d, %d) \"%s\""), (int32_t)bTransparent, dxp, dyp, pstnFile);
     DumpSz(stn.Psz());
 }
 
@@ -219,7 +219,7 @@ void CHSE::DumpAdoptCmd(CKI *pcki, KID *pkid)
 /***************************************************************************
     Dump the data in the _bsf
 ***************************************************************************/
-void CHSE::_DumpBsf(long cactTab)
+void CHSE::_DumpBsf(int32_t cactTab)
 {
     AssertThis(fchseDump);
     AssertIn(cactTab, 0, kcchMaxStn + 1);
@@ -227,9 +227,9 @@ void CHSE::_DumpBsf(long cactTab)
     uint8_t rgb[8], bT;
     STN stn1;
     STN stn2;
-    long cact;
-    long ib, ibMac;
-    long cb, ibT;
+    int32_t cact;
+    int32_t ib, ibMac;
+    int32_t cb, ibT;
 
     stn1.SetNil();
     for (cact = cactTab; cact-- > 0;)
@@ -303,8 +303,8 @@ void CHSE::DumpList(PGLB pglb)
     AssertThis(fchseDump);
     AssertPo(pglb, 0);
 
-    long cbEntry;
-    long iv, ivMac;
+    int32_t cbEntry;
+    int32_t iv, ivMac;
     STN stn;
     bool fAl = pglb->FIs(kclsAL);
 
@@ -350,8 +350,8 @@ void CHSE::DumpGroup(PGGB pggb)
     AssertThis(fchseDump);
     AssertPo(pggb, 0);
 
-    long cbFixed, cb;
-    long iv, ivMac;
+    int32_t cbFixed, cb;
+    int32_t iv, ivMac;
     STN stnT;
     bool fAg = pggb->FIs(kclsAG);
 
@@ -406,8 +406,8 @@ bool CHSE::FDumpStringTable(PGSTB pgstb)
     AssertThis(fchseDump);
     AssertPo(pgstb, 0);
 
-    long cbExtra;
-    long iv, ivMac;
+    int32_t cbExtra;
+    int32_t iv, ivMac;
     STN stn1;
     STN stn2;
     void *pvExtra = pvNil;

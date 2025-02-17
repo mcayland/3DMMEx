@@ -17,7 +17,7 @@ RTCLASS(MODL)
 /***************************************************************************
     Create a new PMODL based on some vertices and faces.
 ***************************************************************************/
-PMODL MODL::PmodlNew(long cbrv, BRV *prgbrv, long cbrf, BRF *prgbrf)
+PMODL MODL::PmodlNew(int32_t cbrv, BRV *prgbrv, int32_t cbrf, BRF *prgbrf)
 {
     AssertIn(cbrv, 0, ksuMax); // ushort in br_model
     AssertPvCb(prgbrv, LwMul(cbrv, SIZEOF(BRV)));
@@ -48,7 +48,7 @@ LFail:
 /***************************************************************************
     A PFNRPO to read a MODL from a file
 ***************************************************************************/
-bool MODL::FReadModl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool MODL::FReadModl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -89,11 +89,11 @@ bool MODL::_FInit(PBLCK pblck)
     AssertPo(pblck, 0);
 
     MODLF modlf;
-    long cbrgbrv;
-    long cbrgbrf;
-    long ibrv;
+    int32_t cbrgbrv;
+    int32_t cbrgbrf;
+    int32_t ibrv;
     BRV *pbrv;
-    long ibrf;
+    int32_t ibrf;
     BRF *pbrf;
     MODL *pmodlThis = this;
     char szIdentifier[SIZEOF(PMODL) + 1];
@@ -235,7 +235,7 @@ LFail:
 PMODL MODL::PmodlFromBmdl(PBMDL pbmdl)
 {
     AssertVarMem(pbmdl);
-    PMODL pmodl = (PMODL) * (long *)pbmdl->identifier;
+    PMODL pmodl = (PMODL) * (int32_t *)pbmdl->identifier;
     AssertPo(pmodl, 0);
     return pmodl;
 }
@@ -261,9 +261,9 @@ bool MODL::FWrite(PCFL pcfl, CTG ctg, CNO cno)
     AssertThis(0);
     AssertPo(pcfl, 0);
 
-    long cb;
-    long cbrgbrv;
-    long cbrgbrf;
+    int32_t cb;
+    int32_t cbrgbrv;
+    int32_t cbrgbrf;
     MODLF *pmodlf;
 
     cbrgbrv = LwMul(_pbmdl->nprepared_vertices, SIZEOF(br_vertex));
@@ -304,8 +304,8 @@ void MODL::AdjustTdfCharacter(void)
     BRS dxr = BrsHalf(dxrModl) + dxrSpacing;
     BRS dzrModl = Dzr();
     BRS dzr = BrsHalf(dzrModl);
-    long cbrv = _pbmdl->nprepared_vertices;
-    long ibrv;
+    int32_t cbrv = _pbmdl->nprepared_vertices;
+    int32_t ibrv;
 
     for (ibrv = 0; ibrv < cbrv; ibrv++)
     {
@@ -329,7 +329,7 @@ void MODL::AdjustTdfCharacter(void)
     Prelight a model
     REVIEW *****: make this code more general
 ***************************************************************************/
-bool MODL::_FPrelight(long cblit, BVEC3 *prgbvec3Light)
+bool MODL::_FPrelight(int32_t cblit, BVEC3 *prgbvec3Light)
 {
     AssertIn(cblit, 1, 10);
     AssertPvCb(prgbvec3Light, LwMul(cblit, SIZEOF(BVEC3)));
@@ -342,7 +342,7 @@ bool MODL::_FPrelight(long cblit, BVEC3 *prgbvec3Light)
     PBACT pbactLight;
     BLIT blit;
     PBMTL pbmtl;
-    long iblit;
+    int32_t iblit;
     BCAM bcam = {"bah",
                  BR_CAMERA_PERSPECTIVE,
                  BR_ANGLE_DEG(60.0), // REVIEW *****
@@ -358,7 +358,7 @@ bool MODL::_FPrelight(long cblit, BVEC3 *prgbvec3Light)
     const br_ufraction kbrufKdHilite = BR_UFRACTION(0.60);
     const br_ufraction kbrufKsHilite = BR_UFRACTION(0.00);
     const BRS krPowerHilite = BR_SCALAR(50);
-    const long kiclrHilite = 108; // palette index for hilite color
+    const int32_t kiclrHilite = 108; // palette index for hilite color
 
     ClearPb(&blit, SIZEOF(BLIT));
     blit.colour = BR_COLOUR_RGB(0xff, 0xff, 0xff);
@@ -422,7 +422,7 @@ void MODL::AssertValid(uint32_t grf)
 {
     MODL_PAR::AssertValid(fobjAllocated);
     AssertVarMem(_pbmdl);
-    Assert((PMODL) * (long *)_pbmdl->identifier == this, "Bad MODL identifier");
+    Assert((PMODL) * (int32_t *)_pbmdl->identifier == this, "Bad MODL identifier");
 }
 
 /***************************************************************************

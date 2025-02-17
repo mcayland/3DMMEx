@@ -17,7 +17,7 @@ ASSERTNAME
 /***************************************************************************
     Fill a block with a specific byte value.
 ***************************************************************************/
-void FillPb(void *pv, long cb, uint8_t b)
+void FillPb(void *pv, int32_t cb, uint8_t b)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv, cb);
@@ -28,7 +28,7 @@ void FillPb(void *pv, long cb, uint8_t b)
 /***************************************************************************
     Clear a block.
 ***************************************************************************/
-void ClearPb(void *pv, long cb)
+void ClearPb(void *pv, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv, cb);
@@ -40,7 +40,7 @@ void ClearPb(void *pv, long cb)
     Reverse a block. Useful for exchanging two blocks or avoiding
     recursion.
 ***************************************************************************/
-void ReversePb(void *pv, long cb)
+void ReversePb(void *pv, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv, cb);
@@ -93,7 +93,7 @@ LDone:
 /***************************************************************************
     Reverse a list of shorts.
 ***************************************************************************/
-void ReverseRgsw(void *pv, long csw)
+void ReverseRgsw(void *pv, int32_t csw)
 {
     AssertIn(csw, 0, kcbMax);
     AssertPvCb(pv, csw * SIZEOF(int16_t));
@@ -130,10 +130,10 @@ LDone:
 
 #else //! IN_80386
 
-    long *psw1, *psw2;
-    long sw;
+    int32_t *psw1, *psw2;
+    int32_t sw;
 
-    for (psw2 = (psw1 = reinterpret_cast<long *>(pv)) + csw - 1; psw1 < psw2;)
+    for (psw2 = (psw1 = reinterpret_cast<int32_t *>(pv)) + csw - 1; psw1 < psw2;)
     {
         sw = *psw1;
         *psw1++ = *psw2;
@@ -146,10 +146,10 @@ LDone:
 /***************************************************************************
     Reverse a list of longs.
 ***************************************************************************/
-void ReverseRglw(void *pv, long clw)
+void ReverseRglw(void *pv, int32_t clw)
 {
     AssertIn(clw, 0, kcbMax);
-    AssertPvCb(pv, clw * SIZEOF(long));
+    AssertPvCb(pv, clw * SIZEOF(int32_t));
 
 #ifdef IN_80386
 
@@ -183,10 +183,10 @@ LDone:
 
 #else //! IN_80386
 
-    long *plw1, *plw2;
-    long lw;
+    int32_t *plw1, *plw2;
+    int32_t lw;
 
-    for (plw2 = (plw1 = (long *)pv) + clw - 1; plw1 < plw2;)
+    for (plw2 = (plw1 = (int32_t *)pv) + clw - 1; plw1 < plw2;)
     {
         lw = *plw1;
         *plw1++ = *plw2;
@@ -199,7 +199,7 @@ LDone:
 /***************************************************************************
     Swap two adjacent blocks of size cb1 and cb2 respectively.
 ***************************************************************************/
-void SwapBlocks(void *pv, long cb1, long cb2)
+void SwapBlocks(void *pv, int32_t cb1, int32_t cb2)
 {
     AssertIn(cb1, 0, kcbMax);
     AssertIn(cb2, 0, kcbMax);
@@ -213,7 +213,7 @@ void SwapBlocks(void *pv, long cb1, long cb2)
 /***************************************************************************
     Swap the contents of two blocks of the same size.
 ***************************************************************************/
-void SwapPb(void *pv1, void *pv2, long cb)
+void SwapPb(void *pv1, void *pv2, int32_t cb)
 {
     AssertPvCb(pv1, cb);
     AssertPvCb(pv2, cb);
@@ -287,7 +287,7 @@ LDone:
     appropriately. prgv is the array of elements and cbElement is the
     size of each element.
 ***************************************************************************/
-void MoveElement(void *prgv, long cbElement, long ivSrc, long ivTarget)
+void MoveElement(void *prgv, int32_t cbElement, int32_t ivSrc, int32_t ivTarget)
 {
     AssertIn(cbElement, 0, kcbMax);
     AssertIn(ivSrc, 0, kcbMax);
@@ -312,7 +312,7 @@ void MoveElement(void *prgv, long cbElement, long ivSrc, long ivTarget)
 /***************************************************************************
     Check for equality of two blocks.
 ***************************************************************************/
-bool FEqualRgb(const void *pv1, const void *pv2, long cb)
+bool FEqualRgb(const void *pv1, const void *pv2, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);
@@ -325,7 +325,7 @@ bool FEqualRgb(const void *pv1, const void *pv2, long cb)
     Compare the two buffers byte for byte and return a the number of bytes
     that match.
 ***************************************************************************/
-long CbEqualRgb(const void *pv1, const void *pv2, long cb)
+int32_t CbEqualRgb(const void *pv1, const void *pv2, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);
@@ -383,9 +383,9 @@ LHit:
     // Compare the buffers four bytes at a time
     if (cb >= 4)
     {
-        const long *plw1 = (const long *)pv1;
-        const long *plw2 = (const long *)pv2;
-        long clw = cb >> 2;
+        const int32_t *plw1 = (const int32_t *)pv1;
+        const int32_t *plw2 = (const int32_t *)pv2;
+        int32_t clw = cb >> 2;
 
         for (; clw-- > 0 && *plw1 == *plw2; plw1++, plw2++)
         {
@@ -396,7 +396,7 @@ LHit:
         pb1 = (uint8_t *)plw1;
         pb2 = (uint8_t *)plw2;
 
-        long cbMatch = (pb1 - (uint8_t *)pv1);
+        int32_t cbMatch = (pb1 - (uint8_t *)pv1);
         cb = cb - cbMatch;
     }
 
@@ -414,13 +414,13 @@ LHit:
     Compare the two buffers byte for byte and return an fcmp indicating
     their relationship to each other.
 ***************************************************************************/
-uint32_t FcmpCompareRgb(const void *pv1, const void *pv2, long cb)
+uint32_t FcmpCompareRgb(const void *pv1, const void *pv2, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);
     AssertPvCb(pv2, cb);
 
-    long cbMatch = CbEqualRgb(pv1, pv2, cb);
+    int32_t cbMatch = CbEqualRgb(pv1, pv2, cb);
 
     AssertIn(cbMatch, 0, cb + 1);
     if (cb == cbMatch)
@@ -432,7 +432,7 @@ uint32_t FcmpCompareRgb(const void *pv1, const void *pv2, long cb)
 /***************************************************************************
     Copy data without overlap.
 ****************************************************************************/
-void CopyPb(const void *pv1, void *pv2, long cb)
+void CopyPb(const void *pv1, void *pv2, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);
@@ -445,7 +445,7 @@ void CopyPb(const void *pv1, void *pv2, long cb)
 /***************************************************************************
     Copy data with possible overlap.
 ***************************************************************************/
-void BltPb(const void *pv1, void *pv2, long cb)
+void BltPb(const void *pv1, void *pv2, int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     AssertPvCb(pv1, cb);

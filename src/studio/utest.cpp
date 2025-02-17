@@ -52,7 +52,7 @@ const uint32_t kcbCacheTagm = 2048 * 1024;
 static PSZ kpszAppWndCls = PszLit("3DMOVIE");
 const PSZ kpszOpenFile = PszLit("3DMMOpen.tmp");
 
-const long klwOpenDoc = 0x12123434; // arbitrary wParam for WM_USER
+const int32_t klwOpenDoc = 0x12123434; // arbitrary wParam for WM_USER
 
 BEGIN_CMD_MAP(APP, APPB)
 ON_CID_GEN(cidInfo, &APP::FCmdInfo, pvNil)
@@ -95,7 +95,7 @@ void FrameMain(void)
         long ginDef  -- default GOB invalidation
 
 ************************************************************ PETED ***********/
-void APP::Run(uint32_t grfapp, uint32_t grfgob, long ginDef)
+void APP::Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
     /* Don't bother w/ AssertThis; we'd have to use AssertBaseThis, or
         possibly the parent's AssertValid, which gets done almost right
@@ -104,7 +104,7 @@ void APP::Run(uint32_t grfapp, uint32_t grfgob, long ginDef)
     _CleanupTemp();
 
     // Get stereo sound preference from registry
-    long lwValue = fFalse;
+    int32_t lwValue = fFalse;
     (void)FGetSetRegKey(kszStereoSound, &lwValue, SIZEOF(lwValue), fregNil);
     if (FPure(lwValue))
     {
@@ -166,24 +166,24 @@ void APP::GetStnAppName(PSTN pstn)
 #ifdef DEBUG
 struct DBINFO
 {
-    long cactAV;
+    int32_t cactAV;
 };
 #endif // DEBUG
 
 /***************************************************************************
     Init the APP
 ***************************************************************************/
-bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
     AssertBaseThis(0);
 
     uint32_t tsHomeLogo;
     uint32_t tsSplashScreen;
     FNI fniUserDoc;
-    long fFirstTimeUser;
+    int32_t fFirstTimeUser;
 
     // Load startup preferences
-    long fStartupSound = kfStartupSoundDefault;
+    int32_t fStartupSound = kfStartupSoundDefault;
     (void)FGetSetRegKey(kszStartupSoundValue, &fStartupSound, SIZEOF(fStartupSound), fregNil);
 
     // Only allow one copy of 3DMM to run at a time:
@@ -591,9 +591,9 @@ bool APP::_FEnsureAudio(void)
     AssertBaseThis(0);
 
 #ifdef WIN
-    long cwod; // count of wave-out devices
-    long cmod; // count of midi-out devices
-    long fShowMessage;
+    int32_t cwod; // count of wave-out devices
+    int32_t cmod; // count of midi-out devices
+    int32_t fShowMessage;
     PDLG pdlg;
 
     cwod = waveOutGetNumDevs();
@@ -706,7 +706,7 @@ bool APP::_FEnsureColorDepth(void)
 
 #ifdef WIN
     HDC hdc;
-    long cbitPixel;
+    int32_t cbitPixel;
     PDLG pdlg;
     bool fShowMessage;
     bool fDontShowAgain = fFalse;
@@ -768,14 +768,14 @@ bool APP::_FEnsureColorDepth(void)
     the dialog) if kdtsMaxResSwitchDlg has passed since the dialog was
     created.
 ***************************************************************************/
-bool _FDlgResSwitch(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgResSwitch(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
-    AssertPvCb(pv, SIZEOF(long));
+    AssertPvCb(pv, SIZEOF(int32_t));
 
-    long tsResize = *(long *)pv;
-    long tsCur;
+    int32_t tsResize = *(int32_t *)pv;
+    int32_t tsCur;
 
     if (*pidit != ivNil)
     {
@@ -805,10 +805,10 @@ bool APP::_FEnsureDisplayResolution(void)
     AssertBaseThis(0);
 
     PDLG pdlg;
-    long idit;
-    long fSwitchRes;
+    int32_t idit;
+    int32_t fSwitchRes;
     bool fNoValue;
-    long tsResize;
+    int32_t tsResize;
 
     if (_FDisplayIs640480())
     {
@@ -942,10 +942,10 @@ bool APP::_FInitOS(void)
     AssertBaseThis(0);
 
 #ifdef WIN
-    long dxpWindow;
-    long dypWindow;
-    long xpWindow;
-    long ypWindow;
+    int32_t dxpWindow;
+    int32_t dypWindow;
+    int32_t xpWindow;
+    int32_t ypWindow;
     DWORD dwStyle = 0;
     STN stnWindowTitle;
 
@@ -1012,7 +1012,7 @@ bool APP::_FInitOS(void)
     should pass in the current dwStyle if the window already exists.  If
     the window does not already exist, pass in 0.
 ***************************************************************************/
-void APP::_GetWindowProps(long *pxp, long *pyp, long *pdxp, long *pdyp, DWORD *pdwStyle)
+void APP::_GetWindowProps(int32_t *pxp, int32_t *pyp, int32_t *pdxp, int32_t *pdyp, DWORD *pdwStyle)
 {
     AssertBaseThis(0);
     AssertVarMem(pxp);
@@ -1059,10 +1059,10 @@ void APP::_RebuildMainWindow(void)
     Assert(_fMainWindowCreated, 0);
 
 #ifdef WIN
-    long dxpWindow;
-    long dypWindow;
-    long xpWindow;
-    long ypWindow;
+    int32_t dxpWindow;
+    int32_t dypWindow;
+    int32_t xpWindow;
+    int32_t ypWindow;
     DWORD dwStyle;
 
     dwStyle = GetWindowLong(vwig.hwndApp, GWL_STYLE);
@@ -1326,7 +1326,7 @@ bool APP::_FGetUserName(void)
 *******************************/
 struct UDAT
 {
-    long rglw[kcpridUserData];
+    int32_t rglw[kcpridUserData];
 };
 
 /***************************************************************************
@@ -1338,8 +1338,8 @@ bool APP::_FReadUserData(void)
     AssertBaseThis(0);
 
     UDAT udat;
-    long iprid;
-    long fEnableFeature;
+    int32_t iprid;
+    int32_t fEnableFeature;
 
     ClearPb(&udat, SIZEOF(UDAT));
 
@@ -1373,7 +1373,7 @@ bool APP::_FWriteUserData(void)
     AssertBaseThis(0);
 
     UDAT udat;
-    long iprid;
+    int32_t iprid;
 
     for (iprid = 0; iprid < kcpridUserData; iprid++)
     {
@@ -1407,7 +1407,7 @@ bool APP::_FWriteUserData(void)
     Returns:  fTrue if all actions necessary could be performed
 
 ************************************************************ PETED ***********/
-bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, uint32_t grfreg, bool *pfNoValue)
+bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg, bool *pfNoValue)
 {
     AssertBaseThis(0);
     AssertSz(pszValueName);
@@ -1426,7 +1426,7 @@ bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, uint32_t gr
     DWORD dwDisposition;
     DWORD dwCbData = cbData;
     DWORD dwType;
-    long lwRet;
+    int32_t lwRet;
     HKEY hkey = 0;
     REGSAM samDesired = (fSetKey || fSetDefault) ? KEY_ALL_ACCESS : KEY_READ;
 
@@ -1604,9 +1604,9 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
     STN stnTitle;
     DWORD cchTitle = kcchMaxSz;
     PGST pgst;
-    long sid;
+    int32_t sid;
 
-    if ((pgst = GST::PgstNew(SIZEOF(long))) == pvNil)
+    if ((pgst = GST::PgstNew(SIZEOF(int32_t))) == pvNil)
         goto LFail;
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, kszProductsKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ, NULL, &hkey,
@@ -1672,7 +1672,7 @@ bool APP::_FInitTdt(void)
     pgst = _PgstRead(kcnoGstAction);
     if (pvNil == pgst)
         return fFalse;
-    Assert(pgst->CbExtra() == SIZEOF(long), "bad Action string table");
+    Assert(pgst->CbExtra() == SIZEOF(int32_t), "bad Action string table");
     if (!TDT::FSetActionNames(pgst))
     {
         ReleasePpo(&pgst);
@@ -1695,15 +1695,15 @@ PGST APP::_PgstRead(CNO cno)
     BLCK blck;
     int16_t bo;
     int16_t osk;
-    long istn;
-    long lwExtra;
+    int32_t istn;
+    int32_t lwExtra;
 
     if (!_pcfl->FFind(kctgGst, cno, &blck))
         return pvNil;
     pgst = GST::PgstRead(&blck, &bo, &osk);
     if (pvNil == pgst)
         return pvNil;
-    Assert(pgst->CbExtra() == 0 || pgst->CbExtra() == SIZEOF(long), "unexpected extra size");
+    Assert(pgst->CbExtra() == 0 || pgst->CbExtra() == SIZEOF(int32_t), "unexpected extra size");
     if (kboCur != bo && 0 != pgst->CbExtra())
     {
         for (istn = 0; istn < pgst->IvMac(); istn++)
@@ -1823,11 +1823,11 @@ bool APP::_FInitCrm(void)
     if (pvNil == _pcrmAll)
         goto LFail;
 
-    _pglicrfBuilding = GL::PglNew(SIZEOF(long), _pgstBuildingFiles->IvMac());
+    _pglicrfBuilding = GL::PglNew(SIZEOF(int32_t), _pgstBuildingFiles->IvMac());
     if (pvNil == _pglicrfBuilding)
         goto LFail;
 
-    _pglicrfStudio = GL::PglNew(SIZEOF(long), _pgstStudioFiles->IvMac());
+    _pglicrfStudio = GL::PglNew(SIZEOF(int32_t), _pgstStudioFiles->IvMac());
     if (pvNil == _pglicrfStudio)
         goto LFail;
 
@@ -1878,10 +1878,10 @@ bool APP::_FAddToCrm(PGST pgstFiles, PCRM pcrm, PGL pglFiles)
     bool fRet = fFalse;
     FNI fni;
     STN stn;
-    long istn;
-    long cbCache;
+    int32_t istn;
+    int32_t cbCache;
     PCFL pcfl = pvNil;
-    long icfl;
+    int32_t icfl;
 
     for (istn = 0; istn < pgstFiles->IvMac(); istn++)
     {
@@ -1945,9 +1945,9 @@ bool APP::_FInitBuilding(void)
     AssertBaseThis(0);
 
     bool fRet = fFalse;
-    long i;
-    long cbCache;
-    long iv;
+    int32_t i;
+    int32_t cbCache;
+    int32_t iv;
     PCRF pcrfT;
     PSCEG psceg = pvNil;
     PSCPT pscpt = pvNil;
@@ -2002,9 +2002,9 @@ bool APP::_FInitStudio(PFNI pfniUserDoc, bool fFailIfDocOpenFailed)
 {
     AssertBaseThis(0);
 
-    long i;
-    long cbCache;
-    long iv;
+    int32_t i;
+    int32_t cbCache;
+    int32_t iv;
     PCRF pcrfT;
     bool fRet = fFalse;
 
@@ -2051,7 +2051,7 @@ bool APP::_FDetermineIfSlowCPU(void)
 {
     AssertBaseThis(0);
 
-    long fSlowCPU;
+    int32_t fSlowCPU;
 
     // If user has a saved preference, read and use that
     if (FGetSetRegKey(kszBetterSpeedValue, &fSlowCPU, SIZEOF(fSlowCPU), fregNil))
@@ -2076,7 +2076,7 @@ bool APP::_FDetermineIfSlowCPU(void)
     uint32_t dts1;
     uint32_t dts2;
     uint32_t dts3;
-    long i;
+    int32_t i;
     char *pch1 = pvNil;
     char *pch2 = pvNil;
     BRS r1;
@@ -2409,7 +2409,7 @@ bool APP::_FFindProductDir(PGST pgst)
     STN stnShort;
     STN stn;
     FNI fni;
-    long istn;
+    int32_t istn;
 
     if (_FQueryProductExists(&_stnProductLong, &_stnProductShort, &_fniProductDir))
         return fTrue;
@@ -2602,7 +2602,7 @@ bool APP::FCmdDeactivate(PCMD pcmd)
     GTE gte;
     PGOB pgob;
     uint32_t grfgte;
-    long lwRet;
+    int32_t lwRet;
     CMD_MOUSE cmd;
     PT pt;
     bool fDoQuit;
@@ -2806,7 +2806,7 @@ bool APP::FCmdLoadStudio(PCMD pcmd)
 
     FNI fniUserDoc;
     CHID chidProject;
-    long kidBuilding;
+    int32_t kidBuilding;
     PGOB pgob;
     PGOK pgokBackground;
 
@@ -2853,7 +2853,7 @@ bool APP::FCmdLoadBuilding(PCMD pcmd)
 
     if ((_pstdio != pvNil) && !_pstdio->FShutdown())
     {
-        long kgobReturn;
+        int32_t kgobReturn;
 
         // This attempt may have destroyed the contents of kpridBuildingGob;
         // Try to reset it from kpridBuildingGobT.
@@ -2923,7 +2923,7 @@ bool APP::FCmdTheaterOpen(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long kidParent;
+    int32_t kidParent;
 
     kidParent = pcmd->rglw[0];
 
@@ -2977,7 +2977,7 @@ bool APP::FCmdPortfolioOpen(PCMD pcmd)
 
     FNI fni;
     bool fOKed;
-    long idsTitle, idsFilterLabel, idsFilterExt;
+    int32_t idsTitle, idsFilterLabel, idsFilterExt;
     FNI fniUsersDir;
     PFNI pfni;
     uint32_t grfPrevType;
@@ -3066,7 +3066,7 @@ bool APP::FCmdPortfolioOpen(PCMD pcmd)
         Retrieves the default onn for this app.  Gets the name from the app's
         string table.
 ************************************************************ PETED ***********/
-long APP::OnnDefVariable(void)
+int32_t APP::OnnDefVariable(void)
 {
     AssertBaseThis(0);
 
@@ -3098,7 +3098,7 @@ long APP::OnnDefVariable(void)
     Returns:  fTrue if the original font could be found.
 
 ************************************************************ PETED ***********/
-bool APP::FGetOnn(PSTN pstn, long *ponn)
+bool APP::FGetOnn(PSTN pstn, int32_t *ponn)
 {
     AssertBaseThis(0);
 
@@ -3118,7 +3118,7 @@ bool APP::FGetOnn(PSTN pstn, long *ponn)
 /***************************************************************************
     Return the size of memory
 ***************************************************************************/
-void APP::MemStat(long *pdwTotalPhys, long *pdwAvailPhys)
+void APP::MemStat(int32_t *pdwTotalPhys, int32_t *pdwAvailPhys)
 {
 #ifdef WIN
     MEMORYSTATUS ms;
@@ -3139,7 +3139,7 @@ void APP::MemStat(long *pdwTotalPhys, long *pdwAvailPhys)
         a string from the app's string table, then converts it to the number
         value.
 ************************************************************ PETED ***********/
-long APP::DypTextDef(void)
+int32_t APP::DypTextDef(void)
 {
     AssertBaseThis(0);
 
@@ -3165,9 +3165,9 @@ tribool APP::TQuerySaveDoc(PDOCB pdocb, bool fForce)
     AssertPo(pdocb, 0);
 
     STN stnName;
-    long tpc;
+    int32_t tpc;
     STN stnBackup;
-    long bk;
+    int32_t bk;
     tribool tResult;
 
     pdocb->GetName(&stnName);
@@ -3312,12 +3312,12 @@ bool APP::FCmdInfo(PCMD pcmd)
     AssertThis(0);
     PMVIE pmvie = pvNil;
     PDLG pdlg;
-    long idit;
+    int32_t idit;
     bool fRunInWindowNew;
     STN stn;
     STN stnT;
     bool fSaveChanges;
-    long lwValue = 0;
+    int32_t lwValue = 0;
     bool fValue = fFalse;
 
     pmvie = _Pmvie();
@@ -3376,7 +3376,7 @@ bool APP::FCmdInfo(PCMD pcmd)
     }
     if (fSaveChanges)
     {
-        long fSlowCPU = _fSlowCPU;
+        int32_t fSlowCPU = _fSlowCPU;
         FGetSetRegKey(kszBetterSpeedValue, &fSlowCPU, SIZEOF(fSlowCPU), fregSetKey);
     }
 
@@ -3420,7 +3420,7 @@ bool APP::FCmdInfo(PCMD pcmd)
     }
     if (fSaveChanges)
     {
-        long fSwitchRes = !_fRunInWindow;
+        int32_t fSwitchRes = !_fRunInWindow;
 
         FGetSetRegKey(kszSwitchResolutionValue, &fSwitchRes, SIZEOF(fSwitchRes), fregSetKey);
     }
@@ -3428,7 +3428,7 @@ bool APP::FCmdInfo(PCMD pcmd)
 #ifdef DEBUG
     {
         bool fEmpty;
-        long lwT;
+        int32_t lwT;
 
         if (pdlg->FGetLwFromEdit(iditCactAV, &lwT, &fEmpty) && !fEmpty)
         {
@@ -3455,7 +3455,7 @@ bool APP::FCmdInfo(PCMD pcmd)
     // Save startup sound preference
     if (fSaveChanges)
     {
-        long lwValue = pdlg->FGetCheck(iditStartupSound);
+        int32_t lwValue = pdlg->FGetCheck(iditStartupSound);
         AssertDo(FGetSetRegKey(kszStartupSoundValue, &lwValue, SIZEOF(lwValue), fregSetKey),
                  "can't save startup sound to registry");
     }
@@ -3563,7 +3563,7 @@ bool APP::_FSwitch640480(bool fTo640480)
     HINSTANCE hLibrary;
     PFNCHDS pfnChds;
     DEVMODE devmode;
-    long lwResult;
+    int32_t lwResult;
 
     hLibrary = LoadLibrary(PszLit("USER32.DLL"));
     if (0 == hLibrary)
@@ -3676,12 +3676,12 @@ void APP::_CleanUp(void)
 /***************************************************************************
     Put up a modal help balloon
 ***************************************************************************/
-tribool APP::TModal(PRCA prca, long tpc, PSTN pstnBackup, long bkBackup, long stidSubst, PSTN pstnSubst)
+tribool APP::TModal(PRCA prca, int32_t tpc, PSTN pstnBackup, int32_t bkBackup, int32_t stidSubst, PSTN pstnSubst)
 {
     AssertThis(0);
     AssertNilOrPo(prca, 0);
 
-    long lwSelect;
+    int32_t lwSelect;
     tribool tRet;
     STN stn;
 
@@ -3762,7 +3762,7 @@ void APP::DisplayErrors(void)
 {
     AssertThis(0);
 
-    long erc;
+    int32_t erc;
     STN stnMessage;
 
     if (vpers->FPop(&erc))
@@ -4276,7 +4276,7 @@ void APP::UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp)
     Handle Windows messages for the main app window. Return true iff the
     default window proc should _NOT_ be called.
 ***************************************************************************/
-bool APP::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APP::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet)
 {
     AssertBaseThis(0);
     AssertVarMem(plwRet);
@@ -4292,7 +4292,7 @@ bool APP::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plw
 
     case WM_SIZE: {
         bool fRet;
-        long lwStyle;
+        int32_t lwStyle;
 
         fRet = APP_PAR::_FFrameWndProc(hwnd, wm, wParam, lw, plwRet);
         lwStyle = GetWindowLong(hwnd, GWL_STYLE);
@@ -4723,7 +4723,7 @@ bool KWA::FFindFile(PSTN pstnSrc, PFNI pfni)
 /***************************************************************************
     Do a modal help topic.
 ***************************************************************************/
-bool KWA::FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet)
+bool KWA::FModalTopic(PRCA prca, CNO cnoTopic, int32_t *plwRet)
 {
     AssertThis(0);
     AssertPo(prca, 0);

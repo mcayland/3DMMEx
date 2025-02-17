@@ -50,8 +50,8 @@ BEGIN_CMD_MAP(TSCG, GOB)
 ON_CID_GEN(cidClose, &GOB::FCmdCloseWnd, pvNil)
 END_CMD_MAP_NIL()
 
-bool _FGetCtg(PDLG pdlg, long idit, CTG *pctg);
-void _PutCtgStn(PDLG pdlg, long idit, CTG ctg);
+bool _FGetCtg(PDLG pdlg, int32_t idit, CTG *pctg);
+void _PutCtgStn(PDLG pdlg, int32_t idit, CTG ctg);
 
 RTCLASS(DOC)
 RTCLASS(DOCE)
@@ -81,17 +81,17 @@ struct ADCD
     CKI cki;
 };
 
-bool _FDlgAddChunk(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgAddChunk(PDLG pdlg, int32_t *pidit, void *pv);
 
 /***************************************************************************
     Dialog proc for Add Chunk dialog. pv should be a padcd.
 ***************************************************************************/
-bool _FDlgAddChunk(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgAddChunk(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
     CTG ctg;
-    long lw;
+    int32_t lw;
     bool fEmpty;
     ADCD *padcd = (ADCD *)pv;
 
@@ -119,7 +119,7 @@ bool _FDlgAddChunk(PDLG pdlg, long *pidit, void *pv)
             return fFalse;
         }
         AssertPo(padcd->pcfl, 0);
-        if (!fEmpty && (!padcd->fCkiValid || ctg != padcd->cki.ctg || lw != (long)padcd->cki.cno) &&
+        if (!fEmpty && (!padcd->fCkiValid || ctg != padcd->cki.ctg || lw != (int32_t)padcd->cki.cno) &&
             padcd->pcfl->FFind(ctg, lw))
         {
             tribool tRet = vpappb->TGiveAlertSz(PszLit("A chunk with this CTG & CNO")
@@ -364,7 +364,7 @@ void DOCE::GetName(PSTN pstn)
 /***************************************************************************
     Save the document. Handles cidSave, cidSaveAs and cidSaveCopy.
 ***************************************************************************/
-bool DOCE::FSave(long cid)
+bool DOCE::FSave(int32_t cid)
 {
     AssertThis(0);
     CTG ctg;
@@ -381,8 +381,8 @@ bool DOCE::FSave(long cid)
 
     case cidSaveAs:
     case cidSaveCopy:
-        long idit;
-        long lw;
+        int32_t idit;
+        int32_t lw;
         ADCD adcd;
 
         // put up the dialog
@@ -451,7 +451,7 @@ bool DOCE::_FSaveToChunk(CTG ctg, CNO cno, bool fRedirect)
     CNO cnoT;
     CKI cki;
     BLCK blck;
-    long cb = _CbOnFile();
+    int32_t cb = _CbOnFile();
 
     // if the chunk already exists, add a temporary chunk, swap the data
     // between the two chunks, then delete the temporary chunk.
@@ -527,7 +527,7 @@ DCLB::DCLB(PDOCB pdocb, PGCB pgcb) : DDG(pdocb, pgcb)
     Return the ln that corresponds with the given yp value. If yp is in
     the header, returns lnNil.
 ***************************************************************************/
-long DCLB::_LnFromYp(long yp)
+int32_t DCLB::_LnFromYp(int32_t yp)
 {
     AssertThis(0);
     if (yp < _dypHeader)
@@ -538,12 +538,12 @@ long DCLB::_LnFromYp(long yp)
 /***************************************************************************
     Perform a scroll according to scaHorz and scaVert.
 ***************************************************************************/
-void DCLB::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
+void DCLB::_Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz, int32_t scvVert)
 {
     AssertThis(0);
     RC rc;
-    long dscvHorz, dscvVert;
-    long dxp, dyp;
+    int32_t dscvHorz, dscvVert;
+    int32_t dxp, dyp;
 
     _GetContent(&rc);
     dscvHorz = dscvVert = 0;
@@ -603,7 +603,7 @@ void DCLB::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
 /***************************************************************************
     Move the bits in the window.
 ***************************************************************************/
-void DCLB::_ScrollDxpDyp(long dxp, long dyp)
+void DCLB::_ScrollDxpDyp(int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     RC rc;
@@ -708,7 +708,7 @@ void DCD::InvalAllDcd(PDOCB pdocb, PCFL pcfl, CKI *pcki, KID *pkid)
     AssertPo(pcfl, 0);
     AssertNilOrVarMem(pcki);
     AssertNilOrVarMem(pkid);
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
     PDCD pdcd;
 
@@ -737,7 +737,7 @@ void DCD::_InvalCkiKid(CKI *pcki, KID *pkid)
     AssertNilOrVarMem(pcki);
     AssertNilOrVarMem(pkid);
     RC rc;
-    long lnMin;
+    int32_t lnMin;
 
     // we need to recalculate the lnLim
     _sel.InvalLim();
@@ -781,8 +781,8 @@ void DCD::Draw(PGNV pgnv, RC *prcClip)
     STN stn;
     STN stnT;
     RC rc;
-    long yp, xp;
-    long ikid, cckiRef;
+    int32_t yp, xp;
+    int32_t ikid, cckiRef;
     CKI cki;
     KID kid;
     BLCK blck;
@@ -880,7 +880,7 @@ void DCD::_DrawSel(PGNV pgnv)
     AssertThis(0);
     AssertPo(pgnv, 0);
     RC rc;
-    long ln;
+    int32_t ln;
 
     if (lnNil == (ln = _sel.Ln()))
         return;
@@ -895,7 +895,7 @@ void DCD::_DrawSel(PGNV pgnv)
 /***************************************************************************
     Set the selection to the given ln.
 ***************************************************************************/
-void DCD::_SetSel(long ln, CKI *pcki, KID *pkid)
+void DCD::_SetSel(int32_t ln, CKI *pcki, KID *pkid)
 {
     AssertThis(0);
     AssertNilOrVarMem(pcki);
@@ -935,7 +935,7 @@ void DCD::_ShowSel(void)
 {
     AssertThis(0);
     RC rc;
-    long ln, lnLim;
+    int32_t ln, lnLim;
 
     if (lnNil == (ln = _sel.Ln()))
         _Scroll(scaNil, scaToVal, 0, _scvVert);
@@ -953,14 +953,14 @@ void DCD::_ShowSel(void)
 /***************************************************************************
     Handle a mouse down in our content.
 ***************************************************************************/
-void DCD::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
+void DCD::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
     PGOB pgob;
     PDCD pdcd, pdcdNew;
     PT pt, ptT;
     bool fDown;
-    long ln, lnNew;
+    int32_t ln, lnNew;
     CKI cki, ckiNew;
     KID kid;
     uint32_t grfsel;
@@ -1079,7 +1079,7 @@ void DCD::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 /***************************************************************************
     Hilite the line (to indicate a drag target)
 ***************************************************************************/
-void DCD::_HiliteLn(long ln)
+void DCD::_HiliteLn(int32_t ln)
 {
     AssertThis(0);
     RC rc;
@@ -1103,7 +1103,7 @@ bool DCD::FCmdReopen(PCMD pcmd)
     CKI cki;
     KID kid;
     uint32_t grfsel;
-    long lnOld;
+    int32_t lnOld;
 
     if (tYes != vpappb->TGiveAlertSz(PszLit("Nuke all changes since the last save?"), bkYesNo, cokQuestion))
     {
@@ -1150,7 +1150,7 @@ bool DCD::FCmdReopen(PCMD pcmd)
 bool DCD::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
-    long ln, lnLim, lnNew, cln;
+    int32_t ln, lnLim, lnNew, cln;
     uint32_t grfsel;
     KID kid;
     CKI cki;
@@ -1247,7 +1247,7 @@ bool DCD::FCmdKey(PCMD_KEY pcmd)
 /***************************************************************************
     Return the maximum for the indicated scroll bar.
 ***************************************************************************/
-long DCD::_ScvMax(bool fVert)
+int32_t DCD::_ScvMax(bool fVert)
 {
     AssertThis(0);
 
@@ -1328,8 +1328,8 @@ bool DCD::_FAddChunk(CTG ctgDef, CKI *pcki, bool *pfCreated)
 {
     AssertVarMem(pcki);
     AssertVarMem(pfCreated);
-    long idit;
-    long lw;
+    int32_t idit;
+    int32_t lw;
     bool fEmpty;
     PDLG pdlg;
     ADCD adcd;
@@ -1396,7 +1396,7 @@ bool DCD::FCmdAddChunk(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
     CKI cki;
-    long lnOld;
+    int32_t lnOld;
     bool fCreated;
 
     // save and clear the sel
@@ -1425,8 +1425,8 @@ bool DCD::FCmdAddPicChunk(PCMD pcmd)
     AssertVarMem(pcmd);
     CKI cki;
     BLCK blck;
-    long cb;
-    long lnOld;
+    int32_t cb;
+    int32_t lnOld;
     FNI fni;
     bool fCreated;
     PPIC ppic = pvNil;
@@ -1482,16 +1482,16 @@ enum
     kiditDefaultMbmp,
     kiditLimMbmp
 };
-bool _FDlgMbmp(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgMbmp(PDLG pdlg, int32_t *pidit, void *pv);
 
 /****************************************************************************
     Dialog proc for input of transparent pixel value and reference point
 ****************************************************************************/
-bool _FDlgMbmp(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgMbmp(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
-    long lw;
+    int32_t lw;
 
     switch (*pidit)
     {
@@ -1503,7 +1503,7 @@ bool _FDlgMbmp(PDLG pdlg, long *pidit, void *pv)
             *pidit = ivNil;
             return fTrue;
         }
-        if (!pdlg->FGetLwFromEdit(kiditPixelMbmp, &lw) || !FIn(lw, 0, (long)kbMax + 1))
+        if (!pdlg->FGetLwFromEdit(kiditPixelMbmp, &lw) || !FIn(lw, 0, (int32_t)kbMax + 1))
         {
             vpappb->TGiveAlertSz(PszLit("The transparent pixel value must be ") PszLit("between 0 and 255."), bkOk,
                                  cokStop);
@@ -1538,12 +1538,12 @@ bool DCD::FCmdAddBitmapChunk(PCMD pcmd)
     AssertVarMem(pcmd);
     CKI cki;
     BLCK blck;
-    long lw;
-    long lnOld;
+    int32_t lw;
+    int32_t lnOld;
     FNI fni;
     bool fCreated;
     uint8_t bTransparent;
-    long xp, yp;
+    int32_t xp, yp;
     bool fMask = pcmd->cid != cidAddMbmpChunk;
     PBACO pbaco = pvNil;
     CTG ctg;
@@ -1567,7 +1567,7 @@ bool DCD::FCmdAddBitmapChunk(PCMD pcmd)
     pdlg->FPutLwInEdit(kiditYPosMbmp, 0);
     if (pdlg->IditDo(kiditPixelMbmp) != kiditOkMbmp)
         goto LErrDlg;
-    if (!pdlg->FGetLwFromEdit(kiditPixelMbmp, &lw) || !FIn(lw, 0, (long)kbMax + 1))
+    if (!pdlg->FGetLwFromEdit(kiditPixelMbmp, &lw) || !FIn(lw, 0, (int32_t)kbMax + 1))
     {
         goto LErrDlg;
     }
@@ -1625,7 +1625,7 @@ bool DCD::FCmdAddFileChunk(PCMD pcmd)
     CKI cki;
     PFIL pfil;
     BLCK blck;
-    long lnOld;
+    int32_t lnOld;
     FNI fni;
     bool fCreated;
 
@@ -1678,18 +1678,18 @@ struct CLAN
     PCFL pcfl;
 };
 
-bool _FDlgEditChunkInfo(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgEditChunkInfo(PDLG pdlg, int32_t *pidit, void *pv);
 
 /**************************************************************************
     Dialog proc for Edit Chunk Info dialog. *pv should be a CLAN *, with
     the cki and pcfl fields filled in (the kid field is not used).
 **************************************************************************/
-bool _FDlgEditChunkInfo(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgEditChunkInfo(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
     CKI cki;
-    long lw;
+    int32_t lw;
     bool fEmpty;
     CLAN *pclan = (CLAN *)pv;
     AssertVarMem(pclan);
@@ -1740,8 +1740,8 @@ bool _FDlgEditChunkInfo(PDLG pdlg, long *pidit, void *pv)
 bool DCD::_FEditChunkInfo(CKI *pckiOld)
 {
     AssertVarMem(pckiOld);
-    long idit;
-    long lw;
+    int32_t idit;
+    int32_t lw;
     PDLG pdlg;
     STN stn;
     CLAN clan;
@@ -1793,7 +1793,7 @@ bool DCD::FCmdEditChunkInfo(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
     CKI cki;
-    long lnOld;
+    int32_t lnOld;
 
     // record, save, and clear the sel
     if (fselCki != _sel.GrfselGetCkiKid(&cki, pvNil))
@@ -1860,18 +1860,18 @@ enum
     kiditLimChid
 };
 
-bool _FDlgChangeChid(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgChangeChid(PDLG pdlg, int32_t *pidit, void *pv);
 
 /**************************************************************************
     Dialog proc for Change CHID dialog.
 **************************************************************************/
-bool _FDlgChangeChid(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgChangeChid(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
     CHID chid;
-    long lw;
-    long ikid;
+    int32_t lw;
+    int32_t ikid;
     CLAN *pclan = (CLAN *)pv;
     AssertVarMem(pclan);
     AssertPo(pclan->pcfl, 0);
@@ -1921,10 +1921,10 @@ bool DCD::_FChangeChid(CKI *pcki, KID *pkid)
 {
     AssertVarMem(pcki);
     AssertVarMem(pkid);
-    long idit;
+    int32_t idit;
     CHID chid;
     PDLG pdlg;
-    long lw;
+    int32_t lw;
     CLAN clan;
 
     clan.cki = *pcki;
@@ -1970,7 +1970,7 @@ bool DCD::FCmdChangeChid(PCMD pcmd)
     AssertVarMem(pcmd);
     CKI cki;
     KID kid;
-    long lnOld;
+    int32_t lnOld;
 
     // record, save, and clear the sel
     if (ivNil == _sel.Icki() || ivNil == _sel.Ikid())
@@ -2007,19 +2007,19 @@ enum
     kiditChidAdopt,
     kiditLimAdopt
 };
-bool _FDlgAdoptChunk(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgAdoptChunk(PDLG pdlg, int32_t *pidit, void *pv);
 
 /***************************************************************************
     Dialog proc for Adopt Chunk dialog.
 ***************************************************************************/
-bool _FDlgAdoptChunk(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgAdoptChunk(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
-    long lw;
+    int32_t lw;
     CKI cki;
     KID kid;
-    long ikid;
+    int32_t ikid;
     bool fEmpty;
     PCFL pcfl = (PCFL)pv;
 
@@ -2122,11 +2122,11 @@ bool DCD::_FDoAdoptChunkDlg(CKI *pcki, KID *pkid)
     AssertThis(0);
     AssertNilOrVarMem(pcki);
     AssertNilOrVarMem(pkid);
-    long idit;
+    int32_t idit;
     CKI cki;
     KID kid;
-    long lnOld;
-    long lw1, lw2, lw3;
+    int32_t lnOld;
+    int32_t lw1, lw2, lw3;
     bool fEmptyChid;
     PDLG pdlg = pvNil;
 
@@ -2252,12 +2252,12 @@ bool DCD::FCmdEditChunk(PCMD pcmd)
 /***************************************************************************
     Opens a window onto the CKI's data.
 ***************************************************************************/
-void DCD::_EditCki(CKI *pcki, long cid)
+void DCD::_EditCki(CKI *pcki, int32_t cid)
 {
     AssertThis(0);
     AssertVarMem(pcki);
     PDOCE pdoce;
-    long cls;
+    int32_t cls;
     CTG ctg;
 
     // check for a doce already open on the chunk.
@@ -2412,7 +2412,7 @@ bool DCD::FCmdImportScript(PCMD pcmd)
     AssertVarMem(pcmd);
     SCCG sccg;
     CKI cki;
-    long lnOld;
+    int32_t lnOld;
     FNI fni;
     bool fCreated;
     MSFIL msfil;
@@ -2480,7 +2480,7 @@ bool DCD::FCmdTestScript(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
     CKI cki;
-    long cbCache;
+    int32_t cbCache;
 
     if (fselCki != _sel.GrfselGetCkiKid(&cki, pvNil))
         return fFalse;
@@ -2576,7 +2576,7 @@ bool DCD::FCmdPack(PCMD pcmd)
 /***************************************************************************
     Run a script. Make the crf cache cbCache large.
 ***************************************************************************/
-bool DCD::FTestScript(CTG ctg, CNO cno, long cbCache)
+bool DCD::FTestScript(CTG ctg, CNO cno, int32_t cbCache)
 {
     AssertThis(0);
     AssertIn(cbCache, 0, kcbMax);
@@ -2688,13 +2688,13 @@ void DCD::_ClearSel(void)
     REVIEW shonk: should this delete the current selection?
     REVIEW shonk: is there an easy way to make this atomic?
 ***************************************************************************/
-bool DCD::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool DCD::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     AssertThis(0);
     AssertPo(pclip, 0);
     PDOC pdoc;
     PCFL pcfl;
-    long icki;
+    int32_t icki;
     CKI cki, ckiSel;
     bool fFailed = fFalse;
 
@@ -2788,7 +2788,7 @@ bool DCD::FCmdFilterChunk(PCMD pcmd)
     CKI cki;
     KID kid;
     CTG ctg;
-    long ictg;
+    int32_t ictg;
     achar *prgch;
     achar chQuote, *psz;
 
@@ -2941,7 +2941,7 @@ bool FGetCtgFromStn(CTG *pctg, PSTN pstn)
     Pads with spaces. Fails if the text in the edit item is longer
     than 4 characters or empty.
 ***************************************************************************/
-bool _FGetCtg(PDLG pdlg, long idit, CTG *pctg)
+bool _FGetCtg(PDLG pdlg, int32_t idit, CTG *pctg)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pctg);
@@ -2954,7 +2954,7 @@ bool _FGetCtg(PDLG pdlg, long idit, CTG *pctg)
 /***************************************************************************
     Put the ctg into the indicated edit item.
 ***************************************************************************/
-void _PutCtgStn(PDLG pdlg, long idit, CTG ctg)
+void _PutCtgStn(PDLG pdlg, int32_t idit, CTG ctg)
 {
     AssertPo(pdlg, 0);
     STN stn;
@@ -3048,7 +3048,7 @@ uint32_t SEL::GrfselGetCkiKid(CKI *pcki, KID *pkid)
     Set the selection to the given line. Return true iff the resulting
     selection is not nil.
 ***************************************************************************/
-bool SEL::FSetLn(long ln)
+bool SEL::FSetLn(int32_t ln)
 {
     AssertThis(0);
     Assert(ln == lnNil || ln >= 0 && ln < kcbMax, "bad ln");
@@ -3095,7 +3095,7 @@ bool SEL::FSetLn(long ln)
 /***************************************************************************
     Get the number of active lines in the sel.
 ***************************************************************************/
-long SEL::LnLim(void)
+int32_t SEL::LnLim(void)
 {
     AssertThis(0);
 
@@ -3238,7 +3238,7 @@ bool SEL::FSetCkiKid(CKI *pcki, KID *pkid, bool fExact)
 void SEL::Adjust(bool fExact)
 {
     AssertPo(_pcfl, 0);
-    long icki, ikid;
+    int32_t icki, ikid;
 
     if (ivNil == _icki)
         goto LSetNil;
@@ -3314,7 +3314,7 @@ void SEL::HideList(bool fHide)
 /***************************************************************************
     Get the ictg'th ctg that we're filtering on.
 ***************************************************************************/
-bool SEL::FGetCtgFilter(long ictg, CTG *pctg)
+bool SEL::FGetCtgFilter(int32_t ictg, CTG *pctg)
 {
     AssertThis(0);
     AssertVarMem(pctg);
@@ -3359,7 +3359,7 @@ bool SEL::FAddCtgFilter(CTG ctg)
 ***************************************************************************/
 bool SEL::_FFilter(CTG ctg, CNO cno)
 {
-    long cctg;
+    int32_t cctg;
     CTG *qctg;
 
     if (pvNil == _pglctg || 0 == (cctg = _pglctg->IvMac()))

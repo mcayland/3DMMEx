@@ -34,7 +34,7 @@ SSCB::SSCB(PMVIE pmvie)
     _pmvie = pmvie;
 #ifdef SHOW_FPS
     _itsNext = 1;
-    for (long its = 0; its < kctsFps; its++)
+    for (int32_t its = 0; its < kctsFps; its++)
         _rgfdsc[its].ts = 0;
 #endif // SHOW_FPS
 }
@@ -59,7 +59,7 @@ PSSCB SSCB::PsscbNew(PMVIE pmvie)
     STN stn;
     GCB gcb;
     RC rcRel, rcAbs;
-    long hid;
+    int32_t hid;
 
     //
     // Create the view
@@ -172,9 +172,9 @@ bool SSCB::FCmdScroll(PCMD pcmd)
 
     bool fScene;
     bool fThumbDrag = fFalse;
-    long lwDest, cxScrollbar, lwDestOld, xp;
-    long cRangeDest, iRangeDestFirst;
-    long tool = -1;
+    int32_t lwDest, cxScrollbar, lwDestOld, xp;
+    int32_t cRangeDest, iRangeDestFirst;
+    int32_t tool = -1;
     RC rc;
     PSCEN pscen = pvNil;
 
@@ -415,11 +415,11 @@ LExecuteCmd:
  *		Length of the slidable region of the scrollbar
  *
 \*****************************************************************************/
-long SSCB::_CxScrollbar(long kidScrollbar, long kidThumb)
+int32_t SSCB::_CxScrollbar(int32_t kidScrollbar, int32_t kidThumb)
 {
     AssertThis(0);
 
-    long cxThumb, cxScrollbar;
+    int32_t cxThumb, cxScrollbar;
     PGOB pgob;
     RC rc;
 
@@ -461,8 +461,8 @@ void SSCB::Update(void)
     STN stn;
     PGOB pgob;
     RC rc;
-    long xp, dxp;
-    long cxScrollbar;
+    int32_t xp, dxp;
+    int32_t cxScrollbar;
 
     // need a valid movie ptr, also a ptr to the current scene
     if ((pvNil == _pmvie) || (pvNil == (pscen = _pmvie->Pscen())))
@@ -472,9 +472,9 @@ void SSCB::Update(void)
     if (pvNil != (pgob = ((APP *)vpappb)->Pkwa()->PgobFromHid(kidFrameScrollbar)))
     {
         // source range: [first_frame, ..., last_frame]
-        long cfrm = pscen->NfrmLast() - pscen->NfrmFirst() + 1;
+        int32_t cfrm = pscen->NfrmLast() - pscen->NfrmFirst() + 1;
         // source value: index of the current frame
-        long ifrm = pscen->Nfrm() - pscen->NfrmFirst();
+        int32_t ifrm = pscen->Nfrm() - pscen->NfrmFirst();
 
         pgob->GetRc(&rc, cooParent);
         if (cfrm < 2)
@@ -509,9 +509,9 @@ void SSCB::Update(void)
     if (pvNil != (pgob = ((APP *)vpappb)->Pkwa()->PgobFromHid(kidSceneScrollbar)))
     {
         // source range: [0, ..., num_scenes - 1]
-        long cscen = _pmvie->Cscen();
+        int32_t cscen = _pmvie->Cscen();
         // source value: index of current scene
-        long iscen = _pmvie->Iscen();
+        int32_t iscen = _pmvie->Iscen();
 
         pgob->GetRc(&rc, cooParent);
         if (cscen < 2)
@@ -561,7 +561,7 @@ void SSCB::Update(void)
 
 #ifdef SHOW_FPS
     {
-        long cfrmTail, cfrmCur;
+        int32_t cfrmTail, cfrmCur;
         uint32_t tsTail, tsCur;
         float fps;
 
@@ -636,7 +636,7 @@ void SSCB::StartNoAutoadjust(void)
 
 void SSCB::SetSndFrame(bool fSoundInFrame)
 {
-    long snoNew = fSoundInFrame ? kst2 : kst1;
+    int32_t snoNew = fSoundInFrame ? kst2 : kst1;
     PGOK pgokThumb = (PGOK)vapp.Pkwa()->PgobFromHid(kidFrameThumb);
 
     if (pgokThumb != pvNil && pgokThumb->FIs(kclsGOK))

@@ -18,7 +18,7 @@ RTCLASS(SREC)
 /***************************************************************************
     Create a new SREC
 ***************************************************************************/
-PSREC SREC::PsrecNew(long csampSec, long cchan, long cbSample, uint32_t dtsMax)
+PSREC SREC::PsrecNew(int32_t csampSec, int32_t cchan, int32_t cbSample, uint32_t dtsMax)
 {
     PSREC psrec;
 
@@ -37,12 +37,12 @@ PSREC SREC::PsrecNew(long csampSec, long cchan, long cbSample, uint32_t dtsMax)
 /***************************************************************************
     Init this SREC
 ***************************************************************************/
-bool SREC::_FInit(long csampSec, long cchan, long cbSample, uint32_t dtsMax)
+bool SREC::_FInit(int32_t csampSec, int32_t cchan, int32_t cbSample, uint32_t dtsMax)
 {
     AssertBaseThis(0);
     AssertIn(cchan, 0, ksuMax);
 
-    long cwid;
+    int32_t cwid;
 
     _csampSec = csampSec;
     _cchan = cchan;

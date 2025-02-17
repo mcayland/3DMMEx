@@ -35,7 +35,7 @@ void TestCrf(void);
 void TestUtil(void)
 {
     Bug("Assert Test");
-    long lw = 0x12345678;
+    int32_t lw = 0x12345678;
     BugVar("AssertVar test", &lw);
 
     TestInt();
@@ -135,7 +135,7 @@ void TestMem(void)
 #define kchq 18
     static HQ rghq[kchq]; // static so it's initially zeros
     HQ hqT, hq;
-    long cb, ihq;
+    int32_t cb, ihq;
 
     for (ihq = 0; ihq < kchq; ihq++)
     {
@@ -212,7 +212,7 @@ void TestMem(void)
 void TestGl(void)
 {
     short sw;
-    long isw;
+    int32_t isw;
     short *qsw;
     PGL pglsw;
 
@@ -350,7 +350,7 @@ void TestGg(void)
 {
     PGG pgg;
     uint32_t grf;
-    long cb, iv;
+    int32_t cb, iv;
     uint8_t *qb;
     PSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
@@ -456,7 +456,7 @@ void TestCfl(void)
     PCFL pcfl, pcflDst;
     BLCK blck;
     short rel;
-    long icki;
+    int32_t icki;
     CNO cno;
     CKI cki;
     EREL *perel, *perelPar;
@@ -586,8 +586,8 @@ void TestCfl(void)
 ******************************************************************************/
 void TestErs(void)
 {
-    const long cercTest = 30;
-    long erc, ercT;
+    const int32_t cercTest = 30;
+    int32_t erc, ercT;
 
     vpers->Clear();
     Assert(vpers->Cerc() == 0, "bad count of error codes on stack");

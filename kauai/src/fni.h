@@ -44,7 +44,7 @@ enum
     fvkRemovable = 0x0008,
 };
 
-typedef long FTG; // file type
+typedef int32_t FTG; // file type
 
 const FTG ftgNil = '...,';
 const FTG kftgDir = '....';
@@ -70,7 +70,7 @@ class FNI : public FNI_PAR
   private:
     FTG _ftg;
 #ifdef MAC
-    long _lwDir; // the directory id
+    int32_t _lwDir; // the directory id
     FSS _fss;
 #elif defined(WIN)
     STN _stnFile;
@@ -78,7 +78,7 @@ class FNI : public FNI_PAR
 
 #ifdef WIN
     void _SetFtgFromName(void);
-    long _CchExt(void);
+    int32_t _CchExt(void);
     bool _FChangeLeaf(PSTN pstn);
 #endif // WIN
 
@@ -89,7 +89,7 @@ class FNI : public FNI_PAR
 #ifdef MAC
     bool FGetOpen(FTG *prgftg, short cftg);
     bool FGetSave(FTG ftg, PST pstPrompt, PST pstDefault);
-    bool FBuild(long lwVol, long lwDir, PSTN pstn, FTG ftg);
+    bool FBuild(int32_t lwVol, int32_t lwDir, PSTN pstn, FTG ftg);
 #elif defined(WIN)
     bool FGetOpen(achar *prgchFilter, HWND hwndOwner);
     bool FGetSave(achar *prgchFilter, HWND hwndOwner);
@@ -131,7 +131,7 @@ class FNI : public FNI_PAR
 /****************************************
     File name enumerator.
 ****************************************/
-const long kcftgFneBase = 20;
+const int32_t kcftgFneBase = 20;
 
 enum
 {
@@ -158,22 +158,22 @@ class FNE : public FNE_PAR
     struct FES
     {
 #ifdef MAC
-        long lwVol;
-        long lwDir;
-        long iv;
+        int32_t lwVol;
+        int32_t lwDir;
+        int32_t iv;
 #endif // MAC
 #ifdef WIN
         FNI fni; // directory fni
         HN hn;   // for enumerating files/directories
         WIN32_FIND_DATA wfd;
         uint32_t grfvol; // which volumes are available (for enumerating volumes)
-        long chVol;   // which volume we're on (for enumerating volumes)
+        int32_t chVol;   // which volume we're on (for enumerating volumes)
 #endif                // WIN
     };
 
     FTG _rgftg[kcftgFneBase];
     FTG *_prgftg;
-    long _cftg;
+    int32_t _cftg;
     bool _fRecurse : 1;
     bool _fInited : 1;
     PGL _pglfes;
@@ -188,7 +188,7 @@ class FNE : public FNE_PAR
     FNE(void);
     ~FNE(void);
 
-    bool FInit(FNI *pfniDir, FTG *prgftg, long cftg, uint32_t grffne = ffneNil);
+    bool FInit(FNI *pfniDir, FTG *prgftg, int32_t cftg, uint32_t grffne = ffneNil);
     bool FNextFni(FNI *pfni, uint32_t *pgrffneOut = pvNil, uint32_t grffneIn = ffneNil);
 };
 

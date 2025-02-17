@@ -30,17 +30,17 @@
 ***************************************************************************/
 #define RTCLASS_DEC                                                                                                    \
   public:                                                                                                              \
-    static bool FWouldBe(long cls);                                                                                    \
+    static bool FWouldBe(int32_t cls);                                                                                    \
                                                                                                                        \
   public:                                                                                                              \
-    virtual bool FIs(long cls);                                                                                        \
+    virtual bool FIs(int32_t cls);                                                                                        \
                                                                                                                        \
   public:                                                                                                              \
-    virtual long Cls(void);
+    virtual int32_t Cls(void);
 
 #define RTCLASS_INLINE(foo)                                                                                            \
   public:                                                                                                              \
-    static bool FWouldBe(long cls)                                                                                     \
+    static bool FWouldBe(int32_t cls)                                                                                     \
     {                                                                                                                  \
         if (kcls##foo == cls)                                                                                          \
             return fTrue;                                                                                              \
@@ -48,29 +48,29 @@
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
-    virtual bool FIs(long cls)                                                                                         \
+    virtual bool FIs(int32_t cls)                                                                                         \
     {                                                                                                                  \
         return FWouldBe(cls);                                                                                          \
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
-    virtual long Cls(void)                                                                                             \
+    virtual int32_t Cls(void)                                                                                             \
     {                                                                                                                  \
         return kcls##foo;                                                                                              \
     }
 
 #define RTCLASS(foo)                                                                                                   \
-    bool foo::FWouldBe(long cls)                                                                                       \
+    bool foo::FWouldBe(int32_t cls)                                                                                       \
     {                                                                                                                  \
         if (kcls##foo == cls)                                                                                          \
             return fTrue;                                                                                              \
         return foo##_PAR::FWouldBe(cls);                                                                               \
     }                                                                                                                  \
-    bool foo::FIs(long cls)                                                                                            \
+    bool foo::FIs(int32_t cls)                                                                                            \
     {                                                                                                                  \
         return FWouldBe(cls);                                                                                          \
     }                                                                                                                  \
-    long foo::Cls(void)                                                                                                \
+    int32_t foo::Cls(void)                                                                                                \
     {                                                                                                                  \
         return kcls##foo;                                                                                              \
     }
@@ -97,9 +97,9 @@ const uint32_t fobjNotAllocated = 0x40000000L;
 const uint32_t fobjAllocated = 0x20000000L;
 const uint32_t fobjAssertFull = 0x10000000L;
 
-extern long vcactSuspendAssertValid;
-extern long vcactAVSave;
-extern long vcactAV;
+extern int32_t vcactSuspendAssertValid;
+extern int32_t vcactAVSave;
+extern int32_t vcactAV;
 inline void SuspendAssertValid(void)
 {
     if (0 == vcactSuspendAssertValid++)
@@ -228,14 +228,14 @@ class BASE
     ASSERT
 
   private:
-    Debug(long _lwMagic;)
+    Debug(int32_t _lwMagic;)
 
-        protected : long _cactRef;
+        protected : int32_t _cactRef;
 
   public:
 #ifdef DEBUG
-    void *operator new(size_t cb, schar *pszsFile, long lwLine);
-    void operator delete(void *pv, schar *pszsFile, long lwLine); // To prevent warning C4291
+    void *operator new(size_t cb, schar *pszsFile, int32_t lwLine);
+    void operator delete(void *pv, schar *pszsFile, int32_t lwLine); // To prevent warning C4291
     void operator delete(void *pv);
     void MarkMemStub(void);
 #else //! DEBUG
@@ -252,7 +252,7 @@ class BASE
 
     virtual void AddRef(void);
     virtual void Release(void);
-    long CactRef(void)
+    int32_t CactRef(void)
     {
         return _cactRef;
     }

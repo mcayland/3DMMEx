@@ -17,7 +17,7 @@ ASSERTNAME
 struct DLGI
 {
     PDLG pdlg;
-    long iditFocus;
+    int32_t iditFocus;
 };
 
 achar _szDlgProp[] = PszLit("DLG");
@@ -49,8 +49,8 @@ achar _szDlgProp[] = PszLit("DLG");
 bool DLG::_FInit(void)
 {
     HN hn;
-    long cbEntry;
-    long idit, csit;
+    int32_t cbEntry;
+    int32_t idit, csit;
     bool fAddDit;
     DIT dit;
     int16_t *psw;
@@ -72,7 +72,7 @@ bool DLG::_FInit(void)
 
     // get the number of items and ensure space in the GGDIT
     Assert(dtm.cdit > 0, "no items in this dialog");
-    if (!FEnsureSpace(dtm.cdit, SIZEOF(long), fgrpNil))
+    if (!FEnsureSpace(dtm.cdit, SIZEOF(int32_t), fgrpNil))
         goto LFail;
 
     // skip over the menu field
@@ -111,7 +111,7 @@ bool DLG::_FInit(void)
     for (csit = dtm.cdit, idit = 0; csit > 0; csit--)
     {
         // align to dword
-        if ((long)psw & 2)
+        if ((int32_t)psw & 2)
             psw++;
 
         // get and skip the ditm
@@ -167,7 +167,7 @@ bool DLG::_FInit(void)
             case 3:
                 // check box
                 dit.ditk = ditkCheckBox;
-                cbEntry = SIZEOF(long);
+                cbEntry = SIZEOF(int32_t);
                 break;
 
             case 4:
@@ -189,7 +189,7 @@ bool DLG::_FInit(void)
 
                 // new group
                 dit.ditk = ditkRadioGroup;
-                cbEntry = SIZEOF(long);
+                cbEntry = SIZEOF(int32_t);
                 break;
 
             default:
@@ -242,7 +242,7 @@ BOOL CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
 {
     PDLG pdlg;
     DIT dit;
-    long idit;
+    int32_t idit;
     RC rcDlg;
     RC rcDsp;
 
@@ -377,14 +377,14 @@ BOOL CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
     Actually put up the dialog and don't return until it comes down.
     Returns the idit that dismissed the dialog.  Returns ivNil on failure.
 ***************************************************************************/
-long DLG::IditDo(long iditFocus)
+int32_t DLG::IditDo(int32_t iditFocus)
 {
-    long idit;
+    int32_t idit;
     DLGI dlgi;
 
     dlgi.pdlg = this;
     dlgi.iditFocus = iditFocus;
-    idit = DialogBoxParam(vwig.hinst, MIR(_rid), vwig.hwndApp, &_FDlgCore, (long)&dlgi);
+    idit = DialogBoxParam(vwig.hinst, MIR(_rid), vwig.hwndApp, &_FDlgCore, (int32_t)&dlgi);
 
     return idit;
 }
@@ -393,7 +393,7 @@ long DLG::IditDo(long iditFocus)
     Make the given item the "focused" item and select its contents.  The
     item should be a text item or combo item.
 ***************************************************************************/
-void DLG::SelectDit(long idit)
+void DLG::SelectDit(int32_t idit)
 {
     HDLG hdlg;
     DIT dit;
@@ -416,11 +416,11 @@ void DLG::SelectDit(long idit)
 /***************************************************************************
     Get the value of a radio group.
 ***************************************************************************/
-long DLG::_LwGetRadioGroup(long idit)
+int32_t DLG::_LwGetRadioGroup(int32_t idit)
 {
     HDLG hdlg;
     DIT dit;
-    long sit;
+    int32_t sit;
 
     GetDit(idit, &dit);
     hdlg = (HDLG)_pgob->Hwnd();
@@ -439,7 +439,7 @@ long DLG::_LwGetRadioGroup(long idit)
 /***************************************************************************
     Change a radio group value.
 ***************************************************************************/
-void DLG::_SetRadioGroup(long idit, long lw)
+void DLG::_SetRadioGroup(int32_t idit, int32_t lw)
 {
     HDLG hdlg;
     DIT dit;
@@ -456,7 +456,7 @@ void DLG::_SetRadioGroup(long idit, long lw)
 /***************************************************************************
     Returns the current value of a check box.
 ***************************************************************************/
-bool DLG::_FGetCheckBox(long idit)
+bool DLG::_FGetCheckBox(int32_t idit)
 {
     HDLG hdlg;
     DIT dit;
@@ -473,7 +473,7 @@ bool DLG::_FGetCheckBox(long idit)
 /***************************************************************************
     Invert the value of a check box.
 ***************************************************************************/
-void DLG::_InvertCheckBox(long idit)
+void DLG::_InvertCheckBox(int32_t idit)
 {
     _SetCheckBox(idit, !_FGetCheckBox(idit));
 }
@@ -481,7 +481,7 @@ void DLG::_InvertCheckBox(long idit)
 /***************************************************************************
     Set the value of a check box.
 ***************************************************************************/
-void DLG::_SetCheckBox(long idit, bool fOn)
+void DLG::_SetCheckBox(int32_t idit, bool fOn)
 {
     HDLG hdlg;
     DIT dit;
@@ -498,7 +498,7 @@ void DLG::_SetCheckBox(long idit, bool fOn)
 /***************************************************************************
     Get the text from an edit control or combo.
 ***************************************************************************/
-void DLG::_GetEditText(long idit, PSTN pstn)
+void DLG::_GetEditText(int32_t idit, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -519,7 +519,7 @@ void DLG::_GetEditText(long idit, PSTN pstn)
 /***************************************************************************
     Set the text in an edit control or combo.
 ***************************************************************************/
-void DLG::_SetEditText(long idit, PSTN pstn)
+void DLG::_SetEditText(int32_t idit, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -538,7 +538,7 @@ void DLG::_SetEditText(long idit, PSTN pstn)
 /***************************************************************************
     Add a string to a combo item.
 ***************************************************************************/
-bool DLG::_FAddToList(long idit, PSTN pstn)
+bool DLG::_FAddToList(int32_t idit, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -558,13 +558,13 @@ bool DLG::_FAddToList(long idit, PSTN pstn)
         return fFalse;
     }
 
-    return 0 <= (long)SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)pstn->Psz());
+    return 0 <= (int32_t)SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)pstn->Psz());
 }
 
 /***************************************************************************
     Empty the list portion of the combo item.
 ***************************************************************************/
-void DLG::_ClearList(long idit)
+void DLG::_ClearList(int32_t idit)
 {
     AssertThis(0);
     HDLG hdlg;

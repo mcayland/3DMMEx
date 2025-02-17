@@ -22,7 +22,7 @@ struct HQH
     short swMagic;   // to detect memory trashing
     short cactRef;   // for marking memory
     schar *pszsFile; // source file that allocation request is coming from
-    long lwLine;     // line in file that allocation request is coming from
+    int32_t lwLine;     // line in file that allocation request is coming from
     HQ hqPrev;       // previous hq in doubly linked list
     HQ hqNext;       // next hq in doubly linked list
 #endif               // DEBUG
@@ -32,7 +32,7 @@ struct HQH
 
 #ifdef DEBUG
 HQ _hqFirst; // head of the doubly linked list
-long vcactSuspendCheckPointers = 0;
+int32_t vcactSuspendCheckPointers = 0;
 #endif // DEBUG
 
 inline void *_QvFromHq(HQ hq)
@@ -43,12 +43,12 @@ inline HQH *_QhqhFromHq(HQ hq)
 {
     return (HQH *)PvAddBv(vadst.PvStrip(*(void **)hq), GetHandleSize((HN)hq) - size(HQH));
 }
-inline HQH *_QhqhFromHqBv(HQ hq, long bv)
+inline HQH *_QhqhFromHqBv(HQ hq, int32_t bv)
 {
     return (HQH *)PvAddBv(vadst.PvStrip(*(void **)hq), bv);
 }
 
-long __pascal _CbFreeStuff(long cb);
+int32_t __pascal _CbFreeStuff(int32_t cb);
 ADST vadst;
 
 /***************************************************************************
@@ -61,7 +61,7 @@ ADST vadst;
 
     REVIEW shonk: should we just free an emergency buffer and return?
 ***************************************************************************/
-long __pascal _CbFreeStuff(long cb)
+int32_t __pascal _CbFreeStuff(int32_t cb)
 {
     if (_fInAlloc || pvNil == vpfnlib)
         return 0;
@@ -77,7 +77,7 @@ long __pascal _CbFreeStuff(long cb)
 ***************************************************************************/
 ADST::ADST(void)
 {
-    _lwMaskAddress = (long)StripAddress((void *)0xFFFFFFFFL);
+    _lwMaskAddress = (int32_t)StripAddress((void *)0xFFFFFFFFL);
     SetGrowZone(&_CbFreeStuff);
 }
 
@@ -85,9 +85,9 @@ ADST::ADST(void)
     Allocates a new moveable block.
 ***************************************************************************/
 #ifdef DEBUG
-bool FAllocHqDebug(HQ *phq, long cb, uint32_t grfmem, long mpr, schar *pszsFile, long lwLine)
+bool FAllocHqDebug(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr, schar *pszsFile, int32_t lwLine)
 #else  //! DEBUG
-bool FAllocHq(HQ *phq, long cb, uint32_t grfmem, long mpr)
+bool FAllocHq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr)
 #endif //! DEBUG
 {
     AssertVarMem(phq);
@@ -157,13 +157,13 @@ bool FAllocHq(HQ *phq, long cb, uint32_t grfmem, long mpr)
     Resizes the given hq.  *phq may change (on Windows).  If fhqClear,
     clears any newly added space.
 ***************************************************************************/
-bool FResizePhq(HQ *phq, long cb, uint32_t grfmem, long mpr)
+bool FResizePhq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr)
 {
     AssertVarMem(phq);
     AssertHq(*phq);
     AssertIn(cb, 0, kcbMax);
     HQH hqh;
-    long cbOld;
+    int32_t cbOld;
     bool fInAllocSave;
     short err;
 
@@ -281,10 +281,10 @@ void FreePhq(HQ *phq)
 /***************************************************************************
     Return the size of the hq (the client area of the block).
 ***************************************************************************/
-long CbOfHq(HQ hq)
+int32_t CbOfHq(HQ hq)
 {
     AssertHq(hq);
-    long cbRaw;
+    int32_t cbRaw;
 
     cbRaw = GetHandleSize((HN)hq) - size(HQH);
     return cbRaw - _QhqhFromHqBv(hq, cbRaw)->cbExtra;
@@ -293,7 +293,7 @@ long CbOfHq(HQ hq)
 /***************************************************************************
     Copy an hq to a new block.
 ***************************************************************************/
-bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr)
+bool FCopyHq(HQ hqSrc, HQ *phqDst, int32_t mpr)
 {
     AssertHq(hqSrc);
     AssertVarMem(phqDst);
@@ -395,18 +395,18 @@ void AssertHq(HQ hq)
     void *pvLimZone;
     void *qv;
     HQH hqh;
-    long cb;
+    int32_t cb;
     short sw;
 
     // make sure hq isn't nil or odd
-    if (hq == hqNil || (long(hq) & 1) != 0)
+    if (hq == hqNil || (int32_t(hq) & 1) != 0)
     {
         BugVar("hq is nil or odd", &hq);
         return;
     }
 
     // make sure *hq is not nil or odd
-    if ((qv = _QvFromHq(hq)) == pvNil || (long(qv) & 1) != 0)
+    if ((qv = _QvFromHq(hq)) == pvNil || (int32_t(qv) & 1) != 0)
     {
         BugVar("*hq is nil or odd", &qv);
         return;
@@ -477,7 +477,7 @@ void _AssertUnmarkedHqs(void)
         if (_QhqhFromHq(hq)->cactRef == 0)
         {
             HQH hqh;
-            long cb;
+            int32_t cb;
             achar stz[kcbMaxStz];
 
             cb = CbOfHq(hq);
@@ -507,9 +507,9 @@ void _UnmarkAllHqs(void)
     in either the app zone or the system zone.  If cb is zero, pv can
     be anything (including nil).
 ***************************************************************************/
-void AssertPvCb(void *pv, long cb)
+void AssertPvCb(void *pv, int32_t cb)
 {
-    static long _lwStrip;
+    static int32_t _lwStrip;
     static void *_pvMinZone, *_pvMinSysZone;
     void *pvLimZone, *pvLimSysZone;
     void *pvClean, *pvLim;
@@ -521,12 +521,12 @@ void AssertPvCb(void *pv, long cb)
     {
         _pvMinZone = ApplicZone();
         _pvMinSysZone = SystemZone();
-        _lwStrip = (long)StripAddress((void *)-1L);
+        _lwStrip = (int32_t)StripAddress((void *)-1L);
     }
     pvLimZone = (void *)LMGetCurrentA5();
-    pvLimSysZone = (void *)(*(long *)_pvMinSysZone & _lwStrip);
+    pvLimSysZone = (void *)(*(int32_t *)_pvMinSysZone & _lwStrip);
 
-    pvClean = (void *)((long)pv & _lwStrip);
+    pvClean = (void *)((int32_t)pv & _lwStrip);
     pvLim = PvAddBv(pvClean, cb);
     if (pvClean < _pvMinZone || pvLim > pvLimZone)
     {

@@ -98,8 +98,8 @@ bool TXHD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, uint32_t grftxh
     BLCK blck;
     KID kid;
     HTOPF htopf;
-    long stid, lw;
-    long cp, cpMac, cpMin;
+    int32_t stid, lw;
+    int32_t cp, cpMac, cpMin;
     STN stn;
     bool fRet = fFalse;
 
@@ -180,13 +180,13 @@ LFail:
     Do any necessary munging of the AG entry on open.  Return false if
     we don't recognize this argument type.
 ***************************************************************************/
-bool TXHD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
+bool TXHD::_FOpenArg(int32_t icact, uint8_t sprm, int16_t bo, int16_t osk)
 {
     CTG ctg;
     CNO cno;
-    long cb;
-    long rglw[2];
-    long clw;
+    int32_t cb;
+    int32_t rglw[2];
+    int32_t clw;
 
     if (TXHD_PAR::_FOpenArg(icact, sprm, bo, osk))
         return fTrue;
@@ -227,14 +227,14 @@ bool TXHD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
             clw = 2;
         LSwapBytes:
             AssertIn(clw, 1, CvFromRgv(rglw) + 1);
-            if (cb < clw * SIZEOF(long))
+            if (cb < clw * SIZEOF(int32_t))
                 return fFalse;
 
             if (bo == kboOther)
             {
-                _pagcact->GetRgb(icact, SIZEOF(CTG), clw * SIZEOF(long), rglw);
+                _pagcact->GetRgb(icact, SIZEOF(CTG), clw * SIZEOF(int32_t), rglw);
                 SwapBytesRglw(rglw, clw);
-                _pagcact->PutRgb(icact, SIZEOF(CTG), clw * SIZEOF(long), rglw);
+                _pagcact->PutRgb(icact, SIZEOF(CTG), clw * SIZEOF(int32_t), rglw);
             }
             break;
 
@@ -294,7 +294,7 @@ bool TXHD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
 /***************************************************************************
     Get the bounding rectangle for the given object.
 ***************************************************************************/
-bool TXHD::_FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc)
+bool TXHD::_FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc)
 {
     AssertThis(0);
     AssertIn(icact, 0, _pagcact->IvMac());
@@ -302,16 +302,16 @@ bool TXHD::_FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc
     AssertPo(pgnv, 0);
     AssertVarMem(pchp);
     AssertVarMem(prc);
-    long cb;
+    int32_t cb;
     PMBMP pmbmp;
     PCRF pcrf;
     KID kid;
-    long rglw[2];
+    int32_t rglw[2];
 
     if (sprmObject != sprm)
         return fFalse;
 
-    Assert(SIZEOF(CTG) == SIZEOF(long), 0);
+    Assert(SIZEOF(CTG) == SIZEOF(int32_t), 0);
     cb = _pagcact->Cb(icact);
     if (cb < SIZEOF(rglw))
         return fFalse;
@@ -356,7 +356,7 @@ bool TXHD::_FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc
 /***************************************************************************
     Draw the given object.
 ***************************************************************************/
-bool TXHD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip)
+bool TXHD::_FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip)
 {
     AssertIn(icact, 0, _pagcact->IvMac());
     Assert(sprm >= sprmObject, 0);
@@ -364,12 +364,12 @@ bool TXHD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp,
     AssertVarMem(pxp);
     AssertVarMem(pchp);
     AssertVarMem(prcClip);
-    long cb;
+    int32_t cb;
     RC rc;
     PMBMP pmbmp;
     PCRF pcrf;
     KID kid;
-    long rglw[2];
+    int32_t rglw[2];
     bool fDrawMbmp = fTrue;
 
     if (sprmObject != sprm)
@@ -435,7 +435,7 @@ bool TXHD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp,
 /***************************************************************************
     Insert a picture into the help text document.
 ***************************************************************************/
-bool TXHD::FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp, uint32_t grfdoc)
+bool TXHD::FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPvCb(pvExtra, cbExtra);
@@ -466,7 +466,7 @@ bool TXHD::FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long cc
 /***************************************************************************
     Insert a new button
 ***************************************************************************/
-bool TXHD::FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp,
+bool TXHD::FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp,
                          uint32_t grfdoc)
 {
     AssertThis(0);
@@ -474,7 +474,7 @@ bool TXHD::FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, long cbExtra, lon
     AssertIn(cp, 0, CpMac());
     AssertIn(ccpDel, 0, CpMac() - cp);
     AssertNilOrVarMem(pchp);
-    uint8_t rgb[SIZEOF(CKI) + SIZEOF(long)];
+    uint8_t rgb[SIZEOF(CKI) + SIZEOF(int32_t)];
     CKI *pcki = (CKI *)rgb;
     CNO *pcnoTopic = (CNO *)(pcki + 1);
     ;
@@ -504,7 +504,7 @@ bool TXHD::FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, long cbExtra, lon
     Group the given text into the given group.  lw == 0 indicates no group.
     Any non-zero number is a group.
 ***************************************************************************/
-bool TXHD::FGroupText(long cp1, long cp2, uint8_t bGroup, CNO cnoTopic, PSTN pstnTopic)
+bool TXHD::FGroupText(int32_t cp1, int32_t cp2, uint8_t bGroup, CNO cnoTopic, PSTN pstnTopic)
 {
     AssertThis(0);
     AssertNilOrPo(pstnTopic, 0);
@@ -529,7 +529,7 @@ bool TXHD::FGroupText(long cp1, long cp2, uint8_t bGroup, CNO cnoTopic, PSTN pst
     else
     {
         uint8_t rgb[SIZEOF(uint8_t) + SIZEOF(CNO) + kcbMaxDataStn];
-        long cb = SIZEOF(uint8_t) + SIZEOF(CNO);
+        int32_t cb = SIZEOF(uint8_t) + SIZEOF(CNO);
 
         rgb[0] = bGroup;
         CopyPb(&cnoTopic, rgb + SIZEOF(uint8_t), SIZEOF(CNO));
@@ -564,7 +564,7 @@ bool TXHD::FGroupText(long cp1, long cp2, uint8_t bGroup, CNO cnoTopic, PSTN pst
 /***************************************************************************
     Determine if the given cp is in a grouped text range.
 ***************************************************************************/
-bool TXHD::FGrouped(long cp, long *pcpMin, long *pcpLim, uint8_t *pbGroup, CNO *pcnoTopic, PSTN pstnTopic)
+bool TXHD::FGrouped(int32_t cp, int32_t *pcpMin, int32_t *pcpLim, uint8_t *pbGroup, CNO *pcnoTopic, PSTN pstnTopic)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -585,7 +585,7 @@ bool TXHD::FGrouped(long cp, long *pcpMin, long *pcpLim, uint8_t *pbGroup, CNO *
     if (mpe.lw > 0)
     {
         uint8_t *prgb;
-        long cb;
+        int32_t cb;
 
         prgb = (uint8_t *)_pagcact->PvLock(mpe.lw - 1, &cb);
         cb -= SIZEOF(uint8_t) + SIZEOF(CNO); // group number, cnoTopic
@@ -687,17 +687,17 @@ bool TXHG::_FInit(void)
 {
     AssertBaseThis(0);
     PRCA prca;
-    long cp, cb;
+    int32_t cp, cb;
     void *pv;
     CKI *pcki;
-    long dxp;
+    int32_t dxp;
     CNO cno;
-    long xp, ypBase;
+    int32_t xp, ypBase;
     CNO cnoTopic;
     uint8_t bGroup;
-    long lwMax;
+    int32_t lwMax;
     RTVN rtvn;
-    long hid;
+    int32_t hid;
     CHP chp;
     RC rc;
     EDPAR edpar;
@@ -712,7 +712,7 @@ bool TXHG::_FInit(void)
     for (cp = 0; cp < ptxhd->CpMac();)
     {
         ptxhd->FGrouped(cp, pvNil, &cp, &bGroup);
-        lwMax = LwMax((long)bGroup, lwMax);
+        lwMax = LwMax((int32_t)bGroup, lwMax);
     }
 
     // find a base hid that covers lwMax buttons
@@ -800,7 +800,7 @@ bool TXHG::_FInit(void)
 /***************************************************************************
     Return whether the point is over hot (marked text).
 ***************************************************************************/
-bool TXHG::FPtIn(long xp, long yp)
+bool TXHG::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
 
@@ -869,12 +869,12 @@ bool TXHG::FCmdBadKey(PCMD_BADKEY pcmd)
 /***************************************************************************
     Return the number of the group text that the given point is in.
 ***************************************************************************/
-bool TXHG::FGroupFromPt(long xp, long yp, uint8_t *pbGroup, CNO *pcnoTopic)
+bool TXHG::FGroupFromPt(int32_t xp, int32_t yp, uint8_t *pbGroup, CNO *pcnoTopic)
 {
     AssertThis(0);
     AssertNilOrVarMem(pbGroup);
     AssertNilOrVarMem(pcnoTopic);
-    long cp;
+    int32_t cp;
 
     if (!_FGetCpFromPt(xp, yp, &cp, fFalse))
         return 0;
@@ -884,10 +884,10 @@ bool TXHG::FGroupFromPt(long xp, long yp, uint8_t *pbGroup, CNO *pcnoTopic)
 /***************************************************************************
     A child button was hit, take action.
 ***************************************************************************/
-void TXHG::DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, long hidHit)
+void TXHG::DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, int32_t hidHit)
 {
     AssertThis(0);
-    long lwRet = 0;
+    int32_t lwRet = 0;
 
     // run the script
     if (!_FRunScript(bGroup, grfcust, hidHit, chNil, cnoTopic, &lwRet))
@@ -901,7 +901,7 @@ void TXHG::DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, long hidHit)
     Run the script. Returns false iff the TXHG doesn't exist after
     running the script.
 ***************************************************************************/
-bool TXHG::_FRunScript(uint8_t bGroup, uint32_t grfcust, long hidHit, achar ch, CNO cnoTopic, long *plwRet)
+bool TXHG::_FRunScript(uint8_t bGroup, uint32_t grfcust, int32_t hidHit, achar ch, CNO cnoTopic, int32_t *plwRet)
 {
     AssertThis(0);
     AssertNilOrVarMem(plwRet);
@@ -927,13 +927,13 @@ bool TXHG::_FRunScript(uint8_t bGroup, uint32_t grfcust, long hidHit, achar ch, 
         AssertPo(psceg, 0);
 
         PWOKS pwoks = _pwoks;
-        long grid = Grid();
-        long rglw[5];
+        int32_t grid = Grid();
+        int32_t rglw[5];
 
-        rglw[0] = (long)bGroup;
+        rglw[0] = (int32_t)bGroup;
         rglw[1] = grfcust;
         rglw[2] = hidHit;
-        rglw[3] = (long)(uint8_t)ch;
+        rglw[3] = (int32_t)(uint8_t)ch;
         rglw[4] = cnoTopic;
 
         // be careful not to use TXHG variables here in case the TXHG is
@@ -1031,7 +1031,7 @@ PHBAL HBAL::PhbalNew(PWOKS pwoks, PGOB pgobPar, PRCA prca, PTXHD ptxhd, PHTOP ph
     HTOP htop;
     GCB gcb;
     PHBAL phbal;
-    long grid;
+    int32_t grid;
 
     ptxhd->GetHtop(&htop);
     if (pvNil != phtop)
@@ -1216,7 +1216,7 @@ bool HBAL::_FSetTopic(PTXHD ptxhd, PHTOP phtop, PRCA prca)
     Our representation is changing, so make sure we stay inside our parent
     and reposition the TXHG.
 ***************************************************************************/
-void HBAL::_SetGorp(PGORP pgorp, long dxp, long dyp)
+void HBAL::_SetGorp(PGORP pgorp, int32_t dxp, int32_t dyp)
 {
     RC rc1, rc2, rc3;
 
@@ -1249,8 +1249,8 @@ HBTN::HBTN(GCB *pgcb) : HBTN_PAR(pgcb)
 /***************************************************************************
     Create a new help balloon button
 ***************************************************************************/
-PHBTN HBTN::PhbtnNew(PWOKS pwoks, PGOB pgobPar, long hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic, long xpLeft,
-                     long ypBottom)
+PHBTN HBTN::PhbtnNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic, int32_t xpLeft,
+                     int32_t ypBottom)
 {
     AssertPo(pwoks, 0);
     AssertNilOrPo(pgobPar, 0);
@@ -1294,7 +1294,7 @@ PHBTN HBTN::PhbtnNew(PWOKS pwoks, PGOB pgobPar, long hid, CNO cno, PRCA prca, ui
 /***************************************************************************
     Test whether the given point is in this button or its related text.
 ***************************************************************************/
-bool HBTN::FPtIn(long xp, long yp)
+bool HBTN::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     PTXHG ptxhg;
@@ -1325,7 +1325,7 @@ bool HBTN::FCmdClicked(PCMD_MOUSE pcmd)
     AssertVarMem(pcmd);
 
     PTXHG ptxhg;
-    long hid = Hid();
+    int32_t hid = Hid();
 
     if (!PgobPar()->FIs(kclsTXHG))
     {

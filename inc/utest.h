@@ -36,7 +36,7 @@ class KWA : public KWA_PAR
     ~KWA(void);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FFindFile(PSTN pstnSrc, PFNI pfni); // for finding AVIs
-    virtual bool FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet);
+    virtual bool FModalTopic(PRCA prca, CNO cnoTopic, int32_t *plwRet);
     void SetMbmp(PMBMP pmbmp);
     void SetCDPrompt(bool fAskForCD)
     {
@@ -126,7 +126,7 @@ class APP : public APP_PAR
     STN _stnProductLong;  // Long version of product name
     STN _stnProductShort; // Short version of product name
     STN _stnUser;         // User's name
-    long _sidProduct;
+    int32_t _sidProduct;
     FNI _fniCurrentDir; // fni of current working directory
     FNI _fniExe;        // fni of this executable file
     FNI _fniMsKidsDir;  // e.g., \mskids
@@ -135,19 +135,19 @@ class APP : public APP_PAR
     FNI _fniProductDir; // e.g., \mskids\3dmovie or \mskids\otherproduct
     FNI _fniUserDir;    // User's preferred directory
     FNI _fni3DMovieDir; // e.g., \mskids\3dMovie
-    long _dypTextDef;   // Default text height
+    int32_t _dypTextDef; // Default text height
 
-    long _cactDisable; // disable count for keyboard accelerators
+    int32_t _cactDisable; // disable count for keyboard accelerators
 #ifdef BUG1085
-    long _cactCursHide; // hide count for cursor
-    long _cactCursSav;  // saved count for cursor
+    int32_t _cactCursHide; // hide count for cursor
+    int32_t _cactCursSav;  // saved count for cursor
 #endif
 
     //
     //
     //
     bool _fDown;
-    long _cactToggle;
+    int32_t _cactToggle;
 
 #ifdef WIN
     HACCEL _haccel;
@@ -193,7 +193,7 @@ class APP : public APP_PAR
     bool _FAddToCrm(PGST pgstFiles, PCRM pcrm, PGL pglFiles);
     bool _FInitBuilding(void);
     bool _FInitStudio(PFNI pfniUserDoc, bool fFailIfDocOpenFailed = fTrue);
-    void _GetWindowProps(long *pxp, long *pyp, long *pdxp, long *pdyp, DWORD *pdwStyle);
+    void _GetWindowProps(int32_t *pxp, int32_t *pyp, int32_t *pdxp, int32_t *pdyp, DWORD *pdwStyle);
     void _RebuildMainWindow(void);
     bool _FSwitch640480(bool fTo640480);
     bool _FDisplayIs640480(void);
@@ -207,7 +207,7 @@ class APP : public APP_PAR
 #endif // WIN
 
     // APPB methods that we override
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
     virtual bool _FInitOS(void);
     virtual bool _FInitMenu(void)
     {
@@ -219,7 +219,7 @@ class APP : public APP_PAR
     virtual void _Activate(bool fActive);
     virtual bool _FGetNextEvt(PEVT pevt);
 #ifdef WIN
-    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet);
+    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet);
 #endif // WIN
 
   public:
@@ -230,12 +230,12 @@ class APP : public APP_PAR
 
     // Overridden APPB functions
     virtual void GetStnAppName(PSTN pstn);
-    virtual long OnnDefVariable(void);
-    virtual long DypTextDef(void);
+    virtual int32_t OnnDefVariable(void);
+    virtual int32_t DypTextDef(void);
     virtual tribool TQuerySaveDoc(PDOCB pdocb, bool fForce);
     virtual void Quit(bool fForce);
     virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
-    virtual void Run(uint32_t grfapp, uint32_t grfgob, long ginDef);
+    virtual void Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
 #ifdef BUG1085
     virtual void HideCurs(void);
     virtual void ShowCurs(void);
@@ -296,7 +296,7 @@ class APP : public APP_PAR
         return _fMinimized;
     }
 
-    bool FGetStnApp(long ids, PSTN pstn)
+    bool FGetStnApp(int32_t ids, PSTN pstn)
     {
         return _pgstApp->FFindExtra(&ids, pstn);
     }
@@ -328,12 +328,12 @@ class APP : public APP_PAR
     {
         *pfni = _fniMelanieDir;
     }
-    long SidProduct(void)
+    int32_t SidProduct(void)
     {
         return _sidProduct;
     }
-    bool FGetOnn(PSTN pstn, long *ponn);
-    void MemStat(long *pdwTotalPhys, long *pdwAvailPhys = pvNil);
+    bool FGetOnn(PSTN pstn, int32_t *ponn);
+    void MemStat(int32_t *pdwTotalPhys, int32_t *pdwAvailPhys = pvNil);
     bool FSlowCPU(void)
     {
         return _fSlowCPU;
@@ -356,7 +356,7 @@ class APP : public APP_PAR
 #endif //! WIN
         }
     }
-    tribool TModal(PRCA prca, long tpc, PSTN pstnBackup = pvNil, long bkBackup = ivNil, long stidSubst = ivNil,
+    tribool TModal(PRCA prca, int32_t tpc, PSTN pstnBackup = pvNil, int32_t bkBackup = ivNil, int32_t stidSubst = ivNil,
                    PSTN pstnSubst = pvNil);
 
     // Enable/disable accelerator keys
@@ -364,7 +364,7 @@ class APP : public APP_PAR
     void EnableAccel(void);
 
     // Registry access function
-    bool FGetSetRegKey(PSZ pszValueName, void *pvData, long cbData, uint32_t grfreg = fregSetDefault,
+    bool FGetSetRegKey(PSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg = fregSetDefault,
                        bool *pfNoValue = pvNil);
 
     // Movie handoff routines

@@ -63,7 +63,7 @@ class TMAP : public TMAP_PAR
     {
     } // can't instantiate directly; must use PtmapRead
 #ifdef NOT_YET_REVIEWED
-    void TMAP::_SortInverseTable(uint8_t *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi);
+    void TMAP::_SortInverseTable(uint8_t *prgb, int32_t cbRgb, BRCLR brclrLo, BRCLR brclrHi);
 #endif // NOT_YET_REVIEWED
   public:
     ~TMAP(void);
@@ -79,7 +79,7 @@ class TMAP : public TMAP_PAR
     bool FWrite(PCFL pcfl, CTG ctg, CNO *pcno);
 
     //	a chunky resource reader for a TMAP
-    static bool FReadTmap(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadTmap(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
 
     //	Given a BPMP (a Brender br_pixelmap), create a TMAP
     static PTMAP PtmapNewFromBpmp(BPMP *pbpmp);
@@ -97,10 +97,10 @@ class TMAP : public TMAP_PAR
     bool FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr = pvNil);
 
     // Creates a TMAP from the width, height, and an array of bytes
-    static PTMAP PtmapNew(uint8_t *prgbPixels, long dxWidth, long dxHeight);
+    static PTMAP PtmapNew(uint8_t *prgbPixels, int32_t dxWidth, int32_t dxHeight);
 
     // Some useful file methods
-    long CbOnFile(void)
+    int32_t CbOnFile(void)
     {
         return (SIZEOF(TMAPF) + LwMul(_bpmp.row_bytes, _bpmp.height));
     }

@@ -55,7 +55,7 @@ void SCEG::AssertValid(uint32_t grf)
     The script is being resumed, so set _pgob to nil (don't know whether
     it exists).
 ***************************************************************************/
-bool SCEG::FResume(long *plwReturn, bool *pfPaused)
+bool SCEG::FResume(int32_t *plwReturn, bool *pfPaused)
 {
     GobMayDie();
     return SCEG_PAR::FResume(plwReturn, pfPaused);
@@ -83,7 +83,7 @@ PGOB SCEG::_PgobThis(void)
     Return the gob that is accessible to this script interpreter and has
     the given hid.
 ***************************************************************************/
-PGOB SCEG::_PgobFromHid(long hid)
+PGOB SCEG::_PgobFromHid(int32_t hid)
 {
     AssertThis(0);
 
@@ -120,7 +120,7 @@ PGL *SCEG::_PpglrtvmGlobal(void)
 /***************************************************************************
     Return the address of the variable table for the GOB with given hid.
 ***************************************************************************/
-PGL *SCEG::_PpglrtvmRemote(long lw)
+PGL *SCEG::_PpglrtvmRemote(int32_t lw)
 {
     PGOB pgob = _PgobFromHid(lw);
 
@@ -149,16 +149,16 @@ int16_t SCEG::_SwMin(void)
 /***************************************************************************
     Execute a script command.
 ***************************************************************************/
-bool SCEG::_FExecOp(long op)
+bool SCEG::_FExecOp(int32_t op)
 {
     CMD cmd;
     PGOB pgob;
     PCLOK pclok;
-    long hid;
-    long dtim;
-    long dxp, dyp;
-    long lw1, lw2, lw3, lw4, clw;
-    long *qrglw;
+    int32_t hid;
+    int32_t dtim;
+    int32_t dxp, dyp;
+    int32_t lw1, lw2, lw3, lw4, clw;
+    int32_t *qrglw;
     void *pv;
 
     hid = _hid; // for "this" operations
@@ -307,7 +307,7 @@ bool SCEG::_FExecOp(long op)
         {
             if (pvNil == _QlwGet(clw))
                 break;
-            if (!FAllocPv(&pv, LwMul(SIZEOF(long), clw), fmemNil, mprNormal))
+            if (!FAllocPv(&pv, LwMul(SIZEOF(int32_t), clw), fmemNil, mprNormal))
             {
                 Debug(_WarnSz(PszLit("OOM attempting to run script")));
                 _PopList(clw);
@@ -316,7 +316,7 @@ bool SCEG::_FExecOp(long op)
             }
             else
             {
-                CopyPb(_QlwGet(clw), pv, LwMul(SIZEOF(long), clw));
+                CopyPb(_QlwGet(clw), pv, LwMul(SIZEOF(int32_t), clw));
                 ReverseRglw(pv, clw);
                 _PopList(clw);
             }
@@ -335,9 +335,9 @@ bool SCEG::_FExecOp(long op)
 
             GobMayDie();
             if (kopRunScriptCnoGob == op || kopRunScriptCnoThis == op)
-                ((PGOK)pgob)->FRunScriptCno(lw1, (long *)pv, clw, &lw2, &tRet);
+                ((PGOK)pgob)->FRunScriptCno(lw1, (int32_t *)pv, clw, &lw2, &tRet);
             else
-                ((PGOK)pgob)->FRunScript(lw1, (long *)pv, clw, &lw2, &tRet);
+                ((PGOK)pgob)->FRunScript(lw1, (int32_t *)pv, clw, &lw2, &tRet);
             if (tYes != tRet)
             {
                 Debug(_WarnSz(PszLit("Running script failed (chid = 0x%x, gid = %d)"), lw1, hid));
@@ -1066,13 +1066,13 @@ bool SCEG::_FExecOp(long op)
 /***************************************************************************
     Put up an alert containing a list of numbers.
 ***************************************************************************/
-void SCEG::_DoAlert(long op)
+void SCEG::_DoAlert(int32_t op)
 {
     STN stn1;
     STN stn2;
-    long lw;
+    int32_t lw;
     bool fStrings;
-    long clw = _LwPop();
+    int32_t clw = _LwPop();
 
     switch (op)
     {
@@ -1138,10 +1138,10 @@ void SCEG::_DoAlert(long op)
 /***************************************************************************
     Get or set the string in an edit control.
 ***************************************************************************/
-void SCEG::_DoEditControl(long hid, long stid, bool fGet)
+void SCEG::_DoEditControl(int32_t hid, int32_t stid, bool fGet)
 {
     PEDCB pedcb;
-    long cch;
+    int32_t cch;
     achar rgch[kcchMaxStn];
     STN stn;
 
@@ -1213,7 +1213,7 @@ PGL SCEG::_PglclrGet(CNO cno)
     A chunky resource reader to read a color table. Wraps the color table in
     a CABO.
 ***************************************************************************/
-bool FReadColorTable(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool FReadColorTable(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     PCABO pcabo;
     PGL pglclr = pvNil;
@@ -1246,7 +1246,7 @@ bool FReadColorTable(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     Launch an app with the given command line. Return true iff the launch
     was successful.
 ***************************************************************************/
-bool SCEG::_FLaunch(long stid)
+bool SCEG::_FLaunch(int32_t stid)
 {
     AssertThis(0);
     STN stn;

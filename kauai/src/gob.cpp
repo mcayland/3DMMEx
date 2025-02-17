@@ -27,13 +27,13 @@ END_CMD_MAP_NIL()
 RTCLASS(GOB)
 RTCLASS(GTE)
 
-long GOB::_ginDefGob = kginSysInval;
-long GOB::_gridLast;
+int32_t GOB::_ginDefGob = kginSysInval;
+int32_t GOB::_gridLast;
 
 /***************************************************************************
     Fill in the elements of the GCB.
 ***************************************************************************/
-void GCB::Set(long hid, PGOB pgob, uint32_t grfgob, long gin, RC *prcAbs, RC *prcRel)
+void GCB::Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel)
 {
     Assert(hidNil != hid, "bad hid");
     AssertNilOrPo(pgob, 0);
@@ -118,7 +118,7 @@ void GOB::_Init(PGCB pgcb)
 /***************************************************************************
     Constructor for GOB.
 ***************************************************************************/
-GOB::GOB(long hid) : CMH(hid)
+GOB::GOB(int32_t hid) : CMH(hid)
 {
     GCB gcb(hid, GOB::PgobScreen());
     _Init(&gcb);
@@ -268,7 +268,7 @@ void GOB::SendBehind(PGOB pgobBehind)
     area is marked dirty at the operating system level.  In all cases,
     passing pvNil for prc affects the whole gob.
 ***************************************************************************/
-void GOB::InvalRc(RC *prc, long gin)
+void GOB::InvalRc(RC *prc, int32_t gin)
 {
     AssertThis(0);
     AssertNilOrVarMem(prc);
@@ -330,7 +330,7 @@ void GOB::InvalRc(RC *prc, long gin)
     validated only at the given level.  In any case, passing pvNil for prc
     affects the whole gob.
 ***************************************************************************/
-void GOB::ValidRc(RC *prc, long gin)
+void GOB::ValidRc(RC *prc, int32_t gin)
 {
     AssertThis(0);
     RC rc;
@@ -381,7 +381,7 @@ void GOB::ValidRc(RC *prc, long gin)
     is non-empty.  If gin is kginDraw, gets the union of the marked area
     and system-invalidated area.
 ***************************************************************************/
-bool GOB::FGetRcInval(RC *prc, long gin)
+bool GOB::FGetRcInval(RC *prc, int32_t gin)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -448,7 +448,7 @@ bool GOB::FGetRcInval(RC *prc, long gin)
     Handles this being covered by any GOBs or system windows.  If prc is
     nil, the entire content rectangle is used.
 ***************************************************************************/
-void GOB::Scroll(RC *prc, long dxp, long dyp, long gin, RC *prcBad1, RC *prcBad2)
+void GOB::Scroll(RC *prc, int32_t dxp, int32_t dyp, int32_t gin, RC *prcBad1, RC *prcBad2)
 {
     AssertThis(0);
     AssertNilOrVarMem(prc);
@@ -952,7 +952,7 @@ void GOB::SetRcFromHwnd(void)
 /***************************************************************************
     Get the bounding rectangle of the gob in the given coordinates.
 ***************************************************************************/
-void GOB::GetRc(RC *prc, long coo)
+void GOB::GetRc(RC *prc, int32_t coo)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -966,7 +966,7 @@ void GOB::GetRc(RC *prc, long coo)
 /***************************************************************************
     Get the visible rectangle of the gob in the given coordinates.
 ***************************************************************************/
-void GOB::GetRcVis(RC *prc, long coo)
+void GOB::GetRcVis(RC *prc, int32_t coo)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -1013,7 +1013,7 @@ HWND GOB::HwndContainer(void)
     Map a point from cooSrc coordinates to cooDst coordinates (relative
     to the gob).
 ***************************************************************************/
-void GOB::MapPt(PT *ppt, long cooSrc, long cooDst)
+void GOB::MapPt(PT *ppt, int32_t cooSrc, int32_t cooDst)
 {
     AssertThis(0);
     AssertVarMem(ppt);
@@ -1031,7 +1031,7 @@ void GOB::MapPt(PT *ppt, long cooSrc, long cooDst)
     Map an rc from cooSrc coordinates to cooDst coordinates (relative to
     the gob).
 ***************************************************************************/
-void GOB::MapRc(RC *prc, long cooSrc, long cooDst)
+void GOB::MapRc(RC *prc, int32_t cooSrc, int32_t cooDst)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -1048,7 +1048,7 @@ void GOB::MapRc(RC *prc, long cooSrc, long cooDst)
     If coo is cooHwnd or cooGlobal, also return the containing hwnd
     (otherwise return hNil).
 ***************************************************************************/
-HWND GOB::_HwndGetDptFromCoo(PT *pdpt, long coo)
+HWND GOB::_HwndGetDptFromCoo(PT *pdpt, int32_t coo)
 {
     PGOB pgob, pgobT;
     HWND hwnd = hNil;
@@ -1122,7 +1122,7 @@ void GOB::GetMinMax(RC *prcMinMax)
     coordinates).  If the mouse isn't over a GOB, this returns pvNil and
     sets *pptLocal to the passed in (xp, yp).
 ***************************************************************************/
-PGOB GOB::PgobFromPtGlobal(long xp, long yp, PT *pptLocal)
+PGOB GOB::PgobFromPtGlobal(int32_t xp, int32_t yp, PT *pptLocal)
 {
     AssertNilOrVarMem(pptLocal);
     HWND hwnd;
@@ -1173,7 +1173,7 @@ PGOB GOB::PgobFromPtGlobal(long xp, long yp, PT *pptLocal)
     This is recursive, so a GOB can build it's own world and hit testing
     method.
 ***************************************************************************/
-PGOB GOB::PgobFromPt(long xp, long yp, PT *pptLocal)
+PGOB GOB::PgobFromPt(int32_t xp, int32_t yp, PT *pptLocal)
 {
     AssertThis(0);
 
@@ -1214,7 +1214,7 @@ PGOB GOB::PgobFromPt(long xp, long yp, PT *pptLocal)
     (including ones that don't want to respond to the mouse at all).
     We handle tool tips here to avoid bugs of omission and for convenience.
 ***************************************************************************/
-bool GOB::FPtIn(long xp, long yp)
+bool GOB::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     RC rc;
@@ -1235,7 +1235,7 @@ bool GOB::FPtIn(long xp, long yp)
     handle tool tips here to avoid bugs of omission and for convenience.
     If this returns false, PgobFromPt will still call FPtIn.
 ***************************************************************************/
-bool GOB::FPtInBounds(long xp, long yp)
+bool GOB::FPtInBounds(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     RC rc;
@@ -1252,7 +1252,7 @@ bool GOB::FPtInBounds(long xp, long yp)
     Default mouse down handler just enqueues a cidActivateSel, cidSelIdle and
     a cidTrackMouse command.
 ***************************************************************************/
-void GOB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
+void GOB::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
     Assert(grfcust & fcustMouse, "grfcust wrong");
@@ -1304,8 +1304,8 @@ void GOB::_SetRcCur(void)
         }
         else if (pgob->_pgobPar != pvNil)
         {
-            long dxp;
-            long dyp;
+            int32_t dxp;
+            int32_t dyp;
 
             dxp = pgob->_pgobPar->_rcCur.Dxp();
             dyp = pgob->_pgobPar->_rcCur.Dyp();
@@ -1416,7 +1416,7 @@ PGOB GOB::PgobMdiActive(void)
     Static method: find the first gob of the given class in the screen's gob
     tree.
 ***************************************************************************/
-PGOB GOB::PgobFromClsScr(long cls)
+PGOB GOB::PgobFromClsScr(int32_t cls)
 {
     if (pvNil == _pgobScreen)
         return pvNil;
@@ -1426,7 +1426,7 @@ PGOB GOB::PgobFromClsScr(long cls)
 /***************************************************************************
     Find a gob in this gob's subtree that is of the given class.
 ***************************************************************************/
-PGOB GOB::PgobFromCls(long cls)
+PGOB GOB::PgobFromCls(int32_t cls)
 {
     AssertThis(0);
     GTE gte;
@@ -1445,7 +1445,7 @@ PGOB GOB::PgobFromCls(long cls)
 /***************************************************************************
     Find a direct child of this gob of the given class.
 ***************************************************************************/
-PGOB GOB::PgobChildFromCls(long cls)
+PGOB GOB::PgobChildFromCls(int32_t cls)
 {
     AssertThis(0);
     PGOB pgob;
@@ -1461,7 +1461,7 @@ PGOB GOB::PgobChildFromCls(long cls)
 /***************************************************************************
     Find a gob of the given class in the parent chain of this gob.
 ***************************************************************************/
-PGOB GOB::PgobParFromCls(long cls)
+PGOB GOB::PgobParFromCls(int32_t cls)
 {
     AssertThis(0);
     PGOB pgob;
@@ -1478,7 +1478,7 @@ PGOB GOB::PgobParFromCls(long cls)
     Static method: find the first gob with the given hid in the screen's gob
     tree.
 ***************************************************************************/
-PGOB GOB::PgobFromHidScr(long hid)
+PGOB GOB::PgobFromHidScr(int32_t hid)
 {
     Assert(hid != hidNil, "nil hid");
     if (pvNil == _pgobScreen)
@@ -1490,7 +1490,7 @@ PGOB GOB::PgobFromHidScr(long hid)
 /***************************************************************************
     Find a gob in this gobs subtree having the given hid.
 ***************************************************************************/
-PGOB GOB::PgobFromHid(long hid)
+PGOB GOB::PgobFromHid(int32_t hid)
 {
     AssertThis(0);
     GTE gte;
@@ -1509,7 +1509,7 @@ PGOB GOB::PgobFromHid(long hid)
 /***************************************************************************
     Find a direct child of this gob having the given hid.
 ***************************************************************************/
-PGOB GOB::PgobChildFromHid(long hid)
+PGOB GOB::PgobChildFromHid(int32_t hid)
 {
     AssertThis(0);
     PGOB pgob;
@@ -1525,7 +1525,7 @@ PGOB GOB::PgobChildFromHid(long hid)
 /***************************************************************************
     Find a gob with the given hid in the parent chain of this gob.
 ***************************************************************************/
-PGOB GOB::PgobParFromHid(long hid)
+PGOB GOB::PgobParFromHid(int32_t hid)
 {
     AssertThis(0);
     PGOB pgob;
@@ -1541,7 +1541,7 @@ PGOB GOB::PgobParFromHid(long hid)
 /***************************************************************************
     Find a gob in this gobs subtree having the given gob run-time id.
 ***************************************************************************/
-PGOB GOB::PgobFromGrid(long grid)
+PGOB GOB::PgobFromGrid(int32_t grid)
 {
     AssertThis(0);
     GTE gte;
@@ -1634,7 +1634,7 @@ bool GOB::FCmdMouseMove(PCMD_MOUSE pcmd)
     [zpMinActive, zpLimActive), the bar is filled with solid invert, otherwise
     with patterned (50%) invert.
 ***************************************************************************/
-long GOB::ZpDragRc(RC *prc, bool fVert, long zp, long zpMin, long zpLim, long zpMinActive, long zpLimActive)
+int32_t GOB::ZpDragRc(RC *prc, bool fVert, int32_t zp, int32_t zpMin, int32_t zpLim, int32_t zpMinActive, int32_t zpLimActive)
 {
     RC rcBound, rcActive;
     PT pt, dpt;
@@ -1683,7 +1683,7 @@ long GOB::ZpDragRc(RC *prc, bool fVert, long zp, long zpMin, long zpLim, long zp
             // invert the two pieces of the difference between
             // the new and old rectangles
             RC rc1, rc2;
-            long dzp;
+            int32_t dzp;
 
             rc1 = *prc;
             if (fVert)
@@ -1783,7 +1783,7 @@ PGL *GOB::Ppglrtvm(void)
 /***************************************************************************
     Put up a tool tip if this GOB has one.
 ***************************************************************************/
-bool GOB::FEnsureToolTip(PGOB *ppgobCurTip, long xpMouse, long ypMouse)
+bool GOB::FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse)
 {
     AssertThis(0);
     AssertVarMem(ppgobCurTip);
@@ -1795,7 +1795,7 @@ bool GOB::FEnsureToolTip(PGOB *ppgobCurTip, long xpMouse, long ypMouse)
 /***************************************************************************
     Return the state of the GOB. Must be non-zero.
 ***************************************************************************/
-long GOB::LwState(void)
+int32_t GOB::LwState(void)
 {
     AssertThis(0);
     return 1;

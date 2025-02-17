@@ -43,7 +43,7 @@ class SUNA : public SUNA_PAR
 
   protected:
     PACTR _pactr;
-    long _ut; // Tells which type of undo this is.
+    int32_t _ut; // Tells which type of undo this is.
     SUNA(void)
     {
     }
@@ -56,7 +56,7 @@ class SUNA : public SUNA_PAR
     {
         _pactr = pactr;
     }
-    void SetType(long ut)
+    void SetType(int32_t ut)
     {
         _ut = ut;
     }
@@ -123,16 +123,16 @@ class SCEN : public SCEN_PAR
     //
     // These variables keep track of the internal frame numbers.
     //
-    long _nfrmCur;   // Current frame number
-    long _nfrmLast;  // Last frame number in scene.
-    long _nfrmFirst; // First frame number in scene.
+    int32_t _nfrmCur; // Current frame number
+    int32_t _nfrmLast; // Last frame number in scene.
+    int32_t _nfrmFirst; // First frame number in scene.
 
     //
     // Frames with events in them.  This stuff works as follows.
     //   _isevFrmLim is the index into the GG of a sev with nfrm > nCurFrm.
     //
     PGG _pggsevFrm;   // List of events that occur in frames.
-    long _isevFrmLim; // Next event to process.
+    int32_t _isevFrmLim; // Next event to process.
 
     //
     // Global information
@@ -151,7 +151,7 @@ class SCEN : public SCEN_PAR
     PSSE _psseBkgd;       // Background scene sound (starts playing
                           // at start time even if snd event is
                           // earlier)
-    long _nfrmSseBkgd;    // Frame at which _psseBkgd starts
+    int32_t _nfrmSseBkgd; // Frame at which _psseBkgd starts
     TAG _tagBkgd;         // Tag to current BKGD
 
   protected:
@@ -163,8 +163,8 @@ class SCEN : public SCEN_PAR
     //
     bool _FPlaySev(PSEV psev, void *qvVar, uint32_t grfscen); // Plays a single scene event.
     bool _FUnPlaySev(PSEV psev, void *qvVar);              // Undoes a single scene event.
-    bool _FAddSev(PSEV psev, long cbVar, void *pvVar);     // Adds scene event to the current frame.
-    void _MoveBackFirstFrame(long nfrm);
+    bool _FAddSev(PSEV psev, int32_t cbVar, void *pvVar);     // Adds scene event to the current frame.
+    void _MoveBackFirstFrame(int32_t nfrm);
 
     //
     // Dirtying stuff
@@ -176,8 +176,8 @@ class SCEN : public SCEN_PAR
     //
     // Make actors go to a specific frame
     //
-    bool _FForceActorsToFrm(long nfrm, bool *pfSoundInFrame = pvNil);
-    bool _FForceTboxesToFrm(long nfrm);
+    bool _FForceActorsToFrm(int32_t nfrm, bool *pfSoundInFrame = pvNil);
+    bool _FForceTboxesToFrm(int32_t nfrm);
 
     //
     // Thumbnail routines
@@ -205,16 +205,16 @@ class SCEN : public SCEN_PAR
     //
     bool FPlayStartEvents(bool fActorsOnly = fFalse); // Play all one-time starting scene events.
     void InvalFrmRange(void);                         // Mark the frame count dirty
-    bool FGotoFrm(long nfrm);                         // Jumps to an arbitrary frame.
-    long Nfrm(void)                                   // Returns the current frame number
+    bool FGotoFrm(int32_t nfrm);                      // Jumps to an arbitrary frame.
+    int32_t Nfrm(void)                                // Returns the current frame number
     {
         return (_nfrmCur);
     }
-    long NfrmFirst(void) // Returns the number of the first frame in the scene.
+    int32_t NfrmFirst(void) // Returns the number of the first frame in the scene.
     {
         return (_nfrmFirst);
     }
-    long NfrmLast(void) // Returns the number of the last frame in the scene.
+    int32_t NfrmLast(void) // Returns the number of the last frame in the scene.
     {
         return (_nfrmLast);
     }
@@ -223,7 +223,7 @@ class SCEN : public SCEN_PAR
     //
     // Undo accessor functions
     //
-    void SetNfrmCur(long nfrm)
+    void SetNfrmCur(int32_t nfrm)
     {
         _nfrmCur = nfrm;
     }
@@ -273,7 +273,7 @@ class SCEN : public SCEN_PAR
     {
         _grfscen &= ~grfscen;
     }
-    long GrfScen(void) // Currently disabled functionality.
+    int32_t GrfScen(void) // Currently disabled functionality.
     {
         return _grfscen;
     }
@@ -284,22 +284,22 @@ class SCEN : public SCEN_PAR
     //
     bool FAddActrCore(ACTR *pactr); // Adds an actor to the scene at current frame.
     bool FAddActr(ACTR *pactr);     // Adds an actor to the scene at current frame, and undo
-    void RemActrCore(long arid);    // Removes an actor from the scene.
-    bool FRemActr(long arid);       // Removes an actor from the scene, and undo
+    void RemActrCore(int32_t arid); // Removes an actor from the scene.
+    bool FRemActr(int32_t arid);    // Removes an actor from the scene, and undo
     PACTR PactrSelected(void)       // Returns selected actor
     {
         return _pactrSelected;
     }
     void SelectActr(ACTR *pactr);                      // Sets the selected actor
-    PACTR PactrFromPt(long xp, long yp, long *pibset); // Gets actor pointed at by the mouse.
+    PACTR PactrFromPt(int32_t xp, int32_t yp, int32_t *pibset); // Gets actor pointed at by the mouse.
     PGL PglRollCall(void)                              // Return a list of all actors in scene.
     {
         return (_pglpactr);
     } // Only to be used by the movie-class
     void HideActors(void);
     void ShowActors(void);
-    PACTR PactrFromArid(long arid); // Finds a current actor in this scene.
-    long Cactr(void)
+    PACTR PactrFromArid(int32_t arid); // Finds a current actor in this scene.
+    int32_t Cactr(void)
     {
         return (_pglpactr == pvNil ? 0 : _pglpactr->IvMac());
     }
@@ -307,16 +307,16 @@ class SCEN : public SCEN_PAR
     //
     // Sound functions
     //
-    bool FAddSndCore(bool fLoop, bool fQueue, long vlm, long sty, long ctag,
+    bool FAddSndCore(bool fLoop, bool fQueue, int32_t vlm, int32_t sty, int32_t ctag,
                      PTAG prgtag); // Adds a sound to the current frame.
-    bool FAddSndCoreTagc(bool fLoop, bool fQueue, long vlm, long sty, long ctagc, PTAGC prgtagc);
-    bool FAddSnd(PTAG ptag, bool fLoop, bool fQueue, long vlm, long sty); // Adds a sound to the current frame, and undo
-    void RemSndCore(long sty);                                            // Removes the sound from current frame.
-    bool FRemSnd(long sty);                             // Removes the sound from current frame, and undo
-    bool FGetSnd(long sty, bool *pfFound, PSSE *ppsse); // Allows for retrieval of sounds.
+    bool FAddSndCoreTagc(bool fLoop, bool fQueue, int32_t vlm, int32_t sty, int32_t ctagc, PTAGC prgtagc);
+    bool FAddSnd(PTAG ptag, bool fLoop, bool fQueue, int32_t vlm, int32_t sty); // Adds a sound to the current frame, and undo
+    void RemSndCore(int32_t sty);                       // Removes the sound from current frame.
+    bool FRemSnd(int32_t sty);                          // Removes the sound from current frame, and undo
+    bool FGetSnd(int32_t sty, bool *pfFound, PSSE *ppsse); // Allows for retrieval of sounds.
     void PlayBkgdSnd(void);
-    bool FQuerySnd(long sty, PGL *pgltagSnd, long *pvlm, bool *pfLoop);
-    void SetSndVlmCore(long sty, long vlmNew);
+    bool FQuerySnd(int32_t sty, PGL *pgltagSnd, int32_t *pvlm, bool *pfLoop);
+    void SetSndVlmCore(int32_t sty, int32_t vlmNew);
     void UpdateSndFrame(void);
     bool FResolveAllSndTags(CNO cnoScen);
 
@@ -327,14 +327,14 @@ class SCEN : public SCEN_PAR
     bool FAddTbox(PTBOX ptbox);       // Adds a text box to the current frame.
     bool FRemTboxCore(PTBOX ptbox);   // Removes a text box from the scene.
     bool FRemTbox(PTBOX ptbox);       // Removes a text box from the scene.
-    PTBOX PtboxFromItbox(long itbox); // Returns the ith tbox in this frame.
+    PTBOX PtboxFromItbox(int32_t itbox); // Returns the ith tbox in this frame.
     PTBOX PtboxSelected(void)         // Returns the tbox currently selected.
     {
         return _ptboxSelected;
     }
     void SelectTbox(PTBOX ptbox); // Selects this tbox.
     void HideTboxes(void);        // Hides all text boxes.
-    long Ctbox(void)
+    int32_t Ctbox(void)
     {
         return (_pglptbox == pvNil ? 0 : _pglptbox->IvMac());
     }
@@ -342,8 +342,8 @@ class SCEN : public SCEN_PAR
     //
     // Pause functions
     //
-    bool FPauseCore(WIT *pwit, long *pdts); // Adds\Removes a pause to the current frame.
-    bool FPause(WIT wit, long dts);         // Adds\Removes a pause to the current frame, and undo
+    bool FPauseCore(WIT *pwit, int32_t *pdts); // Adds\Removes a pause to the current frame.
+    bool FPause(WIT wit, int32_t dts);         // Adds\Removes a pause to the current frame, and undo
 
     //
     // Background functions
@@ -354,8 +354,8 @@ class SCEN : public SCEN_PAR
     {
         return _pbkgd;
     }                                               // Gets the background for this scene.
-    bool FChangeCamCore(long icam, long *picamOld); // Changes camera viewpoint at current frame.
-    bool FChangeCam(long icam);                     // Changes camera viewpoint at current frame, and undo
+    bool FChangeCamCore(int32_t icam, int32_t *picamOld); // Changes camera viewpoint at current frame.
+    bool FChangeCam(int32_t icam);                        // Changes camera viewpoint at current frame, and undo
     PMBMP PmbmpThumbnail(void);                     // Returns the thumbnail.
     bool FGetTagBkgd(PTAG ptag);                    // Returns the tag for the background for this scene
 

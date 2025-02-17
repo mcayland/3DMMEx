@@ -198,7 +198,7 @@ void TXDC::MarkMem(void)
 /***************************************************************************
     Constructor for a text document display gob.
 ***************************************************************************/
-TXDD::TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfont, long dypFont) : DDG(pdocb, pgcb)
+TXDD::TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, int32_t onn, uint32_t grfont, int32_t dypFont) : DDG(pdocb, pgcb)
 {
     AssertPo(pbsf, 0);
     Assert(vntl.FValidOnn(onn), "bad onn");
@@ -231,7 +231,7 @@ TXDD::~TXDD(void)
 /***************************************************************************
     Create a new TXDD.
 ***************************************************************************/
-PTXDD TXDD::PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfont, long dypFont)
+PTXDD TXDD::PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, int32_t onn, uint32_t grfont, int32_t dypFont)
 {
     PTXDD ptxdd;
 
@@ -254,11 +254,11 @@ PTXDD TXDD::PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, long onn, uint32_t grfon
 ***************************************************************************/
 bool TXDD::_FInit(void)
 {
-    long ib;
+    int32_t ib;
 
     if (!TXDD_PAR::_FInit())
         return fFalse;
-    if (pvNil == (_pglichStarts = GL::PglNew(SIZEOF(long))))
+    if (pvNil == (_pglichStarts = GL::PglNew(SIZEOF(int32_t))))
         return fFalse;
 
     _pglichStarts->SetMinGrow(20);
@@ -299,12 +299,12 @@ void TXDD::_Activate(bool fActive)
 /***************************************************************************
     Find new line starts starting at lnMin.
 ***************************************************************************/
-void TXDD::_Reformat(long lnMin, long *pclnIns, long *pclnDel)
+void TXDD::_Reformat(int32_t lnMin, int32_t *pclnIns, int32_t *pclnDel)
 {
     AssertThis(0);
     AssertIn(lnMin, 0, kcbMax);
-    long ich, ichT;
-    long ln, clnIns, clnDel;
+    int32_t ich, ichT;
+    int32_t ln, clnIns, clnDel;
 
     lnMin = LwMin(lnMin, _pglichStarts->IvMac() - 1);
     ich = *_QichLn(lnMin);
@@ -357,7 +357,7 @@ LDone:
 /***************************************************************************
     Find new line starts starting at lnMin.
 ***************************************************************************/
-void TXDD::_ReformatEdit(long ichMinEdit, long cchIns, long cchDel, long *plnNew, long *pclnIns, long *pclnDel)
+void TXDD::_ReformatEdit(int32_t ichMinEdit, int32_t cchIns, int32_t cchDel, int32_t *plnNew, int32_t *pclnIns, int32_t *pclnDel)
 {
     AssertThis(0);
     AssertIn(ichMinEdit, 0, kcbMax);
@@ -366,8 +366,8 @@ void TXDD::_ReformatEdit(long ichMinEdit, long cchIns, long cchDel, long *plnNew
     AssertNilOrVarMem(plnNew);
     AssertNilOrVarMem(pclnIns);
     AssertNilOrVarMem(pclnDel);
-    long ich;
-    long ln, clnDel;
+    int32_t ich;
+    int32_t ln, clnDel;
 
     // if the first displayed character was affected, reset it
     // to a valid line start
@@ -394,7 +394,7 @@ void TXDD::_ReformatEdit(long ichMinEdit, long cchIns, long cchDel, long *plnNew
 
     if (cchIns != cchDel)
     {
-        long lnT;
+        int32_t lnT;
 
         for (lnT = ln; lnT < _pglichStarts->IvMac(); lnT++)
             *_QichLn(lnT) += cchIns - cchDel;
@@ -411,7 +411,7 @@ void TXDD::_ReformatEdit(long ichMinEdit, long cchIns, long cchDel, long *plnNew
 /***************************************************************************
     Fetch a character of the stream through the cache.
 ***************************************************************************/
-bool TXDD::_FFetchCh(long ich, achar *pch)
+bool TXDD::_FFetchCh(int32_t ich, achar *pch)
 {
     AssertThis(0);
     AssertIn(_ichMinCache, 0, _pbsf->IbMac() + 1);
@@ -420,8 +420,8 @@ bool TXDD::_FFetchCh(long ich, achar *pch)
     if (!FIn(ich, _ichMinCache, _ichLimCache))
     {
         // not a cache hit
-        long ichMinCache, ichLimCache;
-        long ichLim = _pbsf->IbMac();
+        int32_t ichMinCache, ichLimCache;
+        int32_t ichLim = _pbsf->IbMac();
 
         if (!FIn(ich, 0, ichLim))
         {
@@ -474,13 +474,13 @@ bool TXDD::_FFetchCh(long ich, achar *pch)
 /***************************************************************************
     Find the start of the line that ich is on.
 ***************************************************************************/
-bool TXDD::_FFindLineStart(long ich, long *pich)
+bool TXDD::_FFindLineStart(int32_t ich, int32_t *pich)
 {
     AssertThis(0);
     AssertVarMem(pich);
     achar ch;
-    long dichLine = 0;
-    long ichOrig = ich;
+    int32_t dichLine = 0;
+    int32_t ichOrig = ich;
 
     if (ich > 0 && _FFetchCh(ich, &ch) && ch == kchLineFeed)
         dichLine++;
@@ -520,7 +520,7 @@ bool TXDD::_FFindLineStart(long ich, long *pich)
     with the characters between ich and the line start (but not more
     than cchMax characters).
 ***************************************************************************/
-bool TXDD::_FFindNextLineStart(long ich, long *pich, achar *prgch, long cchMax)
+bool TXDD::_FFindNextLineStart(int32_t ich, int32_t *pich, achar *prgch, int32_t cchMax)
 {
     AssertThis(0);
     AssertVarMem(pich);
@@ -579,10 +579,10 @@ bool TXDD::_FFindNextLineStart(long ich, long *pich, achar *prgch, long cchMax)
     Find the start of the line that ich is on.  This routine assumes
     that _pglichStarts is valid and tries to use it.
 ***************************************************************************/
-bool TXDD::_FFindLineStartCached(long ich, long *pich)
+bool TXDD::_FFindLineStartCached(int32_t ich, int32_t *pich)
 {
     AssertThis(0);
-    long ln = _LnFromIch(ich);
+    int32_t ln = _LnFromIch(ich);
 
     if (FIn(ln, 0, _clnDisp))
     {
@@ -597,12 +597,12 @@ bool TXDD::_FFindLineStartCached(long ich, long *pich)
     with the characters between ich and the line start (but not more
     than cchMax characters).
 ***************************************************************************/
-bool TXDD::_FFindNextLineStartCached(long ich, long *pich, achar *prgch, long cchMax)
+bool TXDD::_FFindNextLineStartCached(int32_t ich, int32_t *pich, achar *prgch, int32_t cchMax)
 {
     AssertThis(0);
     if (pvNil == prgch || cchMax == 0)
     {
-        long ln = _LnFromIch(ich);
+        int32_t ln = _LnFromIch(ich);
 
         if (FIn(ln, 0, _pglichStarts->IvMac() - 1))
         {
@@ -623,9 +623,9 @@ void TXDD::Draw(PGNV pgnv, RC *prcClip)
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
     RC rc;
-    long yp;
-    long ln, lnLim;
-    long cchDraw;
+    int32_t yp;
+    int32_t ln, lnLim;
+    int32_t cchDraw;
     achar rgch[kcchMaxLine];
 
     GetRc(&rc, cooLocal);
@@ -650,10 +650,10 @@ void TXDD::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Fetch the characters for the given line.
 ***************************************************************************/
-void TXDD::_FetchLineLn(long ln, achar *prgch, long cchMax, long *pcch, long *pichMin)
+void TXDD::_FetchLineLn(int32_t ln, achar *prgch, int32_t cchMax, int32_t *pcch, int32_t *pichMin)
 {
     AssertThis(0);
-    long ichMin, ichLim;
+    int32_t ichMin, ichLim;
 
     ichMin = _IchMinLn(ln);
     ichLim = _IchMinLn(ln + 1);
@@ -666,10 +666,10 @@ void TXDD::_FetchLineLn(long ln, achar *prgch, long cchMax, long *pcch, long *pi
 /***************************************************************************
     Fetch the characters for the given line.
 ***************************************************************************/
-void TXDD::_FetchLineIch(long ich, achar *prgch, long cchMax, long *pcch, long *pichMin)
+void TXDD::_FetchLineIch(int32_t ich, achar *prgch, int32_t cchMax, int32_t *pcch, int32_t *pichMin)
 {
     AssertThis(0);
-    long ichMin, ichLim;
+    int32_t ichMin, ichLim;
 
     AssertDo(_FFindLineStartCached(ich, &ichMin), 0);
     if (!_FFindNextLineStartCached(ichMin, &ichLim, prgch, cchMax))
@@ -682,11 +682,11 @@ void TXDD::_FetchLineIch(long ich, achar *prgch, long cchMax, long *pcch, long *
 /***************************************************************************
     Draw the line in the given GNV.
 ***************************************************************************/
-void TXDD::_DrawLine(PGNV pgnv, RC *prcClip, long yp, achar *prgch, long cch)
+void TXDD::_DrawLine(PGNV pgnv, RC *prcClip, int32_t yp, achar *prgch, int32_t cch)
 {
     AssertThis(0);
-    long xp, xpOrigin, xpPrev;
-    long ich, ichMin;
+    int32_t xp, xpOrigin, xpPrev;
+    int32_t ich, ichMin;
     RC rc;
 
     xpPrev = 0;
@@ -753,11 +753,11 @@ void TXDD::_DrawLine(PGNV pgnv, RC *prcClip, long yp, achar *prgch, long cch)
 /***************************************************************************
     Return the maximum scroll value for this view of the doc.
 ***************************************************************************/
-long TXDD::_ScvMax(bool fVert)
+int32_t TXDD::_ScvMax(bool fVert)
 {
     if (fVert)
     {
-        long ich;
+        int32_t ich;
 
         if (!_FFindLineStartCached(_pbsf->IbMac() - 1, &ich))
             ich = 0;
@@ -770,11 +770,11 @@ long TXDD::_ScvMax(bool fVert)
 /***************************************************************************
     Perform a scroll according to scaHorz and scaVert.
 ***************************************************************************/
-void TXDD::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
+void TXDD::_Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz, int32_t scvVert)
 {
     AssertThis(0);
     RC rc;
-    long dxp, dyp;
+    int32_t dxp, dyp;
 
     GetRc(&rc, cooLocal);
     dxp = 0;
@@ -806,10 +806,10 @@ void TXDD::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
     dyp = 0;
     if (scaVert != scaNil)
     {
-        long ichMin;
-        long ichMinNew;
-        long cln;
-        long ichT;
+        int32_t ichMin;
+        int32_t ichMinNew;
+        int32_t cln;
+        int32_t ichT;
 
         ichMin = *_QichLn(0);
         switch (scaVert)
@@ -898,10 +898,10 @@ bool TXDD::FCmdSelIdle(PCMD pcmd)
 /***************************************************************************
     Set the selection.
 ***************************************************************************/
-void TXDD::SetSel(long ichAnchor, long ichOther, bool fDraw)
+void TXDD::SetSel(int32_t ichAnchor, int32_t ichOther, bool fDraw)
 {
     AssertThis(0);
-    long ichMac = _pbsf->IbMac();
+    int32_t ichMac = _pbsf->IbMac();
 
     ichAnchor = LwBound(ichAnchor, 0, ichMac + 1);
     ichOther = LwBound(ichOther, 0, ichMac + 1);
@@ -960,7 +960,7 @@ void TXDD::_InvertSel(PGNV pgnv, bool fDraw)
     AssertThis(0);
     AssertPo(pgnv, 0);
     RC rc, rcT;
-    long ln;
+    int32_t ln;
 
     if (_ichAnchor == _ichOther)
     {
@@ -989,14 +989,14 @@ void TXDD::_InvertSel(PGNV pgnv, bool fDraw)
 /***************************************************************************
     Invert a range.
 ***************************************************************************/
-void TXDD::_InvertIchRange(PGNV pgnv, long ich1, long ich2, bool fDraw)
+void TXDD::_InvertIchRange(PGNV pgnv, int32_t ich1, int32_t ich2, bool fDraw)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertIn(ich1, 0, _pbsf->IbMac() + 1);
     AssertIn(ich2, 0, _pbsf->IbMac() + 1);
     RC rc, rcClip, rcT;
-    long ln1, ln2, xp2;
+    int32_t ln1, ln2, xp2;
 
     if (ich1 == ich2)
         return;
@@ -1066,11 +1066,11 @@ void TXDD::_InvertIchRange(PGNV pgnv, long ich1, long ich2, bool fDraw)
     if the ich is before the first displayed ich and returns _clnDisp if
     ich is after the last displayed ich.
 ***************************************************************************/
-long TXDD::_LnFromIch(long ich)
+int32_t TXDD::_LnFromIch(int32_t ich)
 {
     AssertThis(0);
-    long lnMin, lnLim, ln;
-    long ichT;
+    int32_t lnMin, lnLim, ln;
+    int32_t ichT;
 
     lnMin = 0;
     lnLim = LwMin(_clnDisp + 1, _pglichStarts->IvMac());
@@ -1093,10 +1093,10 @@ long TXDD::_LnFromIch(long ich)
     Return the ich of the first character on the given line.  If ln < 0,
     returns 0; if ln >= _clnDisp, returns IbMac().
 ***************************************************************************/
-long TXDD::_IchMinLn(long ln)
+int32_t TXDD::_IchMinLn(int32_t ln)
 {
     AssertThis(0);
-    long ich;
+    int32_t ich;
 
     if (ln < 0)
         return 0;
@@ -1109,12 +1109,12 @@ long TXDD::_IchMinLn(long ln)
 /***************************************************************************
     Return the xp location of the given ich on the given line.
 ***************************************************************************/
-long TXDD::_XpFromLnIch(PGNV pgnv, long ln, long ich)
+int32_t TXDD::_XpFromLnIch(PGNV pgnv, int32_t ln, int32_t ich)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
     RC rc;
-    long cch, ichT;
+    int32_t cch, ichT;
     achar rgch[kcchMaxLine];
 
     if (!FIn(ln, 0, LwMin(_clnDisp, _pglichStarts->IvMac())))
@@ -1128,10 +1128,10 @@ long TXDD::_XpFromLnIch(PGNV pgnv, long ln, long ich)
 /***************************************************************************
     Return the xp location of the given ich.
 ***************************************************************************/
-long TXDD::_XpFromIch(long ich)
+int32_t TXDD::_XpFromIch(int32_t ich)
 {
     AssertThis(0);
-    long ichMin, cch;
+    int32_t ichMin, cch;
     achar rgch[kcchMaxLine];
 
     if (!_FFindLineStartCached(ich, &ichMin))
@@ -1148,11 +1148,11 @@ long TXDD::_XpFromIch(long ich)
     Return the xp location of the end of the given (rgch, cch), assuming
     it starts at the beginning of a line.
 ***************************************************************************/
-long TXDD::_XpFromRgch(PGNV pgnv, achar *prgch, long cch)
+int32_t TXDD::_XpFromRgch(PGNV pgnv, achar *prgch, int32_t cch)
 {
     AssertThis(0);
-    long xp, xpOrigin;
-    long ich, ichMin;
+    int32_t xp, xpOrigin;
+    int32_t ich, ichMin;
     RC rc;
 
     pgnv->SetFont(_onn, _grfont, _dypFont);
@@ -1204,10 +1204,10 @@ long TXDD::_XpFromRgch(PGNV pgnv, achar *prgch, long cch)
 /***************************************************************************
     Find the character that is closest to xp on the given line.
 ***************************************************************************/
-long TXDD::_IchFromLnXp(long ln, long xp)
+int32_t TXDD::_IchFromLnXp(int32_t ln, int32_t xp)
 {
     AssertThis(0);
-    long ichMin, cch;
+    int32_t ichMin, cch;
     achar rgch[kcchMaxLine];
 
     if (ln < 0)
@@ -1221,10 +1221,10 @@ long TXDD::_IchFromLnXp(long ln, long xp)
     Find the character that is closest to xp on the same line as the given
     character.
 ***************************************************************************/
-long TXDD::_IchFromIchXp(long ich, long xp)
+int32_t TXDD::_IchFromIchXp(int32_t ich, int32_t xp)
 {
     AssertThis(0);
-    long ichMin, cch;
+    int32_t ichMin, cch;
     achar rgch[kcchMaxLine];
 
     _FetchLineIch(ich, rgch, SIZEOF(rgch), &cch, &ichMin);
@@ -1234,11 +1234,11 @@ long TXDD::_IchFromIchXp(long ich, long xp)
 /***************************************************************************
     Find the character that is closest to xp on the given line.
 ***************************************************************************/
-long TXDD::_IchFromRgchXp(achar *prgch, long cch, long ichMinLine, long xp)
+int32_t TXDD::_IchFromRgchXp(achar *prgch, int32_t cch, int32_t ichMinLine, int32_t xp)
 {
     AssertThis(0);
-    long xpT;
-    long ich, ichMin, ichLim;
+    int32_t xpT;
+    int32_t ich, ichMin, ichLim;
     GNV gnv(this);
 
     while (cch > 0 && (prgch[cch - 1] == kchReturn || prgch[cch - 1] == kchLineFeed))
@@ -1268,11 +1268,11 @@ long TXDD::_IchFromRgchXp(achar *prgch, long cch, long ichMinLine, long xp)
 void TXDD::ShowSel(bool fDraw)
 {
     AssertThis(0);
-    long ln, lnHope;
-    long dxpScroll, dichScroll;
-    long xpMin, xpLim;
+    int32_t ln, lnHope;
+    int32_t dxpScroll, dichScroll;
+    int32_t xpMin, xpLim;
     RC rc;
-    long ichAnchor = _ichAnchor;
+    int32_t ichAnchor = _ichAnchor;
 
     // find the lines we want to show
     ln = _LnFromIch(_ichOther);
@@ -1283,10 +1283,10 @@ void TXDD::ShowSel(bool fDraw)
     if (!FIn(ln, 0, _clnDispWhole) || !FIn(lnHope, 0, _clnDispWhole))
     {
         // count the number of lines between _ichOther and ichAnchor
-        long ichMinLine, ich;
-        long ichMin = LwMin(ichAnchor, _ichOther);
-        long ichLim = LwMax(ichAnchor, _ichOther);
-        long cln = 0;
+        int32_t ichMinLine, ich;
+        int32_t ichMin = LwMin(ichAnchor, _ichOther);
+        int32_t ichLim = LwMax(ichAnchor, _ichOther);
+        int32_t cln = 0;
 
         AssertDo(_FFindLineStartCached(ichMin, &ichMinLine), 0);
         for (ich = ichMin; cln < _clnDispWhole && _FFindNextLineStartCached(ich, &ich) && ich < ichLim; cln++)
@@ -1351,10 +1351,10 @@ bool TXDD::FCmdTrackMouse(PCMD_MOUSE pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
     RC rc;
-    long ich;
-    long scaHorz, scaVert;
-    long xp = pcmd->xp;
-    long yp = pcmd->yp;
+    int32_t ich;
+    int32_t scaHorz, scaVert;
+    int32_t xp = pcmd->xp;
+    int32_t yp = pcmd->yp;
 
     if (pcmd->cid == cidMouseDown)
     {
@@ -1407,14 +1407,14 @@ bool TXDD::FCmdTrackMouse(PCMD_MOUSE pcmd)
 bool TXDD::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
-    const long kcchInsBuf = 64;
+    const int32_t kcchInsBuf = 64;
     AssertThis(0);
     AssertVarMem(pcmd);
     uint32_t grfcust;
-    long vkDone;
-    long dich, dln, ichLim, ichT, ichMin;
+    int32_t vkDone;
+    int32_t dich, dln, ichLim, ichT, ichMin;
     achar ch;
-    long cact;
+    int32_t cact;
     CMD cmd;
     achar rgch[kcchInsBuf + 1];
 
@@ -1567,7 +1567,7 @@ LInsert:
         }
         else
         {
-            long ichAnchor = _ichAnchor;
+            int32_t ichAnchor = _ichAnchor;
 
             if (ichAnchor == _ichOther)
                 ichAnchor += dich;
@@ -1599,7 +1599,7 @@ LInsert:
 /***************************************************************************
     Replaces the characters between ich1 and ich2 with the given ones.
 ***************************************************************************/
-bool TXDD::FReplace(achar *prgch, long cch, long ich1, long ich2, bool fDraw)
+bool TXDD::FReplace(achar *prgch, int32_t cch, int32_t ich1, int32_t ich2, bool fDraw)
 {
     AssertThis(0);
     _SwitchSel(fFalse, fTrue);
@@ -1618,10 +1618,10 @@ bool TXDD::FReplace(achar *prgch, long cch, long ich1, long ich2, bool fDraw)
     Invalidate all TXDDs on this text doc.  Also dirties the document.
     Should be called by any code that edits the document.
 ***************************************************************************/
-void TXDD::_InvalAllTxdd(long ich, long cchIns, long cchDel)
+void TXDD::_InvalAllTxdd(int32_t ich, int32_t cchIns, int32_t cchDel)
 {
     AssertThis(0);
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
 
     // mark the document dirty
@@ -1638,14 +1638,14 @@ void TXDD::_InvalAllTxdd(long ich, long cchIns, long cchDel)
 /***************************************************************************
     Invalidate the display from ich.  If we're the active TXDD, also redraw.
 ***************************************************************************/
-void TXDD::_InvalIch(long ich, long cchIns, long cchDel)
+void TXDD::_InvalIch(int32_t ich, int32_t cchIns, int32_t cchDel)
 {
     AssertThis(0);
     Assert(!_fSelOn, "why is the sel on during an invalidation?");
     RC rcLoc, rc;
-    long ichAnchor, ichOther;
-    long lnNew, clnIns, clnDel;
-    long yp, dypIns, dypDel;
+    int32_t ichAnchor, ichOther;
+    int32_t lnNew, clnIns, clnDel;
+    int32_t yp, dypIns, dypDel;
 
     // adjust the sel
     ichAnchor = _ichAnchor;
@@ -1717,7 +1717,7 @@ bool TXDD::_FCopySel(PDOCB *ppdocb)
 {
     AssertThis(0);
     PTXDC ptxdc;
-    long ich1, ich2;
+    int32_t ich1, ich2;
 
     if ((ich1 = _ichOther) == (ich2 = _ichAnchor))
         return fFalse;
@@ -1748,11 +1748,11 @@ void TXDD::_ClearSel(void)
 /***************************************************************************
     Paste the given doc into this one.
 ***************************************************************************/
-bool TXDD::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool TXDD::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     AssertThis(0);
     AssertPo(pclip, 0);
-    long ich1, ich2, cch;
+    int32_t ich1, ich2, cch;
     PTXDC ptxdc;
     PBSF pbsf;
 

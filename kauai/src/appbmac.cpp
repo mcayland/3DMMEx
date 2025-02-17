@@ -16,8 +16,8 @@ ASSERTNAME
 uint32_t _GrfcustFromEvt(PEVT pevt);
 
 // by default grow the stack by 8K and call MoreMasters 10 times
-const long _cbExtraStackDef = 0x2000L;
-const long _cactMoreMastersDef = 10;
+const int32_t _cbExtraStackDef = 0x2000L;
+const int32_t _cactMoreMastersDef = 10;
 
 /***************************************************************************
     main for the entire frame work app.  Does system initialization and
@@ -48,7 +48,7 @@ void __cdecl main(void)
     Static method to increase the stack size by cbExtraStack and call
     MoreMasters the specified number of times.
 ***************************************************************************/
-void APPB::_SetupHeap(long cbExtraStack, long cactMoreMasters)
+void APPB::_SetupHeap(int32_t cbExtraStack, int32_t cactMoreMasters)
 {
     // This is called before any Mac OS stuff is initialized, so
     // don't assert on anything.
@@ -111,7 +111,7 @@ bool APPB::FCmdOpenDA(PCMD pcmd)
 
     PRT *pprt;
     schar rgchs[256];
-    long cchs;
+    int32_t cchs;
 
     if (pcmd->pgg != pvNil && pcmd->pgg->IvMac() == 1 && (cchs = pcmd->pgg->Cb(0)) < size(rgchs))
     {
@@ -517,7 +517,7 @@ enum
     Put an alert up.  Return which button was hit.  Returns tYes for yes
     or ok; tNo for no; tMaybe for cancel.
 ***************************************************************************/
-bool APPB::TGiveAlertSz(PSZ psz, long bk, long cok)
+bool APPB::TGiveAlertSz(PSZ psz, int32_t bk, int32_t cok)
 {
     AssertThis(0);
     AssertSz(psz);
@@ -596,7 +596,7 @@ bool APPB::_FInitDebug(void)
     Assert proc.
     REVIEW shonk: Mac FAssertProcApp: flesh out and fix for unicode.
 ***************************************************************************/
-bool APPB::FAssertProcApp(PSZ pszFile, long lwLine, PSZ pszMsg, void *pv, long cb)
+bool APPB::FAssertProcApp(PSZ pszFile, int32_t lwLine, PSZ pszMsg, void *pv, int32_t cb)
 {
     short bid;
     achar stLine[kcbMaxSt];

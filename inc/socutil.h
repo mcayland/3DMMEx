@@ -45,8 +45,8 @@ class MUNB : public MUNB_PAR
 
   protected:
     PMVIE _pmvie;
-    long _iscen;
-    long _nfrm;
+    int32_t _iscen;
+    int32_t _nfrm;
 
     MUNB(void)
     {
@@ -62,20 +62,20 @@ class MUNB : public MUNB_PAR
         return _pmvie;
     }
 
-    void SetIscen(long iscen)
+    void SetIscen(int32_t iscen)
     {
         _iscen = iscen;
     }
-    long Iscen(void)
+    int32_t Iscen(void)
     {
         return _iscen;
     }
 
-    void SetNfrm(long nfrm)
+    void SetNfrm(int32_t nfrm)
     {
         _nfrm = nfrm;
     }
-    long Nfrm(void)
+    int32_t Nfrm(void)
     {
         return _nfrm;
     }
@@ -96,10 +96,10 @@ class AUND : public AUND_PAR
 
   protected:
     PACTR _pactr;
-    long _arid;
+    int32_t _arid;
     bool _fSoonerLater;
     bool _fSndUndo;
-    long _nfrmLast;
+    int32_t _nfrmLast;
     STN _stn; // actor's name
     AUND(void)
     {
@@ -110,7 +110,7 @@ class AUND : public AUND_PAR
     ~AUND(void);
 
     void SetPactr(PACTR pactr);
-    void SetArid(long arid)
+    void SetArid(int32_t arid)
     {
         _arid = arid;
     }
@@ -122,7 +122,7 @@ class AUND : public AUND_PAR
     {
         _fSndUndo = fSndUndo;
     }
-    void SetNfrmLast(long nfrmLast)
+    void SetNfrmLast(int32_t nfrmLast)
     {
         _nfrmLast = nfrmLast;
     }

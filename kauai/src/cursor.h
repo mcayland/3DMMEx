@@ -24,7 +24,7 @@ enum
 // cursor on file - stored in a GG with the rgb's in the variable part
 struct CURF
 {
-    long curt; // type of cursor
+    int32_t curt; // type of cursor
     uint8_t xp; // hot spot
     uint8_t yp;
     uint8_t dxp; // size - either 16 or 32 and they should match
@@ -57,7 +57,7 @@ class CURS : public CURS_PAR
     ~CURS(void);
 
   public:
-    static bool FReadCurs(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadCurs(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, int32_t *pcb);
 
     void Set(void);
 };

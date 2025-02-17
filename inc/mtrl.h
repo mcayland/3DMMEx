@@ -20,7 +20,7 @@ struct CMTLF
 {
     int16_t bo;
     int16_t osk;
-    long ibset; // which body part set this CMTL attaches to
+    int32_t ibset; // which body part set this CMTL attaches to
 };
 VERIFY_STRUCT_SIZE(CMTLF, 8);
 const BOM kbomCmtlf = 0x5c000000;
@@ -70,8 +70,8 @@ class MTRL : public MTRL_PAR
 
   public:
     static bool FSetShadeTable(PCFL pcfl, CTG ctg, CNO cno);
-    static PMTRL PmtrlNew(long iclrBase = ivNil, long cclr = ivNil);
-    static bool FReadMtrl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static PMTRL PmtrlNew(int32_t iclrBase = ivNil, int32_t cclr = ivNil);
+    static bool FReadMtrl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     static PMTRL PmtrlNewFromPix(PFNI pfni);
     static PMTRL PmtrlNewFromBmp(PFNI pfni, PGL pglclr = pvNil);
     static PMTRL PmtrlFromBmtl(PBMTL pbmtl);
@@ -104,8 +104,8 @@ class CMTL : public CMTL_PAR
   protected:
     PMTRL *_prgpmtrl; // _cbprt PMTRLs, one per body part in this CMTL's set
     PMODL *_prgpmodl; // _cbprt PMODLs, one per body part in this CMTL's set
-    long _cbprt;      // count of body parts in this CMTL
-    long _ibset;      // body part set that this CMTL should be applied to
+    int32_t _cbprt;   // count of body parts in this CMTL
+    int32_t _ibset;   // body part set that this CMTL should be applied to
 
   protected:
     bool _FInit(PCRF pcrf, CTG ctg, CNO cno);
@@ -114,18 +114,18 @@ class CMTL : public CMTL_PAR
     } // can't instantiate directly; must use PcmtlRead
 
   public:
-    static PCMTL PcmtlNew(long ibset, long cbprt, PMTRL *prgpmtrl);
-    static bool FReadCmtl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static PCMTL PcmtlNew(int32_t ibset, int32_t cbprt, PMTRL *prgpmtrl);
+    static bool FReadCmtl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     static bool FHasModels(PCFL pcfl, CTG ctg, CNO cno);
     static bool FEqualModels(PCFL pcfl, CNO cno1, CNO cno2);
     ~CMTL(void);
-    PBMTL Pbmtl(long ibmtl);
-    PMODL Pmodl(long imodl);
-    long Ibset(void)
+    PBMTL Pbmtl(int32_t ibmtl);
+    PMODL Pmodl(int32_t imodl);
+    int32_t Ibset(void)
     {
         return _ibset;
     }
-    long Cbprt(void)
+    int32_t Cbprt(void)
     {
         return _cbprt;
     }

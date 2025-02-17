@@ -31,20 +31,20 @@ class MP : public MP_PAR
     CMD_MAP_DEC(MP)
 
   protected:
-    long _cid;  // cid to enqueue to apply selection
+    int32_t _cid; // cid to enqueue to apply selection
     PCMH _pcmh; // command handler to enqueue command to
 
   protected:
-    virtual void _ApplySelection(long ithumSelect, long sid);
-    virtual long _IthumFromThum(long thumSelect, long sidSelect);
+    virtual void _ApplySelection(int32_t ithumSelect, int32_t sid);
+    virtual int32_t _IthumFromThum(int32_t thumSelect, int32_t sidSelect);
     MP(PGCB pgcb) : MP_PAR(pgcb)
     {
     }
     bool _FInit(PRCA prca);
 
   public:
-    static PMP PmpNew(long kidParent, long kidMenu, PRCA prca, PCMD pcmd, BWS bws, long ithumSelect, long sidSelect,
-                      CKI ckiRoot, CTG ctg, PCMH pcmh, long cid, bool fMoveTop);
+    static PMP PmpNew(int32_t kidParent, int32_t kidMenu, PRCA prca, PCMD pcmd, BWS bws, int32_t ithumSelect, int32_t sidSelect,
+                      CKI ckiRoot, CTG ctg, PCMH pcmh, int32_t cid, bool fMoveTop);
 
     virtual bool FCmdSelIdle(PCMD pcmd);
 };
@@ -63,16 +63,16 @@ class MPFNT : public MPFNT_PAR
     CMD_MAP_DEC(MPFNT)
 
   protected:
-    void _AdjustRc(long cthum, long cfrm);
+    void _AdjustRc(int32_t cthum, int32_t cfrm);
 
-    virtual void _ApplySelection(long ithumSelect, long sid);
-    virtual bool _FSetThumFrame(long istn, PGOB pgobPar);
+    virtual void _ApplySelection(int32_t ithumSelect, int32_t sid);
+    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar);
     MPFNT(PGCB pgcb) : MPFNT_PAR(pgcb)
     {
     }
 
   public:
-    static PMPFNT PmpfntNew(PRCA prca, long kidParent, long kidMenu, PCMD pcmd, long ithumSelect, PGST pgst);
+    static PMPFNT PmpfntNew(PRCA prca, int32_t kidParent, int32_t kidMenu, PCMD pcmd, int32_t ithumSelect, PGST pgst);
 
     virtual bool FCmdSelIdle(PCMD pcmd);
 };

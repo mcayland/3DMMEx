@@ -20,11 +20,11 @@
 #include "studio.h"
 ASSERTNAME
 
-const long kcchMaxTdt = 50;                     // max length of a spletter
-const long kdtsMaxRecord = 10 * kdtsSecond;     // max time to record a sound
-const long kdtimMeterUpdate = kdtimSecond / 10; // interval to update meter
-const long kcsampSec = 11025;                   // sampling rate for recorder easel
-long csampSec;                                  // sampling rate for recorder easel
+const int32_t kcchMaxTdt = 50;                  // max length of a spletter
+const int32_t kdtsMaxRecord = 10 * kdtsSecond;  // max time to record a sound
+const int32_t kdtimMeterUpdate = kdtimSecond / 10; // interval to update meter
+const int32_t kcsampSec = 11025;                   // sampling rate for recorder easel
+int32_t csampSec;                                  // sampling rate for recorder easel
 
 RTCLASS(ESL)
 RTCLASS(ESLT)
@@ -37,7 +37,7 @@ RTCLASS(ESLR)
 /***************************************************************************
     Function to build a GCB for creating a child GOB
 ***************************************************************************/
-bool FBuildGcb(PGCB pgcb, long kidParent, long kidChild)
+bool FBuildGcb(PGCB pgcb, int32_t kidParent, int32_t kidChild)
 {
     AssertVarMem(pgcb);
 
@@ -59,7 +59,7 @@ bool FBuildGcb(PGCB pgcb, long kidParent, long kidChild)
 /***************************************************************************
     Sets the given gok to the given state
 ***************************************************************************/
-void SetGokState(long kid, long st)
+void SetGokState(int32_t kid, int32_t st)
 {
     PGOK pgok;
 
@@ -84,7 +84,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Create a new easel
 ***************************************************************************/
-PESL ESL::PeslNew(PRCA prca, long kidParent, long kidEasel)
+PESL ESL::PeslNew(PRCA prca, int32_t kidParent, int32_t kidEasel)
 {
     AssertPo(prca, 0);
 
@@ -109,7 +109,7 @@ PESL ESL::PeslNew(PRCA prca, long kidParent, long kidEasel)
 /***************************************************************************
     Initialize the easel and make it visible
 ***************************************************************************/
-bool ESL::_FInit(PRCA prca, long kidEasel)
+bool ESL::_FInit(PRCA prca, int32_t kidEasel)
 {
     AssertBaseThis(0);
     AssertPo(prca, 0);
@@ -205,7 +205,7 @@ END_CMD_MAP_NIL()
     Create a new text easel.  If pactr is pvNil, this is for a new TDT
     and pstnNew, tdtsNew, and ptagTdfNew will be used as initial values.
 ***************************************************************************/
-PESLT ESLT::PesltNew(PRCA prca, PMVIE pmvie, PACTR pactr, PSTN pstnNew, long tdtsNew, PTAG ptagTdfNew)
+PESLT ESLT::PesltNew(PRCA prca, PMVIE pmvie, PACTR pactr, PSTN pstnNew, int32_t tdtsNew, PTAG ptagTdfNew)
 {
     AssertPo(prca, 0);
     AssertPo(pmvie, 0);
@@ -238,7 +238,7 @@ PESLT ESLT::PesltNew(PRCA prca, PMVIE pmvie, PACTR pactr, PSTN pstnNew, long tdt
 /***************************************************************************
     Set up this easel
 ***************************************************************************/
-bool ESLT::_FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr, PSTN pstnNew, long tdtsNew, PTAG ptagTdfNew)
+bool ESLT::_FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr, PSTN pstnNew, int32_t tdtsNew, PTAG ptagTdfNew)
 {
     AssertBaseThis(0);
     AssertPo(prca, 0);
@@ -359,9 +359,9 @@ bool ESLT::FCmdTransmogrify(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long tdts;
+    int32_t tdts;
     CKI cki;
-    long ithd;
+    int32_t ithd;
     THD thd;
     TAG tagTdf;
     TAG tagMtrl;
@@ -423,12 +423,12 @@ bool ESLT::FCmdStartPopup(PCMD pcmd)
     AssertVarMem(pcmd);
 
     CKI ckiGPar;
-    long kid;
-    long ithumSelect = ivNil;
-    long sidSelect = vpapp->SidProduct();
-    long cidSelect;
+    int32_t kid;
+    int32_t ithumSelect = ivNil;
+    int32_t sidSelect = vpapp->SidProduct();
+    int32_t cidSelect;
     TAG tagTdf;
-    long tdts;
+    int32_t tdts;
     CNO cnoSelect;
 
     ckiGPar.cno = cnoNil;
@@ -508,8 +508,8 @@ bool ESLT::FCmdSetShape(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long tdtsOld;
-    long tdtsNew = pcmd->rglw[0];
+    int32_t tdtsOld;
+    int32_t tdtsNew = pcmd->rglw[0];
 
     _pape->GetTdtInfo(pvNil, &tdtsOld, pvNil);
     // If FChangeTdt fails, someone will report the error
@@ -560,21 +560,21 @@ bool ESLT::_FAcceptChanges(bool *pfDismissEasel)
     AssertThis(0);
     AssertVarMem(pfDismissEasel);
 
-    long ich;
+    int32_t ich;
     bool fNonSpaceFound = fFalse;
     PACTR pactrDup = pvNil;
     bool fChangesMade = fFalse;
     PTDT ptdtOld;
     STN stnOld;
-    long tdtsOld;
+    int32_t tdtsOld;
     TAG tagTdfOld;
     STN stnNew;
-    long tdtsNew;
+    int32_t tdtsNew;
     TAG tagTdfNew;
-    long cbset;
-    long ibset;
+    int32_t cbset;
+    int32_t ibset;
     tribool fMtrl;
-    long cmid;
+    int32_t cmid;
     TAG tagMtrl;
 
     if (pvNil == _pactr) // new TDT
@@ -739,7 +739,7 @@ PSNE SNE::PsneNew(PEDPAR pedpar, PESLT peslt, PSTN pstnInit)
     Trap the default FReplace to prevent illegal strings and to notify the
     ESLT that the text has changed.
 ***************************************************************************/
-bool SNE::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin)
+bool SNE::FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin)
 {
     AssertThis(0);
 
@@ -767,9 +767,9 @@ bool SNE::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long g
         // all ASCII values from xxx to xxx + kcchMaxTdt (or up to chNil).
         STN stnT;
         achar rgch[kcchMaxTdt];
-        long ichStart;
-        long ich;
-        long cch = 0;
+        int32_t ichStart;
+        int32_t ich;
+        int32_t cch = 0;
 
         stnT.SetRgch(&stnNew.Psz()[1], 3);
         if (stnT.FGetLw(&ichStart, 10))
@@ -863,7 +863,7 @@ PESLA ESLA::PeslaNew(PRCA prca, PMVIE pmvie, PACTR pactr)
 /***************************************************************************
     Set up this easel
 ***************************************************************************/
-bool ESLA::_FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr)
+bool ESLA::_FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr)
 {
     AssertBaseThis(0);
     AssertPo(prca, 0);
@@ -963,14 +963,14 @@ bool ESLA::_FAcceptChanges(bool *pfDismissEasel)
 
     PACTR pactrDup;
     bool fNonSpaceFound;
-    long ich;
+    int32_t ich;
     bool fChangesMade = fFalse;
     STN stnOld;
     STN stnNew;
-    long cbset;
-    long ibset;
+    int32_t cbset;
+    int32_t ibset;
     tribool fMtrl;
-    long cmid;
+    int32_t cmid;
     TAG tagMtrl;
 
     if (!_pactr->FDup(&pactrDup))
@@ -1072,7 +1072,7 @@ PESLL ESLL::PesllNew(PRCA prca, PMVIE pmvie, PACTR pactr)
 
     PESLL pesll;
     GCB gcb;
-    long kidGlass;
+    int32_t kidGlass;
 
     if (pvNil == pactr)
         kidGlass = kidListenGlassBkgd;
@@ -1099,7 +1099,7 @@ PESLL ESLL::PesllNew(PRCA prca, PMVIE pmvie, PACTR pactr)
 /***************************************************************************
     Set up this easel
 ***************************************************************************/
-bool ESLL::_FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr)
+bool ESLL::_FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr)
 {
     AssertBaseThis(0);
     AssertPo(prca, 0);
@@ -1107,7 +1107,7 @@ bool ESLL::_FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr)
     AssertNilOrPo(pactr, 0);
 
     PGL pgltag;
-    long vlm;
+    int32_t vlm;
     bool fLoop;
 
     if (!ESLL_PAR::_FInit(prca, kidEasel))
@@ -1207,7 +1207,7 @@ bool LSND::FValidSnd(void)
 {
     AssertThis(0);
     PMSND pmsnd;
-    long itag;
+    int32_t itag;
     TAG tag;
 
     if (pvNil == _pgltag)
@@ -1246,8 +1246,8 @@ bool ESLL::FCmdVlm(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long kid = pcmd->rglw[0];
-    long vlm = pcmd->rglw[1];
+    int32_t kid = pcmd->rglw[0];
+    int32_t vlm = pcmd->rglw[1];
 
     switch (kid)
     {
@@ -1282,7 +1282,7 @@ bool ESLL::FCmdPlay(PCMD pcmd)
     AssertVarMem(pcmd);
     AssertNilOrPo(_pactr, 0);
 
-    long kid = pcmd->rglw[0];
+    int32_t kid = pcmd->rglw[0];
     bool fPlay = FPure(pcmd->rglw[1]);
 
     if (!fPlay)
@@ -1326,7 +1326,7 @@ bool ESLL::_FAcceptChanges(bool *pfDismissEasel)
     AssertThis(0);
     AssertVarMem(pfDismissEasel);
 
-    long vlmNew;
+    int32_t vlmNew;
     bool fNuked;
 
     if (pvNil == _pactr)
@@ -1454,18 +1454,18 @@ void ESLL::MarkMem(void)
     Initialize a LSND.  Note that the LSND takes over the reference to
     *ppgltag.
 ***************************************************************************/
-bool LSND::FInit(long sty, long kidVol, long kidIcon, long kidEditBox, PGL *ppgltag, long vlm, bool fLoop, long objID,
+bool LSND::FInit(int32_t sty, int32_t kidVol, int32_t kidIcon, int32_t kidEditBox, PGL *ppgltag, int32_t vlm, bool fLoop, int32_t objID,
                  bool fMatcher)
 {
     AssertBaseThis(0);
     AssertIn(sty, 0, styLim);
     AssertNilOrPo(*ppgltag, 0);
 
-    long st;
+    int32_t st;
     PGOK pgok;
     PTGOB ptgob;
     PMSND pmsnd;
-    long itag;
+    int32_t itag;
     TAG tag;
 
     _sty = sty;
@@ -1540,7 +1540,7 @@ void LSND::Play(void)
 {
     AssertThis(0);
 
-    long itag;
+    int32_t itag;
     TAG tag;
     PMSND pmsnd;
 
@@ -1573,7 +1573,7 @@ void LSND::Play(void)
     Return whether the LSND has changed.  Specifies new volume and whether
     the sound was nuked.
 ***************************************************************************/
-bool LSND::FChanged(long *pvlmNew, bool *pfNuked)
+bool LSND::FChanged(int32_t *pvlmNew, bool *pfNuked)
 {
     AssertThis(0);
     AssertVarMem(pvlmNew);
@@ -1658,7 +1658,7 @@ PESLR ESLR::PeslrNew(PRCA prca, PMVIE pmvie, bool fSpeech, PSTN pstnNew)
 /***************************************************************************
     Set up this easel
 ***************************************************************************/
-bool ESLR::_FInit(PRCA prca, long kidEasel, PMVIE pmvie, bool fSpeech, PSTN pstnNew)
+bool ESLR::_FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, bool fSpeech, PSTN pstnNew)
 {
     AssertBaseThis(0);
     AssertPo(prca, 0);
@@ -1736,8 +1736,8 @@ void ESLR::_UpdateMeter(void)
     AssertThis(0);
 
     PGOK pgok;
-    long dtsRec;
-    long percentDone; // no good hungarian for a percent
+    int32_t dtsRec;
+    int32_t percentDone; // no good hungarian for a percent
 
     if (_fRecording)
     {
@@ -1887,8 +1887,8 @@ bool ESLR::_FAcceptChanges(bool *pfDismissEasel)
     STN stn;
     PFIL pfil = pvNil;
     CNO cno;
-    long sty = _fSpeech ? stySpeech : stySfx;
-    long kid = _fSpeech ? kidSpeechGlass : kidFXGlass;
+    int32_t sty = _fSpeech ? stySpeech : stySfx;
+    int32_t kid = _fSpeech ? kidSpeechGlass : kidFXGlass;
 
     if (_psrec->FRecording())
     {

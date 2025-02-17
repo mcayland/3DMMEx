@@ -57,7 +57,7 @@ PDDG DOCMBMP::PddgNew(PGCB pgcb)
 /***************************************************************************
     Return the size of the thing on file.
 ***************************************************************************/
-long DOCMBMP::_CbOnFile(void)
+int32_t DOCMBMP::_CbOnFile(void)
 {
     return _pmbmp->CbOnFile();
 }

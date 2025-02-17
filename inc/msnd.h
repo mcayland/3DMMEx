@@ -43,9 +43,9 @@ enum
 };
 
 // Sound-class-number constants
-const long sclNonLoop = 0;
-const long sclLoopWav = 1;
-const long sclLoopMidi = 2;
+const int32_t sclNonLoop = 0;
+const int32_t sclLoopWav = 1;
+const int32_t sclLoopMidi = 2;
 
 #define vlmNil (-1)
 
@@ -60,13 +60,13 @@ enum
 
 // Sound Queue Delta times
 // Any sound times less than ksqdtimLong will be clocked & stopped
-const long kdtimOffMsq = 0;
-const long kdtimLongMsq = klwMax;
-const long kdtim2Msq = ((kdtimSecond * 2) * 10) / 12; // adjustment -> 2 seconds
-const long kSndSamplesPerSec = 22050;
-const long kSndBitsPerSample = 8;
-const long kSndBlockAlign = 1;
-const long kSndChannels = 1;
+const int32_t kdtimOffMsq = 0;
+const int32_t kdtimLongMsq = klwMax;
+const int32_t kdtim2Msq = ((kdtimSecond * 2) * 10) / 12; // adjustment -> 2 seconds
+const int32_t kSndSamplesPerSec = 22050;
+const int32_t kSndBitsPerSample = 8;
+const int32_t kSndBlockAlign = 1;
+const int32_t kSndChannels = 1;
 
 /****************************************
 
@@ -77,8 +77,8 @@ struct MSNDF
 {
     int16_t bo;
     int16_t osk;
-    long sty;        // sound type
-    long vlmDefault; // default volume
+    int32_t sty;     // sound type
+    int32_t vlmDefault; // default volume
     bool fInvalid;   // Invalid flag
 };
 VERIFY_STRUCT_SIZE(MSNDF, 16);
@@ -113,8 +113,8 @@ class MSND : public MSND_PAR
     CTG _ctgSnd;       // CTG of the WAV or MIDI chunk
     CNO _cnoSnd;       // CNO of the WAV or MIDI chunk
     PRCA _prca;        // file that the WAV/MIDI lives in
-    long _sty;         // MIDI, speech, or sfx
-    long _vlm;         // Volume of the sound
+    int32_t _sty;      // MIDI, speech, or sfx
+    int32_t _vlm;      // Volume of the sound
     tribool _fNoSound; // Set if silent sound
     STN _stn;          // Sound name
     bool _fInvalid;    // Invalid flag
@@ -123,27 +123,27 @@ class MSND : public MSND_PAR
     bool _FInit(PCFL pcfl, CTG ctg, CNO cno);
 
   public:
-    static bool FReadMsnd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
-    static bool FGetMsndInfo(PCFL pcfl, CTG ctg, CNO cno, bool *pfInvalid = pvNil, long *psty = pvNil,
-                             long *pvlm = pvNil);
+    static bool FReadMsnd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
+    static bool FGetMsndInfo(PCFL pcfl, CTG ctg, CNO cno, bool *pfInvalid = pvNil, int32_t *psty = pvNil,
+                             int32_t *pvlm = pvNil);
     static bool FCopyMidi(PFIL pfilSrc, PCFL pcflDest, CNO *pcno, PSTN pstn = pvNil);
     static bool FWriteMidi(PCFL pcflDest, PMIDS pmids, STN *pstnName, CNO *pcno);
-    static bool FCopyWave(PFIL pfilSrc, PCFL pcflDest, long sty, CNO *pcno, PSTN pstn = pvNil);
-    static bool FWriteWave(PFIL pfilSrc, PCFL pcflDest, long sty, STN *pstnName, CNO *pcno);
+    static bool FCopyWave(PFIL pfilSrc, PCFL pcflDest, int32_t sty, CNO *pcno, PSTN pstn = pvNil);
+    static bool FWriteWave(PFIL pfilSrc, PCFL pcflDest, int32_t sty, STN *pstnName, CNO *pcno);
     ~MSND(void);
 
-    static long SqnActr(long sty, long objID);
-    static long SqnBkgd(long sty, long objID);
-    long Scl(bool fLoop)
+    static int32_t SqnActr(int32_t sty, int32_t objID);
+    static int32_t SqnBkgd(int32_t sty, int32_t objID);
+    int32_t Scl(bool fLoop)
     {
         return (fLoop ? ((_sty == styMidi) ? sclLoopMidi : sclLoopWav) : sclNonLoop);
     }
-    long SqnActr(long objID)
+    int32_t SqnActr(int32_t objID)
     {
         AssertThis(0);
         return SqnActr(_sty, objID);
     }
-    long SqnBkgd(long objID)
+    int32_t SqnBkgd(int32_t objID)
     {
         AssertThis(0);
         return SqnBkgd(_sty, objID);
@@ -160,24 +160,24 @@ class MSND : public MSND_PAR
         AssertThis(0);
         return &_stn;
     }
-    long Sty(void)
+    int32_t Sty(void)
     {
         AssertThis(0);
         return _sty;
     }
-    long Vlm(void)
+    int32_t Vlm(void)
     {
         AssertThis(0);
         return _vlm;
     }
-    long Spr(long tool); // Return Priority
+    int32_t Spr(int32_t tool); // Return Priority
     tribool FNoSound(void)
     {
         AssertThis(0);
         return _fNoSound;
     }
 
-    void Play(long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr = fFalse, uint32_t dtsStart = 0);
+    void Play(int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr = fFalse, uint32_t dtsStart = 0);
 };
 
 /****************************************
@@ -192,16 +192,16 @@ typedef class MSQ *PMSQ;
 #define MSQ_PAR CMH
 #define kclsMSQ 'MSQ'
 
-const long kcsqeGrow = 10; // quantum growth for sqe
+const int32_t kcsqeGrow = 10; // quantum growth for sqe
 
 // Movie sound queue entry
 struct SQE
 {
-    long objID;     // Unique identifier (actor id, eg)
+    int32_t objID;  // Unique identifier (actor id, eg)
     bool fLoop;     // Looping sound flag
     bool fQueue;    // Queued sound
-    long vlmMod;    // Volume modification
-    long spr;       // Priority
+    int32_t vlmMod; // Volume modification
+    int32_t spr;    // Priority
     bool fActr;     // Actor vs Scene (to generate unique class)
     PMSND pmsnd;    // PMSND
     uint32_t dtsStart; // How far into the sound to start playing
@@ -216,18 +216,18 @@ class MSQ : public MSQ_PAR
 
   protected:
     PGL _pglsqe; // Sound queue entries
-    long _dtim;  // Time sound allowed to play
+    int32_t _dtim; // Time sound allowed to play
     PCLOK _pclok;
 
   public:
-    MSQ(long hid) : MSQ_PAR(hid)
+    MSQ(int32_t hid) : MSQ_PAR(hid)
     {
     }
     ~MSQ(void);
 
     static PMSQ PmsqNew(void);
 
-    bool FEnqueue(PMSND pmsnd, long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr = fFalse,
+    bool FEnqueue(PMSND pmsnd, int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr = fFalse,
                   uint32_t dtsStart = 0, bool fLowPri = fFalse);
     void PlayMsq(void);  // Destroys queue as it plays
     void FlushMsq(void); // Without playing the sounds
@@ -264,12 +264,12 @@ class MSQ : public MSQ_PAR
     }
 
     // Save/Restore snd-on duration times
-    long DtimSnd(void)
+    int32_t DtimSnd(void)
     {
         AssertThis(0);
         return _dtim;
     }
-    void SndOnDtim(long dtim)
+    void SndOnDtim(int32_t dtim)
     {
         AssertThis(0);
         _dtim = dtim;

@@ -20,13 +20,13 @@ RTCLASS(CODC)
     The header on a compressed block consists of the cfmt (a long in big
     endian order) and the decompressed length (a long in big endian order).
 ***************************************************************************/
-const long kcbCodecHeader = 2 * SIZEOF(long);
+const int32_t kcbCodecHeader = 2 * SIZEOF(int32_t);
 
 /***************************************************************************
     Constructor for the compression manager. pcodc is an optional default
     codec. cfmt is the default compression format.
 ***************************************************************************/
-CODM::CODM(PCODC pcodc, long cfmt)
+CODM::CODM(PCODC pcodc, int32_t cfmt)
 {
     AssertNilOrPo(pcodc, 0);
     Assert(cfmtNil != cfmt, "nil default compression format");
@@ -50,7 +50,7 @@ CODM::~CODM(void)
     ReleasePpo(&_pcodcDef);
     if (pvNil != _pglpcodc)
     {
-        long ipcodc;
+        int32_t ipcodc;
         PCODC pcodc;
 
         for (ipcodc = _pglpcodc->IvMac(); ipcodc-- > 0;)
@@ -85,7 +85,7 @@ void CODM::MarkMem(void)
     MarkMemObj(_pcodcDef);
     if (pvNil != _pglpcodc)
     {
-        long ipcodc;
+        int32_t ipcodc;
         PCODC pcodc;
 
         for (ipcodc = _pglpcodc->IvMac(); ipcodc-- > 0;)
@@ -101,7 +101,7 @@ void CODM::MarkMem(void)
 /***************************************************************************
     Set the default compression type.
 ***************************************************************************/
-void CODM::SetCfmtDefault(long cfmt)
+void CODM::SetCfmtDefault(int32_t cfmt)
 {
     AssertThis(0);
 
@@ -135,7 +135,7 @@ bool CODM::FRegisterCodec(PCODC pcodc)
 /***************************************************************************
     Return whether we can encode or decode the given format.
 ***************************************************************************/
-bool CODM::FCanDo(long cfmt, bool fEncode)
+bool CODM::FCanDo(int32_t cfmt, bool fEncode)
 {
     AssertThis(0);
     PCODC pcodc;
@@ -150,7 +150,7 @@ bool CODM::FCanDo(long cfmt, bool fEncode)
     Gets the type of compression used on the block (assuming it is
     compressed).
 ***************************************************************************/
-bool CODM::FGetCfmtFromBlck(PBLCK pblck, long *pcfmt)
+bool CODM::FGetCfmtFromBlck(PBLCK pblck, int32_t *pcfmt)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -172,7 +172,7 @@ bool CODM::FGetCfmtFromBlck(PBLCK pblck, long *pcfmt)
 /***************************************************************************
     Look for a codec that can handle the given format.
 ***************************************************************************/
-bool CODM::_FFindCodec(bool fEncode, long cfmt, PCODC *ppcodc)
+bool CODM::_FFindCodec(bool fEncode, int32_t cfmt, PCODC *ppcodc)
 {
     AssertThis(0);
     AssertVarMem(ppcodc);
@@ -186,7 +186,7 @@ bool CODM::_FFindCodec(bool fEncode, long cfmt, PCODC *ppcodc)
 
     if (pvNil != _pglpcodc)
     {
-        long ipcodc;
+        int32_t ipcodc;
         PCODC pcodc;
 
         for (ipcodc = _pglpcodc->IvMac(); ipcodc-- > 0;)
@@ -207,7 +207,7 @@ bool CODM::_FFindCodec(bool fEncode, long cfmt, PCODC *ppcodc)
     Compress or decompress an hq of data. Note that the value of *phq
     may change. cfmt should be cfmtNil to decompress.
 ***************************************************************************/
-bool CODM::_FCodePhq(long cfmt, HQ *phq)
+bool CODM::_FCodePhq(int32_t cfmt, HQ *phq)
 {
     AssertThis(0);
     AssertVarMem(phq);
@@ -215,8 +215,8 @@ bool CODM::_FCodePhq(long cfmt, HQ *phq)
 
     HQ hqDst;
     void *pvSrc;
-    long cbSrc;
-    long cbDst;
+    int32_t cbSrc;
+    int32_t cbDst;
     bool fRet;
 
     pvSrc = PvLockHq(*phq);
@@ -252,7 +252,7 @@ bool CODM::_FCodePhq(long cfmt, HQ *phq)
     *pcbDst with the required destination buffer size. This is just an
     estimate in the compress case.
 ***************************************************************************/
-bool CODM::_FCode(long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst)
+bool CODM::_FCode(int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst)
 {
     AssertIn(cbSrc, 1, kcbMax);
     AssertPvCb(pvSrc, cbSrc);

@@ -21,13 +21,13 @@ RTCLASS(WOKS)
 /***************************************************************************
     Static method to read a GKDS from the CRF. This is a CRF object reader.
 ***************************************************************************/
-bool GKDS::FReadGkds(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool GKDS::FReadGkds(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     PGKDS pgkds;
     GOKDF gokdf;
     HQ hq;
     LOP *qlop;
-    long cb;
+    int32_t cb;
 
     *pcb = pblck->Cb(fTrue);
     if (pvNil == ppbaco)
@@ -68,7 +68,7 @@ bool GKDS::FReadGkds(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     pgkds->_hqData = hq;
     pgkds->_gokk = gokdf.gokk;
     if (gokdf.bo == kboOther)
-        SwapBytesRglw(QvFromHq(hq), cb / SIZEOF(long));
+        SwapBytesRglw(QvFromHq(hq), cb / SIZEOF(int32_t));
 
     qlop = (LOP *)QvFromHq(hq);
     for (pgkds->_clop = 0;; qlop++)
@@ -134,7 +134,7 @@ void GKDS::MarkMem(void)
 /***************************************************************************
     Return the GOK kind id.
 ***************************************************************************/
-long GKDS::Gokk(void)
+int32_t GKDS::Gokk(void)
 {
     AssertThis(0);
     return _gokk;
@@ -143,12 +143,12 @@ long GKDS::Gokk(void)
 /***************************************************************************
     Look for a cursor map entry in this GKDS.
 ***************************************************************************/
-bool GKDS::FGetCume(uint32_t grfcust, long sno, CUME *pcume)
+bool GKDS::FGetCume(uint32_t grfcust, int32_t sno, CUME *pcume)
 {
     AssertThis(0);
     AssertVarMem(pcume);
     CUME *qcume;
-    long ccume;
+    int32_t ccume;
     uint32_t fbitSno = (1L << (sno & 0x1F));
 
     if (0 == _ccume)
@@ -170,7 +170,7 @@ bool GKDS::FGetCume(uint32_t grfcust, long sno, CUME *pcume)
 /***************************************************************************
     Get the location map entry from the parent id.
 ***************************************************************************/
-void GKDS::GetLop(long hidPar, LOP *plop)
+void GKDS::GetLop(int32_t hidPar, LOP *plop)
 {
     AssertThis(0);
     AssertVarMem(plop);
@@ -265,7 +265,7 @@ PGOKD WOKS::PgokdFetch(CTG ctg, CNO cno, PRCA prca)
 /***************************************************************************
     Create a new gob in this kidspace world.
 ***************************************************************************/
-PGOK WOKS::PgokNew(PGOB pgobPar, long hid, CNO cnoGokd, PRCA prca)
+PGOK WOKS::PgokNew(PGOB pgobPar, int32_t hid, CNO cnoGokd, PRCA prca)
 {
     AssertThis(0);
     AssertNilOrPo(pgobPar, 0);
@@ -335,7 +335,7 @@ PHBAL WOKS::PhbalNew(PGOB pgobPar, PRCA prca, CNO cnoTopic, PHTOP phtop)
 /***************************************************************************
     Get the command handler for this hid.
 ***************************************************************************/
-PCMH WOKS::PcmhFromHid(long hid)
+PCMH WOKS::PcmhFromHid(int32_t hid)
 {
     AssertThis(0);
     PCMH pcmh;
@@ -357,7 +357,7 @@ PCMH WOKS::PcmhFromHid(long hid)
 /***************************************************************************
     Get the clock having the given hid.
 ***************************************************************************/
-PCLOK WOKS::PclokFromHid(long hid)
+PCLOK WOKS::PclokFromHid(int32_t hid)
 {
     AssertThis(0);
 
@@ -399,7 +399,7 @@ bool WOKS::FFindFile(PSTN pstnSrc, PFNI pfni)
 /***************************************************************************
     Put up an alert (and don't return until it is dismissed).
 ***************************************************************************/
-tribool WOKS::TGiveAlert(PSTN pstn, long bk, long cok)
+tribool WOKS::TGiveAlert(PSTN pstn, int32_t bk, int32_t cok)
 {
     AssertThis(0);
 
@@ -463,7 +463,7 @@ uint32_t WOKS::GrfcustAdjust(uint32_t grfcust)
 /***************************************************************************
     Do a modal help topic.
 ***************************************************************************/
-bool WOKS::FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet)
+bool WOKS::FModalTopic(PRCA prca, CNO cnoTopic, int32_t *plwRet)
 {
     AssertThis(0);
     AssertPo(prca, 0);

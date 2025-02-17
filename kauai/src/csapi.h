@@ -118,7 +118,7 @@ typedef SC_CHAR SC_FAR *LPSC_PATH; /* ptr to full Sz path string. */
 typedef struct spath
 {
     short volRefNum;
-    long dirID;
+    int32_t dirID;
     SC_CHAR *lpszFilePath; /* lpSzFile is local Sz path string for MAC,
                            it is the local file path which will be
                            used with the volRefNum.
@@ -445,7 +445,7 @@ extern GLOBALSEC SpellGetListUdr(SC_SPLID, SC_UDR, SC_WORD, LPSC_SRB);
 extern GLOBALSEC SpellCloseMdr(SC_SPLID, LPSC_MDRS);
 extern GLOBALSEC SpellCloseUdr(SC_SPLID, SC_UDR, SC_BOOL);
 
-extern Handle HCsapiResInit(SC_CHAR *stzsFileName, short vRef, long dirId);
+extern Handle HCsapiResInit(SC_CHAR *stzsFileName, short vRef, int32_t dirId);
 extern void CsapiResTerm(void);
 extern void CsapiResFlush(void);
 

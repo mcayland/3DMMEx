@@ -54,7 +54,7 @@ GRPB::~GRPB(void)
     Ensure that the two sections are at least the given cb's large.
     if (grfgrp & fgrpShrink), makes them exact.
 ***************************************************************************/
-bool GRPB::_FEnsureSizes(long cbMin1, long cbMin2, uint32_t grfgrp)
+bool GRPB::_FEnsureSizes(int32_t cbMin1, int32_t cbMin2, uint32_t grfgrp)
 {
     AssertThis(0);
     Assert(cbMin1 >= 0 && cbMin2 >= 0, "negative sizes");
@@ -97,7 +97,7 @@ bool GRPB::_FEnsureSizes(long cbMin1, long cbMin2, uint32_t grfgrp)
 /***************************************************************************
     Ensure that the given HQ is large enough.
 ***************************************************************************/
-bool GRPB::_FEnsureHqCb(HQ *phq, long cb, long cbMinGrow, long *pcb)
+bool GRPB::_FEnsureHqCb(HQ *phq, int32_t cb, int32_t cbMinGrow, int32_t *pcb)
 {
     AssertVarMem(phq);
     AssertIn(cbMinGrow, 0, kcbMax);
@@ -145,7 +145,7 @@ bool GRPB::_FEnsureHqCb(HQ *phq, long cb, long cbMinGrow, long *pcb)
 /***************************************************************************
     Make the given GRPB a duplicate of this one.
 ***************************************************************************/
-bool GRPB::_FDup(PGRPB pgrpbDst, long cb1, long cb2)
+bool GRPB::_FDup(PGRPB pgrpbDst, int32_t cb1, int32_t cb2)
 {
     AssertThis(0);
     AssertPo(pgrpbDst, 0);
@@ -181,7 +181,7 @@ bool GRPB::FWriteFlo(PFLO pflo, int16_t bo, int16_t osk)
     Write the GRPB data to the block.  First write the (pv, cb), then
     cb1 bytes from the first section and cb2 bytes from the second.
 ***************************************************************************/
-bool GRPB::_FWrite(PBLCK pblck, void *pv, long cb, long cb1, long cb2)
+bool GRPB::_FWrite(PBLCK pblck, void *pv, int32_t cb, int32_t cb1, int32_t cb2)
 {
     AssertPo(pblck, 0);
     AssertIn(cb, 1, kcbMax);
@@ -221,7 +221,7 @@ bool GRPB::_FWrite(PBLCK pblck, void *pv, long cb, long cb1, long cb2)
     Read the two sections of data from the given location in the given
     block.
 ***************************************************************************/
-bool GRPB::_FReadData(PBLCK pblck, long cb1, long cb2, long ib)
+bool GRPB::_FReadData(PBLCK pblck, int32_t cb1, int32_t cb2, int32_t ib)
 {
     AssertPo(pblck, fblckUnpacked);
     AssertIn(cb1, 0, kcbMax);
@@ -289,7 +289,7 @@ void GRPB::MarkMem(void)
 /***************************************************************************
     Constructor for the list base.
 ***************************************************************************/
-GLB::GLB(long cb)
+GLB::GLB(int32_t cb)
 {
     AssertIn(cb, 0, kcbMax);
     _cbEntry = cb;
@@ -305,7 +305,7 @@ GLB::GLB(long cb)
     Return a volatile pointer to a list entry.
     NOTE: don't assert !FFree(iv) for allocated lists.
 ***************************************************************************/
-void *GLB::QvGet(long iv)
+void *GLB::QvGet(int32_t iv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac + 1);
@@ -315,7 +315,7 @@ void *GLB::QvGet(long iv)
 /***************************************************************************
     Get the data for the iv'th element in the GLB.
 ***************************************************************************/
-void GLB::Get(long iv, void *pv)
+void GLB::Get(int32_t iv, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -326,7 +326,7 @@ void GLB::Get(long iv, void *pv)
 /***************************************************************************
     Put data into the iv'th element in the GLB.
 ***************************************************************************/
-void GLB::Put(long iv, void *pv)
+void GLB::Put(int32_t iv, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -338,7 +338,7 @@ void GLB::Put(long iv, void *pv)
 /***************************************************************************
     Lock the data and return a pointer to the ith item.
 ***************************************************************************/
-void *GLB::PvLock(long iv)
+void *GLB::PvLock(int32_t iv)
 {
     Lock();
     return QvGet(iv);
@@ -347,7 +347,7 @@ void *GLB::PvLock(long iv)
 /***************************************************************************
     Set the minimum that a GL should grow by.
 ***************************************************************************/
-void GLB::SetMinGrow(long cvAdd)
+void GLB::SetMinGrow(int32_t cvAdd)
 {
     AssertThis(0);
     AssertIn(cvAdd, 0, kcbMax);
@@ -372,7 +372,7 @@ void GLB::AssertValid(uint32_t grfobj)
 /***************************************************************************
     Allocate a new list and ensure that it has space for cvInit elements.
 ***************************************************************************/
-PGL GL::PglNew(long cb, long cvInit)
+PGL GL::PglNew(int32_t cb, int32_t cvInit)
 {
     AssertIn(cb, 1, kcbMax);
     AssertIn(cvInit, 0, kcbMax);
@@ -417,7 +417,7 @@ PGL GL::PglRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Read a list from file and return it.
 ***************************************************************************/
-PGL GL::PglRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
+PGL GL::PglRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PglRead(&blck, pbo, posk);
@@ -426,7 +426,7 @@ PGL GL::PglRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Constructor for GL.
 ***************************************************************************/
-GL::GL(long cb) : GLB(cb)
+GL::GL(int32_t cb) : GLB(cb)
 {
     AssertThis(0);
 }
@@ -435,7 +435,7 @@ GL::GL(long cb) : GLB(cb)
     Provided for completeness (all GRPB's have an FFree routine).
     Returns false iff iv is a valid index for the GL.
 ***************************************************************************/
-bool GL::FFree(long iv)
+bool GL::FFree(int32_t iv)
 {
     AssertThis(0);
     return !FIn(iv, 0, _ivMac);
@@ -464,8 +464,8 @@ struct GLF
 {
     int16_t bo;
     int16_t osk;
-    long cbEntry;
-    long ivMac;
+    int32_t cbEntry;
+    int32_t ivMac;
 };
 VERIFY_STRUCT_SIZE(GLF, 12);
 const BOM kbomGlf = 0x5F000000L;
@@ -473,7 +473,7 @@ const BOM kbomGlf = 0x5F000000L;
 /***************************************************************************
     Return the amount of space on file needed for the list.
 ***************************************************************************/
-long GL::CbOnFile(void)
+int32_t GL::CbOnFile(void)
 {
     AssertThis(0);
     return SIZEOF(GLF) + LwMul(_cbEntry, _ivMac);
@@ -515,7 +515,7 @@ bool GL::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
     AssertNilOrVarMem(posk);
 
     GLF glf;
-    long cb;
+    int32_t cb;
     bool fRet = fFalse;
 
     if (!pblck->FUnpackData())
@@ -557,7 +557,7 @@ LFail:
 /***************************************************************************
     Insert some items into a list at position iv.  iv should be <= IvMac().
 ***************************************************************************/
-bool GL::FInsert(long iv, void *pv, long cv)
+bool GL::FInsert(int32_t iv, void *pv, int32_t cv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac + 1);
@@ -565,7 +565,7 @@ bool GL::FInsert(long iv, void *pv, long cv)
     AssertNilOrPvCb(pv, LwMul(cv, _cbEntry));
 
     uint8_t *qb;
-    long cbTot, cbIns, ibIns;
+    int32_t cbTot, cbIns, ibIns;
 
     cbTot = LwMul(_ivMac + cv, _cbEntry);
     cbIns = LwMul(cv, _cbEntry);
@@ -588,7 +588,7 @@ bool GL::FInsert(long iv, void *pv, long cv)
     Delete an element from the list.  This changes the indices of all
     later elements.
 ***************************************************************************/
-void GL::Delete(long iv)
+void GL::Delete(int32_t iv)
 {
     AssertThis(0);
     Delete(iv, 1);
@@ -598,7 +598,7 @@ void GL::Delete(long iv)
     Delete a range of elements.  This changes the indices of all later
     elements.
 ***************************************************************************/
-void GL::Delete(long ivMin, long cv)
+void GL::Delete(int32_t ivMin, int32_t cv)
 {
     AssertThis(0);
     AssertIn(ivMin, 0, _ivMac);
@@ -621,7 +621,7 @@ void GL::Delete(long ivMin, long cv)
     ivTarget moves to (ivTarget + 1).  Everything in between is shifted
     appropriately.  ivTarget is allowed to be equal to IvMac().
 ***************************************************************************/
-void GL::Move(long ivSrc, long ivTarget)
+void GL::Move(int32_t ivSrc, int32_t ivTarget)
 {
     AssertThis(0);
     AssertIn(ivSrc, 0, _ivMac);
@@ -635,7 +635,7 @@ void GL::Move(long ivSrc, long ivTarget)
     Add an element to the end of the list.  Returns the location in *piv.
     On failure, returns false and *piv is undefined.
 ***************************************************************************/
-bool GL::FAdd(void *pv, long *piv)
+bool GL::FAdd(void *pv, int32_t *piv)
 {
     AssertThis(0);
     AssertNilOrVarMem(piv);
@@ -674,11 +674,11 @@ bool GL::FPop(void *pv)
     Set the number of elements.  Used rarely (to add a block of elements
     at a time or to "zero out" a list.
 ***************************************************************************/
-bool GL::FSetIvMac(long ivMacNew)
+bool GL::FSetIvMac(int32_t ivMacNew)
 {
     AssertThis(0);
     AssertIn(ivMacNew, 0, kcbMax);
-    long cb;
+    int32_t cb;
 
     if (ivMacNew > _ivMac)
     {
@@ -711,7 +711,7 @@ bool GL::FSetIvMac(long ivMacNew)
     fgrpShrink is set, will shrink the list if it has more than cvAdd
     available entries.
 ***************************************************************************/
-bool GL::FEnsureSpace(long cvAdd, uint32_t grfgrp)
+bool GL::FEnsureSpace(int32_t cvAdd, uint32_t grfgrp)
 {
     AssertThis(0);
     AssertIn(cvAdd, 0, kcbMax);
@@ -730,7 +730,7 @@ bool GL::FEnsureSpace(long cvAdd, uint32_t grfgrp)
     Allocate a new allocated list and ensure that it has space for
     cvInit elements.
 ***************************************************************************/
-PAL AL::PalNew(long cb, long cvInit)
+PAL AL::PalNew(int32_t cb, int32_t cvInit)
 {
     AssertIn(cb, 1, kcbMax);
     AssertIn(cvInit, 0, kcbMax);
@@ -776,7 +776,7 @@ PAL AL::PalRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Read an allocated list from file and return it.
 ***************************************************************************/
-PAL AL::PalRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
+PAL AL::PalRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PalRead(&blck, pbo, posk);
@@ -785,7 +785,7 @@ PAL AL::PalRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Constructor for AL (allocated list) class.
 ***************************************************************************/
-AL::AL(long cb) : GLB(cb)
+AL::AL(int32_t cb) : GLB(cb)
 {
     AssertThis(fobjAssertFull);
 }
@@ -815,9 +815,9 @@ struct ALF
 {
     int16_t bo;
     int16_t osk;
-    long cbEntry;
-    long ivMac;
-    long cvFree;
+    int32_t cbEntry;
+    int32_t ivMac;
+    int32_t cvFree;
 };
 VERIFY_STRUCT_SIZE(ALF, 16);
 const BOM kbomAlf = 0x5FC00000L;
@@ -825,7 +825,7 @@ const BOM kbomAlf = 0x5FC00000L;
 /***************************************************************************
     Return the amount of space on file needed for the list.
 ***************************************************************************/
-long AL::CbOnFile(void)
+int32_t AL::CbOnFile(void)
 {
     AssertThis(fobjAssertFull);
 
@@ -869,8 +869,8 @@ bool AL::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
     AssertNilOrVarMem(posk);
 
     ALF alf;
-    long cbT;
-    long cb;
+    int32_t cbT;
+    int32_t cb;
     bool fRet = fFalse;
 
     if (!pblck->FUnpackData())
@@ -924,7 +924,7 @@ void AL::DeleteAll(void)
 /***************************************************************************
     Returns whether the given element of the allocated list is free.
 ***************************************************************************/
-bool AL::FFree(long iv)
+bool AL::FFree(int32_t iv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -936,7 +936,7 @@ bool AL::FFree(long iv)
     fgrpShrink is set, will try to shrink the list if it has more than
     cvAdd available entries.
 ***************************************************************************/
-bool AL::FEnsureSpace(long cvAdd, uint32_t grfgrp)
+bool AL::FEnsureSpace(int32_t cvAdd, uint32_t grfgrp)
 {
     AssertIn(cvAdd, 0, kcbMax);
     AssertThis(0);
@@ -955,13 +955,13 @@ bool AL::FEnsureSpace(long cvAdd, uint32_t grfgrp)
 /***************************************************************************
     Add an element to the list.
 ***************************************************************************/
-bool AL::FAdd(void *pv, long *piv)
+bool AL::FAdd(void *pv, int32_t *piv)
 {
     AssertThis(fobjAssertFull);
     AssertPvCb(pv, _cbEntry);
     AssertNilOrVarMem(piv);
 
-    long iv;
+    int32_t iv;
 
     if (_cvFree > 0)
     {
@@ -1001,7 +1001,7 @@ bool AL::FAdd(void *pv, long *piv)
 /***************************************************************************
     Delete element iv from an allocated list.
 ***************************************************************************/
-void AL::Delete(long iv)
+void AL::Delete(int32_t iv)
 {
     AssertThis(fobjAssertFull);
     AssertIn(iv, 0, _ivMac);
@@ -1058,7 +1058,7 @@ void AL::Delete(long iv)
 ***************************************************************************/
 void AL::AssertValid(uint32_t grfobj)
 {
-    long cT, iv;
+    int32_t cT, iv;
 
     AL_PAR::AssertValid(0);
     Assert(_Cb2() >= CbFromCbit(_ivMac), "flag area too small");
@@ -1077,7 +1077,7 @@ void AL::AssertValid(uint32_t grfobj)
 /***************************************************************************
     Constructor for GGB class.
 ***************************************************************************/
-GGB::GGB(long cbFixed, bool fAllowFree)
+GGB::GGB(int32_t cbFixed, bool fAllowFree)
 {
     AssertIn(cbFixed, 0, kcbMax);
     _clocFree = fAllowFree ? 0 : cvNil;
@@ -1115,10 +1115,10 @@ struct GGF
 {
     int16_t bo;
     int16_t osk;
-    long ilocMac;
-    long bvMac;
-    long clocFree;
-    long cbFixed;
+    int32_t ilocMac;
+    int32_t bvMac;
+    int32_t clocFree;
+    int32_t cbFixed;
 };
 VERIFY_STRUCT_SIZE(GGF, 20);
 const BOM kbomGgf = 0x5FF00000L;
@@ -1126,7 +1126,7 @@ const BOM kbomGgf = 0x5FF00000L;
 /***************************************************************************
     Return the amount of space on file needed for the group.
 ***************************************************************************/
-long GGB::CbOnFile(void)
+int32_t GGB::CbOnFile(void)
 {
     AssertThis(fobjAssertFull);
     return SIZEOF(GGF) + LwMul(_ivMac, SIZEOF(LOC)) + _bvMac;
@@ -1159,13 +1159,13 @@ bool GGB::FWrite(PBLCK pblck, int16_t bo, int16_t osk)
         SwapBytesBom(&ggf, kbomGgf);
         Assert(ggf.bo == bo, "wrong bo");
         Assert(ggf.osk == osk, "osk not invariant under byte swapping");
-        SwapBytesRglw(_Qb2(0), LwMulDiv(_ivMac, SIZEOF(LOC), SIZEOF(long)));
+        SwapBytesRglw(_Qb2(0), LwMulDiv(_ivMac, SIZEOF(LOC), SIZEOF(int32_t)));
     }
     fRet = _FWrite(pblck, &ggf, SIZEOF(ggf), _bvMac, LwMul(_ivMac, SIZEOF(LOC)));
     if (kboOther == bo)
     {
         // swap the rgloc back
-        SwapBytesRglw(_Qb2(0), LwMulDiv(_ivMac, SIZEOF(LOC), SIZEOF(long)));
+        SwapBytesRglw(_Qb2(0), LwMulDiv(_ivMac, SIZEOF(LOC), SIZEOF(int32_t)));
     }
     return fRet;
 }
@@ -1181,9 +1181,9 @@ bool GGB::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
     AssertNilOrVarMem(posk);
 
     GGF ggf;
-    long cbT;
+    int32_t cbT;
     int16_t bo;
-    long cb;
+    int32_t cb;
     bool fRet = fFalse;
 
     if (!pblck->FUnpackData())
@@ -1224,7 +1224,7 @@ bool GGB::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
     if (bo == kboOther && fRet)
     {
         // adjust the byte order on the loc's.
-        SwapBytesRglw(_Qb2(0), LwMulDiv(_ivMac, SIZEOF(LOC), SIZEOF(long)));
+        SwapBytesRglw(_Qb2(0), LwMulDiv(_ivMac, SIZEOF(LOC), SIZEOF(int32_t)));
     }
 
 LFail:
@@ -1236,7 +1236,7 @@ LFail:
 /***************************************************************************
     Returns true iff the loc.bv is nil or iloc is out of range.
 ***************************************************************************/
-bool GGB::FFree(long iv)
+bool GGB::FFree(int32_t iv)
 {
     AssertBaseThis(0);
     AssertIn(iv, 0, kcbMax);
@@ -1257,53 +1257,53 @@ bool GGB::FFree(long iv)
     If there is more than enough room and fgrpShrink is passed, the GST
     will shrink.
 ***************************************************************************/
-bool GGB::FEnsureSpace(long cvAdd, long cbAdd, uint32_t grfgrp)
+bool GGB::FEnsureSpace(int32_t cvAdd, int32_t cbAdd, uint32_t grfgrp)
 {
     AssertThis(0);
     AssertIn(cvAdd, 0, kcbMax);
     AssertIn(cbAdd, 0, kcbMax);
 
-    long clocAdd;
+    int32_t clocAdd;
 
     if (cvNil == _clocFree)
         clocAdd = cvAdd;
     else
         clocAdd = LwMax(0, cvAdd - _clocFree);
 
-    // we waste at most (SIZEOF(long) - 1) bytes per element
-    if (clocAdd > kcbMax / SIZEOF(LOC) - _ivMac || cvAdd > (kcbMax / (_cbFixed + SIZEOF(long) - 1)) - _bvMac ||
-        cbAdd > kcbMax - _bvMac - cvAdd * (_cbFixed + SIZEOF(long) - 1))
+    // we waste at most (SIZEOF(int32_t) - 1) bytes per element
+    if (clocAdd > kcbMax / SIZEOF(LOC) - _ivMac || cvAdd > (kcbMax / (_cbFixed + SIZEOF(int32_t) - 1)) - _bvMac ||
+        cbAdd > kcbMax - _bvMac - cvAdd * (_cbFixed + SIZEOF(int32_t) - 1))
     {
         Bug("why is this group growing so large?");
         return fFalse;
     }
 
-    return _FEnsureSizes(_bvMac + cbAdd + LwMul(cvAdd, _cbFixed + SIZEOF(long) - 1),
+    return _FEnsureSizes(_bvMac + cbAdd + LwMul(cvAdd, _cbFixed + SIZEOF(int32_t) - 1),
                          LwMul(_ivMac + clocAdd, SIZEOF(LOC)), grfgrp);
 }
 
 /***************************************************************************
     Set the minimum that a GGB should grow by.
 ***************************************************************************/
-void GGB::SetMinGrow(long cvAdd, long cbAdd)
+void GGB::SetMinGrow(int32_t cvAdd, int32_t cbAdd)
 {
     AssertThis(0);
     AssertIn(cvAdd, 0, kcbMax);
     AssertIn(cbAdd, 0, kcbMax);
 
-    _cbMinGrow1 = CbRoundToLong(cbAdd + LwMul(cvAdd, _cbFixed + SIZEOF(long) - 1));
+    _cbMinGrow1 = CbRoundToLong(cbAdd + LwMul(cvAdd, _cbFixed + SIZEOF(int32_t) - 1));
     _cbMinGrow2 = LwMul(cvAdd, SIZEOF(LOC));
 }
 
 /***************************************************************************
     Private api to remove a block of bytes.
 ***************************************************************************/
-void GGB::_RemoveRgb(long bv, long cb)
+void GGB::_RemoveRgb(int32_t bv, int32_t cb)
 {
     AssertBaseThis(0);
     AssertIn(bv, 0, _bvMac);
     AssertIn(cb, 1, _bvMac - bv + 1);
-    Assert(cb == CbRoundToLong(cb), "cb not divisible by SIZEOF(long)");
+    Assert(cb == CbRoundToLong(cb), "cb not divisible by SIZEOF(int32_t)");
     uint8_t *qb;
 
     if (bv + cb < _bvMac)
@@ -1320,14 +1320,14 @@ void GGB::_RemoveRgb(long bv, long cb)
 /***************************************************************************
     Private api to remove a block of bytes.
 ***************************************************************************/
-void GGB::_AdjustLocs(long bvMin, long bvLim, long dcb)
+void GGB::_AdjustLocs(int32_t bvMin, int32_t bvLim, int32_t dcb)
 {
     AssertBaseThis(0);
     AssertIn(bvMin, 0, _bvMac + 2);
     AssertIn(bvLim, bvMin, _bvMac + 2);
     AssertIn(dcb, -_bvMac, kcbMax);
-    Assert((dcb % SIZEOF(long)) == 0, "dcb not divisible by SIZEOF(long)");
-    long cloc;
+    Assert((dcb % SIZEOF(int32_t)) == 0, "dcb not divisible by SIZEOF(int32_t)");
+    int32_t cloc;
     LOC *qloc;
 
     if (FIn(_bvMac, bvMin, bvLim))
@@ -1346,7 +1346,7 @@ void GGB::_AdjustLocs(long bvMin, long bvLim, long dcb)
     Returns a volative pointer the the fixed sized data in the element.
     If pcbVar is not nil, fills *pcbVar with the size of the variable part.
 ***************************************************************************/
-void *GGB::QvFixedGet(long iv, long *pcbVar)
+void *GGB::QvFixedGet(int32_t iv, int32_t *pcbVar)
 {
     AssertThis(0);
     AssertIn(_cbFixed, 1, kcbMax);
@@ -1366,7 +1366,7 @@ void *GGB::QvFixedGet(long iv, long *pcbVar)
 /***************************************************************************
     Lock the data and return a pointer to the fixed sized data.
 ***************************************************************************/
-void *GGB::PvFixedLock(long iv, long *pcbVar)
+void *GGB::PvFixedLock(int32_t iv, int32_t *pcbVar)
 {
     AssertThis(0);
     Lock();
@@ -1376,7 +1376,7 @@ void *GGB::PvFixedLock(long iv, long *pcbVar)
 /***************************************************************************
     Get the fixed sized data for the element.
 ***************************************************************************/
-void GGB::GetFixed(long iv, void *pv)
+void GGB::GetFixed(int32_t iv, void *pv)
 {
     AssertThis(0);
     AssertIn(_cbFixed, 1, kcbMax);
@@ -1394,7 +1394,7 @@ void GGB::GetFixed(long iv, void *pv)
 /***************************************************************************
     Put the fixed sized data for the element.
 ***************************************************************************/
-void GGB::PutFixed(long iv, void *pv)
+void GGB::PutFixed(int32_t iv, void *pv)
 {
     AssertThis(0);
     AssertIn(_cbFixed, 1, kcbMax);
@@ -1413,7 +1413,7 @@ void GGB::PutFixed(long iv, void *pv)
 /***************************************************************************
     Return the length of the variable part of the iv'th element.
 ***************************************************************************/
-long GGB::Cb(long iv)
+int32_t GGB::Cb(int32_t iv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1427,7 +1427,7 @@ long GGB::Cb(long iv)
     If pcb is not nil, sets *pcb to the length of the (variable part of the)
     item.
 ***************************************************************************/
-void *GGB::QvGet(long iv, long *pcb)
+void *GGB::QvGet(int32_t iv, int32_t *pcb)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1448,7 +1448,7 @@ void *GGB::QvGet(long iv, long *pcb)
     item.  If pcb is not nil, sets *pcb to the length of the (variable part
     of the) item.
 ***************************************************************************/
-void *GGB::PvLock(long iv, long *pcb)
+void *GGB::PvLock(int32_t iv, int32_t *pcb)
 {
     AssertThis(0);
     Lock();
@@ -1458,7 +1458,7 @@ void *GGB::PvLock(long iv, long *pcb)
 /***************************************************************************
     Copy the (variable part of the) iv'th element to pv.
 ***************************************************************************/
-void GGB::Get(long iv, void *pv)
+void GGB::Get(int32_t iv, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1474,7 +1474,7 @@ void GGB::Get(long iv, void *pv)
 /***************************************************************************
     Copy *pv to the (variable part of the) iv'th element.
 ***************************************************************************/
-void GGB::Put(long iv, void *pv)
+void GGB::Put(int32_t iv, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1491,14 +1491,14 @@ void GGB::Put(long iv, void *pv)
     Replace the (variable part of the) iv'th element with the stuff in pv
     (cb bytes worth).  pv may be nil (effectively resizing the block).
 ***************************************************************************/
-bool GGB::FPut(long iv, long cb, void *pv)
+bool GGB::FPut(int32_t iv, int32_t cb, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
     Assert(!FFree(iv), "element free!");
     AssertIn(cb, 0, kcbMax);
 
-    long cbCur = Cb(iv);
+    int32_t cbCur = Cb(iv);
 
     if (cb > cbCur)
     {
@@ -1521,7 +1521,7 @@ bool GGB::FPut(long iv, long cb, void *pv)
 /***************************************************************************
     Get a portion of the element.
 ***************************************************************************/
-void GGB::GetRgb(long iv, long bv, long cb, void *pv)
+void GGB::GetRgb(int32_t iv, int32_t bv, int32_t cb, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1541,7 +1541,7 @@ void GGB::GetRgb(long iv, long bv, long cb, void *pv)
 /***************************************************************************
     Put a portion of the element.
 ***************************************************************************/
-void GGB::PutRgb(long iv, long bv, long cb, void *pv)
+void GGB::PutRgb(int32_t iv, int32_t bv, int32_t cb, void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1562,7 +1562,7 @@ void GGB::PutRgb(long iv, long bv, long cb, void *pv)
 /***************************************************************************
     Remove a portion of element iv (can't be all of it).
 ***************************************************************************/
-void GGB::DeleteRgb(long iv, long bv, long cb)
+void GGB::DeleteRgb(int32_t iv, int32_t bv, int32_t cb)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1570,7 +1570,7 @@ void GGB::DeleteRgb(long iv, long bv, long cb)
 
     LOC loc;
     LOC *qloc;
-    long cbDel;
+    int32_t cbDel;
     uint8_t *qb;
 
     bv += _cbFixed;
@@ -1603,7 +1603,7 @@ void GGB::DeleteRgb(long iv, long bv, long cb)
     Insert cb new bytes at location bv into the iv'th element.  pv may
     be nil.
 ***************************************************************************/
-bool GGB::FInsertRgb(long iv, long bv, long cb, const void *pv)
+bool GGB::FInsertRgb(int32_t iv, int32_t bv, int32_t cb, const void *pv)
 {
     AssertThis(0);
     AssertIn(iv, 0, _ivMac);
@@ -1611,7 +1611,7 @@ bool GGB::FInsertRgb(long iv, long bv, long cb, const void *pv)
     AssertIn(cb, 1, kcbMax);
 
     LOC loc;
-    long cbAdd;
+    int32_t cbAdd;
     uint8_t *qb;
 
     bv += _cbFixed;
@@ -1624,7 +1624,7 @@ bool GGB::FInsertRgb(long iv, long bv, long cb, const void *pv)
     cbAdd = CbRoundToLong(loc.cb + cb) - CbRoundToLong(loc.cb);
     if (cbAdd > 0)
     {
-        long bvT;
+        int32_t bvT;
 
         if (!_FEnsureSizes(_bvMac + cbAdd, LwMul(_ivMac, SIZEOF(LOC)), fgrpNil))
             return fFalse;
@@ -1666,9 +1666,9 @@ bool GGB::FInsertRgb(long iv, long bv, long cb, const void *pv)
 /***************************************************************************
     Move cb bytes from position bvSrc in ivSrc to position bvDst in ivDst.
     This can fail only because of the padding used for each entry (at most
-    SIZEOF(long) additional bytes will need to be allocated).
+    SIZEOF(int32_t) additional bytes will need to be allocated).
 ***************************************************************************/
-bool GGB::FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb)
+bool GGB::FMoveRgb(int32_t ivSrc, int32_t bvSrc, int32_t ivDst, int32_t bvDst, int32_t cb)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ivSrc, 0, _ivMac);
@@ -1681,7 +1681,7 @@ bool GGB::FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb)
 
     LOC *qloc;
     LOC locSrc, locDst;
-    long cbMove, cbT;
+    int32_t cbMove, cbT;
 
     locSrc = *_Qloc(ivSrc);
     locDst = *_Qloc(ivDst);
@@ -1691,18 +1691,18 @@ bool GGB::FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb)
           (CbRoundToLong(locSrc.cb) - CbRoundToLong(locSrc.cb - cb));
     if (cbT > 0)
     {
-        Assert(cb % SIZEOF(long) != 0, "why are we here when cb is a multiple of SIZEOF(long)?");
+        Assert(cb % SIZEOF(int32_t) != 0, "why are we here when cb is a multiple of SIZEOF(int32_t)?");
         if (!_FEnsureSizes(_bvMac + cbT, LwMul(_ivMac, SIZEOF(LOC)), fgrpNil))
             return fFalse;
     }
 
     // move most of the bytes
-    cbMove = LwRoundToward(cb, SIZEOF(long));
-    AssertIn(cb, cbMove, cbMove + SIZEOF(long));
+    cbMove = LwRoundToward(cb, SIZEOF(int32_t));
+    AssertIn(cb, cbMove, cbMove + SIZEOF(int32_t));
     if (cbMove > 0)
     {
-        long bv1 = locSrc.bv + bvSrc + _cbFixed;
-        long bv2 = locDst.bv + bvDst + _cbFixed;
+        int32_t bv1 = locSrc.bv + bvSrc + _cbFixed;
+        int32_t bv2 = locDst.bv + bvDst + _cbFixed;
 
         qloc = _Qloc(ivSrc);
         if (0 == (qloc->cb -= cbMove))
@@ -1733,7 +1733,7 @@ bool GGB::FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb)
     // move the last few bytes
     if (cb > cbMove)
     {
-        uint8_t rgb[SIZEOF(long)];
+        uint8_t rgb[SIZEOF(int32_t)];
 
         GetRgb(ivSrc, bvSrc, cb - cbMove, rgb);
         DeleteRgb(ivSrc, bvSrc, cb - cbMove);
@@ -1749,9 +1749,9 @@ bool GGB::FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb)
     NOTE: this is kind of goofy.  The only time FMoveRgb could possibly
     fail if we just do the naive thing (FMoveRgb the entire var data,
     then delete the source element) is if _cbFixed is not a multiple
-    of SIZEOF(long).
+    of SIZEOF(int32_t).
 ***************************************************************************/
-void GGB::Merge(long ivSrc, long ivDst)
+void GGB::Merge(int32_t ivSrc, int32_t ivDst)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ivSrc, 0, _ivMac);
@@ -1759,11 +1759,11 @@ void GGB::Merge(long ivSrc, long ivDst)
     AssertIn(ivDst, 0, _ivMac);
     Assert(!FFree(ivDst), "element free!");
     Assert(ivSrc != ivDst, "can't merge an element with itself!");
-    long cb, cbMove, bv;
-    uint8_t rgb[SIZEOF(long)];
+    int32_t cb, cbMove, bv;
+    uint8_t rgb[SIZEOF(int32_t)];
 
     cb = Cb(ivSrc);
-    cbMove = LwRoundToward(cb, SIZEOF(long));
+    cbMove = LwRoundToward(cb, SIZEOF(int32_t));
     if (cb > cbMove)
         GetRgb(ivSrc, cbMove, cb - cbMove, rgb); // get the tail bytes
 
@@ -1795,8 +1795,8 @@ void GGB::Merge(long ivSrc, long ivDst)
 void GGB::AssertValid(uint32_t grfobj)
 {
     LOC loc;
-    long iloc;
-    long cbTot, clocFree;
+    int32_t iloc;
+    int32_t cbTot, clocFree;
 
     GGB_PAR::AssertValid(grfobj);
     AssertIn(_ivMac, 0, kcbMax);
@@ -1835,7 +1835,7 @@ void GGB::AssertValid(uint32_t grfobj)
     Allocate a new group with room for at least cvInit elements containing
     at least cbInit bytes worth of (total) space.
 ***************************************************************************/
-PGG GG::PggNew(long cbFixed, long cvInit, long cbInit)
+PGG GG::PggNew(int32_t cbFixed, int32_t cvInit, int32_t cbInit)
 {
     AssertIn(cbFixed, 0, kcbMax);
     AssertIn(cvInit, 0, kcbMax);
@@ -1882,7 +1882,7 @@ PGG GG::PggRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Read a group from file and return it.
 ***************************************************************************/
-PGG GG::PggRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
+PGG GG::PggRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PggRead(&blck, pbo, posk);
@@ -1909,7 +1909,7 @@ PGG GG::PggDup(void)
 /***************************************************************************
     Insert an element into the group.
 ***************************************************************************/
-bool GG::FInsert(long iv, long cb, const void *pv, const void *pvFixed)
+bool GG::FInsert(int32_t iv, int32_t cb, const void *pv, const void *pvFixed)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cb, 0, kcbMax);
@@ -1963,14 +1963,14 @@ bool GG::FInsert(long iv, long cb, const void *pv, const void *pvFixed)
     Takes cv entries from pggSrc at ivSrc and inserts (a copy of) them into
     this GG at ivDst.
 ***************************************************************************/
-bool GG::FCopyEntries(PGG pggSrc, long ivSrc, long ivDst, long cv)
+bool GG::FCopyEntries(PGG pggSrc, int32_t ivSrc, int32_t ivDst, int32_t cv)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pggSrc, 0);
     AssertIn(cv, 0, pggSrc->IvMac() + 1);
     AssertIn(ivSrc, 0, pggSrc->IvMac() + 1 - cv);
     AssertIn(ivDst, 0, _ivMac + 1);
-    long cb, cbFixed, iv, ivLim;
+    int32_t cb, cbFixed, iv, ivLim;
     LOC loc;
     uint8_t *pb;
 
@@ -2008,7 +2008,7 @@ bool GG::FCopyEntries(PGG pggSrc, long ivSrc, long ivDst, long cv)
 /***************************************************************************
     Append an element to the group.
 ***************************************************************************/
-bool GG::FAdd(long cb, long *piv, void *pv, void *pvFixed)
+bool GG::FAdd(int32_t cb, int32_t *piv, void *pv, void *pvFixed)
 {
     AssertThis(0);
     AssertNilOrVarMem(piv);
@@ -2026,7 +2026,7 @@ bool GG::FAdd(long cb, long *piv, void *pv, void *pvFixed)
 /***************************************************************************
     Delete an element from the group.
 ***************************************************************************/
-void GG::Delete(long iv)
+void GG::Delete(int32_t iv)
 {
     AssertThis(fobjAssertFull);
     AssertIn(iv, 0, _ivMac);
@@ -2051,7 +2051,7 @@ void GG::Delete(long iv)
     ivTarget moves to (ivTarget + 1).  Everything in between is shifted
     appropriately.  ivTarget is allowed to be equal to IvMac().
 ***************************************************************************/
-void GG::Move(long ivSrc, long ivTarget)
+void GG::Move(int32_t ivSrc, int32_t ivTarget)
 {
     AssertThis(0);
     AssertIn(ivSrc, 0, _ivMac);
@@ -2064,7 +2064,7 @@ void GG::Move(long ivSrc, long ivTarget)
 /***************************************************************************
     Swap two elements in a GG.
 ***************************************************************************/
-void GG::Swap(long iv1, long iv2)
+void GG::Swap(int32_t iv1, int32_t iv2)
 {
     AssertThis(0);
     AssertIn(iv1, 0, _ivMac);
@@ -2089,7 +2089,7 @@ void GG::AssertValid(uint32_t grfobj)
     Allocate a new allocated group with romm for at least cvInit elements
     containing at least cbInit bytes worth of (total) space.
 ***************************************************************************/
-PAG AG::PagNew(long cbFixed, long cvInit, long cbInit)
+PAG AG::PagNew(int32_t cbFixed, int32_t cvInit, int32_t cbInit)
 {
     AssertIn(cbFixed, 0, kcbMax);
     AssertIn(cvInit, 0, kcbMax);
@@ -2136,7 +2136,7 @@ PAG AG::PagRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Read an allocated group from file and return it.
 ***************************************************************************/
-PAG AG::PagRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
+PAG AG::PagRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PagRead(&blck, pbo, posk);
@@ -2163,13 +2163,13 @@ PAG AG::PagDup(void)
 /***************************************************************************
     Add an element to the allocated group.
 ***************************************************************************/
-bool AG::FAdd(long cb, long *piv, void *pv, void *pvFixed)
+bool AG::FAdd(int32_t cb, int32_t *piv, void *pv, void *pvFixed)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cb, 0, kcbMax);
     AssertNilOrVarMem(piv);
 
-    long iloc;
+    int32_t iloc;
     uint8_t *qb;
     LOC loc;
     LOC *qloc;
@@ -2240,7 +2240,7 @@ bool AG::FAdd(long cb, long *piv, void *pv, void *pvFixed)
 /***************************************************************************
     Delete an element from the group.
 ***************************************************************************/
-void AG::Delete(long iv)
+void AG::Delete(int32_t iv)
 {
     AssertThis(fobjAssertFull);
     AssertIn(iv, 0, _ivMac);

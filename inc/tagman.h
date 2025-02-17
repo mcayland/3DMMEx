@@ -40,9 +40,9 @@
 #ifndef TAGM_H
 #define TAGM_H
 
-const long ksidInvalid = -1; // negative SIDs imply an invalid TAG
-const long sidNil = 0;
-const long ksidUseCrf = 0; // chunk is in ptag->pcrf
+const int32_t ksidInvalid = -1; // negative SIDs imply an invalid TAG
+const int32_t sidNil = 0;
+const int32_t ksidUseCrf = 0; // chunk is in ptag->pcrf
 
 typedef struct TAG *PTAG;
 struct TAG
@@ -53,7 +53,7 @@ struct TAG
     void MarkMem(void);
 #endif // DEBUG
 
-    long sid;  // Source ID (or ksidUseCrf)
+    int32_t sid; // Source ID (or ksidUseCrf)
     PCRF pcrf; // File to look in for this chunk if sid is ksidUseCrf
     CTG ctg;   // CTG of chunk
     CNO cno;   // CNO of chunk
@@ -89,7 +89,7 @@ class TAGM : public TAGM_PAR
 
   protected:
     FNI _fniHDRoot;     // Root HD directory to search for content
-    long _cbCache;      // Size of RAM Cache on files in CRM for each source
+    int32_t _cbCache;   // Size of RAM Cache on files in CRM for each source
     PGL _pglsfs;        // GL of source file structs
     PGST _pgstSource;   // String table of source descriptions
     PFNINSCD _pfninscd; // Function to call when source is not found
@@ -98,40 +98,40 @@ class TAGM : public TAGM_PAR
     TAGM(void)
     {
     }
-    bool _FFindSid(long sid, long *pistn = pvNil);
-    bool _FGetStnMergedOfSid(long sid, PSTN pstn);
-    bool _FGetStnSplitOfSid(long sid, PSTN pstnLong, PSTN pstnShort);
-    bool _FRetry(long sid);
-    bool _FEnsureFniCD(long sid, PFNI pfniCD, PSTN pstn = pvNil);
-    bool _FFindFniCD(long sid, PFNI pfniCD, bool *pfFniChanged);
-    bool _FDetermineIfSourceHD(long sid, bool *pfSourceIsOnHD);
+    bool _FFindSid(int32_t sid, int32_t *pistn = pvNil);
+    bool _FGetStnMergedOfSid(int32_t sid, PSTN pstn);
+    bool _FGetStnSplitOfSid(int32_t sid, PSTN pstnLong, PSTN pstnShort);
+    bool _FRetry(int32_t sid);
+    bool _FEnsureFniCD(int32_t sid, PFNI pfniCD, PSTN pstn = pvNil);
+    bool _FFindFniCD(int32_t sid, PFNI pfniCD, bool *pfFniChanged);
+    bool _FDetermineIfSourceHD(int32_t sid, bool *pfSourceIsOnHD);
     bool _FDetermineIfContentOnFni(PFNI pfni, bool *pfContentOnFni);
 
-    bool _FGetFniHD(long sid, PFNI pfniHD);
-    bool _FGetFniCD(long sid, PFNI pfniHD, bool fAskForCD);
+    bool _FGetFniHD(int32_t sid, PFNI pfniHD);
+    bool _FGetFniCD(int32_t sid, PFNI pfniHD, bool fAskForCD);
 
-    bool _FBuildFniHD(long sid, PFNI pfniHD, bool *pfExists);
-    PCRM _PcrmSourceNew(long sid, PFNI pfniInfo);
-    PCRM _PcrmSourceGet(long sid, bool fDontHitCD = fFalse);
+    bool _FBuildFniHD(int32_t sid, PFNI pfniHD, bool *pfExists);
+    PCRM _PcrmSourceNew(int32_t sid, PFNI pfniInfo);
+    PCRM _PcrmSourceGet(int32_t sid, bool fDontHitCD = fFalse);
     PCFL _PcflFindTag(PTAG ptag);
 
   public:
-    static PTAGM PtagmNew(PFNI pfniHDRoot, PFNINSCD pfninscd, long cbCache);
+    static PTAGM PtagmNew(PFNI pfniHDRoot, PFNINSCD pfninscd, int32_t cbCache);
     ~TAGM(void);
 
     // GstSource stuff:
     PGST PgstSource(void);
     bool FMergeGstSource(PGST pgst, int16_t bo, int16_t osk);
-    bool FAddStnSource(PSTN pstnMerged, long sid);
-    bool FGetSid(PSTN pstn, long *psid); // pstn can be short or long
+    bool FAddStnSource(PSTN pstnMerged, int32_t sid);
+    bool FGetSid(PSTN pstn, int32_t *psid); // pstn can be short or long
 
-    bool FFindFile(long sid, PSTN pstn, PFNI pfni, bool fAskForCD);
+    bool FFindFile(int32_t sid, PSTN pstn, PFNI pfni, bool fAskForCD);
     void SplitString(PSTN pstnMerged, PSTN pstnLong, PSTN pstnShort);
 
     bool FBuildChildTag(PTAG ptagPar, CHID chid, CTG ctgChild, PTAG ptagChild);
     bool FCacheTagToHD(PTAG ptag, bool fCacheChildChunks = fTrue);
     PBACO PbacoFetch(PTAG ptag, PFNRPO pfnrpo, bool fUseCD = fFalse);
-    void ClearCache(long sid = sidNil,
+    void ClearCache(int32_t sid = sidNil,
                     uint32_t grftagm = ftagmFile | ftagmMemory); // sidNil clears all caches
 
     // For ksidUseCrf tags:

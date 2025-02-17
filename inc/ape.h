@@ -29,14 +29,14 @@ struct GMS
 {
     bool fValid; // if fFalse, ignore this GMS
     bool fMtrl;  // if fMtrl is fTrue, tagMtrl is valid.  Else cmid is valid
-    long cmid;
+    int32_t cmid;
     TAG tagMtrl;
 };
 
 // Actor preview entity tool
 struct APET
 {
-    long apt;
+    int32_t apt;
     GMS gms;
 };
 
@@ -59,38 +59,38 @@ class APE : public APE_PAR
     PBODY _pbody;       // Body of the actor being previewed
     APET _apet;         // Currently selected tool
     PGL _pglgms;        // What materials are attached to what body part sets
-    long _celn;         // Current cel of action
+    int32_t _celn;      // Current cel of action
     CLOK _clok;         // To time cel cycling
     BLIT _blit;         // BRender light data
     BACT _bact;         // BRender light actor
-    long _anid;         // Current action ID
-    long _iview;        // Current camera view
+    int32_t _anid;      // Current action ID
+    int32_t _iview;     // Current camera view
     bool _fCycleCels;   // If cycling cels
     PRCA _prca;         // resource source (for cursors)
-    long _ibsetOnlyAcc; // ibset of accessory, if only one (else ivNil)
+    int32_t _ibsetOnlyAcc; // ibset of accessory, if only one (else ivNil)
 
   protected:
     APE(PGCB pgcb) : GOB(pgcb), _clok(CMH::HidUnique())
     {
     }
-    bool _FInit(PTMPL ptmpl, PCOST pcost, long anid, bool fCycleCels, PRCA prca);
+    bool _FInit(PTMPL ptmpl, PCOST pcost, int32_t anid, bool fCycleCels, PRCA prca);
     void _InitView(void);
     void _SetScale(void);
     void _UpdateView(void);
-    bool _FApplyGms(GMS *pgms, long ibset);
-    bool _FIncCmtl(GMS *pgms, long ibset, bool fNextAccessory);
-    long _CmidNext(long ibset, long icmidCur, bool fNextAccessory);
+    bool _FApplyGms(GMS *pgms, int32_t ibset);
+    bool _FIncCmtl(GMS *pgms, int32_t ibset, bool fNextAccessory);
+    int32_t _CmidNext(int32_t ibset, int32_t icmidCur, bool fNextAccessory);
 
   public:
-    static PAPE PapeNew(PGCB pgcb, PTMPL ptmpl, PCOST pcost, long anid, bool fCycleCels, PRCA prca = pvNil);
+    static PAPE PapeNew(PGCB pgcb, PTMPL ptmpl, PCOST pcost, int32_t anid, bool fCycleCels, PRCA prca = pvNil);
     ~APE();
 
     void SetToolMtrl(PTAG ptagMtrl);
-    void SetToolCmtl(long cmid);
+    void SetToolCmtl(int32_t cmid);
     void SetToolIncCmtl(void);
     void SetToolIncAccessory(void);
 
-    bool FSetAction(long anid);
+    bool FSetAction(int32_t anid);
     bool FCmdNextCel(PCMD pcmd);
 
     void SetCustomView(BRA xa, BRA ya, BRA za);
@@ -99,16 +99,16 @@ class APE : public APE_PAR
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
 
-    bool FChangeTdt(PSTN pstn, long tdts, PTAG ptagTdf);
+    bool FChangeTdt(PSTN pstn, int32_t tdts, PTAG ptagTdf);
     bool FSetTdtMtrl(PTAG ptagMtrl);
     bool FGetTdtMtrlCno(CNO *pcno);
 
-    void GetTdtInfo(PSTN pstn, long *ptdts, PTAG ptagTdf);
-    long Anid(void)
+    void GetTdtInfo(PSTN pstn, int32_t *ptdts, PTAG ptagTdf);
+    int32_t Anid(void)
     {
         return _anid;
     }
-    long Celn(void)
+    int32_t Celn(void)
     {
         return _celn;
     }
@@ -117,14 +117,14 @@ class APE : public APE_PAR
     {
         return _fCycleCels;
     }
-    bool FDisplayCel(long celn);
-    long Cbset(void)
+    bool FDisplayCel(int32_t celn);
+    int32_t Cbset(void)
     {
         return _pbody->Cbset();
     }
 
     // Returns fTrue if a material was applied to this ibset
-    bool FGetMaterial(long ibset, tribool *pfMtrl, long *pcmid, TAG *ptagMtrl);
+    bool FGetMaterial(int32_t ibset, tribool *pfMtrl, int32_t *pcmid, TAG *ptagMtrl);
 };
 
 #endif // APE_H

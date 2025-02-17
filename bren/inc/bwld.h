@@ -70,8 +70,8 @@ class BWLD : public BWLD_PAR
     BWLD(void)
     {
     }
-    bool _FInit(long dxp, long dyp, bool fHalfX, bool fHalfY);
-    bool _FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY);
+    bool _FInit(int32_t dxp, int32_t dyp, bool fHalfX, bool fHalfY);
+    bool _FInitBuffers(int32_t dxp, int32_t dyp, bool fHalfX, bool fHalfY);
     void _CleanWorkingBuffers(void);
     static int BR_CALLBACK _FFilter(BACT *pbact, PBMDL pbmdl, PBMTL pbmtl, BVEC3 *pbvec3RayPos, BVEC3 *pbvec3RayDir,
                                     BRS dzpNear, BRS dzpFar, void *pbwld);
@@ -80,7 +80,7 @@ class BWLD : public BWLD_PAR
 
   public:
     // Constructors and destructors
-    static PBWLD PbwldNew(long dxp, long dyp, bool fHalfX = fFalse, bool fhalfY = fFalse);
+    static PBWLD PbwldNew(int32_t dxp, int32_t dyp, bool fHalfX = fFalse, bool fhalfY = fFalse);
     ~BWLD();
     static void CloseBRender(void);
 
@@ -89,7 +89,7 @@ class BWLD : public BWLD_PAR
     {
         _fWorldChanged = fTrue;
     }
-    void MarkRenderedRegn(PGOB pgob, long dxp, long dyp);
+    void MarkRenderedRegn(PGOB pgob, int32_t dxp, int32_t dyp);
 
     // Background stuff
     bool FSetBackground(PCRF pcrf, CTG ctgRGB, CNO cnoRGB, CTG ctgZ, CNO cnoZ);
@@ -98,8 +98,8 @@ class BWLD : public BWLD_PAR
 
     // Actor stuff
     void AddActor(BACT *pbact);
-    bool FClickedActor(long xp, long yp, BACT **ppbact);
-    void IterateActorsInPt(br_pick2d_cbfn *pfnCallback, void *pvArg, long xp, long yp);
+    bool FClickedActor(int32_t xp, int32_t yp, BACT **ppbact);
+    void IterateActorsInPt(br_pick2d_cbfn *pfnCallback, void *pvArg, int32_t xp, int32_t yp);
     void SetBeginRenderCallback(PFNBEGINREND pfnbeginrend)
     {
         _pfnbeginrend = pfnbeginrend;
@@ -126,7 +126,7 @@ class BWLD : public BWLD_PAR
     void Render(void);
     void Prerender(void);
     void Unprerender(void);
-    void Draw(PGNV pgnv, RC *prcClip, long dxp, long dyp);
+    void Draw(PGNV pgnv, RC *prcClip, int32_t dxp, int32_t dyp);
 
 #ifdef DEBUG
     bool FWriteBmp(PFNI pfni);

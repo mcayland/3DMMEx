@@ -124,18 +124,18 @@ enum
 // structure to map a string to an opcode (post-fix)
 struct SZOP
 {
-    long op;
+    int32_t op;
     PSZ psz;
 };
 
 // structure to map a string to an opcode and argument information (in-fix)
 struct AROP
 {
-    long op;
+    int32_t op;
     PSZ psz;
-    long clwFixed;   // number of fixed arguments
-    long clwVar;     // number of arguments per variable group
-    long cactMinVar; // minimum number of variable groups
+    int32_t clwFixed;   // number of fixed arguments
+    int32_t clwVar;     // number of arguments per variable group
+    int32_t cactMinVar; // minimum number of variable groups
     bool fVoid;      // return a value?
 };
 
@@ -191,29 +191,29 @@ class SCCB : public SCCB_PAR
     PGST _pgstNames;    // encountered names (in-fix only)
     PGST _pgstLabel;    // encountered labels, sorted, extra long is label value
     PGST _pgstReq;      // label references, extra long is address of reference
-    long _ilwOpLast;    // address of the last opcode
-    long _lwLastLabel;  // for internal temporary labels
+    int32_t _ilwOpLast;    // address of the last opcode
+    int32_t _lwLastLabel;  // for internal temporary labels
     bool _fError : 1;   // whether an error has occured during compiling
     bool _fForceOp : 1; // when pushing a constant, make sure the last long
                         // is an opcode (because a label references this loc)
     bool _fHitEnd : 1;  // we've exhausted our input stream
-    long _ttEnd;        // stop compiling when we see this
+    int32_t _ttEnd;        // stop compiling when we see this
     PMSNK _pmsnk;       // the message sink - for error reporting when compiling
 
     bool _FInit(PLEXB plexb, bool fInFix, PMSNK pmsnk);
     void _Free(void);
 
     // general compilation methods
-    void _PushLw(long lw);
+    void _PushLw(int32_t lw);
     void _PushString(PSTN pstn);
-    void _PushOp(long op);
+    void _PushOp(int32_t op);
     void _EndOp(void);
-    void _PushVarOp(long op, RTVN *prtvn);
-    bool _FFindLabel(PSTN pstn, long *plwLoc);
+    void _PushVarOp(int32_t op, RTVN *prtvn);
+    bool _FFindLabel(PSTN pstn, int32_t *plwLoc);
     void _AddLabel(PSTN pstn);
     void _PushLabelRequest(PSTN pstn);
-    void _AddLabelLw(long lw);
-    void _PushLabelRequestLw(long lw);
+    void _AddLabelLw(int32_t lw);
+    void _PushLabelRequestLw(int32_t lw);
 
     virtual void _ReportError(PSZ psz);
     virtual int16_t _SwCur(void);
@@ -224,41 +224,41 @@ class SCCB : public SCCB_PAR
 
     // post-fix compiler routines
     virtual void _CompilePost(void);
-    long _OpFromStnRgszop(PSTN pstn, SZOP *prgszop);
-    virtual long _OpFromStn(PSTN pstn);
-    bool _FGetStnFromOpRgszop(long op, PSTN pstn, SZOP *prgszop);
-    virtual bool _FGetStnFromOp(long op, PSTN pstn);
+    int32_t _OpFromStnRgszop(PSTN pstn, SZOP *prgszop);
+    virtual int32_t _OpFromStn(PSTN pstn);
+    bool _FGetStnFromOpRgszop(int32_t op, PSTN pstn, SZOP *prgszop);
+    virtual bool _FGetStnFromOp(int32_t op, PSTN pstn);
 
     // in-fix compiler routines
     virtual void _CompileIn(void);
-    bool _FResolveToOpl(long opl, long oplMin, long *pietn);
-    void _EmitCode(long ietnTop, uint32_t grfscc, long *pclwArg);
-    void _EmitVarAccess(long ietn, RTVN *prtvn, long *popPush, long *popPop, long *pclwStack);
-    virtual bool _FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar, bool *pfVoid);
-    bool _FGetArop(PSTN pstn, AROP *prgarop, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar,
+    bool _FResolveToOpl(int32_t opl, int32_t oplMin, int32_t *pietn);
+    void _EmitCode(int32_t ietnTop, uint32_t grfscc, int32_t *pclwArg);
+    void _EmitVarAccess(int32_t ietn, RTVN *prtvn, int32_t *popPush, int32_t *popPop, int32_t *pclwStack);
+    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar, bool *pfVoid);
+    bool _FGetArop(PSTN pstn, AROP *prgarop, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
                    bool *pfVoid);
-    void _PushLabelRequestIetn(long ietn);
-    void _AddLabelIetn(long ietn);
-    void _PushOpFromName(long ietn, uint32_t grfscc, long clwArg);
-    void _GetIstnNameFromIetn(long ietn, long *pistn);
-    void _GetRtvnFromName(long istn, RTVN *prtvn);
+    void _PushLabelRequestIetn(int32_t ietn);
+    void _AddLabelIetn(int32_t ietn);
+    void _PushOpFromName(int32_t ietn, uint32_t grfscc, int32_t clwArg);
+    void _GetIstnNameFromIetn(int32_t ietn, int32_t *pistn);
+    void _GetRtvnFromName(int32_t istn, RTVN *prtvn);
     bool _FKeyWord(PSTN pstn);
-    void _GetStnFromIstn(long istn, PSTN pstn);
-    void _AddNameRef(PSTN pstn, long *pistn);
-    long _CstFromName(long ietn);
-    void _BeginCst(long cst, long ietn);
-    bool _FHandleCst(long ietn);
-    bool _FAddToTree(struct ETN *petn, long *pietn);
-    bool _FConstEtn(long ietn, long *plw);
-    bool _FCombineConstValues(long op, long lw1, long lw2, long *plw);
+    void _GetStnFromIstn(int32_t istn, PSTN pstn);
+    void _AddNameRef(PSTN pstn, int32_t *pistn);
+    int32_t _CstFromName(int32_t ietn);
+    void _BeginCst(int32_t cst, int32_t ietn);
+    bool _FHandleCst(int32_t ietn);
+    bool _FAddToTree(struct ETN *petn, int32_t *pietn);
+    bool _FConstEtn(int32_t ietn, int32_t *plw);
+    bool _FCombineConstValues(int32_t op, int32_t lw1, int32_t lw2, int32_t *plw);
     void _SetDepth(struct ETN *petn, bool fCommute = fFalse);
-    void _PushStringIstn(long istn);
+    void _PushStringIstn(int32_t istn);
 
   public:
     SCCB(void);
     ~SCCB(void);
 
-    virtual PSCPT PscptCompileLex(PLEXB plexb, bool fInFix, PMSNK pmsnk, long ttEnd = ttNil);
+    virtual PSCPT PscptCompileLex(PLEXB plexb, bool fInFix, PMSNK pmsnk, int32_t ttEnd = ttNil);
     virtual PSCPT PscptCompileFil(PFIL pfil, bool fInFix, PMSNK pmsnk);
     virtual PSCPT PscptCompileFni(FNI *pfni, bool fInFix, PMSNK pmsnk);
     virtual bool FDisassemble(PSCPT pscpt, PMSNK pmsnk, PMSNK pmsnkError = pvNil);

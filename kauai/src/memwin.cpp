@@ -15,24 +15,24 @@ ASSERTNAME
 
 struct HQH
 {
-    long cb;       // size of client area
-    long cactLock; // lock count
+    int32_t cb;       // size of client area
+    int32_t cactLock; // lock count
 #ifdef DEBUG
-    long lwMagic; // for detecting memory trashing
+    int32_t lwMagic; // for detecting memory trashing
 #endif            // DEBUG
 };
 
 #ifdef DEBUG
-long vcactSuspendCheckPointers = 0;
+int32_t vcactSuspendCheckPointers = 0;
 #endif // DEBUG
 
 /***************************************************************************
     Allocates a new moveable block.
 ***************************************************************************/
 #ifdef DEBUG
-bool FAllocHqDebug(HQ *phq, long cb, uint32_t grfmem, long mpr, PSZS pszsFile, long lwLine)
+bool FAllocHqDebug(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr, PSZS pszsFile, int32_t lwLine)
 #else  //! DEBUG
-bool FAllocHq(HQ *phq, long cb, uint32_t grfmem, long mpr)
+bool FAllocHq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr)
 #endif //! DEBUG
 {
     AssertVarMem(phq);
@@ -59,7 +59,7 @@ bool FAllocHq(HQ *phq, long cb, uint32_t grfmem, long mpr)
     Resizes the given hq.  *phq may change.  If fmemClear, clears any
     newly added space.
 ***************************************************************************/
-bool FResizePhq(HQ *phq, long cb, uint32_t grfmem, long mpr)
+bool FResizePhq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr)
 {
     AssertVarMem(phq);
     AssertHq(*phq);
@@ -109,11 +109,11 @@ void FreePhq(HQ *phq)
 /***************************************************************************
     Create a new HQ the same size as hqSrc and copy hqSrc into it.
 ***************************************************************************/
-bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr)
+bool FCopyHq(HQ hqSrc, HQ *phqDst, int32_t mpr)
 {
     AssertHq(hqSrc);
     AssertVarMem(phqDst);
-    long cb;
+    int32_t cb;
 
     if (!FAllocHq(phqDst, cb = CbOfHq(hqSrc), fmemNil, mpr))
         return fFalse;
@@ -124,7 +124,7 @@ bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr)
 /***************************************************************************
     Return the size of the hq (the client area of the block).
 ***************************************************************************/
-long CbOfHq(HQ hq)
+int32_t CbOfHq(HQ hq)
 {
     AssertHq(hq);
     HQH *phqh = (HQH *)PvSubBv(hq, SIZEOF(HQH));
@@ -206,7 +206,7 @@ void MarkHq(HQ hq)
     Make sure we can access a pointer's memory.  If cb is 0, pv can be
     anything (including nil).
 ***************************************************************************/
-void AssertPvCb(const void *pv, long cb)
+void AssertPvCb(const void *pv, int32_t cb)
 {
     if (vcactSuspendCheckPointers == 0 && cb != 0)
     {

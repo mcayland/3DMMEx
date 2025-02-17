@@ -21,11 +21,11 @@ typedef class MIDS *PMIDS;
 struct MIDEV
 {
     uint32_t ts;  // time stamp of this event
-    long cb;      // number of bytes to send (in rgbSend)
-    long lwTempo; // the current tempo - at a tempo change, cb will be 0
+    int32_t cb;      // number of bytes to send (in rgbSend)
+    int32_t lwTempo; // the current tempo - at a tempo change, cb will be 0
     union {
         uint8_t rgbSend[4]; // bytes to send if pvLong is nil
-        long lwSend;        // for convenience
+        int32_t lwSend;        // for convenience
     };
 };
 typedef MIDEV *PMIDEV;
@@ -45,21 +45,21 @@ class MSTP : public MSTP_PAR
 
   protected:
     uint32_t _tsCur;
-    long _lwTempo;
+    int32_t _lwTempo;
     uint8_t *_prgb;
     uint8_t *_pbLim;
     uint8_t *_pbCur;
     uint8_t _bStatus;
 
-    Debug(long _cactLongLock;) PMIDS _pmids;
+    Debug(int32_t _cactLongLock;) PMIDS _pmids;
 
-    bool _FReadVar(uint8_t **ppbCur, long *plw);
+    bool _FReadVar(uint8_t **ppbCur, int32_t *plw);
 
   public:
     MSTP(void);
     ~MSTP(void);
 
-    void Init(PMIDS pmids, uint32_t tsStart = 0, long lwTempo = 500000);
+    void Init(PMIDS pmids, uint32_t tsStart = 0, int32_t lwTempo = 500000);
     bool FGetEvent(PMIDEV pmidev, bool fAdvance = fTrue);
 };
 
@@ -82,16 +82,16 @@ class MIDS : public MIDS_PAR
 
     MIDS(void);
 
-    static long _CbEncodeLu(uint32_t lu, uint8_t *prgb);
+    static int32_t _CbEncodeLu(uint32_t lu, uint8_t *prgb);
 
   public:
-    static bool FReadMids(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadMids(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     static PMIDS PmidsRead(PBLCK pblck);
     static PMIDS PmidsReadNative(FNI *pfni);
     ~MIDS(void);
 
     virtual bool FWrite(PBLCK pblck);
-    virtual long CbOnFile(void);
+    virtual int32_t CbOnFile(void);
 };
 
 #endif //! MIDI_H

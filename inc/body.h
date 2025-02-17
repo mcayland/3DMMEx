@@ -29,19 +29,19 @@ class BODY : public BODY_PAR
   protected:
     static BMTL *_pbmtlHilite; // hilight material
     static BODY *_pbodyClosestClicked;
-    static long _dzpClosestClicked;
+    static int32_t _dzpClosestClicked;
     static BACT *_pbactClosestClicked;
     BACT *_prgbact;      // array of BACTs
     PGL _pglibset;       // body part set IDs
-    long _cbset;         // count of body part sets
+    int32_t _cbset;      // count of body part sets
     PCMTL *_prgpcmtl;    // array of PCMTLs -- one per body part set
-    long _cbactPart;     // count of model body parts in body
-    long _cactHidden;    // for Show() / Hide()
+    int32_t _cbactPart;  // count of model body parts in body
+    int32_t _cactHidden; // for Show() / Hide()
     PBWLD _pbwld;        // world that body lives in
     RC _rcBounds;        // bounds of body after last render
     RC _rcBoundsLastVis; // bounds of body last time it was visible
     bool _fFound;        // is the actor found under the mouse?
-    long _ibset;         // which body part got hit.
+    int32_t _ibset;      // which body part got hit.
 
   protected:
     BODY(void)
@@ -58,19 +58,19 @@ class BODY : public BODY_PAR
     {
         return _prgbact + 1;
     }                            // skip root BACT
-    PBACT _PbactPart(long ipart) // ptr to ipart'th body part
+    PBACT _PbactPart(int32_t ipart) // ptr to ipart'th body part
     {
         return _prgbact + 1 + 1 + ipart;
     }                 // skip root and hilite BACTs
-    long _Cbact(void) // count in _prgbact
+    int32_t _Cbact(void) // count in _prgbact
     {
         return 1 + 1 + _cbactPart;
     }                       // root, hilite, and body part BACTs
-    long _Ibset(long ipart) // body part set that this part belongs to
+    int32_t _Ibset(int32_t ipart) // body part set that this part belongs to
     {
         return *(int16_t *)_pglibset->QvGet(ipart);
     }
-    void _RemoveMaterial(long ibset);
+    void _RemoveMaterial(int32_t ibset);
 
     // Callbacks from BRender:
     static int BR_CALLBACK _FFilterSearch(BACT *pbact, PBMDL pbmdl, PBMTL pbmtl, BVEC3 *pbvec3RayPos,
@@ -81,8 +81,8 @@ class BODY : public BODY_PAR
 
   public:
     static PBODY PbodyNew(PGL pglibactPar, PGL pglibset);
-    static PBODY PbodyFromBact(BACT *pbact, long *pibset = pvNil);
-    static PBODY PbodyClicked(long xp, long yp, PBWLD pbwld, long *pibset = pvNil);
+    static PBODY PbodyFromBact(BACT *pbact, int32_t *pibset = pvNil);
+    static PBODY PbodyClicked(int32_t xp, int32_t yp, PBWLD pbwld, int32_t *pibset = pvNil);
     ~BODY(void);
     PBODY PbodyDup(void);
     void Restore(PBODY pbodyDup);
@@ -100,24 +100,24 @@ class BODY : public BODY_PAR
     void Hilite(void);
     void Unhilite(void);
 
-    static void SetHiliteColor(long iclr);
+    static void SetHiliteColor(int32_t iclr);
 
     void LocateOrient(BRS xr, BRS yr, BRS zr, BMAT34 *pbmat34);
-    void SetPartModel(long ibact, MODL *pmodl);
-    void SetPartMatrix(long ibact, BMAT34 *pbmat34);
-    void SetPartSetMtrl(long ibset, MTRL *pmtrl);
+    void SetPartModel(int32_t ibact, MODL *pmodl);
+    void SetPartMatrix(int32_t ibact, BMAT34 *pbmat34);
+    void SetPartSetMtrl(int32_t ibset, MTRL *pmtrl);
     void SetPartSetCmtl(CMTL *pcmtl);
-    void GetPartSetMaterial(long ibset, bool *pfMtrl, MTRL **ppmtrl, CMTL **ppcmtl);
-    long Cbset()
+    void GetPartSetMaterial(int32_t ibset, bool *pfMtrl, MTRL **ppmtrl, CMTL **ppcmtl);
+    int32_t Cbset()
     {
         return _cbset;
     }
 
     void GetBcbBounds(BCB *pbcb, bool fWorld = fFalse);
     void GetRcBounds(RC *prc);
-    void GetCenter(long *pxp, long *pyp);
+    void GetCenter(int32_t *pxp, int32_t *pyp);
     void GetPosition(BRS *pxr, BRS *pyr, BRS *pzr);
-    bool FPtInBody(long xp, long yp, long *pibset);
+    bool FPtInBody(int32_t xp, int32_t yp, int32_t *pibset);
     bool FIsInView(void);
 };
 
@@ -136,7 +136,7 @@ class COST : public COST_PAR
     MARKMEM
 
   private:
-    long _cbset;   // count of body part sets in _prgpo
+    int32_t _cbset; // count of body part sets in _prgpo
     BASE **_prgpo; // array of MTRLs and CMTLs
 
   private:

@@ -45,17 +45,17 @@ const CHID kchidGstSource = 1;
 //
 // How many pixels from edge to warp cursor back to center
 //
-const long kdpInset = 50;
+const int32_t kdpInset = 50;
 
 //
 // Mouse scaling factor when rotating
 //
-const long krRotateScaleFactor = BR_SCALAR(0.001);
+const int32_t krRotateScaleFactor = BR_SCALAR(0.001);
 
 //
 // Mouse scaling factor when sooner/latering.
 //
-const long krSoonerScaleFactor = BR_SCALAR(0.05);
+const int32_t krSoonerScaleFactor = BR_SCALAR(0.05);
 
 //
 // Number of ticks to pass before scrolling a single pixel
@@ -86,7 +86,7 @@ class MUNS : public MUNS_PAR
     ASSERT
 
   protected:
-    long _iscen;
+    int32_t _iscen;
     TAG _tag;
     PSCEN _pscen;
     MUNST _munst;
@@ -98,7 +98,7 @@ class MUNS : public MUNS_PAR
     static PMUNS PmunsNew(void);
     ~MUNS(void);
 
-    void SetIscen(long iscen)
+    void SetIscen(int32_t iscen)
     {
         _iscen = iscen;
     }
@@ -173,8 +173,8 @@ const BOM kbomMfp = 0x55000000;
 //
 struct MACTR
 {
-    long arid;
-    long cactRef;
+    int32_t arid;
+    int32_t cactRef;
     uint32_t grfbrws; // browser properties
     TAG tagTmpl;
 };
@@ -215,7 +215,7 @@ bool MVIE::_FSetPfilSave(PFNI pfni)
     AssertBaseThis(0);
     AssertPo(pfni, 0);
 
-    long lAttrib;
+    int32_t lAttrib;
     STN stnFile;
 
     /* Look for the file and remember FIL if found */
@@ -452,7 +452,7 @@ LFail:
     Returns: fTrue if there were no failures, fFalse otherwise
 
 ************************************************************ PETED ***********/
-bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, long *paridLim)
+bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
 {
     AssertPo(pcrf, 0);
     AssertVarMem(ppgst);
@@ -460,7 +460,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, long *paridLim)
     AssertNilOrVarMem(paridLim);
 
     int16_t bo;
-    long imactr, imactrMac;
+    int32_t imactr, imactrMac;
     PCFL pcfl = pcrf->Pcfl();
     KID kid;
     BLCK blck;
@@ -533,7 +533,7 @@ void MVIE::_DoSndGarbageCollection(bool fPurgeAll)
     // cactref == 1 (the refcnt from being a child of the
     // movie chunk)
 
-    long ikid;
+    int32_t ikid;
 
     if (pvNil == _pcrfAutoSave)
         return;
@@ -580,7 +580,7 @@ MVIE::~MVIE(void)
 {
     AssertBaseThis(0);
 
-    long imactr;
+    int32_t imactr;
     MACTR mactr;
 
     ReleasePpo(&_pcrfAutoSave);
@@ -760,10 +760,10 @@ PTAGL MVIE::_PtaglFetch(void)
  *	 fTrue if successful, else fFalse if out of range.
  *
  ****************************************************/
-bool MVIE::FGetArid(long iarid, long *parid, PSTN pstn, long *pcactRef, PTAG ptagTmpl)
+bool MVIE::FGetArid(int32_t iarid, int32_t *parid, PSTN pstn, int32_t *pcactRef, PTAG ptagTmpl)
 {
     AssertThis(0);
-    AssertPvCb(parid, SIZEOF(long));
+    AssertPvCb(parid, SIZEOF(int32_t));
     AssertVarMem(pcactRef);
 
     MACTR mactr;
@@ -796,14 +796,14 @@ bool MVIE::FGetArid(long iarid, long *parid, PSTN pstn, long *pcactRef, PTAG pta
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool MVIE::FChooseArid(long arid)
+bool MVIE::FChooseArid(int32_t arid)
 {
     AssertThis(0);
     AssertPo(Pscen(), 0);
 
     PACTR pactr, pactrDup;
     MACTR mactr;
-    long imactr;
+    int32_t imactr;
     PMVU pmvu;
 
     pmvu = (PMVU)PddgGet(0);
@@ -892,7 +892,7 @@ bool MVIE::FChooseArid(long arid)
  *   Arid of the selected actor, else aridNil.
  *
  ****************************************************/
-long MVIE::AridSelected(void)
+int32_t MVIE::AridSelected(void)
 {
     AssertThis(0);
 
@@ -918,13 +918,13 @@ long MVIE::AridSelected(void)
  *	 fTrue if successful, else fFalse if failure.
  *
  ****************************************************/
-bool MVIE::FGetName(long arid, PSTN pstn)
+bool MVIE::FGetName(int32_t arid, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
 
     MACTR mactr;
-    long imactr;
+    int32_t imactr;
 
     for (imactr = 0; imactr < _pgstmactr->IvMac(); imactr++)
     {
@@ -951,14 +951,14 @@ bool MVIE::FGetName(long arid, PSTN pstn)
  *	 fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool MVIE::FNameActr(long arid, PSTN pstn)
+bool MVIE::FNameActr(int32_t arid, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(arid, 0, 500);
     AssertPo(pstn, 0);
 
     MACTR mactr;
-    long imactr;
+    int32_t imactr;
 
     for (imactr = 0; imactr < _pgstmactr->IvMac(); imactr++)
     {
@@ -992,7 +992,7 @@ bool MVIE::FNameActr(long arid, PSTN pstn)
  *	 bool
  *
  ****************************************************/
-bool MVIE::FIsPropBrwsIarid(long iarid)
+bool MVIE::FIsPropBrwsIarid(int32_t iarid)
 {
     AssertThis(0);
     AssertIn(iarid, 0, _pgstmactr->IvMac());
@@ -1013,7 +1013,7 @@ bool MVIE::FIsPropBrwsIarid(long iarid)
  *	 bool
  *
  ****************************************************/
-bool MVIE::FIsIaridTdt(long iarid)
+bool MVIE::FIsIaridTdt(int32_t iarid)
 {
     AssertThis(0);
     AssertIn(iarid, 0, _pgstmactr->IvMac());
@@ -1035,14 +1035,14 @@ bool MVIE::FIsIaridTdt(long iarid)
  *	 none
  *
  ****************************************************/
-void MVIE::ChangeActrTag(long arid, PTAG ptag)
+void MVIE::ChangeActrTag(int32_t arid, PTAG ptag)
 {
     AssertThis(0);
     AssertIn(arid, 0, 500);
     AssertVarMem(ptag);
 
     MACTR mactr;
-    long imactr;
+    int32_t imactr;
 
     for (imactr = 0; imactr < _pgstmactr->IvMac(); imactr++)
     {
@@ -1079,7 +1079,7 @@ bool MVIE::FAddToRollCall(ACTR *pactr, PSTN pstn)
     AssertNilOrPo(pstn, 0); // can be pvNil if the actor is already in the movie.
 
     MACTR mactr;
-    long imactr;
+    int32_t imactr;
 
     if (pactr->Arid() != aridNil)
     {
@@ -1160,7 +1160,7 @@ void MVIE::RemFromRollCall(ACTR *pactr, bool fDelIfOnlyRef)
     AssertPo(pactr, 0);
 
     MACTR mactr;
-    long imactr;
+    int32_t imactr;
 
     //
     // Search for the actor in the roll call
@@ -1206,7 +1206,7 @@ void MVIE::RemFromRollCall(ACTR *pactr, bool fDelIfOnlyRef)
  *  same scene is still open (if possible).
  *
  ****************************************************/
-bool MVIE::FSwitchScen(long iscen)
+bool MVIE::FSwitchScen(int32_t iscen)
 {
     AssertThis(0);
     Assert(iscen == ivNil || FIn(iscen, 0, Cscen()), "iscen out of range");
@@ -1214,7 +1214,7 @@ bool MVIE::FSwitchScen(long iscen)
 
     PSCEN pscen;
     KID kid;
-    long iscenOld;
+    int32_t iscenOld;
     bool fRet = fTrue;
 
     if (iscen == _iscen)
@@ -1329,7 +1329,7 @@ LRetry:
  *  fTrue, if successful, else fFalse.
  *
  ****************************************************/
-bool MVIE::FNewScenInsCore(long iscen)
+bool MVIE::FNewScenInsCore(int32_t iscen)
 {
     AssertThis(0);
     AssertIn(iscen, 0, Cscen() + 1);
@@ -1418,7 +1418,7 @@ void MVIE::_MoveChids(CHID chid, bool fDown)
 bool MVIE::_FIsChild(PCFL pcfl, CTG ctg, CNO cno)
 {
     bool fIsChild = fFalse;
-    long ckid, ikid;
+    int32_t ckid, ikid;
     KID kid;
 
     ckid = pcfl->Ckid(kctgMvie, _cno);
@@ -1460,7 +1460,7 @@ bool MVIE::_FAdoptMsndInMvie(PCFL pcfl, CNO cnoScen)
     AssertPo(pcfl, 0);
 
     CHID chidMvie;
-    long ckid, ikid;
+    int32_t ckid, ikid;
     KID kid;
 
     ckid = pcfl->Ckid(kctgScen, cnoScen);
@@ -1567,8 +1567,8 @@ bool MVIE::FChidFromUserSndCno(CNO cno, CHID *pchid)
 
     KID kidScen;
     KID kid;
-    long ckid;
-    long ikid;
+    int32_t ckid;
+    int32_t ikid;
     PCFL pcfl = _pcrfAutoSave->Pcfl();
 
     if (!pcfl->FGetKidChidCtg(kctgMvie, _cno, _iscen, kctgScen, &kidScen))
@@ -1606,7 +1606,7 @@ bool MVIE::FChidFromUserSndCno(CNO cno, CHID *pchid)
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FCopySndFileToMvie(PFIL pfilSrc, long sty, CNO *pcno, PSTN pstn)
+bool MVIE::FCopySndFileToMvie(PFIL pfilSrc, int32_t sty, CNO *pcno, PSTN pstn)
 {
     AssertThis(0);
     AssertVarMem(pfilSrc);
@@ -1722,8 +1722,8 @@ CHID MVIE::_ChidScenNewSnd(void)
 {
     AssertBaseThis(0);
     PCFL pcfl = _pcrfAutoSave->Pcfl();
-    long ckid;
-    long chid;
+    int32_t ckid;
+    int32_t chid;
     KID kidScen;
     KID kid;
 
@@ -1754,8 +1754,8 @@ CHID MVIE::_ChidMvieNewSnd(void)
 {
     AssertBaseThis(0);
     PCFL pcfl = _pcrfAutoSave->Pcfl();
-    long ckid;
-    long chid;
+    int32_t ckid;
+    int32_t chid;
     KID kid;
 
     ckid = pcfl->Ckid(kctgMvie, _cno);
@@ -1836,7 +1836,7 @@ bool MVIE::FVerifyVersion(PCFL pcfl, CNO *pcno)
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FRemScenCore(long iscen)
+bool MVIE::FRemScenCore(int32_t iscen)
 {
     AssertThis(0);
     AssertIn(iscen, 0, Cscen());
@@ -1845,7 +1845,7 @@ bool MVIE::FRemScenCore(long iscen)
     KID kid;
     PCFL pcfl;
     PSCEN pscen;
-    long iscenOld;
+    int32_t iscenOld;
 
     pcfl = _pcrfAutoSave->Pcfl();
 
@@ -1952,7 +1952,7 @@ bool MVIE::FRemScenCore(long iscen)
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FRemScen(long iscen)
+bool MVIE::FRemScen(int32_t iscen)
 {
     AssertThis(0);
     AssertIn(iscen, 0, Cscen());
@@ -2107,7 +2107,7 @@ bool MVIE::FEnsureAutosave(PCRF *ppcrf)
  *  fTrue if success, fFalse if couldn't add the TDT
  *
  ****************************************************/
-bool MVIE::FInsTdt(PSTN pstn, long tdts, PTAG ptagTdf)
+bool MVIE::FInsTdt(PSTN pstn, int32_t tdts, PTAG ptagTdf)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2179,7 +2179,7 @@ bool MVIE::FInsTdt(PSTN pstn, long tdts, PTAG ptagTdf)
  *  fTrue if success, fFalse if couldn't change the TDT
  *
  ****************************************************/
-bool MVIE::FChangeActrTdt(PACTR pactr, PSTN pstn, long tdts, PTAG ptagTdf)
+bool MVIE::FChangeActrTdt(PACTR pactr, PSTN pstn, int32_t tdts, PTAG ptagTdf)
 {
     AssertThis(0);
     AssertPo(pactr, 0);
@@ -2188,7 +2188,7 @@ bool MVIE::FChangeActrTdt(PACTR pactr, PSTN pstn, long tdts, PTAG ptagTdf)
     AssertIn(tdts, 0, tdtsLim);
     AssertVarMem(ptagTdf);
 
-    long ich;
+    int32_t ich;
     bool fNonSpaceFound;
     PTDT ptdtNew;
     TAG tagTdtNew;
@@ -2536,7 +2536,7 @@ LRetry:
     if (fCleanRollCall)
     {
         MACTR mactr;
-        long imactr;
+        int32_t imactr;
 
         for (imactr = 0; imactr < _pgstmactr->IvMac();)
         {
@@ -2777,10 +2777,10 @@ bool MVIE::_FDoMtrlTmplGC(PCFL pcfl)
     AssertPo(pcfl, 0);
 
     PTAGL ptagl = pvNil;
-    long itag;
+    int32_t itag;
     TAG tag;
-    long icki1 = 0;
-    long icki2 = 0;
+    int32_t icki1 = 0;
+    int32_t icki2 = 0;
     CKI cki;
     PGL pglckiDoomed = pvNil;
 
@@ -2889,7 +2889,7 @@ bool MVIE::FGetFni(FNI *pfni)
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FSave(long cid)
+bool MVIE::FSave(int32_t cid)
 {
     AssertThis(0);
 
@@ -3083,7 +3083,7 @@ void MVIE::ClearUndo(void)
  *  fTrue if successful, else fFalse.
  *
  **************************************************************************/
-bool MVIE::FChangeCam(long icam)
+bool MVIE::FChangeCam(int32_t icam)
 {
     AssertThis(0);
     AssertIn(icam, 0, kccamMax);
@@ -3210,13 +3210,13 @@ bool MVIE::FHideTbox(void)
  *  None.
  *
  **************************************************************************/
-void MVIE::SelectTbox(long itbox)
+void MVIE::SelectTbox(int32_t itbox)
 {
     AssertThis(0);
     AssertPo(Pscen(), 0);
 
     PTBOX ptbox;
-    long cVis = 0;
+    int32_t cVis = 0;
 
     while (fTrue)
     {
@@ -3270,7 +3270,7 @@ void MVIE::SetPaintAcr(ACR acr)
         long dypFont  --  the new textbox font size
 
 ************************************************************ PETED ***********/
-void MVIE::SetDypFontTextCur(long dypFont)
+void MVIE::SetDypFontTextCur(int32_t dypFont)
 {
     AssertThis(0);
 
@@ -3300,7 +3300,7 @@ void MVIE::SetStyleTextCur(uint32_t grfont)
         long onn  -- the new textbox font face
 
 ************************************************************ PETED ***********/
-void MVIE::SetOnnTextCur(long onn)
+void MVIE::SetOnnTextCur(int32_t onn)
 {
     AssertThis(0);
 
@@ -3402,7 +3402,7 @@ bool MVIE::FInsActr(PTAG ptag)
  *  fTrue if successful, else fFalse.
  *
  **************************************************************************/
-bool MVIE::FAddOnstage(long arid)
+bool MVIE::FAddOnstage(int32_t arid)
 {
     AssertThis(0);
     AssertPo(Pscen(), 0);
@@ -3566,7 +3566,7 @@ bool MVIE::FSquashStretchActr(BRS brs)
  *  fTrue if successful, else fFalse.
  *
  **************************************************************************/
-bool MVIE::FSoonerLaterActr(long nfrm)
+bool MVIE::FSoonerLaterActr(int32_t nfrm)
 {
     AssertThis(0);
     AssertPo(Pscen(), 0);
@@ -3574,7 +3574,7 @@ bool MVIE::FSoonerLaterActr(long nfrm)
     ACTR *pactr;
     PAUND paund;
 
-    long dnfrm = nfrm - Pscen()->Nfrm();
+    int32_t dnfrm = nfrm - Pscen()->Nfrm();
 
     //
     // Get the current actor
@@ -3655,7 +3655,7 @@ bool MVIE::FScaleActr(BRS brs)
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FAddBkgdSnd(PTAG ptag, tribool fLoop, tribool fQueue, long vlm, long sty)
+bool MVIE::FAddBkgdSnd(PTAG ptag, tribool fLoop, tribool fQueue, int32_t vlm, int32_t sty)
 {
     AssertThis(0);
     Assert(Pscen(), 0);
@@ -3693,7 +3693,7 @@ bool MVIE::FAddBkgdSnd(PTAG ptag, tribool fLoop, tribool fQueue, long vlm, long 
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FAddActrSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fActnCel, long vlm, long sty)
+bool MVIE::FAddActrSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fActnCel, int32_t vlm, int32_t sty)
 {
     AssertThis(0);
     ACTR *pactr;
@@ -3720,7 +3720,7 @@ bool MVIE::FAddActrSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fActnCe
  *  fFalse if there was a failure, else fTrue.
  *
  ****************************************************/
-bool MVIE::FInsScenCore(long iscen, SCEN *pscen)
+bool MVIE::FInsScenCore(int32_t iscen, SCEN *pscen)
 {
     AssertThis(0);
     AssertIn(iscen, 0, Cscen() + 1);
@@ -3857,7 +3857,7 @@ bool MVIE::FAddScen(PTAG ptag)
     AssertThis(0);
     AssertPvCb(ptag, SIZEOF(TAG));
 
-    long iscen;
+    int32_t iscen;
     TAG tagOld;
     PMUNS pmuns;
 
@@ -4196,7 +4196,7 @@ bool MVIE::FCmdRender(PCMD pcmd)
 
     PMVU pmvu;
     PTBOX ptbox;
-    long itbox;
+    int32_t itbox;
     uint32_t tsCur = TsCurrent();
 
     pmvu = (PMVU)PddgGet(0);
@@ -4259,7 +4259,7 @@ bool MVIE::FCmdRender(PCMD pcmd)
     //
     if (_vlmOrg)
     {
-        long vlm;
+        int32_t vlm;
 
         // get the current volume
         vlm = vpsndm->VlmCur();
@@ -4530,7 +4530,7 @@ bool MVIE::FCmdRender(PCMD pcmd)
  *  fTrue if successful, else fFalse.
  *
  **************************************************************************/
-bool MVIE::FCostumeActr(long ibprt, PTAG ptag, long cmid, tribool fCustom)
+bool MVIE::FCostumeActr(int32_t ibprt, PTAG ptag, int32_t cmid, tribool fCustom)
 {
     AssertThis(0);
     AssertPo(Pscen(), 0);
@@ -4566,7 +4566,7 @@ bool MVIE::FCostumeActr(long ibprt, PTAG ptag, long cmid, tribool fCustom)
  *  fTrue if successful, else fFalse.
  *
  **************************************************************************/
-bool MVIE::FPause(WIT wit, long dts)
+bool MVIE::FPause(WIT wit, int32_t dts)
 {
     AssertThis(0);
     AssertPo(Pscen(), 0);
@@ -4588,7 +4588,7 @@ bool MVIE::FPause(WIT wit, long dts)
 ************************************************************ PETED ***********/
 void CMVI::MarkMem(void)
 {
-    long iv, ivMac;
+    int32_t iv, ivMac;
     MVIED mvied;
     SCEND scend;
 
@@ -4625,13 +4625,13 @@ void CMVI::MarkMem(void)
     Returns: fTrue if it was successful, fFalse otherwise
 
 ************************************************************ PETED ***********/
-bool MVIE::FAddToCmvi(PCMVI pcmvi, long *piscendIns)
+bool MVIE::FAddToCmvi(PCMVI pcmvi, int32_t *piscendIns)
 {
     AssertThis(0);
     AssertVarMem(pcmvi);
     AssertNilOrPo(pcmvi->pglscend, 0);
 
-    long iscen = 0, iscenMac = Cscen(), imvied;
+    int32_t iscen = 0, iscenMac = Cscen(), imvied;
     SCEND scend;
     MVIED mvied;
     PCFL pcfl;
@@ -4752,10 +4752,10 @@ bool MVIE::FSetCmvi(PCMVI pcmvi)
     AssertPo(pcmvi->pglscend, 0);
 
     bool fRet = fFalse;
-    long iscend, iscendMac = pcmvi->pglscend->IvMac();
-    long iscenOld = Iscen();
-    long imvied, imviedMac = pcmvi->pglmvied->IvMac();
-    long aridMin = 0;
+    int32_t iscend, iscendMac = pcmvi->pglscend->IvMac();
+    int32_t iscenOld = Iscen();
+    int32_t imvied, imviedMac = pcmvi->pglmvied->IvMac();
+    int32_t aridMin = 0;
     CHID chidScen = 0;
     PCFL pcfl = _pcrfAutoSave->Pcfl();
     PCRF pcrf = _pcrfAutoSave;
@@ -4905,11 +4905,11 @@ bool MVIE::FSetCmvi(PCMVI pcmvi)
 
 #ifdef DEBUG
     {
-        long ckid = pcfl->Ckid(kctgMvie, _cno);
+        int32_t ckid = pcfl->Ckid(kctgMvie, _cno);
         KID kid;
         CHID chidLast = chidNil;
 
-        for (long ikid = 0; ikid < ckid; ikid++)
+        for (int32_t ikid = 0; ikid < ckid; ikid++)
         {
             if (pcfl->FGetKid(kctgMvie, _cno, ikid, &kid))
             {
@@ -4960,11 +4960,11 @@ LFail:
     Returns: fTrue if it succeeds, fFalse otherwise
 
 ************************************************************ PETED ***********/
-bool MVIE::_FAddMvieToRollCall(CNO cno, long aridMin)
+bool MVIE::_FAddMvieToRollCall(CNO cno, int32_t aridMin)
 {
     AssertThis(0);
 
-    long imactr, imactrMac, icnoMac = 0;
+    int32_t imactr, imactrMac, icnoMac = 0;
     PCFL pcfl = _pcrfAutoSave->Pcfl();
     PGST pgstmactr = pvNil;
 
@@ -5009,7 +5009,7 @@ bool MVIE::_FAddMvieToRollCall(CNO cno, long aridMin)
                 /* If we've found an ACTR chunk, remap its arid */
                 if (kid.cki.ctg == kctgActr)
                 {
-                    long icno;
+                    int32_t icno;
                     CNO cnoActr;
 
                     /* Only do a given chunk once */
@@ -5106,7 +5106,7 @@ void CMVI::Empty(void)
 
     if ((pgl = pglscend) != pvNil)
     {
-        long iscend = pgl->IvMac();
+        int32_t iscend = pgl->IvMac();
 
         while (iscend-- > 0)
         {
@@ -5121,7 +5121,7 @@ void CMVI::Empty(void)
 
     if ((pgl = pglmvied) != pvNil)
     {
-        long imvied = pgl->IvMac();
+        int32_t imvied = pgl->IvMac();
 
         while (imvied-- > 0)
         {
@@ -5148,7 +5148,7 @@ void CMVI::Empty(void)
     Returns: fTrue if successful, fFalse otherwise
 
 ************************************************************ PETED ***********/
-bool MVIE::_FInsertScend(PGL pglscend, long iscend, PSCEND pscend)
+bool MVIE::_FInsertScend(PGL pglscend, int32_t iscend, PSCEND pscend)
 {
     AssertPo(pglscend, 0);
     AssertPo(pscend->pmbmp, 0);
@@ -5169,7 +5169,7 @@ bool MVIE::_FInsertScend(PGL pglscend, long iscend, PSCEND pscend)
         long iscend  -- which SCEND to delete
 
 ************************************************************ PETED ***********/
-void MVIE::_DeleteScend(PGL pglscend, long iscend)
+void MVIE::_DeleteScend(PGL pglscend, int32_t iscend)
 {
     AssertPo(pglscend, 0);
     AssertIn(iscend, 0, pglscend->IvMac());
@@ -5326,7 +5326,7 @@ void MVIE::InvalViews(void)
 {
     AssertThis(0);
 
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
 
     for (ipddg = 0; pvNil != (pddg = PddgGet(ipddg)); ipddg++)
@@ -5370,7 +5370,7 @@ void MVIE::MarkViews(void)
 {
     AssertThis(0);
 
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
 
     //
@@ -5449,7 +5449,7 @@ void MVIE::ResetTitle(void)
 void MVIE::BuildActionMenu()
 {
     AssertThis(0);
-    long arid = aridNil;
+    int32_t arid = aridNil;
 
     if (pvNil != _pscenOpen && pvNil != _pscenOpen->PactrSelected())
     {
@@ -5459,7 +5459,7 @@ void MVIE::BuildActionMenu()
     _pmcc->UpdateAction();
 }
 
-const long kdtsTrans = 4 * kdtsSecond;
+const int32_t kdtsTrans = 4 * kdtsSecond;
 
 /***************************************************************************
  *
@@ -5491,7 +5491,7 @@ void MVIE::DoTrans(PGNV pgnvDst, PGNV pgnvSrc, RC *prcDst, RC *prcSrc)
 
     PGL pglclrSystem = pvNil;
     PGL pglclrBkgd = pvNil;
-    long iclrMin;
+    int32_t iclrMin;
 
     pglclrSystem = GPT::PglclrGetPalette();
     if (Pscen() == pvNil || !Pscen()->Pbkgd()->FGetPalette(&pglclrBkgd, &iclrMin))
@@ -5551,7 +5551,7 @@ void MVIE::DoTrans(PGNV pgnvDst, PGNV pgnvSrc, RC *prcDst, RC *prcSrc)
  *  1 if exists, else 0.
  *
  **************************************************************************/
-long MVIE::LwQueryExists(long lwType, long lwId)
+int32_t MVIE::LwQueryExists(int32_t lwType, int32_t lwId)
 {
     AssertThis(0);
     AssertIn(lwType, 0, 2);
@@ -5582,14 +5582,14 @@ long MVIE::LwQueryExists(long lwType, long lwId)
  *  -1 if nonexistent or non-visible, else x in high word, y in low word.
  *
  **************************************************************************/
-long MVIE::LwQueryLocation(long lwType, long lwId)
+int32_t MVIE::LwQueryLocation(int32_t lwType, int32_t lwId)
 {
     AssertThis(0);
     AssertIn(lwType, 0, 2);
 
     PACTR pactr;
     PTBOX ptbox;
-    long xp, yp;
+    int32_t xp, yp;
     RC rc;
 
     if (Pscen() == pvNil)
@@ -5601,9 +5601,9 @@ long MVIE::LwQueryLocation(long lwType, long lwId)
     if (lwType == 1)
     {
         RC rcBounds;
-        long cactGuessPt = 0;
+        int32_t cactGuessPt = 0;
         RND rnd;
-        long ibset;
+        int32_t ibset;
 
         pactr = Pscen()->PactrFromArid(lwId);
         if (pactr == pvNil)
@@ -5664,7 +5664,7 @@ long MVIE::LwQueryLocation(long lwType, long lwId)
  *  0 if successful, else -1.
  *
  **************************************************************************/
-long MVIE::LwSetMoviePos(long lwScene, long lwFrame)
+int32_t MVIE::LwSetMoviePos(int32_t lwScene, int32_t lwFrame)
 {
     AssertThis(0);
 
@@ -5698,7 +5698,7 @@ bool MVIE::FUnusedSndsUser(bool *pfHaveValid)
     AssertNilOrVarMem(pfHaveValid);
 
     bool fUnused = fFalse;
-    long icki, ccki;
+    int32_t icki, ccki;
     PCFL pcfl;
 
     if (pfHaveValid != pvNil)
@@ -5830,7 +5830,7 @@ MVU::~MVU(void)
  *  A pointer to the view, otw pvNil on failure
  *
  ***************************************************************************/
-MVU *MVU::PmvuNew(PMVIE pmvie, PGCB pgcb, long dxp, long dyp)
+MVU *MVU::PmvuNew(PMVIE pmvie, PGCB pgcb, int32_t dxp, int32_t dyp)
 {
     AssertPo(pmvie, 0);
     AssertVarMem(pgcb);
@@ -5879,13 +5879,13 @@ MVU *MVU::PmvuNew(PMVIE pmvie, PGCB pgcb, long dxp, long dyp)
  *  None.
  *
  ***************************************************************************/
-void MVU::SetTool(long tool)
+void MVU::SetTool(int32_t tool)
 {
     AssertThis(0);
     AssertPo(Pmvie(), 0);
     AssertNilOrPo(Pmvie()->Pscen(), 0);
 
-    long lwMode; // -1 = Textbox mode, 0 = either mode, 1 = Actor mode
+    int32_t lwMode; // -1 = Textbox mode, 0 = either mode, 1 = Actor mode
     PTBOX ptbox = pvNil;
     PACTR pactr = pvNil;
 
@@ -6269,7 +6269,7 @@ void MVU::WarpCursToActor(PACTR pactr)
  *	None.
  *
  **************************************************************************/
-void MVU::AdjustCursor(long xp, long yp)
+void MVU::AdjustCursor(int32_t xp, int32_t yp)
 {
     AssertThis(0);
 
@@ -6338,8 +6338,8 @@ void MVU::MouseToWorld(BRS dxrMouse, BRS dyrMouse, BRS dzrMouse, BRS *pdxrWld, B
 }
 
 bool MVU::_fKbdDelayed = fFalse;
-long MVU::_dtsKbdDelay;
-long MVU::_dtsKbdRepeat;
+int32_t MVU::_dtsKbdDelay;
+int32_t MVU::_dtsKbdRepeat;
 
 /***************************************************************************
  *
@@ -6515,7 +6515,7 @@ bool MVU::FCmdMouseMove(PCMD_MOUSE pcmd)
     AssertVarMem(pcmd);
 
     PACTR pactr;
-    long ibset;
+    int32_t ibset;
     PDOCB pdocb;
 
     AssertPo(Pmvie(), 0);
@@ -6844,7 +6844,7 @@ void MVU::_MouseDown(CMD_MOUSE *pcmd)
     PTBOX ptbox;
     PAUND paund;
     PT pt;
-    long ibset;
+    int32_t ibset;
     PDOCB pdocb;
 
     if (Pmvie()->FPlaying())
@@ -7127,9 +7127,9 @@ void MVU::_MouseDown(CMD_MOUSE *pcmd)
 
         if (pactr != pvNil)
         {
-            long anidTool = pactr->AnidCur();
-            long anid = anidTool;
-            long celn = 0;
+            int32_t anidTool = pactr->AnidCur();
+            int32_t anid = anidTool;
+            int32_t celn = 0;
             bool fFrozen;
 
             SetAnidTool(pactr->AnidCur());
@@ -8098,7 +8098,7 @@ bool MVU::FCmdClip(PCMD pcmd)
  *  fTrue if it processed the command, else fFalse.
  *
  **************************************************************************/
-bool MVU::FDoClip(long tool)
+bool MVU::FDoClip(int32_t tool)
 {
     AssertThis(0);
 

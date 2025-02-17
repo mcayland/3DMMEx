@@ -32,12 +32,12 @@ RTCLASS(AST)
 /***************************************************************************
     Constructor for a base string table.
 ***************************************************************************/
-GSTB::GSTB(long cbExtra, uint32_t grfgst)
+GSTB::GSTB(int32_t cbExtra, uint32_t grfgst)
 {
     AssertIn(cbExtra, 0, kcbMax);
-    Assert(cbExtra % SIZEOF(long) == 0, "cbExtra not multiple of SIZEOF(long)");
+    Assert(cbExtra % SIZEOF(int32_t) == 0, "cbExtra not multiple of SIZEOF(int32_t)");
 
-    _cbEntry = cbExtra + SIZEOF(long);
+    _cbEntry = cbExtra + SIZEOF(int32_t);
     _cbstFree = (grfgst & fgstAllowFree) ? 0 : cvNil;
 
     // use some reasonable values for _cbMinGrow* - code can always set
@@ -72,10 +72,10 @@ struct GSTF
 {
     int16_t bo;
     int16_t osk;
-    long cbEntry;
-    long ibstMac;
-    long bstMac;
-    long cbstFree;
+    int32_t cbEntry;
+    int32_t ibstMac;
+    int32_t bstMac;
+    int32_t cbstFree;
 };
 VERIFY_STRUCT_SIZE(GSTF, 20);
 const BOM kbomGstf = 0x5FF00000L;
@@ -83,7 +83,7 @@ const BOM kbomGstf = 0x5FF00000L;
 /***************************************************************************
     Return the amount of space on file needed for the string table.
 ***************************************************************************/
-long GSTB::CbOnFile(void)
+int32_t GSTB::CbOnFile(void)
 {
     AssertThis(0);
     return SIZEOF(GSTF) + LwMul(_ivMac, _cbEntry) + _bstMac;
@@ -159,9 +159,9 @@ bool GSTB::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
     AssertNilOrVarMem(posk);
 
     GSTF gstf;
-    long cbT;
+    int32_t cbT;
     int16_t bo;
-    long cb;
+    int32_t cb;
     bool fRet = fFalse;
 
     if (!pblck->FUnpackData())
@@ -186,7 +186,7 @@ bool GSTB::_FRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
     // don't use LwMul, in case the file is corrupted, we don't want to assert,
     // we should detect it below.
     cbT = gstf.cbEntry * gstf.ibstMac;
-    if (gstf.bo != kboCur || !FIn(gstf.cbEntry, SIZEOF(long), kcbMax) || (gstf.cbEntry % SIZEOF(long)) != 0 ||
+    if (gstf.bo != kboCur || !FIn(gstf.cbEntry, SIZEOF(int32_t), kcbMax) || (gstf.cbEntry % SIZEOF(int32_t)) != 0 ||
         !FIn(gstf.ibstMac, 0, kcbMax) || !FIn(gstf.bstMac, gstf.ibstMac - LwMax(0, gstf.cbstFree), kcbMax) ||
         cb != cbT + gstf.bstMac || (gstf.cbstFree == cvNil) != (_cbstFree == cvNil) ||
         gstf.cbstFree != cvNil && !FIn(gstf.cbstFree, 0, LwMax(1, gstf.ibstMac)))
@@ -220,13 +220,13 @@ LFail:
     a total of cchAdd characters.  If there is more than enough room and
     fgrpShrink is passed, the GSTB may shrink.
 ***************************************************************************/
-bool GSTB::FEnsureSpace(long cstnAdd, long cchAdd, uint32_t grfgrp)
+bool GSTB::FEnsureSpace(int32_t cstnAdd, int32_t cchAdd, uint32_t grfgrp)
 {
     AssertThis(0);
     AssertIn(cstnAdd, 0, kcbMax);
     AssertIn(cchAdd, 0, kcbMax);
-    long cbstAdd;
-    long cbAdd = cchAdd * SIZEOF(achar);
+    int32_t cbstAdd;
+    int32_t cbAdd = cchAdd * SIZEOF(achar);
 
     if (cvNil == _cbstFree)
         cbstAdd = cstnAdd;
@@ -244,7 +244,7 @@ bool GSTB::FEnsureSpace(long cstnAdd, long cchAdd, uint32_t grfgrp)
 /***************************************************************************
     Set the minimum that a GSTB should grow by.
 ***************************************************************************/
-void GSTB::SetMinGrow(long cstnAdd, long cchAdd)
+void GSTB::SetMinGrow(int32_t cstnAdd, int32_t cchAdd)
 {
     AssertThis(0);
     AssertIn(cstnAdd, 0, kcbMax);
@@ -257,7 +257,7 @@ void GSTB::SetMinGrow(long cstnAdd, long cchAdd)
 /***************************************************************************
     Append an stn to string table.
 ***************************************************************************/
-bool GSTB::FAddStn(PSTN pstn, void *pvExtra, long *pistn)
+bool GSTB::FAddStn(PSTN pstn, void *pvExtra, int32_t *pistn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -268,7 +268,7 @@ bool GSTB::FAddStn(PSTN pstn, void *pvExtra, long *pistn)
 /***************************************************************************
     Replace the ith string.
 ***************************************************************************/
-bool GSTB::FPutRgch(long istn, const achar *prgch, long cch)
+bool GSTB::FPutRgch(int32_t istn, const achar *prgch, int32_t cch)
 {
     AssertThis(fobjAssertFull);
     AssertIn(istn, 0, _ivMac);
@@ -276,8 +276,8 @@ bool GSTB::FPutRgch(long istn, const achar *prgch, long cch)
     AssertIn(cch, 0, kcchMaxGst + 1);
     AssertPvCb(prgch, cch * SIZEOF(achar));
 
-    long cchOld;
-    long bstOld;
+    int32_t cchOld;
+    int32_t bstOld;
     achar *qst;
 
     qst = _Qst(istn);
@@ -307,7 +307,7 @@ LDone:
 /***************************************************************************
     Replace the ith string with stn.
 ***************************************************************************/
-bool GSTB::FPutStn(long istn, PSTN pstn)
+bool GSTB::FPutStn(int32_t istn, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -318,7 +318,7 @@ bool GSTB::FPutStn(long istn, PSTN pstn)
 /***************************************************************************
     Get up to cchMax characters for the istn'th string.
 ***************************************************************************/
-void GSTB::GetRgch(long istn, achar *prgch, long cchMax, long *pcch)
+void GSTB::GetRgch(int32_t istn, achar *prgch, int32_t cchMax, int32_t *pcch)
 {
     AssertThis(0);
     AssertIn(istn, 0, _ivMac);
@@ -335,7 +335,7 @@ void GSTB::GetRgch(long istn, achar *prgch, long cchMax, long *pcch)
 /***************************************************************************
     Get the ith string.
 ***************************************************************************/
-void GSTB::GetStn(long istn, PSTN pstn)
+void GSTB::GetStn(int32_t istn, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(istn, 0, _ivMac);
@@ -348,7 +348,7 @@ void GSTB::GetStn(long istn, PSTN pstn)
 /***************************************************************************
     Find the given stn in the string table.
 ***************************************************************************/
-bool GSTB::FFindStn(PSTN pstn, long *pistn, uint32_t grfgst)
+bool GSTB::FFindStn(PSTN pstn, int32_t *pistn, uint32_t grfgst)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -361,13 +361,13 @@ bool GSTB::FFindStn(PSTN pstn, long *pistn, uint32_t grfgst)
     search.  GST overrides this to do a binary search if fgstSorted is
     passed in grfgst.
 ***************************************************************************/
-bool GSTB::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
+bool GSTB::FFindRgch(const achar *prgch, int32_t cch, int32_t *pistn, uint32_t grfgst)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcchMaxGst + 1);
     AssertPvCb(prgch, cch * SIZEOF(achar));
     AssertVarMem(pistn);
-    long istn, bst;
+    int32_t istn, bst;
     PST qst;
 
     for (istn = 0; istn < _ivMac; istn++)
@@ -394,17 +394,17 @@ bool GSTB::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
 /***************************************************************************
     Find the string with the given extra data in the string table.
 ***************************************************************************/
-bool GSTB::FFindExtra(const void *prgbFind, PSTN pstn, long *pistn)
+bool GSTB::FFindExtra(const void *prgbFind, PSTN pstn, int32_t *pistn)
 {
     AssertThis(0);
     AssertPvCb(prgbFind, CbExtra());
     AssertNilOrPo(pstn, 0);
     AssertNilOrVarMem(pistn);
 
-    long istn;
+    int32_t istn;
     uint8_t *qbExtra;
-    long cbExtra = CbExtra();
-    long ivMac = IvMac();
+    int32_t cbExtra = CbExtra();
+    int32_t ivMac = IvMac();
 
     if (cbExtra == 0)
     {
@@ -415,7 +415,7 @@ bool GSTB::FFindExtra(const void *prgbFind, PSTN pstn, long *pistn)
 
     for (istn = 0; istn < ivMac; istn++)
     {
-        qbExtra = (uint8_t *)_Qbst(istn) + SIZEOF(long);
+        qbExtra = (uint8_t *)_Qbst(istn) + SIZEOF(int32_t);
         if (FEqualRgb(prgbFind, qbExtra, cbExtra))
         {
             if (pstn != pvNil)
@@ -435,45 +435,45 @@ bool GSTB::FFindExtra(const void *prgbFind, PSTN pstn, long *pistn)
 /***************************************************************************
     Fetch the extra data for element istn.
 ***************************************************************************/
-void GSTB::GetExtra(long istn, void *pv)
+void GSTB::GetExtra(int32_t istn, void *pv)
 {
     AssertThis(0);
     AssertIn(istn, 0, _ivMac);
     Assert(!FFree(istn), "string entry is free!");
-    Assert(_cbEntry > SIZEOF(long), "no extra data");
-    AssertPvCb(pv, _cbEntry - SIZEOF(long));
+    Assert(_cbEntry > SIZEOF(int32_t), "no extra data");
+    AssertPvCb(pv, _cbEntry - SIZEOF(int32_t));
 
     uint8_t *qb;
 
-    qb = (uint8_t *)_Qbst(istn) + SIZEOF(long);
-    CopyPb(qb, pv, _cbEntry - SIZEOF(long));
+    qb = (uint8_t *)_Qbst(istn) + SIZEOF(int32_t);
+    CopyPb(qb, pv, _cbEntry - SIZEOF(int32_t));
 }
 
 /***************************************************************************
     Put the extra data for element istn.
 ***************************************************************************/
-void GSTB::PutExtra(long istn, void *pv)
+void GSTB::PutExtra(int32_t istn, void *pv)
 {
     AssertThis(0);
     AssertIn(istn, 0, _ivMac);
     Assert(!FFree(istn), "string entry is free!");
-    Assert(_cbEntry > SIZEOF(long), "no extra data");
-    AssertPvCb(pv, _cbEntry - SIZEOF(long));
+    Assert(_cbEntry > SIZEOF(int32_t), "no extra data");
+    AssertPvCb(pv, _cbEntry - SIZEOF(int32_t));
 
     uint8_t *qb;
 
-    qb = (uint8_t *)_Qbst(istn) + SIZEOF(long);
-    CopyPb(pv, qb, _cbEntry - SIZEOF(long));
+    qb = (uint8_t *)_Qbst(istn) + SIZEOF(int32_t);
+    CopyPb(pv, qb, _cbEntry - SIZEOF(int32_t));
     AssertThis(0);
 }
 
 /***************************************************************************
     Return a volatile pointer to the string given the ibst (not the bst).
 ***************************************************************************/
-achar *GSTB::_Qst(long ibst)
+achar *GSTB::_Qst(int32_t ibst)
 {
     AssertIn(ibst, 0, _ivMac);
-    long bst = _Bst(ibst);
+    int32_t bst = _Bst(ibst);
     AssertIn(bst, 0, _bstMac);
     return (achar *)_Qb1(bst);
 }
@@ -482,7 +482,7 @@ achar *GSTB::_Qst(long ibst)
     Private api to append the string.  It's assumed that the first block
     is already big enough to accomodate the string.
 ***************************************************************************/
-void GSTB::_AppendRgch(const achar *prgch, long cch)
+void GSTB::_AppendRgch(const achar *prgch, int32_t cch)
 {
     AssertIn(cch, 0, kcchMaxGst + 1);
     AssertPvCb(prgch, cch * SIZEOF(achar));
@@ -499,11 +499,11 @@ void GSTB::_AppendRgch(const achar *prgch, long cch)
 /***************************************************************************
     Private api to remove the string.
 ***************************************************************************/
-void GSTB::_RemoveSt(long bst)
+void GSTB::_RemoveSt(int32_t bst)
 {
     AssertIn(bst, 0, _bstMac);
 
-    long cb;
+    int32_t cb;
     uint8_t *qb;
 
     qb = _Qb1(bst);
@@ -511,15 +511,15 @@ void GSTB::_RemoveSt(long bst)
     AssertIn(bst + cb, 0, _bstMac + 1);
     if (bst + cb < _bstMac)
     {
-        long cv;
+        int32_t cv;
 
         BltPb(qb + cb, qb, _bstMac - bst - cb);
         for (qb = _Qb2(0), cv = _ivMac; cv-- > 0; qb += _cbEntry)
         {
-            if (*(long *)qb > bst)
+            if (*(int32_t *)qb > bst)
             {
-                Assert(*(long *)qb >= bst + cb, "overlapping strings in GSTB");
-                *(long *)qb -= cb;
+                Assert(*(int32_t *)qb >= bst + cb, "overlapping strings in GSTB");
+                *(int32_t *)qb -= cb;
             }
         }
     }
@@ -532,11 +532,11 @@ void GSTB::_RemoveSt(long bst)
 ***************************************************************************/
 void GSTB::_SwapBytesRgbst(void)
 {
-    if (SIZEOF(long) == _cbEntry)
+    if (SIZEOF(int32_t) == _cbEntry)
         SwapBytesRglw(_Qb2(0), _ivMac);
     else
     {
-        long cbst;
+        int32_t cbst;
         uint8_t *qb;
 
         for (cbst = _ivMac, qb = _Qb2(0); cbst-- > 0; qb += _cbEntry)
@@ -551,7 +551,7 @@ void GSTB::_SwapBytesRgbst(void)
 void GSTB::_TranslateGrst(int16_t osk, bool fToCur)
 {
     AssertOsk(osk);
-    long bst;
+    int32_t bst;
     uint8_t *qb;
 
     if (CbCharOsk(osk) != CbCharOsk(koskCur))
@@ -575,10 +575,10 @@ bool GSTB::_FTranslateGrst(int16_t osk)
 {
     AssertOsk(osk);
     void *pvSrc;
-    long cbSrc;
-    long cbChar;
-    long ibst, bstOld, cch;
-    long *qbst;
+    int32_t cbSrc;
+    int32_t cbChar;
+    int32_t ibst, bstOld, cch;
+    int32_t *qbst;
     achar rgch[kcchMaxSt];
     bool fRet = fFalse;
 
@@ -615,7 +615,7 @@ bool GSTB::_FTranslateGrst(int16_t osk)
         if (cbChar == SIZEOF(schar))
         {
             schar chs = *(schar *)PvAddBv(pvSrc, bstOld);
-            cch = (long)(uint8_t)chs;
+            cch = (int32_t)(uint8_t)chs;
         }
         else
         {
@@ -623,7 +623,7 @@ bool GSTB::_FTranslateGrst(int16_t osk)
             CopyPb(PvAddBv(pvSrc, bstOld), &chw, SIZEOF(wchar));
             if (osk == MacWin(koskUniWin, koskUniMac))
                 SwapBytesRgsw(&chw, 1);
-            cch = (long)(uint16_t)chw;
+            cch = (int32_t)(uint16_t)chw;
         }
 
         if (!FIn(cch, 0, kcchMaxSt + 1) || bstOld + (cch + 1) * cbChar > cbSrc)
@@ -650,10 +650,10 @@ LFail:
     Returns true iff ibst is out of range or the corresponding bst is
     bvNil.
 ***************************************************************************/
-bool GSTB::FFree(long istn)
+bool GSTB::FFree(int32_t istn)
 {
     AssertIn(istn, 0, kcbMax);
-    long bst;
+    int32_t bst;
 
     if (!FIn(istn, 0, _ivMac))
         return fTrue;
@@ -668,13 +668,13 @@ bool GSTB::FFree(long istn)
 ***************************************************************************/
 void GSTB::AssertValid(uint32_t grfobj)
 {
-    long ibst;
-    long cchTot, cbstFree;
-    long bst;
+    int32_t ibst;
+    int32_t cchTot, cbstFree;
+    int32_t bst;
 
     GSTB_PAR::AssertValid(grfobj);
-    AssertIn(_cbEntry, SIZEOF(long), kcbMax);
-    Assert(_cbEntry % SIZEOF(long) == 0, "_cbEntry bad");
+    AssertIn(_cbEntry, SIZEOF(int32_t), kcbMax);
+    Assert(_cbEntry % SIZEOF(int32_t) == 0, "_cbEntry bad");
     AssertIn(_ivMac, 0, kcbMax);
     Assert(_Cb1() >= _bstMac, "grst area too small");
     Assert(_Cb2() >= LwMul(_ivMac, _cbEntry), "rgbst area too small");
@@ -708,10 +708,10 @@ void GSTB::AssertValid(uint32_t grfobj)
     Allocate a new string table and ensure that it has space for cstnInit
     strings, totalling cchInit characters.
 ***************************************************************************/
-PGST GST::PgstNew(long cbExtra, long cstnInit, long cchInit)
+PGST GST::PgstNew(int32_t cbExtra, int32_t cstnInit, int32_t cchInit)
 {
     AssertIn(cbExtra, 0, kcbMax);
-    Assert(cbExtra % SIZEOF(long) == 0, "cbExtra not multiple of SIZEOF(long)");
+    Assert(cbExtra % SIZEOF(int32_t) == 0, "cbExtra not multiple of SIZEOF(int32_t)");
     AssertIn(cstnInit, 0, kcbMax);
     AssertIn(cchInit, 0, kcbMax);
     PGST pgst;
@@ -755,7 +755,7 @@ PGST GST::PgstRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Read a string table from file and return it.
 ***************************************************************************/
-PGST GST::PgstRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
+PGST GST::PgstRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck(pfil, fp, cb);
     return PgstRead(&blck, pbo, posk);
@@ -769,7 +769,7 @@ PGST GST::PgstDup(void)
     AssertThis(0);
     PGST pgst;
 
-    if (pvNil == (pgst = PgstNew(_cbEntry - SIZEOF(long))))
+    if (pvNil == (pgst = PgstNew(_cbEntry - SIZEOF(int32_t))))
         return pvNil;
 
     if (!_FDup(pgst))
@@ -782,12 +782,12 @@ PGST GST::PgstDup(void)
 /***************************************************************************
     Append a string to the string table.
 ***************************************************************************/
-bool GST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pistn)
+bool GST::FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra, int32_t *pistn)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcchMaxGst + 1);
     AssertPvCb(prgch, cch * SIZEOF(achar));
-    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(long));
+    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(int32_t));
     AssertNilOrVarMem(pistn);
 
     if (pistn != pvNil)
@@ -806,7 +806,7 @@ bool GST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
     is passed in, this does a binary search for the string; otherwise it
     does a linear search.
 ***************************************************************************/
-bool GST::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
+bool GST::FFindRgch(const achar *prgch, int32_t cch, int32_t *pistn, uint32_t grfgst)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcchMaxGst);
@@ -817,7 +817,7 @@ bool GST::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
         return GSTB::FFindRgch(prgch, cch, pistn, grfgst);
 
     // the table should be sorted, so do a binary search
-    long ivMin, ivLim, iv;
+    int32_t ivMin, ivLim, iv;
     uint32_t fcmp;
     achar *qst;
 
@@ -849,13 +849,13 @@ bool GST::FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst)
 /***************************************************************************
     Insert a new entry into the string text.
 ***************************************************************************/
-bool GST::FInsertRgch(long istn, const achar *prgch, long cch, const void *pvExtra)
+bool GST::FInsertRgch(int32_t istn, const achar *prgch, int32_t cch, const void *pvExtra)
 {
     AssertThis(fobjAssertFull);
     AssertIn(istn, 0, _ivMac + 1);
     AssertIn(cch, 0, kcchMaxGst + 1);
     AssertPvCb(prgch, cch * SIZEOF(achar));
-    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(long));
+    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(int32_t));
 
     uint8_t *qb;
 
@@ -868,14 +868,14 @@ bool GST::FInsertRgch(long istn, const achar *prgch, long cch, const void *pvExt
     qb = (uint8_t *)_Qbst(istn);
     if (istn < _ivMac)
         BltPb(qb, qb + _cbEntry, LwMul(_ivMac - istn, _cbEntry));
-    *(long *)qb = _bstMac;
-    if (SIZEOF(long) < _cbEntry)
+    *(int32_t *)qb = _bstMac;
+    if (SIZEOF(int32_t) < _cbEntry)
     {
-        qb += SIZEOF(long);
+        qb += SIZEOF(int32_t);
         if (pvExtra != pvNil)
-            CopyPb(pvExtra, qb, _cbEntry - SIZEOF(long));
+            CopyPb(pvExtra, qb, _cbEntry - SIZEOF(int32_t));
         else
-            TrashPvCb(qb, _cbEntry - SIZEOF(long));
+            TrashPvCb(qb, _cbEntry - SIZEOF(int32_t));
     }
     else
         Assert(pvNil == pvExtra, "cbExtra is zero");
@@ -891,12 +891,12 @@ bool GST::FInsertRgch(long istn, const achar *prgch, long cch, const void *pvExt
 /***************************************************************************
     Insert an stn into the string table
 ***************************************************************************/
-bool GST::FInsertStn(long istn, PSTN pstn, const void *pvExtra)
+bool GST::FInsertStn(int32_t istn, PSTN pstn, const void *pvExtra)
 {
     AssertThis(0);
     AssertIn(istn, 0, _ivMac + 1);
     AssertPo(pstn, 0);
-    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(long));
+    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(int32_t));
 
     return FInsertRgch(istn, pstn->Prgch(), pstn->Cch(), pvExtra);
 }
@@ -904,16 +904,16 @@ bool GST::FInsertStn(long istn, PSTN pstn, const void *pvExtra)
 /***************************************************************************
     Delete the string at location istn.
 ***************************************************************************/
-void GST::Delete(long istn)
+void GST::Delete(int32_t istn)
 {
     AssertThis(fobjAssertFull);
     AssertIn(istn, 0, _ivMac);
 
     uint8_t *qb;
-    long bst;
+    int32_t bst;
 
     qb = (uint8_t *)_Qbst(istn);
-    bst = *(long *)qb;
+    bst = *(int32_t *)qb;
     if (istn < --_ivMac)
         BltPb(qb + _cbEntry, qb, LwMul(_ivMac - istn, _cbEntry));
     TrashPvCb(_Qbst(_ivMac), _cbEntry);
@@ -929,7 +929,7 @@ void GST::Delete(long istn)
     ivTarget moves to (ivTarget + 1).  Everything in between is shifted
     appropriately.  ivTarget is allowed to be equal to IvMac().
 ***************************************************************************/
-void GST::Move(long ivSrc, long ivTarget)
+void GST::Move(int32_t ivSrc, int32_t ivTarget)
 {
     AssertThis(0);
     AssertIn(ivSrc, 0, _ivMac);
@@ -954,10 +954,10 @@ void GST::AssertValid(uint32_t grfobj)
     Allocate a new allocated string table and ensure that it has space for
     cstnInit strings, totalling cchInit characters.
 ***************************************************************************/
-PAST AST::PastNew(long cbExtra, long cstnInit, long cchInit)
+PAST AST::PastNew(int32_t cbExtra, int32_t cstnInit, int32_t cchInit)
 {
     AssertIn(cbExtra, 0, kcbMax);
-    Assert(cbExtra % SIZEOF(long) == 0, "cbExtra not multiple of SIZEOF(long)");
+    Assert(cbExtra % SIZEOF(int32_t) == 0, "cbExtra not multiple of SIZEOF(int32_t)");
     AssertIn(cstnInit, 0, kcbMax);
     AssertIn(cchInit, 0, kcbMax);
     PAST past;
@@ -1001,7 +1001,7 @@ PAST AST::PastRead(PBLCK pblck, int16_t *pbo, int16_t *posk)
 /***************************************************************************
     Read an allocated string table from file and return it.
 ***************************************************************************/
-PAST AST::PastRead(PFIL pfil, FP fp, long cb, int16_t *pbo, int16_t *posk)
+PAST AST::PastRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo, int16_t *posk)
 {
     BLCK blck;
     return PastRead(&blck, pbo, posk);
@@ -1015,7 +1015,7 @@ PAST AST::PastDup(void)
     AssertThis(0);
     PAST past;
 
-    if (pvNil == (past = PastNew(_cbEntry - SIZEOF(long))))
+    if (pvNil == (past = PastNew(_cbEntry - SIZEOF(int32_t))))
         return pvNil;
 
     if (!_FDup(past))
@@ -1028,15 +1028,15 @@ PAST AST::PastDup(void)
 /***************************************************************************
     Append a string to the allocated string table.
 ***************************************************************************/
-bool AST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pistn)
+bool AST::FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra, int32_t *pistn)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cch, 0, kcchMaxGst + 1);
     AssertPvCb(prgch, cch * SIZEOF(achar));
-    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(long));
+    AssertNilOrPvCb(pvExtra, _cbEntry - SIZEOF(int32_t));
     AssertNilOrVarMem(pistn);
 
-    long ibst;
+    int32_t ibst;
     uint8_t *qb;
 
     if (_cbstFree > 0)
@@ -1045,7 +1045,7 @@ bool AST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
         qb = _Qb2(0);
         for (ibst = 0; ibst < _ivMac; ibst++, qb += _cbEntry)
         {
-            if (*(long *)qb == bvNil)
+            if (*(int32_t *)qb == bvNil)
                 break;
         }
         Assert(ibst < _ivMac - 1, "_cbstFree is wrong");
@@ -1066,14 +1066,14 @@ bool AST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
 
     // fill in the bst and extra data
     qb = (uint8_t *)_Qbst(ibst);
-    *(long *)qb = _bstMac;
-    if (SIZEOF(long) < _cbEntry)
+    *(int32_t *)qb = _bstMac;
+    if (SIZEOF(int32_t) < _cbEntry)
     {
-        qb += SIZEOF(long);
+        qb += SIZEOF(int32_t);
         if (pvExtra != pvNil)
-            CopyPb(pvExtra, qb, _cbEntry - SIZEOF(long));
+            CopyPb(pvExtra, qb, _cbEntry - SIZEOF(int32_t));
         else
-            TrashPvCb(qb, _cbEntry - SIZEOF(long));
+            TrashPvCb(qb, _cbEntry - SIZEOF(int32_t));
     }
     else
         Assert(pvNil == pvExtra, "cbExtra is zero");
@@ -1090,29 +1090,29 @@ bool AST::FAddRgch(const achar *prgch, long cch, const void *pvExtra, long *pist
 /***************************************************************************
     Delete the string at location istn.
 ***************************************************************************/
-void AST::Delete(long istn)
+void AST::Delete(int32_t istn)
 {
     AssertThis(fobjAssertFull);
     AssertIn(istn, 0, _ivMac);
     Assert(!FFree(istn), "entry already free!");
 
     uint8_t *qb;
-    long bst;
+    int32_t bst;
 
     qb = (uint8_t *)_Qbst(istn);
-    bst = *(long *)qb;
+    bst = *(int32_t *)qb;
 
     if (istn == _ivMac - 1)
     {
         // move _ivMac back past any free entries on the end
-        while (--_ivMac > 0 && *(long *)(qb -= _cbEntry) == bvNil)
+        while (--_ivMac > 0 && *(int32_t *)(qb -= _cbEntry) == bvNil)
             _cbstFree--;
         TrashPvCb(_Qbst(_ivMac), LwMul(istn - _ivMac + 1, _cbEntry));
     }
     else
     {
-        *(long *)qb = bvNil;
-        TrashPvCb(qb + SIZEOF(long), _cbEntry - SIZEOF(long));
+        *(int32_t *)qb = bvNil;
+        TrashPvCb(qb + SIZEOF(int32_t), _cbEntry - SIZEOF(int32_t));
         _cbstFree++;
     }
     _RemoveSt(bst);

@@ -41,32 +41,32 @@ class ZBMP : public ZBMP_PAR
 
   protected:
     RC _rc;      // bounding rectangle of ZBMP
-    long _cbRow; // bytes per row
-    long _cb;    // count of bytes in Z buffer
+    int32_t _cbRow; // bytes per row
+    int32_t _cb;    // count of bytes in Z buffer
     uint8_t *_prgb; // Z buffer
     ZBMP(void)
     {
     }
 
   public:
-    static PZBMP PzbmpNew(long dxp, long dyp);
+    static PZBMP PzbmpNew(int32_t dxp, int32_t dyp);
     static PZBMP PzbmpNewFromBpmp(BPMP *pbpmp);
     static PZBMP PzbmpRead(PBLCK pblck);
-    static bool FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     ~ZBMP(void);
 
     uint8_t *Prgb(void)
     {
         return _prgb;
     }
-    long CbRow(void)
+    int32_t CbRow(void)
     {
         return _cbRow;
     }
 
-    void Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
+    void Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip = pvNil,
               PREGN pregnClip = pvNil);
-    void DrawHalf(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip = pvNil,
+    void DrawHalf(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip = pvNil,
                   PREGN pregnClip = pvNil);
 
     bool FWrite(PCFL pcfl, CTG ctg, CNO *pcno);

@@ -28,7 +28,7 @@ class APP : public APP_PAR
     CMD_MAP_DEC(APP)
 
   protected:
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
     virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
 
   public:

@@ -14,7 +14,7 @@
 ASSERTNAME
 
 // what we set the system max to for scroll bars
-const long _klwMaxScroll = 20000; // should be less than 32K
+const int32_t _klwMaxScroll = 20000; // should be less than 32K
 
 #ifdef WIN
 achar _szCtlProp[] = PszLit("CTL");
@@ -66,7 +66,7 @@ bool CTL::_FSetHctl(HCTL hctl)
     if (hctl != hNil)
     {
 #ifdef MAC
-        SetCRefCon(hctl, (long)this);
+        SetCRefCon(hctl, (int32_t)this);
 #endif // MAC
 #ifdef WIN
         if (!SetProp(hctl, _szCtlProp, (HANDLE)this))
@@ -170,7 +170,7 @@ void CTL::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Static method to create a scroll bar.
 ***************************************************************************/
-PSCB SCB::PscbNew(PGCB pgcb, uint32_t grfscb, long val, long valMin, long valMax)
+PSCB SCB::PscbNew(PGCB pgcb, uint32_t grfscb, int32_t val, int32_t valMin, int32_t valMax)
 {
     Assert(FPure(grfscb & fscbHorz) != FPure(grfscb & fscbVert), "exactly one of (fscbHorz,fscbVert) should be set");
     PSCB pscb;
@@ -195,7 +195,7 @@ PSCB SCB::PscbNew(PGCB pgcb, uint32_t grfscb, long val, long valMin, long valMax
 /***************************************************************************
     Static method to return the normal width of a vertical scroll bar.
 ***************************************************************************/
-long SCB::DxpNormal(void)
+int32_t SCB::DxpNormal(void)
 {
 #ifdef WIN
     static int _dxp = 0;
@@ -212,7 +212,7 @@ long SCB::DxpNormal(void)
 /***************************************************************************
     Static method to return the normal width of a horizontal scroll bar.
 ***************************************************************************/
-long SCB::DypNormal(void)
+int32_t SCB::DypNormal(void)
 {
 #ifdef WIN
     static int _dyp = 0;
@@ -270,7 +270,7 @@ void SCB::GetClientRc(uint32_t grfscb, RC *prcAbs, RC *prcRel)
 /***************************************************************************
     Create the actual system scroll bar.
 ***************************************************************************/
-bool SCB::_FCreate(long val, long valMin, long valMax, uint32_t grfscb)
+bool SCB::_FCreate(int32_t val, int32_t valMin, int32_t valMax, uint32_t grfscb)
 {
     Assert(_Hctl() == hNil, "scb already created");
     RC rc;
@@ -311,9 +311,9 @@ bool SCB::_FCreate(long val, long valMin, long valMax, uint32_t grfscb)
 /***************************************************************************
     Set the value of the scroll bar.
 ***************************************************************************/
-void SCB::SetVal(long val, bool fRedraw)
+void SCB::SetVal(int32_t val, bool fRedraw)
 {
-    long lwCur;
+    int32_t lwCur;
 
     val = LwMin(_valMax, LwMax(_valMin, val));
     if (val == _val)
@@ -336,9 +336,9 @@ void SCB::SetVal(long val, bool fRedraw)
 /***************************************************************************
     Set the min and max of the scroll bar.
 ***************************************************************************/
-void SCB::SetValMinMax(long val, long valMin, long valMax, bool fRedraw)
+void SCB::SetValMinMax(int32_t val, int32_t valMin, int32_t valMax, bool fRedraw)
 {
-    long lwCur;
+    int32_t lwCur;
 
     valMax = LwMax(valMin, valMax);
     val = LwMin(valMax, LwMax(valMin, val));
@@ -375,7 +375,7 @@ void SCB::_ActivateHwnd(bool fActive)
     if (_valMin < _valMax)
     {
         GNV gnv(this);
-        long lwCur;
+        int32_t lwCur;
 
         gnv.Set();
         SetCtlMax(_Hctl(), (short)(fActive ? _klwMaxScroll : 0));
@@ -396,7 +396,7 @@ void SCB::_ActivateHwnd(bool fActive)
 /***************************************************************************
     Handle mouse tracking for a scroll bar.
 ***************************************************************************/
-void SCB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
+void SCB::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     PTS pts;
     short in;
@@ -423,7 +423,7 @@ void SCB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
         // note that the _Hctl() has the wrong value so the
         // gob should call SetValue in response to this command
         vpcex->EnqueueCid(cidEndScroll, PgobPar(), pvNil, Hid(),
-                          _valMin + LwMulDiv((long)GetCtlValue(_Hctl()), _valMax - _valMin, _klwMaxScroll));
+                          _valMin + LwMulDiv((int32_t)GetCtlValue(_Hctl()), _valMax - _valMin, _klwMaxScroll));
         break;
 
     case inUpButton:
@@ -493,11 +493,11 @@ void SCB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
 /***************************************************************************
     Called in response to a Win WM_HSCROLL or WM_VSCROLL message.
 ***************************************************************************/
-void SCB::TrackScroll(long sb, long lwVal)
+void SCB::TrackScroll(int32_t sb, int32_t lwVal)
 {
     AssertThis(0);
     CMD cmd;
-    long val;
+    int32_t val;
 
     ClearPb(&cmd, SIZEOF(cmd));
     cmd.cid = cidDoScroll;

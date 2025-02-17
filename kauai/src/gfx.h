@@ -22,11 +22,11 @@
 // DeScription of a Font.
 struct DSF
 {
-    long onn;     // Font number.
+    int32_t onn;     // Font number.
     uint32_t grfont; // Font style.
-    long dyp;     // Font height in points.
-    long tah;     // Horizontal Text Alignment
-    long tav;     // Vertical Text Alignment
+    int32_t dyp;     // Font height in points.
+    int32_t tah;     // Horizontal Text Alignment
+    int32_t tav;     // Vertical Text Alignment
 
     ASSERT
 };
@@ -63,7 +63,7 @@ enum
 /****************************************
     Font List
 ****************************************/
-const long onnNil = -1;
+const int32_t onnNil = -1;
 
 #ifdef WIN
 int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, UINT luType, LPARAM luParam);
@@ -83,7 +83,7 @@ class NTL : public NTL_PAR
     friend int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, UINT luType, LPARAM luParam);
 #endif // WIN
     PGST _pgst;
-    long _onnSystem;
+    int32_t _onnSystem;
 
   public:
     NTL(void);
@@ -93,22 +93,22 @@ class NTL : public NTL_PAR
     HFONT HfntCreate(DSF *pdsf);
 #endif // WIN
 #ifdef MAC
-    int16_t FtcFromOnn(long onn);
+    int16_t FtcFromOnn(int32_t onn);
 #endif // MAC
 
     bool FInit(void);
-    long OnnSystem(void)
+    int32_t OnnSystem(void)
     {
         return _onnSystem;
     }
-    void GetStn(long onn, PSTN pstn);
-    bool FGetOnn(PSTN pstn, long *ponn);
-    long OnnMapStn(PSTN pstn, int16_t osk = koskCur);
-    long OnnMac(void);
-    bool FFixedPitch(long onn);
+    void GetStn(int32_t onn, PSTN pstn);
+    bool FGetOnn(PSTN pstn, int32_t *ponn);
+    int32_t OnnMapStn(PSTN pstn, int16_t osk = koskCur);
+    int32_t OnnMac(void);
+    bool FFixedPitch(int32_t onn);
 
 #ifdef DEBUG
-    bool FValidOnn(long onn);
+    bool FValidOnn(int32_t onn);
 #endif // DEBUG
 };
 extern NTL vntl;
@@ -210,8 +210,8 @@ class ACR
         _lu = kluAcrInvert;
     }
 
-    void SetFromLw(long lw);
-    long LwGet(void) const;
+    void SetFromLw(int32_t lw);
+    int32_t LwGet(void) const;
     void GetClr(CLR *pclr);
 
     bool operator==(const ACR &acr) const
@@ -261,37 +261,37 @@ struct APT
 
     bool operator==(APT &apt)
     {
-        return ((long *)rgb)[0] == ((long *)apt.rgb)[0] && ((long *)rgb)[1] == ((long *)apt.rgb)[1];
+        return ((int32_t *)rgb)[0] == ((int32_t *)apt.rgb)[0] && ((int32_t *)rgb)[1] == ((int32_t *)apt.rgb)[1];
     }
     bool operator!=(APT &apt)
     {
-        return ((long *)rgb)[0] != ((long *)apt.rgb)[0] || ((long *)rgb)[1] != ((long *)apt.rgb)[1];
+        return ((int32_t *)rgb)[0] != ((int32_t *)apt.rgb)[0] || ((int32_t *)rgb)[1] != ((int32_t *)apt.rgb)[1];
     }
 
     void SetSolidFore(void)
     {
-        ((long *)rgb)[0] = -1L;
-        ((long *)rgb)[1] = -1L;
+        ((int32_t *)rgb)[0] = -1L;
+        ((int32_t *)rgb)[1] = -1L;
     }
     bool FSolidFore(void)
     {
-        return (((long *)rgb)[0] & ((long *)rgb)[1]) == -1L;
+        return (((int32_t *)rgb)[0] & ((int32_t *)rgb)[1]) == -1L;
     }
     void SetSolidBack(void)
     {
-        ((long *)rgb)[0] = 0L;
-        ((long *)rgb)[1] = 0L;
+        ((int32_t *)rgb)[0] = 0L;
+        ((int32_t *)rgb)[1] = 0L;
     }
     bool FSolidBack(void)
     {
-        return (((long *)rgb)[0] | ((long *)rgb)[1]) == 0L;
+        return (((int32_t *)rgb)[0] | ((int32_t *)rgb)[1]) == 0L;
     }
     void Invert(void)
     {
-        ((long *)rgb)[0] = ~((long *)rgb)[0];
-        ((long *)rgb)[1] = ~((long *)rgb)[1];
+        ((int32_t *)rgb)[0] = ~((int32_t *)rgb)[0];
+        ((int32_t *)rgb)[1] = ~((int32_t *)rgb)[1];
     }
-    void MoveOrigin(long dxp, long dyp);
+    void MoveOrigin(int32_t dxp, int32_t dyp);
 };
 extern APT vaptGray;
 extern APT vaptLtGray;
@@ -309,15 +309,15 @@ struct OLY // pOLYgon
     RCS rcs;  // bounding rectangle
     PTS rgpts[1];
 
-    long Cpts(void)
+    int32_t Cpts(void)
     {
         return (cb - offset(OLY, rgpts[0])) / size(PTS);
     }
 #else  //! MAC
-    long cpts;
+    int32_t cpts;
     PTS rgpts[1];
 
-    long Cpts(void)
+    int32_t Cpts(void)
     {
         return cpts;
     }
@@ -325,7 +325,7 @@ struct OLY // pOLYgon
 
     ASSERT
 };
-const long kcbOlyBase = SIZEOF(OLY) - SIZEOF(PTS);
+const int32_t kcbOlyBase = SIZEOF(OLY) - SIZEOF(PTS);
 
 /****************************************
     High level polygon - a GL of PT's.
@@ -348,12 +348,12 @@ class OGN : public OGN_PAR
     struct AEI // Add Edge Info.
     {
         PT *prgpt;
-        long cpt;
-        long iptPenCur;
+        int32_t cpt;
+        int32_t iptPenCur;
         PT ptCur;
         POGN pogn;
-        long ipt;
-        long dipt;
+        int32_t ipt;
+        int32_t dipt;
     };
     bool _FAddEdge(AEI *paei);
 
@@ -361,23 +361,23 @@ class OGN : public OGN_PAR
     OGN(void);
 
   public:
-    PT *PrgptLock(long ipt = 0)
+    PT *PrgptLock(int32_t ipt = 0)
     {
         return (PT *)PvLock(ipt);
     }
-    PT *QrgptGet(long ipt = 0)
+    PT *QrgptGet(int32_t ipt = 0)
     {
         return (PT *)QvGet(ipt);
     }
 
     POGN PognTraceOgn(POGN pogn, uint32_t grfogn);
-    POGN PognTraceRgpt(PT *prgpt, long cpt, uint32_t grfogn);
+    POGN PognTraceRgpt(PT *prgpt, int32_t cpt, uint32_t grfogn);
 
     // static methods
-    static POGN PognNew(long cvInit = 0);
+    static POGN PognNew(int32_t cvInit = 0);
 };
 
-long IptFindLeftmost(PT *prgpt, long cpt, long dxp, long dyp);
+int32_t IptFindLeftmost(PT *prgpt, int32_t cpt, int32_t dxp, int32_t dyp);
 
 /****************************************
     Graphics drawing data - a parameter
@@ -399,8 +399,8 @@ struct GDD
     APT apt;       // pattern to use
     ACR acrFore;   // foreground color (used for solid fills also)
     ACR acrBack;   // background color
-    long dxpPen;   // pen width (used if framing)
-    long dypPen;   // pen height
+    int32_t dxpPen;   // pen width (used if framing)
+    int32_t dypPen;   // pen height
     RCS *prcsClip; // clipping (may be pvNil)
 };
 
@@ -423,8 +423,8 @@ class GNV : public GNV_PAR
     RC _rcDst;
 
     // current pen location and clipping
-    long _xp;
-    long _yp;
+    int32_t _xp;
+    int32_t _yp;
     RCS _rcsClip;
     RC _rcVis; // always clipped to - this is in Dst coordinates
 
@@ -437,13 +437,13 @@ class GNV : public GNV_PAR
 
     void _Init(PGPT pgpt);
     bool _FMapRcRcs(RC *prc, RCS *prcs);
-    void _MapPtPts(long xp, long yp, PTS *ppts);
+    void _MapPtPts(int32_t xp, int32_t yp, PTS *ppts);
     HQ _HqolyCreate(POGN pogn, uint32_t grfogn);
     HQ _HqolyFrame(POGN pogn, uint32_t grfogn);
 
     // transition related methods
-    bool _FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, long cbitPixel = 0);
-    void _PaletteTrans(PGL pglclrOld, PGL pglclrNew, long lwNum, long lwDen, PGL pglclrTrans, CLR *pclrSub = pvNil);
+    bool _FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, int32_t cbitPixel = 0);
+    void _PaletteTrans(PGL pglclrOld, PGL pglclrNew, int32_t lwNum, int32_t lwDen, PGL pglclrTrans, CLR *pclrSub = pvNil);
     bool _FEnsureTempGnv(PGNV *ppgnv, RC *prc);
 
   public:
@@ -466,7 +466,7 @@ class GNV : public GNV_PAR
     void DrawDib(HDRAWDIB hdd, BITMAPINFOHEADER *pbi, RC *prc);
 #endif // WIN
 
-    void SetPenSize(long dxp, long dyp);
+    void SetPenSize(int32_t dxp, int32_t dyp);
 
     void FillRcApt(RC *prc, APT *papt, ACR acrFore, ACR acrBack);
     void FillRc(RC *prc, ACR acr);
@@ -486,37 +486,37 @@ class GNV : public GNV_PAR
     void FramePolyLineApt(POGN pogn, APT *papt, ACR acrFore, ACR acrBack);
     void FramePolyLine(POGN pogn, ACR acr);
 
-    void MoveTo(long xp, long yp)
+    void MoveTo(int32_t xp, int32_t yp)
     {
         _xp = xp;
         _yp = yp;
     }
-    void MoveRel(long dxp, long dyp)
+    void MoveRel(int32_t dxp, int32_t dyp)
     {
         _xp += dxp;
         _yp += dyp;
     }
-    void LineToApt(long xp, long yp, APT *papt, ACR acrFore, ACR acrBack)
+    void LineToApt(int32_t xp, int32_t yp, APT *papt, ACR acrFore, ACR acrBack)
     {
         LineApt(_xp, _yp, xp, yp, papt, acrFore, acrBack);
     }
-    void LineTo(long xp, long yp, ACR acr)
+    void LineTo(int32_t xp, int32_t yp, ACR acr)
     {
         Line(_xp, _yp, xp, yp, acr);
     }
-    void LineRelApt(long dxp, long dyp, APT *papt, ACR acrFore, ACR acrBack)
+    void LineRelApt(int32_t dxp, int32_t dyp, APT *papt, ACR acrFore, ACR acrBack)
     {
         LineApt(_xp, _yp, _xp + dxp, _yp + dyp, papt, acrFore, acrBack);
     }
-    void LineRel(long dxp, long dyp, ACR acr)
+    void LineRel(int32_t dxp, int32_t dyp, ACR acr)
     {
         Line(_xp, _yp, _xp + dxp, _yp + dyp, acr);
     }
-    void LineApt(long xp1, long yp1, long xp2, long yp2, APT *papt, ACR acrFore, ACR acrBack);
-    void Line(long xp1, long yp1, long xp2, long yp2, ACR acr);
+    void LineApt(int32_t xp1, int32_t yp1, int32_t xp2, int32_t yp2, APT *papt, ACR acrFore, ACR acrBack);
+    void Line(int32_t xp1, int32_t yp1, int32_t xp2, int32_t yp2, ACR acr);
 
-    void ScrollRc(RC *prc, long dxp, long dyp, RC *prc1 = pvNil, RC *prc2 = pvNil);
-    static void GetBadRcForScroll(RC *prc, long dxp, long dyp, RC *prc1, RC *prc2);
+    void ScrollRc(RC *prc, int32_t dxp, int32_t dyp, RC *prc1 = pvNil, RC *prc2 = pvNil);
+    static void GetBadRcForScroll(RC *prc, int32_t dxp, int32_t dyp, RC *prc1, RC *prc2);
 
     // for mapping
     void GetRcSrc(RC *prc);
@@ -531,31 +531,31 @@ class GNV : public GNV_PAR
     void ClipToSrc(void);
 
     // Text & font.
-    void SetFont(long onn, uint32_t grfont, long dypFont, long tah = tahLeft, long tav = tavTop);
-    void SetOnn(long onn);
+    void SetFont(int32_t onn, uint32_t grfont, int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop);
+    void SetOnn(int32_t onn);
     void SetFontStyle(uint32_t grfont);
-    void SetFontSize(long dyp);
-    void SetFontAlign(long tah, long tav);
+    void SetFontSize(int32_t dyp);
+    void SetFontAlign(int32_t tah, int32_t tav);
     void GetDsf(DSF *pdsf);
     void SetDsf(DSF *pdsf);
-    void DrawRgch(const achar *prgch, long cch, long xp, long yp, ACR acrFore = kacrBlack, ACR acrBack = kacrClear);
-    void DrawStn(PSTN pstn, long xp, long yp, ACR acrFore = kacrBlack, ACR acrBack = kacrClear);
-    void GetRcFromRgch(RC *prc, const achar *prgch, long cch, long xp = 0, long yp = 0);
-    void GetRcFromStn(RC *prc, PSTN pstn, long xp = 0, long yp = 0);
+    void DrawRgch(const achar *prgch, int32_t cch, int32_t xp, int32_t yp, ACR acrFore = kacrBlack, ACR acrBack = kacrClear);
+    void DrawStn(PSTN pstn, int32_t xp, int32_t yp, ACR acrFore = kacrBlack, ACR acrBack = kacrClear);
+    void GetRcFromRgch(RC *prc, const achar *prgch, int32_t cch, int32_t xp = 0, int32_t yp = 0);
+    void GetRcFromStn(RC *prc, PSTN pstn, int32_t xp = 0, int32_t yp = 0);
 
     // bitmaps and pictures
     void CopyPixels(PGNV pgnvSrc, RC *prcSrc, RC *prcDst);
     void DrawPic(PPIC ppic, RC *prc);
-    void DrawMbmp(PMBMP pmbmp, long xp, long yp);
+    void DrawMbmp(PMBMP pmbmp, int32_t xp, int32_t yp);
     void DrawMbmp(PMBMP pmbmp, RC *prc);
 
     // transitions
-    void Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
-    void Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
-    void Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
+    void Wipe(int32_t gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
+    void Slide(int32_t gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
+    void Dissolve(int32_t crcWidth, int32_t crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
                   PGL pglclr = pvNil);
-    void Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
-    void Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
+    void Fade(int32_t cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr = pvNil);
+    void Iris(int32_t gfd, int32_t xp, int32_t yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
               PGL pglclr = pvNil);
 };
 
@@ -591,21 +591,21 @@ class GPT : public GPT_PAR
     static HPAL _hpal;
     static HPAL _hpalIdentity;
     static CLR *_prgclr;
-    static long _cclrPal;
-    static long _cactPalCur;
-    static long _cactFlush;
+    static int32_t _cclrPal;
+    static int32_t _cactPalCur;
+    static int32_t _cactFlush;
     static bool _fPalettized; // whether the screen is palettized
 
     HDC _hdc;
     HWND _hwnd;
     HBMP _hbmp;        // nil if not an offscreen port
     uint8_t *_prgbPixels; // nil if not a dib section port
-    long _cbitPixel;
-    long _cbRow;
+    int32_t _cbitPixel;
+    int32_t _cbRow;
     RC _rcOff;      // bounding rectangle for a metafile or dib port
-    long _cactPal;  // which palette this port has selected
-    long _cactDraw; // last draw - for knowing when to call GdiFlush
-    long _cactLock; // lock count
+    int32_t _cactPal;  // which palette this port has selected
+    int32_t _cactDraw; // last draw - for knowing when to call GdiFlush
+    int32_t _cactLock; // lock count
 
     // selected brush and its related info
     enum // brush kind
@@ -616,7 +616,7 @@ class GPT : public GPT_PAR
         bkStock
     };
     HBRUSH _hbr;
-    long _bk;
+    int32_t _bk;
     APT _apt;   // for bkApt
     ACR _acr;   // for bkAcr
     int _wType; // for bkStock (stock brush)
@@ -649,7 +649,7 @@ class GPT : public GPT_PAR
 #ifdef MAC
     static HCLT _hcltDef;
     static bool _fForcePalOnSys;
-    static HCLT _HcltUse(long cbitPixel);
+    static HCLT _HcltUse(int32_t cbitPixel);
 
     // WARNING: the PPRT's below may be GWorldPtr's instead of GrafPtr's
     // Only use SetGWorld or GetGWorld on these.  Don't assume they
@@ -694,7 +694,7 @@ class GPT : public GPT_PAR
     static PGPT PgptNew(HDC hdc);
     static PGPT PgptNewHwnd(HWND hwnd);
 
-    static long CclrSetPalette(HWND hwnd, bool fInval);
+    static int32_t CclrSetPalette(HWND hwnd, bool fInval);
 
     // this gross API is for AVI playback
     void DrawDib(HDRAWDIB hdd, BITMAPINFOHEADER *pbi, RCS *prcs, GDD *pgdd);
@@ -702,9 +702,9 @@ class GPT : public GPT_PAR
 #ifdef MAC
     static PGPT PgptNew(PPRT pprt, HGD hgd = hNil);
 
-    static bool FCanScreen(long cbitPixel, bool fColor);
-    static bool FSetScreenState(long cbitPixel, bool tColor);
-    static void GetScreenState(long *pcbitPixel, bool *pfColor);
+    static bool FCanScreen(int32_t cbitPixel, bool fColor);
+    static bool FSetScreenState(int32_t cbitPixel, bool tColor);
+    static void GetScreenState(int32_t *pcbitPixel, bool *pfColor);
 
     void Set(RCS *prcsClip);
     void Restore(void);
@@ -717,7 +717,7 @@ class GPT : public GPT_PAR
     static PGL PglclrGetPalette(void);
     static void Flush(void);
 
-    static PGPT PgptNewOffscreen(RC *prc, long cbitPixel);
+    static PGPT PgptNewOffscreen(RC *prc, int32_t cbitPixel);
     static PGPT PgptNewPic(RC *prc);
     PPIC PpicRelease(void);
     void SetOffscreenColors(PGL pglclr = pvNil);
@@ -731,10 +731,10 @@ class GPT : public GPT_PAR
     void DrawOval(RCS *prcs, GDD *pgdd);
     void DrawLine(PTS *ppts1, PTS *ppts2, GDD *pgdd);
     void DrawPoly(HQ hqoly, GDD *pgdd);
-    void ScrollRcs(RCS *prcs, long dxp, long dyp, GDD *pgdd);
+    void ScrollRcs(RCS *prcs, int32_t dxp, int32_t dyp, GDD *pgdd);
 
-    void DrawRgch(const achar *prgch, long cch, PTS pts, GDD *pgdd, DSF *pdsf);
-    void GetRcsFromRgch(RCS *prcs, const achar *prgch, long cch, PTS pts, DSF *pdsf);
+    void DrawRgch(const achar *prgch, int32_t cch, PTS pts, GDD *pgdd, DSF *pdsf);
+    void GetRcsFromRgch(RCS *prcs, const achar *prgch, int32_t cch, PTS pts, DSF *pdsf);
 
     void CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd);
     void DrawPic(PPIC ppic, RCS *prcs, GDD *pgdd);
@@ -743,8 +743,8 @@ class GPT : public GPT_PAR
     void Lock(void);
     void Unlock(void);
     uint8_t *PrgbLockPixels(RC *prc = pvNil);
-    long CbRow(void);
-    long CbitPixel(void);
+    int32_t CbRow(void);
+    int32_t CbitPixel(void);
 };
 
 /****************************************
@@ -766,16 +766,16 @@ bool FEqualRgn(HRGN hrgn1, HRGN hrgn2);
 bool FInitGfx(void);
 
 // stretch by a factor of 2 in each dimension.
-void DoubleStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
-                   long xpDst, long ypDst, RC *prcClip, PREGN pregnClip);
+void DoubleStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
+                   int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip);
 
 // stretch by a factor of 2 in vertical direction only.
-void DoubleVertStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
-                       long xpDst, long ypDst, RC *prcClip, PREGN pregnClip);
+void DoubleVertStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
+                       int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip);
 
 // Number of times that the palette has changed (via a call to CclrSetPalette
 // or SetActiveColors). This can be used by other modules to detect a palette
 // change.
-extern long vcactRealize;
+extern int32_t vcactRealize;
 
 #endif //! GFX_H

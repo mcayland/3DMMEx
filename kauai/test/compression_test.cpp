@@ -19,7 +19,7 @@ TEST(KauaiCodecTests, DecodeKCDC)
     CODM codm(&kcdc, kcfmtKauai2);
 
     uint8_t rgbDecoded[128];
-    long cbDecoded = SIZEOF(rgbDecoded);
+    int32_t cbDecoded = SIZEOF(rgbDecoded);
 
     ASSERT_TRUE(codm.FDecompress(rgbEncoded, SIZEOF(rgbEncoded), rgbDecoded, cbDecoded, &cbDecoded));
     ASSERT_EQ(cbDecoded, 36);
@@ -38,7 +38,7 @@ TEST(KauaiCodecTests, DecodeKCD2)
     CODM codm(&kcdc, kcfmtKauai2);
 
     uint8_t rgbDecoded[128];
-    long cbDecoded = SIZEOF(rgbDecoded);
+    int32_t cbDecoded = SIZEOF(rgbDecoded);
 
     ASSERT_TRUE(codm.FDecompress(rgbEncoded, SIZEOF(rgbEncoded), rgbDecoded, cbDecoded, &cbDecoded));
     ASSERT_EQ(cbDecoded, 36);

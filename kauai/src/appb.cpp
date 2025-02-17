@@ -57,7 +57,7 @@ APPB::~APPB(void)
 /***************************************************************************
     Calls _FInit and if successful, calls _Loop then _CleanUp.
 ***************************************************************************/
-void APPB::Run(uint32_t grfapp, uint32_t grfgob, long ginDef)
+void APPB::Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
     AssertThis(0);
 
@@ -163,7 +163,7 @@ void APPB::RefreshCurs(void)
 }
 
 /***************************************************************************
-    Starting a long operation, put up the wait cursor.
+    Starting a int32_t operation, put up the wait cursor.
 ***************************************************************************/
 void APPB::BeginLongOp(void)
 {
@@ -261,7 +261,7 @@ void APPB::ShowCurs(void)
 /***************************************************************************
     Warp the cursor to (xpScreen, ypScreen)
 ***************************************************************************/
-void APPB::PositionCurs(long xpScreen, long ypScreen)
+void APPB::PositionCurs(int32_t xpScreen, int32_t ypScreen)
 {
     AssertThis(0);
 
@@ -287,7 +287,7 @@ void APPB::PositionCurs(long xpScreen, long ypScreen)
 /***************************************************************************
     Return the default variable pitch font.
 ***************************************************************************/
-long APPB::OnnDefVariable(void)
+int32_t APPB::OnnDefVariable(void)
 {
     AssertThis(0);
 
@@ -305,7 +305,7 @@ long APPB::OnnDefVariable(void)
 /***************************************************************************
     Return the default fixed pitch font.
 ***************************************************************************/
-long APPB::OnnDefFixed(void)
+int32_t APPB::OnnDefFixed(void)
 {
     AssertThis(0);
 
@@ -337,7 +337,7 @@ long APPB::OnnDefFixed(void)
     Static method to return the default text size.
     REVIEW shonk: DypTextDef: what's the right way to do this?
 ***************************************************************************/
-long APPB::DypTextDef(void)
+int32_t APPB::DypTextDef(void)
 {
     AssertThis(0);
 
@@ -376,7 +376,7 @@ bool APPB::FCmdIdle(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    static long _cactIdle = 0;
+    static int32_t _cactIdle = 0;
     PGOB pgob;
 
     if (_fQuit)
@@ -558,7 +558,7 @@ bool APPB::FCmdChooseWnd(PCMD pcmd)
 /***************************************************************************
     Application initialization.
 ***************************************************************************/
-bool APPB::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
+bool APPB::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
     AssertThis(0);
 
@@ -595,7 +595,7 @@ bool APPB::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
         return fFalse;
 
     // initialize sound functionality
-    long lwWav = kwav22M16;
+    int32_t lwWav = kwav22M16;
     if (FPure(grfapp & fappStereoSound))
     {
         lwWav = kwav44S16;
@@ -613,7 +613,7 @@ bool APPB::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
     Initialize the sound manager.  Default is to return true whether or not
     we could create the sound manager.
 ***************************************************************************/
-bool APPB::_FInitSound(long wav)
+bool APPB::_FInitSound(int32_t wav)
 {
     AssertBaseThis(0);
     PSNDV psndv;
@@ -814,7 +814,7 @@ void APPB::UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp)
 /***************************************************************************
     Map a handler id to a handler.
 ***************************************************************************/
-PCMH APPB::PcmhFromHid(long hid)
+PCMH APPB::PcmhFromHid(int32_t hid)
 {
     AssertThis(0);
     PCMH pcmh;
@@ -839,7 +839,7 @@ PCMH APPB::PcmhFromHid(long hid)
 void APPB::BuryCmh(PCMH pcmh)
 {
     AssertThis(0);
-    long imodcx;
+    int32_t imodcx;
     MODCX modcx;
 
     // NOTE: don't do an AssertPo(pcmh, 0)!
@@ -905,7 +905,7 @@ void APPB::_MarkRegnRc(PREGN pregn, RC *prc, PGOB pgobCoo)
     AssertPo(pgobCoo, 0);
 
     MKRGN mkrgn;
-    long imkrgn;
+    int32_t imkrgn;
     RC rc;
     PT pt;
     HWND hwnd;
@@ -1017,7 +1017,7 @@ void APPB::_UnmarkRegnRc(PREGN pregn, RC *prc, PGOB pgobCoo)
     AssertPo(pgobCoo, 0);
 
     MKRGN mkrgn;
-    long imkrgn;
+    int32_t imkrgn;
     RC rc;
     PT pt;
     HWND hwnd;
@@ -1087,7 +1087,7 @@ bool APPB::FGetMarkedRc(HWND hwnd, RC *prc)
     AssertVarMem(prc);
 
     MKRGN mkrgn;
-    long imkrgn;
+    int32_t imkrgn;
 
     if (pvNil != _pglmkrgn)
     {
@@ -1114,7 +1114,7 @@ void APPB::InvalMarked(HWND hwnd)
     AssertThis(0);
     Assert(hNil != hwnd, "bad hwnd");
 
-    long imkrgn;
+    int32_t imkrgn;
     MKRGN mkrgn;
     RC rc;
     RCS rcs;
@@ -1208,7 +1208,7 @@ void APPB::_FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp, PGPT pgpt)
     If pglclr is not nil, this AddRef's it and holds onto it until after
     the transition is done.
 ***************************************************************************/
-void APPB::SetGft(long gft, long lwGft, uint32_t dts, PGL pglclr, ACR acr)
+void APPB::SetGft(int32_t gft, int32_t lwGft, uint32_t dts, PGL pglclr, ACR acr)
 {
     AssertThis(0);
     AssertNilOrPo(pglclr, 0);
@@ -1312,12 +1312,12 @@ PGPT APPB::_PgptEnsure(RC *prc)
 /***************************************************************************
     See if the given property is in the property list.
 ***************************************************************************/
-bool APPB::_FFindProp(long prid, PROP *pprop, long *piprop)
+bool APPB::_FFindProp(int32_t prid, PROP *pprop, int32_t *piprop)
 {
     AssertThis(0);
     AssertNilOrVarMem(pprop);
     AssertNilOrVarMem(piprop);
-    long ivMin, ivLim, iv;
+    int32_t ivMin, ivLim, iv;
     PROP prop;
 
     if (pvNil == _pglprop)
@@ -1355,11 +1355,11 @@ bool APPB::_FFindProp(long prid, PROP *pprop, long *piprop)
 /***************************************************************************
     Set the given property in the property list.
 ***************************************************************************/
-bool APPB::_FSetProp(long prid, long lw)
+bool APPB::_FSetProp(int32_t prid, int32_t lw)
 {
     AssertThis(0);
     PROP prop;
-    long iprop;
+    int32_t iprop;
 
     if (_FFindProp(prid, &prop, &iprop))
     {
@@ -1384,7 +1384,7 @@ bool APPB::_FSetProp(long prid, long lw)
 /***************************************************************************
     Set the indicated property, using the given parameter.
 ***************************************************************************/
-bool APPB::FSetProp(long prid, long lw)
+bool APPB::FSetProp(int32_t prid, int32_t lw)
 {
     AssertThis(0);
 
@@ -1394,7 +1394,7 @@ bool APPB::FSetProp(long prid, long lw)
         if (FPure(_fFullScreen) == FPure(lw))
             break;
 #ifdef WIN
-        long lwT;
+        int32_t lwT;
 
         // if we're already maximized, we have to restore and maximize
         // to force the system to use our new MINMAXINFO.
@@ -1448,7 +1448,7 @@ bool APPB::FSetProp(long prid, long lw)
 /***************************************************************************
     Return the current value of the given property.
 ***************************************************************************/
-bool APPB::FGetProp(long prid, long *plw)
+bool APPB::FGetProp(int32_t prid, int32_t *plw)
 {
     AssertThis(0);
     AssertVarMem(plw);
@@ -1496,13 +1496,13 @@ bool APPB::FGetProp(long prid, long *plw)
     pfDelay is nil, importing cannot be delayed.  If *ppdocb is not nil,
     import into *ppdocb if we can.
 ***************************************************************************/
-bool APPB::FImportClip(long clfm, void *pv, long cb, PDOCB *ppdocb, bool *pfDelay)
+bool APPB::FImportClip(int32_t clfm, void *pv, int32_t cb, PDOCB *ppdocb, bool *pfDelay)
 {
     AssertThis(0);
     AssertPvCb(pv, cb);
     AssertNilOrVarMem(ppdocb);
     AssertNilOrVarMem(pfDelay);
-    long cpMac;
+    int32_t cpMac;
 
     switch (clfm)
     {
@@ -1602,7 +1602,7 @@ bool APPB::FPushModal(PCEX pcex)
     FPushModal/PopModal pair. Returns false iff the modal terminated
     abnormally (eg, we're quitting).
 ***************************************************************************/
-bool APPB::FModalLoop(long *plwRet)
+bool APPB::FModalLoop(int32_t *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);
@@ -1624,7 +1624,7 @@ bool APPB::FModalLoop(long *plwRet)
     Cause the topmost modal loop to terminate (next time through) with the
     given return value.
 ***************************************************************************/
-void APPB::EndModal(long lwRet)
+void APPB::EndModal(int32_t lwRet)
 {
     AssertThis(0);
 
@@ -1680,7 +1680,7 @@ void APPB::BadModalCmd(PCMD pcmd)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
-    long imodcx;
+    int32_t imodcx;
     MODCX modcx;
 
     if (pvNil == _pglmodcx || 0 >= (imodcx = _pglmodcx->IvMac()))
@@ -1761,7 +1761,7 @@ void APPB::MarkMem(void)
 
     if (pvNil != _pglmkrgn)
     {
-        long imkrgn;
+        int32_t imkrgn;
         MKRGN mkrgn;
 
         MarkMemObj(_pglmkrgn);
@@ -1774,7 +1774,7 @@ void APPB::MarkMem(void)
 
     if (pvNil != _pglmodcx)
     {
-        long imodcx;
+        int32_t imodcx;
         MODCX modcx;
 
         MarkMemObj(_pglmodcx);
@@ -1795,7 +1795,7 @@ void APPB::MarkMem(void)
 /***************************************************************************
     Assert proc - just calls the app's AssertProc.
 ***************************************************************************/
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t cb)
 {
     if (vpappb == pvNil)
         return fTrue;
@@ -1805,7 +1805,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
 /***************************************************************************
     Warning reporting proc.
 ***************************************************************************/
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMsg)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
 {
     if (vpappb == pvNil)
         Debugger();
@@ -1818,7 +1818,7 @@ static MUTX _mutxWarn;
 /***************************************************************************
     Default framework warning proc.
 ***************************************************************************/
-void APPB::WarnProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg)
+void APPB::WarnProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
 {
     static PFIL _pfilWarn;
     static bool _fInWarn;

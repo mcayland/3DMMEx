@@ -221,7 +221,7 @@ bool SPLC::_FEnsureUserDict(PSTN pstnCustom, PFNI pfniDef)
 
 #ifdef WIN
     HKEY hkey;
-    long cb, lwType;
+    int32_t cb, lwType;
     SZ sz;
     STN stn;
     FNI fni;
@@ -340,7 +340,7 @@ bool SPLC::FSetOptions(uint32_t grfsplc)
 /***************************************************************************
     Check the spelling of stuff in the given buffer.
 ***************************************************************************/
-bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PSTN pstnReplace, long *pscrs)
+bool SPLC::FCheck(achar *prgch, int32_t cch, int32_t *pichMinBad, int32_t *pichLimBad, PSTN pstnReplace, int32_t *pscrs)
 {
     AssertThis(0);
     AssertIn(cch, 0, ksuMax);
@@ -406,7 +406,7 @@ bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PS
 /***************************************************************************
     Get the istn'th suggestion for the given word.
 ***************************************************************************/
-bool SPLC::FSuggest(achar *prgch, long cch, bool fFirst, PSTN pstn)
+bool SPLC::FSuggest(achar *prgch, int32_t cch, bool fFirst, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(cch, 1, ksuMax);
@@ -589,7 +589,7 @@ SC_SEC SPLC::SpellInit(SC_SPLID *psplid, SC_WSC *pwsc)
 /***************************************************************************
     Stub for SpellOptions
 ***************************************************************************/
-SC_SEC SPLC::SpellOptions(SC_SPLID splid, long grfso)
+SC_SEC SPLC::SpellOptions(SC_SPLID splid, int32_t grfso)
 {
     AssertThis(0);
 

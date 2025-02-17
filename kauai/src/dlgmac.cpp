@@ -22,12 +22,12 @@ bool DLG::_FInit(void)
 {
     HN hn;
     short ridDitl;
-    long sit, sitLim;
-    long idit;
+    int32_t sit, sitLim;
+    int32_t idit;
     uint8_t bState;
     uint8_t *pbDitl;
     uint8_t bType;
-    long cbEntry;
+    int32_t cbEntry;
     DIT dit;
     bool fAddDit;
     bool fRet = fFalse;
@@ -94,7 +94,7 @@ bool DLG::_FInit(void)
     // to a reasonable size
     sitLim = (*(short *)pbDitl) + 2;
     pbDitl += size(short);
-    if (!FEnsureSpace(sitLim, size(long), fgrpNil))
+    if (!FEnsureSpace(sitLim, size(int32_t), fgrpNil))
         goto LFail;
 
     // look at the items in the DITL
@@ -122,7 +122,7 @@ bool DLG::_FInit(void)
 
         case chkCtrl + ctrlItem: // check box
             dit.ditk = ditkCheckBox;
-            cbEntry = size(long);
+            cbEntry = size(int32_t);
             fAddDit = fTrue;
             goto LSkipSt;
 
@@ -140,7 +140,7 @@ bool DLG::_FInit(void)
                 }
             }
             dit.ditk = ditkRadioGroup;
-            cbEntry = size(long);
+            cbEntry = size(int32_t);
             fAddDit = fTrue;
             goto LSkipSt;
 
@@ -153,7 +153,7 @@ bool DLG::_FInit(void)
             fAddDit = fTrue;
         LSkipSt:
             pbDitl += CbSt((achar *)pbDitl);
-            if ((long)pbDitl & 1)
+            if ((int32_t)pbDitl & 1)
                 pbDitl++;
             break;
 
@@ -201,12 +201,12 @@ LFail:
     Actually put up the dialog and don't return until it comes down.
     Returns the idit that dismissed the dialog.  Returns ivNil on failure.
 ***************************************************************************/
-long DLG::IditDo(long iditFocus)
+int32_t DLG::IditDo(int32_t iditFocus)
 {
     HDLG hdlg;
     DIT dit;
     short swHit;
-    long idit = ivNil;
+    int32_t idit = ivNil;
 
     if ((hdlg = GetNewDialog((short)_rid, pvNil, (PPRT)-1L)) == pvNil)
     {
@@ -233,7 +233,7 @@ long DLG::IditDo(long iditFocus)
     for (;;)
     {
         ModalDialog(pvNil, &swHit);
-        if ((idit = IditFromSit((long)swHit)) == ivNil)
+        if ((idit = IditFromSit((int32_t)swHit)) == ivNil)
             continue;
 
         GetDit(idit, &dit);
@@ -252,7 +252,7 @@ long DLG::IditDo(long iditFocus)
 
         case ditkRadioGroup:
             // set the value to swHit - dit.sitMin
-            _SetRadioGroup(idit, (long)swHit - dit.sitMin);
+            _SetRadioGroup(idit, (int32_t)swHit - dit.sitMin);
             break;
         }
 
@@ -283,14 +283,14 @@ LDone:
 /***************************************************************************
     Get the value of a radio group.
 ***************************************************************************/
-long DLG::_LwGetRadioGroup(long idit)
+int32_t DLG::_LwGetRadioGroup(int32_t idit)
 {
     HDLG hdlg;
     DIT dit;
     short sitk;
     HCTL hctl;
     RCS rcs;
-    long sit;
+    int32_t sit;
 
     GetDit(idit, &dit);
     hdlg = (HDLG)_pgob->Hwnd();
@@ -311,14 +311,14 @@ long DLG::_LwGetRadioGroup(long idit)
 /***************************************************************************
     Change a radio group value.
 ***************************************************************************/
-void DLG::_SetRadioGroup(long idit, long lw)
+void DLG::_SetRadioGroup(int32_t idit, int32_t lw)
 {
     HDLG hdlg;
     DIT dit;
     short sitk;
     HCTL hctl;
     RCS rcs;
-    long sit;
+    int32_t sit;
     short swT;
 
     GetDit(idit, &dit);
@@ -353,7 +353,7 @@ void DLG::_SetRadioGroup(long idit, long lw)
 /***************************************************************************
     Returns the current value of a check box.
 ***************************************************************************/
-bool DLG::_FGetCheckBox(long idit)
+bool DLG::_FGetCheckBox(int32_t idit)
 {
     HDLG hdlg;
     DIT dit;
@@ -375,7 +375,7 @@ bool DLG::_FGetCheckBox(long idit)
 /***************************************************************************
     Invert the value of a check box.
 ***************************************************************************/
-void DLG::_InvertCheckBox(long idit)
+void DLG::_InvertCheckBox(int32_t idit)
 {
     _SetCheckBox(idit, !_FGetCheckBox(idit));
 }
@@ -383,7 +383,7 @@ void DLG::_InvertCheckBox(long idit)
 /***************************************************************************
     Set the value of a check box.
 ***************************************************************************/
-void DLG::_SetCheckBox(long idit, bool fOn)
+void DLG::_SetCheckBox(int32_t idit, bool fOn)
 {
     HDLG hdlg;
     DIT dit;
@@ -411,7 +411,7 @@ void DLG::_SetCheckBox(long idit, bool fOn)
 /***************************************************************************
     Get the text from an edit control.
 ***************************************************************************/
-void DLG::_GetEditText(long idit, PSTZ pstz)
+void DLG::_GetEditText(int32_t idit, PSTZ pstz)
 {
     HDLG hdlg;
     DIT dit;
@@ -434,7 +434,7 @@ void DLG::_GetEditText(long idit, PSTZ pstz)
 /***************************************************************************
     Set the text in an edit control.
 ***************************************************************************/
-void DLG::_SetEditText(long idit, PSTZ pstz)
+void DLG::_SetEditText(int32_t idit, PSTZ pstz)
 {
     HDLG hdlg;
     DIT dit;
@@ -460,7 +460,7 @@ void DLG::_SetEditText(long idit, PSTZ pstz)
     Make the given item the "focused" item and select its contents.  The
     item should be a text item.
 ***************************************************************************/
-void DLG::SelectDit(long idit)
+void DLG::SelectDit(int32_t idit)
 {
     HDLG hdlg;
     DIT dit;

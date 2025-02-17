@@ -16,7 +16,7 @@ ASSERTNAME
 
 void TestUtil(void);
 void CheckForLostMem(void);
-bool FFindPrime(long lwMax, long lwMaxRoot, long *plwPrime, long *plwRoot);
+bool FFindPrime(int32_t lwMax, int32_t lwMaxRoot, int32_t *plwPrime, int32_t *plwRoot);
 
 /***************************************************************************
     Call test routines.
@@ -29,7 +29,7 @@ int __cdecl main(int cpszs, char **prgpszs)
     FTG rgftg[2];
     uint8_t rgb[512];
     FP fpMac, fp;
-    long cbTot, clnTot, ib, cbT, cln;
+    int32_t cbTot, clnTot, ib, cbT, cln;
     PFIL pfil;
     STN stn;
 
@@ -74,7 +74,7 @@ int __cdecl main(int cpszs, char **prgpszs)
 #endif // REVIEW
 
 #ifndef REVIEW // shonk: for finding a prime and a primitive root for the prime
-    long lwPrime, lwRoot, lw;
+    int32_t lwPrime, lwRoot, lw;
     STN stn;
 
     lwPrime = 6000;
@@ -107,7 +107,7 @@ int __cdecl main(int cpszs, char **prgpszs)
 /***************************************************************************
     Returning true breaks into the debugger.
 ***************************************************************************/
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t cb)
 {
     printf("An assert occurred: \n\r");
     if (pszsMsg != pvNil)
@@ -134,7 +134,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
                 break;
 
             case 4:
-                printf("%8x", *(long *)pv);
+                printf("%8x", *(int32_t *)pv);
                 break;
             }
             printf("\n\r");
@@ -149,7 +149,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
 /***************************************************************************
     Callback from util for warnings.
 ***************************************************************************/
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMsg)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
 {
     printf("Warning\n\r");
     if (pszsMsg != pvNil)
@@ -178,14 +178,14 @@ void CheckForLostMem(void)
     Find the largest prime that is less than lwMax and find a primitive root
     for it.
 ***************************************************************************/
-bool FFindPrime(long lwMax, long lwMaxRoot, long *plwPrime, long *plwRoot)
+bool FFindPrime(int32_t lwMax, int32_t lwMaxRoot, int32_t *plwPrime, int32_t *plwRoot)
 {
     AssertIn(lwMax, 3, kcbMax);
     AssertVarMem(plwPrime);
     AssertVarMem(plwRoot);
     uint8_t *prgb;
-    long cb;
-    long lw, ibit, lwT, clwHit;
+    int32_t cb;
+    int32_t lw, ibit, lwT, clwHit;
 
     // make sure lwMax is even.
     lwMax = (lwMax + 1) & ~1;

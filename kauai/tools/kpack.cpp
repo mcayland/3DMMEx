@@ -13,7 +13,7 @@
 #include "frame.h"
 ASSERTNAME
 
-bool _FGetLwFromSzs(PSZS pszs, long *plw);
+bool _FGetLwFromSzs(PSZS pszs, int32_t *plw);
 
 /***************************************************************************
     Main routine.  Returns non-zero iff there's an error.
@@ -24,12 +24,12 @@ int __cdecl main(int cpszs, char *prgpszs[])
     STN stn;
     char chs;
     FLO floSrc, floDst;
-    long lwSig;
+    int32_t lwSig;
     BLCK blck;
     bool fPacked;
     bool fCompress = fTrue;
-    long cfni = 0;
-    long cfmt = vpcodmUtil->CfmtDefault();
+    int32_t cfni = 0;
+    int32_t cfmt = vpcodmUtil->CfmtDefault();
 
 #ifdef UNICODE
     fprintf(stderr, "\nMicrosoft (R) Kauai Pack Utility (Unicode; " Debug("Debug; ") __DATE__ "; " __TIME__ ")\n");
@@ -138,12 +138,12 @@ int __cdecl main(int cpszs, char *prgpszs[])
 
     if (!fCompress)
     {
-        long lwSwapped;
+        int32_t lwSwapped;
 
-        if (floSrc.cb < SIZEOF(long))
+        if (floSrc.cb < SIZEOF(int32_t))
             goto LBadSrc;
 
-        if (!floSrc.FReadRgb(&lwSig, SIZEOF(long), 0))
+        if (!floSrc.FReadRgb(&lwSig, SIZEOF(int32_t), 0))
         {
             fprintf(stderr, "Reading source file failed\n\n");
             goto LFail;
@@ -162,7 +162,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
             goto LFail;
         }
 
-        blck.Set(floSrc.pfil, SIZEOF(long), floSrc.cb - SIZEOF(long), fPacked);
+        blck.Set(floSrc.pfil, SIZEOF(int32_t), floSrc.cb - SIZEOF(int32_t), fPacked);
         if (fPacked && !blck.FUnpackData())
         {
             fprintf(stderr, "Unpacking source failed\n\n");
@@ -183,13 +183,13 @@ int __cdecl main(int cpszs, char *prgpszs[])
             lwSig = klwSigPackedFile;
         else
             lwSig = klwSigUnpackedFile;
-        if (!floDst.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0))
+        if (!floDst.pfil->FWriteRgb(&lwSig, SIZEOF(int32_t), 0))
         {
             fprintf(stderr, "Writing destination failed\n\n");
             goto LFail;
         }
 
-        floDst.fp = SIZEOF(long);
+        floDst.fp = SIZEOF(int32_t);
         floDst.cb = blck.Cb(fTrue);
     }
 
@@ -223,10 +223,10 @@ LFail:
     length is <= 4, assumes the characters are to be packed into a long
     (ala CTGs and FTGs).
 ***************************************************************************/
-bool _FGetLwFromSzs(PSZS pszs, long *plw)
+bool _FGetLwFromSzs(PSZS pszs, int32_t *plw)
 {
     STN stn;
-    long ich;
+    int32_t ich;
 
     stn.SetSzs(pszs);
     if (stn.FGetLw(plw))
@@ -248,7 +248,7 @@ bool _fEnableWarnings = fTrue;
 /***************************************************************************
     Warning proc called by Warn() macro
 ***************************************************************************/
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage)
 {
     if (_fEnableWarnings)
     {
@@ -264,7 +264,7 @@ void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
 /***************************************************************************
     Returning true breaks into the debugger.
 ***************************************************************************/
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage, void *pv, int32_t cb)
 {
     fprintf(stderr, "An assert occurred: \n");
     if (pszsMessage != pvNil)
@@ -291,7 +291,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
                 break;
 
             case 4:
-                fprintf(stderr, "%08lx", *(long *)pv);
+                fprintf(stderr, "%08lx", *(int32_t *)pv);
                 break;
             }
             printf("\n");

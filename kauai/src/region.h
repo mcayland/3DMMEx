@@ -39,7 +39,7 @@ class REGN : public REGN_PAR
     // The xp's are relative to _rc.xpLeft + _dxp. _pglxp is nil iff the region
     // is strictly rectangular.
     RC _rc;     // bounding rectangle
-    long _dxp;  // additional offset for xp values
+    int32_t _dxp;  // additional offset for xp values
     PGL _pglxp; // region data - see above
     HRGN _hrgn; // for HrgnEnsure
     PT _dptRgn; // offset of _hrgn relative to this region
@@ -57,10 +57,10 @@ class REGN : public REGN_PAR
     ~REGN(void);
 
     void SetRc(RC *prc = pvNil);
-    void Offset(long xp, long yp);
+    void Offset(int32_t xp, int32_t yp);
     bool FEmpty(RC *prc = pvNil);
     bool FIsRc(RC *prc = pvNil);
-    void Scale(long lwNumX, long lwDenX, long lwNumY, long lwDenY);
+    void Scale(int32_t lwNumX, int32_t lwDenX, int32_t lwNumY, int32_t lwDenY);
 
     bool FUnion(PREGN pregn1, PREGN pregn2 = pvNil);
     bool FUnionRc(RC *prc, PREGN pregn2 = pvNil);
@@ -85,26 +85,26 @@ class REGSC : public REGSC_PAR
 
   protected:
     PGL _pglxpSrc;    // the list of points
-    long *_pxpLimSrc; // the end of the list
-    long *_pxpLimCur; // the end of the current row
+    int32_t *_pxpLimSrc; // the end of the list
+    int32_t *_pxpLimCur; // the end of the current row
 
-    long _xpMinRow;   // the first xp value of the active part of the current row
-    long *_pxpMinRow; // the beginning of the active part of the currrent row
-    long *_pxpLimRow; // the end of the active part of the current row
-    long *_pxp;       // the current postion in the current row
+    int32_t _xpMinRow;   // the first xp value of the active part of the current row
+    int32_t *_pxpMinRow; // the beginning of the active part of the currrent row
+    int32_t *_pxpLimRow; // the end of the active part of the current row
+    int32_t *_pxp;       // the current postion in the current row
 
-    long _dxp;     // this gets added to all source xp values
-    long _xpRight; // the right edge of the active area - left edge is 0
+    int32_t _dxp;     // this gets added to all source xp values
+    int32_t _xpRight; // the right edge of the active area - left edge is 0
 
     // current state
     bool _fOn;    // whether the current xp is a transition to on or off
-    long _xp;     // the current xp
-    long _dyp;    // the remaining height that this scan is effective for
-    long _dypTot; // the remaining total height of the active area
+    int32_t _xp;     // the current xp
+    int32_t _dyp;    // the remaining height that this scan is effective for
+    int32_t _dypTot; // the remaining total height of the active area
 
     // When scanning rectangles, _pglxpSrc will be nil and _pxpSrc et al will
     // point into this.
-    long _rgxpRect[4];
+    int32_t _rgxpRect[4];
 
     void _InitCore(PGL pglxp, RC *prc, RC *prcRel);
     void _ScanNextCore(void);
@@ -116,7 +116,7 @@ class REGSC : public REGSC_PAR
 
     void Init(PREGN pregn, RC *prcRel);
     void InitRc(RC *prc, RC *prcRel);
-    void ScanNext(long dyp)
+    void ScanNext(int32_t dyp)
     {
         _dypTot -= dyp;
         if ((_dyp -= dyp) <= 0)
@@ -125,7 +125,7 @@ class REGSC : public REGSC_PAR
         _xp = _xpMinRow;
         _fOn = fTrue;
     }
-    long XpFetch(void)
+    int32_t XpFetch(void)
     {
         if (_pxp < _pxpLimRow - 1)
         {
@@ -150,15 +150,15 @@ class REGSC : public REGSC_PAR
     {
         return _fOn;
     }
-    long XpCur(void)
+    int32_t XpCur(void)
     {
         return _xp;
     }
-    long DypCur(void)
+    int32_t DypCur(void)
     {
         return _dyp;
     }
-    long CxpCur(void)
+    int32_t CxpCur(void)
     {
         return _pxpLimRow - _pxpMinRow + 1;
     }

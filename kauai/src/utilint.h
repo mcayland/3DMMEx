@@ -51,8 +51,8 @@ const uint32_t kgrfcmpNe = (fcmpGt | fcmpLt);
     Memory access asserts
 ****************************************/
 #ifdef DEBUG
-void AssertPvCb(const void *pv, long cb);
-inline void AssertNilOrPvCb(const void *pv, long cb)
+void AssertPvCb(const void *pv, int32_t cb);
+inline void AssertNilOrPvCb(const void *pv, int32_t cb)
 {
     if (pv != pvNil)
         AssertPvCb(pv, cb);
@@ -69,58 +69,58 @@ inline void AssertNilOrPvCb(const void *pv, long cb)
 /****************************************
     Scalar APIs
 ****************************************/
-inline bool FIn(long lw, long lwMin, long lwLim)
+inline bool FIn(int32_t lw, int32_t lwMin, int32_t lwLim)
 {
     return lw >= lwMin && lw < lwLim;
 }
-inline long LwBound(long lw, long lwMin, long lwMax)
+inline int32_t LwBound(int32_t lw, int32_t lwMin, int32_t lwMax)
 {
     return lw < lwMin ? lwMin : lw >= lwMax ? lwMax - 1 : lw;
 }
-void SortLw(long *plw1, long *plw2);
+void SortLw(int32_t *plw1, int32_t *plw2);
 
-inline int16_t SwHigh(long lw)
+inline int16_t SwHigh(int32_t lw)
 {
     return (int16_t)(lw >> 16);
 }
-inline int16_t SwLow(long lw)
+inline int16_t SwLow(int32_t lw)
 {
     return (int16_t)lw;
 }
-inline long LwHighLow(int16_t swHigh, int16_t swLow)
+inline int32_t LwHighLow(int16_t swHigh, int16_t swLow)
 {
-    return ((long)swHigh << 16) | (long)(uint16_t)swLow;
+    return ((int32_t)swHigh << 16) | (int32_t)(uint16_t)swLow;
 }
 inline uint32_t LuHighLow(uint16_t suHigh, uint16_t suLow)
 {
     return ((uint32_t)suHigh << 16) | (uint32_t)suLow;
 }
-inline uint8_t B0Lw(long lw)
+inline uint8_t B0Lw(int32_t lw)
 {
     return (uint8_t)lw;
 }
-inline uint8_t B1Lw(long lw)
+inline uint8_t B1Lw(int32_t lw)
 {
     return (uint8_t)(lw >> 8);
 }
-inline uint8_t B2Lw(long lw)
+inline uint8_t B2Lw(int32_t lw)
 {
     return (uint8_t)(lw >> 16);
 }
-inline uint8_t B3Lw(long lw)
+inline uint8_t B3Lw(int32_t lw)
 {
     return (uint8_t)(lw >> 24);
 }
-inline long LwFromBytes(uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0)
+inline int32_t LwFromBytes(uint8_t b3, uint8_t b2, uint8_t b1, uint8_t b0)
 {
-    return ((long)b3 << 24) | ((long)b2 << 16) | ((long)b1 << 8) | (long)b0;
+    return ((int32_t)b3 << 24) | ((int32_t)b2 << 16) | ((int32_t)b1 << 8) | (int32_t)b0;
 }
 
-inline uint16_t SuHigh(long lw)
+inline uint16_t SuHigh(int32_t lw)
 {
     return (uint16_t)((uint32_t)lw >> 16);
 }
-inline uint16_t SuLow(long lw)
+inline uint16_t SuLow(int32_t lw)
 {
     return (uint16_t)lw;
 }
@@ -142,7 +142,7 @@ inline uint16_t SuHighLow(uint8_t bHigh, uint8_t bLow)
     return ((uint16_t)bHigh << 8) | (uint16_t)bLow;
 }
 
-inline int16_t SwTruncLw(long lw)
+inline int16_t SwTruncLw(int32_t lw)
 {
     return lw <= kswMax ? (lw >= kswMin ? (int16_t)lw : kswMin) : kswMax;
 }
@@ -162,11 +162,11 @@ inline uint16_t SuMax(uint16_t su1, uint16_t su2)
 {
     return su1 >= su2 ? su1 : su2;
 }
-inline long LwMin(long lw1, long lw2)
+inline int32_t LwMin(int32_t lw1, int32_t lw2)
 {
     return lw1 < lw2 ? lw1 : lw2;
 }
-inline long LwMax(long lw1, long lw2)
+inline int32_t LwMax(int32_t lw1, int32_t lw2)
 {
     return lw1 >= lw2 ? lw1 : lw2;
 }
@@ -183,14 +183,14 @@ inline int16_t SwAbs(int16_t sw)
 {
     return sw < 0 ? -sw : sw;
 }
-inline long LwAbs(long lw)
+inline int32_t LwAbs(int32_t lw)
 {
     return lw < 0 ? -lw : lw;
 }
 
-inline long LwMulSw(int16_t sw1, int16_t sw2)
+inline int32_t LwMulSw(int16_t sw1, int16_t sw2)
 {
-    return (long)sw1 * sw2;
+    return (int32_t)sw1 * sw2;
 }
 
 #ifdef MC_68020
@@ -200,19 +200,19 @@ inline long LwMulSw(int16_t sw1, int16_t sw2)
 ***************************************************************************/
 extern "C"
 {
-    long __cdecl LwMulDiv(long lw, long lwMul, long lwDiv);
-    void __cdecl MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow);
+    int32_t __cdecl LwMulDiv(int32_t lw, int32_t lwMul, int32_t lwDiv);
+    void __cdecl MulLw(int32_t lw1, int32_t lw2, int32_t *plwHigh, uint32_t *pluLow);
     uint32_t __cdecl LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv);
     void __cdecl MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 }
-long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem);
+int32_t LwMulDivMod(int32_t lw, int32_t lwMul, int32_t lwDiv, int32_t *plwRem);
 
 #elif defined(IN_80386)
 
 /***************************************************************************
     Intel 80386 routines.
 ***************************************************************************/
-inline long LwMulDiv(long lw, long lwMul, long lwDiv)
+inline int32_t LwMulDiv(int32_t lw, int32_t lwMul, int32_t lwDiv)
 {
     AssertH(lwDiv != 0);
     __asm
@@ -225,7 +225,7 @@ inline long LwMulDiv(long lw, long lwMul, long lwDiv)
     return lw;
 }
 
-inline long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem)
+inline int32_t LwMulDivMod(int32_t lw, int32_t lwMul, int32_t lwDiv, int32_t *plwRem)
 {
     AssertH(lwDiv != 0);
     AssertVarMem(plwRem);
@@ -241,7 +241,7 @@ inline long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem)
     return lw;
 }
 
-void MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow);
+void MulLw(int32_t lw1, int32_t lw2, int32_t *plwHigh, uint32_t *pluLow);
 uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv);
 void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 
@@ -250,57 +250,57 @@ void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 /***************************************************************************
     Other processors.  These generally use floating point.
 ***************************************************************************/
-long LwMulDiv(long lw, long lwMul, long lwDiv);
-long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem);
-void MulLw(long lw1, long lw2, long *plwHigh, uint32_t *pluLow);
+int32_t LwMulDiv(int32_t lw, int32_t lwMul, int32_t lwDiv);
+int32_t LwMulDivMod(int32_t lw, int32_t lwMul, int32_t lwDiv, int32_t *plwRem);
+void MulLw(int32_t lw1, int32_t lw2, int32_t *plwHigh, uint32_t *pluLow);
 uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv);
 void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow);
 
 #endif //! MC_68020 && !IN_80386
 
-long LwMulDivAway(long lw, long lwMul, long lwDiv);
+int32_t LwMulDivAway(int32_t lw, int32_t lwMul, int32_t lwDiv);
 uint32_t LuMulDivAway(uint32_t lu, uint32_t luMul, uint32_t luDiv);
 
-uint32_t FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2);
+uint32_t FcmpCompareFracs(int32_t lwNum1, int32_t lwDen1, int32_t lwNum2, int32_t lwDen2);
 
-long LwDivAway(long lwNum, long lwDen);
-long LwDivClosest(long lwNum, long lwDen);
-long LwRoundAway(long lwSrc, long lwBase);
-long LwRoundToward(long lwSrc, long lwBase);
-long LwRoundClosest(long lwSrc, long lwBase);
+int32_t LwDivAway(int32_t lwNum, int32_t lwDen);
+int32_t LwDivClosest(int32_t lwNum, int32_t lwDen);
+int32_t LwRoundAway(int32_t lwSrc, int32_t lwBase);
+int32_t LwRoundToward(int32_t lwSrc, int32_t lwBase);
+int32_t LwRoundClosest(int32_t lwSrc, int32_t lwBase);
 
-inline long CbRoundToLong(long cb)
+inline int32_t CbRoundToLong(int32_t cb)
 {
-    return (cb + SIZEOF(long) - 1) & ~(long)(SIZEOF(long) - 1);
+    return (cb + SIZEOF(int32_t) - 1) & ~(int32_t)(SIZEOF(int32_t) - 1);
 }
-inline long CbRoundToShort(long cb)
+inline int32_t CbRoundToShort(int32_t cb)
 {
-    return (cb + SIZEOF(int16_t) - 1) & ~(long)(SIZEOF(int16_t) - 1);
+    return (cb + SIZEOF(int16_t) - 1) & ~(int32_t)(SIZEOF(int16_t) - 1);
 }
-inline long CbFromCbit(long cbit)
+inline int32_t CbFromCbit(int32_t cbit)
 {
     return (cbit + 7) / 8;
 }
-inline uint8_t Fbit(long ibit)
+inline uint8_t Fbit(int32_t ibit)
 {
     return 1 << (ibit & 0x0007);
 }
-inline long IbFromIbit(long ibit)
+inline int32_t IbFromIbit(int32_t ibit)
 {
     return ibit >> 3;
 }
 
-long LwGcd(long lw1, long lw2);
+int32_t LwGcd(int32_t lw1, int32_t lw2);
 uint32_t LuGcd(uint32_t lu1, uint32_t lu2);
 
-bool FAdjustIv(long *piv, long iv, long cvIns, long cvDel);
+bool FAdjustIv(int32_t *piv, int32_t iv, int32_t cvIns, int32_t cvDel);
 
 #ifdef DEBUG
-void AssertIn(long lw, long lwMin, long lwLim);
-long LwMul(long lw1, long lw2);
+void AssertIn(int32_t lw, int32_t lwMin, int32_t lwLim);
+int32_t LwMul(int32_t lw1, int32_t lw2);
 #else //! DEBUG
 #define AssertIn(lw, lwMin, lwLim)
-inline long LwMul(long lw1, long lw2)
+inline int32_t LwMul(int32_t lw1, int32_t lw2)
 {
     return lw1 * lw2;
 }
@@ -314,8 +314,8 @@ inline long LwMul(long lw1, long lw2)
 typedef uint32_t BOM;
 
 void SwapBytesBom(void *pv, BOM bom);
-void SwapBytesRgsw(void *psw, long csw);
-void SwapBytesRglw(void *plw, long clw);
+void SwapBytesRgsw(void *psw, int32_t csw);
+void SwapBytesRglw(void *plw, int32_t clw);
 
 const BOM bomNil = 0;
 const BOM kbomSwapShort = 0x40000000;
@@ -327,8 +327,8 @@ const BOM kbomLeaveLong = 0x80000000;
 #define BomField(bomNew, bomLast) ((bomNew) | ((bomLast) >> 2))
 
 #ifdef DEBUG
-void AssertBomRglw(BOM bom, long cb);
-void AssertBomRgsw(BOM bom, long cb);
+void AssertBomRglw(BOM bom, int32_t cb);
+void AssertBomRgsw(BOM bom, int32_t cb);
 #else //! DEBUG
 #define AssertBomRglw(bom, cb)
 #define AssertBomRgsw(bom, cb)
@@ -364,15 +364,15 @@ typedef class RC *PRC;
 class PT
 {
   public:
-    long xp;
-    long yp;
+    int32_t xp;
+    int32_t yp;
 
   public:
     // constructors
     PT(void)
     {
     }
-    PT(long xpT, long ypT)
+    PT(int32_t xpT, int32_t ypT)
     {
         xp = xpT, yp = ypT;
     }
@@ -414,7 +414,7 @@ class PT
         yp -= pt.yp;
         return *this;
     }
-    void Offset(long dxp, long dyp)
+    void Offset(int32_t dxp, int32_t dyp)
     {
         xp += dxp;
         yp += dyp;
@@ -430,17 +430,17 @@ class PT
 class RC
 {
   public:
-    long xpLeft;
-    long ypTop;
-    long xpRight;
-    long ypBottom;
+    int32_t xpLeft;
+    int32_t ypTop;
+    int32_t xpRight;
+    int32_t ypBottom;
 
   public:
     // constructors
     RC(void)
     {
     }
-    RC(long xpLeftT, long ypTopT, long xpRightT, long ypBottomT)
+    RC(int32_t xpLeftT, int32_t ypTopT, int32_t xpRightT, int32_t ypBottomT)
     {
         AssertThisMem();
         xpLeft = xpLeftT;
@@ -462,7 +462,7 @@ class RC
         AssertThisMem();
         xpLeft = ypTop = xpRight = ypBottom = 0;
     }
-    void Set(long xp1, long yp1, long xp2, long yp2)
+    void Set(int32_t xp1, int32_t yp1, int32_t xp2, int32_t yp2)
     {
         AssertThisMem();
         xpLeft = xp1;
@@ -532,22 +532,22 @@ class RC
 
     void Transform(uint32_t grfpt);
 
-    long Dxp(void)
+    int32_t Dxp(void)
     {
         AssertThisMem();
         return xpRight - xpLeft;
     }
-    long Dyp(void)
+    int32_t Dyp(void)
     {
         AssertThisMem();
         return ypBottom - ypTop;
     }
-    long XpCenter(void)
+    int32_t XpCenter(void)
     {
         AssertThisMem();
         return (xpLeft + xpRight) / 2;
     }
-    long YpCenter(void)
+    int32_t YpCenter(void)
     {
         AssertThisMem();
         return (ypTop + ypBottom) / 2;
@@ -559,14 +559,14 @@ class RC
     }
 
     void CenterOnRc(RC *prcBase);
-    void CenterOnPt(long xp, long yp);
+    void CenterOnPt(int32_t xp, int32_t yp);
     bool FIntersect(RC *prc1, RC *prc2);
     bool FIntersect(RC *prc);
-    bool FPtIn(long xp, long yp);
-    void InsetCopy(RC *prc, long dxp, long dyp);
-    void Inset(long dxp, long dyp);
-    void OffsetCopy(RC *prc, long dxp, long dyp);
-    void Offset(long dxp, long dyp);
+    bool FPtIn(int32_t xp, int32_t yp);
+    void InsetCopy(RC *prc, int32_t dxp, int32_t dyp);
+    void Inset(int32_t dxp, int32_t dyp);
+    void OffsetCopy(RC *prc, int32_t dxp, int32_t dyp);
+    void Offset(int32_t dxp, int32_t dyp);
     void OffsetToOrigin(void);
     void PinPt(PT *ppt);
     void PinToRc(RC *prc);
@@ -574,10 +574,10 @@ class RC
     void StretchToRc(RC *prcBase);
     void Union(RC *prc1, RC *prc2);
     void Union(RC *prc);
-    long LwArea(void);
+    int32_t LwArea(void);
     bool FContains(RC *prc);
-    void SetToCell(RC *prcSrc, long crcWidth, long crcHeight, long ircWidth, long ircHeight);
-    bool FMapToCell(long xp, long yp, long crcWidth, long crcHeight, long *pircWidth, long *pircHeight);
+    void SetToCell(RC *prcSrc, int32_t crcWidth, int32_t crcHeight, int32_t ircWidth, int32_t ircHeight);
+    bool FMapToCell(int32_t xp, int32_t yp, int32_t crcWidth, int32_t crcHeight, int32_t *pircWidth, int32_t *pircHeight);
 };
 
 /****************************************
@@ -588,13 +588,13 @@ class RAT
     ASSERT
 
   private:
-    long _lwNum;
-    long _lwDen;
+    int32_t _lwNum;
+    int32_t _lwDen;
 
     // the third argument of this constructor is bogus.  This constructor is
     // provided so the GCD calculation can be skipped when we already know
     // the numerator and denominator are relatively prime.
-    RAT(long lwNum, long lwDen, long lwJunk)
+    RAT(int32_t lwNum, int32_t lwDen, int32_t lwJunk)
     {
         // lwNum and lwDen are already relatively prime
         if (lwDen > 0)
@@ -616,18 +616,18 @@ class RAT
     {
         _lwDen = 0;
     }
-    RAT(long lw)
+    RAT(int32_t lw)
     {
         _lwNum = lw;
         _lwDen = 1;
     }
-    RAT(long lwNum, long lwDen)
+    RAT(int32_t lwNum, int32_t lwDen)
     {
         Set(lwNum, lwDen);
     }
-    void Set(long lwNum, long lwDen)
+    void Set(int32_t lwNum, int32_t lwDen)
     {
-        long lwGcd = LwGcd(lwNum, lwDen);
+        int32_t lwGcd = LwGcd(lwNum, lwDen);
         if (lwDen < 0)
             lwGcd = -lwGcd;
         _lwNum = lwNum / lwGcd;
@@ -642,49 +642,49 @@ class RAT
     }
 
     // access functions
-    long LwNumerator(void)
+    int32_t LwNumerator(void)
     {
         return _lwNum;
     }
-    long LwDenominator(void)
+    int32_t LwDenominator(void)
     {
         return _lwDen;
     }
-    long LwAway(void)
+    int32_t LwAway(void)
     {
         return LwDivAway(_lwNum, _lwDen);
     }
-    long LwToward(void)
+    int32_t LwToward(void)
     {
         return _lwNum / _lwDen;
     }
-    long LwClosest(void)
+    int32_t LwClosest(void)
     {
         return LwDivClosest(_lwNum, _lwDen);
     }
 
-    operator long(void)
+    operator int32_t(void)
     {
         return _lwNum / _lwDen;
     }
 
     // applying to a long (as a multiplicative operator)
-    long LwScale(long lw)
+    int32_t LwScale(int32_t lw)
     {
         return (_lwNum != _lwDen) ? LwMulDiv(lw, _lwNum, _lwDen) : lw;
     }
-    long LwUnscale(long lw)
+    int32_t LwUnscale(int32_t lw)
     {
         return (_lwNum != _lwDen) ? LwMulDiv(lw, _lwDen, _lwNum) : lw;
     }
 
     // operator functions
     friend RAT operator+(const RAT &rat1, const RAT &rat2);
-    friend RAT operator+(const RAT &rat, long lw)
+    friend RAT operator+(const RAT &rat, int32_t lw)
     {
         return RAT(rat._lwNum + LwMul(rat._lwDen, lw), rat._lwDen);
     }
-    friend RAT operator+(long lw, const RAT &rat)
+    friend RAT operator+(int32_t lw, const RAT &rat)
     {
         return RAT(rat._lwNum + LwMul(rat._lwDen, lw), rat._lwDen);
     }
@@ -693,48 +693,48 @@ class RAT
     {
         return rat1 + (-rat2);
     }
-    friend RAT operator-(const RAT &rat, long lw)
+    friend RAT operator-(const RAT &rat, int32_t lw)
     {
         return RAT(rat._lwNum + LwMul(rat._lwDen, -lw), rat._lwDen);
     }
-    friend RAT operator-(long lw, const RAT &rat)
+    friend RAT operator-(int32_t lw, const RAT &rat)
     {
         return RAT(rat._lwNum + LwMul(rat._lwDen, -lw), rat._lwDen);
     }
 
     friend RAT operator*(const RAT &rat1, const RAT &rat2)
     {
-        long lwGcd1 = LwGcd(rat1._lwNum, rat2._lwDen);
-        long lwGcd2 = LwGcd(rat1._lwDen, rat2._lwNum);
+        int32_t lwGcd1 = LwGcd(rat1._lwNum, rat2._lwDen);
+        int32_t lwGcd2 = LwGcd(rat1._lwDen, rat2._lwNum);
         return RAT(LwMul(rat1._lwNum / lwGcd1, rat2._lwNum / lwGcd2), LwMul(rat1._lwDen / lwGcd2, rat2._lwDen / lwGcd1),
                    0);
     }
-    friend RAT operator*(const RAT &rat, long lw)
+    friend RAT operator*(const RAT &rat, int32_t lw)
     {
-        long lwGcd = LwGcd(rat._lwDen, lw);
+        int32_t lwGcd = LwGcd(rat._lwDen, lw);
         return RAT(LwMul(lw / lwGcd, rat._lwNum), rat._lwDen / lwGcd, 0);
     }
-    friend RAT operator*(long lw, const RAT &rat)
+    friend RAT operator*(int32_t lw, const RAT &rat)
     {
-        long lwGcd = LwGcd(rat._lwDen, lw);
+        int32_t lwGcd = LwGcd(rat._lwDen, lw);
         return RAT(LwMul(lw / lwGcd, rat._lwNum), rat._lwDen / lwGcd, 0);
     }
 
     friend RAT operator/(const RAT &rat1, const RAT &rat2)
     {
-        long lwGcd1 = LwGcd(rat1._lwNum, rat2._lwNum);
-        long lwGcd2 = LwGcd(rat1._lwDen, rat2._lwDen);
+        int32_t lwGcd1 = LwGcd(rat1._lwNum, rat2._lwNum);
+        int32_t lwGcd2 = LwGcd(rat1._lwDen, rat2._lwDen);
         return RAT(LwMul(rat1._lwNum / lwGcd1, rat2._lwDen / lwGcd2), LwMul(rat1._lwDen / lwGcd2, rat2._lwNum / lwGcd1),
                    0);
     }
-    friend RAT operator/(const RAT &rat, long lw)
+    friend RAT operator/(const RAT &rat, int32_t lw)
     {
-        long lwGcd = LwGcd(rat._lwNum, lw);
+        int32_t lwGcd = LwGcd(rat._lwNum, lw);
         return RAT(rat._lwNum / lwGcd, LwMul(lw / lwGcd, rat._lwDen), 0);
     }
-    friend RAT operator/(long lw, const RAT &rat)
+    friend RAT operator/(int32_t lw, const RAT &rat)
     {
-        long lwGcd = LwGcd(rat._lwNum, lw);
+        int32_t lwGcd = LwGcd(rat._lwNum, lw);
         return RAT(LwMul(lw / lwGcd, rat._lwDen), rat._lwNum / lwGcd, 0);
     }
 
@@ -742,11 +742,11 @@ class RAT
     {
         return rat1._lwNum == rat2._lwNum && rat1._lwDen == rat2._lwDen;
     }
-    friend int operator==(const RAT &rat, long lw)
+    friend int operator==(const RAT &rat, int32_t lw)
     {
         return rat._lwDen == 1 && rat._lwNum == lw;
     }
-    friend int operator==(long lw, const RAT &rat)
+    friend int operator==(int32_t lw, const RAT &rat)
     {
         return rat._lwDen == 1 && rat._lwNum == lw;
     }
@@ -755,17 +755,17 @@ class RAT
     {
         return rat1._lwNum != rat2._lwNum || rat1._lwDen != rat2._lwDen;
     }
-    friend int operator!=(const RAT &rat, long lw)
+    friend int operator!=(const RAT &rat, int32_t lw)
     {
         return rat._lwDen != 1 || rat._lwNum != lw;
     }
-    friend int operator!=(long lw, const RAT &rat)
+    friend int operator!=(int32_t lw, const RAT &rat)
     {
         return rat._lwDen != 1 || rat._lwNum != lw;
     }
 
     // operator methods
-    RAT &operator=(long lw)
+    RAT &operator=(int32_t lw)
     {
         _lwNum = lw;
         _lwDen = 1;
@@ -777,7 +777,7 @@ class RAT
         *this = *this + rat;
         return *this;
     }
-    RAT &operator+=(long lw)
+    RAT &operator+=(int32_t lw)
     {
         *this = *this + lw;
         return *this;
@@ -788,7 +788,7 @@ class RAT
         *this = *this - rat;
         return *this;
     }
-    RAT &operator-=(long lw)
+    RAT &operator-=(int32_t lw)
     {
         *this = *this + (-lw);
         return *this;
@@ -799,7 +799,7 @@ class RAT
         *this = *this * rat;
         return *this;
     }
-    RAT &operator*=(long lw)
+    RAT &operator*=(int32_t lw)
     {
         *this = *this * lw;
         return *this;
@@ -810,7 +810,7 @@ class RAT
         *this = *this / rat;
         return *this;
     }
-    RAT &operator/=(long lw)
+    RAT &operator/=(int32_t lw)
     {
         *this = *this / lw;
         return *this;

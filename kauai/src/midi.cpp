@@ -40,7 +40,7 @@ MSTP::~MSTP(void)
     Initialize this midi stream parser to the given midi stream and use the
     given time as the start time.
 ***************************************************************************/
-void MSTP::Init(PMIDS pmids, uint32_t tsStart, long lwTempo)
+void MSTP::Init(PMIDS pmids, uint32_t tsStart, int32_t lwTempo)
 {
     AssertThis(0);
     AssertNilOrPo(pmids, 0);
@@ -82,8 +82,8 @@ bool MSTP::FGetEvent(PMIDEV pmidev, bool fAdvance)
     uint8_t bT;
     uint8_t *pbCur;
     MIDEV midev;
-    long cbT;
-    long ibSend;
+    int32_t cbT;
+    int32_t ibSend;
     uint32_t tsCur;
 
     ClearPb(&midev, SIZEOF(midev));
@@ -95,7 +95,7 @@ bool MSTP::FGetEvent(PMIDEV pmidev, bool fAdvance)
     for (pbCur = _pbCur; midev.cb == 0;)
     {
         // read the delta time
-        if (!_FReadVar(&pbCur, (long *)&midev.ts) || pbCur >= _pbLim)
+        if (!_FReadVar(&pbCur, (int32_t *)&midev.ts) || pbCur >= _pbLim)
             goto LFail;
         tsCur += midev.ts;
         midev.ts = tsCur;
@@ -229,7 +229,7 @@ LFail:
 /***************************************************************************
     Read a variable length quantity.
 ***************************************************************************/
-bool MSTP::_FReadVar(uint8_t **ppbCur, long *plw)
+bool MSTP::_FReadVar(uint8_t **ppbCur, int32_t *plw)
 {
     AssertThis(0);
     AssertVarMem(ppbCur);
@@ -313,7 +313,7 @@ void MIDS::MarkMem(void)
 /***************************************************************************
     A baco reader for a midi stream.
 ***************************************************************************/
-bool MIDS::FReadMids(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool MIDS::FReadMids(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, fblckReadable);
@@ -370,8 +370,8 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     // Midi chunk header
     struct MIDCHD
     {
-        long lwSig;
-        long cb;
+        int32_t lwSig;
+        int32_t cb;
     };
     VERIFY_STRUCT_SIZE(MIDCHD, 8);
 #define kbomMidchd 0xF0000000
@@ -404,9 +404,9 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     RAT ratTempo;
     uint32_t tsTempo, tsRawTempo, tsLast, ts, dts;
     uint8_t rgbT[5];
-    long cbT;
+    int32_t cbT;
     bool fSeq;
-    long imidtr, imidtrMin;
+    int32_t imidtr, imidtrMin;
     uint32_t tsMin;
     PMIDS pmids = pvNil;
     PGL pglmidtr = pvNil;
@@ -508,8 +508,8 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     if (FPure(fSmpte = (midhed.swDiv < 0)))
     {
         // SMPTE time
-        long fps = (uint8_t)(-BHigh(midhed.swDiv));
-        long ctickFrame = BLow(midhed.swDiv);
+        int32_t fps = (uint8_t)(-BHigh(midhed.swDiv));
+        int32_t ctickFrame = BLow(midhed.swDiv);
 
         if (fps == 29)
             fps = 30; // 29 is 30 drop frame - 30 is close enough for us
@@ -643,11 +643,11 @@ PMIDS MIDS::PmidsReadNative(FNI *pfni)
     Static method to convert a long to its midi file variable length
     equivalent.
 ***************************************************************************/
-long MIDS::_CbEncodeLu(uint32_t lu, uint8_t *prgb)
+int32_t MIDS::_CbEncodeLu(uint32_t lu, uint8_t *prgb)
 {
     AssertNilOrVarMem(prgb);
 
-    long ib;
+    int32_t ib;
 
     if (pvNil != prgb)
         prgb[0] = (uint8_t)(lu & 0x7F);
@@ -675,7 +675,7 @@ bool MIDS::FWrite(PBLCK pblck)
 /***************************************************************************
     Return the length of this midi stream on file.
 ***************************************************************************/
-long MIDS::CbOnFile(void)
+int32_t MIDS::CbOnFile(void)
 {
     AssertThis(0);
 

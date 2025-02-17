@@ -15,24 +15,24 @@
 ASSERTNAME
 
 #ifdef DEBUG
-long vcactSuspendAssertValid = 0;
-long vcactAVSave = 0;
-long vcactAV = kswMax;
+int32_t vcactSuspendAssertValid = 0;
+int32_t vcactAVSave = 0;
+int32_t vcactAV = kswMax;
 
 /*****************************************************************************
     Debugging stuff to track leaked allocated objects.
 ******************************************************************************/
 // Debugging object info.
-const long kclwStackDoi = 10;
+const int32_t kclwStackDoi = 10;
 struct DOI
 {
     int16_t swMagic;    // magic number == kswMagicMem
     int16_t cactRef;    // for marking memory and asserting on unused objects
     PSZS pszsFile;      // file NewObj appears in
-    long lwLine;        // line NewObj appears on
-    long cbTot;         // total size of the block, including the DOI
-    long lwThread;      // thread that allocated this
-    long rglwStack[10]; // what we get from following the EBP/A6 chain
+    int32_t lwLine;        // line NewObj appears on
+    int32_t cbTot;         // total size of the block, including the DOI
+    int32_t lwThread;      // thread that allocated this
+    int32_t rglwStack[10]; // what we get from following the EBP/A6 chain
     DOI *pdoiNext;      // singly linked list
     DOI **ppdoiPrev;
 };
@@ -75,7 +75,7 @@ RTCLASS(BLL)
 /***************************************************************************
     Returns the run-time class id (cls) of the class.
 ***************************************************************************/
-long BASE::Cls(void)
+int32_t BASE::Cls(void)
 {
     return kclsBASE;
 }
@@ -83,7 +83,7 @@ long BASE::Cls(void)
 /***************************************************************************
     Returns true iff cls is kclsBASE.
 ***************************************************************************/
-bool BASE::FIs(long cls)
+bool BASE::FIs(int32_t cls)
 {
     return kclsBASE == cls;
 }
@@ -91,7 +91,7 @@ bool BASE::FIs(long cls)
 /***************************************************************************
     Static method. Returns true iff cls is kclsBASE.
 ***************************************************************************/
-bool BASE::FWouldBe(long cls)
+bool BASE::FWouldBe(int32_t cls)
 {
     return kclsBASE == cls;
 }
@@ -177,7 +177,7 @@ void BASE::Release(void)
     of allocated objects for object leakage tracking.
 ***************************************************************************/
 #ifdef DEBUG
-void *BASE::operator new(size_t cb, PSZS pszsFile, long lwLine)
+void *BASE::operator new(size_t cb, PSZS pszsFile, int32_t lwLine)
 #else  //! DEBUG
 void *BASE::operator new(size_t cb)
 #endif //! DEBUG
@@ -224,13 +224,13 @@ void *BASE::operator new(size_t cb)
 
 #if defined(WIN) && defined(IN_80386)
         // follow the EBP chain....
-        long *plw;
-        long ilw;
+        int32_t *plw;
+        int32_t ilw;
 
         __asm { mov plw,ebp }
         for (ilw = 0; ilw < kclwStackDoi; ilw++)
         {
-            if (pvNil == plw || IsBadReadPtr(plw, 2 * SIZEOF(long)) || *plw <= (long)plw)
+            if (pvNil == plw || IsBadReadPtr(plw, 2 * SIZEOF(int32_t)) || *plw <= (int32_t)plw)
             {
                 pdoi->rglwStack[ilw] = 0;
                 plw = pvNil;
@@ -238,7 +238,7 @@ void *BASE::operator new(size_t cb)
             else
             {
                 pdoi->rglwStack[ilw] = plw[1];
-                plw = (long *)*plw;
+                plw = (int32_t *)*plw;
             }
         }
 #endif // WIN && IN_80386
@@ -281,7 +281,7 @@ void BASE::operator delete(void *pv)
 }
 
 #ifdef DEBUG
-void BASE::operator delete(void *pv, schar *pszsFile, long lwLine)
+void BASE::operator delete(void *pv, schar *pszsFile, int32_t lwLine)
 {
     BASE::operator delete(pv);
 }
@@ -441,8 +441,8 @@ void AssertUnmarkedObjs(void)
     DOI *pdoi;
     DOI *pdoiLast;
     bool fAssert;
-    long cdoiLost = 0;
-    long lwThread = LwThreadCur();
+    int32_t cdoiLost = 0;
+    int32_t lwThread = LwThreadCur();
 
     Assert(_pdoiFirstRaw == pvNil, "Raw list is not empty!");
 
@@ -479,7 +479,7 @@ void AssertUnmarkedObjs(void)
                               pbase->Cls(), pdoi->cbTot - SIZEOF(DOI));
                 stn.GetSzs(szs);
 
-                if (FAssertProc(pdoi->pszsFile, pdoi->lwLine, szs, pdoi->rglwStack, kclwStackDoi * SIZEOF(long)))
+                if (FAssertProc(pdoi->pszsFile, pdoi->lwLine, szs, pdoi->rglwStack, kclwStackDoi * SIZEOF(int32_t)))
                 {
                     Debugger();
                 }
@@ -509,7 +509,7 @@ void UnmarkAllObjs(void)
 
     BASE *pbase;
     DOI *pdoi;
-    long lwThread = LwThreadCur();
+    int32_t lwThread = LwThreadCur();
 
     Assert(_pdoiFirstRaw == pvNil, "Raw list is not empty!");
     for (pdoi = _pdoiFirst; pvNil != pdoi; pdoi = pdoi->pdoiNext)

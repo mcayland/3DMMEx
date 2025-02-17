@@ -91,9 +91,9 @@ class SCB : public SCB_PAR
     RTCLASS_DEC
 
   private:
-    long _val;
-    long _valMin;
-    long _valMax;
+    int32_t _val;
+    int32_t _valMin;
+    int32_t _valMax;
     bool _fVert : 1;
 #ifdef WIN
     bool _fSentEndScroll : 1;
@@ -103,40 +103,40 @@ class SCB : public SCB_PAR
     SCB(PGCB pgcb) : CTL(pgcb)
     {
     }
-    bool _FCreate(long val, long valMin, long valMax, uint32_t grfscb);
+    bool _FCreate(int32_t val, int32_t valMin, int32_t valMax, uint32_t grfscb);
 
 #ifdef MAC
     virtual void _ActivateHwnd(bool fActive);
 #endif // MAC
 
   public:
-    static long DxpNormal(void);
-    static long DypNormal(void);
+    static int32_t DxpNormal(void);
+    static int32_t DypNormal(void);
     static void GetStandardRc(uint32_t grfscb, RC *prcAbs, RC *prcRel);
     static void GetClientRc(uint32_t grfscb, RC *prcAbs, RC *prcRel);
-    static PSCB PscbNew(PGCB pgcb, uint32_t grfscb, long val = 0, long valMin = 0, long valMax = 0);
+    static PSCB PscbNew(PGCB pgcb, uint32_t grfscb, int32_t val = 0, int32_t valMin = 0, int32_t valMax = 0);
 
-    void SetVal(long val, bool fRedraw = fTrue);
-    void SetValMinMax(long val, long valMin, long valMax, bool fRedraw = fTrue);
+    void SetVal(int32_t val, bool fRedraw = fTrue);
+    void SetValMinMax(int32_t val, int32_t valMin, int32_t valMax, bool fRedraw = fTrue);
 
-    long Val(void)
+    int32_t Val(void)
     {
         return _val;
     }
-    long ValMin(void)
+    int32_t ValMin(void)
     {
         return _valMin;
     }
-    long ValMax(void)
+    int32_t ValMax(void)
     {
         return _valMax;
     }
 
 #ifdef MAC
-    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
 #endif // MAC
 #ifdef WIN
-    virtual void TrackScroll(long sb, long lwVal);
+    virtual void TrackScroll(int32_t sb, int32_t lwVal);
 #endif // WIN
 };
 

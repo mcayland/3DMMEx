@@ -59,7 +59,7 @@ PMUB MUB::PmubNew(uint32_t ridMenuBar)
 ***************************************************************************/
 void MUB::_Free(void)
 {
-    long imnu;
+    int32_t imnu;
     MNU mnu;
 
     ReleasePpo(&_pglmlst);
@@ -81,7 +81,7 @@ bool MUB::_FFetchRes(uint32_t ridMenuBar)
 {
     SMB **hnsmb;
     MNU mnu;
-    long cmnu, imnu;
+    int32_t cmnu, imnu;
 
     // get the menu list and record the menu id's
     if ((hnsmb = (SMB **)GetResource('MBAR', (ushort)ridMenuBar)) == hNil)
@@ -107,9 +107,9 @@ bool MUB::_FFetchRes(uint32_t ridMenuBar)
 
     for (imnu = 0; imnu < cmnu; imnu++)
     {
-        long cmni, imni;
+        int32_t cmni, imni;
         MNI mni;
-        long rtg;
+        int32_t rtg;
 
         _pglmnu->Get(imnu, &mnu);
         if (hNil == (mnu.hnsmu = GetMHandle((ushort)mnu.mid)))
@@ -124,10 +124,10 @@ bool MUB::_FFetchRes(uint32_t ridMenuBar)
             achar stName[kcbMaxSt];
             achar stz[kcbMaxStz];
             achar *pch, *pchLim;
-            long cch;
+            int32_t cch;
             achar chList;
             MLST mlst;
-            long onn;
+            int32_t onn;
 
             // This loop looks for kchCid and kchList in the menu name.
             // Following a kchCid, it extracts the number (in ascii).
@@ -273,7 +273,7 @@ bool MUB::FDoClick(EVT *pevt)
 {
     AssertThis(0);
     AssertVarMem(pevt);
-    long lwCode;
+    int32_t lwCode;
     CMD cmd;
     bool fRet = fFalse;
 
@@ -295,7 +295,7 @@ bool MUB::FDoKey(EVT *pevt)
 {
     AssertThis(0);
     AssertVarMem(pevt);
-    long lwCode;
+    int32_t lwCode;
     CMD cmd;
     bool fRet = fFalse;
 
@@ -317,13 +317,13 @@ bool MUB::FDoKey(EVT *pevt)
 void MUB::Clean(void)
 {
     AssertThis(0);
-    long imnu, imni;
+    int32_t imnu, imni;
     uint32_t grfeds;
     MNU mnu;
     MNI mni;
     CMD cmd;
     achar st[kcbMaxSt];
-    long cch;
+    int32_t cch;
 
     for (imnu = _pglmnu->IvMac(); imnu-- > 0;)
     {
@@ -345,7 +345,7 @@ void MUB::Clean(void)
             {
                 // need the item name in a GG
                 GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
-                cch = (long)*(uint8_t *)st;
+                cch = (int32_t)*(uint8_t *)st;
                 if ((cmd.pgg = GG::PggNew(0, 1, cch)) != pvNil)
                     AssertDo(cmd.pgg->FInsert(0, cch, st + 1), 0);
             }
@@ -371,12 +371,12 @@ void MUB::Clean(void)
 /***************************************************************************
     See if the given item is in a list.
 ***************************************************************************/
-bool MUB::_FFindMlst(long imnu, long imni, MLST *pmlst, long *pimlst)
+bool MUB::_FFindMlst(int32_t imnu, int32_t imni, MLST *pmlst, int32_t *pimlst)
 {
     AssertThis(0);
     AssertNilOrVarMem(pmlst);
     AssertNilOrVarMem(pimlst);
-    long imlst;
+    int32_t imlst;
     MLST mlst;
 
     if (pvNil == _pglmlst)
@@ -402,18 +402,18 @@ bool MUB::_FFindMlst(long imnu, long imni, MLST *pmlst, long *pimlst)
 /***************************************************************************
     Get a command struct for the command from the Mac menu item code.
 ***************************************************************************/
-bool MUB::_FGetCmdFromCode(long lwCode, CMD *pcmd)
+bool MUB::_FGetCmdFromCode(int32_t lwCode, CMD *pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long mid = SwHigh(lwCode);
-    long imni = SwLow(lwCode);
-    long cmni;
-    long imnu, cmnu;
+    int32_t mid = SwHigh(lwCode);
+    int32_t imni = SwLow(lwCode);
+    int32_t cmni;
+    int32_t imnu, cmnu;
     MNU mnu;
     MNI mni;
     achar st[kcbMaxSt];
-    long cch;
+    int32_t cch;
     bool fNeedName;
     MLST mlst;
 
@@ -451,7 +451,7 @@ bool MUB::_FGetCmdFromCode(long lwCode, CMD *pcmd)
     {
         // need the item name in a GG
         GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
-        cch = (long)*(uint8_t *)st;
+        cch = (int32_t)*(uint8_t *)st;
         if (pvNil == (pcmd->pgg = GG::PggNew(0, 1, cch)))
             return fFalse;
         AssertDo(pcmd->pgg->FInsert(0, cch, st + 1), 0);
@@ -464,14 +464,14 @@ bool MUB::_FGetCmdFromCode(long lwCode, CMD *pcmd)
     Adds an item identified by the given list cid, long parameter
     and string.
 ***************************************************************************/
-bool MUB::FAddListCid(long cid, long lw0, PSTZ pstz)
+bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTZ pstz)
 {
     AssertThis(0);
     AssertStz(pstz);
-    long imlst;
+    int32_t imlst;
     MLST mlst;
-    long imnuPrev;
-    long dimni;
+    int32_t imnuPrev;
+    int32_t dimni;
     bool fSeparator;
     bool fRet = fTrue;
 
@@ -538,14 +538,14 @@ bool MUB::FAddListCid(long cid, long lw0, PSTZ pstz)
 /***************************************************************************
     Insert a new menu item.
 ***************************************************************************/
-bool MUB::_FInsertMni(long imnu, long imni, long cid, long lw0, PSTZ pstz)
+bool MUB::_FInsertMni(int32_t imnu, int32_t imni, int32_t cid, int32_t lw0, PSTZ pstz)
 {
     AssertThis(0);
     AssertIn(imnu, 0, _pglmnu->IvMac());
     AssertStz(pstz);
     MNU mnu;
     MNI mni;
-    long cmni;
+    int32_t cmni;
 
     _pglmnu->Get(imnu, &mnu);
     AssertPo(mnu.pglmni, 0);
@@ -567,7 +567,7 @@ bool MUB::_FInsertMni(long imnu, long imni, long cid, long lw0, PSTZ pstz)
 /***************************************************************************
     Delete a menu item.
 ***************************************************************************/
-void MUB::_DeleteMni(long imnu, long imni)
+void MUB::_DeleteMni(int32_t imnu, int32_t imni)
 {
     AssertThis(0);
     AssertIn(imnu, 0, _pglmnu->IvMac());
@@ -585,17 +585,17 @@ void MUB::_DeleteMni(long imnu, long imni)
     or string.  If pstz is non-nil, it is used to find the item.
     If pstz is nil, lw0 is used to identify the item.
 ***************************************************************************/
-bool MUB::FRemoveListCid(long cid, long lw0, PSTZ pstz)
+bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTZ pstz)
 {
     AssertThis(0);
     AssertNilOrStz(pstz);
-    long imlst;
+    int32_t imlst;
     MLST mlst;
     MNU mnu;
     MNI mni;
     achar st[kcbMaxSt];
-    long imnuPrev;
-    long dimni, imni;
+    int32_t imnuPrev;
+    int32_t dimni, imni;
     bool fSeparator;
     bool fRet = fTrue;
 
@@ -676,13 +676,13 @@ bool MUB::FRemoveListCid(long cid, long lw0, PSTZ pstz)
 /***************************************************************************
     Removes all items identified by the given list cid.
 ***************************************************************************/
-bool MUB::FRemoveAllListCid(long cid)
+bool MUB::FRemoveAllListCid(int32_t cid)
 {
     AssertThis(0);
-    long imlst;
+    int32_t imlst;
     MLST mlst;
-    long imnuPrev;
-    long dimni;
+    int32_t imnuPrev;
+    int32_t dimni;
     bool fSeparator;
     bool fRet = fTrue;
 
@@ -751,14 +751,14 @@ bool MUB::FRemoveAllListCid(long cid)
     lwNew is set as the new long parameter and if pstzNew is non-nil,
     it is used as the new menu item text.
 ***************************************************************************/
-bool MUB::FChangeListCid(long cid, long lwOld, PSTZ pstzOld, long lwNew, PSTZ pstzNew)
+bool MUB::FChangeListCid(int32_t cid, int32_t lwOld, PSTZ pstzOld, int32_t lwNew, PSTZ pstzNew)
 {
     AssertThis(0);
     AssertNilOrStz(pstzOld);
     AssertNilOrStz(pstzNew);
-    long imlst;
+    int32_t imlst;
     MLST mlst;
-    long imni;
+    int32_t imni;
     MNI mni;
     MNU mnu;
     achar st[kcbMaxSt];
@@ -808,7 +808,7 @@ bool MUB::FChangeListCid(long cid, long lwOld, PSTZ pstzOld, long lwNew, PSTZ ps
 void MUB::MarkMem(void)
 {
     AssertThis(0);
-    long imnu;
+    int32_t imnu;
     MNU mnu;
 
     MUB_PAR::MarkMem();

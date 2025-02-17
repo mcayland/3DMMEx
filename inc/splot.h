@@ -37,11 +37,11 @@ class SPLOT : public SPLOT_PAR
     SFL _sflSound;
 
     /* Current selected content */
-    long _ithdBkgd;
-    long _ithdCam;
-    long _ithdActr;
-    long _ithdProp;
-    long _ithdSound;
+    int32_t _ithdBkgd;
+    int32_t _ithdCam;
+    int32_t _ithdActr;
+    int32_t _ithdProp;
+    int32_t _ithdSound;
 
     /* State of the SPLOT */
     bool _fDirty;
@@ -57,7 +57,7 @@ class SPLOT : public SPLOT_PAR
 
   public:
     ~SPLOT(void);
-    static PSPLOT PsplotNew(long hidPar, long hid, PRCA prca);
+    static PSPLOT PsplotNew(int32_t hidPar, int32_t hid, PRCA prca);
 
     bool FCmdInit(PCMD pcmd);
     bool FCmdSplot(PCMD pcmd);

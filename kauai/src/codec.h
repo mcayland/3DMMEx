@@ -27,11 +27,11 @@ class CODC : public CODC_PAR
 
   public:
     // return whether this codec can handle the given format.
-    virtual bool FCanDo(bool fEncode, long cfmt) = 0;
+    virtual bool FCanDo(bool fEncode, int32_t cfmt) = 0;
 
     // Decompression should be extremely fast. Compression may be
     // (painfully) slow.
-    virtual bool FConvert(bool fEncode, long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst) = 0;
+    virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst) = 0;
 };
 
 /***************************************************************************
@@ -47,29 +47,29 @@ class CODM : public CODM_PAR
     MARKMEM
 
   protected:
-    long _cfmtDef;
+    int32_t _cfmtDef;
     PCODC _pcodcDef;
     PGL _pglpcodc;
 
-    virtual bool _FFindCodec(bool fEncode, long cfmt, PCODC *ppcodc);
-    virtual bool _FCodePhq(long cfmt, HQ *phq);
-    virtual bool _FCode(long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst);
+    virtual bool _FFindCodec(bool fEncode, int32_t cfmt, PCODC *ppcodc);
+    virtual bool _FCodePhq(int32_t cfmt, HQ *phq);
+    virtual bool _FCode(int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
 
   public:
-    CODM(PCODC pcodc, long cfmt);
+    CODM(PCODC pcodc, int32_t cfmt);
     ~CODM(void);
 
-    long CfmtDefault(void)
+    int32_t CfmtDefault(void)
     {
         return _cfmtDef;
     }
-    void SetCfmtDefault(long cfmt);
+    void SetCfmtDefault(int32_t cfmt);
     virtual bool FRegisterCodec(PCODC pcodc);
-    virtual bool FCanDo(long cfmt, bool fEncode);
+    virtual bool FCanDo(int32_t cfmt, bool fEncode);
 
     // Gets the type of compression used on the block (assuming it is
     // compressed).
-    virtual bool FGetCfmtFromBlck(PBLCK pblck, long *pcfmt);
+    virtual bool FGetCfmtFromBlck(PBLCK pblck, int32_t *pcfmt);
 
     // FDecompress allows pvDst to be nil (in which case *pcbDst is filled
     // in with the buffer size required).
@@ -79,16 +79,16 @@ class CODM : public CODM_PAR
     {
         return _FCodePhq(cfmtNil, phq);
     }
-    bool FCompressPhq(HQ *phq, long cfmt = cfmtNil)
+    bool FCompressPhq(HQ *phq, int32_t cfmt = cfmtNil)
     {
         return _FCodePhq(cfmtNil == cfmt ? _cfmtDef : cfmt, phq);
     }
 
-    bool FDecompress(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst)
+    bool FDecompress(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst)
     {
         return _FCode(cfmtNil, pvSrc, cbSrc, pvDst, cbDst, pcbDst);
     }
-    bool FCompress(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst, long cfmt = cfmtNil)
+    bool FCompress(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst, int32_t cfmt = cfmtNil)
     {
         return _FCode(cfmtNil == cfmt ? _cfmtDef : cfmt, pvSrc, cbSrc, pvDst, cbDst, pcbDst);
     }
@@ -105,17 +105,17 @@ class KCDC : public KCDC_PAR
     RTCLASS_DEC
 
   protected:
-    bool _FEncode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst);
-    bool _FDecode(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst);
-    bool _FEncode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst);
-    bool _FDecode2(void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst);
+    bool _FEncode(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
+    bool _FDecode(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
+    bool _FEncode2(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
+    bool _FDecode2(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
 
   public:
-    virtual bool FCanDo(bool fEncode, long cfmt)
+    virtual bool FCanDo(bool fEncode, int32_t cfmt)
     {
         return kcfmtKauai2 == cfmt || kcfmtKauai == cfmt;
     }
-    virtual bool FConvert(bool fEncode, long cfmt, void *pvSrc, long cbSrc, void *pvDst, long cbDst, long *pcbDst);
+    virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
 };
 
 #endif //! CODEC_H

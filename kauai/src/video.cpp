@@ -22,14 +22,14 @@ RTCLASS(GVDW)
 BEGIN_CMD_MAP_BASE(GVDS)
 END_CMD_MAP(&GVDS::FCmdAll, pvNil, kgrfcmmAll)
 
-const long kcmhlGvds = kswMin; // put videos at the head of the list
+const int32_t kcmhlGvds = kswMin; // put videos at the head of the list
 
 /***************************************************************************
     Create a video - either an HWND based one, or just a video stream,
     depending on fHwndBased. pgobBase is assumed to be valid for the life
     of the video.
 ***************************************************************************/
-PGVID GVID::PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased, long hid)
+PGVID GVID::PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased, int32_t hid)
 {
     AssertPo(pfni, ffniFile);
     AssertPo(pgobBase, 0);
@@ -42,7 +42,7 @@ PGVID GVID::PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased, long hid)
 /***************************************************************************
     Constructor for a generic video.
 ***************************************************************************/
-GVID::GVID(long hid) : GVID_PAR(hid)
+GVID::GVID(int32_t hid) : GVID_PAR(hid)
 {
     AssertBaseThis(0);
 }
@@ -50,7 +50,7 @@ GVID::GVID(long hid) : GVID_PAR(hid)
 /***************************************************************************
     Constructor for video stream class.
 ***************************************************************************/
-GVDS::GVDS(long hid) : GVDS_PAR(hid)
+GVDS::GVDS(int32_t hid) : GVDS_PAR(hid)
 {
     AssertBaseThis(0);
 
@@ -140,7 +140,7 @@ bool GVDS::_FInit(PFNI pfni, PGOB pgobBase)
 /***************************************************************************
     Create a new video stream object.
 ***************************************************************************/
-PGVDS GVDS::PgvdsNew(PFNI pfni, PGOB pgobBase, long hid)
+PGVDS GVDS::PgvdsNew(PFNI pfni, PGOB pgobBase, int32_t hid)
 {
     AssertPo(pfni, ffniFile);
     PGVDS pgvds;
@@ -163,7 +163,7 @@ PGVDS GVDS::PgvdsNew(PFNI pfni, PGOB pgobBase, long hid)
 /***************************************************************************
     Return the number of frames in the video.
 ***************************************************************************/
-long GVDS::NfrMac(void)
+int32_t GVDS::NfrMac(void)
 {
     AssertThis(0);
     return _nfrMac;
@@ -172,7 +172,7 @@ long GVDS::NfrMac(void)
 /***************************************************************************
     Return the current frame of the video.
 ***************************************************************************/
-long GVDS::NfrCur(void)
+int32_t GVDS::NfrCur(void)
 {
     AssertThis(0);
     return _nfrCur;
@@ -182,7 +182,7 @@ long GVDS::NfrCur(void)
     Advance to a particular frame.  If we are playing, stop playing.  This
     only changes internal state and doesn't mark anything.
 ***************************************************************************/
-void GVDS::GotoNfr(long nfr)
+void GVDS::GotoNfr(int32_t nfr)
 {
     AssertThis(0);
     AssertIn(nfr, 0, _nfrMac);
@@ -331,7 +331,7 @@ void GVDS::AssertValid(uint32_t grf)
 /***************************************************************************
     Create a new video window.
 ***************************************************************************/
-PGVDW GVDW::PgvdwNew(PFNI pfni, PGOB pgobBase, long hid)
+PGVDW GVDW::PgvdwNew(PFNI pfni, PGOB pgobBase, int32_t hid)
 {
     AssertPo(pfni, ffniFile);
     PGVDW pgvdw;
@@ -354,7 +354,7 @@ PGVDW GVDW::PgvdwNew(PFNI pfni, PGOB pgobBase, long hid)
 /***************************************************************************
     Constructor for a video window.
 ***************************************************************************/
-GVDW::GVDW(long hid) : GVDW_PAR(hid)
+GVDW::GVDW(int32_t hid) : GVDW_PAR(hid)
 {
     AssertBaseThis(0);
 }
@@ -372,7 +372,7 @@ GVDW::~GVDW(void)
         MCI_GENERIC_PARMS mci;
         PSNDV psndv;
 
-        mciSendCommand(_lwDevice, MCI_CLOSE, MCI_WAIT, (long)&mci);
+        mciSendCommand(_lwDevice, MCI_CLOSE, MCI_WAIT, (int32_t)&mci);
         if (pvNil != vpsndm && pvNil != (psndv = vpsndm->PsndvFromCtg(kctgWave)))
         {
             psndv->Suspend(fFalse);
@@ -406,7 +406,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     mciOpen.dwStyle = WS_CHILD | WS_CLIPSIBLINGS | WS_DISABLED;
     mciOpen.hWndParent = _pgobBase->HwndContainer();
     if (0 != mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_ANIM_OPEN_PARENT | MCI_ANIM_OPEN_WS,
-                            (long)&mciOpen))
+                            (int32_t)&mciOpen))
     {
         goto LFail;
     }
@@ -422,7 +422,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     // REVIEW shonk: mmsystem.h defines MCI_ANIM_STATUS_HWND as 0x00004003,
     // which doesn't give us the hwnd. 4001 does!
     mciStatus.dwItem = 0x00004001;
-    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (long)&mciStatus))
+    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus))
     {
         goto LFail;
     }
@@ -432,14 +432,14 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     ClearPb(&mciStatus, SIZEOF(mciStatus));
     mciStatus.dwItem = MCI_STATUS_LENGTH;
     mciStatus.dwTrack = 1;
-    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (long)&mciStatus))
+    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus))
     {
         goto LFail;
     }
     _nfrMac = mciStatus.dwReturn;
 
     // get the rectangle
-    if (0 != mciSendCommand(_lwDevice, MCI_WHERE, MCI_ANIM_WHERE_SOURCE, (long)&mciRect))
+    if (0 != mciSendCommand(_lwDevice, MCI_WHERE, MCI_ANIM_WHERE_SOURCE, (int32_t)&mciRect))
     {
         goto LFail;
     }
@@ -466,7 +466,7 @@ LFail:
 /***************************************************************************
     Return the number of frames in the video.
 ***************************************************************************/
-long GVDW::NfrMac(void)
+int32_t GVDW::NfrMac(void)
 {
     AssertThis(0);
 
@@ -476,7 +476,7 @@ long GVDW::NfrMac(void)
 /***************************************************************************
     Return the current frame of the video.
 ***************************************************************************/
-long GVDW::NfrCur(void)
+int32_t GVDW::NfrCur(void)
 {
     AssertThis(0);
 
@@ -487,7 +487,7 @@ long GVDW::NfrCur(void)
     ClearPb(&mciStatus, SIZEOF(mciStatus));
     mciStatus.dwItem = MCI_STATUS_POSITION;
     mciStatus.dwTrack = 1;
-    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (long)&mciStatus))
+    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus))
     {
         Warn("getting position failed");
         return 0;
@@ -505,7 +505,7 @@ long GVDW::NfrCur(void)
     Advance to a particular frame.  If we are playing, stop playing.  This
     only changes internal state and doesn't mark anything.
 ***************************************************************************/
-void GVDW::GotoNfr(long nfr)
+void GVDW::GotoNfr(int32_t nfr)
 {
     AssertThis(0);
     AssertIn(nfr, 0, _nfrMac);
@@ -515,7 +515,7 @@ void GVDW::GotoNfr(long nfr)
 
     ClearPb(&mciSeek, SIZEOF(mciSeek));
     mciSeek.dwTo = nfr;
-    if (0 != mciSendCommand(_lwDevice, MCI_SEEK, MCI_TO, (long)&mciSeek))
+    if (0 != mciSendCommand(_lwDevice, MCI_SEEK, MCI_TO, (int32_t)&mciSeek))
     {
         Warn("seeking failed");
     }
@@ -543,7 +543,7 @@ bool GVDW::FPlaying(void)
     ClearPb(&mciStatus, SIZEOF(mciStatus));
     mciStatus.dwItem = MCI_STATUS_MODE;
     mciStatus.dwTrack = 1;
-    if (0 == mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (long)&mciStatus) &&
+    if (0 == mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus) &&
         (MCI_MODE_STOP == mciStatus.dwReturn || MCI_MODE_PAUSE == mciStatus.dwReturn))
     {
         _fPlaying = fFalse;
@@ -580,7 +580,7 @@ bool GVDW::FPlay(RC *prc)
 
     // start the movie playing
     ClearPb(&mciPlay, SIZEOF(mciPlay));
-    if (0 != mciSendCommand(_lwDevice, MCI_PLAY, MCI_MCIAVI_PLAY_WINDOW, (long)&mciPlay))
+    if (0 != mciSendCommand(_lwDevice, MCI_PLAY, MCI_MCIAVI_PLAY_WINDOW, (int32_t)&mciPlay))
     {
         return fFalse;
     }
@@ -623,7 +623,7 @@ void GVDW::Stop(void)
     MCI_GENERIC_PARMS mciPause;
 
     ClearPb(&mciPause, SIZEOF(mciPause));
-    mciSendCommand(_lwDevice, MCI_PAUSE, 0, (long)&mciPause);
+    mciSendCommand(_lwDevice, MCI_PAUSE, 0, (int32_t)&mciPause);
 #endif // WIN
 
 #ifdef MAC
@@ -666,7 +666,7 @@ void GVDW::_SetRc(void)
             // show the playback window
             ClearPb(&mciWindow, SIZEOF(mciWindow));
             mciWindow.nCmdShow = SW_SHOW;
-            mciSendCommand(_lwDevice, MCI_WINDOW, MCI_ANIM_WINDOW_STATE, (long)&mciWindow);
+            mciSendCommand(_lwDevice, MCI_WINDOW, MCI_ANIM_WINDOW_STATE, (int32_t)&mciWindow);
             _fVisible = fTrue;
         }
 #endif // WIN

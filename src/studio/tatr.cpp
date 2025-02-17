@@ -17,7 +17,7 @@ ASSERTNAME
 
 RTCLASS(TATR)
 
-const long kcmhlTheater = 0x10000;
+const int32_t kcmhlTheater = 0x10000;
 
 BEGIN_CMD_MAP(TATR, CMH)
 ON_CID_GEN(cidTheaterLoad, &TATR::FCmdLoad, pvNil)
@@ -29,7 +29,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Create a new TATR
 ***************************************************************************/
-PTATR TATR::PtatrNew(long kidParent)
+PTATR TATR::PtatrNew(int32_t kidParent)
 {
     PTATR ptatr;
 
@@ -48,7 +48,7 @@ PTATR TATR::PtatrNew(long kidParent)
 /***************************************************************************
     Initialize the TATR
 ***************************************************************************/
-bool TATR::_FInit(long kidParent)
+bool TATR::_FInit(int32_t kidParent)
 {
     AssertBaseThis(0);
 

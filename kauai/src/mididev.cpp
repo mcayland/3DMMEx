@@ -17,8 +17,8 @@ ASSERTNAME
 
 RTCLASS(MIDP)
 
-const long kdtsMinSlip = kdtsSecond / 30;
-const long klwInfinite = klwMax;
+const int32_t kdtsMinSlip = kdtsSecond / 30;
+const int32_t klwInfinite = klwMax;
 
 /***************************************************************************
     Midi output object.
@@ -47,11 +47,11 @@ class MIDO : public MIDO_PAR
     // is always relative to this
     DWORD _luVolSys;
 
-    long _vlmBase; // our current volume relative to _luVolSys.
-    long _vlm;     // our current volume relative to _vlmBase
+    int32_t _vlmBase; // our current volume relative to _luVolSys.
+    int32_t _vlm;     // our current volume relative to _vlmBase
 
-    long _sii; // the sound that owns the _hmo
-    long _spr; // the priority of sound that owns the _hmo
+    int32_t _sii; // the sound that owns the _hmo
+    int32_t _spr; // the priority of sound that owns the _hmo
 
     bool _fRestart : 1; // whether the device needs reset
     bool _fSetVol : 1;  // whether the volume needs set
@@ -66,12 +66,12 @@ class MIDO : public MIDO_PAR
     ~MIDO(void);
 
     void Suspend(bool fSuspend);
-    void SetVlm(long vlm);
-    long VlmCur(void);
+    void SetVlm(int32_t vlm);
+    int32_t VlmCur(void);
 
-    bool FPlay(long sii, long spr, MIDEV *pmidev, long vlm, uint32_t grfmido);
-    void Transition(long siiOld, long siiNew, long sprNew);
-    void Close(long sii);
+    bool FPlay(int32_t sii, int32_t spr, MIDEV *pmidev, int32_t vlm, uint32_t grfmido);
+    void Transition(int32_t siiOld, int32_t siiNew, int32_t sprNew);
+    void Close(int32_t sii);
 };
 
 static MIDO _mido;
@@ -152,7 +152,7 @@ void MIDO::_Reset(void)
     {
         // Reset channel pressure and pitch wheel on all channels
         MIDEV midev;
-        long iv;
+        int32_t iv;
 
         midiOutReset(_hmo);
 
@@ -210,7 +210,7 @@ void MIDO::Suspend(bool fSuspend)
 /***************************************************************************
     Set the master volume for the device.
 ***************************************************************************/
-void MIDO::SetVlm(long vlm)
+void MIDO::SetVlm(int32_t vlm)
 {
     AssertThis(0);
 
@@ -224,7 +224,7 @@ void MIDO::SetVlm(long vlm)
 /***************************************************************************
     Return the current master volume.
 ***************************************************************************/
-long MIDO::VlmCur(void)
+int32_t MIDO::VlmCur(void)
 {
     AssertThis(0);
 
@@ -235,7 +235,7 @@ long MIDO::VlmCur(void)
     Play the given midi event. Returns false iff the midi stream should be
     started over from the beginning in fast forward mode.
 ***************************************************************************/
-bool MIDO::FPlay(long sii, long spr, MIDEV *pmidev, long vlm, uint32_t grfmido)
+bool MIDO::FPlay(int32_t sii, int32_t spr, MIDEV *pmidev, int32_t vlm, uint32_t grfmido)
 {
     AssertThis(0);
     AssertVarMem(pmidev);
@@ -280,7 +280,7 @@ bool MIDO::FPlay(long sii, long spr, MIDEV *pmidev, long vlm, uint32_t grfmido)
     if (grfmido & fmidoFastFwd)
     {
         // don't play notes or do other stuff that doesn't affect
-        // the (long term) device state.
+        // the (int32_t term) device state.
         switch (pmidev->rgbSend[0] & 0xF0)
         {
         default:
@@ -314,7 +314,7 @@ LDone:
 /***************************************************************************
     siiOld is being replaced by siiNew.
 ***************************************************************************/
-void MIDO::Transition(long siiOld, long siiNew, long sprNew)
+void MIDO::Transition(int32_t siiOld, int32_t siiNew, int32_t sprNew)
 {
     AssertThis(0);
 
@@ -331,7 +331,7 @@ void MIDO::Transition(long siiOld, long siiNew, long sprNew)
 /***************************************************************************
     sii is going away.
 ***************************************************************************/
-void MIDO::Close(long sii)
+void MIDO::Close(int32_t sii)
 {
     AssertThis(0);
 
@@ -364,10 +364,10 @@ class MPQUE : public MPQUE_PAR
 
     MUTX _mutx;    // mutex to restrict access to member variables
     MSTP _mstp;    // midi stream parser
-    long _dtsSlip; // amount of time we've slipped by
-    long _sii;     // id and priority of sound we're currently serving
-    long _spr;
-    long _vlm;      // volume to play back at
+    int32_t _dtsSlip; // amount of time we've slipped by
+    int32_t _sii;     // id and priority of sound we're currently serving
+    int32_t _spr;
+    int32_t _vlm;      // volume to play back at
     MIDEV _midev;   // current midi event
     uint32_t _tsStart; // time current sound was started
     uint32_t _grfmido; // options for midi output device
@@ -382,14 +382,14 @@ class MPQUE : public MPQUE_PAR
 
     virtual bool _FInit(void);
     virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno);
-    virtual void _Queue(long isndinMin);
-    virtual void _PauseQueue(long isndinMin);
-    virtual void _ResumeQueue(long isndinMin);
+    virtual void _Queue(int32_t isndinMin);
+    virtual void _PauseQueue(int32_t isndinMin);
+    virtual void _ResumeQueue(int32_t isndinMin);
 
     static DWORD __stdcall _ThreadProc(LPVOID pv);
 
     DWORD _LuThread(void);
-    void _DoEvent(bool fRestart, long *pdtsWait);
+    void _DoEvent(bool fRestart, int32_t *pdtsWait);
     bool _FGetEvt(void);
     bool _FStartQueue(void);
     void _PlayEvt(void);
@@ -542,7 +542,7 @@ PBACO MPQUE::_PbacoFetch(PRCA prca, CTG ctg, CNO cno)
 /***************************************************************************
     The element at the head of the queue changed, notify the thread.
 ***************************************************************************/
-void MPQUE::_Queue(long isndinMin)
+void MPQUE::_Queue(int32_t isndinMin)
 {
     AssertThis(0);
 
@@ -561,7 +561,7 @@ void MPQUE::_Queue(long isndinMin)
 /***************************************************************************
     Pause the sound at the head of the queue.
 ***************************************************************************/
-void MPQUE::_PauseQueue(long isndinMin)
+void MPQUE::_PauseQueue(int32_t isndinMin)
 {
     AssertThis(0);
     SNDIN sndin;
@@ -583,7 +583,7 @@ void MPQUE::_PauseQueue(long isndinMin)
 /***************************************************************************
     Resume the sound at the head of the queue.
 ***************************************************************************/
-void MPQUE::_ResumeQueue(long isndinMin)
+void MPQUE::_ResumeQueue(int32_t isndinMin)
 {
     AssertThis(0);
 
@@ -609,7 +609,7 @@ DWORD MPQUE::_LuThread(void)
 {
     AssertThis(0);
     bool fRestart;
-    long dtsWait = klwInfinite;
+    int32_t dtsWait = klwInfinite;
 
     for (;;)
     {
@@ -637,7 +637,7 @@ DWORD MPQUE::_LuThread(void)
     Called when it's time to send the next midi event or when the queue
     has changed. Assumes the mutx is already checked out.
 ***************************************************************************/
-void MPQUE::_DoEvent(bool fRestart, long *pdtsWait)
+void MPQUE::_DoEvent(bool fRestart, int32_t *pdtsWait)
 {
     if (fRestart && !_FStartQueue())
         *pdtsWait = klwInfinite;
@@ -650,7 +650,7 @@ void MPQUE::_DoEvent(bool fRestart, long *pdtsWait)
     else
     {
         // we have a valid midi event
-        *pdtsWait = (long)(_midev.ts - TsCurrentSystem());
+        *pdtsWait = (int32_t)(_midev.ts - TsCurrentSystem());
         if (*pdtsWait <= 0)
         {
             // go ahead and send it
@@ -845,7 +845,7 @@ void MIDP::_Suspend(bool fSuspend)
 /***************************************************************************
     Set the volume.
 ***************************************************************************/
-void MIDP::SetVlm(long vlm)
+void MIDP::SetVlm(int32_t vlm)
 {
     AssertThis(0);
 
@@ -855,7 +855,7 @@ void MIDP::SetVlm(long vlm)
 /***************************************************************************
     Get the volume.
 ***************************************************************************/
-long MIDP::VlmCur(void)
+int32_t MIDP::VlmCur(void)
 {
     AssertThis(0);
 

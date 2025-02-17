@@ -27,17 +27,17 @@ class GVID : public GVID_PAR
     RTCLASS_DEC
 
   protected:
-    GVID(long hid);
+    GVID(int32_t hid);
     ~GVID(void)
     {
     }
 
   public:
-    static PGVID PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased = fFalse, long hid = hidNil);
+    static PGVID PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased = fFalse, int32_t hid = hidNil);
 
-    virtual long NfrMac(void) = 0;
-    virtual long NfrCur(void) = 0;
-    virtual void GotoNfr(long nfr) = 0;
+    virtual int32_t NfrMac(void) = 0;
+    virtual int32_t NfrCur(void) = 0;
+    virtual void GotoNfr(int32_t nfr) = 0;
 
     virtual bool FPlaying(void) = 0;
     virtual bool FPlay(RC *prc = pvNil) = 0;
@@ -61,11 +61,11 @@ class GVDS : public GVDS_PAR
     ASSERT
 
   protected:
-    long _nfrMac;
-    long _nfrCur;
-    long _nfrMarked;
-    long _dxp;
-    long _dyp;
+    int32_t _nfrMac;
+    int32_t _nfrCur;
+    int32_t _nfrMarked;
+    int32_t _dxp;
+    int32_t _dyp;
 
     PGOB _pgobBase;
     RC _rcPlay;
@@ -74,24 +74,24 @@ class GVDS : public GVDS_PAR
     bool _fPlaying;
 
 #ifdef WIN
-    long _dnfr;
+    int32_t _dnfr;
     PAVIFILE _pavif;
     PAVISTREAM _pavis;
     PGETFRAME _pavig;
     HDRAWDIB _hdd;
 #endif // WIN
 
-    GVDS(long hid);
+    GVDS(int32_t hid);
     ~GVDS(void);
 
     virtual bool _FInit(PFNI pfni, PGOB pgobBase);
 
   public:
-    static PGVDS PgvdsNew(PFNI pfni, PGOB pgobBase, long hid = hidNil);
+    static PGVDS PgvdsNew(PFNI pfni, PGOB pgobBase, int32_t hid = hidNil);
 
-    virtual long NfrMac(void);
-    virtual long NfrCur(void);
-    virtual void GotoNfr(long nfr);
+    virtual int32_t NfrMac(void);
+    virtual int32_t NfrCur(void);
+    virtual void GotoNfr(int32_t nfr);
 
     virtual bool FPlaying(void);
     virtual bool FPlay(RC *prc = pvNil);
@@ -117,31 +117,31 @@ class GVDW : public GVDW_PAR
 
   protected:
     HWND _hwndMovie;
-    long _lwDevice;
-    long _dxp;
-    long _dyp;
+    int32_t _lwDevice;
+    int32_t _dxp;
+    int32_t _dyp;
     RC _rc;
     RC _rcPlay;
-    long _nfrMac;
+    int32_t _nfrMac;
     PGOB _pgobBase;
-    long _cactPal;
+    int32_t _cactPal;
 
     bool _fDeviceOpen : 1;
     bool _fPlaying : 1;
     bool _fVisible : 1;
 
-    GVDW(long hid);
+    GVDW(int32_t hid);
     ~GVDW(void);
 
     virtual bool _FInit(PFNI pfni, PGOB pgobBase);
     virtual void _SetRc(void);
 
   public:
-    static PGVDW PgvdwNew(PFNI pfni, PGOB pgobBase, long hid = hidNil);
+    static PGVDW PgvdwNew(PFNI pfni, PGOB pgobBase, int32_t hid = hidNil);
 
-    virtual long NfrMac(void);
-    virtual long NfrCur(void);
-    virtual void GotoNfr(long nfr);
+    virtual int32_t NfrMac(void);
+    virtual int32_t NfrCur(void);
+    virtual void GotoNfr(int32_t nfr);
 
     virtual bool FPlaying(void);
     virtual bool FPlay(RC *prc = pvNil);

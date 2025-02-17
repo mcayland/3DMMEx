@@ -47,38 +47,38 @@ class GRPB : public GRPB_PAR
     MARKMEM
 
   private:
-    long _cb1;
-    long _cb2;
+    int32_t _cb1;
+    int32_t _cb2;
     HQ _hqData1;
     HQ _hqData2;
 
-    bool _FEnsureHqCb(HQ *phq, long cb, long cbMinGrow, long *pcb);
+    bool _FEnsureHqCb(HQ *phq, int32_t cb, int32_t cbMinGrow, int32_t *pcb);
 
   protected:
-    long _cbMinGrow1;
-    long _cbMinGrow2;
-    long _ivMac;
+    int32_t _cbMinGrow1;
+    int32_t _cbMinGrow2;
+    int32_t _ivMac;
 
-    uint8_t *_Qb1(long ib)
+    uint8_t *_Qb1(int32_t ib)
     {
         return (uint8_t *)QvFromHq(_hqData1) + ib;
     }
-    uint8_t *_Qb2(long ib)
+    uint8_t *_Qb2(int32_t ib)
     {
         return (uint8_t *)QvFromHq(_hqData2) + ib;
     }
-    long _Cb1(void)
+    int32_t _Cb1(void)
     {
         return _cb1;
     }
-    long _Cb2(void)
+    int32_t _Cb2(void)
     {
         return _cb2;
     }
-    bool _FEnsureSizes(long cbMin1, long cbMin2, uint32_t grfgrp);
-    bool _FWrite(PBLCK pblck, void *pv, long cb, long cb1, long cb2);
-    bool _FReadData(PBLCK pblck, long ib, long cb1, long cb2);
-    bool _FDup(PGRPB pgrpbDst, long cb1, long cb2);
+    bool _FEnsureSizes(int32_t cbMin1, int32_t cbMin2, uint32_t grfgrp);
+    bool _FWrite(PBLCK pblck, void *pv, int32_t cb, int32_t cb1, int32_t cb2);
+    bool _FReadData(PBLCK pblck, int32_t ib, int32_t cb1, int32_t cb2);
+    bool _FDup(PGRPB pgrpbDst, int32_t cb1, int32_t cb2);
 
     GRPB(void)
     {
@@ -97,17 +97,17 @@ class GRPB : public GRPB_PAR
         if (_hqData1 != hqNil)
             UnlockHq(_hqData1);
     }
-    long IvMac(void)
+    int32_t IvMac(void)
     {
         return _ivMac;
     }
-    virtual bool FFree(long iv) = 0;
-    virtual void Delete(long iv) = 0;
+    virtual bool FFree(int32_t iv) = 0;
+    virtual void Delete(int32_t iv) = 0;
 
     // writing
     virtual bool FWriteFlo(PFLO pflo, int16_t bo = kboCur, int16_t osk = koskCur);
     virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur) = 0;
-    virtual long CbOnFile(void) = 0;
+    virtual int32_t CbOnFile(void) = 0;
 };
 
 /****************************************
@@ -122,22 +122,22 @@ class GLB : public GLB_PAR
     ASSERT
 
   protected:
-    long _cbEntry;
+    int32_t _cbEntry;
 
-    GLB(long cb);
+    GLB(int32_t cb);
 
   public:
-    long CbEntry(void)
+    int32_t CbEntry(void)
     {
         return _cbEntry;
     }
-    void *QvGet(long iv);
-    void Get(long iv, void *pv);
-    void Put(long iv, void *pv);
-    void *PvLock(long iv);
-    void SetMinGrow(long cvAdd);
+    void *QvGet(int32_t iv);
+    void Get(int32_t iv, void *pv);
+    void Put(int32_t iv, void *pv);
+    void *PvLock(int32_t iv);
+    void SetMinGrow(int32_t cvAdd);
 
-    virtual bool FAdd(void *pv, long *piv = pvNil) = 0;
+    virtual bool FAdd(void *pv, int32_t *piv = pvNil) = 0;
 };
 
 /****************************************
@@ -150,31 +150,31 @@ class GL : public GL_PAR
     RTCLASS_DEC
 
   protected:
-    GL(long cb);
+    GL(int32_t cb);
     bool _FRead(PBLCK pblck, int16_t *pbo, int16_t *posk);
 
   public:
     // static methods
-    static PGL PglNew(long cb, long cvInit = 0);
+    static PGL PglNew(int32_t cb, int32_t cvInit = 0);
     static PGL PglRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
-    static PGL PglRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PGL PglRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PGL PglDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(void *pv, long *piv = pvNil);
-    virtual void Delete(long iv);
+    virtual bool FAdd(void *pv, int32_t *piv = pvNil);
+    virtual void Delete(int32_t iv);
     virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual long CbOnFile(void);
-    virtual bool FFree(long iv);
+    virtual int32_t CbOnFile(void);
+    virtual bool FFree(int32_t iv);
 
     // new methods
-    void Delete(long iv, long cv);
-    bool FInsert(long iv, void *pv = pvNil, long cv = 1);
-    bool FSetIvMac(long ivMacNew);
-    bool FEnsureSpace(long cvAdd, uint32_t grfgrp = fgrpNil);
-    void Move(long ivSrc, long ivTarget);
+    void Delete(int32_t iv, int32_t cv);
+    bool FInsert(int32_t iv, void *pv = pvNil, int32_t cv = 1);
+    bool FSetIvMac(int32_t ivMacNew);
+    bool FEnsureSpace(int32_t cvAdd, uint32_t grfgrp = fgrpNil);
+    void Move(int32_t ivSrc, int32_t ivTarget);
     bool FPush(void *pv)
     {
         return FInsert(_ivMac, pv);
@@ -201,37 +201,37 @@ class AL : public AL_PAR
     ASSERT
 
   private:
-    long _cvFree;
+    int32_t _cvFree;
 
   private:
     // section 2 of the data contains a bit array
-    uint8_t *_Qgrfbit(long iv)
+    uint8_t *_Qgrfbit(int32_t iv)
     {
         return _Qb2(IbFromIbit(iv));
     }
 
   protected:
-    AL(long cb);
+    AL(int32_t cb);
     bool _FRead(PBLCK pblck, int16_t *pbo, int16_t *posk);
 
   public:
     // static methods
-    static PAL PalNew(long cb, long cvInit = 0);
+    static PAL PalNew(int32_t cb, int32_t cvInit = 0);
     static PAL PalRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
-    static PAL PalRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PAL PalRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PAL PalDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(void *pv, long *piv = pvNil);
-    virtual void Delete(long iv);
+    virtual bool FAdd(void *pv, int32_t *piv = pvNil);
+    virtual void Delete(int32_t iv);
     virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual long CbOnFile(void);
-    virtual bool FFree(long iv);
+    virtual int32_t CbOnFile(void);
+    virtual bool FFree(int32_t iv);
 
     // new methods
-    bool FEnsureSpace(long cvAdd, uint32_t grfgrp = fgrpNil);
+    bool FEnsureSpace(int32_t cvAdd, uint32_t grfgrp = fgrpNil);
     void DeleteAll(void);
 };
 
@@ -250,20 +250,20 @@ class GGB : public GGB_PAR
   protected:
     struct LOC
     {
-        long bv;
-        long cb;
+        int32_t bv;
+        int32_t cb;
     };
 
-    long _bvMac;
-    long _clocFree;
-    long _cbFixed;
+    int32_t _bvMac;
+    int32_t _clocFree;
+    int32_t _cbFixed;
 
   protected:
-    GGB(long cbFixed, bool fAllowFree);
+    GGB(int32_t cbFixed, bool fAllowFree);
 
-    void _RemoveRgb(long bv, long cb);
-    void _AdjustLocs(long bvMin, long bvLim, long dcb);
-    LOC *_Qloc(long iloc)
+    void _RemoveRgb(int32_t bv, int32_t cb);
+    void _AdjustLocs(int32_t bvMin, int32_t bvLim, int32_t dcb);
+    LOC *_Qloc(int32_t iloc)
     {
         return (LOC *)_Qb2(LwMul(iloc, SIZEOF(LOC)));
     }
@@ -274,37 +274,37 @@ class GGB : public GGB_PAR
   public:
     // methods required by parent class
     virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual long CbOnFile(void);
-    virtual bool FFree(long iv);
+    virtual int32_t CbOnFile(void);
+    virtual bool FFree(int32_t iv);
 
-    bool FEnsureSpace(long cvAdd, long cbAdd, uint32_t grfgrp = fgrpNil);
-    void SetMinGrow(long cvAdd, long cbAdd);
+    bool FEnsureSpace(int32_t cvAdd, int32_t cbAdd, uint32_t grfgrp = fgrpNil);
+    void SetMinGrow(int32_t cvAdd, int32_t cbAdd);
 
-    virtual bool FAdd(long cb, long *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil) = 0;
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil) = 0;
 
     // access to the fixed portion
-    long CbFixed(void)
+    int32_t CbFixed(void)
     {
         return _cbFixed;
     }
-    void *QvFixedGet(long iv, long *pcbVar = pvNil);
-    void *PvFixedLock(long iv, long *pcbVar = pvNil);
-    void GetFixed(long iv, void *pv);
-    void PutFixed(long iv, void *pv);
+    void *QvFixedGet(int32_t iv, int32_t *pcbVar = pvNil);
+    void *PvFixedLock(int32_t iv, int32_t *pcbVar = pvNil);
+    void GetFixed(int32_t iv, void *pv);
+    void PutFixed(int32_t iv, void *pv);
 
     // access to the variable portion
-    long Cb(long iv);
-    void *QvGet(long iv, long *pcb = pvNil);
-    void *PvLock(long iv, long *pcb = pvNil);
-    void Get(long iv, void *pv);
-    void Put(long iv, void *pv);
-    bool FPut(long iv, long cb, void *pv);
-    void GetRgb(long iv, long bv, long cb, void *pv);
-    void PutRgb(long iv, long bv, long cb, void *pv);
-    void DeleteRgb(long iv, long bv, long cb);
-    bool FInsertRgb(long iv, long bv, long cb, const void *pv);
-    bool FMoveRgb(long ivSrc, long bvSrc, long ivDst, long bvDst, long cb);
-    void Merge(long ivSrc, long ivDst);
+    int32_t Cb(int32_t iv);
+    void *QvGet(int32_t iv, int32_t *pcb = pvNil);
+    void *PvLock(int32_t iv, int32_t *pcb = pvNil);
+    void Get(int32_t iv, void *pv);
+    void Put(int32_t iv, void *pv);
+    bool FPut(int32_t iv, int32_t cb, void *pv);
+    void GetRgb(int32_t iv, int32_t bv, int32_t cb, void *pv);
+    void PutRgb(int32_t iv, int32_t bv, int32_t cb, void *pv);
+    void DeleteRgb(int32_t iv, int32_t bv, int32_t cb);
+    bool FInsertRgb(int32_t iv, int32_t bv, int32_t cb, const void *pv);
+    bool FMoveRgb(int32_t ivSrc, int32_t bvSrc, int32_t ivDst, int32_t bvDst, int32_t cb);
+    void Merge(int32_t ivSrc, int32_t ivDst);
 };
 
 /****************************************
@@ -318,28 +318,28 @@ class GG : public GG_PAR
     ASSERT
 
   protected:
-    GG(long cbFixed) : GGB(cbFixed, fFalse)
+    GG(int32_t cbFixed) : GGB(cbFixed, fFalse)
     {
     }
 
   public:
     // static methods
-    static PGG PggNew(long cbFixed = 0, long cvInit = 0, long cbInit = 0);
+    static PGG PggNew(int32_t cbFixed = 0, int32_t cvInit = 0, int32_t cbInit = 0);
     static PGG PggRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
-    static PGG PggRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PGG PggRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PGG PggDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(long cb, long *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil);
-    virtual void Delete(long iv);
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil);
+    virtual void Delete(int32_t iv);
 
     // new methods
-    bool FInsert(long iv, long cb, const void *pv = pvNil, const void *pvFixed = pvNil);
-    bool FCopyEntries(PGG pggSrc, long ivSrc, long ivDst, long cv);
-    void Move(long ivSrc, long ivTarget);
-    void Swap(long iv1, long iv2);
+    bool FInsert(int32_t iv, int32_t cb, const void *pv = pvNil, const void *pvFixed = pvNil);
+    bool FCopyEntries(PGG pggSrc, int32_t ivSrc, int32_t ivDst, int32_t cv);
+    void Move(int32_t ivSrc, int32_t ivTarget);
+    void Swap(int32_t iv1, int32_t iv2);
 };
 
 /****************************************
@@ -353,22 +353,22 @@ class AG : public AG_PAR
     ASSERT
 
   protected:
-    AG(long cbFixed) : GGB(cbFixed, fTrue)
+    AG(int32_t cbFixed) : GGB(cbFixed, fTrue)
     {
     }
 
   public:
     // static methods
-    static PAG PagNew(long cbFixed = 0, long cvInit = 0, long cbInit = 0);
+    static PAG PagNew(int32_t cbFixed = 0, int32_t cvInit = 0, int32_t cbInit = 0);
     static PAG PagRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
-    static PAG PagRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PAG PagRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PAG PagDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(long cb, long *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil);
-    virtual void Delete(long iv);
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil);
+    virtual void Delete(int32_t iv);
 };
 
 /****************************************
@@ -382,7 +382,7 @@ enum
     fgstAllowFree = 4,
 };
 
-const long kcchMaxGst = kcchMaxStn;
+const int32_t kcchMaxGst = kcchMaxStn;
 
 /****************************************
     GSTB is a virtual class supporting
@@ -396,24 +396,24 @@ class GSTB : public GSTB_PAR
     ASSERT
 
   protected:
-    long _cbEntry;
-    long _bstMac;
-    long _cbstFree; // this is cvNil for non-allocated GSTBs
+    int32_t _cbEntry;
+    int32_t _bstMac;
+    int32_t _cbstFree; // this is cvNil for non-allocated GSTBs
 
   protected:
-    GSTB(long cbExtra, uint32_t grfgst);
+    GSTB(int32_t cbExtra, uint32_t grfgst);
 
-    long _Bst(long ibst)
+    int32_t _Bst(int32_t ibst)
     {
-        return *(long *)_Qb2(LwMul(ibst, _cbEntry));
+        return *(int32_t *)_Qb2(LwMul(ibst, _cbEntry));
     }
-    long *_Qbst(long ibst)
+    int32_t *_Qbst(int32_t ibst)
     {
-        return (long *)_Qb2(LwMul(ibst, _cbEntry));
+        return (int32_t *)_Qb2(LwMul(ibst, _cbEntry));
     }
-    PST _Qst(long ibst);
-    void _RemoveSt(long bst);
-    void _AppendRgch(const achar *prgch, long cch);
+    PST _Qst(int32_t ibst);
+    void _RemoveSt(int32_t bst);
+    void _AppendRgch(const achar *prgch, int32_t cch);
     void _SwapBytesRgbst(void);
     void _TranslateGrst(int16_t osk, bool fToCur);
     bool _FTranslateGrst(int16_t osk);
@@ -424,34 +424,34 @@ class GSTB : public GSTB_PAR
   public:
     // methods required by parent class
     virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual long CbOnFile(void);
-    virtual bool FFree(long istn);
+    virtual int32_t CbOnFile(void);
+    virtual bool FFree(int32_t istn);
 
-    bool FEnsureSpace(long cstnAdd, long cchAdd, uint32_t grfgrp = fgrpNil);
-    void SetMinGrow(long cstnAdd, long cchAdd);
+    bool FEnsureSpace(int32_t cstnAdd, int32_t cchAdd, uint32_t grfgrp = fgrpNil);
+    void SetMinGrow(int32_t cstnAdd, int32_t cchAdd);
 
-    virtual bool FAddRgch(const achar *prgch, long cch, const void *pvExtra = pvNil, long *pistn = pvNil) = 0;
-    virtual bool FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst = fgstNil);
+    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil, int32_t *pistn = pvNil) = 0;
+    virtual bool FFindRgch(const achar *prgch, int32_t cch, int32_t *pistn, uint32_t grfgst = fgstNil);
 
-    long IstnMac(void)
+    int32_t IstnMac(void)
     {
         return _ivMac;
     }
-    long CbExtra(void)
+    int32_t CbExtra(void)
     {
-        return _cbEntry - SIZEOF(long);
+        return _cbEntry - SIZEOF(int32_t);
     }
 
-    bool FAddStn(PSTN pstn, void *pvExtra = pvNil, long *pistn = pvNil);
-    bool FPutRgch(long istn, const achar *prgch, long cch);
-    bool FPutStn(long istn, PSTN pstn);
-    void GetRgch(long istn, achar *prgch, long cchMax, long *pcch);
-    void GetStn(long istn, PSTN pstn);
-    bool FFindStn(PSTN pstn, long *pistn, uint32_t grfgst = fgstNil);
+    bool FAddStn(PSTN pstn, void *pvExtra = pvNil, int32_t *pistn = pvNil);
+    bool FPutRgch(int32_t istn, const achar *prgch, int32_t cch);
+    bool FPutStn(int32_t istn, PSTN pstn);
+    void GetRgch(int32_t istn, achar *prgch, int32_t cchMax, int32_t *pcch);
+    void GetStn(int32_t istn, PSTN pstn);
+    bool FFindStn(PSTN pstn, int32_t *pistn, uint32_t grfgst = fgstNil);
 
-    void GetExtra(long istn, void *pv);
-    void PutExtra(long istn, void *pv);
-    bool FFindExtra(const void *prgbFind, PSTN pstn = pvNil, long *pistn = pvNil);
+    void GetExtra(int32_t istn, void *pv);
+    void PutExtra(int32_t istn, void *pv);
+    bool FFindExtra(const void *prgbFind, PSTN pstn = pvNil, int32_t *pistn = pvNil);
 };
 
 /****************************************
@@ -465,28 +465,28 @@ class GST : public GST_PAR
     ASSERT
 
   protected:
-    GST(long cbExtra) : GSTB(cbExtra, fgstNil)
+    GST(int32_t cbExtra) : GSTB(cbExtra, fgstNil)
     {
     }
 
   public:
     // static methods
-    static PGST PgstNew(long cbExtra = 0, long cstnInit = 0, long cchInit = 0);
+    static PGST PgstNew(int32_t cbExtra = 0, int32_t cstnInit = 0, int32_t cchInit = 0);
     static PGST PgstRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
-    static PGST PgstRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PGST PgstRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PGST PgstDup(void);
 
     // methods required by parent class
-    virtual bool FAddRgch(const achar *prgch, long cch, const void *pvExtra = pvNil, long *pistn = pvNil);
-    virtual bool FFindRgch(const achar *prgch, long cch, long *pistn, uint32_t grfgst = fgstNil);
-    virtual void Delete(long istn);
+    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil, int32_t *pistn = pvNil);
+    virtual bool FFindRgch(const achar *prgch, int32_t cch, int32_t *pistn, uint32_t grfgst = fgstNil);
+    virtual void Delete(int32_t istn);
 
     // new methods
-    bool FInsertRgch(long istn, const achar *prgch, long cch, const void *pvExtra = pvNil);
-    bool FInsertStn(long istn, PSTN pstn, const void *pvExtra = pvNil);
-    void Move(long istnSrc, long istnDst);
+    bool FInsertRgch(int32_t istn, const achar *prgch, int32_t cch, const void *pvExtra = pvNil);
+    bool FInsertStn(int32_t istn, PSTN pstn, const void *pvExtra = pvNil);
+    void Move(int32_t istnSrc, int32_t istnDst);
 };
 
 /****************************************
@@ -500,22 +500,22 @@ class AST : public AST_PAR
     ASSERT
 
   protected:
-    AST(long cbExtra) : GSTB(cbExtra, fgstAllowFree)
+    AST(int32_t cbExtra) : GSTB(cbExtra, fgstAllowFree)
     {
     }
 
   public:
     // static methods
-    static PAST PastNew(long cbExtra = 0, long cstnInit = 0, long cchInit = 0);
+    static PAST PastNew(int32_t cbExtra = 0, int32_t cstnInit = 0, int32_t cchInit = 0);
     static PAST PastRead(PBLCK pblck, int16_t *pbo = pvNil, int16_t *posk = pvNil);
-    static PAST PastRead(PFIL pfil, FP fp, long cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
+    static PAST PastRead(PFIL pfil, FP fp, int32_t cb, int16_t *pbo = pvNil, int16_t *posk = pvNil);
 
     // duplication
     PAST PastDup(void);
 
     // methods required by parent class
-    virtual bool FAddRgch(const achar *prgch, long cch, const void *pvExtra = pvNil, long *pistn = pvNil);
-    virtual void Delete(long istn);
+    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil, int32_t *pistn = pvNil);
+    virtual void Delete(int32_t istn);
 };
 
 #endif //! GROUPS_H

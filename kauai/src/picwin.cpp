@@ -65,7 +65,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
     PICH *ppich;
     PPIC ppic;
     RC rc;
-    long cb;
+    int32_t cb;
 
     if (!pblck->FUnpackData())
         return pvNil;
@@ -103,7 +103,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
 /***************************************************************************
     Return the total size on file.
 ***************************************************************************/
-long PIC::CbOnFile(void)
+int32_t PIC::CbOnFile(void)
 {
     AssertThis(0);
     return GetEnhMetaFileBits(_hpic, 0, pvNil) + SIZEOF(PICH);
@@ -116,7 +116,7 @@ bool PIC::FWrite(PBLCK pblck)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
-    long cb, cbTot;
+    int32_t cb, cbTot;
     bool fT;
     PICH *ppich;
 
@@ -204,21 +204,21 @@ HPIC PIC::_HpicReadWmf(FNI *pfni)
     MEFH mefh;
     METAHEADER mh;
     HPIC hpic;
-    long lw;
-    long cb;
+    int32_t lw;
+    int32_t cb;
     PFIL pfil;
     void *pv;
     bool fT;
     FP fp;
 
-    const long kcbMefh = 22;
-    const long kcbMetaHeader = 18;
+    const int32_t kcbMefh = 22;
+    const int32_t kcbMetaHeader = 18;
 
     if (pvNil == (pfil = FIL::PfilOpen(pfni)))
         return hNil;
 
     // check for type of meta file
-    if (!pfil->FReadRgb(&lw, SIZEOF(long), 0))
+    if (!pfil->FReadRgb(&lw, SIZEOF(int32_t), 0))
         goto LFail;
 
     // read placeable meta file header - NOTE: we can't just use SIZEOF(MEFH) for

@@ -108,7 +108,7 @@ void CLIP::Set(PDOCB pdocb, bool fExport)
 /***************************************************************************
     See if the clipboard supports this format and if so, get it.
 ***************************************************************************/
-bool CLIP::FGetFormat(long cls, PDOCB *ppdocb)
+bool CLIP::FGetFormat(int32_t cls, PDOCB *ppdocb)
 {
     AssertThis(0);
     AssertNilOrVarMem(ppdocb);
@@ -166,7 +166,7 @@ void CLIP::_EnsureDoc(void)
     HN hn;
     PDOCB pdocb;
     bool fDelay;
-    long clfm;
+    int32_t clfm;
 
     if (GetClipboardOwner() == vwig.hwndApp || !OpenClipboard(vwig.hwndApp))
         return;
@@ -244,7 +244,7 @@ void CLIP::_ImportCur(void)
 /***************************************************************************
     Import a particular format.
 ***************************************************************************/
-bool CLIP::_FImportFormat(long clfm, void *pv, long cb, PDOCB *ppdocb, bool *pfDelay)
+bool CLIP::_FImportFormat(int32_t clfm, void *pv, int32_t cb, PDOCB *ppdocb, bool *pfDelay)
 {
     AssertThis(0);
     AssertPvCb(pv, cb);
@@ -327,7 +327,7 @@ bool CLIP::FInitExport(void)
 /***************************************************************************
     Allocate a buffer to export to.
 ***************************************************************************/
-void *CLIP::PvExport(long cb, long clfm)
+void *CLIP::PvExport(int32_t cb, int32_t clfm)
 {
     AssertThis(0);
     AssertIn(cb, 1, kcbMax);

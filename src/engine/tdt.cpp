@@ -71,7 +71,7 @@ struct TDTF
 {
     int16_t bo;
     int16_t osk;
-    long tdts;
+    int32_t tdts;
     TAG tagTdf;
 };
 VERIFY_STRUCT_SIZE(TDTF, 24);
@@ -125,7 +125,7 @@ LFail:
 /***************************************************************************
     Create a new TDT
 ***************************************************************************/
-PTDT TDT::PtdtNew(PSTN pstn, long tdts, PTAG ptagTdf)
+PTDT TDT::PtdtNew(PSTN pstn, int32_t tdts, PTAG ptagTdf)
 {
     AssertPo(pstn, 0);
     AssertIn(tdts, 0, tdtsLim);
@@ -208,7 +208,7 @@ bool TDT::_FInitLists(void)
     AssertPo(&_stn, 0);
     AssertIn(_tdts, 0, tdtsLim);
 
-    long cch;
+    int32_t cch;
     PGL pglibactParNew = pvNil;
     PGL pglibsetNew = pvNil;
     PGG pggcmidNew = pvNil;
@@ -265,7 +265,7 @@ LFail:
     Get the given action.  If we've built it before, use the cached copy.
     Else build the action, cache it, and return it.
 ***************************************************************************/
-PACTN TDT::_PactnFetch(long tda)
+PACTN TDT::_PactnFetch(int32_t tda)
 {
     AssertThis(0);
     AssertIn(tda, 0, tdaLim);
@@ -287,7 +287,7 @@ PACTN TDT::_PactnFetch(long tda)
 /***************************************************************************
     Build the given action
 ***************************************************************************/
-PACTN TDT::_PactnBuild(long tda)
+PACTN TDT::_PactnBuild(int32_t tda)
 {
     AssertThis(0);
     AssertIn(tda, 0, tdaLim);
@@ -319,14 +319,14 @@ LFail:
 /***************************************************************************
     Get the name of the given action
 ***************************************************************************/
-bool TDT::FGetActnName(long anid, PSTN pstn)
+bool TDT::FGetActnName(int32_t anid, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(anid, 0, tdaLim);
     AssertPo(pstn, 0);
 
-    long istn;
-    long anidT;
+    int32_t istn;
+    int32_t anidT;
 
     for (istn = 0; istn < _pgstAction->IvMac(); istn++)
     {
@@ -369,8 +369,8 @@ PGL TDT::_PglibactParBuild(void)
 {
     AssertBaseThis(0);
 
-    long cch = _stn.Cch();
-    long ich;
+    int32_t cch = _stn.Cch();
+    int32_t ich;
     int16_t ibactPar = ivNil;
     PGL pglibactPar;
 
@@ -391,8 +391,8 @@ PGL TDT::_PglibsetBuild(void)
 {
     AssertBaseThis(0);
 
-    long cch = _stn.Cch();
-    long ich;
+    int32_t cch = _stn.Cch();
+    int32_t ich;
     int16_t ibset = 0;
     PGL pglibset;
 
@@ -413,15 +413,15 @@ PGG TDT::_PggcmidBuild(void)
 {
     AssertBaseThis(0);
 
-    long cch = _stn.Cch();
-    long lwOne = 1;
+    int32_t cch = _stn.Cch();
+    int32_t lwOne = 1;
     PGG pggcmid;
-    long cmid = 0;
+    int32_t cmid = 0;
 
-    pggcmid = GG::PggNew(SIZEOF(long), 1, SIZEOF(long));
+    pggcmid = GG::PggNew(SIZEOF(int32_t), 1, SIZEOF(int32_t));
     if (pvNil == pggcmid)
         return pvNil;
-    if (!pggcmid->FAdd(SIZEOF(long), pvNil, &cmid, &lwOne))
+    if (!pggcmid->FAdd(SIZEOF(int32_t), pvNil, &cmid, &lwOne))
     {
         ReleasePpo(&pggcmid);
         return pvNil;
@@ -432,14 +432,14 @@ PGG TDT::_PggcmidBuild(void)
 /***************************************************************************
     Build a GL of matrices for the action
 ***************************************************************************/
-PGL TDT::_Pglbmat34Build(long tda)
+PGL TDT::_Pglbmat34Build(int32_t tda)
 {
     AssertBaseThis(0);
     AssertIn(tda, 0, tdaLim);
 
     PTDF ptdf;
-    long cch = _stn.Cch();
-    long ich;
+    int32_t cch = _stn.Cch();
+    int32_t ich;
     BMAT34 bmat34;
     PGL pglbmat34 = pvNil;
     BRS dxrTotal;     // width of string (before scaling)
@@ -448,8 +448,8 @@ PGL TDT::_Pglbmat34Build(long tda)
     BRS xrChar;       // "insertion point" of character in string
     BRS xrCharCenter; // origin of character in string (after scaling)
     BRS dxrChar;      // width of each character
-    long ccel;
-    long icel;
+    int32_t ccel;
+    int32_t icel;
     BRS dyrChar;  // height of each character
     BRS dyrTotal; // total height of string, if vertical shape
     BRS dyrHalf;  // half of height of string, if vertical shape
@@ -538,19 +538,19 @@ LFail:
 /***************************************************************************
     Build a GG of cels for the action
 ***************************************************************************/
-PGG TDT::_PggcelBuild(long tda)
+PGG TDT::_PggcelBuild(int32_t tda)
 {
     AssertBaseThis(0);
     AssertIn(tda, 0, tdaLim);
 
-    long cch = _stn.Cch();
-    long ich;
+    int32_t cch = _stn.Cch();
+    int32_t ich;
     PGG pggcel;
     CEL cel;
     CPS *prgcps = pvNil;
-    long iv;
-    long ccel;
-    long icel;
+    int32_t iv;
+    int32_t ccel;
+    int32_t icel;
 
     ccel = _CcelOfTda(tda);
 
@@ -610,7 +610,7 @@ PTDT TDT::PtdtDup(void)
 /***************************************************************************
     Change the text, shape, and/or font of the TDT
 ***************************************************************************/
-bool TDT::FChange(PSTN pstn, long tdts, PTAG ptagTdf)
+bool TDT::FChange(PSTN pstn, int32_t tdts, PTAG ptagTdf)
 {
     AssertThis(0);
     AssertNilOrPo(pstn, 0);
@@ -619,7 +619,7 @@ bool TDT::FChange(PSTN pstn, long tdts, PTAG ptagTdf)
     AssertNilOrVarMem(ptagTdf);
 
     STN stnSave;
-    long tdtsSave;
+    int32_t tdtsSave;
     TAG tagTdfSave;
 
     stnSave = _stn;
@@ -657,7 +657,7 @@ bool TDT::FChange(PSTN pstn, long tdts, PTAG ptagTdf)
 /***************************************************************************
     Get stats of this TDT
 ***************************************************************************/
-void TDT::GetInfo(PSTN pstn, long *ptdts, PTAG ptagTdf)
+void TDT::GetInfo(PSTN pstn, int32_t *ptdts, PTAG ptagTdf)
 {
     AssertThis(0);
     AssertNilOrPo(pstn, 0);
@@ -701,7 +701,7 @@ bool TDT::FSetDefaultCost(PBODY pbody)
 /***************************************************************************
     Get a custom material
 ***************************************************************************/
-PCMTL TDT::PcmtlFetch(long cmid)
+PCMTL TDT::PcmtlFetch(int32_t cmid)
 {
     AssertThis(0);
     AssertIn(cmid, 0, _ccmid);
@@ -747,12 +747,12 @@ bool TDT::FWrite(PCFL pcfl, CTG ctg, CNO *pcno)
 /***************************************************************************
     Return the number of cels in the given action
 ***************************************************************************/
-long TDT::_CcelOfTda(long tda)
+int32_t TDT::_CcelOfTda(int32_t tda)
 {
     AssertThis(0);
     AssertIn(tda, 0, tdaLim);
 
-    long ccel;
+    int32_t ccel;
 
     switch (tda)
     {
@@ -790,7 +790,7 @@ long TDT::_CcelOfTda(long tda)
     transformation matrix is returned in pbmat34.  Some transformations are
     pre-applied and some are post-applied, depending on the desired effect.
 ***************************************************************************/
-void TDT::_ApplyAction(BMAT34 *pbmat34, long tda, long ich, long ccel, long icel, BRS xrChar, BRS dxrText)
+void TDT::_ApplyAction(BMAT34 *pbmat34, int32_t tda, int32_t ich, int32_t ccel, int32_t icel, BRS xrChar, BRS dxrText)
 {
     AssertThis(0);
     AssertVarMem(pbmat34);
@@ -967,7 +967,7 @@ void TDT::_ApplyAction(BMAT34 *pbmat34, long tda, long ich, long ccel, long icel
     character from the origin of the TDT).	dxrText is the width of the
     entire string.  dyr is the height of the font.
 ***************************************************************************/
-void TDT::_ApplyShape(BMAT34 *pbmat34, long tdts, long cch, long ich, BRS xrChar, BRS dxrText, BRS yrChar, BRS dyrMax,
+void TDT::_ApplyShape(BMAT34 *pbmat34, int32_t tdts, int32_t cch, int32_t ich, BRS xrChar, BRS dxrText, BRS yrChar, BRS dyrMax,
                       BRS dyrTotal)
 {
     AssertThis(0);

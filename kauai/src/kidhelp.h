@@ -22,11 +22,11 @@
 struct HTOP
 {
     CNO cnoBalloon;
-    long hidThis;
-    long hidTarget;
+    int32_t hidThis;
+    int32_t hidTarget;
     CNO cnoScript;
-    long dxp;
-    long dyp;
+    int32_t dxp;
+    int32_t dyp;
     CKI ckiSnd;
 };
 VERIFY_STRUCT_SIZE(HTOP, 32);
@@ -45,7 +45,7 @@ struct HTOPF
 struct ECOS
 {
     CTG ctg;  // kctgEditControl
-    long dxp; // width
+    int32_t dxp; // width
 };
 
 /***************************************************************************
@@ -81,9 +81,9 @@ class TXHD : public TXHD_PAR
     ~TXHD(void);
 
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil, uint32_t grftxhd = ftxhdNil);
-    virtual bool _FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk);
-    virtual bool _FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
-    virtual bool _FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip);
+    virtual bool _FOpenArg(int32_t icact, uint8_t sprm, int16_t bo, int16_t osk);
+    virtual bool _FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
+    virtual bool _FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip);
 
   public:
     static PTXHD PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil,
@@ -91,16 +91,16 @@ class TXHD : public TXHD_PAR
 
     virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse);
 
-    bool FInsertPicture(CNO cno, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp = pvNil,
+    bool FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil,
                         uint32_t grfdoc = fdocUpdate);
-    bool FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, long cbExtra, long cp, long ccpDel, PCHP pchp = pvNil,
+    bool FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil,
                        uint32_t grfdoc = fdocUpdate);
     PRCA Prca(void)
     {
         return _prca;
     }
-    bool FGroupText(long cp1, long cp2, uint8_t bGroup, CNO cnoTopic = cnoNil, PSTN pstnTopic = pvNil);
-    bool FGrouped(long cp, long *pcpMin = pvNil, long *pcpLim = pvNil, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil,
+    bool FGroupText(int32_t cp1, int32_t cp2, uint8_t bGroup, CNO cnoTopic = cnoNil, PSTN pstnTopic = pvNil);
+    bool FGrouped(int32_t cp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil,
                   PSTN pstnTopic = pvNil);
 
     void GetHtop(PHTOP phtop);
@@ -125,14 +125,14 @@ class TXHG : public TXHG_PAR
   protected:
     uint8_t _bTrack;
     CNO _cnoTrack;
-    long _hidBase;
+    int32_t _hidBase;
     uint32_t _grfcust;
     PWOKS _pwoks;
 
     TXHG(PWOKS pwoks, PTXHD ptxhd, PGCB pgcb);
     virtual bool _FInit(void);
-    virtual bool _FRunScript(uint8_t bGroup, uint32_t grfcust, long hidHit, achar ch, CNO cnoTopic = cnoNil,
-                             long *plwRet = pvNil);
+    virtual bool _FRunScript(uint8_t bGroup, uint32_t grfcust, int32_t hidHit, achar ch, CNO cnoTopic = cnoNil,
+                             int32_t *plwRet = pvNil);
 
   public:
     static PTXHG PtxhgNew(PWOKS pwoks, PTXHD ptxhd, PGCB pgcb);
@@ -141,12 +141,12 @@ class TXHG : public TXHG_PAR
     {
         return (PTXHD)_ptxtb;
     }
-    virtual bool FPtIn(long xp, long yp);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdBadKey(PCMD_BADKEY pcmd);
-    virtual bool FGroupFromPt(long xp, long yp, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil);
-    virtual void DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, long hidHit);
+    virtual bool FGroupFromPt(int32_t xp, int32_t yp, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil);
+    virtual void DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, int32_t hidHit);
     virtual void SetCursor(uint32_t grfcust);
 };
 
@@ -164,7 +164,7 @@ class HBAL : public HBAL_PAR
     PTXHG _ptxhg;
 
     HBAL(GCB *pgcb);
-    virtual void _SetGorp(PGORP pgorp, long dxp, long dyp);
+    virtual void _SetGorp(PGORP pgorp, int32_t dxp, int32_t dyp);
     virtual bool _FInit(PWOKS pwoks, PTXHD ptxhd, HTOP *phtop, PRCA prca);
     virtual bool _FSetTopic(PTXHD ptxhd, PHTOP phtop, PRCA prca);
 
@@ -192,10 +192,10 @@ class HBTN : public HBTN_PAR
     CNO _cnoTopic;
 
   public:
-    static PHBTN PhbtnNew(PWOKS pwoks, PGOB pgobPar, long hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic,
-                          long xpLeft, long ypBottom);
+    static PHBTN PhbtnNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic,
+                          int32_t xpLeft, int32_t ypBottom);
 
-    virtual bool FPtIn(long xp, long yp);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
     virtual bool FCmdClicked(PCMD_MOUSE pcmd);
 };
 

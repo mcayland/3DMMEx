@@ -208,12 +208,12 @@ int16_t _rgtt[] = {
     ttNil, ttNil, ttNil, ttNil, ttNil, ttNil, ttNil, ttNil,
     // x y a { | } ~
     ttNil, ttNil, ttNil, ttOpenBrace, ttBOr, ttCloseBrace, ttBNot};
-long _TtFromCh(achar ch);
+int32_t _TtFromCh(achar ch);
 
 /***************************************************************************
     Return the token type of a single character operator.
 ***************************************************************************/
-long _TtFromCh(achar ch)
+int32_t _TtFromCh(achar ch)
 {
     AssertIn(ch, kchMinTok, kchMinTok + SIZEOF(_rgtt) / SIZEOF(_rgtt[0]));
     return _rgtt[(uint8_t)ch - kchMinTok];
@@ -274,12 +274,12 @@ int16_t _rgttEqual[] = {
     ttNil, ttNil, ttNil, ttNil, ttNil, ttNil, ttNil, ttNil,
     // x y a { |
     ttNil, ttNil, ttNil, ttNil, ttABOr};
-long _TtFromChCh(achar ch1, achar ch2);
+int32_t _TtFromChCh(achar ch1, achar ch2);
 
 /***************************************************************************
     Return the token type of a double character token.
 ***************************************************************************/
-long _TtFromChCh(achar ch1, achar ch2)
+int32_t _TtFromChCh(achar ch1, achar ch2)
 {
     if (ch1 == ch2)
     {
@@ -396,7 +396,7 @@ void LEXB::GetStnFile(PSTN pstn)
     Fetch some characters.  Don't advance the pointer into the file.  Can
     fetch at most kcchLexbBuf characters at a time.
 ***************************************************************************/
-bool LEXB::_FFetchRgch(achar *prgch, long cch)
+bool LEXB::_FFetchRgch(achar *prgch, int32_t cch)
 {
     AssertThis(0);
     AssertIn(cch, 1, kcchLexbBuf);
@@ -405,7 +405,7 @@ bool LEXB::_FFetchRgch(achar *prgch, long cch)
     if (_ichLim < _ichCur + cch)
     {
         // need to read some more data
-        long cchT;
+        int32_t cchT;
 
         if (_fpCur + (_ichCur + cch - _ichLim) * SIZEOF(achar) > _fpMac)
         {
@@ -462,7 +462,7 @@ bool LEXB::_FSkipWhiteSpace(void)
     AssertThis(0);
     achar ch;
     bool fStar, fSkipComment, fSlash;
-    long lwLineSav;
+    int32_t lwLineSav;
     achar rgch[kcchPoundLine + 1];
     STN stn;
 
@@ -606,7 +606,7 @@ bool LEXB::FGetTok(PTOK ptok)
     AssertVarMem(ptok);
     achar ch, ch2;
     uint32_t grfct;
-    long cch;
+    int32_t cch;
 
     ptok->stn.SetNil();
     if (!_FSkipWhiteSpace())
@@ -789,7 +789,7 @@ LError:
 /***************************************************************************
     Return the size of extra data associated with the last token returned.
 ***************************************************************************/
-long LEXB::CbExtra(void)
+int32_t LEXB::CbExtra(void)
 {
     AssertThis(0);
     return 0;
@@ -808,7 +808,7 @@ void LEXB::GetExtra(void *pv)
     Read a number.  The first character is passed in ch.  lwBase is the base
     of the number (must be <= 10).
 ***************************************************************************/
-void LEXB::_ReadNumber(long *plw, achar ch, long lwBase, long cchMax)
+void LEXB::_ReadNumber(int32_t *plw, achar ch, int32_t lwBase, int32_t cchMax)
 {
     AssertThis(0);
     AssertVarMem(plw);
@@ -826,7 +826,7 @@ void LEXB::_ReadNumber(long *plw, achar ch, long lwBase, long cchMax)
 /***************************************************************************
     Read in a hexadecimal value (without the 0x).
 ***************************************************************************/
-bool LEXB::_FReadHex(long *plw)
+bool LEXB::_FReadHex(int32_t *plw)
 {
     AssertThis(0);
     AssertVarMem(plw);
@@ -864,7 +864,7 @@ bool LEXB::_FReadControlCh(achar *pch)
     AssertVarMem(pch);
     // control sequence
     achar ch;
-    long lw;
+    int32_t lw;
 
     if (!_FFetchRgch(&ch))
         return fFalse;

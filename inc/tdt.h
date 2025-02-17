@@ -69,11 +69,11 @@ class TDT : public TDT_PAR
   protected:
     static PGST _pgstAction; // Action names
 
-    long _tdts;          // TDT shape
+    int32_t _tdts;       // TDT shape
     TAG _tagTdf;         // Tag to Three-D Font
     PMTRL _pmtrlDefault; // MTRL for TDT's default costume
     PACTN _pactnCache;   // Last-used action
-    long _tdaCache;      // Action in pactnCache
+    int32_t _tdaCache;   // Action in pactnCache
 
   protected:
     virtual bool _FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl);
@@ -81,14 +81,14 @@ class TDT : public TDT_PAR
     PGL _PglibactParBuild(void);
     PGL _PglibsetBuild(void);
     PGG _PggcmidBuild(void);
-    PGL _Pglbmat34Build(long tda);
-    PGG _PggcelBuild(long tda);
-    virtual PACTN _PactnFetch(long tda);
-    PACTN _PactnBuild(long tda);
+    PGL _Pglbmat34Build(int32_t tda);
+    PGG _PggcelBuild(int32_t tda);
+    virtual PACTN _PactnFetch(int32_t tda);
+    PACTN _PactnBuild(int32_t tda);
     virtual PMODL _PmodlFetch(CHID chidModl);
-    long _CcelOfTda(long tda);
-    void _ApplyAction(BMAT34 *pbmat34, long tda, long ich, long ccel, long icel, BRS xrChar, BRS pdxrText);
-    void _ApplyShape(BMAT34 *pbmat34, long tdts, long cch, long ich, BRS xrChar, BRS dxrText, BRS yrChar, BRS dyrMax,
+    int32_t _CcelOfTda(int32_t tda);
+    void _ApplyAction(BMAT34 *pbmat34, int32_t tda, int32_t ich, int32_t ccel, int32_t icel, BRS xrChar, BRS pdxrText);
+    void _ApplyShape(BMAT34 *pbmat34, int32_t tdts, int32_t cch, int32_t ich, BRS xrChar, BRS dxrText, BRS yrChar, BRS dyrMax,
                      BRS dyrTotal);
 
   public:
@@ -97,18 +97,18 @@ class TDT : public TDT_PAR
     static void MarkActionNames(void);
 #endif
 
-    static PTDT PtdtNew(PSTN pstn, long tdts, PTAG ptagTdf);
+    static PTDT PtdtNew(PSTN pstn, int32_t tdts, PTAG ptagTdf);
     ~TDT(void);
     static PGL PgltagFetch(PCFL pcfl, CTG ctg, CNO cno, bool *pfError);
     PTDT PtdtDup(void);
 
-    void GetInfo(PSTN pstn, long *ptdts, PTAG ptagTdf);
-    bool FChange(PSTN pstn, long tdts = tdtsNil, PTAG ptagTdf = pvNil);
+    void GetInfo(PSTN pstn, int32_t *ptdts, PTAG ptagTdf);
+    bool FChange(PSTN pstn, int32_t tdts = tdtsNil, PTAG ptagTdf = pvNil);
     bool FWrite(PCFL pcfl, CTG ctg, CNO *pcno);
     bool FAdjustBody(PBODY pbody);
     virtual bool FSetDefaultCost(PBODY pbody);
-    virtual PCMTL PcmtlFetch(long cmid);
-    virtual bool FGetActnName(long anid, PSTN pstn);
+    virtual PCMTL PcmtlFetch(int32_t cmid);
+    virtual bool FGetActnName(int32_t anid, PSTN pstn);
 };
 
 #endif // TDT_H

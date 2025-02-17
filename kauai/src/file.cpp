@@ -357,7 +357,7 @@ void FIL::AssertValid(uint32_t grf)
 /***************************************************************************
     Determine if the given range is within cbTot.
 ***************************************************************************/
-priv bool _FRangeIn(long cbTot, long cb, long ib)
+priv bool _FRangeIn(int32_t cbTot, int32_t cb, int32_t ib)
 {
     return FIn(ib, 0, cbTot + 1) && FIn(cb, 0, cbTot - ib + 1);
 }
@@ -365,7 +365,7 @@ priv bool _FRangeIn(long cbTot, long cb, long ib)
 /***************************************************************************
     Read a piece of a flo into pv.
 ***************************************************************************/
-bool FLO::FReadRgb(void *pv, long cbRead, FP dfp)
+bool FLO::FReadRgb(void *pv, int32_t cbRead, FP dfp)
 {
     AssertThis(ffloReadable);
 
@@ -383,7 +383,7 @@ bool FLO::FReadRgb(void *pv, long cbRead, FP dfp)
 /***************************************************************************
     Write a piece of a flo from pv.
 ***************************************************************************/
-bool FLO::FWriteRgb(const void *pv, long cbWrite, FP dfp)
+bool FLO::FWriteRgb(const void *pv, int32_t cbWrite, FP dfp)
 {
     AssertThis(0);
 
@@ -406,7 +406,7 @@ bool FLO::FCopy(PFLO pfloDst)
     AssertThis(ffloReadable);
     AssertPo(pfloDst, 0);
     uint8_t rgb[1024];
-    long cbBlock, cbT;
+    int32_t cbBlock, cbT;
     void *pv;
     bool fRet = fFalse;
 
@@ -445,7 +445,7 @@ LFail:
 /***************************************************************************
     Allocate an hq and read the flo into it.
 ***************************************************************************/
-bool FLO::FReadHq(HQ *phq, long cbRead, FP dfp)
+bool FLO::FReadHq(HQ *phq, int32_t cbRead, FP dfp)
 {
     AssertThis(ffloReadable);
     AssertVarMem(phq);
@@ -469,12 +469,12 @@ bool FLO::FReadHq(HQ *phq, long cbRead, FP dfp)
 /***************************************************************************
     Write the contents of an hq to the flo.
 ***************************************************************************/
-bool FLO::FWriteHq(HQ hq, long dfp)
+bool FLO::FWriteHq(HQ hq, int32_t dfp)
 {
     AssertThis(0);
     AssertHq(hq);
     bool fRet;
-    long cbWrite = CbOfHq(hq);
+    int32_t cbWrite = CbOfHq(hq);
 
     if (!_FRangeIn(this->cb, cbWrite, dfp))
     {
@@ -500,8 +500,8 @@ bool FLO::FTranslate(int16_t osk)
     uint8_t rgbDst[1024];
     void *pvSrc;
     void *pvDst;
-    long cchDst, cch;
-    long cbBlock, cbT;
+    int32_t cchDst, cch;
+    int32_t cbBlock, cbT;
     PFIL pfilNew;
     FP fpSrc, fpDst;
     bool fRet = fFalse;
@@ -535,7 +535,7 @@ bool FLO::FTranslate(int16_t osk)
             osk = oskSig;
         else
         {
-            long dcb = CbCharOsk(osk) - CbCharOsk(oskSig);
+            int32_t dcb = CbCharOsk(osk) - CbCharOsk(oskSig);
 
             if (dcb < 0 || dcb == 0 && CbCharOsk(osk) == SIZEOF(wchar))
                 osk = oskSig;
@@ -645,7 +645,7 @@ BLCK::BLCK(PFLO pflo, bool fPacked)
 /***************************************************************************
     Constructor for a data block.
 ***************************************************************************/
-BLCK::BLCK(PFIL pfil, FP fp, long cb, bool fPacked)
+BLCK::BLCK(PFIL pfil, FP fp, int32_t cb, bool fPacked)
 {
     AssertBaseThis(0);
     AssertPo(pfil, 0);
@@ -717,7 +717,7 @@ void BLCK::Set(PFLO pflo, bool fPacked)
 /***************************************************************************
     Set the data block to refer to the given range on the file.
 ***************************************************************************/
-void BLCK::Set(PFIL pfil, FP fp, long cb, bool fPacked)
+void BLCK::Set(PFIL pfil, FP fp, int32_t cb, bool fPacked)
 {
     AssertThis(0);
     AssertPo(pfil, 0);
@@ -809,7 +809,7 @@ HQ BLCK::HqFree(bool fPackedOk)
 /***************************************************************************
     Return the length of the data block.
 ***************************************************************************/
-long BLCK::Cb(bool fPackedOk)
+int32_t BLCK::Cb(bool fPackedOk)
 {
     AssertThis(fPackedOk ? 0 : fblckUnpacked);
 
@@ -823,7 +823,7 @@ long BLCK::Cb(bool fPackedOk)
 /***************************************************************************
     Create a temporary buffer.
 ***************************************************************************/
-bool BLCK::FSetTemp(long cb, bool fForceFile)
+bool BLCK::FSetTemp(int32_t cb, bool fForceFile)
 {
     AssertThis(0);
     PFIL pfil;
@@ -854,7 +854,7 @@ bool BLCK::FSetTemp(long cb, bool fForceFile)
     end of the block.  Fails if you try to move before the beginning of
     the physical storage or after the lim of the block.
 ***************************************************************************/
-bool BLCK::FMoveMin(long dib)
+bool BLCK::FMoveMin(int32_t dib)
 {
     AssertThis(0);
 
@@ -883,7 +883,7 @@ bool BLCK::FMoveMin(long dib)
     beginning of the block.  Fails if you try to move before the min of the
     block or after the end of the physical storage.
 ***************************************************************************/
-bool BLCK::FMoveLim(long dib)
+bool BLCK::FMoveLim(int32_t dib)
 {
     AssertThis(0);
 
@@ -909,7 +909,7 @@ bool BLCK::FMoveLim(long dib)
 /***************************************************************************
     Read a range of bytes from the data block.
 ***************************************************************************/
-bool BLCK::FReadRgb(void *pv, long cb, long ib, bool fPackedOk)
+bool BLCK::FReadRgb(void *pv, int32_t cb, int32_t ib, bool fPackedOk)
 {
     AssertThis(0);
     AssertPvCb(pv, cb);
@@ -942,7 +942,7 @@ bool BLCK::FReadRgb(void *pv, long cb, long ib, bool fPackedOk)
 /***************************************************************************
     Write a range of bytes to the data block.
 ***************************************************************************/
-bool BLCK::FWriteRgb(const void *pv, long cb, long ib, bool fPackedOk)
+bool BLCK::FWriteRgb(const void *pv, int32_t cb, int32_t ib, bool fPackedOk)
 {
     AssertThis(0);
     AssertPvCb(pv, cb);
@@ -975,7 +975,7 @@ bool BLCK::FWriteRgb(const void *pv, long cb, long ib, bool fPackedOk)
 /***************************************************************************
     Read a range of bytes from the data block and put it in an hq.
 ***************************************************************************/
-bool BLCK::FReadHq(HQ *phq, long cb, long ib, bool fPackedOk)
+bool BLCK::FReadHq(HQ *phq, int32_t cb, int32_t ib, bool fPackedOk)
 {
     AssertThis(0);
     AssertVarMem(phq);
@@ -1011,11 +1011,11 @@ bool BLCK::FReadHq(HQ *phq, long cb, long ib, bool fPackedOk)
 /***************************************************************************
     Write an hq to the data block.
 ***************************************************************************/
-bool BLCK::FWriteHq(HQ hq, long ib, bool fPackedOk)
+bool BLCK::FWriteHq(HQ hq, int32_t ib, bool fPackedOk)
 {
     AssertThis(0);
     AssertHq(hq);
-    long cb = CbOfHq(hq);
+    int32_t cb = CbOfHq(hq);
 
     if (!fPackedOk && _fPacked)
     {
@@ -1083,7 +1083,7 @@ bool BLCK::FWriteToBlck(PBLCK pblckDst, bool fPackedOk)
 {
     AssertThis(fblckReadable);
     AssertPo(pblckDst, 0);
-    long cb;
+    int32_t cb;
 
     if (!fPackedOk && _fPacked)
     {
@@ -1162,7 +1162,7 @@ bool BLCK::FGetFlo(PFLO pflo, bool fPackedOk)
     determining the compression type failed, *pcfmt is set to cfmtNil and
     true is returned.
 ***************************************************************************/
-bool BLCK::FPacked(long *pcfmt)
+bool BLCK::FPacked(int32_t *pcfmt)
 {
     AssertThis(0);
     AssertNilOrVarMem(pcfmt);
@@ -1180,7 +1180,7 @@ bool BLCK::FPacked(long *pcfmt)
     packing format, otherwise use the one specified. If the block is
     already packed, this doesn't change the packing format.
 ***************************************************************************/
-bool BLCK::FPackData(long cfmt)
+bool BLCK::FPackData(int32_t cfmt)
 {
     AssertThis(0);
     HQ hq;
@@ -1276,7 +1276,7 @@ bool BLCK::FUnpackData(void)
 /***************************************************************************
     Return the amount of memory the block is using (roughly).
 ***************************************************************************/
-long BLCK::CbMem(void)
+int32_t BLCK::CbMem(void)
 {
     AssertThis(0);
 
@@ -1303,7 +1303,7 @@ void BLCK::AssertValid(uint32_t grfblck)
     {
         Assert(!(grfblck & fblckFile) || (grfblck & fblckMemory), "block should be file based");
         AssertHq(_hq);
-        long cb = CbOfHq(_hq);
+        int32_t cb = CbOfHq(_hq);
 
         AssertIn(_ibMin, 0, cb + 1);
         AssertIn(_ibLim, _ibMin, cb + 1);

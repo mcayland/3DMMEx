@@ -19,7 +19,7 @@ PGOB GOB::_pgobScreen;
     Create the screen gob.  If fgobEnsureHwnd is set, ensures that the
     screen gob has an OS window associated with it.
 ***************************************************************************/
-bool GOB::FInitScreen(uint32_t grfgob, long ginDef)
+bool GOB::FInitScreen(uint32_t grfgob, int32_t ginDef)
 {
     PGOB pgob;
     GCB gcb(khidScreen, pvNil);
@@ -104,7 +104,7 @@ HWND GOB::_HwndNewMdi(PSTN pstnTitle)
 {
     AssertPo(pstnTitle, 0);
     HWND hwnd, hwndT;
-    long lwStyle;
+    int32_t lwStyle;
 
     if (vwig.hwndClient == hNil)
     {
@@ -131,7 +131,7 @@ HWND GOB::_HwndNewMdi(PSTN pstnTitle)
     hwnd = CreateMDIWindow(PszLit("MDI"), pstnTitle->Psz(), lwStyle, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                            CW_USEDEFAULT, vwig.hwndClient, vwig.hinst, 0L);
     if (hNil != hwnd && pvNil != vpmubCur)
-        vpmubCur->FAddListCid(cidChooseWnd, (long)hwnd, pstnTitle);
+        vpmubCur->FAddListCid(cidChooseWnd, (int32_t)hwnd, pstnTitle);
     return hwnd;
 }
 
@@ -148,7 +148,7 @@ void GOB::_DestroyHwnd(HWND hwnd)
     if (GetParent(hwnd) == vwig.hwndClient && vwig.hwndClient != hNil)
     {
         if (pvNil != vpmubCur)
-            vpmubCur->FRemoveListCid(cidChooseWnd, (long)hwnd);
+            vpmubCur->FRemoveListCid(cidChooseWnd, (int32_t)hwnd);
         SendMessage(vwig.hwndClient, WM_MDIDESTROY, (WPARAM)hwnd, 0);
     }
     else
@@ -166,7 +166,7 @@ void GOB::GetPtMouse(PT *ppt, bool *pfDown)
     if (ppt != pvNil)
     {
         PTS pts;
-        long xp, yp;
+        int32_t xp, yp;
         PGOB pgob;
 
         xp = yp = 0;
@@ -218,7 +218,7 @@ void GOB::SetHwndName(PSTN pstn)
     }
     if (pvNil != vpmubCur)
     {
-        vpmubCur->FChangeListCid(cidChooseWnd, (long)_hwnd, pvNil, (long)_hwnd, pstn);
+        vpmubCur->FChangeListCid(cidChooseWnd, (int32_t)_hwnd, pvNil, (int32_t)_hwnd, pstn);
     }
     SetWindowText(_hwnd, pstn->Psz());
 }

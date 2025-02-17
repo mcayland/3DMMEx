@@ -12,7 +12,7 @@ RTCLASS(TMAP)
 /***************************************************************************
     A PFNRPO to read TMAP objects.
 ***************************************************************************/
-bool TMAP::FReadTmap(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool TMAP::FReadTmap(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -178,11 +178,11 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni, PGL pglclr)
 {
     uint8_t *prgb = pvNil;
     PTMAP ptmap = pvNil;
-    long dxp, dyp;
+    int32_t dxp, dyp;
     bool fUpsideDown;
-    long iclrBest, igl;
-    long iprgb;
-    long dist, min;
+    int32_t iclrBest, igl;
+    int32_t iprgb;
+    int32_t dist, min;
     CLR clr, clrSrc;
     PGL pglclrSrc;
     PGL pglCache;
@@ -202,7 +202,7 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni, PGL pglclr)
             // Do a closest color match
             //
 
-            pglCache = GL::PglNew(SIZEOF(long), pglclrSrc->IvMac());
+            pglCache = GL::PglNew(SIZEOF(int32_t), pglclrSrc->IvMac());
 
             if (pglCache != pvNil)
             {
@@ -290,7 +290,7 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni)
  *	output:
  *			returns the pointer to the new TMAP
  */
-PTMAP TMAP::PtmapNew(uint8_t *prgbPixels, long dxp, long dyp)
+PTMAP TMAP::PtmapNew(uint8_t *prgbPixels, int32_t dxp, int32_t dyp)
 {
     PTMAP ptmap;
 
@@ -335,7 +335,7 @@ bool TMAP::FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr)
     AssertNilOrPo(pmsnkErr, 0);
 
     bool fRet = fFalse;
-    long lwSig;
+    int32_t lwSig;
     PSZ pszErr = pvNil;
     FLO flo;
 
@@ -344,7 +344,7 @@ bool TMAP::FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr)
         pszErr = PszLit("Couldn't create destination file\n");
         goto LFail;
     }
-    flo.fp = SIZEOF(long);
+    flo.fp = SIZEOF(int32_t);
     flo.cb = CbOnFile();
 
     if (fCompress)
@@ -363,7 +363,7 @@ bool TMAP::FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr)
             lwSig = klwSigPackedFile;
             flo.cb = blck.Cb(fTrue);
         }
-        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0) || !blck.FWriteToFlo(&flo, fTrue))
+        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(int32_t), 0) || !blck.FWriteToFlo(&flo, fTrue))
         {
             pszErr = PszLit("writing to destination file failed\n");
             goto LFail;
@@ -372,7 +372,7 @@ bool TMAP::FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr)
     else
     {
         lwSig = klwSigUnpackedFile;
-        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0) || !FWriteFlo(&flo))
+        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(int32_t), 0) || !FWriteFlo(&flo))
         {
             pszErr = PszLit("writing to destination file failed\n");
             goto LFail;
@@ -393,7 +393,7 @@ LFail:
 uint8_t *TMAP::PrgbBuildInverseTable(void)
 {
     uint8_t *prgb, *prgbT, iclr;
-    long cbRgb;
+    int32_t cbRgb;
 
     if (_pbpmp->type != BR_PMT_RGB_888)
         return pvNil;
@@ -408,9 +408,9 @@ uint8_t *TMAP::PrgbBuildInverseTable(void)
     return prgb;
 }
 
-void TMAP::_SortInverseTable(uint8_t *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi)
+void TMAP::_SortInverseTable(uint8_t *prgb, int32_t cbRgb, BRCLR brclrLo, BRCLR brclrHi)
 {
-    long cbRgb1 = 0, cbRgb2 = 0;
+    int32_t cbRgb1 = 0, cbRgb2 = 0;
     uint8_t *prgb2, *prgbRead, bT;
     BRCLR brclrPivot = brclrLo + (brclrHi - brclrLo) / 2;
     BRCLR *pbrclr;

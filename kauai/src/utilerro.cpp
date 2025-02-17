@@ -33,9 +33,9 @@ ERS::ERS(void)
     kcerdMax - 1 entries down by one (and lose the bottom entry).
 ***************************************************************************/
 #ifdef DEBUG
-void ERS::Push(long erc, PSZS pszsFile, long lwLine)
+void ERS::Push(int32_t erc, PSZS pszsFile, int32_t lwLine)
 #else  //! DEBUG
-void ERS::Push(long erc)
+void ERS::Push(int32_t erc)
 #endif //! DEBUG
 {
     AssertThis(0);
@@ -75,7 +75,7 @@ LDone:
 /***************************************************************************
     Pop the top error from the stack.  Return fFalse if underflow.
 ***************************************************************************/
-bool ERS::FPop(long *perc)
+bool ERS::FPop(int32_t *perc)
 {
     AssertThis(0);
     AssertNilOrVarMem(perc);
@@ -113,7 +113,7 @@ void ERS::Clear(void)
 /***************************************************************************
     Return the size of the error stack.
 ***************************************************************************/
-long ERS::Cerc(void)
+int32_t ERS::Cerc(void)
 {
     AssertThis(0);
     return _cerd;
@@ -122,10 +122,10 @@ long ERS::Cerc(void)
 /***************************************************************************
     See if the given error code is on the stack.
 ***************************************************************************/
-bool ERS::FIn(long erc)
+bool ERS::FIn(int32_t erc)
 {
     AssertThis(0);
-    long ierd;
+    int32_t ierd;
 
     _mutx.Enter();
     for (ierd = 0; ierd < _cerd; ierd++)
@@ -143,10 +143,10 @@ bool ERS::FIn(long erc)
 /***************************************************************************
     Return the i'th entry.
 ***************************************************************************/
-long ERS::ErcGet(long ierc)
+int32_t ERS::ErcGet(int32_t ierc)
 {
     AssertThis(0);
-    long erc;
+    int32_t erc;
 
     _mutx.Enter();
     if (!::FIn(ierc, 0, _cerd))
@@ -161,10 +161,10 @@ long ERS::ErcGet(long ierc)
 /***************************************************************************
     Flush all instances of the given error code from the error stack.
 ***************************************************************************/
-void ERS::Flush(long erc)
+void ERS::Flush(int32_t erc)
 {
     AssertThis(0);
-    long ierdSrc, ierdDst;
+    int32_t ierdSrc, ierdDst;
 
     _mutx.Enter();
     for (ierdSrc = ierdDst = 0; ierdSrc < _cerd; ierdSrc++)

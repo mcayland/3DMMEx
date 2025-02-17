@@ -55,7 +55,7 @@ bool PIC::FAddToCfl(PCFL pcfl, CTG ctg, CNO *pcno, CHID chid)
     AssertVarMem(pcno);
     BLCK blck;
     CNO cnoKid;
-    long cb;
+    int32_t cb;
 
     if (!pcfl->FAdd(0, ctg, pcno))
         return fFalse;
@@ -79,11 +79,11 @@ bool PIC::FPutInCfl(PCFL pcfl, CTG ctg, CNO cno, CHID chid)
     AssertThis(0);
     AssertPo(pcfl, 0);
     bool fDelOnFail;
-    long ikid;
+    int32_t ikid;
     KID kid;
     BLCK blck;
     CNO cnoKid;
-    long cb;
+    int32_t cb;
 
     fDelOnFail = !pcfl->FFind(ctg, cno);
     if (!pcfl->FPut(0, ctg, cno))
@@ -125,7 +125,7 @@ void PIC::AssertValid(uint32_t grf)
 /***************************************************************************
     A PFNRPO to read PIC 0 from a GRAF chunk.
 ***************************************************************************/
-bool FReadMainPic(PCFL pcfl, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool FReadMainPic(PCFL pcfl, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     PPIC ppic;
 

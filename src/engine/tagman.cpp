@@ -49,7 +49,7 @@ const BOM kbomSid = 0xc0000000;
 struct SFS
 {
   public:
-    long sid;             // ID for this source
+    int32_t sid;          // ID for this source
     FNI fniHD;            // FNI of the HD directory
     FNI fniCD;            // FNI of the CD directory
     PCRM pcrmSource;      // CRM of files on the CD (or possibly HD)
@@ -69,7 +69,7 @@ struct SFS
 /***************************************************************************
     Initialize the tag manager
 ***************************************************************************/
-PTAGM TAGM::PtagmNew(PFNI pfniHDRoot, PFNINSCD pfninscd, long cbCache)
+PTAGM TAGM::PtagmNew(PFNI pfniHDRoot, PFNINSCD pfninscd, int32_t cbCache)
 {
     AssertPo(pfniHDRoot, ffniDir);
     Assert(pvNil != pfninscd, "bad pfninscd");
@@ -89,7 +89,7 @@ PTAGM TAGM::PtagmNew(PFNI pfniHDRoot, PFNINSCD pfninscd, long cbCache)
     if (pvNil == ptagm->_pglsfs)
         goto LFail;
 
-    ptagm->_pgstSource = GST::PgstNew(SIZEOF(long)); // extra data is sid
+    ptagm->_pgstSource = GST::PgstNew(SIZEOF(int32_t)); // extra data is sid
     if (pvNil == ptagm->_pgstSource)
         goto LFail;
 
@@ -107,7 +107,7 @@ TAGM::~TAGM(void)
 {
     AssertBaseThis(0);
 
-    long isfs;
+    int32_t isfs;
     SFS sfs;
 
     if (pvNil != _pglsfs)
@@ -161,14 +161,14 @@ PGST TAGM::PgstSource(void)
     If there is an stn for the given sid in _pgstSource, return the
     location of the stn.
 ***************************************************************************/
-bool TAGM::_FFindSid(long sid, long *pistn)
+bool TAGM::_FFindSid(int32_t sid, int32_t *pistn)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
     AssertNilOrVarMem(pistn);
 
-    long istn;
-    long sidT;
+    int32_t istn;
+    int32_t sidT;
 
     for (istn = 0; istn < _pgstSource->IvMac(); istn++)
     {
@@ -192,11 +192,11 @@ bool TAGM::FMergeGstSource(PGST pgst, int16_t bo, int16_t osk)
 {
     AssertThis(0);
     AssertPo(pgst, 0);
-    Assert(SIZEOF(long) == pgst->CbExtra(), "bad pgstSource");
+    Assert(SIZEOF(int32_t) == pgst->CbExtra(), "bad pgstSource");
 
-    long istn;
+    int32_t istn;
     STN stn;
-    long sid;
+    int32_t sid;
 
     for (istn = 0; istn < pgst->IvMac(); istn++)
     {
@@ -214,7 +214,7 @@ bool TAGM::FMergeGstSource(PGST pgst, int16_t bo, int16_t osk)
 /***************************************************************************
     Add source title string to tag manager, if it's not already there
 ***************************************************************************/
-bool TAGM::FAddStnSource(PSTN pstn, long sid)
+bool TAGM::FAddStnSource(PSTN pstn, int32_t sid)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -230,13 +230,13 @@ bool TAGM::FAddStnSource(PSTN pstn, long sid)
     Find the sid with the given string as its source name.  pstn can be
     the merged name, the short name, or the long name.
 ***************************************************************************/
-bool TAGM::FGetSid(PSTN pstn, long *psid)
+bool TAGM::FGetSid(PSTN pstn, int32_t *psid)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
     AssertVarMem(psid);
 
-    long istn;
+    int32_t istn;
     STN stnMerged;
     STN stnLong;
     STN stnShort;
@@ -262,13 +262,13 @@ bool TAGM::FGetSid(PSTN pstn, long *psid)
 /***************************************************************************
     Find the string of the source with the given sid
 ***************************************************************************/
-bool TAGM::_FGetStnMergedOfSid(long sid, PSTN pstn)
+bool TAGM::_FGetStnMergedOfSid(int32_t sid, PSTN pstn)
 {
     AssertThis(0);
     AssertVarMem(pstn);
 
-    long istn;
-    long sidT;
+    int32_t istn;
+    int32_t sidT;
 
     for (istn = 0; istn < _pgstSource->IvMac(); istn++)
     {
@@ -283,7 +283,7 @@ bool TAGM::_FGetStnMergedOfSid(long sid, PSTN pstn)
 /***************************************************************************
     Find the string of the source with the given sid
 ***************************************************************************/
-bool TAGM::_FGetStnSplitOfSid(long sid, PSTN pstnLong, PSTN pstnShort)
+bool TAGM::_FGetStnSplitOfSid(int32_t sid, PSTN pstnLong, PSTN pstnShort)
 {
     AssertThis(0);
     AssertVarMem(pstnLong);
@@ -304,7 +304,7 @@ bool TAGM::_FGetStnSplitOfSid(long sid, PSTN pstnLong, PSTN pstnShort)
     - If we find the fniHD, put it in *pfniHD, set *pfExists to fTrue,
       and return fTrue
 ***************************************************************************/
-bool TAGM::_FBuildFniHD(long sid, PFNI pfniHD, bool *pfExists)
+bool TAGM::_FBuildFniHD(int32_t sid, PFNI pfniHD, bool *pfExists)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -358,7 +358,7 @@ bool TAGM::_FDetermineIfContentOnFni(PFNI pfni, bool *pfContentOnFni)
     think it does.  Or, if pstn is non-nil, try to go down from pfniCD
     to pstn.
 ***************************************************************************/
-bool TAGM::_FEnsureFniCD(long sid, FNI *pfniCD, PSTN pstn)
+bool TAGM::_FEnsureFniCD(int32_t sid, FNI *pfniCD, PSTN pstn)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -398,7 +398,7 @@ bool TAGM::_FEnsureFniCD(long sid, FNI *pfniCD, PSTN pstn)
     looking for this source, pass in any FNI with a FTG of ftgNil.	If it
     can't find the CD directory, it returns fFalse with pfniInfo untouched.
 ***************************************************************************/
-bool TAGM::_FFindFniCD(long sid, PFNI pfniCD, bool *pfFniChanged)
+bool TAGM::_FFindFniCD(int32_t sid, PFNI pfniCD, bool *pfFniChanged)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -459,7 +459,7 @@ bool TAGM::_FFindFniCD(long sid, PFNI pfniCD, bool *pfFniChanged)
     the source named stn cannot be found.  Returns fTrue if the user wants
     to retry, else fFalse.
 ***************************************************************************/
-bool TAGM::_FRetry(long sid)
+bool TAGM::_FRetry(int32_t sid)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -479,7 +479,7 @@ bool TAGM::_FRetry(long sid)
     Builds the CRM for the given sid's source.  pfniDir tells where the
     content files are.
 ***************************************************************************/
-PCRM TAGM::_PcrmSourceNew(long sid, PFNI pfniDir)
+PCRM TAGM::_PcrmSourceNew(int32_t sid, PFNI pfniDir)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -520,12 +520,12 @@ LFail:
     new one if there isn't one already.  It verifies that the CD is still
     in the drive, unless fDontHitCD is fTrue.
 ***************************************************************************/
-PCRM TAGM::_PcrmSourceGet(long sid, bool fDontHitCD)
+PCRM TAGM::_PcrmSourceGet(int32_t sid, bool fDontHitCD)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
 
-    long isfs;
+    int32_t isfs;
     SFS sfs;
     bool fContentOnFni;
     bool fFniChanged;
@@ -612,13 +612,13 @@ LSetupSfs:
     HD!)  Note that the function return value is whether the function
     completed without error, not whether the source is on HD.
 ***************************************************************************/
-bool TAGM::_FDetermineIfSourceHD(long sid, bool *pfIsOnHD)
+bool TAGM::_FDetermineIfSourceHD(int32_t sid, bool *pfIsOnHD)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
     AssertVarMem(pfIsOnHD);
 
-    long isfs;
+    int32_t isfs;
     SFS sfs;
     bool fContentOnFni;
     bool fExists;
@@ -660,12 +660,12 @@ LSetupSfs:
 /***************************************************************************
     Get the FNI for the HD directory
 ***************************************************************************/
-bool TAGM::_FGetFniHD(long sid, PFNI pfniHD)
+bool TAGM::_FGetFniHD(int32_t sid, PFNI pfniHD)
 {
     AssertThis(0);
     AssertVarMem(pfniHD);
 
-    long isfs;
+    int32_t isfs;
     SFS sfs;
     bool fExists;
 
@@ -694,12 +694,12 @@ LSetupSFS:
 /***************************************************************************
     Get the FNI for the CD directory
 ***************************************************************************/
-bool TAGM::_FGetFniCD(long sid, PFNI pfniCD, bool fAskForCD)
+bool TAGM::_FGetFniCD(int32_t sid, PFNI pfniCD, bool fAskForCD)
 {
     AssertThis(0);
     AssertVarMem(pfniCD);
 
-    long isfs;
+    int32_t isfs;
     SFS sfs;
     bool fFniChanged;
 
@@ -731,7 +731,7 @@ LSetupSFS:
 /***************************************************************************
     Finds the file with name pstn on the HD or CD.
 ***************************************************************************/
-bool TAGM::FFindFile(long sid, PSTN pstn, PFNI pfni, bool fAskForCD)
+bool TAGM::FFindFile(int32_t sid, PSTN pstn, PFNI pfni, bool fAskForCD)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
@@ -904,20 +904,20 @@ PBACO TAGM::PbacoFetch(PTAG ptag, PFNRPO pfnrpo, bool fUseCD)
 /***************************************************************************
     Clear the cache for source sid.  If sid is sidNil, clear all caches.
 ***************************************************************************/
-void TAGM::ClearCache(long sid, uint32_t grftagm)
+void TAGM::ClearCache(int32_t sid, uint32_t grftagm)
 {
     AssertThis(0);
     Assert(sid >= 0, "Invalid sid");
 
-    long isfs, isfsMac;
-    long cbMax;
+    int32_t isfs, isfsMac;
+    int32_t cbMax;
 
     vpappb->BeginLongOp();
 
     isfsMac = _pglsfs->IvMac();
     for (isfs = 0; isfs < isfsMac; isfs++)
     {
-        long icrf, icrfMac;
+        int32_t icrf, icrfMac;
         SFS sfs;
         PCRM pcrmSource;
 
@@ -1103,7 +1103,7 @@ uint32_t TAGM::FcmpCompareTags(PTAG ptag1, PTAG ptag2)
 ***************************************************************************/
 void TAGM::AssertValid(uint32_t grf)
 {
-    long isfs;
+    int32_t isfs;
     SFS sfs;
 
     TAGM_PAR::AssertValid(fobjAllocated);
@@ -1127,7 +1127,7 @@ void TAGM::MarkMem(void)
 {
     AssertThis(0);
 
-    long isfs;
+    int32_t isfs;
     SFS sfs;
 
     TAGM_PAR::MarkMem();

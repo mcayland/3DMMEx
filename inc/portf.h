@@ -12,7 +12,7 @@
 
 // Top level portoflio routines.
 bool FPortGetFniMovieOpen(FNI *pfni);
-bool FPortDisplayWithIds(FNI *pfni, bool fOpen, long lFilterLabel, long lFilterExt, long lTitle, LPCTSTR lpstrDefExt,
+bool FPortDisplayWithIds(FNI *pfni, bool fOpen, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPCTSTR lpstrDefExt,
                          PSTN pstnDefFileName, FNI *pfniInitialDir, uint32_t grfPrevType, CNO cnoWave);
 bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pfniInitialDir, uint32_t grfPrevType,
                      CNO cnoWave);

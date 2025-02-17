@@ -31,7 +31,7 @@ void FrameMain(void)
 /***************************************************************************
     Initialize the APP - do the command line parsing thing.
 ***************************************************************************/
-bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
     if (!APP_PAR::_FInit(grfapp, grfgob, ginDef))
         return fFalse;
@@ -44,7 +44,7 @@ bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, long ginDef)
     PDMD pdmd;
     PDDG pddg;
     PDOCB pdocb;
-    long lw;
+    int32_t lw;
     PSZ psz = vwig.pszCmdLine;
 
     fSkip = fTrue;

@@ -50,7 +50,7 @@ class APP : public APP_PAR
     PLID _plidPicture;
     PLID _plidButton;
 
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
     virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
 
   public:
@@ -64,7 +64,7 @@ class APP : public APP_PAR
 
     PLIG PligNew(bool fButton, PGCB pgcb, PTXHD ptxhd);
     bool FLoadResFile(PFNI pfni);
-    bool FOpenDocFile(PFNI pfni, long cid = cidOpen);
+    bool FOpenDocFile(PFNI pfni, int32_t cid = cidOpen);
 };
 extern APP vapp;
 
@@ -101,16 +101,16 @@ class LID : public LID_PAR
     static PLID PlidNew(PCRM pcrm, CTG ctg, CHID chid = 0);
 
     bool FRefresh(void);
-    long Ccki(void);
-    void GetCki(long icki, CKI *pcki, PCRF *ppcrf = pvNil);
-    PMBMP PmbmpGet(long icki);
+    int32_t Ccki(void);
+    void GetCki(int32_t icki, CKI *pcki, PCRF *ppcrf = pvNil);
+    PMBMP PmbmpGet(int32_t icki);
 };
 
 /***************************************************************************
     List display gob
 ***************************************************************************/
-const long kdxpCellLig = kdzpInch * 2;
-const long kdypCellLig = kdzpInch;
+const int32_t kdxpCellLig = kdzpInch * 2;
+const int32_t kdypCellLig = kdzpInch;
 
 typedef class LIG *PLIG;
 #define LIG_PAR DDG
@@ -125,17 +125,17 @@ class LIG : public LIG_PAR
   protected:
     PTXHD _ptxhd;  // the document to put the chunk in
     PSCB _pscb;    // our scroll bar
-    long _dypCell; // how tall are our cells
+    int32_t _dypCell; // how tall are our cells
 
     LIG(PLID plid, GCB *pgcb);
-    bool _FInit(PTXHD ptxhd, long dypCell);
+    bool _FInit(PTXHD ptxhd, int32_t dypCell);
 
   public:
-    static PLIG PligNew(PLID plid, GCB *pgcb, PTXHD ptxhd, long dypCell = kdypCellLig);
+    static PLIG PligNew(PLID plid, GCB *pgcb, PTXHD ptxhd, int32_t dypCell = kdypCellLig);
 
     PLID Plid(void);
     void Refresh(void);
-    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdScroll(PCMD pcmd);
 };
@@ -143,9 +143,9 @@ class LIG : public LIG_PAR
 /***************************************************************************
     Color chooser GOB.
 ***************************************************************************/
-const long kcacrCcg = 8;
-const long kdxpCcg = 78;
-const long kdxpFrameCcg = 2;
+const int32_t kcacrCcg = 8;
+const int32_t kdxpCcg = 78;
+const int32_t kdxpFrameCcg = 2;
 
 typedef class CCG *PCCG;
 #define CCG_PAR GOB
@@ -157,19 +157,19 @@ class CCG : public CCG_PAR
 
   protected:
     PTXHD _ptxhd;     // the document to put the color in
-    long _cacrRow;    // how many colors to put on a row
+    int32_t _cacrRow; // how many colors to put on a row
     bool _fForeColor; // whether this sets the foreground or background color
 
-    bool _FGetAcrFromPt(long xp, long yp, ACR *pacr, RC *prc = pvNil, long *piscr = pvNil);
+    bool _FGetAcrFromPt(int32_t xp, int32_t yp, ACR *pacr, RC *prc = pvNil, int32_t *piscr = pvNil);
 
   public:
-    CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, long cacrRow = kcacrCcg);
+    CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, int32_t cacrRow = kcacrCcg);
 
-    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
 
-    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, long xpMouse, long ypMouse);
+    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse);
 };
 
 /***************************************************************************
@@ -253,7 +253,7 @@ class TSEL : public TSEL_PAR
 
   protected:
     PCFL _pcfl;
-    long _icki;
+    int32_t _icki;
     CNO _cno;
 
     void _SetNil(void);
@@ -263,7 +263,7 @@ class TSEL : public TSEL_PAR
 
     void Adjust(void);
 
-    long Icki(void)
+    int32_t Icki(void)
     {
         return _icki;
     }
@@ -272,7 +272,7 @@ class TSEL : public TSEL_PAR
         return _cno;
     }
 
-    bool FSetIcki(long icki);
+    bool FSetIcki(int32_t icki);
     bool FSetCno(CNO cno);
 };
 
@@ -289,51 +289,51 @@ class HEDG : public HEDG_PAR
     ASSERT
 
   protected:
-    long _onn;       // fixed width font to use
-    long _dypHeader; // height of the header
-    long _dypLine;   // height of one line
-    long _dxpChar;   // width of a character
-    long _dypBorder; // height of border (included in _dypLine)
+    int32_t _onn;    // fixed width font to use
+    int32_t _dypHeader; // height of the header
+    int32_t _dypLine;   // height of one line
+    int32_t _dxpChar;   // width of a character
+    int32_t _dypBorder; // height of border (included in _dypLine)
     PCFL _pcfl;      // the chunky file
     TSEL _tsel;      // the selection
 
     HEDG(PHEDO phedo, PCFL pcfl, PGCB pgcb);
-    virtual void _Scroll(long scaHorz, long scaVert, long scvHorz = 0, long scvVert = 0);
-    virtual void _ScrollDxpDyp(long dxp, long dyp);
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
+    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp);
 
-    long _YpFromIcki(long icki)
+    int32_t _YpFromIcki(int32_t icki)
     {
         return LwMul(icki - _scvVert, _dypLine) + _dypHeader;
     }
-    long _XpFromIch(long ich)
+    int32_t _XpFromIch(int32_t ich)
     {
         return LwMul(ich - _scvHorz + 1, _dxpChar);
     }
-    long _IckiFromYp(long yp);
+    int32_t _IckiFromYp(int32_t yp);
     void _GetContent(RC *prc);
 
     void _DrawSel(PGNV pgnv);
-    void _SetSel(long icki, CNO cno = cnoNil);
+    void _SetSel(int32_t icki, CNO cno = cnoNil);
     void _ShowSel(void);
     void _EditTopic(CNO cno);
 
     virtual void _Activate(bool fActive);
-    virtual long _ScvMax(bool fVert);
+    virtual int32_t _ScvMax(bool fVert);
 
     // clipboard support
     virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
     virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, long cid);
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
 
 #ifdef WIN
-    void _StartPage(PGNV pgnv, PSTN pstnDoc, long lwPage, RC *prcPage, long onn);
+    void _StartPage(PGNV pgnv, PSTN pstnDoc, int32_t lwPage, RC *prcPage, int32_t onn);
 #endif // WIN
 
   public:
     static PHEDG PhedgNew(PHEDO phedo, PCFL pcfl, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, uint32_t grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     virtual bool FCmdKey(PCMD_KEY pcmd);
 
     virtual void InvalCno(CNO cno);
@@ -384,13 +384,13 @@ class HETD : public HETD_PAR
     virtual PDMD PdmdNew(void);
     virtual PDDG PddgNew(PGCB pgcb);
     virtual void GetName(PSTN pstn);
-    virtual bool FSave(long cid);
+    virtual bool FSave(int32_t cid);
 
     virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse);
 
     void EditHtop(void);
-    bool FDoFind(long cpMin, long *pcpMin, long *pcpLim);
-    bool FDoReplace(long cp1, long cp2, long *pcpMin, long *pcpLim);
+    bool FDoFind(int32_t cpMin, int32_t *pcpMin, int32_t *pcpLim);
+    bool FDoReplace(int32_t cp1, int32_t cp2, int32_t *pcpMin, int32_t *pcpLim);
 
     PHEDO Phedo(void)
     {
@@ -401,7 +401,7 @@ class HETD : public HETD_PAR
         return _cno;
     }
 
-    void GetHtopStn(long istn, PSTN pstn);
+    void GetHtopStn(int32_t istn, PSTN pstn);
 };
 
 /***************************************************************************
@@ -422,20 +422,20 @@ class HETG : public HETG_PAR
     virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
 
     // override these so we can put up our dialogs
-    virtual bool _FGetOtherSize(long *pdypFont);
-    virtual bool _FGetOtherSubSuper(long *pdypOffset);
+    virtual bool _FGetOtherSize(int32_t *pdypFont);
+    virtual bool _FGetOtherSubSuper(int32_t *pdypOffset);
 
     // we have our own ruler
-    virtual long _DypTrul(void);
+    virtual int32_t _DypTrul(void);
     virtual PTRUL _PtrulNew(PGCB pgcb);
 
     // override _DrawLinExtra so we can put boxes around grouped text.
-    virtual void _DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, uint32_t grftxtg);
+    virtual void _DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, int32_t dxp, int32_t yp, uint32_t grftxtg);
 
   public:
     static PHETG PhetgNew(PHETD phetd, PGCB pgcb);
 
-    virtual void InvalCp(long cp, long ccpIns, long ccpDel);
+    virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FInsertPicture(PCRF pcrf, CTG ctg, CNO cno);
@@ -455,18 +455,18 @@ class HETG : public HETG_PAR
     virtual bool FCmdCheckSpelling(PCMD pcmd);
     virtual bool FCmdFontDialog(PCMD pcmd);
 
-    virtual bool FCheckSpelling(long *pcactChanges);
+    virtual bool FCheckSpelling(int32_t *pcactChanges);
 
     PHETD Phetd(void)
     {
         return (PHETD)_ptxtb;
     }
 
-    long DypLine(long ilin);
+    int32_t DypLine(int32_t ilin);
 };
 
-const long kstidFind = 1;
-const long kstidReplace = 2;
+const int32_t kstidFind = 1;
+const int32_t kstidReplace = 2;
 
 /***************************************************************************
     The ruler for a help text document.
@@ -489,30 +489,30 @@ class HTRU : public HTRU_PAR
     };
 
     PTXTG _ptxtg;
-    long _dxpTab;
-    long _dxpDoc;
-    long _dyp;
-    long _xpLeft;
-    long _dxpTrack;
-    long _rtt;
-    long _onn;
-    long _dypFont;
+    int32_t _dxpTab;
+    int32_t _dxpDoc;
+    int32_t _dyp;
+    int32_t _xpLeft;
+    int32_t _dxpTrack;
+    int32_t _rtt;
+    int32_t _onn;
+    int32_t _dypFont;
     uint32_t _grfont;
 
     HTRU(GCB *pgcb, PTXTG ptxtg);
 
   public:
-    static PHTRU PhtruNew(GCB *pgcb, PTXTG ptxtg, long dxpTab, long dxpDoc, long dypDoc, long xpLeft, long onn,
-                          long dypFont, uint32_t grfont);
+    static PHTRU PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft, int32_t onn,
+                          int32_t dypFont, uint32_t grfont);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
 
-    virtual void SetDxpTab(long dxpTab);
-    virtual void SetDxpDoc(long dxpDoc);
-    virtual void SetXpLeft(long xpLeft);
+    virtual void SetDxpTab(int32_t dxpTab);
+    virtual void SetDxpDoc(int32_t dxpDoc);
+    virtual void SetXpLeft(int32_t xpLeft);
 
-    virtual void SetDypHeight(long dyp);
+    virtual void SetDypHeight(int32_t dyp);
 };
 
 #endif //! CHELP_H

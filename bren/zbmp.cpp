@@ -14,7 +14,7 @@ RTCLASS(ZBMP)
 /***************************************************************************
     Create a ZBMP of all 0xff's
 ***************************************************************************/
-PZBMP ZBMP::PzbmpNew(long dxp, long dyp)
+PZBMP ZBMP::PzbmpNew(int32_t dxp, int32_t dyp)
 {
     AssertIn(dxp, 1, klwMax);
     AssertIn(dyp, 1, klwMax);
@@ -56,7 +56,7 @@ PZBMP ZBMP::PzbmpNewFromBpmp(BPMP *pbpmp)
 /***************************************************************************
     Chunky resource reader for ZBMP
 ***************************************************************************/
-bool ZBMP::FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool ZBMP::FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -137,22 +137,22 @@ ZBMP::~ZBMP(void)
 /***************************************************************************
     Draw the ZBMP into prgbPixels
 ***************************************************************************/
-void ZBMP::Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip, PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp));
     AssertNilOrVarMem(prcClip);
     AssertNilOrVarMem(pregnClip);
 
-    long yp;
-    long cbRowCopy;
+    int32_t yp;
+    int32_t cbRowCopy;
     uint8_t *pbSrc;
     uint8_t *pbDst;
     REGSC regsc;
     RC rcZbmp = _rc;
     RC rcRegnBounds;
     RC rcClippedRegnBounds;
-    long xpLeft, xpRight;
+    int32_t xpLeft, xpRight;
 
     // Translate the zbmp's rc into coordinate system of prgbPixels' rc
     rcZbmp.Offset(xpRef, ypRef);
@@ -198,22 +198,22 @@ void ZBMP::Draw(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRe
     Draw the ZBMP into prgbPixels, squashing the clip region vertically by
     two (for BWLD's "half mode")
 ***************************************************************************/
-void ZBMP::DrawHalf(uint8_t *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::DrawHalf(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip, PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp / 2));
     AssertNilOrVarMem(prcClip);
     AssertNilOrVarMem(pregnClip);
 
-    long yp;
-    long cbRowCopy;
+    int32_t yp;
+    int32_t cbRowCopy;
     uint8_t *pbSrc;
     uint8_t *pbDst;
     REGSC regsc;
     RC rcZbmp = _rc;
     RC rcRegnBounds;
     RC rcClippedRegnBounds;
-    long xpLeft, xpRight;
+    int32_t xpLeft, xpRight;
 
     rcZbmp.ypBottom *= 2;
 

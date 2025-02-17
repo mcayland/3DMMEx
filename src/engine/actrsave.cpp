@@ -29,9 +29,9 @@ struct ACTF // Actor chunk on file
     int16_t bo;     // Byte order
     int16_t osk;     // OS kind
     XYZ dxyzFullRte; // Translation of the route
-    long arid;       // Unique id assigned to this actor.
-    long nfrmFirst;  // First frame in this actor's stage life
-    long nfrmLast;   // Last frame in this actor's stage life
+    int32_t arid;    // Unique id assigned to this actor.
+    int32_t nfrmFirst; // First frame in this actor's stage life
+    int32_t nfrmLast;  // Last frame in this actor's stage life
     TAG tagTmpl;     // Tag to actor's template
 };
 const BOM kbomActf = 0x5ffc0000 | kbomTag;
@@ -52,11 +52,11 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
     CNO cnoTmpl;
     BLCK blck;
     KID kid;
-    long iaev;
+    int32_t iaev;
     AEV *paev;
     AEVSND aevsnd;
-    long nfrmFirst;
-    long nfrmLast;
+    int32_t nfrmFirst;
+    int32_t nfrmLast;
 
     // Validate the actor's lifetime if not done already
     if (knfrmInvalid != _nfrmFirst)
@@ -188,7 +188,7 @@ PACTR ACTR::PactrRead(PCRF pcrf, CNO cnoActr)
 
     if (knfrmInvalid == pactr->_nfrmLast && knfrmInvalid != pactr->_nfrmFirst)
     {
-        long nfrmFirst, nfrmLast;
+        int32_t nfrmFirst, nfrmLast;
 
         if (!pactr->FGetLifetime(&nfrmFirst, &nfrmLast))
             goto LFail;
@@ -217,7 +217,7 @@ bool _FReadActf(PBLCK pblck, ACTF *pactf)
 
     if (pblck->Cb() != SIZEOF(ACTF))
     {
-        if (pblck->Cb() != SIZEOF(ACTF) - SIZEOF(long))
+        if (pblck->Cb() != SIZEOF(ACTF) - SIZEOF(int32_t))
             return fFalse;
         fOldActf = fTrue;
     }
@@ -227,7 +227,7 @@ bool _FReadActf(PBLCK pblck, ACTF *pactf)
 
     if (fOldActf)
     {
-        BltPb(&pactf->nfrmLast, &pactf->nfrmLast + 1, SIZEOF(ACTF) - offset(ACTF, nfrmLast) - SIZEOF(long));
+        BltPb(&pactf->nfrmLast, &pactf->nfrmLast + 1, SIZEOF(ACTF) - offset(ACTF, nfrmLast) - SIZEOF(int32_t));
     }
 
     if (kboOther == pactf->bo)
@@ -295,7 +295,7 @@ bool ACTR::_FReadActor(PCFL pcfl, CNO cno)
     Returns: fTrue if everything went well, fFalse otherwise
 
 ************************************************************ PETED ***********/
-bool ACTR::FAdjustAridOnFile(PCFL pcfl, CNO cno, long darid)
+bool ACTR::FAdjustAridOnFile(PCFL pcfl, CNO cno, int32_t darid)
 {
     AssertPo(pcfl, 0);
     Assert(darid != 0, "Why call this with darid == 0?");
@@ -330,7 +330,7 @@ bool ACTR::_FReadRoute(PCFL pcfl, CNO cno)
     AssertBomRglw(kbomRpt, SIZEOF(RPT));
     if (kboOther == bo)
     {
-        SwapBytesRglw(_pglrpt->QvGet(0), LwMul(_pglrpt->IvMac(), SIZEOF(RPT) / SIZEOF(long)));
+        SwapBytesRglw(_pglrpt->QvGet(0), LwMul(_pglrpt->IvMac(), SIZEOF(RPT) / SIZEOF(int32_t)));
     }
     return fTrue;
 }
@@ -363,7 +363,7 @@ void ACTR::_SwapBytesPggaev(PGG pggaev)
 {
     AssertPo(pggaev, 0);
 
-    long iaev;
+    int32_t iaev;
 
     for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
     {
@@ -422,7 +422,7 @@ bool ACTR::_FOpenTags(PCRF pcrf)
     AssertBaseThis(0);
     AssertPo(pcrf, 0);
 
-    long iaev = 0;
+    int32_t iaev = 0;
     PTAG ptag;
 
     if (!TAGM::FOpenTag(&_tagTmpl, pcrf))
@@ -457,7 +457,7 @@ void ACTR::_CloseTags(void)
 {
     AssertBaseThis(0); // because destructor calls this function
 
-    long iaev;
+    int32_t iaev;
     PTAG ptag;
 
     TAGM::CloseTag(&_tagTmpl);
@@ -489,7 +489,7 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     PTAG ptag;
     PGL pgltag;
     PGG pggaev = pvNil;
-    long iaev;
+    int32_t iaev;
     KID kid;
 
     pgltag = GL::PglNew(SIZEOF(TAG), 0);
@@ -523,7 +523,7 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         }
         if (pvNil != pgltagTmpl)
         {
-            long itag;
+            int32_t itag;
             TAG tag;
 
             for (itag = 0; itag < pgltagTmpl->IvMac(); itag++)
@@ -579,7 +579,7 @@ LFail:
     If the iaev'th event of pggaev has a tag, sets *pptag to point to it.
     WARNING: unless you locked pggaev, *pptag is a qtag!
 ***************************************************************************/
-bool ACTR::_FIsIaevTag(PGG pggaev, long iaev, PTAG *pptag, PAEV *pqaev)
+bool ACTR::_FIsIaevTag(PGG pggaev, int32_t iaev, PTAG *pptag, PAEV *pqaev)
 {
     AssertPo(pggaev, 0);
     AssertIn(iaev, 0, pggaev->IvMac());

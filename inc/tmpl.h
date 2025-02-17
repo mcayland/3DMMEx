@@ -69,7 +69,7 @@ struct ACTNF
 {
     int16_t bo;
     int16_t osk;
-    long grfactn;
+    int32_t grfactn;
 };
 VERIFY_STRUCT_SIZE(ACTNF, 8);
 const uint32_t kbomActnf = 0x5c000000;
@@ -110,7 +110,7 @@ class ACTN : public ACTN_PAR
 
   public:
     static PACTN PactnNew(PGG pggcel, PGL pglbmat34, uint32_t grfactn);
-    static bool FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     ~ACTN(void);
 
     uint32_t Grfactn(void)
@@ -118,14 +118,14 @@ class ACTN : public ACTN_PAR
         return _grfactn;
     }
 
-    long Ccel(void)
+    int32_t Ccel(void)
     {
         return _pggcel->IvMac();
     }
-    void GetCel(long icel, CEL *pcel);
-    void GetCps(long icel, long icps, CPS *pcps);
-    void GetMatrix(long imat34, BMAT34 *pbmat34);
-    void GetSnd(long icel, PTAG ptagSnd);
+    void GetCel(int32_t icel, CEL *pcel);
+    void GetCps(int32_t icel, int32_t icps, CPS *pcps);
+    void GetMatrix(int32_t imat34, BMAT34 *pbmat34);
+    void GetSnd(int32_t icel, PTAG ptagSnd);
 };
 
 // grftmpl flags
@@ -159,9 +159,9 @@ class TMPL : public TMPL_PAR
     PGL _pglibactPar; // GL of parent IDs (shorts) to build BODY
     PGL _pglibset;    // GL of body-part-set IDs to build BODY
     PGG _pggcmid;     // List of costumes for each body part set
-    long _ccmid;      // Count of custom costumes
-    long _cbset;      // Count of body part sets
-    long _cactn;      // Count of actions
+    int32_t _ccmid;   // Count of custom costumes
+    int32_t _cbset;   // Count of body part sets
+    int32_t _cactn;   // Count of actions
     STN _stn;         // Template name
 
   protected:
@@ -170,12 +170,12 @@ class TMPL : public TMPL_PAR
     } // can't instantiate directly; must use FReadTmpl
     bool _FReadTmplf(PCFL pcfl, CTG ctg, CNO cno);
     virtual bool _FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl);
-    virtual PACTN _PactnFetch(long anid);
+    virtual PACTN _PactnFetch(int32_t anid);
     virtual PMODL _PmodlFetch(CHID chidModl);
     bool _FWriteTmplf(PCFL pcfl, CTG ctg, CNO *pcno);
 
   public:
-    static bool FReadTmpl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadTmpl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     ~TMPL(void);
     static PGL PgltagFetch(PCFL pcfl, CTG ctg, CNO cno, bool *pfError);
 
@@ -193,25 +193,25 @@ class TMPL : public TMPL_PAR
     }
 
     // Action stuff
-    long Cactn(void)
+    int32_t Cactn(void)
     {
         return _cactn;
     } // count of actions
-    virtual bool FGetActnName(long anid, PSTN pstn);
-    bool FSetActnCel(PBODY pbody, long anid, long celn, BRS *pdwr = pvNil);
-    bool FGetGrfactn(long anid, uint32_t *pgrfactn);
-    bool FGetDwrActnCel(long anid, long celn, BRS *pdwr);
-    bool FGetCcelActn(long anid, long *pccel);
-    bool FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag);
+    virtual bool FGetActnName(int32_t anid, PSTN pstn);
+    bool FSetActnCel(PBODY pbody, int32_t anid, int32_t celn, BRS *pdwr = pvNil);
+    bool FGetGrfactn(int32_t anid, uint32_t *pgrfactn);
+    bool FGetDwrActnCel(int32_t anid, int32_t celn, BRS *pdwr);
+    bool FGetCcelActn(int32_t anid, int32_t *pccel);
+    bool FGetSndActnCel(int32_t anid, int32_t celn, bool *pfSoundExists, PTAG ptag);
 
     // Costume stuff
     virtual bool FSetDefaultCost(PBODY pbody); // applies default costume
-    virtual PCMTL PcmtlFetch(long cmid);
-    long CcmidOfBset(long ibset);
-    long CmidOfBset(long ibset, long icmid);
-    bool FBsetIsAccessory(long ibset); // whether ibset holds accessories
-    bool FIbsetAccOfIbset(long ibset, long *pibsetAcc);
-    bool FSameAccCmids(long cmid1, long cmid2);
+    virtual PCMTL PcmtlFetch(int32_t cmid);
+    int32_t CcmidOfBset(int32_t ibset);
+    int32_t CmidOfBset(int32_t ibset, int32_t icmid);
+    bool FBsetIsAccessory(int32_t ibset); // whether ibset holds accessories
+    bool FIbsetAccOfIbset(int32_t ibset, int32_t *pibsetAcc);
+    bool FSameAccCmids(int32_t cmid1, int32_t cmid2);
 };
 
 #endif // TMPL_H

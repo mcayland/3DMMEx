@@ -45,7 +45,7 @@ class TUNT : public TUNT_PAR
     ASSERT
 
   protected:
-    long _itbox;
+    int32_t _itbox;
     bool _fStory;
     TUNT(void)
     {
@@ -59,7 +59,7 @@ class TUNT : public TUNT_PAR
     {
         _fStory = fStory;
     }
-    void SetItbox(long itbox)
+    void SetItbox(int32_t itbox)
     {
         _itbox = itbox;
     }
@@ -84,7 +84,7 @@ class TUNS : public TUNS_PAR
     ASSERT
 
   protected:
-    long _itbox;
+    int32_t _itbox;
     RC _rc;
     TUNS(void)
     {
@@ -98,7 +98,7 @@ class TUNS : public TUNS_PAR
     {
         _rc = *prc;
     }
-    void SetItbox(long itbox)
+    void SetItbox(int32_t itbox)
     {
         _itbox = itbox;
     }
@@ -123,9 +123,9 @@ class TUNH : public TUNH_PAR
     ASSERT
 
   protected:
-    long _itbox;
-    long _nfrmFirst;
-    long _nfrmMax;
+    int32_t _itbox;
+    int32_t _nfrmFirst;
+    int32_t _nfrmMax;
 
     TUNH(void)
     {
@@ -135,15 +135,15 @@ class TUNH : public TUNH_PAR
     static PTUNH PtunhNew(void);
     ~TUNH(void);
 
-    void SetFrmFirst(long nfrmFirst)
+    void SetFrmFirst(int32_t nfrmFirst)
     {
         _nfrmFirst = nfrmFirst;
     }
-    void SetFrmLast(long nfrmMax)
+    void SetFrmLast(int32_t nfrmMax)
     {
         _nfrmMax = nfrmMax;
     }
-    void SetItbox(long itbox)
+    void SetItbox(int32_t itbox)
     {
         _itbox = itbox;
     }
@@ -169,7 +169,7 @@ class TUND : public TUND_PAR
 
   protected:
     PUNDB _pundb;
-    long _itbox;
+    int32_t _itbox;
     TUND(void)
     {
     }
@@ -178,7 +178,7 @@ class TUND : public TUND_PAR
     static PTUND PtundNew(PUNDB pundb);
     ~TUND(void);
 
-    void SetItbox(long itbox)
+    void SetItbox(int32_t itbox)
     {
         _itbox = itbox;
     }
@@ -203,7 +203,7 @@ class TUNC : public TUNC_PAR
     ASSERT
 
   protected:
-    long _itbox;
+    int32_t _itbox;
     ACR _acr;
     TUNC(void)
     {
@@ -213,7 +213,7 @@ class TUNC : public TUNC_PAR
     static PTUNC PtuncNew(void);
     ~TUNC(void);
 
-    void SetItbox(long itbox)
+    void SetItbox(int32_t itbox)
     {
         _itbox = itbox;
     }
@@ -301,7 +301,7 @@ void TBXB::Draw(PGNV pgnv, RC *prcClip)
 
     RC rc;
     RC rcClip;
-    long lwSave;
+    int32_t lwSave;
 
     Assert(_ptbox->FIsVisible(), "DDG existing for invisible tbox");
 
@@ -441,7 +441,7 @@ bool TBXB::FCmdTrackMouse(PCMD_MOUSE pcmd)
     PT pt;
     RC rc, rcOld;
     RC rcBound(0, 0, _ptbox->Pscen()->Pmvie()->Pmcc()->Dxp(), _ptbox->Pscen()->Pmvie()->Pmcc()->Dyp());
-    static long itbox = ivNil;
+    static int32_t itbox = ivNil;
 
     pmvu = (PMVU)_ptbox->Pscen()->Pmvie()->PddgGet(0);
     AssertPo(pmvu, 0);
@@ -733,7 +733,7 @@ bool TBXB::FCmdMouseMove(PCMD_MOUSE pcmd)
  *  Anchor point number.
  *
  **************************************************************************/
-TBXT TBXB::_TbxtAnchor(long xp, long yp)
+TBXT TBXB::_TbxtAnchor(int32_t xp, int32_t yp)
 {
     AssertThis(0);
 
@@ -852,7 +852,7 @@ void TBXB::Activate(bool fActive)
  *  fTrue if it handles the command, else fFalse.
  *
  **************************************************************************/
-bool TBXB::FPtIn(long xp, long yp)
+bool TBXB::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
 
@@ -1084,7 +1084,7 @@ void TBXG::Activate(bool fActive)
  *  None.
  *
  **************************************************************************/
-void TBXG::InvalCp(long cp, long ccpIns, long ccpDel)
+void TBXG::InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel)
 {
     PMVU pmvu;
     PTBOX ptbox = (PTBOX)_pdocb;
@@ -1299,7 +1299,7 @@ bool TBXG::FCmdTrackMouse(PCMD_MOUSE pcmd)
  *  fTrue if it handles the command, else fFalse.
  *
  **************************************************************************/
-bool TBXG::FPtIn(long xp, long yp)
+bool TBXG::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
 
@@ -1339,7 +1339,7 @@ bool TBXG::FPtIn(long xp, long yp)
  *	Width in pixels.
  *
  **************************************************************************/
-long TBXG::_DxpDoc()
+int32_t TBXG::_DxpDoc()
 {
     AssertBaseThis(0);
 
@@ -1381,7 +1381,7 @@ void TBXG::_NewRc(void)
 
     TBXG_PAR::_NewRc();
 
-    long cpLim = _ptxtb->CpMac() - 1;
+    int32_t cpLim = _ptxtb->CpMac() - 1;
 
     _Reformat(0, cpLim, cpLim);
 }
@@ -1521,7 +1521,7 @@ bool TBXG::FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds)
  * 	fTrue if it handled the command, else fFalse.
  *
  **************************************************************************/
-bool TBXG::_FDoClip(long tool)
+bool TBXG::_FDoClip(int32_t tool)
 {
     AssertThis(0);
 
@@ -1647,7 +1647,7 @@ bool TBXG::FNeedToScroll()
     AssertThis(0);
 
     RC rc;
-    long dyp;
+    int32_t dyp;
 
     //
     // Get the height of the remaining text
@@ -1674,7 +1674,7 @@ bool TBXG::FNeedToScroll()
  *  None.
  *
  ****************************************************/
-void TBXG::Scroll(long scaVert)
+void TBXG::Scroll(int32_t scaVert)
 {
     AssertThis(0);
 
@@ -1723,7 +1723,7 @@ bool TBXG::FTextSelected(void)
  * 	None.
  *
  ****************************************************/
-void TBXG::_FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
+void TBXG::_FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin, int32_t *pcpLim)
 {
     TBXG_PAR::_FetchChp(cp, pchp, pcpMin, pcpLim);
 
@@ -1786,12 +1786,12 @@ struct TBOXH
 {
     int16_t bo;
     int16_t osk;
-    long nfrmFirst;
-    long nfrmMax;
-    long xpLeft;
-    long xpRight;
-    long ypTop;
-    long ypBottom;
+    int32_t nfrmFirst;
+    int32_t nfrmMax;
+    int32_t xpLeft;
+    int32_t xpRight;
+    int32_t ypTop;
+    int32_t ypBottom;
     CHID chid;
     bool fStory;
 };
@@ -2172,7 +2172,7 @@ bool TBOX::FIsVisible(void)
  *  fTrue if the lifetime is valid, else fFalse.
  *
  **************************************************************************/
-bool TBOX::FGetLifetime(long *pnfrmStart, long *pnfrmLast)
+bool TBOX::FGetLifetime(int32_t *pnfrmStart, int32_t *pnfrmLast)
 {
     AssertThis(0);
     AssertVarMem(pnfrmStart);
@@ -2243,7 +2243,7 @@ void TBOX::Select(bool fSel)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool TBOX::FGotoFrame(long nfrm)
+bool TBOX::FGotoFrame(int32_t nfrm)
 {
     AssertThis(0);
 
@@ -2562,7 +2562,7 @@ bool TBOX::FSetAcrText(ACR acr)
     Returns:  fTrue if it succeeds
 
 ************************************************************ PETED ***********/
-bool TBOX::FSetDypFontText(long dypFont)
+bool TBOX::FSetDypFontText(int32_t dypFont)
 {
     AssertThis(0);
 
@@ -2622,7 +2622,7 @@ bool TBOX::FSetStyleText(uint32_t grfont)
     Returns:  fTrue if it succeeds
 
 ************************************************************ PETED ***********/
-bool TBOX::FSetOnnText(long onn)
+bool TBOX::FSetOnnText(int32_t onn)
 {
     AssertThis(0);
 
@@ -2659,8 +2659,8 @@ void TBOX::FetchChpSel(PCHP pchp, uint32_t *pgrfchp)
     AssertVarMem(pchp);
     AssertVarMem(pgrfchp);
 
-    long cpMin, cpMac;
-    long cpMinChp, cpMacChp;
+    int32_t cpMin, cpMac;
+    int32_t cpMinChp, cpMacChp;
     CHP chp;
     PTXTG ptxtg;
 
@@ -2784,7 +2784,7 @@ bool TBOX::FTextSelected(void)
  *  None.
  *
  ****************************************************/
-void TBOX::SetStartFrame(long nfrm)
+void TBOX::SetStartFrame(int32_t nfrm)
 {
     AssertThis(0);
     _nfrmFirst = nfrm;
@@ -2898,11 +2898,11 @@ void TBOX::CleanDdg(void)
  *  Itbox.
  *
  ****************************************************/
-long TBOX::Itbox(void)
+int32_t TBOX::Itbox(void)
 {
     AssertThis(0);
 
-    long itbox;
+    int32_t itbox;
 
     for (itbox = 0;; itbox++)
     {
@@ -3257,7 +3257,7 @@ bool TUNH::FDo(PDOCB pdocb)
     AssertPo(pdocb, 0);
 
     PTBOX ptbox;
-    long nfrmFirst, nfrmMax;
+    int32_t nfrmFirst, nfrmMax;
 
     if (!_pmvie->FSwitchScen(_iscen))
     {

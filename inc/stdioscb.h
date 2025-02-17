@@ -19,7 +19,7 @@
 //	The studio scrollbar class.
 //
 
-const long kctsFps = 20;
+const int32_t kctsFps = 20;
 
 #define SSCB_PAR BASE
 typedef class SSCB *PSSCB;
@@ -31,7 +31,7 @@ class SSCB : public SSCB_PAR
     MARKMEM
 
   private:
-    long _nfrmFirstOld;
+    int32_t _nfrmFirstOld;
     bool _fNoAutoadjust;
 
     bool _fBtnAddsFrames;
@@ -39,7 +39,7 @@ class SSCB : public SSCB_PAR
     //
     //	Private methods
     //
-    long _CxScrollbar(long kidScrollbar, long kidThumb);
+    int32_t _CxScrollbar(int32_t kidScrollbar, int32_t kidThumb);
 
   protected:
     PTGOB _ptgobFrame;
@@ -50,12 +50,12 @@ class SSCB : public SSCB_PAR
     struct FDSC
     {
         uint32_t ts;
-        long cfrm;
+        int32_t cfrm;
     };
 
     PTGOB _ptgobFps;
     FDSC _rgfdsc[kctsFps];
-    long _itsNext;
+    int32_t _itsNext;
 #endif // SHOW_FPS
 
     PMVIE _pmvie;

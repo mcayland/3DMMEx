@@ -32,7 +32,7 @@ ASSERTNAME
 
 RTCLASS(TDF)
 
-const long kcchTdfDefault = 256;        // for size estimates and authoring
+const int32_t kcchTdfDefault = 256;     // for size estimates and authoring
 const BRS kdxrSpacing = BR_SCALAR(0.0); // horizontal space between chars
 const BRS kdyrLeading = BR_SCALAR(0.5); // vertical space between chars
 
@@ -43,7 +43,7 @@ struct TDFF
 {
     int16_t bo;
     int16_t osk;
-    long cch;
+    int32_t cch;
     BRS dyrMax;
     // These variable-length arrays follow the TDFF in the TDF chunk
     //  BRS rgdxr[cch];
@@ -55,7 +55,7 @@ const BOM kbomTdff = 0x5F000000; // don't forget to swap rgdxr & rgdyr!
 /***************************************************************************
     A PFNRPO to read a TDF from a file.
 ***************************************************************************/
-bool TDF::FReadTdf(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool TDF::FReadTdf(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -95,7 +95,7 @@ bool TDF::_FInit(PBLCK pblck)
     AssertPo(pblck, 0);
 
     TDFF tdff;
-    long cbrgdwr; // space taken by rgdxr or rgdyr
+    int32_t cbrgdwr; // space taken by rgdxr or rgdyr
 
     if (!pblck->FUnpackData())
         return fFalse;
@@ -171,11 +171,11 @@ bool TDF::FCreate(PCRF pcrf, PGL pglkid, STN *pstn, CKI *pckiTdf)
     BRS *prgdyr = pvNil;
     PMODL pmodl;
     BLCK blck;
-    long cbrgdwr; // space taken by rgdxr or rgdyr
-    long ikid;
-    long ckid;
+    int32_t cbrgdwr; // space taken by rgdxr or rgdyr
+    int32_t ikid;
+    int32_t ckid;
     CHID chidMax = 0;
-    long ikidLetteri = -1;
+    int32_t ikidLetteri = -1;
 
     // Find chidMax
     ckid = pglkid->IvMac();
@@ -274,7 +274,7 @@ PMODL TDF::PmodlFetch(CHID chid)
 /***************************************************************************
     Return the width of the given character
 ***************************************************************************/
-BRS TDF::DxrChar(long ich)
+BRS TDF::DxrChar(int32_t ich)
 {
     AssertThis(0);
     AssertIn(ich, 0, _cch);
@@ -285,7 +285,7 @@ BRS TDF::DxrChar(long ich)
 /***************************************************************************
     Return the height of the given character
 ***************************************************************************/
-BRS TDF::DyrChar(long ich)
+BRS TDF::DyrChar(int32_t ich)
 {
     AssertThis(0);
     AssertIn(ich, 0, _cch);

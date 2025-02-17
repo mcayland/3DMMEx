@@ -212,7 +212,7 @@ FP FIL::FpMac(void)
 /***************************************************************************
     Read a block from the file.
 ***************************************************************************/
-bool FIL::FReadRgb(void *pv, long cb, FP fp)
+bool FIL::FReadRgb(void *pv, int32_t cb, FP fp)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);
@@ -254,7 +254,7 @@ LRet:
 /***************************************************************************
     Write a block to the file.
 ***************************************************************************/
-bool FIL::FWriteRgb(const void *pv, long cb, FP fp)
+bool FIL::FWriteRgb(const void *pv, int32_t cb, FP fp)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);

@@ -14,7 +14,7 @@
 #include "frame.h"
 ASSERTNAME
 
-bool _FGetLwFromSzs(PSZS pszs, long *plw);
+bool _FGetLwFromSzs(PSZS pszs, int32_t *plw);
 
 /***************************************************************************
     Main routine.  Returns non-zero iff there's an error.
@@ -25,13 +25,13 @@ int __cdecl main(int cpszs, char *prgpszs[])
     STN stn;
     char chs;
     FLO flo;
-    long lwSig;
+    int32_t lwSig;
     PMBMP pmbmp = pvNil;
-    long cfni = 0;
-    long xp = 0;
-    long yp = 0;
-    long lwTrans = 0;
-    long cfmt = cfmtNil;
+    int32_t cfni = 0;
+    int32_t xp = 0;
+    int32_t yp = 0;
+    int32_t lwTrans = 0;
+    int32_t cfmt = cfmtNil;
 
 #ifdef UNICODE
     fprintf(stderr, "\nMicrosoft (R) Make Mbmp Utility (Unicode; " Debug("Debug; ") __DATE__ "; " __TIME__ ")\n");
@@ -155,7 +155,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
         fprintf(stderr, "Couldn't create destination file\n\n");
         goto LFail;
     }
-    flo.fp = SIZEOF(long);
+    flo.fp = SIZEOF(int32_t);
     flo.cb = pmbmp->CbOnFile();
 
     if (cfmtNil != cfmt)
@@ -175,7 +175,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
             lwSig = klwSigPackedFile;
             flo.cb = blck.Cb(fTrue);
         }
-        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0) || !blck.FWriteToFlo(&flo, fTrue))
+        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(int32_t), 0) || !blck.FWriteToFlo(&flo, fTrue))
         {
             fprintf(stderr, "writing to destination file failed\n\n");
             goto LFail;
@@ -184,7 +184,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
     else
     {
         lwSig = klwSigUnpackedFile;
-        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0) || !pmbmp->FWriteFlo(&flo))
+        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(int32_t), 0) || !pmbmp->FWriteFlo(&flo))
         {
             fprintf(stderr, "writing to destination file failed\n\n");
             goto LFail;
@@ -216,10 +216,10 @@ LFail:
     length is <= 4, assumes the characters are to be packed into a long
     (ala CTGs and FTGs).
 ***************************************************************************/
-bool _FGetLwFromSzs(PSZS pszs, long *plw)
+bool _FGetLwFromSzs(PSZS pszs, int32_t *plw)
 {
     STN stn;
-    long ich;
+    int32_t ich;
 
     stn.SetSzs(pszs);
     if (stn.FGetLw(plw))
@@ -241,7 +241,7 @@ bool _fEnableWarnings = fTrue;
 /***************************************************************************
     Warning proc called by Warn() macro
 ***************************************************************************/
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage)
 {
     if (_fEnableWarnings)
     {
@@ -257,7 +257,7 @@ void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
 /***************************************************************************
     Returning true breaks into the debugger.
 ***************************************************************************/
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage, void *pv, int32_t cb)
 {
     fprintf(stderr, "An assert occurred: \n");
     if (pszsMessage != pvNil)
@@ -284,7 +284,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
                 break;
 
             case 4:
-                fprintf(stderr, "%08lx", *(long *)pv);
+                fprintf(stderr, "%08lx", *(int32_t *)pv);
                 break;
             }
             printf("\n");

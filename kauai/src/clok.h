@@ -39,7 +39,7 @@ class CLOK : public CLOK_PAR
     {
         PCMH pcmh;
         uint32_t tim;
-        long lw;
+        int32_t lw;
     };
 
     static PCLOK _pclokFirst;
@@ -54,9 +54,9 @@ class CLOK : public CLOK_PAR
     PGL _pglalad; // the registered alarms
 
   public:
-    CLOK(long hid, uint32_t grfclok = fclokNil);
+    CLOK(int32_t hid, uint32_t grfclok = fclokNil);
     ~CLOK(void);
-    static PCLOK PclokFromHid(long hid);
+    static PCLOK PclokFromHid(int32_t hid);
     static void BuryCmh(PCMH pcmh);
     void RemoveCmh(PCMH pcmh);
 
@@ -68,7 +68,7 @@ class CLOK : public CLOK_PAR
         return _dtimAlarm;
     }
 
-    bool FSetAlarm(long dtim, PCMH pcmhNotify = pvNil, long lwUser = 0, bool fAdjustForDelay = fFalse);
+    bool FSetAlarm(int32_t dtim, PCMH pcmhNotify = pvNil, int32_t lwUser = 0, bool fAdjustForDelay = fFalse);
 
     // idle handling
     virtual bool FCmdAll(PCMD pcmd);

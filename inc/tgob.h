@@ -28,11 +28,11 @@ class TGOB : public TGOB_PAR
     MARKMEM
 
   protected:
-    long _onn;
-    long _dypFont;
+    int32_t _onn;
+    int32_t _dypFont;
     STN _stn;
-    long _tah;
-    long _tav;
+    int32_t _tah;
+    int32_t _tav;
     ACR _acrFore;
     ACR _acrBack;
     ~TGOB(void)
@@ -44,14 +44,14 @@ class TGOB : public TGOB_PAR
     // Create and destroy functions
     //
     TGOB(PGCB pgcb);
-    TGOB(long hid);
+    TGOB(int32_t hid);
 
-    void SetFont(long onn)
+    void SetFont(int32_t onn)
     {
         AssertThis(0);
         _onn = onn;
     }
-    void SetFontSize(long dypFont)
+    void SetFontSize(int32_t dypFont)
     {
         AssertThis(0);
         _dypFont = dypFont;
@@ -72,13 +72,13 @@ class TGOB : public TGOB_PAR
         AssertThis(0);
         _acrBack = acrBack;
     }
-    void SetAlign(long tah = tahLim, long tav = tavLim);
-    long GetFont(void)
+    void SetAlign(int32_t tah = tahLim, int32_t tav = tavLim);
+    int32_t GetFont(void)
     {
         AssertThis(0);
         return (_onn);
     }
-    long GetFontSize(void)
+    int32_t GetFontSize(void)
     {
         AssertThis(0);
         return _dypFont;
@@ -93,8 +93,8 @@ class TGOB : public TGOB_PAR
         AssertThis(0);
         return (_acrBack);
     }
-    void GetAlign(long *ptah = pvNil, long *ptav = pvNil);
-    static PTGOB PtgobCreate(long kidFrm, long idsFont, long tav = tavTop, long hid = hidNil);
+    void GetAlign(int32_t *ptah = pvNil, int32_t *ptav = pvNil);
+    static PTGOB PtgobCreate(int32_t kidFrm, int32_t idsFont, int32_t tav = tavTop, int32_t hid = hidNil);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
 };

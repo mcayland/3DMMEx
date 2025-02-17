@@ -23,10 +23,10 @@
 #define ESL_H
 
 // Function to build a GCB to construct a child under a parent
-bool FBuildGcb(PGCB pgcb, long kidParent, long kidChild);
+bool FBuildGcb(PGCB pgcb, int32_t kidParent, int32_t kidChild);
 
 // Function to set a GOK to a different state
-void SetGokState(long kid, long st);
+void SetGokState(int32_t kid, int32_t st);
 
 /*****************************
     The generic easel class
@@ -45,14 +45,14 @@ class ESL : public ESL_PAR
     ESL(PGCB pgcb) : GOK(pgcb)
     {
     }
-    bool _FInit(PRCA prca, long kidEasel);
+    bool _FInit(PRCA prca, int32_t kidEasel);
     virtual bool _FAcceptChanges(bool *pfDismissEasel)
     {
         return fTrue;
     }
 
   public:
-    static PESL PeslNew(PRCA prca, long kidParent, long hidEasel);
+    static PESL PeslNew(PRCA prca, int32_t kidParent, int32_t hidEasel);
     ~ESL(void);
 
     bool FCmdDismiss(PCMD pcmd); // Handles both OK and Cancel
@@ -83,7 +83,7 @@ class SNE : public SNE_PAR
 
   public:
     static PSNE PsneNew(PEDPAR pedpar, PESLT peslt, PSTN pstnInit);
-    virtual bool FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin);
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin);
 };
 
 /****************************************
@@ -115,11 +115,11 @@ class ESLT : public ESLT_PAR
     ESLT(PGCB pgcb) : ESL(pgcb)
     {
     }
-    bool _FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr, PSTN pstnNew, long tdtsNew, PTAG ptagTdfNew);
+    bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr, PSTN pstnNew, int32_t tdtsNew, PTAG ptagTdfNew);
     virtual bool _FAcceptChanges(bool *pfDismissEasel);
 
   public:
-    static PESLT PesltNew(PRCA prca, PMVIE pmvie, PACTR pactr, PSTN pstnNew = pvNil, long tdtsNew = tdtsNil,
+    static PESLT PesltNew(PRCA prca, PMVIE pmvie, PACTR pactr, PSTN pstnNew = pvNil, int32_t tdtsNew = tdtsNil,
                           PTAG ptagTdfNew = pvNil);
     ~ESLT(void);
 
@@ -156,7 +156,7 @@ class ESLA : public ESLA_PAR
     ESLA(PGCB pgcb) : ESL(pgcb)
     {
     }
-    bool _FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr);
+    bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr);
     virtual bool _FAcceptChanges(bool *pfDismissEasel);
 
   public:
@@ -181,14 +181,14 @@ class LSND : public LSND_PAR
 
   protected:
     PGL _pgltag;      // PGL in case of chained sounds
-    long _vlm;        // Initial volume
-    long _vlmNew;     // User can redefine with slider
+    int32_t _vlm;     // Initial volume
+    int32_t _vlmNew;  // User can redefine with slider
     bool _fLoop;      // Looping sound
-    long _objID;      // Owner's object ID
-    long _sty;        // Sound type
-    long _kidVol;     // Kid of volume slider
-    long _kidIcon;    // Kid of sound-type icon
-    long _kidEditBox; // Kid of sound-name box
+    int32_t _objID;   // Owner's object ID
+    int32_t _sty;     // Sound type
+    int32_t _kidVol;  // Kid of volume slider
+    int32_t _kidIcon; // Kid of sound-type icon
+    int32_t _kidEditBox; // Kid of sound-name box
     bool _fMatcher;   // Whether this is a motion-matched sound
 
   public:
@@ -198,15 +198,15 @@ class LSND : public LSND_PAR
     }
     ~LSND(void);
 
-    bool FInit(long sty, long kidVol, long kidIcon, long kidEditBox, PGL *ppgltag, long vlm, bool fLoop, long objID,
+    bool FInit(int32_t sty, int32_t kidVol, int32_t kidIcon, int32_t kidEditBox, PGL *ppgltag, int32_t vlm, bool fLoop, int32_t objID,
                bool fMatcher);
     bool FValidSnd(void);
-    void SetVlmNew(long vlmNew)
+    void SetVlmNew(int32_t vlmNew)
     {
         _vlmNew = vlmNew;
     }
     void Play(void);
-    bool FChanged(long *pvlmNew, bool *pfNuked);
+    bool FChanged(int32_t *pvlmNew, bool *pfNuked);
 };
 
 /****************************************
@@ -237,7 +237,7 @@ class ESLL : public ESLL_PAR
     {
     }
 
-    bool _FInit(PRCA prca, long kidEasel, PMVIE pmvie, PACTR pactr);
+    bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr);
     virtual bool _FAcceptChanges(bool *pfDismissEasel);
 
   public:
@@ -275,7 +275,7 @@ class ESLR : public ESLR_PAR
     ESLR(PGCB pgcb) : ESL(pgcb), _clok(HidUnique())
     {
     }
-    bool _FInit(PRCA prca, long kidEasel, PMVIE pmvie, bool fSpeech, PSTN pstnNew);
+    bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, bool fSpeech, PSTN pstnNew);
     virtual bool _FAcceptChanges(bool *pfDismissEasel);
     void _UpdateMeter(void);
 

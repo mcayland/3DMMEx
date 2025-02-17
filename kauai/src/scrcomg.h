@@ -161,9 +161,9 @@ class SCCG : public SCCG_PAR
     virtual int16_t _SwBack(void);
     virtual int16_t _SwMin(void);
 
-    virtual long _OpFromStn(PSTN pstn);
-    virtual bool _FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar, bool *pfVoid);
-    virtual bool _FGetStnFromOp(long op, PSTN pstn);
+    virtual int32_t _OpFromStn(PSTN pstn);
+    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar, bool *pfVoid);
+    virtual bool _FGetStnFromOp(int32_t op, PSTN pstn);
 };
 
 #endif //! SCRCOMG_H

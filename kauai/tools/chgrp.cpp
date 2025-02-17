@@ -12,7 +12,7 @@ ASSERTNAME
 
 #define kcbMaxDispGrp 16
 
-bool _FDlgGrpbNew(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgGrpbNew(PDLG pdlg, int32_t *pidit, void *pv);
 
 BEGIN_CMD_MAP(DCGB, DDG)
 ON_CID_GEN(cidEditNatural, &DCGB::FCmdEditItem, &DCGB::FEnableDcgbCmd)
@@ -34,7 +34,7 @@ RTCLASS(DCST)
     the edited chunk belongs to.  cls should be one of GL, AL, GG, AG,
     GST, AST.
 ***************************************************************************/
-DOCG::DOCG(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, long cls) : DOCE(pdocb, pcfl, ctg, cno)
+DOCG::DOCG(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, int32_t cls) : DOCE(pdocb, pcfl, ctg, cno)
 {
     _pgrpb = pvNil;
     _cls = cls;
@@ -52,7 +52,7 @@ DOCG::~DOCG(void)
     Static method to create a new document based on a group in a chunk.
     Asserts that there are no other editing docs open on this chunk.
 ***************************************************************************/
-PDOCG DOCG::PdocgNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, long cls)
+PDOCG DOCG::PdocgNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, int32_t cls)
 {
     AssertPo(pdocb, 0);
     AssertPo(pcfl, 0);
@@ -82,11 +82,11 @@ enum
 /***************************************************************************
     Dialog proc for Adopt Chunk dialog.
 ***************************************************************************/
-bool _FDlgGrpbNew(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgGrpbNew(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
-    long cb;
+    int32_t cb;
     bool fEmpty;
 
     switch (*pidit)
@@ -102,7 +102,7 @@ bool _FDlgGrpbNew(PDLG pdlg, long *pidit, void *pv)
         }
 
         // check the size
-        if (!pdlg->FGetLwFromEdit(kiditSizeGrpbNew, &cb, &fEmpty) && !fEmpty || !FIn(cb, *(long *)pv, kcbMax))
+        if (!pdlg->FGetLwFromEdit(kiditSizeGrpbNew, &cb, &fEmpty) && !fEmpty || !FIn(cb, *(int32_t *)pv, kcbMax))
         {
             vpappb->TGiveAlertSz(PszLit("Bad Size"), bkOk, cokStop);
             pdlg->SelectDit(kiditSizeGrpbNew);
@@ -129,8 +129,8 @@ bool DOCG::_FRead(PBLCK pblck)
     {
         // create a new one - need to ask for a size from the user
         PDLG pdlg;
-        long dlid, idit;
-        long cb, cbMin;
+        int32_t dlid, idit;
+        int32_t cb, cbMin;
         bool fEmpty;
 
         // determine which dialog to use
@@ -163,7 +163,7 @@ bool DOCG::_FRead(PBLCK pblck)
         if (idit != kiditOkGrpbNew)
             goto LFail;
 
-        if (!pdlg->FGetLwFromEdit(kiditSizeGrpbNew, &cb, &fEmpty) && !fEmpty || !FIn(cb, cbMin, kcbMax / SIZEOF(long)))
+        if (!pdlg->FGetLwFromEdit(kiditSizeGrpbNew, &cb, &fEmpty) && !fEmpty || !FIn(cb, cbMin, kcbMax / SIZEOF(int32_t)))
         {
             goto LFail;
         }
@@ -183,10 +183,10 @@ bool DOCG::_FRead(PBLCK pblck)
             _pgrpb = AG::PagNew(cb);
             break;
         case kclsGST:
-            _pgrpb = GST::PgstNew(cb * SIZEOF(long));
+            _pgrpb = GST::PgstNew(cb * SIZEOF(int32_t));
             break;
         case kclsAST:
-            _pgrpb = AST::PastNew(cb * SIZEOF(long));
+            _pgrpb = AST::PastNew(cb * SIZEOF(int32_t));
             break;
         default:
             BugVar("bad cls value", &_cls);
@@ -272,7 +272,7 @@ bool DOCG::_FWrite(PBLCK pblck, bool fRedirect)
 /***************************************************************************
     Get the size of the group on file.
 ***************************************************************************/
-long DOCG::_CbOnFile(void)
+int32_t DOCG::_CbOnFile(void)
 {
     AssertThis(0);
     return _pgrpb->CbOnFile();
@@ -316,7 +316,7 @@ void DOCG::MarkMem(void)
 /***************************************************************************
     Constructor for a DCGB.
 ***************************************************************************/
-DCGB::DCGB(PDOCB pdocb, PGRPB pgrpb, long cls, long clnItem, PGCB pgcb) : DCLB(pdocb, pgcb)
+DCGB::DCGB(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t clnItem, PGCB pgcb) : DCLB(pdocb, pgcb)
 {
     AssertIn(clnItem, 1, 10);
     _dypBorder = 1;
@@ -349,9 +349,9 @@ DCGB::DCGB(PDOCB pdocb, PGRPB pgrpb, long cls, long clnItem, PGCB pgcb) : DCLB(p
     Static method to invalidate all DCGB's on this GRPB.  Also dirties the
     document.  Should be called by any code that edits the document.
 ***************************************************************************/
-void DCGB::InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, long iv, long cvIns, long cvDel)
+void DCGB::InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, int32_t iv, int32_t cvIns, int32_t cvDel)
 {
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
     PDCGB pdcgb;
 
@@ -373,7 +373,7 @@ void DCGB::InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, long iv, long cvIns, long cvDe
     Invalidate the display from iv to the end of the display.  If we're
     the active DCGB, also redraw.
 ***************************************************************************/
-void DCGB::_InvalIv(long iv, long cvIns, long cvDel)
+void DCGB::_InvalIv(int32_t iv, int32_t cvIns, int32_t cvDel)
 {
     AssertThis(0);
     AssertIn(iv, 0, kcbMax);
@@ -426,11 +426,11 @@ void DCGB::_Activate(bool fActive)
 /***************************************************************************
     Return the max for the scroll bar.
 ***************************************************************************/
-long DCGB::_ScvMax(bool fVert)
+int32_t DCGB::_ScvMax(bool fVert)
 {
     AssertThis(0);
     RC rc;
-    long ichLim;
+    int32_t ichLim;
 
     _GetContent(&rc);
     if (fVert)
@@ -445,10 +445,10 @@ long DCGB::_ScvMax(bool fVert)
 /***************************************************************************
     Set the selection to the given line.
 ***************************************************************************/
-void DCGB::_SetSel(long ln)
+void DCGB::_SetSel(int32_t ln)
 {
     AssertThis(0);
-    long iv, dln;
+    int32_t iv, dln;
 
     if (ln < 0 || ln >= _LnLim())
     {
@@ -494,7 +494,7 @@ void DCGB::_ShowSel(void)
 {
     AssertThis(0);
     RC rc;
-    long cln, ln;
+    int32_t cln, ln;
 
     if (ivNil == _ivCur)
         return;
@@ -535,7 +535,7 @@ void DCGB::_DrawSel(PGNV pgnv)
 bool DCGB::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
-    long ln, lnLim, lnNew, cln;
+    int32_t ln, lnLim, lnNew, cln;
     RC rc;
 
     ln = _LnFromIvDln(_ivCur, _dlnCur);
@@ -602,12 +602,12 @@ bool DCGB::FCmdKey(PCMD_KEY pcmd)
     Handle mouse-down in a DCGB - track the mouse and select the last
     item the mouse is over.
 ***************************************************************************/
-void DCGB::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
+void DCGB::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
     bool fDown;
     PT pt, ptT;
-    long ln, ivCur, dlnCur;
+    int32_t ln, ivCur, dlnCur;
     RC rc;
 
     // do this before the activate to avoid flashing the selection
@@ -690,7 +690,7 @@ bool DCGB::FCmdEditItem(PCMD pcmd)
 /***************************************************************************
     Edit the indicated line of the group.
 ***************************************************************************/
-void DCGB::_EditIvDln(long iv, long dln)
+void DCGB::_EditIvDln(int32_t iv, int32_t dln)
 {
     PDOCI pdoci;
 
@@ -713,9 +713,9 @@ bool DCGB::FCmdDeleteItem(PCMD pcmd)
 /***************************************************************************
     Delete the indicated item.
 ***************************************************************************/
-void DCGB::_DeleteIv(long iv)
+void DCGB::_DeleteIv(int32_t iv)
 {
-    long ivMac;
+    int32_t ivMac;
 
     if (ivNil == iv || _pgrpb->FFree(iv))
         return;
@@ -764,14 +764,14 @@ void DCGB::MarkMem(void)
     Constructor for the DCGL class.  This class displays (and allows
     editing of) a GL or AL.
 ***************************************************************************/
-DCGL::DCGL(PDOCB pdocb, PGLB pglb, long cls, PGCB pgcb) : DCGB(pdocb, pglb, cls, 1, pgcb)
+DCGL::DCGL(PDOCB pdocb, PGLB pglb, int32_t cls, PGCB pgcb) : DCGB(pdocb, pglb, cls, 1, pgcb)
 {
 }
 
 /***************************************************************************
     Static method to create a new DCGL for the GL or AL.
 ***************************************************************************/
-PDCGL DCGL::PdcglNew(PDOCB pdocb, PGLB pglb, long cls, PGCB pgcb)
+PDCGL DCGL::PdcglNew(PDOCB pdocb, PGLB pglb, int32_t cls, PGCB pgcb)
 {
     AssertVar(cls == kclsGL || cls == kclsAL, "bad cls", &cls);
     PDCGL pdcgl;
@@ -801,9 +801,9 @@ void DCGL::Draw(PGNV pgnv, RC *prcClip)
     PGLB pglb;
     STN stn;
     byte rgb[kcbMaxDispGrp];
-    long ivMac, iv;
-    long cbDisp, cbEntry;
-    long xp, yp, ibT;
+    int32_t ivMac, iv;
+    int32_t cbDisp, cbEntry;
+    int32_t xp, yp, ibT;
     byte bT;
 
     pgnv->ClipRc(prcClip);
@@ -879,9 +879,9 @@ void DCGL::Draw(PGNV pgnv, RC *prcClip)
 bool DCGL::FCmdAddItem(PCMD pcmd)
 {
     HQ hq;
-    long cb;
+    int32_t cb;
     void *pv;
-    long ivNew;
+    int32_t ivNew;
     bool fT;
     PGLB pglb;
 
@@ -921,14 +921,14 @@ bool DCGL::FCmdAddItem(PCMD pcmd)
     Constructor for the DCGG class.  This class displays (and allows
     editing of) a GG or AG.
 ***************************************************************************/
-DCGG::DCGG(PDOCB pdocb, PGGB pggb, long cls, PGCB pgcb) : DCGB(pdocb, pggb, cls, pggb->CbFixed() > 0 ? 2 : 1, pgcb)
+DCGG::DCGG(PDOCB pdocb, PGGB pggb, int32_t cls, PGCB pgcb) : DCGB(pdocb, pggb, cls, pggb->CbFixed() > 0 ? 2 : 1, pgcb)
 {
 }
 
 /***************************************************************************
     Static method to create a new DCGG for the GG or AG.
 ***************************************************************************/
-PDCGG DCGG::PdcggNew(PDOCB pdocb, PGGB pggb, long cls, PGCB pgcb)
+PDCGG DCGG::PdcggNew(PDOCB pdocb, PGGB pggb, int32_t cls, PGCB pgcb)
 {
     AssertVar(cls == kclsGG || cls == kclsAG, "bad cls", &cls);
     PDCGG pdcgg;
@@ -958,9 +958,9 @@ void DCGG::Draw(PGNV pgnv, RC *prcClip)
     PGGB pggb;
     STN stn;
     byte rgb[kcbMaxDispGrp];
-    long ivMac, iv, dln;
-    long cbDisp, cbEntry;
-    long xp, yp, ibT;
+    int32_t ivMac, iv, dln;
+    int32_t cbDisp, cbEntry;
+    int32_t xp, yp, ibT;
     byte bT;
     RC rc;
 
@@ -1064,8 +1064,8 @@ bool DCGG::FCmdAddItem(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long cb;
-    long ivNew;
+    int32_t cb;
+    int32_t ivNew;
     bool fT;
     PGGB pggb;
 
@@ -1105,14 +1105,14 @@ bool DCGG::FCmdAddItem(PCMD pcmd)
     Constructor for the DCST class.  This class displays (and allows
     editing of) a GST or AST.
 ***************************************************************************/
-DCST::DCST(PDOCB pdocb, PGSTB pgstb, long cls, PGCB pgcb) : DCGB(pdocb, pgstb, cls, pgstb->CbExtra() > 0 ? 2 : 1, pgcb)
+DCST::DCST(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb) : DCGB(pdocb, pgstb, cls, pgstb->CbExtra() > 0 ? 2 : 1, pgcb)
 {
 }
 
 /***************************************************************************
     Static method to create a new DCST for the GST or AST.
 ***************************************************************************/
-PDCST DCST::PdcstNew(PDOCB pdocb, PGSTB pgstb, long cls, PGCB pgcb)
+PDCST DCST::PdcstNew(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb)
 {
     AssertVar(cls == kclsGST || cls == kclsAST, "bad cls", &cls);
     PDCST pdcst;
@@ -1143,9 +1143,9 @@ void DCST::Draw(PGNV pgnv, RC *prcClip)
     STN stn;
     STN stnT;
     byte rgb[1024];
-    long ivMac, iv;
-    long cbDisp, cbExtra;
-    long xp, yp, ibT;
+    int32_t ivMac, iv;
+    int32_t cbDisp, cbExtra;
+    int32_t xp, yp, ibT;
     byte bT;
     RC rc;
     HQ hqExtra = hqNil;
@@ -1251,11 +1251,11 @@ bool DCST::FCmdAddItem(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long ivNew;
+    int32_t ivNew;
     bool fT;
     PGSTB pgstb;
     HQ hq;
-    long cb;
+    int32_t cb;
     STN stn;
 
     stn.SetNil();
@@ -1295,7 +1295,7 @@ bool DCST::FCmdAddItem(PCMD pcmd)
     Constructor for DOCI.  DOCI holds an item in a GRPB contained in a
     chunky file.  Doesn't free the GRPB when the doc goes away.
 ***************************************************************************/
-DOCI::DOCI(PDOCB pdocb, PGRPB pgrpb, long cls, long iv, long dln) : DOCB(pdocb)
+DOCI::DOCI(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t iv, int32_t dln) : DOCB(pdocb)
 {
     AssertPo(pgrpb, 0);
     AssertVar(pgrpb->FIs(cls), "wrong cls value", &cls);
@@ -1309,7 +1309,7 @@ DOCI::DOCI(PDOCB pdocb, PGRPB pgrpb, long cls, long iv, long dln) : DOCB(pdocb)
 /***************************************************************************
     Static member to create a new DOCI.
 ***************************************************************************/
-PDOCI DOCI::PdociNew(PDOCB pdocb, PGRPB pgrpb, long cls, long iv, long dln)
+PDOCI DOCI::PdociNew(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t iv, int32_t dln)
 {
     AssertPo(pgrpb, 0);
     AssertPo(pdocb, 0);
@@ -1334,7 +1334,7 @@ bool DOCI::_FInit(void)
 {
     bool fRet;
     HQ hq;
-    long cb;
+    int32_t cb;
 
     if (hqNil == (hq = _HqRead()))
         return fFalse;
@@ -1375,10 +1375,10 @@ void DOCI::GetName(PSTN pstn)
 /***************************************************************************
     Handle saving.  This is a virtual member of DOCB.
 ***************************************************************************/
-bool DOCI::FSave(long cid)
+bool DOCI::FSave(int32_t cid)
 {
     AssertThis(0);
-    long iv;
+    int32_t iv;
 
     switch (cid)
     {
@@ -1401,7 +1401,7 @@ bool DOCI::FSave(long cid)
 /***************************************************************************
     Save the data to an item.
 ***************************************************************************/
-bool DOCI::_FSaveToItem(long iv, bool fRedirect)
+bool DOCI::_FSaveToItem(int32_t iv, bool fRedirect)
 {
     if (!_FWrite(iv))
         return fFalse;
@@ -1420,9 +1420,9 @@ bool DOCI::_FSaveToItem(long iv, bool fRedirect)
 /***************************************************************************
     Write the data to the GRPB at the given item number.
 ***************************************************************************/
-bool DOCI::_FWrite(long iv)
+bool DOCI::_FWrite(int32_t iv)
 {
-    long cb;
+    int32_t cb;
     HQ hq;
     void *pv;
     bool fRet;
@@ -1479,7 +1479,7 @@ bool DOCI::_FWrite(long iv)
 ***************************************************************************/
 HQ DOCI::_HqRead(void)
 {
-    long cb;
+    int32_t cb;
     HQ hq;
     void *pv;
     STN stn;

@@ -14,7 +14,7 @@
 ASSERTNAME
 
 #define dsnoNil 0
-long DOCB::_cactLast = 0;
+int32_t DOCB::_cactLast = 0;
 PDOCB DOCB::_pdocbFirst = pvNil;
 
 BEGIN_CMD_MAP(DDG, GOB)
@@ -248,7 +248,7 @@ bool DOCB::FQueryCloseDmd(PDMD pdmd)
 {
     PDDG pddg;
     PDMD pdmdT;
-    long ipddg;
+    int32_t ipddg;
 
     if (pvNil == _pglpddg || _pglpddg->IvMac() == 0)
     {
@@ -320,7 +320,7 @@ bool DOCB::FGetFni(FNI *pfni)
 /***************************************************************************
     High level save.
 ***************************************************************************/
-bool DOCB::FSave(long cid)
+bool DOCB::FSave(int32_t cid)
 {
     FNI fni;
 
@@ -396,11 +396,11 @@ bool DOCB::FAddDdg(PDDG pddg)
 /***************************************************************************
     Find the position of the pddg in the DOCB's list.
 ***************************************************************************/
-bool DOCB::_FFindDdg(PDDG pddg, long *pipddg)
+bool DOCB::_FFindDdg(PDDG pddg, int32_t *pipddg)
 {
     AssertThis(0);
     AssertVarMem(pipddg);
-    long ipddg, cpddg;
+    int32_t ipddg, cpddg;
     PDDG pddgT;
 
     if (_pglpddg == pvNil)
@@ -428,7 +428,7 @@ LFail:
 void DOCB::RemoveDdg(PDDG pddg)
 {
     AssertThis(fobjAssertFull);
-    long ipddg;
+    int32_t ipddg;
 
     if (_FFindDdg(pddg, &ipddg))
         _pglpddg->Delete(ipddg);
@@ -440,7 +440,7 @@ void DOCB::RemoveDdg(PDDG pddg)
 ***************************************************************************/
 void DOCB::MakeFirstDdg(PDDG pddg)
 {
-    long ipddg;
+    int32_t ipddg;
 
     if (!_FFindDdg(pddg, &ipddg))
     {
@@ -456,7 +456,7 @@ void DOCB::MakeFirstDdg(PDDG pddg)
     Return the iddg'th DDG displaying this doc.  If iddg is too big,
     return pvNil.
 ***************************************************************************/
-PDDG DOCB::PddgGet(long iddg)
+PDDG DOCB::PddgGet(int32_t iddg)
 {
     AssertThis(0);
     AssertIn(iddg, 0, klwMax);
@@ -498,7 +498,7 @@ PDMD DOCB::PdmdNew(void)
 void DOCB::ActivateDmd(void)
 {
     AssertThis(fobjAssertFull);
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
     PDMD pdmd;
 
@@ -525,7 +525,7 @@ PDMW DOCB::PdmwNew(PGCB pgcb)
 /***************************************************************************
     Create a new DSG for the doc in the given DMW.
 ***************************************************************************/
-PDSG DOCB::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, long rel)
+PDSG DOCB::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel)
 {
     AssertThis(fobjAssertFull);
     return DSG::PdsgNew(pdmw, pdsgSplit, grfdsg, rel);
@@ -570,7 +570,7 @@ void DOCB::UpdateName(void)
     DTE dte;
     uint32_t grfdte;
     STN stn;
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
     PDOCB pdocb;
     PDMD pdmd;
@@ -701,11 +701,11 @@ void DOCB::ClearRedo(void)
 /***************************************************************************
     Set the maximum allowable number of undoable operations.
 ***************************************************************************/
-void DOCB::SetCundbMax(long cundbMax)
+void DOCB::SetCundbMax(int32_t cundbMax)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cundbMax, 0, kcbMax);
-    long ipundbLimNew;
+    int32_t ipundbLimNew;
     PUNDB pundb;
 
     _cundbMax = cundbMax;
@@ -733,7 +733,7 @@ void DOCB::SetCundbMax(long cundbMax)
 /***************************************************************************
     Return the maximum number of undoable operations for this doc
 ***************************************************************************/
-long DOCB::CundbMax(void)
+int32_t DOCB::CundbMax(void)
 {
     AssertThis(0);
     return _cundbMax;
@@ -742,7 +742,7 @@ long DOCB::CundbMax(void)
 /***************************************************************************
     Return the number of operations that can currently be undone.
 ***************************************************************************/
-long DOCB::CundbUndo(void)
+int32_t DOCB::CundbUndo(void)
 {
     AssertThis(0);
     return _ipundbLimDone;
@@ -751,7 +751,7 @@ long DOCB::CundbUndo(void)
 /***************************************************************************
     Return the number of operations that can currently be redone.
 ***************************************************************************/
-long DOCB::CundbRedo(void)
+int32_t DOCB::CundbRedo(void)
 {
     if (pvNil == _pglpundb)
         return 0;
@@ -770,7 +770,7 @@ void DOCB::ExportFormats(PCLIP pclip)
 /***************************************************************************
     See if this document can be coerced to the given format.
 ***************************************************************************/
-bool DOCB::FGetFormat(long cls, PDOCB *ppdocb)
+bool DOCB::FGetFormat(int32_t cls, PDOCB *ppdocb)
 {
     AssertThis(0);
     AssertNilOrVarMem(ppdocb);
@@ -786,9 +786,9 @@ bool DOCB::FGetFormat(long cls, PDOCB *ppdocb)
 ***************************************************************************/
 void DOCB::AssertValid(uint32_t grfdocb)
 {
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
-    long ipundb;
+    int32_t ipundb;
     PUNDB pundb;
 
     DOCB_PAR::AssertValid(grfdocb & fobjAssertFull);
@@ -828,7 +828,7 @@ void DOCB::AssertValid(uint32_t grfdocb)
 ***************************************************************************/
 void DOCB::MarkMem(void)
 {
-    long ipundb;
+    int32_t ipundb;
     PUNDB pundb;
 
     AssertThis(fobjAssertFull);
@@ -1163,7 +1163,7 @@ void DDG::_ClearSel(void)
     Default for pasting over a selection.  Just returns false so the Paste
     edit menu item is disabled.
 ***************************************************************************/
-bool DDG::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool DDG::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     return fFalse;
 }
@@ -1223,7 +1223,7 @@ bool DDG::FCmdActivateSel(PCMD pcmd)
 bool DDG::FCmdScroll(PCMD pcmd)
 {
     bool fVert;
-    long scv;
+    int32_t scv;
 
     fVert = (pcmd->rglw[0] == khidVScroll);
     switch (pcmd->cid)
@@ -1254,7 +1254,7 @@ bool DDG::FCmdScroll(PCMD pcmd)
     Scroll with the given scrolling actions.  Sets the scroll bar values
     accordingly.
 ***************************************************************************/
-void DDG::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
+void DDG::_Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz, int32_t scvVert)
 {
     _SetScrollValues();
 }
@@ -1282,7 +1282,7 @@ void DDG::_SetScrollValues(void)
     Actually move the bits for a scroll.  The _scvVert and _scvHorz
     member variables have already been updated.
 ***************************************************************************/
-void DDG::_ScrollDxpDyp(long dxp, long dyp)
+void DDG::_ScrollDxpDyp(int32_t dxp, int32_t dyp)
 {
     Scroll(pvNil, -dxp, -dyp, kginDraw);
 }
@@ -1290,7 +1290,7 @@ void DDG::_ScrollDxpDyp(long dxp, long dyp)
 /***************************************************************************
     Return the scroll bound.
 ***************************************************************************/
-long DDG::_ScvMax(bool fVert)
+int32_t DDG::_ScvMax(bool fVert)
 {
     return 0;
 }
@@ -1515,13 +1515,13 @@ void DMW::_NewRc(void)
     Add the dsg to the dmw (the dsg is already a child gob - we now promote
     it to a full fledged child dsg).
 ***************************************************************************/
-bool DMW::FAddDsg(PDSG pdsg, PDSG pdsgSplit, uint32_t grfdsg, long rel)
+bool DMW::FAddDsg(PDSG pdsg, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel)
 {
     AssertThis(fobjAssertFull);
     AssertIn(rel, 0, krelOne + 1);
     DSED dsed;
     DSED *qdsed;
-    long idsedSplit, idsedPar, idsedEdge, idsedNew;
+    int32_t idsedSplit, idsedPar, idsedEdge, idsedNew;
 
     ClearPb(&dsed, SIZEOF(dsed));
     dsed.idsedLeft = ivNil;
@@ -1611,7 +1611,7 @@ LDone:
 ***************************************************************************/
 void DMW::RemoveDsg(PDSG pdsg)
 {
-    long idsedStart;
+    int32_t idsedStart;
 
     if (!_fFreeing)
     {
@@ -1623,11 +1623,11 @@ void DMW::RemoveDsg(PDSG pdsg)
 /***************************************************************************
     Remove the DSG from the tree and set its _dsno to nil.
 ***************************************************************************/
-void DMW::_RemoveDsg(PDSG pdsg, long *pidsedStartLayout)
+void DMW::_RemoveDsg(PDSG pdsg, int32_t *pidsedStartLayout)
 {
     AssertThis(0);
     AssertPo(pdsg, 0);
-    long idsedDel, idsedGrandPar, idsedSib;
+    int32_t idsedDel, idsedGrandPar, idsedSib;
     DSED *qdsed;
     DSED dsed;
 
@@ -1698,12 +1698,12 @@ void DMW::_RemoveDsg(PDSG pdsg, long *pidsedStartLayout)
     either hit the root (return ivNil) or we just went up a left arc (return
     the parent).
 ***************************************************************************/
-long DMW::_IdsedEdge(long idsed, long idsedRoot)
+int32_t DMW::_IdsedEdge(int32_t idsed, int32_t idsedRoot)
 {
     // Don't call AssertThis because AssertValid calls this
     AssertBaseThis(0);
     DSED *qdsed;
-    long idsedPar;
+    int32_t idsedPar;
 
     qdsed = _Qdsed(idsed);
     idsedPar = qdsed->idsedPar;
@@ -1730,7 +1730,7 @@ long DMW::_IdsedEdge(long idsed, long idsedRoot)
     Find the next dsed to visit in the sub-tree traversal based at
     idsedStart (pre-order traversal).
 ***************************************************************************/
-long DMW::_IdsedNext(long idsed, long idsedRoot)
+int32_t DMW::_IdsedNext(int32_t idsed, int32_t idsedRoot)
 {
     DSED *qdsed;
 
@@ -1749,12 +1749,12 @@ long DMW::_IdsedNext(long idsed, long idsedRoot)
 /***************************************************************************
     Re-layout the DSGs in the DMW.  If any become too small, delete them.
 ***************************************************************************/
-void DMW::_Layout(long idsedStart)
+void DMW::_Layout(int32_t idsedStart)
 {
     AssertThis(0);
     RC rc, rcDsg;
-    long dxpDmw, dypDmw;
-    long idsed;
+    int32_t dxpDmw, dypDmw;
+    int32_t idsed;
     DSED *qdsed;
     RC rcRel;
     PDSG pdsg;
@@ -1847,7 +1847,7 @@ LRestart:
 /***************************************************************************
     Find the two child rc's from the DSED's rc.
 ***************************************************************************/
-void DMW::_SplitRcRel(long idsed, RC *prcLeft, RC *prcRight)
+void DMW::_SplitRcRel(int32_t idsed, RC *prcLeft, RC *prcRight)
 {
     DSED *qdsed;
 
@@ -1867,10 +1867,10 @@ void DMW::_SplitRcRel(long idsed, RC *prcLeft, RC *prcRight)
 /***************************************************************************
     Return the number of DSGs.
 ***************************************************************************/
-long DMW::Cdsg(void)
+int32_t DMW::Cdsg(void)
 {
     AssertThis(0);
-    long idsed, cdsg;
+    int32_t idsed, cdsg;
     DSED *qdsed;
 
     if (pvNil == _paldsed)
@@ -1898,9 +1898,9 @@ void DMW::GetRcSplit(PDSG pdsg, RC *prcBounds, RC *prcSplit)
     AssertThis(0);
     AssertPo(pdsg, 0);
     RC rc;
-    long idsedEdge;
+    int32_t idsedEdge;
     DSED *qdsed;
-    long rel;
+    int32_t rel;
 
     if (dsnoNil == pdsg->_dsno)
         goto LZero;
@@ -1939,12 +1939,12 @@ void DMW::GetRcSplit(PDSG pdsg, RC *prcBounds, RC *prcSplit)
 /***************************************************************************
     Move the split corresponding to the given DSG.
 ***************************************************************************/
-void DMW::MoveSplit(PDSG pdsg, long relNew)
+void DMW::MoveSplit(PDSG pdsg, int32_t relNew)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pdsg, 0);
     AssertIn(relNew, 0, krelOne + 1);
-    long idsedEdge;
+    int32_t idsedEdge;
     DSED *qdsed;
 
     if (dsnoNil == pdsg->_dsno)
@@ -1974,7 +1974,7 @@ tribool DMW::TVert(PDSG pdsg)
 {
     AssertThis(0);
     AssertPo(pdsg, 0);
-    long idsed;
+    int32_t idsed;
 
     if (dsnoNil == pdsg->_dsno)
         return tMaybe;
@@ -1990,7 +1990,7 @@ tribool DMW::TVert(PDSG pdsg)
 ***************************************************************************/
 void DMW::AssertValid(uint32_t grfobj)
 {
-    long cdsed, idsed;
+    int32_t cdsed, idsed;
     DSED dsed;
     DSED *qdsed;
 
@@ -2090,7 +2090,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Static method to create a new DSG.
 ***************************************************************************/
-PDSG DSG::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, long rel)
+PDSG DSG::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel)
 {
     AssertPo(pdmw, 0);
     Assert(pvNil != pdsgSplit || pdmw->Cdsg() == 0, "must split an existing DSG");
@@ -2129,7 +2129,7 @@ DSG::~DSG(void)
 /***************************************************************************
     Create the scroll bars, the DDG and do any other DSG initialization.
 ***************************************************************************/
-bool DSG::_FInit(PDSG pdsgSplit, uint32_t grfdsg, long rel)
+bool DSG::_FInit(PDSG pdsgSplit, uint32_t grfdsg, int32_t rel)
 {
     Assert(pvNil != pdsgSplit || Pdmw()->Cdsg() == 0, "must split an existing DSG");
     PDMW pdmw;
@@ -2182,8 +2182,8 @@ bool DSG::_FInit(PDSG pdsgSplit, uint32_t grfdsg, long rel)
 void DSG::GetMinMax(RC *prcMinMax)
 {
     AssertThis(0);
-    long dxpScb = SCB::DxpNormal();
-    long dypScb = SCB::DypNormal();
+    int32_t dxpScb = SCB::DxpNormal();
+    int32_t dypScb = SCB::DypNormal();
 
     AssertPo(_pddg, 0);
     _pddg->GetMinMax(prcMinMax);
@@ -2198,7 +2198,7 @@ void DSG::GetMinMax(RC *prcMinMax)
 /***************************************************************************
     Split the DSG into two dsg's.
 ***************************************************************************/
-void DSG::Split(uint32_t grfdsg, long rel)
+void DSG::Split(uint32_t grfdsg, int32_t rel)
 {
     AssertThis(fobjAssertFull);
     PDMW pdmw;
@@ -2293,11 +2293,11 @@ void DSSP::Draw(PGNV pgnv, RC *prcClip)
     See if the parent DSG can be split.  If so, track the mouse and draw
     the gray outline until the user releases the mouse.
 ***************************************************************************/
-void DSSP::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
+void DSSP::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
 
-    long dzpMinDsg, dzpDsg, zpMin, zpLast, dzp, zp;
+    int32_t dzpMinDsg, dzpDsg, zpMin, zpLast, dzp, zp;
     RC rc;
     bool fVert = Hid() == khidDsspVert;
     PDSG pdsg = (PDSG)PgobPar();
@@ -2328,7 +2328,7 @@ void DSSP::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
     zp = pdsg->ZpDragRc(&rc, fVert, zpMin + dzp, zpMin + dzp, zpLast + 1, zpMin + dzpMinDsg, zpLast - dzpMinDsg + 1);
     if (FIn(zp, zpMin + dzpMinDsg, zpLast - dzpMinDsg + 1))
     {
-        long rel;
+        int32_t rel;
 
         rel = LwMulDiv(zp - zpMin, krelOne, zpLast - zpMin) + 1;
         pdsg->Split(fVert, rel);
@@ -2382,10 +2382,10 @@ void DSSM::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Track the mouse and change the split location.
 ***************************************************************************/
-void DSSM::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
+void DSSM::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
-    long zp, zpMin, zpLast, zpOrig, dzpMinDsg, dzp;
+    int32_t zp, zpMin, zpLast, zpOrig, dzpMinDsg, dzp;
     RC rc, rcSplit;
     PDSG pdsg;
     PDMW pdmw;
@@ -2425,7 +2425,7 @@ void DSSM::MouseDown(long xp, long yp, long cact, uint32_t grfcust)
                         zpLast + 1 - dzpMinDsg);
     if (zp != zpOrig)
     {
-        long rel;
+        int32_t rel;
 
         if (zp < zpMin + dzpMinDsg)
             rel = 0;

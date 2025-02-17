@@ -37,7 +37,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Create a new APE
 ***************************************************************************/
-PAPE APE::PapeNew(PGCB pgcb, PTMPL ptmpl, PCOST pcost, long anid, bool fCycleCels, PRCA prca)
+PAPE APE::PapeNew(PGCB pgcb, PTMPL ptmpl, PCOST pcost, int32_t anid, bool fCycleCels, PRCA prca)
 {
     AssertVarMem(pgcb);
     AssertPo(ptmpl, 0);
@@ -60,14 +60,14 @@ PAPE APE::PapeNew(PGCB pgcb, PTMPL ptmpl, PCOST pcost, long anid, bool fCycleCel
 /***************************************************************************
     Set up the APE
 ***************************************************************************/
-bool APE::_FInit(PTMPL ptmpl, PCOST pcost, long anid, bool fCycleCels, PRCA prca)
+bool APE::_FInit(PTMPL ptmpl, PCOST pcost, int32_t anid, bool fCycleCels, PRCA prca)
 {
     AssertBaseThis(0);
     AssertPo(ptmpl, 0);
     AssertNilOrPo(pcost, 0);
 
-    long cbset;
-    long ibset;
+    int32_t cbset;
+    int32_t ibset;
     RC rc;
     GMS gms;
 
@@ -184,7 +184,7 @@ void APE::SetToolMtrl(PTAG ptagMtrl)
 /***************************************************************************
     Load the brush with cmid (for a custom material)
 ***************************************************************************/
-void APE::SetToolCmtl(long cmid)
+void APE::SetToolCmtl(int32_t cmid)
 {
     AssertThis(0);
 
@@ -222,7 +222,7 @@ void APE::SetToolIncAccessory(void)
 /***************************************************************************
     Change the actor's action to anid
 ***************************************************************************/
-bool APE::FSetAction(long anid)
+bool APE::FSetAction(int32_t anid)
 {
     AssertThis(0);
 
@@ -255,7 +255,7 @@ bool APE::FCmdNextCel(PCMD pcmd)
 /***************************************************************************
     Time to move to the next cel of the action.
 ***************************************************************************/
-bool APE::FDisplayCel(long celn)
+bool APE::FDisplayCel(int32_t celn)
 {
     AssertThis(0);
 
@@ -466,8 +466,8 @@ bool APE::FCmdMouseMove(PCMD_MOUSE pcmd)
 
     PBACT pbact;
     PBODY pbody;
-    long ibset;
-    long ibsetAcc;
+    int32_t ibset;
+    int32_t ibsetAcc;
 
     if (pvNil != _prca)
     {
@@ -505,8 +505,8 @@ bool APE::FCmdTrackMouse(PCMD_MOUSE pcmd)
 
     PBACT pbact;
     PBODY pbody;
-    long ibset;
-    long ibsetAcc;
+    int32_t ibset;
+    int32_t ibsetAcc;
     GMS gms;
 
     if (pcmd->cid != cidMouseDown)
@@ -559,7 +559,7 @@ bool APE::FCmdTrackMouse(PCMD_MOUSE pcmd)
 /***************************************************************************
     Apply a GMS to ibset
 ***************************************************************************/
-bool APE::_FApplyGms(GMS *pgms, long ibset)
+bool APE::_FApplyGms(GMS *pgms, int32_t ibset)
 {
     AssertThis(0);
     AssertVarMem(pgms);
@@ -592,16 +592,16 @@ bool APE::_FApplyGms(GMS *pgms, long ibset)
     Fill in pgms with the next CMTL available for ibset and applies it
     to _pbody.
 ***************************************************************************/
-bool APE::_FIncCmtl(GMS *pgms, long ibset, bool fNextAccessory)
+bool APE::_FIncCmtl(GMS *pgms, int32_t ibset, bool fNextAccessory)
 {
     AssertThis(0);
     AssertVarMem(pgms);
     AssertIn(ibset, 0, _pbody->Cbset());
 
-    long cmid;
-    long cmidNext;
-    long icmid;
-    long ccmid;
+    int32_t cmid;
+    int32_t cmidNext;
+    int32_t icmid;
+    int32_t ccmid;
     PCMTL pcmtl;
     PCMTL pcmtlOld;
     PMTRL pmtrlOld;
@@ -667,15 +667,15 @@ bool APE::_FIncCmtl(GMS *pgms, long ibset, bool fNextAccessory)
     Otherwise it returns the next CMID that has the same set of models as
     icmidCur.
 ***************************************************************************/
-long APE::_CmidNext(long ibset, long icmidCur, bool fNextAccessory)
+int32_t APE::_CmidNext(int32_t ibset, int32_t icmidCur, bool fNextAccessory)
 {
     AssertThis(0);
 
-    long cmidCur;
-    long ccmid;
-    long icmidNext;
-    long cmidNext;
-    long dicmid;
+    int32_t cmidCur;
+    int32_t ccmid;
+    int32_t icmidNext;
+    int32_t cmidNext;
+    int32_t dicmid;
 
     cmidCur = _ptmpl->CmidOfBset(ibset, icmidCur);
     ccmid = _ptmpl->CcmidOfBset(ibset);
@@ -701,7 +701,7 @@ long APE::_CmidNext(long ibset, long icmidCur, bool fNextAccessory)
 /***************************************************************************
     Change this APE's TDT properties
 ***************************************************************************/
-bool APE::FChangeTdt(PSTN pstn, long tdts, PTAG ptagTdf)
+bool APE::FChangeTdt(PSTN pstn, int32_t tdts, PTAG ptagTdf)
 {
     AssertThis(0);
     Assert(_ptmpl->FIsTdt(), "FChangeTdt is only for TDTs");
@@ -793,7 +793,7 @@ bool APE::FGetTdtMtrlCno(CNO *pcno)
 /***************************************************************************
     Return info about the TDT
 ***************************************************************************/
-void APE::GetTdtInfo(PSTN pstn, long *ptdts, PTAG ptagTdf)
+void APE::GetTdtInfo(PSTN pstn, int32_t *ptdts, PTAG ptagTdf)
 {
     AssertThis(0);
     Assert(_ptmpl->FIsTdt(), "GetTdtInfo is only for TDTs");
@@ -809,7 +809,7 @@ void APE::GetTdtInfo(PSTN pstn, long *ptdts, PTAG ptagTdf)
     attached to ibset, if any.  If nothing was done to ibset, returns
     fFalse.
 ***************************************************************************/
-bool APE::FGetMaterial(long ibset, tribool *pfMtrl, long *pcmid, TAG *ptagMtrl)
+bool APE::FGetMaterial(int32_t ibset, tribool *pfMtrl, int32_t *pcmid, TAG *ptagMtrl)
 {
     AssertThis(0);
     AssertIn(ibset, 0, _pbody->Cbset());

@@ -147,7 +147,7 @@ bool _fEnableWarnings = fTrue;
 /***************************************************************************
     Warning proc called by Warn() macro
 ***************************************************************************/
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage)
 {
     if (_fEnableWarnings)
     {
@@ -163,7 +163,7 @@ void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
 /***************************************************************************
     Returning true breaks into the debugger.
 ***************************************************************************/
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage, void *pv, int32_t cb)
 {
     fprintf(stderr, "An assert occurred: \n");
     if (pszsMessage != pvNil)
@@ -190,7 +190,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
                 break;
 
             case 4:
-                fprintf(stderr, "%08lx", *(long *)pv);
+                fprintf(stderr, "%08lx", *(int32_t *)pv);
                 break;
             }
             printf("\n");

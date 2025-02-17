@@ -61,7 +61,7 @@ typedef HCURSOR HCRS;
 
 #endif // WIN
 
-#define SIZEOF(foo) ((long)sizeof(foo))
+#define SIZEOF(foo) ((int32_t)sizeof(foo))
 #define offset(FOO, field) ((int)&((FOO *)0)->field)
 #define CvFromRgv(rgv) (SIZEOF(rgv) / SIZEOF(rgv[0]))
 #define BLOCK
@@ -81,8 +81,8 @@ const int16_t kswMin = -kswMax; // so -kswMin is positive
 const uint16_t ksuMax = 0xFFFF;
 const uint16_t ksuMin = 0;
 
-const long klwMax = 0x7FFFFFFF;
-const long klwMin = -klwMax; // so -klwMin is positive
+const int32_t klwMax = 0x7FFFFFFF;
+const int32_t klwMin = -klwMax; // so -klwMin is positive
 const uint32_t kluMax = 0xFFFFFFFF;
 const uint32_t kluMin = 0;
 

@@ -18,10 +18,10 @@ const SCR kscrWhite = PALETTERGB(0xFF, 0xFF, 0xFF);
 
 HPAL GPT::_hpal = hNil;
 HPAL GPT::_hpalIdentity = hNil;
-long GPT::_cclrPal = 0;
+int32_t GPT::_cclrPal = 0;
 CLR *GPT::_prgclr = pvNil;
-long GPT::_cactPalCur = 0;
-long GPT::_cactFlush = 1;
+int32_t GPT::_cactPalCur = 0;
+int32_t GPT::_cactFlush = 1;
 bool GPT::_fPalettized = fFalse;
 
 #ifdef DEBUG
@@ -40,7 +40,7 @@ HRGN _HrgnNew(RCS *prcs, bool fOval);
 /***************************************************************************
     Creates a rectangular or oval region according to fOval.
 ***************************************************************************/
-HRGN _HrgnNew(RCS *prcs, long dxpInset, long dypInset, bool fOval)
+HRGN _HrgnNew(RCS *prcs, int32_t dxpInset, int32_t dypInset, bool fOval)
 {
     AssertVarMem(prcs);
     return fOval ? CreateEllipticRgn(prcs->left + dxpInset, prcs->top + dypInset, prcs->right - dxpInset,
@@ -121,8 +121,8 @@ void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
     uint8_t rgb[SIZEOF(LOGPALETTE) + 256 * SIZEOF(PALETTEENTRY)];
     LOGPALETTE *ppal = (LOGPALETTE *)rgb;
     PALETTEENTRY pe;
-    long ipe, ipeLim;
-    long cclr;
+    int32_t ipe, ipeLim;
+    int32_t cclr;
     CLR clr;
     uint8_t rgbT[256 / 8];
 
@@ -297,10 +297,10 @@ PGL GPT::PglclrGetPalette(void)
     We've gotten a WM_QUERYNEWPALETTE or WM_PALETTECHANGED message, so
     select and realize our palette.
 ***************************************************************************/
-long GPT::CclrSetPalette(HWND hwnd, bool fInval)
+int32_t GPT::CclrSetPalette(HWND hwnd, bool fInval)
 {
     HDC hdc;
-    long lwRet;
+    int32_t lwRet;
 
     vcactRealize++;
     if (hNil == _hpal)
@@ -459,7 +459,7 @@ GPT::~GPT(void)
 SCR GPT::_Scr(ACR acr)
 {
     SCR scr;
-    long iclr;
+    int32_t iclr;
     CLR clr;
 
     if (!_fMapIndices && _fPalettized)
@@ -479,7 +479,7 @@ SCR GPT::_Scr(ACR acr)
 /***************************************************************************
     Static method to create an offscreen port.
 ***************************************************************************/
-PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
+PGPT GPT::PgptNewOffscreen(RC *prc, int32_t cbitPixel)
 {
     AssertVarMem(prc);
     Assert(!prc->FEmpty(), "empty rectangle for offscreen");
@@ -487,7 +487,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     HDC hdc, hdcT;
     HBMP hbmp, hbmpOld;
     BITMAPINFO *pbmi;
-    long cclr, cbRow, lwUsage;
+    int32_t cclr, cbRow, lwUsage;
     void *pvBits;
 
     // assert that cbitPixel is in {1,4,8,16,24,32}
@@ -505,7 +505,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
 
     // the three longs are for 16 and 32 bit dibs.
     if (!FAllocPv((void **)&pbmi,
-                  SIZEOF(BITMAPINFO) + LwMul(cclr, LwMax(SIZEOF(int16_t), SIZEOF(RGBQUAD))) + LwMul(3, SIZEOF(long)),
+                  SIZEOF(BITMAPINFO) + LwMul(cclr, LwMax(SIZEOF(int16_t), SIZEOF(RGBQUAD))) + LwMul(3, SIZEOF(int32_t)),
                   fmemClear, mprNormal))
     {
         goto LFail;
@@ -517,7 +517,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     pbmi->bmiHeader.biPlanes = 1;
     pbmi->bmiHeader.biBitCount = (int16_t)cbitPixel;
     pbmi->bmiHeader.biCompression = (cbitPixel == 16 || cbitPixel == 32) ? BI_BITFIELDS : BI_RGB;
-    cbRow = LwRoundAway(LwMulDivAway(prc->Dxp(), cbitPixel, 8), SIZEOF(long));
+    cbRow = LwRoundAway(LwMulDivAway(prc->Dxp(), cbitPixel, 8), SIZEOF(int32_t));
     pbmi->bmiHeader.biSizeImage = LwMul(prc->Dyp(), cbRow);
     pbmi->bmiHeader.biXPelsPerMeter = 0;
     pbmi->bmiHeader.biYPelsPerMeter = 0;
@@ -527,7 +527,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     lwUsage = DIB_RGB_COLORS;
     if (cclr == 0)
     {
-        long *plw = (long *)&pbmi->bmiColors;
+        int32_t *plw = (int32_t *)&pbmi->bmiColors;
 
         // set the masks
         if (cbitPixel == 16)
@@ -555,7 +555,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
         {
             LOGPALETTE *ppal;
             PALETTEENTRY pe;
-            long ipe;
+            int32_t ipe;
 
             if (!FAllocPv((void **)&ppal, SIZEOF(LOGPALETTE) + 256 * SIZEOF(PALETTEENTRY), fmemNil, mprNormal))
             {
@@ -587,7 +587,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
         else
         {
             int16_t *psw = (int16_t *)pbmi->bmiColors;
-            long isw;
+            int32_t isw;
 
             lwUsage = DIB_PAL_COLORS;
             for (isw = 0; isw < cclr;)
@@ -687,7 +687,7 @@ uint8_t *GPT::PrgbLockPixels(RC *prc)
 /***************************************************************************
     If this is an offscreen bitmap, return the number of bytes per row.
 ***************************************************************************/
-long GPT::CbRow(void)
+int32_t GPT::CbRow(void)
 {
     AssertThis(0);
 
@@ -699,7 +699,7 @@ long GPT::CbRow(void)
 /***************************************************************************
     Return the number of bits per pixel for the GPT.
 ***************************************************************************/
-long GPT::CbitPixel(void)
+int32_t GPT::CbitPixel(void)
 {
     AssertThis(0);
 
@@ -925,7 +925,7 @@ void GPT::DrawLine(PTS *ppts1, PTS *ppts2, GDD *pgdd)
     AssertVarMem(pgdd);
 
     // create an OLY to fill
-    long dxp, dyp, dypPen;
+    int32_t dxp, dyp, dypPen;
     PTS *pptsDst;
     uint8_t rgbOly[kcbOlyBase + 6 * SIZEOF(PTS)];
     OLY *poly = (OLY *)rgbOly;
@@ -1210,7 +1210,7 @@ void GPT::_Fill(void *pv, GDD *pgdd, PFNDRW pfn)
 /***************************************************************************
     Scroll a rectangle.
 ***************************************************************************/
-void GPT::ScrollRcs(RCS *prcs, long dxp, long dyp, GDD *pgdd)
+void GPT::ScrollRcs(RCS *prcs, int32_t dxp, int32_t dyp, GDD *pgdd)
 {
     AssertThis(0);
     AssertVarMem(prcs);
@@ -1224,7 +1224,7 @@ void GPT::ScrollRcs(RCS *prcs, long dxp, long dyp, GDD *pgdd)
 /***************************************************************************
     Draw some text.
 ***************************************************************************/
-void GPT::DrawRgch(const achar *prgch, long cch, PTS pts, GDD *pgdd, DSF *pdsf)
+void GPT::DrawRgch(const achar *prgch, int32_t cch, PTS pts, GDD *pgdd, DSF *pdsf)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -1295,7 +1295,7 @@ void GPT::DrawRgch(const achar *prgch, long cch, PTS pts, GDD *pgdd, DSF *pdsf)
 /***************************************************************************
     Get the bounding text rectangle.
 ***************************************************************************/
-void GPT::GetRcsFromRgch(RCS *prcs, const achar *prgch, long cch, PTS pts, DSF *pdsf)
+void GPT::GetRcsFromRgch(RCS *prcs, const achar *prgch, int32_t cch, PTS pts, DSF *pdsf)
 {
     AssertThis(0);
     AssertVarMem(prcs);
@@ -1305,7 +1305,7 @@ void GPT::GetRcsFromRgch(RCS *prcs, const achar *prgch, long cch, PTS pts, DSF *
 
     SIZE dpt;
     TEXTMETRIC txm;
-    long dxp, dyp;
+    int32_t dxp, dyp;
 
     _SetTextProps(pdsf);
     GetTextMetrics(_hdc, &txm);
@@ -1366,7 +1366,7 @@ void GPT::_SetAptBrush(APT *papt)
 {
     AssertVarMem(papt);
     int16_t rgw[8];
-    long iw;
+    int32_t iw;
     HBRUSH hbr;
     HBITMAP hbmp;
 
@@ -1510,7 +1510,7 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
     AssertVarMem(prcsSrc);
     AssertVarMem(prcsDst);
     AssertVarMem(pgdd);
-    long dxpSrc, dxpDst;
+    int32_t dxpSrc, dxpDst;
 
     // see if we're doing an offscreen (2x, 2x) stretch or (1x, 2x) stretch -
     // optimize for these
@@ -1823,7 +1823,7 @@ bool NTL::FInit(void)
 ***************************************************************************/
 int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, uint32_t luType, LPARAM luParam)
 {
-    long istz;
+    int32_t istz;
     PGST pgst = (PGST)luParam;
     AssertPo(pgst, 0);
 
@@ -1845,7 +1845,7 @@ HFONT NTL::HfntCreate(DSF *pdsf)
     AssertThis(0);
     AssertPo(pdsf, 0);
     LOGFONT lgf;
-    long cch;
+    int32_t cch;
 
     _pgst->GetExtra(pdsf->onn, &lgf);
     _pgst->GetRgch(pdsf->onn, lgf.lfFaceName, SIZEOF(lgf.lfFaceName) - 1, &cch);
@@ -1861,7 +1861,7 @@ HFONT NTL::HfntCreate(DSF *pdsf)
 /***************************************************************************
     Return true iff the font is a fixed pitch font.
 ***************************************************************************/
-bool NTL::FFixedPitch(long onn)
+bool NTL::FFixedPitch(int32_t onn)
 {
     AssertThis(0);
     Assert(FValidOnn(onn), "bad onn");
@@ -1942,7 +1942,7 @@ bool FIntersectRgn(HRGN hrgnDst, HRGN hrgnSrc1, HRGN hrgnSrc2, bool *pfEmpty)
     Assert(hNil != hrgnDst, "null dst");
     Assert(hNil != hrgnSrc1, "null src1");
     Assert(hNil != hrgnSrc2, "null src2");
-    long lw;
+    int32_t lw;
 
     lw = CombineRgn(hrgnDst, hrgnSrc1, hrgnSrc2, RGN_AND);
     if (ERROR == lw)
@@ -1961,7 +1961,7 @@ bool FDiffRgn(HRGN hrgnDst, HRGN hrgnSrc, HRGN hrgnSrcSub, bool *pfEmpty)
     Assert(hNil != hrgnDst, "null dst");
     Assert(hNil != hrgnSrc, "null src");
     Assert(hNil != hrgnSrcSub, "null srcSub");
-    long lw;
+    int32_t lw;
 
     lw = CombineRgn(hrgnDst, hrgnSrc, hrgnSrcSub, RGN_DIFF);
     if (ERROR == lw)

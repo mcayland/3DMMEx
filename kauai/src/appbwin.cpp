@@ -342,7 +342,7 @@ void APPB::_ShutDownViewer(void)
 LRESULT CALLBACK APPB::_LuWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw)
 {
     AssertNilOrPo(vpappb, 0);
-    long lwRet;
+    int32_t lwRet;
 
     if (pvNil != vpappb && vpappb->_FFrameWndProc(hwnd, wm, wParam, lw, &lwRet))
     {
@@ -356,7 +356,7 @@ LRESULT CALLBACK APPB::_LuWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw)
     Handle Windows messages for the main app window. Return true iff the
     default window proc should _NOT_ be called.
 ***************************************************************************/
-bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);
@@ -364,9 +364,9 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *pl
     PGOB pgob;
     RC rc;
     PT pt;
-    long xp, yp;
-    long lwT;
-    long lwStyle;
+    int32_t xp, yp;
+    int32_t lwT;
+    int32_t lwStyle;
 
     *plwRet = 0;
     switch (wm)
@@ -431,7 +431,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *pl
     case WM_GETMINMAXINFO:
         BLOCK
         {
-            long dypFrame, dypScreen, dypExtra;
+            int32_t dypFrame, dypScreen, dypExtra;
             MINMAXINFO *pmmi;
 
             pmmi = (MINMAXINFO *)lw;
@@ -447,7 +447,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *pl
             pmmi->ptMaxPosition.y = -dypFrame - dypExtra;
             pmmi->ptMaxSize.y = pmmi->ptMaxTrackSize.y = dypScreen + 2 * dypFrame + dypExtra;
             *plwRet = lwT;
-            _FCommonWndProc(hwnd, wm, wParam, (long)pmmi, plwRet);
+            _FCommonWndProc(hwnd, wm, wParam, (int32_t)pmmi, plwRet);
         }
         return fTrue;
 
@@ -589,7 +589,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *pl
 LRESULT CALLBACK APPB::_LuMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw)
 {
     AssertNilOrPo(vpappb, 0);
-    long lwRet;
+    int32_t lwRet;
 
     if (pvNil != vpappb && vpappb->_FMdiWndProc(hwnd, wm, wParam, lw, &lwRet))
     {
@@ -603,13 +603,13 @@ LRESULT CALLBACK APPB::_LuMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM l
     Handle MDI window messages. Returns true iff the default window proc
     should _NOT_ be called.
 ***************************************************************************/
-bool APPB::_FMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APPB::_FMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);
 
     PGOB pgob;
-    long lwT;
+    int32_t lwT;
 
     *plwRet = 0;
     switch (wm)
@@ -639,7 +639,7 @@ bool APPB::_FMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwR
     Common stuff between the two window procs. Returns true if the default
     window proc should _NOT_ be called.
 ***************************************************************************/
-bool APPB::_FCommonWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *plwRet)
+bool APPB::_FCommonWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet)
 {
     AssertThis(0);
     AssertVarMem(plwRet);
@@ -729,7 +729,7 @@ bool APPB::_FCommonWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, long *p
         ResetToolTip();
         if (pvNil != (pgob = GOB::PgobFromHwnd(hwnd)) && pvNil != (pgob = pgob->PgobFromPt(SwLow(lw), SwHigh(lw), &pt)))
         {
-            long ts;
+            int32_t ts;
 
             // compute the multiplicity of the click - don't use Windows'
             // guess, since it can be wrong for our GOBs. It's even wrong
@@ -836,16 +836,16 @@ MUTX _mutxAssert;
 /***************************************************************************
     The assert proc. Returning true breaks into the debugger.
 ***************************************************************************/
-bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
+bool APPB::FAssertProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t cb)
 {
-    const long kclwChain = 10;
+    const int32_t kclwChain = 10;
     STN stn0, stn1, stn2;
     int tmc;
     PSZ psz;
-    long cact;
-    long *plw;
-    long ilw;
-    long rglw[kclwChain];
+    int32_t cact;
+    int32_t *plw;
+    int32_t ilw;
+    int32_t rglw[kclwChain];
 
     _mutxAssert.Enter();
 
@@ -880,7 +880,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
     __asm { mov plw,ebp }
     for (ilw = 0; ilw < kclwChain; ilw++)
     {
-        if (pvNil == plw || IsBadReadPtr(plw, 2 * size(long)) || *plw <= (long)plw)
+        if (pvNil == plw || IsBadReadPtr(plw, 2 * size(int32_t)) || *plw <= (int32_t)plw)
         {
             rglw[ilw] = 0;
             plw = pvNil;
@@ -888,7 +888,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
         else
         {
             rglw[ilw] = plw[1];
-            plw = (long *)*plw;
+            plw = (int32_t *)*plw;
         }
     }
 
@@ -898,9 +898,9 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
         if (pv != pvNil && cb > 0)
         {
             uint8_t *pb = (uint8_t *)pv;
-            long cbT = cb;
-            long ilw;
-            long lw;
+            int32_t cbT = cb;
+            int32_t ilw;
+            int32_t lw;
             STN stnT;
 
             stn2.SetNil();
@@ -954,7 +954,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
     if (LwThreadCur() != vwig.lwThreadMain)
     {
         // can't use a dialog - it may cause grid - lock
-        long sid;
+        int32_t sid;
         uint32_t grfmb;
 
         stn0.FAppendSz(PszLit("\n"));
@@ -1009,12 +1009,12 @@ bool APPB::FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, lo
     Put an alert up. Return which button was hit. Returns tYes for yes
     or ok; tNo for no; tMaybe for cancel.
 ***************************************************************************/
-tribool APPB::TGiveAlertSz(const PSZ psz, long bk, long cok)
+tribool APPB::TGiveAlertSz(const PSZ psz, int32_t bk, int32_t cok)
 {
     AssertThis(0);
     AssertSz(psz);
 
-    long sid;
+    int32_t sid;
     uint32_t grfmb;
     HWND hwnd;
 

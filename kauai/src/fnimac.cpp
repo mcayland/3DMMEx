@@ -27,7 +27,7 @@ FTG vftgTemp = kftgTemp;
 ***************************************************************************/
 
 typedef StandardFileReply SFR;
-priv bool _FFssDir(FSS *pfss, long *plwDir);
+priv bool _FFssDir(FSS *pfss, int32_t *plwDir);
 
 RTCLASS(FNI)
 RTCLASS(FNE)
@@ -106,12 +106,12 @@ bool FNI::FGetSave(FTG ftg, PST pstPrompt, PST pstDefault)
 bool FNI::FGetUnique(FTG ftg)
 {
     AssertThis(ffniFile | ffniDir);
-    static long _dlw = 0;
-    long lw;
+    static int32_t _dlw = 0;
+    int32_t lw;
     short cact;
     short err;
     STN stn;
-    long lwDir = _lwDir;
+    int32_t lwDir = _lwDir;
     short swVol = _fss.vRefNum;
 
     Assert(ftg != kftgDir && ftg != ftgNil, "bad ftg");
@@ -140,7 +140,7 @@ bool FNI::FGetTemp(void)
 {
     AssertThis(0);
     static short _swVolTemp = 0;
-    static long _lwDirTemp = -1;
+    static int32_t _lwDirTemp = -1;
 
     // This is so we only call FindFolder once.
     if (_swVolTemp == 0 && _lwDirTemp == -1 &&
@@ -196,7 +196,7 @@ bool FNI::FSetLeaf(PSTZ pstz, FTG ftg)
 /***************************************************************************
     Set the leaf for the fni.
 ***************************************************************************/
-bool FNI::FBuild(long lwVol, long lwDir, PSTZ pstz, FTG ftg)
+bool FNI::FBuild(int32_t lwVol, int32_t lwDir, PSTZ pstz, FTG ftg)
 {
     AssertNilOrStz(pstz);
     short err;
@@ -389,7 +389,7 @@ bool FNI::FDownDir(PSTZ pstz, uint32_t grffni)
     AssertThis(ffniDir);
     AssertStz(pstz);
     FSS fss;
-    long lwDir;
+    int32_t lwDir;
     short err;
 
     // make the fss
@@ -513,7 +513,7 @@ void FNI::AssertValid(uint32_t grffni)
     directory.  If so and plwDir is not nil, sets *plwDir to the id of
     the directory.
 ***************************************************************************/
-priv bool _FFssDir(FSS *pfss, long *plwDir)
+priv bool _FFssDir(FSS *pfss, int32_t *plwDir)
 {
     CInfoPBRec iob;
 
@@ -580,7 +580,7 @@ void FNE::_Free(void)
 /***************************************************************************
     Initialize the fne to do an enumeration.
 ***************************************************************************/
-bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, uint32_t grffne)
+bool FNE::FInit(FNI *pfniDir, FTG *prgftg, int32_t cftg, uint32_t grffne)
 {
     AssertThis(0);
     AssertNilOrVarMem(pfniDir);
@@ -594,7 +594,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, uint32_t grffne)
         _cftg = 0;
     else
     {
-        long cb = LwMul(cftg, size(FTG));
+        int32_t cb = LwMul(cftg, size(FTG));
 
         if (cftg > kcftgFneBase && !FAllocPv((void **)&_prgftg, cb, fmemNil, mprNormal))
         {
@@ -611,7 +611,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, uint32_t grffne)
         _fesCur.lwVol = 0;
     else
     {
-        _fesCur.lwVol = (long)pfniDir->_fss.vRefNum;
+        _fesCur.lwVol = (int32_t)pfniDir->_fss.vRefNum;
         _fesCur.lwDir = pfniDir->_lwDir;
     }
     _fesCur.iv = 0;

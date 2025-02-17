@@ -78,7 +78,7 @@ RTCLASS(CLOK)
 BEGIN_CMD_MAP_BASE(CLOK)
 END_CMD_MAP(&CLOK::FCmdAll, pvNil, kgrfcmmAll)
 
-const long kcmhlClok = kswMin; // put clocks at the head of the list
+const int32_t kcmhlClok = kswMin; // put clocks at the head of the list
 PCLOK CLOK::_pclokFirst;
 
 /***************************************************************************
@@ -86,7 +86,7 @@ PCLOK CLOK::_pclokFirst;
     that this clock should reset itself to zero on key or mouse input.
     fclokNoSlip specifies that the clok should not let time slip.
 ***************************************************************************/
-CLOK::CLOK(long hid, uint32_t grfclok) : CMH(hid)
+CLOK::CLOK(int32_t hid, uint32_t grfclok) : CMH(hid)
 {
     _pclokNext = _pclokFirst;
     _pclokFirst = this;
@@ -119,7 +119,7 @@ CLOK::~CLOK(void)
 /***************************************************************************
     Static method to find the first clok with the given id.
 ***************************************************************************/
-PCLOK CLOK::PclokFromHid(long hid)
+PCLOK CLOK::PclokFromHid(int32_t hid)
 {
     PCLOK pclok;
 
@@ -151,7 +151,7 @@ void CLOK::RemoveCmh(PCMH pcmh)
 {
     AssertThis(0);
     ALAD *qalad;
-    long ialad;
+    int32_t ialad;
 
     if (pvNil == _pglalad)
         return;
@@ -208,14 +208,14 @@ uint32_t CLOK::TimCur(bool fAdjustForDelay)
     Set an alarm for the given time and for the given command handler.
     Alarms are sorted in _decreasing_ order.
 ***************************************************************************/
-bool CLOK::FSetAlarm(long dtim, PCMH pcmhNotify, long lwUser, bool fAdjustForDelay)
+bool CLOK::FSetAlarm(int32_t dtim, PCMH pcmhNotify, int32_t lwUser, bool fAdjustForDelay)
 {
     AssertThis(0);
     AssertIn(dtim, 0, kcbMax);
     AssertNilOrPo(pcmhNotify, 0);
     ALAD alad;
     ALAD *qalad;
-    long ialad, ialadMin, ialadLim;
+    int32_t ialad, ialadMin, ialadLim;
 
     alad.pcmh = pcmhNotify;
     alad.tim = TimCur(fAdjustForDelay) + LwMax(dtim, 1);
@@ -248,7 +248,7 @@ bool CLOK::FCmdAll(PCMD pcmd)
     AssertVarMem(pcmd);
 
     CMD cmd;
-    long ialad;
+    int32_t ialad;
     ALAD alad;
     uint32_t tsCur, timCur;
 

@@ -19,7 +19,7 @@ ASSERTNAME
     Add a sound event to the actor event list, and create an undo object
 
 ***************************************************************************/
-bool ACTR::FSetSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fMotionMatch, long vlm, long sty)
+bool ACTR::FSetSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fMotionMatch, int32_t vlm, int32_t sty)
 {
     AssertThis(0);
     AssertVarMem(ptag);
@@ -60,7 +60,7 @@ bool ACTR::FSetSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fMotionMatc
     a current tag.
 
 ***************************************************************************/
-bool ACTR::FSetSndCore(PTAG ptag, tribool fLoop, tribool fQueue, tribool fMotionMatch, long vlm, long sty)
+bool ACTR::FSetSndCore(PTAG ptag, tribool fLoop, tribool fQueue, tribool fMotionMatch, int32_t vlm, int32_t sty)
 {
     AssertThis(0);
     AssertVarMem(ptag);
@@ -68,11 +68,11 @@ bool ACTR::FSetSndCore(PTAG ptag, tribool fLoop, tribool fQueue, tribool fMotion
 
     PMSND pmsnd = pvNil;
     AEVSND aevsnd;
-    long ccel;
-    long iaev;
+    int32_t ccel;
+    int32_t iaev;
     AEV *paev;
-    long sqn;
-    long cbVar;
+    int32_t sqn;
+    int32_t cbVar;
 
     // Verify sound before including in the event list
     pmsnd = (PMSND)vptagm->PbacoFetch(ptag, MSND::FReadMsnd);
@@ -164,14 +164,14 @@ LFail:
     Enter non-motion match sounds in the Msq
 
 ***************************************************************************/
-bool ACTR::_FEnqueueSnd(long iaev)
+bool ACTR::_FEnqueueSnd(int32_t iaev)
 {
     AssertThis(0);
     AssertIn(iaev, 0, _pggaev->IvMac());
 
     AEVSND aevsnd;
     PMSND pmsnd = pvNil;
-    long tool;
+    int32_t tool;
 
     _pggaev->Get(iaev, &aevsnd);
 
@@ -228,9 +228,9 @@ bool ACTR::_FEnqueueSmmInMsq(void)
 {
     AssertThis(0);
 
-    long celn;
-    long ccel;
-    long ismm;
+    int32_t celn;
+    int32_t ccel;
+    int32_t ismm;
     SMM *psmm;
     bool fSuccess = fTrue;
     PMSND pmsnd = pvNil;
@@ -288,12 +288,12 @@ LFail:
     Insert a motion match sound in the smm queue
 
 ***************************************************************************/
-bool ACTR::_FInsertSmm(long iaev)
+bool ACTR::_FInsertSmm(int32_t iaev)
 {
     AssertThis(0);
     AssertIn(iaev, 0, _pggaev->IvMac());
 
-    long ismm;
+    int32_t ismm;
     SMM smm;
     SMM *psmm;
     AEV *paev;
@@ -328,11 +328,11 @@ bool ACTR::_FInsertSmm(long iaev)
     Delete old motion sounds in event list
 
 ***************************************************************************/
-bool ACTR::_FRemoveAevMm(long anid)
+bool ACTR::_FRemoveAevMm(int32_t anid)
 {
     AssertThis(0);
 
-    long iaev;
+    int32_t iaev;
     AEV *paev;
     AEVSND aevsnd;
     AEVACTN aevactn;
@@ -369,15 +369,15 @@ bool ACTR::_FRemoveAevMm(long anid)
     Insert default motion match sounds in event list
 
 ***************************************************************************/
-bool ACTR::_FAddAevDefMm(long anid)
+bool ACTR::_FAddAevDefMm(int32_t anid)
 {
     AssertThis(0);
     TAG tag;
     PMSND pmsnd;
-    long iceln;
-    long ccel;
-    long vlm;
-    long sty;
+    int32_t iceln;
+    int32_t ccel;
+    int32_t vlm;
+    int32_t sty;
     bool fSoundExists;
 
     // Insert new motion match sounds
@@ -418,7 +418,7 @@ LFail:
     Set the Volume for sounds in the current frame of the specified sty
 
 ***************************************************************************/
-bool ACTR::FSetVlmSnd(long sty, bool fMotionMatch, long vlm)
+bool ACTR::FSetVlmSnd(int32_t sty, bool fMotionMatch, int32_t vlm)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
@@ -426,13 +426,13 @@ bool ACTR::FSetVlmSnd(long sty, bool fMotionMatch, long vlm)
 
     AEVSND aevsnd;
     bool fActnThisFrame = fFalse;
-    long celn;
-    long ccel;
-    long iaev;
-    long ismm;
+    int32_t celn;
+    int32_t ccel;
+    int32_t iaev;
+    int32_t ismm;
     AEV aev;
     SMM smm;
-    long nfrmMM = ivNil;
+    int32_t nfrmMM = ivNil;
 
     if (!_ptmpl->FGetCcelActn(_anidCur, &ccel))
         return fFalse;
@@ -518,7 +518,7 @@ bool ACTR::FSetVlmSnd(long sty, bool fMotionMatch, long vlm)
     Query actor for current frame sounds
 
 ***************************************************************************/
-bool ACTR::FQuerySnd(long sty, bool fMotionMatch, PGL *pglTagSnd, long *pvlm, bool *pfLoop)
+bool ACTR::FQuerySnd(int32_t sty, bool fMotionMatch, PGL *pglTagSnd, int32_t *pvlm, bool *pfLoop)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
@@ -527,11 +527,11 @@ bool ACTR::FQuerySnd(long sty, bool fMotionMatch, PGL *pglTagSnd, long *pvlm, bo
 
     PGL pgltag = pvNil;
     AEVSND aevsnd;
-    long ccel;
-    long celn;
+    int32_t ccel;
+    int32_t celn;
     AEV aev;
-    long iaev;
-    long ismm;
+    int32_t iaev;
+    int32_t ismm;
     SMM smm;
 
     if (pvNil == (pgltag = GL::PglNew(SIZEOF(TAG), kctagSndGrow)))
@@ -614,20 +614,20 @@ LFail:
     Delete a sound in this frame
 
 ***************************************************************************/
-bool ACTR::FDeleteSndCore(long sty, bool fMotionMatch)
+bool ACTR::FDeleteSndCore(int32_t sty, bool fMotionMatch)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
 
     AEVSND aevsnd;
-    long iaevFirst;
-    long iaev;
-    long ismm;
-    long ccel;
-    long celn;
+    int32_t iaevFirst;
+    int32_t iaev;
+    int32_t ismm;
+    int32_t ccel;
+    int32_t celn;
     AEV aev;
     SMM smm;
-    long nfrmMM = ivNil; // For motion match, this may be an earlier frame
+    int32_t nfrmMM = ivNil; // For motion match, this may be an earlier frame
 
     // First the actor event list
     if (!_ptmpl->FGetCcelActn(_anidCur, &ccel))
@@ -701,7 +701,7 @@ bool ACTR::FSoundInFrm(void)
     if (Pscen()->Nfrm() != _nfrmCur)
         return fFalse;
 
-    for (long iaev = _iaevFrmMin; iaev < _iaevCur; iaev++)
+    for (int32_t iaev = _iaevFrmMin; iaev < _iaevCur; iaev++)
     {
         AEV aev;
 
@@ -719,7 +719,7 @@ bool ACTR::FSoundInFrm(void)
 bool ACTR::FResolveAllSndTags(CNO cnoScen)
 {
     AssertThis(0);
-    long iaev;
+    int32_t iaev;
     AEV *paev;
     AEVSND aevsnd;
     bool fSuccess = fTrue;

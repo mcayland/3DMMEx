@@ -48,24 +48,24 @@ class SDAM : public SDAM_PAR
 
   protected:
     DWORD _luVolSys;
-    long _vlm;
+    int32_t _vlm;
     bool _fAudioManInited : 1;
 
     SDAM(void);
-    virtual bool _FInit(long wav);
+    virtual bool _FInit(int32_t wav);
 
     // inherited methods
     virtual PSNQUE _PsnqueNew(void);
     virtual void _Suspend(bool fSuspend);
 
   public:
-    static long vcbMaxMemWave;
+    static int32_t vcbMaxMemWave;
 
-    static PSDAM PsdamNew(long wav);
+    static PSDAM PsdamNew(int32_t wav);
     ~SDAM(void);
 
-    virtual void SetVlm(long vlm);
-    virtual long VlmCur(void);
+    virtual void SetVlm(int32_t vlm);
+    virtual int32_t VlmCur(void);
     virtual void BeginSynch(void);
     virtual void EndSynch(void);
 };

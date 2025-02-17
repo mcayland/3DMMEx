@@ -27,8 +27,8 @@ class STBL : public STBL_PAR
     MARKMEM
 
   protected:
-    long _cactRef;
-    long _ib;
+    int32_t _cactRef;
+    int32_t _ib;
     BLCK _blck;
 
     STBL(void);
@@ -88,7 +88,7 @@ class STBL : public STBL_PAR
     }
 
     static PSTBL PstblNew(FLO *pflo, bool fPacked);
-    long CbMem(void)
+    int32_t CbMem(void)
     {
         return SIZEOF(STBL) + _blck.CbMem();
     }
@@ -118,11 +118,11 @@ class CAMS : public CAMS_PAR
 
   public:
     ~CAMS(void);
-    static PCAMS PcamsNewLoop(PCAMS pcamsSrc, long cactPlay);
+    static PCAMS PcamsNewLoop(PCAMS pcamsSrc, int32_t cactPlay);
 
     IAMSound *psnd; // the sound to use
 
-    static bool FReadCams(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadCams(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     bool FInMemory(void)
     {
         return _pstbl->FInMemory();
@@ -141,7 +141,7 @@ class AMNOT : public AMNOT_PAR
     ASSERT
 
   protected:
-    long _cactRef;
+    int32_t _cactRef;
     PAMQUE _pamque; // the amque to notify
 
   public:
@@ -189,9 +189,9 @@ class AMQUE : public AMQUE_PAR
 
     virtual bool _FInit(void);
     virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno);
-    virtual void _Queue(long isndinMin);
-    virtual void _PauseQueue(long isndinMin);
-    virtual void _ResumeQueue(long isndinMin);
+    virtual void _Queue(int32_t isndinMin);
+    virtual void _PauseQueue(int32_t isndinMin);
+    virtual void _ResumeQueue(int32_t isndinMin);
 
   public:
     static PAMQUE PamqueNew(void);

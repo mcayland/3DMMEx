@@ -57,7 +57,7 @@ PDDG DOCPIC::PddgNew(PGCB pgcb)
 /***************************************************************************
     Return the size of the thing on file.
 ***************************************************************************/
-long DOCPIC::_CbOnFile(void)
+int32_t DOCPIC::_CbOnFile(void)
 {
     return _ppic->CbOnFile();
 }

@@ -34,10 +34,10 @@
 #ifndef BRWD_H
 #define BRWD_H
 
-const long kcmhlBrowser = 0x11000; // nice medium level for the Browser
-const long kcbMaxCrm = 300000;
-const long kdwTotalPhysLim = 10240000; // 10MB	heuristic
-const long kdwAvailPhysLim = 1024000;  // 1MB heuristic
+const int32_t kcmhlBrowser = 0x11000; // nice medium level for the Browser
+const int32_t kcbMaxCrm = 300000;
+const int32_t kdwTotalPhysLim = 10240000; // 10MB	heuristic
+const int32_t kdwAvailPhysLim = 1024000;  // 1MB heuristic
 const auto kBrwsScript = (kstDefault << 16) | kchidBrowserDismiss;
 
 /************************************
@@ -61,8 +61,8 @@ class BRCN : public BRCN_PAR
     BRCN(void){};
 
   public:
-    long brwdid;
-    long ithumPageFirst;
+    int32_t brwdid;
+    int32_t ithumPageFirst;
 };
 
 /************************************
@@ -112,59 +112,59 @@ class BRWD : public BRWD_PAR
     CMD_MAP_DEC(BRWD)
 
   protected:
-    long _kidFrmFirst;     // kid of first frame
-    long _kidControlFirst; // kid of first control button
-    long _dxpFrmOffset;    // x inset of thumb in frame
-    long _dypFrmOffset;    // y inset of thumb in frame
-    long _sidDefault;      // default sid
-    long _thumDefault;     // default thum
+    int32_t _kidFrmFirst;  // kid of first frame
+    int32_t _kidControlFirst; // kid of first control button
+    int32_t _dxpFrmOffset;    // x inset of thumb in frame
+    int32_t _dypFrmOffset;    // y inset of thumb in frame
+    int32_t _sidDefault;      // default sid
+    int32_t _thumDefault;     // default thum
     PBRCN _pbrcn;          // context carryover
-    long _idsFont;         // string id of Font
-    long _kidThumOverride; // projects may override one thum gobid
-    long _ithumOverride;   // projects may override one thum gobid
+    int32_t _idsFont;         // string id of Font
+    int32_t _kidThumOverride; // projects may override one thum gobid
+    int32_t _ithumOverride;   // projects may override one thum gobid
     PTGOB _ptgobPage;      // for page numbers
     PSTDIO _pstdio;
 
     // Display State variables
-    long _cthumCD;          // Non-user content
-    long _ithumSelect;      // Hilited frame
-    long _ithumPageFirst;   // Index to thd of first frame on current page
-    long _cfrmPageCur;      // Number of visible thumbnails per current page
-    long _cfrm;             // Total frames possible per page
-    long _cthumScroll;      // #items to scroll on fwd/back.  default ivNil -> page scrolling
+    int32_t _cthumCD;       // Non-user content
+    int32_t _ithumSelect;   // Hilited frame
+    int32_t _ithumPageFirst; // Index to thd of first frame on current page
+    int32_t _cfrmPageCur;    // Number of visible thumbnails per current page
+    int32_t _cfrm;           // Total frames possible per page
+    int32_t _cthumScroll;    // #items to scroll on fwd/back.  default ivNil -> page scrolling
     bool _fWrapScroll;      // Wrap around.  Default = fTrue;
     bool _fNoRepositionSel; // Don't reposition selection : default = fFalse;
 
   protected:
     void _SetScrollState(void);
-    long _CfrmCalc(void);
-    static bool _FBuildGcb(GCB *pgcb, long kidPar, long kidBrws);
-    bool _FInitGok(PRCA prca, long kidGlass);
+    int32_t _CfrmCalc(void);
+    static bool _FBuildGcb(GCB *pgcb, int32_t kidPar, int32_t kidBrws);
+    bool _FInitGok(PRCA prca, int32_t kidGlass);
     void _SetVarForOverride(void);
 
-    virtual long _Cthum(void)
+    virtual int32_t _Cthum(void)
     {
         AssertThis(0);
         return 0;
     }
-    virtual bool _FSetThumFrame(long ithum, PGOB pgobPar)
+    virtual bool _FSetThumFrame(int32_t ithum, PGOB pgobPar)
     {
         AssertThis(0);
         return fFalse;
     }
-    virtual bool _FClearHelp(long ifrm)
+    virtual bool _FClearHelp(int32_t ifrm)
     {
         return fTrue;
     }
-    virtual void _ReleaseThumFrame(long ifrm)
+    virtual void _ReleaseThumFrame(int32_t ifrm)
     {
     }
-    virtual long _IthumFromThum(long thum, long sid)
+    virtual int32_t _IthumFromThum(int32_t thum, int32_t sid)
     {
         return thum;
     }
-    virtual void _GetThumFromIthum(long ithum, void *pThumSelect, long *psid);
-    virtual void _ApplySelection(long thumSelect, long sid)
+    virtual void _GetThumFromIthum(int32_t ithum, void *pThumSelect, int32_t *psid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid)
     {
     }
     virtual void _ProcessSelection(void)
@@ -178,16 +178,16 @@ class BRWD : public BRWD_PAR
     {
     }
     void _CalcIthumPageFirst(void);
-    bool _FIsIthumOverride(long ithum)
+    bool _FIsIthumOverride(int32_t ithum)
     {
         return FPure(ithum == _ithumOverride);
     }
-    PGOB _PgobFromIfrm(long ifrm);
-    long _KidThumFromIfrm(long ifrm);
+    PGOB _PgobFromIfrm(int32_t ifrm);
+    int32_t _KidThumFromIfrm(int32_t ifrm);
     void _UnhiliteCurFrm(void);
-    bool _FHiliteFrm(long ifrmSelect);
-    void _InitStateVars(PCMD pcmd, PSTDIO pstdio, bool fWrapScroll, long cthumScroll);
-    void _InitFromData(PCMD pcmd, long ithumSelect, long ithumDisplay);
+    bool _FHiliteFrm(int32_t ifrmSelect);
+    void _InitStateVars(PCMD pcmd, PSTDIO pstdio, bool fWrapScroll, int32_t cthumScroll);
+    void _InitFromData(PCMD pcmd, int32_t ithumSelect, int32_t ithumDisplay);
     virtual void _CacheContext(void);
 
   public:
@@ -201,9 +201,9 @@ class BRWD : public BRWD_PAR
     }
     ~BRWD(void);
 
-    static PBRWD PbrwdNew(PRCA prca, long kidPar, long kidBrwd);
-    void Init(PCMD pcmd, long ithumSelect, long ithumDisplay, PSTDIO pstdio, bool fWrapScroll = fTrue,
-              long cthumScroll = ivNil);
+    static PBRWD PbrwdNew(PRCA prca, int32_t kidPar, int32_t kidBrwd);
+    void Init(PCMD pcmd, int32_t ithumSelect, int32_t ithumDisplay, PSTDIO pstdio, bool fWrapScroll = fTrue,
+              int32_t cthumScroll = ivNil);
     bool FDraw(void);
     bool FCreateAllTgob(void); // For any text based browsers
 
@@ -253,7 +253,7 @@ class BRCNL : public BRCNL_PAR
     ~BRCNL(void);
 
   public:
-    long cthumCD;
+    int32_t cthumCD;
     CKI ckiRoot;
     PGL pglthd;
     PGST pgst;
@@ -263,23 +263,23 @@ class BRCNL : public BRCNL_PAR
 //
 //	Thumbnail descriptors : one per thumbnail
 //
-const long kglstnGrow = 5;
-const long kglthdGrow = 10;
+const int32_t kglstnGrow = 5;
+const int32_t kglthdGrow = 10;
 struct THD
 {
     union {
         TAG tag; // TAG pointing to content
         struct
         {
-            long lwFill1; // sid
-            long lwFill2; // pcrf
+            int32_t lwFill1; // sid
+            int32_t lwFill2; // pcrf
             uint32_t grfontMask;
             uint32_t grfont;
         };
         struct
         {
-            long _lwFill1;
-            long _lwFill2;
+            int32_t _lwFill1;
+            int32_t _lwFill2;
             CTG ctg;
             CHID chid; // CHID of CD content
         };
@@ -287,7 +287,7 @@ struct THD
 
     CNO cno;       // GOKD cno
     CHID chidThum; // GOKD's parent's CHID (relative to GOKD parent's parent)
-    long ithd;     // Original index for this THD, before sorting (used to
+    int32_t ithd;  // Original index for this THD, before sorting (used to
                    // retrieve proper STN for the BRWN-derived browsers)
 };
 
@@ -320,11 +320,11 @@ class BCL : public BCL_PAR
     }
 
     bool _FInit(PCRM pcrm, CKI *pckiRoot, CTG ctgContent, PGL pglthd);
-    bool _FAddGokdToThd(PCFL pcfl, long sid, CKI *pcki);
-    bool _FAddFileToThd(PCFL pcfl, long sid);
+    bool _FAddGokdToThd(PCFL pcfl, int32_t sid, CKI *pcki);
+    bool _FAddFileToThd(PCFL pcfl, int32_t sid);
     bool _FBuildThd(PCRM pcrm);
 
-    virtual bool _FAddGokdToThd(PCFL pcfl, long sid, KID *pkid);
+    virtual bool _FAddGokdToThd(PCFL pcfl, int32_t sid, KID *pkid);
 
   public:
     static PBCL PbclNew(PCRM pcrm, CKI *pckiRoot, CTG ctgContent, PGL pglthd = pvNil, bool fOnlineOnly = fFalse);
@@ -333,11 +333,11 @@ class BCL : public BCL_PAR
     {
         return _pglthd;
     }
-    void GetThd(long ithd, THD *pthd)
+    void GetThd(int32_t ithd, THD *pthd)
     {
         _pglthd->Get(ithd, pthd);
     }
-    long IthdMac(void)
+    int32_t IthdMac(void)
     {
         return _pglthd->IvMac();
     }
@@ -370,7 +370,7 @@ class BCLS : public BCLS_PAR
     bool _FInit(PCRM pcrm, CKI *pckiRoot, CTG ctgContent, PGST pgst, PGL pglthd);
     bool _FSetNameGst(PCFL pcfl, CTG ctg, CNO cno);
 
-    virtual bool _FAddGokdToThd(PCFL pcfl, long sid, KID *pkid);
+    virtual bool _FAddGokdToThd(PCFL pcfl, int32_t sid, KID *pkid);
 
   public:
     static PBCLS PbclsNew(PCRM pcrm, CKI *pckiRoot, CTG ctgContent, PGL pglthd = pvNil, PGST pgst = pvNil,
@@ -424,15 +424,15 @@ class BRWL : public BRWL_PAR
 
   protected:
     // BRWL List
-    bool _FInitNew(PCMD pcmd, BWS bws, long ThumSelect, CKI ckiRoot, CTG ctgContent);
+    bool _FInitNew(PCMD pcmd, BWS bws, int32_t ThumSelect, CKI ckiRoot, CTG ctgContent);
     bool _FCreateBuildThd(CKI ckiRoot, CTG ctgContent, bool fBuildGl = fTrue);
     virtual bool _FGetContent(PCRM pcrm, CKI *pcki, CTG ctg, bool fBuildGl);
-    virtual long _Cthum(void)
+    virtual int32_t _Cthum(void)
     {
         AssertThis(0);
         return _pglthd->IvMac();
     }
-    virtual bool _FSetThumFrame(long ithd, PGOB pgobPar);
+    virtual bool _FSetThumFrame(int32_t ithd, PGOB pgobPar);
     virtual bool _FUpdateLists()
     {
         return fTrue;
@@ -440,9 +440,9 @@ class BRWL : public BRWL_PAR
 
     // BRWL util
     void _SortThd(void);
-    virtual void _GetThumFromIthum(long ithum, void *pThumSelect, long *psid);
-    virtual void _ReleaseThumFrame(long ifrm);
-    virtual long _IthumFromThum(long thum, long sid);
+    virtual void _GetThumFromIthum(int32_t ithum, void *pThumSelect, int32_t *psid);
+    virtual void _ReleaseThumFrame(int32_t ifrm);
+    virtual int32_t _IthumFromThum(int32_t thum, int32_t sid);
     virtual void _CacheContext(void);
     virtual void _SetCbPcrmMin(void);
 
@@ -455,9 +455,9 @@ class BRWL : public BRWL_PAR
     }
     ~BRWL(void);
 
-    static PBRWL PbrwlNew(PRCA prca, long kidPar, long kidBrwl);
-    virtual bool FInit(PCMD pcmd, BWS bws, long ThumSelect, long sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
-                       PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, long cthumScroll = ivNil);
+    static PBRWL PbrwlNew(PRCA prca, int32_t kidPar, int32_t kidBrwl);
+    virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
+                       PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
 };
 
 /************************************
@@ -479,13 +479,13 @@ class BRWT : public BRWT_PAR
     PGST _pgst;
     bool _fEnableAccel;
 
-    virtual long _Cthum(void)
+    virtual int32_t _Cthum(void)
     {
         AssertThis(0);
         return _pgst->IvMac();
     }
-    virtual bool _FSetThumFrame(long istn, PGOB pgobPar);
-    virtual void _ReleaseThumFrame(long ifrm)
+    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar);
+    virtual void _ReleaseThumFrame(int32_t ifrm)
     {
     } // No gob to release
 
@@ -499,10 +499,10 @@ class BRWT : public BRWT_PAR
     }
     ~BRWT(void);
 
-    static PBRWT PbrwtNew(PRCA prca, long kidPar, long kidBrwt);
+    static PBRWT PbrwtNew(PRCA prca, int32_t kidPar, int32_t kidBrwt);
     void SetGst(PGST pgst);
-    bool FInit(PCMD pcmd, long thumSelect, long thumDisplay, PSTDIO pstdio, bool fWrapScroll = fTrue,
-               long cthumScroll = ivNil);
+    bool FInit(PCMD pcmd, int32_t thumSelect, int32_t thumDisplay, PSTDIO pstdio, bool fWrapScroll = fTrue,
+               int32_t cthumScroll = ivNil);
 };
 
 /************************************
@@ -520,12 +520,12 @@ class BRWN : public BRWN_PAR
 
   protected:
     virtual bool _FGetContent(PCRM pcrm, CKI *pcki, CTG ctg, bool fBuildGl);
-    virtual long _Cthum(void)
+    virtual int32_t _Cthum(void)
     {
         return _pglthd->IvMac();
     }
-    virtual bool _FSetThumFrame(long ithd, PGOB pgobPar);
-    virtual void _ReleaseThumFrame(long ifrm);
+    virtual bool _FSetThumFrame(int32_t ithd, PGOB pgobPar);
+    virtual void _ReleaseThumFrame(int32_t ifrm);
 
   public:
     //
@@ -535,8 +535,8 @@ class BRWN : public BRWN_PAR
     {
     }
     ~BRWN(void){};
-    virtual bool FInit(PCMD pcmd, BWS bws, long ThumSelect, long sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
-                       PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, long cthumScroll = ivNil);
+    virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
+                       PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
 
     virtual bool FCmdOk(PCMD pcmd);
 };
@@ -564,10 +564,10 @@ class BRWA : public BRWA_PAR
     MARKMEM
 
   protected:
-    long _celnStart;              // Starting cel number
+    int32_t _celnStart;           // Starting cel number
     PAPE _pape;                   // Actor Preview Entity
     void _ProcessSelection(void); // Action Preview
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
 
   public:
     //
@@ -602,7 +602,7 @@ class BRWP : public BRWP_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
 
   public:
     //
@@ -613,7 +613,7 @@ class BRWP : public BRWP_PAR
     }
     ~BRWP(void){};
 
-    static PBRWP PbrwpNew(PRCA prca, long kidGlass);
+    static PBRWP PbrwpNew(PRCA prca, int32_t kidGlass);
 };
 
 /************************************
@@ -630,7 +630,7 @@ class BRWB : public BRWB_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
 
   public:
     //
@@ -659,7 +659,7 @@ class BRWC : public BRWC_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
     virtual void _SetCbPcrmMin(void)
     {
     }
@@ -692,14 +692,14 @@ class BRWM : public BRWM_PAR
     RTCLASS_DEC
 
   protected:
-    long _sty;  // Identifies type of sound
+    int32_t _sty; // Identifies type of sound
     PCRF _pcrf; // NOT created here (autosave or BRWI file)
 
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
     virtual bool _FUpdateLists(); // By all entries in pcrf of correct type
     void _ProcessSelection(void); // Sound Preview
     bool _FAddThd(STN *pstn, CKI *pcki);
-    bool _FSndListed(CNO cno, long *pithd = pvNil);
+    bool _FSndListed(CNO cno, int32_t *pithd = pvNil);
 
   public:
     //
@@ -711,7 +711,7 @@ class BRWM : public BRWM_PAR
     }
     ~BRWM(void){};
 
-    static PBRWM PbrwmNew(PRCA prca, long kidGlass, long sty, PSTDIO pstdio);
+    static PBRWM PbrwmNew(PRCA prca, int32_t kidGlass, int32_t sty, PSTDIO pstdio);
     virtual bool FCmdFile(PCMD pcmd); // Upon portfolio completion
     virtual bool FCmdDel(PCMD pcmd);  // Delete user sound
 };
@@ -735,7 +735,7 @@ class BRWI : public BRWI_PAR
   protected:
     // The following are already handled by BRWM
     // virtual void _ProcessSelection(void);
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
 
   public:
     //
@@ -747,7 +747,7 @@ class BRWI : public BRWI_PAR
     }
     ~BRWI(void);
 
-    static PBRWI PbrwiNew(PRCA prca, long kidGlass, long sty);
+    static PBRWI PbrwiNew(PRCA prca, int32_t kidGlass, int32_t sty);
     bool FInit(PCMD pcmd, CKI cki, PSTDIO pstdio);
 };
 
@@ -772,14 +772,14 @@ class BRWR : public BRWR_PAR
     bool _fApplyingSel;
 
   protected:
-    virtual long _Cthum(void);
-    virtual bool _FSetThumFrame(long istn, PGOB pgobPar);
-    virtual void _ReleaseThumFrame(long ifrm);
-    virtual void _ApplySelection(long thumSelect, long sid);
+    virtual int32_t _Cthum(void);
+    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar);
+    virtual void _ReleaseThumFrame(int32_t ifrm);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
     virtual void _ProcessSelection(void);
-    virtual bool _FClearHelp(long ifrm);
-    long _IaridFromIthum(long ithum, long iaridFirst = 0);
-    long _IthumFromArid(long arid);
+    virtual bool _FClearHelp(int32_t ifrm);
+    int32_t _IaridFromIthum(int32_t ithum, int32_t iaridFirst = 0);
+    int32_t _IthumFromArid(int32_t arid);
 
   public:
     //
@@ -792,11 +792,11 @@ class BRWR : public BRWR_PAR
     }
     ~BRWR(void);
 
-    static PBRWR PbrwrNew(PRCA prca, long kid);
-    void Init(PCMD pcmd, long thumSelect, long thumDisplay, PSTDIO pstdio, bool fWrapScroll = fTrue,
-              long cthumScroll = ivNil);
-    bool FInit(PCMD pcmd, CTG ctg, long ithumDisplay, PSTDIO pstdio);
-    bool FUpdate(long arid, PSTDIO pstdio);
+    static PBRWR PbrwrNew(PRCA prca, int32_t kid);
+    void Init(PCMD pcmd, int32_t thumSelect, int32_t thumDisplay, PSTDIO pstdio, bool fWrapScroll = fTrue,
+              int32_t cthumScroll = ivNil);
+    bool FInit(PCMD pcmd, CTG ctg, int32_t ithumDisplay, PSTDIO pstdio);
+    bool FUpdate(int32_t arid, PSTDIO pstdio);
     bool FApplyingSel(void)
     {
         AssertBaseThis(0);
@@ -804,7 +804,7 @@ class BRWR : public BRWR_PAR
     }
 };
 
-const long kglcmgGrow = 8;
+const int32_t kglcmgGrow = 8;
 struct CMG // Gokd Cno Map
 {
     CNO cnoTmpl; // Content cno
@@ -834,7 +834,7 @@ class FNET : public FNET_PAR
     bool _fInited;
 
   protected:
-    bool _FNextFni(FNI *pfni, long *psid);
+    bool _FNextFni(FNI *pfni, int32_t *psid);
 
   public:
     //
@@ -847,7 +847,7 @@ class FNET : public FNET_PAR
     ~FNET(void){};
 
     bool FInit(void);
-    bool FNext(FNI *pfni, long *psid = pvNil);
+    bool FNext(FNI *pfni, int32_t *psid = pvNil);
 };
 
 #endif

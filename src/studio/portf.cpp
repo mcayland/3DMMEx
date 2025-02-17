@@ -34,7 +34,7 @@ ASSERTNAME
             FALSE	- User canceled portfolio.
 
 ***************************************************************************/
-bool FPortDisplayWithIds(FNI *pfni, bool fOpen, long lFilterLabel, long lFilterExt, long lTitle, LPCTSTR lpstrDefExt,
+bool FPortDisplayWithIds(FNI *pfni, bool fOpen, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPCTSTR lpstrDefExt,
                          PSTN pstnDefFileName, FNI *pfniInitialDir, uint32_t grfPrevType, CNO cnoWave)
 {
     STN stnTitle;
@@ -377,7 +377,7 @@ bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR
 
                 if ((tExists = pfni->TExists()) != tNo)
                 {
-                    long cch;
+                    int32_t cch;
                     achar *pch;
                     // File already exists. Query user for overwrite.
 
@@ -938,7 +938,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
                     FNI fni;
                     STN stnFile, stnErr;
                     bool fHelp, tRet;
-                    long lSelect;
+                    int32_t lSelect;
 
                     // Now does the specified file already exist?
 

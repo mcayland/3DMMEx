@@ -45,8 +45,8 @@ END_CMD_MAP_NIL()
 void TXTB::AssertValid(uint32_t grfobj)
 {
     achar ch;
-    long ibMac;
-    long cpMac;
+    int32_t ibMac;
+    int32_t cpMac;
 
     TXTB_PAR::AssertValid(grfobj);
     AssertPo(_pbsf, 0);
@@ -161,7 +161,7 @@ bool TXTB::_FLoad(int16_t osk)
 /***************************************************************************
     Return the length of the text in the text document.
 ***************************************************************************/
-long TXTB::CpMac(void)
+int32_t TXTB::CpMac(void)
 {
     // Note: we don't do an AssertThis(0) here for debug performance
     AssertThisMem();
@@ -194,7 +194,7 @@ void TXTB::ResumeUndo(void)
     Set up undo for an action. If this succeeds, you must call either
     CancelUndo or CommitUndo. Default TXTB doesn't create an undo record.
 ***************************************************************************/
-bool TXTB::FSetUndo(long cp1, long cp2, long ccpIns)
+bool TXTB::FSetUndo(int32_t cp1, int32_t cp2, int32_t ccpIns)
 {
     AssertThis(0);
     AssertIn(cp1, 0, CpMac() + 1);
@@ -238,7 +238,7 @@ void TXTB::BumpCombineUndo(void)
     lower case. The pcpLim parameter is in case we support regular
     expressions in the future.
 ***************************************************************************/
-bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *pcpLim, bool fCaseSensitive)
+bool TXTB::FFind(const achar *prgch, int32_t cch, int32_t cpMin, int32_t *pcpMin, int32_t *pcpLim, bool fCaseSensitive)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cch, 1, kcbMax);
@@ -246,12 +246,12 @@ bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *p
     AssertIn(cpMin, 0, CpMac() + 1);
     AssertVarMem(pcpMin);
     AssertVarMem(pcpLim);
-    const long kcbCharSet = 256 / 8;
+    const int32_t kcbCharSet = 256 / 8;
     uint8_t grfbitUsed[kcbCharSet];
-    long ibit;
+    int32_t ibit;
     const achar *pch, *pchLast;
     achar ch;
-    long cpT, cpMac;
+    int32_t cpT, cpMac;
 
     if (!fCaseSensitive)
     {
@@ -268,7 +268,7 @@ bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *p
     ClearPb(grfbitUsed, SIZEOF(grfbitUsed));
     for (pch = prgch; pch <= pchLast; pch++)
     {
-        ibit = (long)(uint8_t)*pch;
+        ibit = (int32_t)(uint8_t)*pch;
         AssertIn(ibit, 0, 256);
         grfbitUsed[IbFromIbit(ibit)] |= Fbit(ibit);
     }
@@ -284,7 +284,7 @@ bool TXTB::FFind(const achar *prgch, long cch, long cpMin, long *pcpMin, long *p
                 ch = ChLower(ch);
 
             // see if the character is used anywhere within the search string
-            ibit = (long)(uint8_t)ch;
+            ibit = (int32_t)(uint8_t)ch;
             if (!(grfbitUsed[IbFromIbit(ibit)] & Fbit(ibit)))
             {
                 // this character isn't anywhere in the search string,
@@ -333,7 +333,7 @@ void TXTB::HideSel(void)
 /***************************************************************************
     Set the selection of this TXTB's active DDG to the given range.
 ***************************************************************************/
-void TXTB::SetSel(long cpAnchor, long cpOther, long gin)
+void TXTB::SetSel(int32_t cpAnchor, int32_t cpOther, int32_t gin)
 {
     AssertThis(0);
     PDDG pddg;
@@ -358,13 +358,13 @@ void TXTB::ShowSel(void)
 /***************************************************************************
     Fetch a character of the stream through the cache.
 ***************************************************************************/
-void TXTB::_CacheRange(long cpMin, long cpLim)
+void TXTB::_CacheRange(int32_t cpMin, int32_t cpLim)
 {
     AssertThis(0);
     AssertIn(cpMin, 0, CpMac() + 1);
     AssertIn(cpLim, cpMin, CpMac() + 1);
     AssertIn(cpLim - cpMin, 0, kcchMaxTxtbCache + 1);
-    long cpMac;
+    int32_t cpMac;
 
     if (cpMin >= _cpMinCache && cpLim <= _cpLimCache)
         return;
@@ -378,7 +378,7 @@ void TXTB::_CacheRange(long cpMin, long cpLim)
 
     if (cpMin < _cpMinCache)
     {
-        long cpT;
+        int32_t cpT;
 
         if (_cpMinCache >= cpMin + kcchMaxTxtbCache)
             goto LNewCache;
@@ -404,7 +404,7 @@ void TXTB::_CacheRange(long cpMin, long cpLim)
         else
         {
             // keep back end old stuff
-            long cpLimCache, cpMinCache;
+            int32_t cpLimCache, cpMinCache;
 
             cpLimCache = LwMin(cpMac, LwMax(cpLim, _cpMinCache + kcchMaxTxtbCache));
             cpMinCache = LwMax(cpLimCache - kcchMaxTxtbCache, _cpMinCache);
@@ -423,9 +423,9 @@ void TXTB::_CacheRange(long cpMin, long cpLim)
 /***************************************************************************
     Characters have changed, so fix the cache.
 ***************************************************************************/
-void TXTB::_InvalCache(long cp, long ccpIns, long ccpDel)
+void TXTB::_InvalCache(int32_t cp, int32_t ccpIns, int32_t ccpDel)
 {
-    long dcpFront, dcpBack;
+    int32_t dcpFront, dcpBack;
 
     if (_cpLimCache <= cp || _cpLimCache <= _cpMinCache || ccpIns == 0 && ccpDel == 0)
     {
@@ -462,7 +462,7 @@ void TXTB::_InvalCache(long cp, long ccpIns, long ccpDel)
 /***************************************************************************
     Fetch a character of the stream through the cache.
 ***************************************************************************/
-achar TXTB::_ChFetch(long cp)
+achar TXTB::_ChFetch(int32_t cp)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac() + 1);
@@ -479,13 +479,13 @@ achar TXTB::_ChFetch(long cp)
 /***************************************************************************
     Fetch some characters from the text document.
 ***************************************************************************/
-void TXTB::FetchRgch(long cp, long ccp, achar *prgch)
+void TXTB::FetchRgch(int32_t cp, int32_t ccp, achar *prgch)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac() + 1);
     AssertIn(ccp, 0, CpMac() - cp + 1);
     AssertPvCb(prgch, ccp * SIZEOF(achar));
-    long ccpT;
+    int32_t ccpT;
 
     while (ccp > 0)
     {
@@ -501,7 +501,7 @@ void TXTB::FetchRgch(long cp, long ccp, achar *prgch)
 /***************************************************************************
     Returns non-zero iff cp is the beginning of a paragraph.
 ***************************************************************************/
-bool TXTB::FMinPara(long cp)
+bool TXTB::FMinPara(int32_t cp)
 {
     AssertThis(0);
     uint32_t grfch;
@@ -535,12 +535,12 @@ bool TXTB::FMinPara(long cp)
     returns 0. If cp >= CpMac(), returns the beginning of the last
     paragraph.
 ***************************************************************************/
-long TXTB::CpMinPara(long cp)
+int32_t TXTB::CpMinPara(int32_t cp)
 {
     AssertThis(0);
     uint32_t grfch;
-    long cpOrig;
-    long dcpLine = 1;
+    int32_t cpOrig;
+    int32_t dcpLine = 1;
 
     if (cp <= 0)
         return 0;
@@ -574,12 +574,12 @@ long TXTB::CpMinPara(long cp)
     Find the end of the paragraph that cp is in. If cp < 0, returns 0.
     If cp >= CpMac(), returns CpMac().
 ***************************************************************************/
-long TXTB::CpLimPara(long cp)
+int32_t TXTB::CpLimPara(int32_t cp)
 {
     AssertThis(0);
     uint32_t grfch;
     bool fCr = fFalse;
-    long cpLim = CpMac();
+    int32_t cpLim = CpMac();
 
     if (cp < 0)
         return 0;
@@ -611,7 +611,7 @@ long TXTB::CpLimPara(long cp)
     Return cp of the previous character, skipping line feed characters. If
     fWord is true, skip to the beginning of a word.
 ***************************************************************************/
-long TXTB::CpPrev(long cp, bool fWord)
+int32_t TXTB::CpPrev(int32_t cp, bool fWord)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac() + 1);
@@ -640,11 +640,11 @@ long TXTB::CpPrev(long cp, bool fWord)
     Return cp of the next character, skipping line feed characters. If
     fWord is true, skip to the beginning of the next word.
 ***************************************************************************/
-long TXTB::CpNext(long cp, bool fWord)
+int32_t TXTB::CpNext(int32_t cp, bool fWord)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac() + 1);
-    long cpMac = CpMac();
+    int32_t cpMac = CpMac();
 
     if (cp >= cpMac)
         return cpMac;
@@ -672,13 +672,13 @@ long TXTB::CpNext(long cp, bool fWord)
     Invalidate all DDGs on this text doc. Also dirties the document.
     Should be called by any code that edits the document.
 ***************************************************************************/
-void TXTB::InvalAllDdg(long cp, long ccpIns, long ccpDel, uint32_t grfdoc)
+void TXTB::InvalAllDdg(int32_t cp, int32_t ccpIns, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac() + 1);
     AssertIn(ccpIns, 0, CpMac() + 1 - cp);
     AssertIn(ccpDel, 0, kcbMax);
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
 
     // mark the document dirty
@@ -717,11 +717,11 @@ void TXTB::SetAcrBack(ACR acr, uint32_t grfdoc)
 /***************************************************************************
     Set the default width of the document.
 ***************************************************************************/
-void TXTB::SetDxpDef(long dxp)
+void TXTB::SetDxpDef(int32_t dxp)
 {
     AssertThis(0);
     AssertIn(dxp, 1, kcbMax);
-    long cpMac;
+    int32_t cpMac;
 
     if (_dxpDef == dxp)
         return;
@@ -737,7 +737,7 @@ void TXTB::SetDxpDef(long dxp)
     Replace cp to cp + ccpDel with ccpIns characters from prgch. If ccpIns
     is zero, prgch can be nil. The last character should never be replaced.
 ***************************************************************************/
-bool TXTB::FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, uint32_t grfdoc)
+bool TXTB::FReplaceRgch(const void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ccpIns, 0, kcbMax);
@@ -758,7 +758,7 @@ bool TXTB::FReplaceRgch(const void *prgch, long ccpIns, long cp, long ccpDel, ui
 /***************************************************************************
     Replace cp to cp + ccpDel with the characters in the given FLO.
 ***************************************************************************/
-bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, uint32_t grfdoc)
+bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, int16_t osk, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, 0);
@@ -785,7 +785,7 @@ bool TXTB::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk,
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc.
 ***************************************************************************/
-bool TXTB::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
+bool TXTB::FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pbsfSrc, 0);
@@ -809,7 +809,7 @@ bool TXTB::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long c
     Replace cp to cpDst + ccpDel with ccpSrc characters from ptxtbSrc starting
     at cpSrc.
 ***************************************************************************/
-bool TXTB::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
+bool TXTB::FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertPo(ptxtbSrc, 0);
     AssertIn(cpSrc, 0, ptxtbSrc->CpMac() + 1);
@@ -822,7 +822,7 @@ bool TXTB::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, lon
     Get the bounds of an object - since plain text doesn't have objects,
     just return false.
 ***************************************************************************/
-bool TXTB::FGetObjectRc(long cp, PGNV pgnv, PCHP pchp, RC *prc)
+bool TXTB::FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -838,7 +838,7 @@ bool TXTB::FGetObjectRc(long cp, PGNV pgnv, PCHP pchp, RC *prc)
     Draw an object - since plain text doesn't have objects, just return
     false.
 ***************************************************************************/
-bool TXTB::FDrawObject(long cp, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip)
+bool TXTB::FDrawObject(int32_t cp, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -874,7 +874,7 @@ void TXTB::ExportFormats(PCLIP pclip)
     AssertThis(0);
     AssertPo(pclip, 0);
     void *pv;
-    long ccp = CpMac() - 1;
+    int32_t ccp = CpMac() - 1;
 
     if (ccp <= 0)
         return;
@@ -918,8 +918,8 @@ PTXPD TXPD::PtxpdNew(PFNI pfni, PBSF pbsf, int16_t osk, PDOCB pdocb, uint32_t gr
 PDDG TXPD::PddgNew(PGCB pgcb)
 {
     AssertThis(fobjAssertFull);
-    long onn = vpappb->OnnDefFixed();
-    long dypFont = vpappb->DypTextDef();
+    int32_t onn = vpappb->OnnDefFixed();
+    int32_t dypFont = vpappb->DypTextDef();
 
     return TXLG::PtxlgNew(this, pgcb, onn, fontNil, dypFont, 4);
 }
@@ -1025,7 +1025,7 @@ void TXRD::AssertValid(uint32_t grfobj)
     if (grfobj & fobjAssertFull)
     {
         MPE mpePrev, mpe;
-        long impe;
+        int32_t impe;
 
         mpePrev.spcp = (uint32_t)-1;
         for (impe = _pglmpe->IvMac(); impe-- > 0;)
@@ -1135,8 +1135,8 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     FLO floText;
     PFIL pfilT;
     KID kid;
-    long icact;
-    long cact;
+    int32_t icact;
+    int32_t cact;
     RDOP rdop;
     int16_t bo, osk;
 
@@ -1198,14 +1198,14 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     }
     if (bo == kboOther)
     {
-        SwapBytesRglw(_pglmpe->QvGet(0), LwMul(_pglmpe->IvMac(), SIZEOF(MPE)) / SIZEOF(long));
+        SwapBytesRglw(_pglmpe->QvGet(0), LwMul(_pglmpe->IvMac(), SIZEOF(MPE)) / SIZEOF(int32_t));
     }
 
     // get the text property arguments
     if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgTxtPropArgs, &kid))
     {
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || pvNil == (_pagcact = AG::PagRead(&blck, &bo, &osk)) ||
-            SIZEOF(long) != _pagcact->CbFixed())
+            SIZEOF(int32_t) != _pagcact->CbFixed())
         {
             return fFalse;
         }
@@ -1232,10 +1232,10 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     Do any necessary munging of the AG entry on open. Return false if
     we don't recognize this argument type.
 ***************************************************************************/
-bool TXRD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
+bool TXRD::_FOpenArg(int32_t icact, uint8_t sprm, int16_t bo, int16_t osk)
 {
     AssertBaseThis(0);
-    long onn, cb;
+    int32_t onn, cb;
     uint8_t *prgb;
     STN stn;
 
@@ -1243,14 +1243,14 @@ bool TXRD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
     switch (sprm)
     {
     case sprmFont:
-        cb -= SIZEOF(long) + SIZEOF(int16_t); // onn, osk
+        cb -= SIZEOF(int32_t) + SIZEOF(int16_t); // onn, osk
         if (cb < 0)
         {
             Bug("bad font entry");
             return fFalse;
         }
-        _pagcact->GetRgb(icact, SIZEOF(long), SIZEOF(int16_t), &osk);
-        prgb = (uint8_t *)PvAddBv(_pagcact->PvLock(icact), SIZEOF(long) + SIZEOF(int16_t));
+        _pagcact->GetRgb(icact, SIZEOF(int32_t), SIZEOF(int16_t), &osk);
+        prgb = (uint8_t *)PvAddBv(_pagcact->PvLock(icact), SIZEOF(int32_t) + SIZEOF(int16_t));
         if (!stn.FSetData(prgb, cb))
         {
             Bug("bad font entry");
@@ -1260,7 +1260,7 @@ bool TXRD::_FOpenArg(long icact, uint8_t sprm, int16_t bo, int16_t osk)
         _pagcact->Unlock();
 
         onn = vntl.OnnMapStn(&stn, osk);
-        _pagcact->PutRgb(icact, 0, SIZEOF(long), &onn);
+        _pagcact->PutRgb(icact, 0, SIZEOF(int32_t), &onn);
         break;
 
     default:
@@ -1365,7 +1365,7 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     RDOP rdop;
     BLCK blck, blckText;
     CNO cno, cnoText;
-    long cb;
+    int32_t cb;
     int16_t osk = koskCur;
 
     pcki->ctg = kctgRichText;
@@ -1439,13 +1439,13 @@ PDDG TXRD::PddgNew(PGCB pgcb)
     Look for an MPE for the given spcp. Return false iff there isn't one.
     In either event, fill pimpe with where one would go if it did exist.
 ***************************************************************************/
-bool TXRD::_FFindMpe(uint32_t spcp, MPE *pmpe, long *pcpLim, long *pimpe)
+bool TXRD::_FFindMpe(uint32_t spcp, MPE *pmpe, int32_t *pcpLim, int32_t *pimpe)
 {
     AssertThis(0);
     AssertNilOrVarMem(pmpe);
     AssertNilOrVarMem(pcpLim);
     AssertNilOrVarMem(pimpe);
-    long impe, impeMin, impeLim;
+    int32_t impe, impeMin, impeLim;
     bool fRet;
     MPE mpe;
     uint8_t sprm = _SprmFromSpcp(spcp);
@@ -1503,7 +1503,7 @@ bool TXRD::_FFindMpe(uint32_t spcp, MPE *pmpe, long *pcpLim, long *pimpe)
 /***************************************************************************
     Fetch the impe'th property, returning all the relevant info about it.
 ***************************************************************************/
-bool TXRD::_FFetchProp(long impe, uint8_t *psprm, long *plw, long *pcpMin, long *pcpLim)
+bool TXRD::_FFetchProp(int32_t impe, uint8_t *psprm, int32_t *plw, int32_t *pcpMin, int32_t *pcpLim)
 {
     MPE mpe;
 
@@ -1536,14 +1536,14 @@ bool TXRD::_FFetchProp(long impe, uint8_t *psprm, long *plw, long *pcpMin, long 
     Adjust the MPE's after an edit. This may involve deleting some MPE's
     and/or updating the cp's.
 ***************************************************************************/
-void TXRD::_AdjustMpe(long cp, long ccpIns, long ccpDel)
+void TXRD::_AdjustMpe(int32_t cp, int32_t ccpIns, int32_t ccpDel)
 {
     AssertBaseThis(0);
     AssertIn(cp, 0, CpMac());
     AssertIn(ccpIns, 0, CpMac() - cp);
     AssertIn(ccpDel, 0, kcbMax);
     MPE *qmpe;
-    long impe, impeMin, cpT;
+    int32_t impe, impeMin, cpT;
     uint8_t sprm;
     bool fBefore, fKeep;
 
@@ -1653,15 +1653,15 @@ void TXRD::_AdjustMpe(long cp, long ccpIns, long ccpDel)
     already there, increment its reference count. Otherwise, set its
     reference count to 1.
 ***************************************************************************/
-bool TXRD::_FEnsureInAg(uint8_t sprm, void *pv, long cb, long *pjv)
+bool TXRD::_FEnsureInAg(uint8_t sprm, void *pv, int32_t cb, int32_t *pjv)
 {
     AssertIn(cb, 1, kcbMax);
     AssertPvCb(pv, cb);
     AssertVarMem(pjv);
-    long cact, iv, cbT;
+    int32_t cact, iv, cbT;
     void *qv;
 
-    if (pvNil == _pagcact && pvNil == (_pagcact = AG::PagNew(SIZEOF(long), 1, cb)))
+    if (pvNil == _pagcact && pvNil == (_pagcact = AG::PagNew(SIZEOF(int32_t), 1, cb)))
     {
         TrashVar(pjv);
         return fFalse;
@@ -1705,9 +1705,9 @@ bool TXRD::_FEnsureInAg(uint8_t sprm, void *pv, long cb, long *pjv)
     Decrement the reference count on the given element of the AG and if
     the reference count becomes zero, delete the element.
 ***************************************************************************/
-void TXRD::_ReleaseInAg(long jv)
+void TXRD::_ReleaseInAg(int32_t jv)
 {
-    long cact, cactT;
+    int32_t cact, cactT;
 
     if (pvNil == _pagcact || !FIn(jv, 1, _pagcact->IvMac() + 1) || _pagcact->FFree(jv - 1))
     {
@@ -1729,9 +1729,9 @@ void TXRD::_ReleaseInAg(long jv)
 /***************************************************************************
     Increment the reference count on the given element of the AG.
 ***************************************************************************/
-void TXRD::_AddRefInAg(long jv)
+void TXRD::_AddRefInAg(int32_t jv)
 {
-    long cact;
+    int32_t cact;
 
     if (pvNil == _pagcact || !FIn(jv, 1, _pagcact->IvMac() + 1) || _pagcact->FFree(jv - 1))
     {
@@ -1766,7 +1766,7 @@ bool TXRD::_FSprmInAg(uint8_t sprm)
     If the sprm allocates stuff in the ag, release it. The inverse operation
     of _AddRefSprmLw.
 ***************************************************************************/
-void TXRD::_ReleaseSprmLw(uint8_t sprm, long lw)
+void TXRD::_ReleaseSprmLw(uint8_t sprm, int32_t lw)
 {
     if (lw > 0 && _FSprmInAg(sprm))
         _ReleaseInAg(lw);
@@ -1776,7 +1776,7 @@ void TXRD::_ReleaseSprmLw(uint8_t sprm, long lw)
     If the sprm allocates stuff in the ag, addref it. The inverse operation
     of _ReleaseSprmLw.
 ***************************************************************************/
-void TXRD::_AddRefSprmLw(uint8_t sprm, long lw)
+void TXRD::_AddRefSprmLw(uint8_t sprm, int32_t lw)
 {
     if (lw > 0 && _FSprmInAg(sprm))
         _AddRefInAg(lw);
@@ -1787,14 +1787,14 @@ void TXRD::_AddRefSprmLw(uint8_t sprm, long lw)
     pchpDiff. If pchpDiff is nil, pchp is just described. If this
     succeeds, either _ApplyRgspvm or _ReleaseRgspvm should be called.
 ***************************************************************************/
-bool TXRD::_FGetRgspvmFromChp(PCHP pchp, PCHP pchpDiff, SPVM *prgspvm, long *pcspvm)
+bool TXRD::_FGetRgspvmFromChp(PCHP pchp, PCHP pchpDiff, SPVM *prgspvm, int32_t *pcspvm)
 {
     AssertVarMem(pchp);
     AssertNilOrVarMem(pchpDiff);
     AssertPvCb(prgspvm, LwMul(SIZEOF(SPVM), sprmLimChp - sprmMinChp));
     AssertVarMem(pcspvm);
     uint8_t sprm;
-    long ispvm;
+    int32_t ispvm;
     SPVM spvm;
 
     // first get the values and masks for the sprm's we have to deal with
@@ -1823,14 +1823,14 @@ bool TXRD::_FGetRgspvmFromChp(PCHP pchp, PCHP pchpDiff, SPVM *prgspvm, long *pcs
     ppapDiff. If ppapDiff is nil, ppap is just described. If this
     succeeds, either _ApplyRgspvm or _ReleaseRgspvm should be called.
 ***************************************************************************/
-bool TXRD::_FGetRgspvmFromPap(PPAP ppap, PPAP ppapDiff, SPVM *prgspvm, long *pcspvm)
+bool TXRD::_FGetRgspvmFromPap(PPAP ppap, PPAP ppapDiff, SPVM *prgspvm, int32_t *pcspvm)
 {
     AssertVarMem(ppap);
     AssertNilOrVarMem(ppapDiff);
     AssertPvCb(prgspvm, LwMul(SIZEOF(SPVM), sprmLimPap - sprmMinPap));
     AssertVarMem(pcspvm);
     uint8_t sprm;
-    long ispvm;
+    int32_t ispvm;
     SPVM spvm;
 
     // first get the values and masks for the sprm's we have to deal with
@@ -1857,11 +1857,11 @@ bool TXRD::_FGetRgspvmFromPap(PPAP ppap, PPAP ppapDiff, SPVM *prgspvm, long *pcs
 /***************************************************************************
     Release the SPVM's.
 ***************************************************************************/
-void TXRD::_ReleaseRgspvm(SPVM *prgspvm, long cspvm)
+void TXRD::_ReleaseRgspvm(SPVM *prgspvm, int32_t cspvm)
 {
     AssertIn(cspvm, 0, kcbMax);
     AssertPvCb(prgspvm, LwMul(SIZEOF(SPVM), cspvm));
-    long ispvm;
+    int32_t ispvm;
 
     for (ispvm = 0; ispvm < cspvm; ispvm++)
         _ReleaseSprmLw(prgspvm[ispvm].sprm, prgspvm[ispvm].lw);
@@ -1873,14 +1873,14 @@ void TXRD::_ReleaseRgspvm(SPVM *prgspvm, long cspvm)
     The caller should have ensured that _pglmpe has room for 2 * cspvm
     additional entries.
 ***************************************************************************/
-void TXRD::_ApplyRgspvm(long cp, long ccp, SPVM *prgspvm, long cspvm)
+void TXRD::_ApplyRgspvm(int32_t cp, int32_t ccp, SPVM *prgspvm, int32_t cspvm)
 {
     AssertIn(cp, 0, CpMac());
     AssertIn(ccp, 1, CpMac() + 1 - cp);
     MPE mpe, mpeT;
-    long lwRevert, lwLast;
-    long cpLimT, cpLim;
-    long ispvm, impe;
+    int32_t lwRevert, lwLast;
+    int32_t cpLimT, cpLim;
+    int32_t ispvm, impe;
     SPVM spvm;
 
     _cpMinChp = _cpLimChp = _cpMinPap = _cpLimPap = 0;
@@ -1998,7 +1998,7 @@ void TXRD::_ApplyRgspvm(long cp, long ccp, SPVM *prgspvm, long cspvm)
     values of pchpOld and pchpNew differ for the given sprm. Returns
     tMaybe on error.
 ***************************************************************************/
-tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw, long *plwMask)
+tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, int32_t *plw, int32_t *plwMask)
 {
     AssertIn(sprm, sprmMinChp, sprmLimChp);
     AssertVarMem(pchpNew);
@@ -2031,16 +2031,16 @@ tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw
             *plw = 0;
         else
         {
-            // data for sprmFont is: long onn, int16_t osk, stn data
+            // data for sprmFont is: int32_t onn, int16_t osk, stn data
             STN stn;
-            long cb;
+            int32_t cb;
             int16_t osk = koskCur;
-            uint8_t rgb[kcbMaxDataStn + SIZEOF(long) + SIZEOF(int16_t)];
+            uint8_t rgb[kcbMaxDataStn + SIZEOF(int32_t) + SIZEOF(int16_t)];
 
-            CopyPb(&pchpNew->onn, rgb, SIZEOF(long));
-            CopyPb(&osk, rgb + SIZEOF(long), SIZEOF(int16_t));
+            CopyPb(&pchpNew->onn, rgb, SIZEOF(int32_t));
+            CopyPb(&osk, rgb + SIZEOF(int32_t), SIZEOF(int16_t));
             vntl.GetStn(pchpNew->onn, &stn);
-            cb = SIZEOF(long) + SIZEOF(int16_t);
+            cb = SIZEOF(int32_t) + SIZEOF(int16_t);
             stn.GetData(rgb + cb);
             cb += stn.CbData();
             if (!_FEnsureInAg(sprm, rgb, cb, plw))
@@ -2079,7 +2079,7 @@ tribool TXRD::_TGetLwFromChp(uint8_t sprm, PCHP pchpNew, PCHP pchpOld, long *plw
 /***************************************************************************
     Get the character properties for the given character.
 ***************************************************************************/
-void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
+void TXRD::FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin, int32_t *pcpLim)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -2089,8 +2089,8 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
     MPE mpe;
     uint8_t sprm;
     uint32_t spcp;
-    long cpLimT;
-    long cb;
+    int32_t cpLimT;
+    int32_t cb;
     bool fRet;
 
     if (FIn(cp, _cpMinChp, _cpLimChp))
@@ -2117,7 +2117,7 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
         {
         case sprmStyle:
             _chp.grfont = B0Lw(mpe.lw);
-            _chp.dypOffset = (long)(achar)B1Lw(mpe.lw);
+            _chp.dypOffset = (int32_t)(achar)B1Lw(mpe.lw);
             _chp.dypFont += SwHigh(mpe.lw);
             break;
 
@@ -2127,13 +2127,13 @@ void TXRD::FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
                 uint8_t *qrgb;
 
                 qrgb = (uint8_t *)_pagcact->QvGet(mpe.lw - 1, &cb);
-                cb -= SIZEOF(long) + SIZEOF(int16_t); // onn, osk
+                cb -= SIZEOF(int32_t) + SIZEOF(int16_t); // onn, osk
                 if (!FIn(cb, 0, kcbMaxDataStn + 1))
                 {
                     Warn("bad group element");
                     break;
                 }
-                CopyPb(qrgb, &_chp.onn, SIZEOF(long));
+                CopyPb(qrgb, &_chp.onn, SIZEOF(int32_t));
                 Assert(vntl.FValidOnn(_chp.onn), "invalid onn");
             }
             break;
@@ -2161,12 +2161,12 @@ LDone:
 /***************************************************************************
     Apply the given character properties to the given range of characters.
 ***************************************************************************/
-bool TXRD::FApplyChp(long cp, long ccp, PCHP pchp, PCHP pchpDiff, uint32_t grfdoc)
+bool TXRD::FApplyChp(int32_t cp, int32_t ccp, PCHP pchp, PCHP pchpDiff, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cp, 0, CpMac() - 1);
     AssertIn(ccp, 1, CpMac() - cp);
-    long cspvm;
+    int32_t cspvm;
     SPVM rgspvm[sprmLimChp - sprmMinChp];
     PRTUN prtun = pvNil;
 
@@ -2209,7 +2209,7 @@ bool TXRD::FApplyChp(long cp, long ccp, PCHP pchp, PCHP pchpDiff, uint32_t grfdo
     *pcpLim may decrease or at most increase past an end of
     paragraph marker and its associated line feed characters.
 ***************************************************************************/
-void TXRD::_GetParaBounds(long *pcpMin, long *pcpLim, bool fExpand)
+void TXRD::_GetParaBounds(int32_t *pcpMin, int32_t *pcpLim, bool fExpand)
 {
     AssertVarMem(pcpMin);
     AssertVarMem(pcpLim);
@@ -2241,7 +2241,7 @@ void TXRD::_GetParaBounds(long *pcpMin, long *pcpLim, bool fExpand)
     values of pchpOld and pchpNew differ for the given sprm. Returns
     tMaybe on error.
 ***************************************************************************/
-tribool TXRD::_TGetLwFromPap(uint8_t sprm, PPAP ppapNew, PPAP ppapOld, long *plw, long *plwMask)
+tribool TXRD::_TGetLwFromPap(uint8_t sprm, PPAP ppapNew, PPAP ppapOld, int32_t *plw, int32_t *plwMask)
 {
     AssertIn(sprm, sprmMinPap, sprmLimPap);
     AssertVarMem(ppapNew);
@@ -2298,7 +2298,7 @@ tribool TXRD::_TGetLwFromPap(uint8_t sprm, PPAP ppapNew, PPAP ppapOld, long *plw
     Get the paragraph properties for the paragraph containing the given
     character.
 ***************************************************************************/
-void TXRD::FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
+void TXRD::FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin, int32_t *pcpLim)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -2308,7 +2308,7 @@ void TXRD::FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
     MPE mpe;
     uint8_t sprm;
     uint32_t spcp;
-    long cpLimT;
+    int32_t cpLimT;
     bool fRet;
 
     if (FIn(cp, _cpMinPap, _cpLimPap))
@@ -2362,7 +2362,7 @@ LDone:
     cp are set regardless of whether cp is at the beginning of the
     paragraph.
 ***************************************************************************/
-bool TXRD::FApplyPap(long cp, long ccp, PPAP ppap, PPAP ppapDiff, long *pcpMin, long *pcpLim, bool fExpand,
+bool TXRD::FApplyPap(int32_t cp, int32_t ccp, PPAP ppap, PPAP ppapDiff, int32_t *pcpMin, int32_t *pcpLim, bool fExpand,
                      uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
@@ -2372,8 +2372,8 @@ bool TXRD::FApplyPap(long cp, long ccp, PPAP ppap, PPAP ppapDiff, long *pcpMin, 
     AssertNilOrVarMem(ppapDiff);
     AssertNilOrVarMem(pcpMin);
     AssertNilOrVarMem(pcpLim);
-    long cpLim;
-    long cspvm;
+    int32_t cpLim;
+    int32_t cspvm;
     SPVM rgspvm[sprmLimPap - sprmMinPap];
 
     // see if there are any paragraphs to deal with
@@ -2423,7 +2423,7 @@ bool TXRD::FApplyPap(long cp, long ccp, PPAP ppap, PPAP ppapDiff, long *pcpMin, 
     Set up undo for an action. If this succeeds, you must call either
     CancelUndo or CommitUndo.
 ***************************************************************************/
-bool TXRD::FSetUndo(long cp1, long cp2, long ccpIns)
+bool TXRD::FSetUndo(int32_t cp1, int32_t cp2, int32_t ccpIns)
 {
     if (_cactSuspendUndo++ > 0 || _cundbMax == 0)
         return fTrue;
@@ -2482,7 +2482,7 @@ LDone:
     Replace cp to cp + ccpDel with ccpIns characters from prgch. If ccpIns
     is zero, prgch can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, uint32_t grfdoc)
+bool TXRD::FReplaceRgch(void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ccpIns, 0, kcbMax);
@@ -2516,7 +2516,7 @@ bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, uint32_t
     the given chp and pap. If ccpIns is zero, prgch can be nil. pchp
     and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, PCHP pchp, PPAP ppap, uint32_t grfdoc)
+bool TXRD::FReplaceRgch(void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertIn(ccpIns, 0, kcbMax);
@@ -2534,7 +2534,7 @@ bool TXRD::FReplaceRgch(void *prgch, long ccpIns, long cp, long ccpDel, PCHP pch
     using the given chp and pap. If ccpIns is zero, prgch can be nil. pchp
     and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpSrc, long ccpIns, long cp, long ccpDel,
+bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, int32_t cpSrc, int32_t ccpIns, int32_t cp, int32_t ccpDel,
                          PCHP pchp, PPAP ppap, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
@@ -2547,8 +2547,8 @@ bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpS
     AssertNilOrVarMem(pchp);
     AssertNilOrVarMem(ppap);
     SPVM rgspvm[sprmLimChp - sprmMinChp + sprmLimPap - sprmMinPap];
-    long cspvmChp, cspvmPap;
-    long cpMinUndo, cpLimUndo;
+    int32_t cspvmChp, cspvmPap;
+    int32_t cpMinUndo, cpLimUndo;
 
     if (CpMac() + ccpIns >= kcpMaxTxrd)
     {
@@ -2613,8 +2613,8 @@ bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpS
         _ApplyRgspvm(cp, ccpIns, rgspvm, cspvmChp);
     if (cspvmPap > 0)
     {
-        long cpMin = cp;
-        long cpLim = cp + ccpIns;
+        int32_t cpMin = cp;
+        int32_t cpLim = cp + ccpIns;
 
         _GetParaBounds(&cpMin, &cpLim, fFalse);
         Assert(cpMin >= cpMinUndo, "new para before old one");
@@ -2631,13 +2631,13 @@ bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, long cpS
 /***************************************************************************
     Replace cp to cp + ccpDel with the characters in the given FLO.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk, uint32_t grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, int16_t osk, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, 0);
     AssertIn(cp, 0, CpMac());
     AssertIn(ccpDel, 0, CpMac() - cp);
-    long ccpIns;
+    int32_t ccpIns;
     FLO flo = *pflo;
 
     flo.pfil->AddRef();
@@ -2674,7 +2674,7 @@ bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, int16_t osk,
     Replace cp to cp + ccpDel with the characters in the given FLO, using
     the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, PPAP ppap, int16_t osk, uint32_t grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap, int16_t osk, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(pflo, 0);
@@ -2696,7 +2696,7 @@ bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, long cp, long ccpDel, PCHP pchp, P
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc.
 ***************************************************************************/
-bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
+bool TXRD::FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pbsfSrc, 0);
@@ -2731,7 +2731,7 @@ bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long c
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, PCHP pchp, PPAP ppap,
+bool TXRD::FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp, PPAP ppap,
                        uint32_t grfdoc)
 {
     AssertThis(0);
@@ -2750,7 +2750,7 @@ bool TXRD::FReplaceBsf(PBSF pbsfSrc, long cpSrc, long ccpSrc, long cpDst, long c
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
+bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(ptxtbSrc, 0);
@@ -2769,7 +2769,7 @@ bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, lon
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, long ccpDel, PCHP pchp, PPAP ppap,
+bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp, PPAP ppap,
                         uint32_t grfdoc)
 {
     AssertThis(0);
@@ -2793,7 +2793,7 @@ bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, long cpSrc, long ccpSrc, long cpDst, lon
     REVIEW shonk: this doesn't preserve font size if the two docs have
     different default font sizes!
 ***************************************************************************/
-bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long ccpDel, uint32_t grfdoc)
+bool TXRD::FReplaceTxrd(PTXRD ptxrd, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPo(ptxrd, 0);
@@ -2802,7 +2802,7 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long c
     AssertIn(cpDst, 0, CpMac());
     AssertIn(ccpDel, 0, CpMac() + 1 - cpDst);
     Assert(ptxrd != this, "can't copy from a rich text doc to itself!");
-    long dcp = 0;
+    int32_t dcp = 0;
 
     // REVIEW shonk: is there an easy way to make this atomic?
 
@@ -2841,9 +2841,9 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long c
 
     if (ccpSrc + dcp > 0)
     {
-        long ccpSrcPap;
-        long cpMinPap = cpDst;
-        long cpLimPap = cpDst + ccpSrc;
+        int32_t ccpSrcPap;
+        int32_t cpMinPap = cpDst;
+        int32_t cpLimPap = cpDst + ccpSrc;
 
         _GetParaBounds(&cpMinPap, &cpLimPap, fFalse);
         ccpSrcPap = ccpSrc - cpMinPap + cpDst;
@@ -2857,9 +2857,9 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long c
     if (ccpSrc > 0)
     {
         // object properties
-        long cp;
+        int32_t cp;
         uint8_t sprm;
-        long impe, impeNew;
+        int32_t impe, impeNew;
         MPE mpe, mpeNew;
         void *pv;
         bool fRet;
@@ -2897,7 +2897,7 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, long cpSrc, long ccpSrc, long cpDst, long c
     Copy properties from a TXRD to this one. Properties from sprmMin to
     sprmLim are copied.
 ***************************************************************************/
-void TXRD::_CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccpDst, uint8_t sprmMin, uint8_t sprmLim)
+void TXRD::_CopyProps(PTXRD ptxrd, int32_t cpSrc, int32_t cpDst, int32_t ccpSrc, int32_t ccpDst, uint8_t sprmMin, uint8_t sprmLim)
 {
     AssertThis(0);
     AssertPo(ptxrd, 0);
@@ -2907,11 +2907,11 @@ void TXRD::_CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccp
     AssertIn(ccpDst, 1, CpMac() + 1 - cpDst);
     SPVM spvm;
     uint8_t sprm;
-    long impe;
-    long cpMin, cpLim;
+    int32_t impe;
+    int32_t cpMin, cpLim;
     bool fRet;
-    long lw;
-    long cb;
+    int32_t lw;
+    int32_t cb;
     void *pv;
 
     // zero the character properties over the inserted text
@@ -2986,7 +2986,7 @@ void TXRD::_CopyProps(PTXRD ptxrd, long cpSrc, long cpDst, long ccpSrc, long ccp
     not nil). If an object was found, but the buffer couldn't be allocated,
     *ppv is set to nil.
 ***************************************************************************/
-bool TXRD::FFetchObject(long cpMin, long *pcp, void **ppv, long *pcb)
+bool TXRD::FFetchObject(int32_t cpMin, int32_t *pcp, void **ppv, int32_t *pcb)
 {
     AssertThis(0);
     AssertIn(cpMin, 0, CpMac());
@@ -2995,8 +2995,8 @@ bool TXRD::FFetchObject(long cpMin, long *pcp, void **ppv, long *pcb)
     AssertNilOrVarMem(pcb);
 
     MPE mpe;
-    long impe;
-    long cb;
+    int32_t impe;
+    int32_t cb;
     bool fRet;
 
     fRet = _FFindMpe(_SpcpFromSprmCp(sprmObject, cpMin), &mpe, pcp, &impe);
@@ -3030,7 +3030,7 @@ bool TXRD::FFetchObject(long cpMin, long *pcp, void **ppv, long *pcb)
 /***************************************************************************
     Insert a picture into the rich text document.
 ***************************************************************************/
-bool TXRD::FInsertObject(void *pv, long cb, long cp, long ccpDel, PCHP pchp, uint32_t grfdoc)
+bool TXRD::FInsertObject(void *pv, int32_t cb, int32_t cp, int32_t ccpDel, PCHP pchp, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPvCb(pv, cb);
@@ -3039,9 +3039,9 @@ bool TXRD::FInsertObject(void *pv, long cb, long cp, long ccpDel, PCHP pchp, uin
     AssertNilOrVarMem(pchp);
     SPVM rgspvm[sprmLimChp - sprmMinChp];
     MPE mpe;
-    long impe;
+    int32_t impe;
     achar ch = kchObject;
-    long cspvmChp = 0;
+    int32_t cspvmChp = 0;
 
     BumpCombineUndo();
     if (!FSetUndo(cp, cp + ccpDel, 1))
@@ -3086,14 +3086,14 @@ bool TXRD::FInsertObject(void *pv, long cb, long cp, long ccpDel, PCHP pchp, uin
 /***************************************************************************
     Insert a picture into the rich text document.
 ***************************************************************************/
-bool TXRD::FApplyObjectProps(void *pv, long cb, long cp, uint32_t grfdoc)
+bool TXRD::FApplyObjectProps(void *pv, int32_t cb, int32_t cp, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertPvCb(pv, cb);
     AssertIn(cp, 0, CpMac());
     MPE mpe;
-    long impe;
-    long lwOld;
+    int32_t impe;
+    int32_t lwOld;
 
     if (!_FFindMpe(_SpcpFromSprmCp(sprmObject, cp), &mpe, pvNil, &impe) || cp != _CpFromSpcp(mpe.spcp))
     {
@@ -3125,7 +3125,7 @@ bool TXRD::FApplyObjectProps(void *pv, long cb, long cp, uint32_t grfdoc)
 /***************************************************************************
     Get the bounds of an object.
 ***************************************************************************/
-bool TXRD::FGetObjectRc(long cp, PGNV pgnv, PCHP pchp, RC *prc)
+bool TXRD::FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -3144,7 +3144,7 @@ bool TXRD::FGetObjectRc(long cp, PGNV pgnv, PCHP pchp, RC *prc)
 /***************************************************************************
     Get the object bounds from the AG entry.
 ***************************************************************************/
-bool TXRD::_FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc)
+bool TXRD::_FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc)
 {
     AssertIn(icact, 0, _pagcact->IvMac());
     Assert(sprm >= sprmObject, 0);
@@ -3160,7 +3160,7 @@ bool TXRD::_FGetObjectRc(long icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc
 /***************************************************************************
     Draw an object.
 ***************************************************************************/
-bool TXRD::FDrawObject(long cp, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip)
+bool TXRD::FDrawObject(int32_t cp, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip)
 {
     AssertThis(0);
     AssertIn(cp, 0, CpMac());
@@ -3180,7 +3180,7 @@ bool TXRD::FDrawObject(long cp, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *pr
 /***************************************************************************
     Draw the object.
 ***************************************************************************/
-bool TXRD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp, PCHP pchp, RC *prcClip)
+bool TXRD::_FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip)
 {
     AssertIn(icact, 0, _pagcact->IvMac());
     Assert(sprm >= sprmObject, 0);
@@ -3196,7 +3196,7 @@ bool TXRD::_FDrawObject(long icact, uint8_t sprm, PGNV pgnv, long *pxp, long yp,
 /***************************************************************************
     Create a new rich text undo object for the given rich text document.
 ***************************************************************************/
-PRTUN RTUN::PrtunNew(long cactCombine, PTXRD ptxrd, long cp1, long cp2, long ccpIns)
+PRTUN RTUN::PrtunNew(int32_t cactCombine, PTXRD ptxrd, int32_t cp1, int32_t cp2, int32_t ccpIns)
 {
     AssertPo(ptxrd, 0);
     AssertIn(cp1, 0, ptxrd->CpMac() + 1);
@@ -3246,7 +3246,7 @@ bool RTUN::FUndo(PDOCB pdocb)
     AssertThis(0);
     AssertPo(pdocb, 0);
     PTXRD ptxrd;
-    long ccpIns;
+    int32_t ccpIns;
     PTXRD ptxrdNew = pvNil;
 
     if (!pdocb->FIs(kclsTXRD))
@@ -3318,7 +3318,7 @@ bool RTUN::FCombine(PRTUN prtun)
 {
     AssertThis(0);
     AssertPo(prtun, 0);
-    long ccp;
+    int32_t ccp;
 
     // if the _cactCombine numbers are different, they can't be combined
     if (prtun->_cactCombine != _cactCombine)

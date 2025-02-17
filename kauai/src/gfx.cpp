@@ -24,14 +24,14 @@ RTCLASS(GPT)
 RTCLASS(NTL)
 RTCLASS(OGN)
 
-const long kdtsMaxTrans = 30 * kdtsSecond;
-long vcactRealize;
+const int32_t kdtsMaxTrans = 30 * kdtsSecond;
+int32_t vcactRealize;
 
 /***************************************************************************
     Set the ACR from the lw.  The lw should have been returned by a call
     to ACR::LwGet().
 ***************************************************************************/
-void ACR::SetFromLw(long lw)
+void ACR::SetFromLw(int32_t lw)
 {
     _lu = (uint32_t)lw;
     AssertThis(0);
@@ -42,9 +42,9 @@ void ACR::SetFromLw(long lw)
     and passed to ACR::SetFromLw.  Valid non-nil colors always return
     non-zero, so zero can be used as a nil value.
 ***************************************************************************/
-long ACR::LwGet(void) const
+int32_t ACR::LwGet(void) const
 {
-    return (long)_lu;
+    return (int32_t)_lu;
 }
 
 /***************************************************************************
@@ -93,7 +93,7 @@ void ACR::AssertValid(uint32_t grfacr)
 /***************************************************************************
     Change the origin on the pattern.
 ***************************************************************************/
-void APT::MoveOrigin(long dxp, long dyp)
+void APT::MoveOrigin(int32_t dxp, int32_t dyp)
 {
     // this cast to uint32_t works because 2^32 is a multiple of 8.
     dxp = (uint32_t)dxp % 8;
@@ -420,7 +420,7 @@ void GNV::FrameOval(RC *prc, ACR acr)
 /***************************************************************************
     Draw a line with a pattern.  Sets the pen position to (xp2, yp2).
 ***************************************************************************/
-void GNV::LineApt(long xp1, long yp1, long xp2, long yp2, APT *papt, ACR acrFore, ACR acrBack)
+void GNV::LineApt(int32_t xp1, int32_t yp1, int32_t xp2, int32_t yp2, APT *papt, ACR acrFore, ACR acrBack)
 {
     AssertThis(0);
     AssertVarMem(papt);
@@ -447,7 +447,7 @@ void GNV::LineApt(long xp1, long yp1, long xp2, long yp2, APT *papt, ACR acrFore
 /***************************************************************************
     Draw a line in a solid color.  Sets the pen position to (xp2, yp2).
 ***************************************************************************/
-void GNV::Line(long xp1, long yp1, long xp2, long yp2, ACR acr)
+void GNV::Line(int32_t xp1, int32_t yp1, int32_t xp2, int32_t yp2, ACR acr)
 {
     AssertThis(0);
     AssertPo(&acr, 0);
@@ -645,9 +645,9 @@ HQ GNV::_HqolyCreate(POGN pogn, uint32_t grfogn)
     AssertThis(0);
     AssertPo(pogn, 0);
     HQ hqoly;
-    long ipt;
-    long cb;
-    long cpt;
+    int32_t ipt;
+    int32_t cb;
+    int32_t cpt;
     OLY *poly;
     PT *ppt;
     PTS *ppts;
@@ -742,7 +742,7 @@ HQ GNV::_HqolyFrame(POGN pogn, uint32_t grfogn)
     with the first uncovered rectangle.  If prc2 is not nil fill it
     with the second uncovered rectangle (if there is one).
 ***************************************************************************/
-void GNV::ScrollRc(RC *prc, long dxp, long dyp, RC *prc1, RC *prc2)
+void GNV::ScrollRc(RC *prc, int32_t dxp, int32_t dyp, RC *prc1, RC *prc2)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -772,7 +772,7 @@ void GNV::ScrollRc(RC *prc, long dxp, long dyp, RC *prc1, RC *prc2)
     Static method to get the RC's that are uncovered during a scroll
     operation.
 ***************************************************************************/
-void GNV::GetBadRcForScroll(RC *prc, long dxp, long dyp, RC *prc1, RC *prc2)
+void GNV::GetBadRcForScroll(RC *prc, int32_t dxp, int32_t dyp, RC *prc1, RC *prc2)
 {
     AssertNilOrVarMem(prc1);
     AssertNilOrVarMem(prc2);
@@ -975,7 +975,7 @@ void GNV::ClipToSrc(void)
 /***************************************************************************
     Set the pen size (in source coordinates).
 ***************************************************************************/
-void GNV::SetPenSize(long dxpPen, long dypPen)
+void GNV::SetPenSize(int32_t dxpPen, int32_t dypPen)
 {
     AssertThis(0);
     AssertIn(dxpPen, 0, kswMax);
@@ -987,7 +987,7 @@ void GNV::SetPenSize(long dxpPen, long dypPen)
 /***************************************************************************
     Set the current font info.
 ***************************************************************************/
-void GNV::SetFont(long onn, uint32_t grfont, long dypFont, long tah, long tav)
+void GNV::SetFont(int32_t onn, uint32_t grfont, int32_t dypFont, int32_t tah, int32_t tav)
 {
     AssertThis(0);
     _dsf.onn = onn;
@@ -1001,7 +1001,7 @@ void GNV::SetFont(long onn, uint32_t grfont, long dypFont, long tah, long tav)
 /***************************************************************************
     Set the current font.
 ***************************************************************************/
-void GNV::SetOnn(long onn)
+void GNV::SetOnn(int32_t onn)
 {
     AssertThis(0);
     _dsf.onn = onn;
@@ -1021,7 +1021,7 @@ void GNV::SetFontStyle(uint32_t grfont)
 /***************************************************************************
     Set the current font size.
 ***************************************************************************/
-void GNV::SetFontSize(long dyp)
+void GNV::SetFontSize(int32_t dyp)
 {
     AssertThis(0);
     _dsf.dyp = LwMulDivAway(dyp, _rcDst.Dyp(), _rcSrc.Dyp());
@@ -1031,7 +1031,7 @@ void GNV::SetFontSize(long dyp)
 /***************************************************************************
     Set the current font alignment.
 ***************************************************************************/
-void GNV::SetFontAlign(long tah, long tav)
+void GNV::SetFontAlign(int32_t tah, int32_t tav)
 {
     AssertThis(0);
     _dsf.tah = tah;
@@ -1064,7 +1064,7 @@ void GNV::GetDsf(DSF *pdsf)
 /******************************************************************************
     Draw some text.
 ******************************************************************************/
-void GNV::DrawRgch(const achar *prgch, long cch, long xp, long yp, ACR acrFore, ACR acrBack)
+void GNV::DrawRgch(const achar *prgch, int32_t cch, int32_t xp, int32_t yp, ACR acrFore, ACR acrBack)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -1086,7 +1086,7 @@ void GNV::DrawRgch(const achar *prgch, long cch, long xp, long yp, ACR acrFore, 
 /***************************************************************************
     Draw the given string.
 ***************************************************************************/
-void GNV::DrawStn(PSTN pstn, long xp, long yp, ACR acrFore, ACR acrBack)
+void GNV::DrawStn(PSTN pstn, int32_t xp, int32_t yp, ACR acrFore, ACR acrBack)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -1100,7 +1100,7 @@ void GNV::DrawStn(PSTN pstn, long xp, long yp, ACR acrFore, ACR acrBack)
     Return the bounding box of the text.  If the GNV has any scaling, this
     is approximate.  This even works if cch is 0 (just gives the height).
 ******************************************************************************/
-void GNV::GetRcFromRgch(RC *prc, const achar *prgch, long cch, long xp, long yp)
+void GNV::GetRcFromRgch(RC *prc, const achar *prgch, int32_t cch, int32_t xp, int32_t yp)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -1120,7 +1120,7 @@ void GNV::GetRcFromRgch(RC *prc, const achar *prgch, long cch, long xp, long yp)
     Return the bounding box of the text.  If the GNV has any scaling, this
     is approximate.  This even works if the string is empty (gives the height).
 ******************************************************************************/
-void GNV::GetRcFromStn(RC *prc, PSTN pstn, long xp, long yp)
+void GNV::GetRcFromStn(RC *prc, PSTN pstn, int32_t xp, int32_t yp)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -1156,12 +1156,12 @@ uint32_t _mpgfdgrfptInv[4] = {fptNegateXp, fptNil, fptNegateXp | fptTranspose, f
     If cbitPixel is not zero and not the depth of this device, this sets
     the palette and returns false.
 ***************************************************************************/
-bool GNV::_FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, long cbitPixel)
+bool GNV::_FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, int32_t cbitPixel)
 {
     AssertNilOrPo(pglclr, 0);
     AssertVarMem(ppglclrOld);
     AssertVarMem(ppglclrTrans);
-    long cclr = pvNil == pglclr ? 256 : pglclr->IvMac();
+    int32_t cclr = pvNil == pglclr ? 256 : pglclr->IvMac();
 
     *ppglclrOld = pvNil;
     *ppglclrTrans = pvNil;
@@ -1186,7 +1186,7 @@ bool GNV::_FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, lon
     and animate the palette to pglclrTrans.  If either source palette is nil,
     *pclrSub is used in place of the nil palette.  acrSub must be an RGB color.
 ***************************************************************************/
-void GNV::_PaletteTrans(PGL pglclrOld, PGL pglclrNew, long lwNum, long lwDen, PGL pglclrTrans, CLR *pclrSub)
+void GNV::_PaletteTrans(PGL pglclrOld, PGL pglclrNew, int32_t lwNum, int32_t lwDen, PGL pglclrTrans, CLR *pclrSub)
 {
     AssertNilOrPo(pglclrOld, 0);
     AssertNilOrPo(pglclrNew, 0);
@@ -1194,7 +1194,7 @@ void GNV::_PaletteTrans(PGL pglclrOld, PGL pglclrNew, long lwNum, long lwDen, PG
     AssertIn(lwNum, 0, lwDen + 1);
     AssertNilOrVarMem(pclrSub);
 
-    long iclr;
+    int32_t iclr;
     CLR clrOld, clrNew;
     CLR clrSub;
 
@@ -1216,9 +1216,9 @@ void GNV::_PaletteTrans(PGL pglclrOld, PGL pglclrNew, long lwNum, long lwDen, PG
         if (pvNil != pglclrNew)
             pglclrNew->Get(iclr, &clrNew);
 
-        clrOld.bRed += (uint8_t)LwMulDiv((long)clrNew.bRed - clrOld.bRed, lwNum, lwDen);
-        clrOld.bGreen += (uint8_t)LwMulDiv((long)clrNew.bGreen - clrOld.bGreen, lwNum, lwDen);
-        clrOld.bBlue += (uint8_t)LwMulDiv((long)clrNew.bBlue - clrOld.bBlue, lwNum, lwDen);
+        clrOld.bRed += (uint8_t)LwMulDiv((int32_t)clrNew.bRed - clrOld.bRed, lwNum, lwDen);
+        clrOld.bGreen += (uint8_t)LwMulDiv((int32_t)clrNew.bGreen - clrOld.bGreen, lwNum, lwDen);
+        clrOld.bBlue += (uint8_t)LwMulDiv((int32_t)clrNew.bBlue - clrOld.bBlue, lwNum, lwDen);
         pglclrTrans->Put(iclr, &clrOld);
     }
 
@@ -1254,7 +1254,7 @@ bool GNV::_FEnsureTempGnv(PGNV *ppgnv, RC *prc)
     size.  gfd indicates which direction the wipe is.  If pglclr is not
     nil and acrFill is clear, the palette transition is gradual.
 ***************************************************************************/
-void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
+void GNV::Wipe(int32_t gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -1265,8 +1265,8 @@ void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint
 
     uint32_t grfpt, grfptInv;
     uint32_t tsStart, dtsT;
-    long dxp, dxpTot;
-    long cact;
+    int32_t dxp, dxpTot;
+    int32_t cact;
     RC rcSrc, rcDst;
     RC rc1, rc2;
     PGL pglclrOld = pvNil;
@@ -1342,7 +1342,7 @@ void GNV::Wipe(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint
     Slide the source gnv onto this one.  The source and destination
     rectangles must be the same size.
 ***************************************************************************/
-void GNV::Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
+void GNV::Slide(int32_t gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -1353,8 +1353,8 @@ void GNV::Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uin
 
     uint32_t grfpt, grfptInv;
     uint32_t dtsT, tsStart;
-    long cact;
-    long dxp, dxpTot, dxpOld;
+    int32_t cact;
+    int32_t dxp, dxpTot, dxpOld;
     RC rcSrc, rcDst;
     RC rc1, rc2;
     PGNV pgnv;
@@ -1471,7 +1471,7 @@ void GNV::Slide(long gfd, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uin
 /***************************************************************************
     Returns the next quasi-random number for Dissolve.
 ***************************************************************************/
-inline long _LwNextDissolve(long lw)
+inline int32_t _LwNextDissolve(int32_t lw)
 {
     AssertIn(lw, 1, klwPrime);
 
@@ -1484,7 +1484,7 @@ inline long _LwNextDissolve(long lw)
     lw = (lw << 15) - lw;
 
     // mod by 2^16 + 1
-    lw = (lw & 0x0000FFFFL) - (long)((uint32_t)lw >> 16);
+    lw = (lw & 0x0000FFFFL) - (int32_t)((uint32_t)lw >> 16);
     if (lw < 0)
         lw += klwPrime;
 
@@ -1503,7 +1503,7 @@ inline long _LwNextDissolve(long lw)
     and destination rectangles must be the same size.  If pgnvSrc is nil,
     just dissolve into the solid color.  Each portion is done in dts time.
 ***************************************************************************/
-void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
+void GNV::Dissolve(int32_t crcWidth, int32_t crcHeight, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
                    PGL pglclr)
 {
     AssertThis(0);
@@ -1517,12 +1517,12 @@ void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC 
 
     uint32_t tsStart, dtsT;
     uint8_t bFill;
-    long cbRowSrc, cbRowDst;
+    int32_t cbRowSrc, cbRowDst;
     RND rnd;
-    long lw, cact, irc, crc, crcFill, crcT;
+    int32_t lw, cact, irc, crc, crcFill, crcT;
     RC rc1, rc2;
     bool fOnScreen;
-    long dibExtra, dibRow, ibExtra;
+    int32_t dibExtra, dibRow, ibExtra;
     uint8_t *pbRow;
     uint8_t *prgbDst = pvNil;
     uint8_t *prgbSrc = pvNil;
@@ -1783,7 +1783,7 @@ void GNV::Dissolve(long crcWidth, long crcHeight, ACR acrFill, PGNV pgnvSrc, RC 
     the maximum number of palette interpolations to do.  It doesn't make
     sense for this to be bigger than 256.  If it's zero, we'll use 256.
 ***************************************************************************/
-void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
+void GNV::Fade(int32_t cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertIn(cactMax, 0, 257);
@@ -1794,7 +1794,7 @@ void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, 
     AssertNilOrPo(pglclr, 0);
 
     uint32_t tsStart;
-    long cact, cactOld;
+    int32_t cact, cactOld;
     CLR clr;
     PGL pglclrOld = pvNil;
     PGL pglclrTrans = pvNil;
@@ -1849,7 +1849,7 @@ void GNV::Fade(long cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, 
     intermediate color of acrFill (if not clear).  xp, yp are the focus
     point of the iris (in destination coordinates).
 ***************************************************************************/
-void GNV::Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
+void GNV::Iris(int32_t gfd, int32_t xp, int32_t yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -1861,7 +1861,7 @@ void GNV::Iris(long gfd, long xp, long yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc
     uint32_t tsStart, dtsT;
     RC rc, rcOld, rcDst;
     PT pt, ptBase;
-    long cact;
+    int32_t cact;
     bool fOpen;
     PREGN pregn, pregnClip;
     PGL pglclrOld = pvNil;
@@ -1978,7 +1978,7 @@ void GNV::DrawPic(PPIC ppic, RC *prc)
 /***************************************************************************
     Draw the mbmp with reference point at the given point.
 ***************************************************************************/
-void GNV::DrawMbmp(PMBMP pmbmp, long xp, long yp)
+void GNV::DrawMbmp(PMBMP pmbmp, int32_t xp, int32_t yp)
 {
     AssertThis(0);
     AssertPo(pmbmp, 0);
@@ -2026,7 +2026,7 @@ bool GNV::_FMapRcRcs(RC *prc, RCS *prcs)
 /***************************************************************************
     Map an (xp, yp) pair to a system point.
 ***************************************************************************/
-void GNV::_MapPtPts(long xp, long yp, PTS *ppts)
+void GNV::_MapPtPts(int32_t xp, int32_t yp, PTS *ppts)
 {
     AssertThis(0);
     AssertVarMem(ppts);
@@ -2178,7 +2178,7 @@ void NTL::MarkMem(void)
 /***************************************************************************
     Return whether the font number is valid.
 ***************************************************************************/
-bool NTL::FValidOnn(long onn)
+bool NTL::FValidOnn(int32_t onn)
 {
     return pvNil != _pgst && onn >= 0 && onn < _pgst->IstnMac();
 }
@@ -2187,7 +2187,7 @@ bool NTL::FValidOnn(long onn)
 /***************************************************************************
     Find the name of the given font.
 ***************************************************************************/
-void NTL::GetStn(long onn, PSTN pstn)
+void NTL::GetStn(int32_t onn, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2198,7 +2198,7 @@ void NTL::GetStn(long onn, PSTN pstn)
 /***************************************************************************
     Get the font number for the given font name.
 ***************************************************************************/
-bool NTL::FGetOnn(PSTN pstn, long *ponn)
+bool NTL::FGetOnn(PSTN pstn, int32_t *ponn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2211,11 +2211,11 @@ bool NTL::FGetOnn(PSTN pstn, long *ponn)
     possible.
     REVIEW shonk: implement font mapping for real.
 ***************************************************************************/
-long NTL::OnnMapStn(PSTN pstn, int16_t osk)
+int32_t NTL::OnnMapStn(PSTN pstn, int16_t osk)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long onn;
+    int32_t onn;
 
     if (!FGetOnn(pstn, &onn))
         onn = _onnSystem;
@@ -2225,7 +2225,7 @@ long NTL::OnnMapStn(PSTN pstn, int16_t osk)
 /***************************************************************************
     Return the font number mac.
 ***************************************************************************/
-long NTL::OnnMac(void)
+int32_t NTL::OnnMac(void)
 {
     AssertThis(0);
     return _pgst->IstnMac();
@@ -2250,7 +2250,7 @@ POGN OGN::PognTraceOgn(POGN pogn, uint32_t grfogn)
     Create a new polygon by tracing the outline of this one with a
     convex polygon.
 ***************************************************************************/
-POGN OGN::PognTraceRgpt(PT *prgpt, long cpt, uint32_t grfogn)
+POGN OGN::PognTraceRgpt(PT *prgpt, int32_t cpt, uint32_t grfogn)
 {
     AssertThis(0);
     AssertIn(cpt, 2, kcbMax);
@@ -2258,7 +2258,7 @@ POGN OGN::PognTraceRgpt(PT *prgpt, long cpt, uint32_t grfogn)
 
     PT *prgptThis;
     AEI aei;
-    long iptLast = IvMac() - 1;
+    int32_t iptLast = IvMac() - 1;
 
     if (2 > cpt || iptLast < 0)
         return pvNil;
@@ -2335,15 +2335,15 @@ bool OGN::_FAddEdge(AEI *paei)
     AssertIn(paei->iptPenCur, 0, paei->cpt);
 
     PT *prgptThis = (PT *)QvGet(0); // Already locked in PognTraceRgpt().
-    long iptEnd = (paei->ipt + paei->dipt) % IvMac();
-    long iptPenNew = IptFindLeftmost(paei->prgpt, paei->cpt, prgptThis[iptEnd].xp - prgptThis[paei->ipt].xp,
+    int32_t iptEnd = (paei->ipt + paei->dipt) % IvMac();
+    int32_t iptPenNew = IptFindLeftmost(paei->prgpt, paei->cpt, prgptThis[iptEnd].xp - prgptThis[paei->ipt].xp,
                                      prgptThis[iptEnd].yp - prgptThis[paei->ipt].yp);
 
     // Add vertices from current to leftmost.
     if (paei->iptPenCur != iptPenNew)
     {
         PT pt;
-        long ipt = paei->iptPenCur;
+        int32_t ipt = paei->iptPenCur;
         PT dpt = paei->ptCur - paei->prgpt[ipt];
 
         do
@@ -2365,14 +2365,14 @@ bool OGN::_FAddEdge(AEI *paei)
     Find the leftmost vertex of the rgpt looking down the vector.
     dxp, dyp : Direction of vector to look down.
 ***************************************************************************/
-long IptFindLeftmost(PT *prgpt, long cpt, long dxp, long dyp)
+int32_t IptFindLeftmost(PT *prgpt, int32_t cpt, int32_t dxp, int32_t dyp)
 {
     AssertPvCb(prgpt, LwMul(cpt, SIZEOF(PT)));
     AssertIn(cpt, 2, kcbMax);
 
-    long ipt, iptLeftmost;
-    long dzpMac; // Maximum cross product (z vector) found.
-    long dzp;
+    int32_t ipt, iptLeftmost;
+    int32_t dzpMac; // Maximum cross product (z vector) found.
+    int32_t dzp;
 
     // reduces the chance of overflow
     if (1 < (dzp = LwGcd(dxp, dyp)))
@@ -2396,7 +2396,7 @@ long IptFindLeftmost(PT *prgpt, long cpt, long dxp, long dyp)
 /***************************************************************************
     -- Allocate a new OGN and ensure that it has space for cptInit elements.
 ***************************************************************************/
-POGN OGN::PognNew(long cptInit)
+POGN OGN::PognNew(int32_t cptInit)
 {
     AssertIn(cptInit, 0, kcbMax);
     POGN pogn;
@@ -2424,8 +2424,8 @@ OGN::OGN(void) : GL(SIZEOF(PT))
     This does a 2x stretch blt, clipped to prcClip and pregnClip. The
     clipping is expressed in destination coordinates.
 ***************************************************************************/
-void DoubleStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
-                   long xpDst, long ypDst, RC *prcClip, PREGN pregnClip)
+void DoubleStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
+                   int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip)
 {
     AssertPvCb(prgbSrc, LwMul(cbRowSrc, dypSrc));
     AssertPvCb(prgbDst, LwMul(cbRowDst, dypDst));
@@ -2435,7 +2435,7 @@ void DoubleStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uin
     AssertNilOrVarMem(prcClip);
     AssertNilOrPo(pregnClip, 0);
 
-    long xpOn, xpOff, dypAdvance, dxpBase, yp;
+    int32_t xpOn, xpOff, dypAdvance, dxpBase, yp;
     bool fSecondRow;
     REGSC regsc;
     RC rcT(xpDst, ypDst, xpDst + 2 * prcSrc->Dxp(), ypDst + 2 * prcSrc->Dyp());
@@ -2567,7 +2567,7 @@ LDone2:
             uint8_t *pbDst = prgbDst + xpOn;
             uint8_t *pbDst2 = pbDst + cbRowDst;
             uint8_t bT;
-            long cactLoop;
+            int32_t cactLoop;
 
             if (xpOn & 1)
             {
@@ -2687,7 +2687,7 @@ LDone1:
             uint8_t bT;
             uint8_t *pbSrc = prgbSrc + (xpOn >> 1);
             uint8_t *pbDst = prgbDst + xpOn;
-            long cactLoop;
+            int32_t cactLoop;
 
             if (xpOn & 1)
             {
@@ -2736,8 +2736,8 @@ LDone1:
     This does a 2x vertical and 1x horizontal stretch blt, clipped to prcClip
     and pregnClip. The clipping is expressed in destination coordinates.
 ***************************************************************************/
-void DoubleVertStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc, uint8_t *prgbDst, long cbRowDst, long dypDst,
-                       long xpDst, long ypDst, RC *prcClip, PREGN pregnClip)
+void DoubleVertStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
+                       int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip)
 {
     AssertPvCb(prgbSrc, LwMul(cbRowSrc, dypSrc));
     AssertPvCb(prgbDst, LwMul(cbRowDst, dypDst));
@@ -2747,7 +2747,7 @@ void DoubleVertStretch(uint8_t *prgbSrc, long cbRowSrc, long dypSrc, RC *prcSrc,
     AssertNilOrVarMem(prcClip);
     AssertNilOrPo(pregnClip, 0);
 
-    long xpOn, xpOff, dypAdvance, dxpBase, yp;
+    int32_t xpOn, xpOff, dypAdvance, dxpBase, yp;
     bool fSecondRow;
     REGSC regsc;
     RC rcT(xpDst, ypDst, xpDst + prcSrc->Dxp(), ypDst + 2 * prcSrc->Dyp());

@@ -35,14 +35,14 @@ class GORP : public GORP_PAR
 
   public:
     virtual void Draw(PGNV pgnv, RC *prcClip) = 0;
-    virtual bool FPtIn(long xp, long yp) = 0;
-    virtual void SetDxpDyp(long dxpPref, long dypPref) = 0;
+    virtual bool FPtIn(int32_t xp, int32_t yp) = 0;
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref) = 0;
     virtual void GetRc(RC *prc) = 0;
     virtual void GetRcContent(RC *prc) = 0;
 
-    virtual long NfrMac(void);
-    virtual long NfrCur(void);
-    virtual void GotoNfr(long nfr);
+    virtual int32_t NfrMac(void);
+    virtual int32_t NfrCur(void);
+    virtual void GotoNfr(int32_t nfr);
     virtual bool FPlaying(void);
     virtual bool FPlay(void);
     virtual void Stop(void);
@@ -66,15 +66,15 @@ class GORF : public GORF_PAR
     ACR _acrBack;
     APT _apt;
     RC _rc;
-    long _dxp;
-    long _dyp;
+    int32_t _dxp;
+    int32_t _dyp;
 
   public:
     static PGORF PgorfNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(long xp, long yp);
-    virtual void SetDxpDyp(long dxpPref, long dypPref);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
     virtual void GetRc(RC *prc);
     virtual void GetRcContent(RC *prc);
 };
@@ -101,8 +101,8 @@ class GORB : public GORB_PAR
     static PGORB PgorbNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(long xp, long yp);
-    virtual void SetDxpDyp(long dxpPref, long dypPref);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
     virtual void GetRc(RC *prc);
     virtual void GetRcContent(RC *prc);
     virtual void Stream(bool fStream);
@@ -148,27 +148,27 @@ class GORT : public GORT_PAR
     int16_t _rgdxp[idzpLimGort];
     int16_t _rgdyp[idzpLimGort];
 
-    long _dxpLeftFlex;
-    long _dxpRightFlex;
-    long _dypLeftFlex;
-    long _dypRightFlex;
-    long _dxp; // the total width
-    long _dyp; // the total height
+    int32_t _dxpLeftFlex;
+    int32_t _dxpRightFlex;
+    int32_t _dypLeftFlex;
+    int32_t _dypRightFlex;
+    int32_t _dxp; // the total width
+    int32_t _dyp; // the total height
 
     bool _fStream;
 
     ~GORT(void);
-    void _DrawRow(PGNV pgnv, PMBMP pmbmp, RC *prcRow, RC *prcClip, long dxp, long dyp);
-    void _ComputeFlexZp(long *pdzpLeftFlex, long *pdzpRightFlex, long dzp, int16_t *prgdzp);
-    void _MapZpToMbmp(long *pzp, int16_t *prgdzp, long dzpLeftFlex, long dzpRightFlex);
-    void _MapZpFlex(long *pzp, int16_t *prgdzp, long dzpLeftFlex, long dzpRightFlex);
+    void _DrawRow(PGNV pgnv, PMBMP pmbmp, RC *prcRow, RC *prcClip, int32_t dxp, int32_t dyp);
+    void _ComputeFlexZp(int32_t *pdzpLeftFlex, int32_t *pdzpRightFlex, int32_t dzp, int16_t *prgdzp);
+    void _MapZpToMbmp(int32_t *pzp, int16_t *prgdzp, int32_t dzpLeftFlex, int32_t dzpRightFlex);
+    void _MapZpFlex(int32_t *pzp, int16_t *prgdzp, int32_t dzpLeftFlex, int32_t dzpRightFlex);
 
   public:
     static PGORT PgortNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(long xp, long yp);
-    virtual void SetDxpDyp(long dxpPref, long dypPref);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
     virtual void GetRc(RC *prc);
     virtual void GetRcContent(RC *prc);
     virtual void Stream(bool fStream);
@@ -188,9 +188,9 @@ class GORV : public GORV_PAR
 
   protected:
     PGVID _pgvid;
-    long _dxp;
-    long _dyp;
-    long _cactSuspend;
+    int32_t _dxp;
+    int32_t _dyp;
+    int32_t _cactSuspend;
     bool _fHwndBased : 1;
     bool _fPlayOnResume : 1;
 
@@ -202,14 +202,14 @@ class GORV : public GORV_PAR
     static PGORV PgorvNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(long xp, long yp);
-    virtual void SetDxpDyp(long dxpPref, long dypPref);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
     virtual void GetRc(RC *prc);
     virtual void GetRcContent(RC *prc);
 
-    virtual long NfrMac(void);
-    virtual long NfrCur(void);
-    virtual void GotoNfr(long nfr);
+    virtual int32_t NfrMac(void);
+    virtual int32_t NfrCur(void);
+    virtual void GotoNfr(int32_t nfr);
     virtual bool FPlaying(void);
     virtual bool FPlay(void);
     virtual void Stop(void);
@@ -299,12 +299,12 @@ class GOK : public GOK_PAR
     CMD_MAP_DEC(GOK)
 
   protected:
-    long _dxp; // offset from top-left to the registration point
-    long _dyp;
-    long _zp; // z-coord (for placing GOK's relative to this one)
+    int32_t _dxp; // offset from top-left to the registration point
+    int32_t _dyp;
+    int32_t _zp; // z-coord (for placing GOK's relative to this one)
 
-    long _dxpPref; // preferred size (if non-zero)
-    long _dypPref;
+    int32_t _dxpPref; // preferred size (if non-zero)
+    int32_t _dypPref;
 
     PWOKS _pwoks; // the kidspace world that this GOK belongs to
     PRCA _prca;   // Chunky resource chain
@@ -313,7 +313,7 @@ class GOK : public GOK_PAR
     int16_t _sno;     // state number
     int16_t _cactMouse; // mouse click count of last mouse down
     uint32_t _grfcust;  // cursor state at last mouse down
-    long _gmsCur;     // gob mouse tracking state
+    int32_t _gmsCur;     // gob mouse tracking state
 
     bool _fRect : 1;          // whether to use rectangular hit testing exclusively
     bool _fNoHit : 1;         // invisible to the mouse
@@ -323,53 +323,53 @@ class GOK : public GOK_PAR
     bool _fMouseSndDirty : 1; // whether playing the mouse sound was deferred
     bool _fStream : 1;        // once we switch reps, we won't use this one again
 
-    long _cactDeferGorp; // defer marking and positioning the gorp
+    int32_t _cactDeferGorp; // defer marking and positioning the gorp
     PGORP _pgorp;        // the graphical representation
     CKI _ckiGorp;        // cki of the current gorp
 
-    long _dtim;       // current time increment for animation
+    int32_t _dtim;       // current time increment for animation
     PSCEG _pscegAnim; // animation script
     CHID _chidAnim;   // chid of current animation
 
     PGOKD _pgokd;
 
-    long _siiSound;     // sound to kill when we go away
-    long _siiMouse;     // mouse tracking sound - kill it when we go away
+    int32_t _siiSound;     // sound to kill when we go away
+    int32_t _siiMouse;     // mouse tracking sound - kill it when we go away
     CKI _ckiMouseSnd;   // for deferred playing of the mouse sound
-    long _cactDeferSnd; // defer starting the mouse sound if this is > 0
+    int32_t _cactDeferSnd; // defer starting the mouse sound if this is > 0
 
     // cid/hid filtering
     struct CMFLT
     {
-        long cid;
-        long hid;
+        int32_t cid;
+        int32_t hid;
         CHID chidScript;
     };
     PGL _pglcmflt; // list of cmd filtering structs, sorted by cid
 
-    long _hidToolTipSrc; // get the tool tip info from this GOK
+    int32_t _hidToolTipSrc; // get the tool tip info from this GOK
 
     GOK(GCB *pgcb);
     ~GOK(void);
 
-    static PGOB _PgobBefore(PGOB pgobPar, long zp);
+    static PGOB _PgobBefore(PGOB pgobPar, int32_t zp);
 
     virtual bool _FInit(PWOKS pwoks, PGOKD pgokd, PRCA prca);
     virtual bool _FInit(PWOKS pwoks, CNO cno, PRCA prca);
 
     virtual bool _FAdjustGms(struct GMSE *pmpgmsgmse);
-    virtual bool _FSetGmsCore(long gms, uint32_t grfact, bool *pfStable);
-    virtual bool _FSetGms(long gms, uint32_t grfact);
+    virtual bool _FSetGmsCore(int32_t gms, uint32_t grfact, bool *pfStable);
+    virtual bool _FSetGms(int32_t gms, uint32_t grfact);
 
-    virtual bool _FEnterState(long sno);
-    virtual bool _FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, long dxp = 0, long dyp = 0,
+    virtual bool _FEnterState(int32_t sno);
+    virtual bool _FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, int32_t dxp = 0, int32_t dyp = 0,
                           bool *pfSet = pvNil);
     virtual bool _FAdvanceFrame(void);
 
-    virtual void _SetGorp(PGORP pgorp, long dxp, long dyp);
+    virtual void _SetGorp(PGORP pgorp, int32_t dxp, int32_t dyp);
     virtual PGORP _PgorpNew(PCRF pcrf, CTG ctg, CNO cno);
 
-    bool _FFindCmflt(long cid, long hid, CMFLT *pcmflt = pvNil, long *picmflt = pvNil);
+    bool _FFindCmflt(int32_t cid, int32_t hid, CMFLT *pcmflt = pvNil, int32_t *picmflt = pvNil);
     bool _FFilterCmd(PCMD pcmd, CHID chidScript, bool *pfFilter);
     void _PlayMouseSound(CHID chid);
     CNO _CnoToolTip(void);
@@ -378,29 +378,29 @@ class GOK : public GOK_PAR
     void _DeferSnd(bool fDefer);
 
   public:
-    static PGOK PgokNew(PWOKS pwoks, PGOB pgobPar, long hid, PGOKD pgokd, PRCA prca);
+    static PGOK PgokNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, PGOKD pgokd, PRCA prca);
 
     PWOKS Pwoks(void)
     {
         return _pwoks;
     }
-    long Sno(void)
+    int32_t Sno(void)
     {
         return _sno;
     }
-    void GetPtReg(PT *ppt, long coo = cooParent);
+    void GetPtReg(PT *ppt, int32_t coo = cooParent);
     void GetRcContent(RC *prc);
-    long ZPlane(void)
+    int32_t ZPlane(void)
     {
         return _zp;
     }
-    void SetZPlane(long zp);
+    void SetZPlane(int32_t zp);
     void SetNoSlip(bool fNoSlip);
-    void SetHidToolTip(long hidSrc);
+    void SetHidToolTip(int32_t hidSrc);
 
     virtual void SetCursor(uint32_t grfcust);
-    virtual bool FPtIn(long xp, long yp);
-    virtual bool FPtInBounds(long xp, long yp);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
+    virtual bool FPtInBounds(int32_t xp, int32_t yp);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
     virtual bool FCmdAlarm(PCMD pcmd);
@@ -411,28 +411,28 @@ class GOK : public GOK_PAR
         return FCmdClicked((PCMD_MOUSE)pcmd);
     }
     virtual bool FCmdAll(PCMD pcmd);
-    virtual bool FFilterCidHid(long cid, long hid, CHID chidScript);
+    virtual bool FFilterCidHid(int32_t cid, int32_t hid, CHID chidScript);
 
-    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, long xpMouse, long ypMouse);
-    virtual long LwState(void);
+    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse);
+    virtual int32_t LwState(void);
 
-    virtual bool FRunScript(CHID chid, long *prglw = pvNil, long clw = 0, long *plwReturn = pvNil,
+    virtual bool FRunScript(CHID chid, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                             tribool *ptSuccess = pvNil);
-    virtual bool FRunScriptCno(CNO cno, long *prglw = pvNil, long clw = 0, long *plwReturn = pvNil,
+    virtual bool FRunScriptCno(CNO cno, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                                tribool *ptSuccess = pvNil);
-    virtual bool FChangeState(long sno);
-    virtual bool FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, long dxp = 0, long dyp = 0,
+    virtual bool FChangeState(int32_t sno);
+    virtual bool FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, int32_t dxp = 0, int32_t dyp = 0,
                          uint32_t dtim = 0);
 
     virtual bool FPlay(void);
     virtual bool FPlaying(void);
     virtual void Stop(void);
-    virtual void GotoNfr(long nfr);
-    virtual long NfrMac(void);
-    virtual long NfrCur(void);
+    virtual void GotoNfr(int32_t nfr);
+    virtual int32_t NfrMac(void);
+    virtual int32_t NfrCur(void);
 
-    virtual long SiiPlaySound(CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, uint32_t dtsStart, long spr, long scl);
-    virtual long SiiPlayMouseSound(CTG ctg, CNO cno);
+    virtual int32_t SiiPlaySound(CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr, int32_t scl);
+    virtual int32_t SiiPlayMouseSound(CTG ctg, CNO cno);
 
     virtual void Suspend(void);
     virtual void Resume(void);

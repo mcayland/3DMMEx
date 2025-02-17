@@ -54,7 +54,7 @@ void AssertOsk(int16_t osk);
 /***************************************************************************
     Return the number of bytes a character occupies in the given osk.
 ***************************************************************************/
-inline long CbCharOsk(int16_t osk)
+inline int32_t CbCharOsk(int16_t osk)
 {
     switch (osk)
     {
@@ -82,18 +82,18 @@ const achar kchSpace = ChLit(' ');
 const wchar kchwUnicode = 0xFEFF;
 const wchar kchwUnicodeSwap = 0xFFFE;
 
-const long kcchMaxSz = 255;
-const long kcchMaxSt = 255;
-const long kcchMaxStz = 255;
-const long kcchExtraSz = 1;
-const long kcchExtraSt = 1;
-const long kcchExtraStz = 2;
-const long kcchTotSz = kcchMaxSz + kcchExtraSz;
-const long kcchTotSt = kcchMaxSt + kcchExtraSt;
-const long kcchTotStz = kcchMaxStz + kcchExtraStz;
+const int32_t kcchMaxSz = 255;
+const int32_t kcchMaxSt = 255;
+const int32_t kcchMaxStz = 255;
+const int32_t kcchExtraSz = 1;
+const int32_t kcchExtraSt = 1;
+const int32_t kcchExtraStz = 2;
+const int32_t kcchTotSz = kcchMaxSz + kcchExtraSz;
+const int32_t kcchTotSt = kcchMaxSt + kcchExtraSt;
+const int32_t kcchTotStz = kcchMaxStz + kcchExtraStz;
 
-const long kcchMaxStn = 255;
-const long kcbMaxDataStn = kcchTotStz * SIZEOF(wchar) + SIZEOF(int16_t);
+const int32_t kcchMaxStn = 255;
+const int32_t kcbMaxDataStn = kcchTotStz * SIZEOF(wchar) + SIZEOF(int16_t);
 
 enum
 {
@@ -117,7 +117,7 @@ typedef schar SZS[kcchTotSz];
     String related asserts
 ***************************************************************************/
 #ifdef DEBUG
-void AssertRgch(achar *prgch, long cch);
+void AssertRgch(achar *prgch, int32_t cch);
 void AssertStz(PSTZ pstz);
 void AssertSt(PST pst);
 void AssertSz(PSZ psz);
@@ -141,30 +141,30 @@ bool FValidSt(PST pst);
     bytes) and CchTot means the total number of characters including
     overhead.
 ***************************************************************************/
-long CchSz(const PSZ psz);
-inline long CchTotSz(const PSZ psz)
+int32_t CchSz(const PSZ psz);
+inline int32_t CchTotSz(const PSZ psz)
 {
     return CchSz(psz) + kcchExtraSz;
 }
-inline long CchSt(PST pst)
+inline int32_t CchSt(PST pst)
 {
     AssertSt(pst);
-    return (long)(uint8_t)pst[0];
+    return (int32_t)(uint8_t)pst[0];
 }
-inline long CchTotSt(PST pst)
+inline int32_t CchTotSt(PST pst)
 {
     AssertSt(pst);
-    return (long)(uint8_t)pst[0] + kcchExtraSt;
+    return (int32_t)(uint8_t)pst[0] + kcchExtraSt;
 }
-inline long CchStz(PSTZ pstz)
+inline int32_t CchStz(PSTZ pstz)
 {
     AssertStz(pstz);
-    return (long)(uint8_t)pstz[0];
+    return (int32_t)(uint8_t)pstz[0];
 }
-inline long CchTotStz(PSTZ pstz)
+inline int32_t CchTotStz(PSTZ pstz)
 {
     AssertStz(pstz);
-    return (long)(uint8_t)pstz[0] + kcchExtraStz;
+    return (int32_t)(uint8_t)pstz[0] + kcchExtraStz;
 }
 
 inline achar *PrgchSt(PST pst)
@@ -182,21 +182,21 @@ inline PSZ PszStz(PSTZ pstz)
     comparison, including any length and/or terminating bytes and should
     be used only for internal sorting (for binary search etc).
 ***************************************************************************/
-bool FEqualRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2);
-uint32_t FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2);
+bool FEqualRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2);
+uint32_t FcmpCompareRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2);
 
 /***************************************************************************
     User level (case insensitive, locale aware) comparison and sorting.
 ***************************************************************************/
-bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, uint32_t grfstn = fstnIgnoreCase);
-uint32_t FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2,
+bool FEqualUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2, uint32_t grfstn = fstnIgnoreCase);
+uint32_t FcmpCompareUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2,
                              uint32_t grfstn = fstnIgnoreCase);
 
 /***************************************************************************
     Upper and lower case utilies
 ***************************************************************************/
-void UpperRgchs(schar *prgchs, long cchs);
-void LowerRgchs(schar *prgchs, long cchs);
+void UpperRgchs(schar *prgchs, int32_t cchs);
+void LowerRgchs(schar *prgchs, int32_t cchs);
 inline schar ChsUpper(schar chs)
 {
     UpperRgchs(&chs, 1);
@@ -207,8 +207,8 @@ inline schar ChsLower(schar chs)
     LowerRgchs(&chs, 1);
     return chs;
 }
-void UpperRgchw(wchar *prgchw, long cchw);
-void LowerRgchw(wchar *prgchw, long cchw);
+void UpperRgchw(wchar *prgchw, int32_t cchw);
+void LowerRgchw(wchar *prgchw, int32_t cchw);
 inline wchar ChwUpper(wchar chw)
 {
     UpperRgchw(&chw, 1);
@@ -221,11 +221,11 @@ inline wchar ChwLower(wchar chw)
 }
 
 #ifdef UNICODE
-inline void UpperRgch(achar *prgch, long cch)
+inline void UpperRgch(achar *prgch, int32_t cch)
 {
     UpperRgchw(prgch, cch);
 }
-inline void LowerRgch(achar *prgch, long cch)
+inline void LowerRgch(achar *prgch, int32_t cch)
 {
     LowerRgchw(prgch, cch);
 }
@@ -240,11 +240,11 @@ inline achar ChLower(achar ch)
     return ch;
 }
 #else  //! UNICODE
-inline void UpperRgch(achar *prgch, long cch)
+inline void UpperRgch(achar *prgch, int32_t cch)
 {
     UpperRgchs(prgch, cch);
 }
-inline void LowerRgch(achar *prgch, long cch)
+inline void LowerRgch(achar *prgch, int32_t cch)
 {
     LowerRgchs(prgch, cch);
 }
@@ -264,13 +264,13 @@ inline achar ChLower(achar ch)
     Translation from one OS to another (eg, Win to Mac, single byte to
     unicode, etc).
 ***************************************************************************/
-long CchTranslateRgb(const void *pvSrc, long cbSrc, int16_t oskSrc, achar *prgchDst, long cchMaxDst);
+int32_t CchTranslateRgb(const void *pvSrc, int32_t cbSrc, int16_t oskSrc, achar *prgchDst, int32_t cchMaxDst);
 
 /***************************************************************************
     These APIs assert if osk specifies a different sized character than
     koskCur uses.
 ***************************************************************************/
-void TranslateRgch(achar *prgch, long cch, int16_t osk, bool fToCur = fTrue);
+void TranslateRgch(achar *prgch, int32_t cch, int16_t osk, bool fToCur = fTrue);
 inline void TranslateSt(PST pst, int16_t osk, bool fToCur = fTrue)
 {
     TranslateRgch(pst + 1, CchSt(pst), osk, fToCur);
@@ -358,7 +358,7 @@ class STN
         AssertThis(0);
         return _rgch;
     }
-    long Cch(void)
+    int32_t Cch(void)
     {
         AssertThis(0);
         return (uchar)_rgch[0];
@@ -370,7 +370,7 @@ class STN
         AssertThis(0);
         _rgch[0] = _rgch[1] = 0;
     }
-    void SetRgch(const achar *prgchSrc, long cch);
+    void SetRgch(const achar *prgchSrc, int32_t cch);
     void SetSz(const PSZ pszSrc)
     {
         SetRgch(pszSrc, CchSz(pszSrc));
@@ -417,8 +417,8 @@ class STN
     void GetSzs(PSZS pszs);
 
     // modifying the string
-    void Delete(long ich, long cch = kcchMaxStn);
-    bool FAppendRgch(const achar *prgchSrc, long cch);
+    void Delete(int32_t ich, int32_t cch = kcchMaxStn);
+    bool FAppendRgch(const achar *prgchSrc, int32_t cch);
     bool FAppendCh(achar chSrc)
     {
         return FAppendRgch(&chSrc, 1);
@@ -431,18 +431,18 @@ class STN
     {
         return FAppendRgch(pstnSrc->Prgch(), pstnSrc->Cch());
     }
-    bool FInsertRgch(long ich, const achar *prgchSrc, long cch);
-    bool FInsertCh(long ich, achar chSrc)
+    bool FInsertRgch(int32_t ich, const achar *prgchSrc, int32_t cch);
+    bool FInsertCh(int32_t ich, achar chSrc)
     {
         return FInsertRgch(ich, &chSrc, 1);
     }
-    bool FInsertStn(long ich, PSTN pstnSrc)
+    bool FInsertStn(int32_t ich, PSTN pstnSrc)
     {
         return FInsertRgch(ich, pstnSrc->Prgch(), pstnSrc->Cch());
     }
 
     // for testing equality
-    bool FEqualRgch(const achar *prgch, long cch);
+    bool FEqualRgch(const achar *prgch, int32_t cch);
     bool FEqualSz(const PSZ psz)
     {
         return FEqualRgch(psz, CchSz(psz));
@@ -451,7 +451,7 @@ class STN
     {
         return FEqualRgch(pstn->Prgch(), pstn->Cch());
     }
-    bool FEqualUserRgch(const achar *prgch, long cch, uint32_t grfstn = fstnIgnoreCase);
+    bool FEqualUserRgch(const achar *prgch, int32_t cch, uint32_t grfstn = fstnIgnoreCase);
     bool FEqualUserSz(const PSZ psz, uint32_t grfstn = fstnIgnoreCase)
     {
         return FEqualUserRgch(psz, CchSz(psz), grfstn);
@@ -472,16 +472,16 @@ class STN
     }
 
     // storing and retrieving strings to other buffers (or file).
-    long CbData(void);
+    int32_t CbData(void);
     void GetData(void *pv);
-    bool FSetData(void *pv, long cbMax, long *pcbRead = pvNil);
-    bool FWrite(PBLCK pblck, long ib);
-    bool FRead(PBLCK pblck, long ib, long *pcbRead = pvNil);
+    bool FSetData(void *pv, int32_t cbMax, int32_t *pcbRead = pvNil);
+    bool FWrite(PBLCK pblck, int32_t ib);
+    bool FRead(PBLCK pblck, int32_t ib, int32_t *pcbRead = pvNil);
 
     bool FFormat(PSTN pstnFormat, ...);
     bool FFormatSz(const PSZ pszFormat, ...);
-    bool FFormatRgch(const achar *prgchFormat, long cchFormat, uint32_t *prgluData);
-    bool FGetLw(long *plw, long lwBase = 0);
+    bool FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uint32_t *prgluData);
+    bool FGetLw(int32_t *plw, int32_t lwBase = 0);
     bool FExpandControls(void);
 };
 

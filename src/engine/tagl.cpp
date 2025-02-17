@@ -85,7 +85,7 @@ TAGL::~TAGL(void)
 /***************************************************************************
     Return the count of tags in the TAGL
 ***************************************************************************/
-long TAGL::Ctag(void)
+int32_t TAGL::Ctag(void)
 {
     AssertThis(0);
 
@@ -95,7 +95,7 @@ long TAGL::Ctag(void)
 /***************************************************************************
     Get the itag'th tag from the TAGL
 ***************************************************************************/
-void TAGL::GetTag(long itag, PTAG ptag)
+void TAGL::GetTag(int32_t itag, PTAG ptag)
 {
     AssertThis(0);
     AssertIn(itag, 0, Ctag());
@@ -114,15 +114,15 @@ void TAGL::GetTag(long itag, PTAG ptag)
     at which the tag should be inserted into the GG to maintain correct
     sorting order in the GG.
 ***************************************************************************/
-bool TAGL::_FFindTag(PTAG ptag, long *pitag)
+bool TAGL::_FFindTag(PTAG ptag, int32_t *pitag)
 {
     AssertThis(0);
     AssertVarMem(ptag);
     AssertVarMem(pitag);
 
     TAGF *qtagf;
-    long itagfMin, itagfLim, itagf;
-    long sid = ptag->sid;
+    int32_t itagfMin, itagfLim, itagf;
+    int32_t sid = ptag->sid;
     CTG ctg = ptag->ctg;
     CNO cno = ptag->cno;
 
@@ -169,7 +169,7 @@ bool TAGL::FInsertTag(PTAG ptag, bool fCacheChildren)
     AssertThis(0);
     AssertVarMem(ptag);
 
-    long itag;
+    int32_t itag;
     TAGF tagf;
 
     if (!_FFindTag(ptag, &itag))
@@ -201,11 +201,11 @@ bool TAGL::FInsertChild(PTAG ptag, CHID chid, CTG ctg)
     AssertThis(0);
     AssertVarMem(ptag);
 
-    long itagf;
+    int32_t itagf;
     CC ccNew;
     CC *prgcc;
-    long ccc; // count of CCs
-    long icc;
+    int32_t ccc; // count of CCs
+    int32_t icc;
 
     if (!_FFindTag(ptag, &itagf))
     {
@@ -249,10 +249,10 @@ bool TAGL::FCacheTags(void)
 {
     AssertThis(0);
 
-    long itagf;
+    int32_t itagf;
     TAGF tagf;
-    long ccc; // count of CCs
-    long icc;
+    int32_t ccc; // count of CCs
+    int32_t icc;
     CC cc;
     TAG tag;
 
