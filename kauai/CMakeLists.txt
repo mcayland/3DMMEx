@@ -479,6 +479,30 @@ gtest_discover_tests(KauaiTest)
 # Add a meta target to build all Kauai tools
 add_custom_target(tools)
 
+# Chomp compiler
+add_executable(chomp)
+target_sources(chomp
+    PRIVATE
+    "${PROJECT_SOURCE_DIR}/kauai/tools/chomp.cpp"
+)
+target_link_libraries(
+    chomp
+    PRIVATE
+    KauaiBase
+    KauaiChcm
+    KauaiSound
+    KauaiPic
+)
+add_dependencies(tools chomp)
+
+if (3DMM_GUI STREQUAL "Win32")
+    set(BUILD_KAUAI_TOOLS ON)
+else()
+    set(BUILD_KAUAI_TOOLS OFF)
+endif()
+
+if (BUILD_KAUAI_TOOLS)
+
 # Chelp: Help editor
 add_executable(chelp WIN32 EXCLUDE_FROM_ALL)
 target_sources(chelp PRIVATE
@@ -553,21 +577,6 @@ target_link_libraries(
     KauaiFile
 )
 add_dependencies(tools ut)
-
-# Chomp compiler
-add_executable(chomp)
-target_sources(chomp
-    PRIVATE
-    "${PROJECT_SOURCE_DIR}/kauai/tools/chomp.cpp"
-)
-target_link_libraries(
-    chomp
-    PRIVATE
-    KauaiBase
-    KauaiChcm
-    KauaiSound
-)
-add_dependencies(tools chomp)
 
 # Chunk Editor
 add_executable(ched WIN32 EXCLUDE_FROM_ALL)
@@ -658,3 +667,5 @@ target_link_libraries(chelpdmp
     KauaiChse
 )
 add_dependencies(tools chelpdmp)
+
+endif()
