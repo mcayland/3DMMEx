@@ -38,10 +38,10 @@ struct WIG
 
     HWND hwndApp;
     HDC hdcApp;
-    HWND hwndClient;     // MDI client window
-    HACCEL haccel;       // main accelerator table
-    HWND hwndNextViewer; // next clipboard viewer
-    int32_t lwThreadMain;   // main thread
+    HWND hwndClient;      // MDI client window
+    HACCEL haccel;        // main accelerator table
+    HWND hwndNextViewer;  // next clipboard viewer
+    int32_t lwThreadMain; // main thread
 };
 extern WIG vwig;
 #endif // WIN
@@ -106,16 +106,16 @@ class APPB : public APPB_PAR
     bool _fEndModal : 1;        // set to end the topmost modal loop
     bool _fFlushCursor : 1;     // flush cursor events when setting cursor position
 
-    PGL _pglmkrgn;        // list of marked regions for fast updating
+    PGL _pglmkrgn;           // list of marked regions for fast updating
     int32_t _onnDefFixed;    // default fixed pitch font
     int32_t _onnDefVariable; // default variable pitched font
-    PGPT _pgptOff;        // cached offscreen GPT for offscreen updates
+    PGPT _pgptOff;           // cached offscreen GPT for offscreen updates
     int32_t _dxpOff;         // size of the offscreen GPT
     int32_t _dypOff;
 
     int32_t _xpMouse; // location of mouse on last reported mouse move
     int32_t _ypMouse;
-    PGOB _pgobMouse;     // gob mouse was last over
+    PGOB _pgobMouse;        // gob mouse was last over
     uint32_t _grfcustMouse; // cursor state on last mouse move
 
     // for determining the multiplicity of a click
@@ -127,20 +127,20 @@ class APPB : public APPB_PAR
     uint32_t _dtsToolTip;    // time lag for tool tip
     PGOB _pgobToolTipTarget; // if there is a tool tip up, it's for this gob
 
-    PCURS _pcurs;     // current cursor
-    PCURS _pcursWait; // cursor to use for long operations
+    PCURS _pcurs;        // current cursor
+    PCURS _pcursWait;    // cursor to use for long operations
     int32_t _cactLongOp; // long operation count
-    uint32_t _grfcust; // current cursor state
+    uint32_t _grfcust;   // current cursor state
 
     int32_t _gft;     // transition to apply during next fast update
     int32_t _lwGft;   // parameter for transition
     uint32_t _dtsGft; // how much time to give the transition
-    PGL _pglclr;   // palette to transition to
-    ACR _acr;      // intermediate color to transition to
+    PGL _pglclr;      // palette to transition to
+    ACR _acr;         // intermediate color to transition to
 
     PGL _pglprop; // the properties
 
-    PGL _pglmodcx;   // The modal context stack
+    PGL _pglmodcx;      // The modal context stack
     int32_t _lwModal;   // Return value from modal loop
     int32_t _cactModal; // how deep we are in application loops
 
@@ -297,7 +297,8 @@ class APPB : public APPB_PAR
     virtual bool FGetProp(int32_t prid, int32_t *plw);
 
     // clipboard importing - normally only called by the clipboard object
-    virtual bool FImportClip(int32_t clfm, void *pv = pvNil, int32_t cb = 0, PDOCB *ppdocb = pvNil, bool *pfDelay = pvNil);
+    virtual bool FImportClip(int32_t clfm, void *pv = pvNil, int32_t cb = 0, PDOCB *ppdocb = pvNil,
+                             bool *pfDelay = pvNil);
 
     // reset tooltip tracking.
     virtual void ResetToolTip(void);

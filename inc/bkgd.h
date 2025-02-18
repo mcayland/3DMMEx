@@ -163,7 +163,7 @@ class BKGD : public BKGD_PAR
     int32_t Icam(void)
     {
         return _icam;
-    }                                        // currently selected camera
+    }                                           // currently selected camera
     bool FSetCamera(PBWLD pbwld, int32_t icam); // change camera to icam
 
     void GetMouseMatrix(BMAT34 *pbmat34);

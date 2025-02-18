@@ -707,7 +707,8 @@ int32_t MSMIX::VlmCur(void)
 /***************************************************************************
     Play the given midi stream from the indicated queue.
 ***************************************************************************/
-bool MSMIX::FPlay(PMSQUE pmsque, PMDWS pmdws, int32_t sii, int32_t spr, int32_t cactPlay, uint32_t dtsStart, int32_t vlm)
+bool MSMIX::FPlay(PMSQUE pmsque, PMDWS pmdws, int32_t sii, int32_t spr, int32_t cactPlay, uint32_t dtsStart,
+                  int32_t vlm)
 {
     AssertThis(0);
     AssertPo(pmsque, 0);

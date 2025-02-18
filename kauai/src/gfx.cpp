@@ -1849,7 +1849,8 @@ void GNV::Fade(int32_t cactMax, ACR acrFade, PGNV pgnvSrc, RC *prcSrc, RC *prcDs
     intermediate color of acrFill (if not clear).  xp, yp are the focus
     point of the iris (in destination coordinates).
 ***************************************************************************/
-void GNV::Iris(int32_t gfd, int32_t xp, int32_t yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts, PGL pglclr)
+void GNV::Iris(int32_t gfd, int32_t xp, int32_t yp, ACR acrFill, PGNV pgnvSrc, RC *prcSrc, RC *prcDst, uint32_t dts,
+               PGL pglclr)
 {
     AssertThis(0);
     AssertPo(&acrFill, 0);
@@ -2337,7 +2338,7 @@ bool OGN::_FAddEdge(AEI *paei)
     PT *prgptThis = (PT *)QvGet(0); // Already locked in PognTraceRgpt().
     int32_t iptEnd = (paei->ipt + paei->dipt) % IvMac();
     int32_t iptPenNew = IptFindLeftmost(paei->prgpt, paei->cpt, prgptThis[iptEnd].xp - prgptThis[paei->ipt].xp,
-                                     prgptThis[iptEnd].yp - prgptThis[paei->ipt].yp);
+                                        prgptThis[iptEnd].yp - prgptThis[paei->ipt].yp);
 
     // Add vertices from current to leftmost.
     if (paei->iptPenCur != iptPenNew)
@@ -2424,8 +2425,8 @@ OGN::OGN(void) : GL(SIZEOF(PT))
     This does a 2x stretch blt, clipped to prcClip and pregnClip. The
     clipping is expressed in destination coordinates.
 ***************************************************************************/
-void DoubleStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
-                   int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip)
+void DoubleStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst,
+                   int32_t dypDst, int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip)
 {
     AssertPvCb(prgbSrc, LwMul(cbRowSrc, dypSrc));
     AssertPvCb(prgbDst, LwMul(cbRowDst, dypDst));
@@ -2736,8 +2737,8 @@ LDone1:
     This does a 2x vertical and 1x horizontal stretch blt, clipped to prcClip
     and pregnClip. The clipping is expressed in destination coordinates.
 ***************************************************************************/
-void DoubleVertStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
-                       int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip)
+void DoubleVertStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst,
+                       int32_t cbRowDst, int32_t dypDst, int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip)
 {
     AssertPvCb(prgbSrc, LwMul(cbRowSrc, dypSrc));
     AssertPvCb(prgbDst, LwMul(cbRowDst, dypDst));

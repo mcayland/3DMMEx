@@ -747,8 +747,8 @@ PMSQ MSQ::PmsqNew(void)
     Enqueue a sound	in the MSQ.  Overwrites sounds of the same type.
 
 ***************************************************************************/
-bool MSQ::FEnqueue(PMSND pmsnd, int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr, uint32_t dtsStart,
-                   bool fLowPri)
+bool MSQ::FEnqueue(PMSND pmsnd, int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr,
+                   uint32_t dtsStart, bool fLowPri)
 {
     AssertThis(0);
     AssertPo(pmsnd, 0);

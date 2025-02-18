@@ -86,9 +86,9 @@ class MUB : public MUB_PAR
         PGL pgllw;
     };
 
-    HMENU _hmenu; // the menu bar
-    int32_t _cmnu;   // number of menus on the menu bar
-    PGL _pglmlst; // menu lists
+    HMENU _hmenu;  // the menu bar
+    int32_t _cmnu; // number of menus on the menu bar
+    PGL _pglmlst;  // menu lists
 
     bool _FInitLists(void);
     bool _FFindMlst(int32_t wcid, MLST *pmlst, int32_t *pimlst = pvNil);

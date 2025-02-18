@@ -97,7 +97,7 @@ class MSQUE : public MSQUE_PAR
     MARKMEM
 
   protected:
-    MUTX _mutx;     // restricts access to member variables
+    MUTX _mutx;        // restricts access to member variables
     uint32_t _tsStart; // when we started the current sound
     PMSMIX _pmsmix;
 
@@ -135,12 +135,12 @@ class MSMIX : public MSMIX_PAR
   protected:
     struct MSOS
     {
-        PMSQUE pmsque;  // the "channel" or queue that the sound is on
-        PMDWS pmdws;    // the sound
+        PMSQUE pmsque;     // the "channel" or queue that the sound is on
+        PMDWS pmdws;       // the sound
         int32_t sii;       // its sound id (for a priority tie breaker)
         int32_t spr;       // its priority
         int32_t cactPlay;  // how many times to play the sound
-        uint32_t dts;   // length of this sound
+        uint32_t dts;      // length of this sound
         uint32_t dtsStart; // position to start at
         int32_t vlm;       // volume to play at
         uint32_t tsStart;  // when we "started" the sound (minus dtsStart)
@@ -151,8 +151,8 @@ class MSMIX : public MSMIX_PAR
     HN _hevt; // to notify the thread that the sound list changed
     HN _hth;  // thread to terminate non-playing sounds
 
-    PMISI _pmisi; // the midi stream interface
-    PGL _pglmsos; // the list of current sounds, in priority order
+    PMISI _pmisi;    // the midi stream interface
+    PGL _pglmsos;    // the list of current sounds, in priority order
     int32_t _cpvOut; // number of buffers submitted (0, 1, or 2)
 
     PGL _pglmevKey;     // to accumulate state events for seeking

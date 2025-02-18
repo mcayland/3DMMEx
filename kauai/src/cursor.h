@@ -25,7 +25,7 @@ enum
 struct CURF
 {
     int32_t curt; // type of cursor
-    uint8_t xp; // hot spot
+    uint8_t xp;   // hot spot
     uint8_t yp;
     uint8_t dxp; // size - either 16 or 32 and they should match
     uint8_t dyp;

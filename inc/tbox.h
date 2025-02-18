@@ -155,7 +155,7 @@ class TBXG : public TBXG_PAR
     //
     // Scrolling
     //
-    bool FNeedToScroll(void);  // Does this text box need to scroll anything
+    bool FNeedToScroll(void);     // Does this text box need to scroll anything
     void Scroll(int32_t scaVert); // Scrolls to beginning or a single pixel only.
 
     //
@@ -210,13 +210,13 @@ class TBOX : public TBOX_PAR
     MARKMEM
 
   private:
-    PSCEN _pscen;    // The owning scene
+    PSCEN _pscen;       // The owning scene
     int32_t _nfrmFirst; // Frame the tbox appears in.
     int32_t _nfrmMax;   // Frame the tbox disappears in.
     int32_t _nfrmCur;   // Current frame number.
-    bool _fSel;      // Is this tbox selected?
-    bool _fStory;    // Is this a story text box.
-    RC _rc;          // Size of text box.
+    bool _fSel;         // Is this tbox selected?
+    bool _fStory;       // Is this a story text box.
+    RC _rc;             // Size of text box.
 
     TBOX(void) : TXRD()
     {

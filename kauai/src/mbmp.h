@@ -55,7 +55,7 @@ class MBMP : public MBMP_PAR
     // If fMask is true, the non-transparent pixels are not in _hqrgb. Instead,
     // all non-transparent pixels have the value bFill.
     int32_t _cbRgcb; // size of the rgcb portion of _hqrgb
-    HQ _hqrgb;    // MBMPH, short rgcb[_rc.Dyp()] followed by the pixel data
+    HQ _hqrgb;       // MBMPH, short rgcb[_rc.Dyp()] followed by the pixel data
 
     // MBMP header on file
     struct MBMPH
@@ -63,7 +63,7 @@ class MBMP : public MBMP_PAR
         int16_t bo;
         int16_t osk;
         uint8_t fMask;
-        uint8_t bFill;    // if fMask, the color value to use
+        uint8_t bFill;      // if fMask, the color value to use
         int16_t swReserved; // should be zero on file
         RC rc;
         int32_t cb; // length of whole chunk, including the header
@@ -73,8 +73,8 @@ class MBMP : public MBMP_PAR
     MBMP(void)
     {
     }
-    virtual bool _FInit(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef, uint8_t bTransparent,
-                        uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
+    virtual bool _FInit(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef,
+                        uint8_t bTransparent, uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 
     int16_t *_Qrgcb(void)
     {
@@ -88,8 +88,8 @@ class MBMP : public MBMP_PAR
   public:
     ~MBMP(void);
 
-    static PMBMP PmbmpNew(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef, uint8_t bTransparent,
-                          uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
+    static PMBMP PmbmpNew(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef,
+                          uint8_t bTransparent, uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
     static PMBMP PmbmpReadNative(FNI *pfni, uint8_t bTransparent = 0, int32_t xp = 0, int32_t yp = 0,
                                  uint32_t grfmbmp = fmbmpNil, uint8_t bDefault = 0);
 

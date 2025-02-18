@@ -113,16 +113,16 @@ const int32_t klwMagicChunky = BigLittle('CHN2', '2NHC'); // chunky file signatu
 // chunky file prefix
 struct CFP
 {
-    int32_t lwMagic;   // identifies this as a chunky file
-    CTG ctgCreator; // program that created this file
-    DVER dver;      // chunky file version
-    int16_t bo;     // byte order
-    int16_t osk;    // which system wrote this
+    int32_t lwMagic; // identifies this as a chunky file
+    CTG ctgCreator;  // program that created this file
+    DVER dver;       // chunky file version
+    int16_t bo;      // byte order
+    int16_t osk;     // which system wrote this
 
-    FP fpMac;     // logical end of file
-    FP fpIndex;   // location of chunky index
+    FP fpMac;        // logical end of file
+    FP fpIndex;      // location of chunky index
     int32_t cbIndex; // size of chunky index
-    FP fpMap;     // location of free space map
+    FP fpMap;        // location of free space map
     int32_t cbMap;   // size of free space map (may be 0)
 
     int32_t rglwReserved[23]; // reserved for future use - should be zero
@@ -154,8 +154,8 @@ enum
 const int32_t kcbMaxCrpbg = klwMax;
 struct CRPBG
 {
-    CKI cki;      // chunk id
-    FP fp;        // location on file
+    CKI cki;         // chunk id
+    FP fp;           // location on file
     int32_t cb;      // size of data on file
     int32_t ckid;    // number of owned chunks
     int32_t ccrpRef; // number of owners of this chunk
@@ -165,9 +165,9 @@ struct CRPBG
         {
             // for cvn <= kcvnMinGrfcrp
             uint8_t fOnExtra; // fcrpOnExtra
-            uint8_t fLoner;  // fcrpLoner
-            uint8_t fPacked; // fcrpPacked
-            uint8_t bT;    // fcrpMarkT
+            uint8_t fLoner;   // fcrpLoner
+            uint8_t fPacked;  // fcrpPacked
+            uint8_t bT;       // fcrpMarkT
         };
 
         // for cvn >= kcvnMinGrfcrp
@@ -219,11 +219,11 @@ const int32_t kcbitGrfcrp = 8;
 const uint32_t kgrfcrpAll = (1 << kcbitGrfcrp) - 1;
 struct CRPSM
 {
-    CKI cki;          // chunk id
-    FP fp;            // location on file
+    CKI cki;             // chunk id
+    FP fp;               // location on file
     uint32_t luGrfcrpCb; // low byte is the grfcrp, high 3 bytes is cb
-    uint16_t ckid;    // number of owned chunks
-    uint16_t ccrpRef; // number of owners of this chunk
+    uint16_t ckid;       // number of owned chunks
+    uint16_t ccrpRef;    // number of owners of this chunk
 
     int32_t BvRgch(void)
     {

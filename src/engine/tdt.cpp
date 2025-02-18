@@ -967,8 +967,8 @@ void TDT::_ApplyAction(BMAT34 *pbmat34, int32_t tda, int32_t ich, int32_t ccel, 
     character from the origin of the TDT).	dxrText is the width of the
     entire string.  dyr is the height of the font.
 ***************************************************************************/
-void TDT::_ApplyShape(BMAT34 *pbmat34, int32_t tdts, int32_t cch, int32_t ich, BRS xrChar, BRS dxrText, BRS yrChar, BRS dyrMax,
-                      BRS dyrTotal)
+void TDT::_ApplyShape(BMAT34 *pbmat34, int32_t tdts, int32_t cch, int32_t ich, BRS xrChar, BRS dxrText, BRS yrChar,
+                      BRS dyrMax, BRS dyrTotal)
 {
     AssertThis(0);
     AssertVarMem(pbmat34);

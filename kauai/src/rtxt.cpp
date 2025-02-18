@@ -2534,8 +2534,8 @@ bool TXRD::FReplaceRgch(void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel,
     using the given chp and pap. If ccpIns is zero, prgch can be nil. pchp
     and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, int32_t cpSrc, int32_t ccpIns, int32_t cp, int32_t ccpDel,
-                         PCHP pchp, PPAP ppap, uint32_t grfdoc)
+bool TXRD::_FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, int32_t cpSrc, int32_t ccpIns, int32_t cp,
+                         int32_t ccpDel, PCHP pchp, PPAP ppap, uint32_t grfdoc)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ccpIns, 0, kcbMax);
@@ -2674,7 +2674,8 @@ bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, int16_
     Replace cp to cp + ccpDel with the characters in the given FLO, using
     the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap, int16_t osk, uint32_t grfdoc)
+bool TXRD::FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap, int16_t osk,
+                       uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(pflo, 0);
@@ -2769,8 +2770,8 @@ bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t c
     Replace cp to cpDst + ccpDel with ccpSrc characters from pbsfSrc starting
     at cpSrc, using the given chp and pap. pchp and/or ppap can be nil.
 ***************************************************************************/
-bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp, PPAP ppap,
-                        uint32_t grfdoc)
+bool TXRD::FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp,
+                        PPAP ppap, uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPo(ptxtbSrc, 0);
@@ -2897,7 +2898,8 @@ bool TXRD::FReplaceTxrd(PTXRD ptxrd, int32_t cpSrc, int32_t ccpSrc, int32_t cpDs
     Copy properties from a TXRD to this one. Properties from sprmMin to
     sprmLim are copied.
 ***************************************************************************/
-void TXRD::_CopyProps(PTXRD ptxrd, int32_t cpSrc, int32_t cpDst, int32_t ccpSrc, int32_t ccpDst, uint8_t sprmMin, uint8_t sprmLim)
+void TXRD::_CopyProps(PTXRD ptxrd, int32_t cpSrc, int32_t cpDst, int32_t ccpSrc, int32_t ccpDst, uint8_t sprmMin,
+                      uint8_t sprmLim)
 {
     AssertThis(0);
     AssertPo(ptxrd, 0);

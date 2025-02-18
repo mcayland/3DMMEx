@@ -79,7 +79,7 @@ const auto kbTransparent = 250;
 struct SEV
 {
     int32_t nfrm; // frame number of the event.
-    SEVT sevt; // event type
+    SEVT sevt;    // event type
 };
 
 const auto kbomSev = 0xF0000000;
@@ -383,7 +383,7 @@ class SUNS : public SUNS_PAR
     ASSERT
 
   protected:
-    PSSE _psse; // may be pvNil
+    PSSE _psse;   // may be pvNil
     int32_t _sty; // sty to use if _psse is pvNil
 
     SUNS(void)

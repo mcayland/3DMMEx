@@ -34,13 +34,15 @@ class EDPAR
     EDPAR(void)
     {
     }
-    EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont, int32_t dypFont,
-          int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack, ACR acrBack = kacrWhite, int32_t cmhl = 0);
+    EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
+          int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack,
+          ACR acrBack = kacrWhite, int32_t cmhl = 0);
 
-    void Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont, int32_t dypFont,
-             int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack, ACR acrBack = kacrWhite, int32_t cmhl = 0);
-    void SetFont(int32_t onn, uint32_t grfont, int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack,
-                 ACR acrBack = kacrWhite);
+    void Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
+             int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack,
+             ACR acrBack = kacrWhite, int32_t cmhl = 0);
+    void SetFont(int32_t onn, uint32_t grfont, int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop,
+                 ACR acrFore = kacrBlack, ACR acrBack = kacrWhite);
 };
 
 /***************************************************************************

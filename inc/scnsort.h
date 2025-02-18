@@ -27,7 +27,7 @@ class SCRT : public SCRT_PAR
     static const TRANS _mplwtrans[];
 
     /* Obtained from the script */
-    int32_t _kidFrameMin; // kid of first frame GOK in the easel
+    int32_t _kidFrameMin;  // kid of first frame GOK in the easel
     int32_t _kidScbtnsMin; // kid of the first scroll button (scroll up)
     int32_t _cfrmPage;     // number of frame GOKs on the easel
     int32_t _cgokFrame;    // number of pieces to a frame GOK
@@ -36,11 +36,11 @@ class SCRT : public SCRT_PAR
     int32_t _iscenCur; // currently selected scene
     int32_t _iscenTop; // first scene visible in the browser
     int32_t _iscenMac; // number of scenes
-    PMVIE _pmvie;     // pointer to movie we're editing
-    CMVI _cmvi;       // Composite movie
-    bool _fError : 1, // Did an error occur during the easel?
-        _fInited : 1; // Have I seen the cidSceneSortInit yet?
-    PSTDIO _pstdio;   // The STDIO that instantiated me
+    PMVIE _pmvie;      // pointer to movie we're editing
+    CMVI _cmvi;        // Composite movie
+    bool _fError : 1,  // Did an error occur during the easel?
+        _fInited : 1;  // Have I seen the cidSceneSortInit yet?
+    PSTDIO _pstdio;    // The STDIO that instantiated me
 
   protected:
     int32_t _IscenFromKid(int32_t kid)

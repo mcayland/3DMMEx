@@ -37,7 +37,7 @@ class TATR : public TATR_PAR
 
   protected:
     int32_t _kidParent; // ID of gob parent of MVU
-    PMVIE _pmvie;    // Currently loaded movie
+    PMVIE _pmvie;       // Currently loaded movie
 
   protected:
     TATR(int32_t hid) : CMH(hid)

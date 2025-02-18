@@ -116,8 +116,8 @@ bool SPLC::_FEnsureDll(SC_LID sclid)
         goto LError;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, pvNil, &cb) ||
-        lwType != REG_SZ || cb >= SIZEOF(sz) ||
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, pvNil, &cb) || lwType != REG_SZ ||
+        cb >= SIZEOF(sz) ||
         ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, (uint8_t *)sz, &cb))
     {
         RegCloseKey(hkey);
@@ -176,8 +176,8 @@ bool SPLC::_FEnsureMainDict(SC_LID sclid, PFNI pfni)
         goto LError;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, pvNil, &cb) ||
-        lwType != REG_SZ || cb >= SIZEOF(sz) ||
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, pvNil, &cb) || lwType != REG_SZ ||
+        cb >= SIZEOF(sz) ||
         ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, (uint8_t *)sz, &cb))
     {
         RegCloseKey(hkey);

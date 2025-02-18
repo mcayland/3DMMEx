@@ -33,7 +33,7 @@ const uint32_t kbomTmapf = 0x54555000;
 /* A TeXture XransForm on File */
 typedef struct _txxff
 {
-    int16_t bo; // byte order
+    int16_t bo;  // byte order
     int16_t osk; // OS kind
     BMAT23 bmat23;
 } TXXFF, *PTXXFF;

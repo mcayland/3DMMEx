@@ -67,8 +67,8 @@ class CHR
     void _DoTab(void);
 
   public:
-    void Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, int32_t cpMin, int32_t cpLim, int32_t xpBase, int32_t xpLimLine,
-              int32_t xpBreak);
+    void Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, int32_t cpMin, int32_t cpLim, int32_t xpBase,
+              int32_t xpLimLine, int32_t xpBreak);
 
     void GetNextRun(bool fMustAdvance = fFalse);
     bool FBreak(void)
@@ -130,8 +130,8 @@ void CHR::AssertValid(uint32_t grf)
 /***************************************************************************
     Initialize the CHR.
 ***************************************************************************/
-void CHR::Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, int32_t cpMin, int32_t cpLim, int32_t xpBase, int32_t xpLimLine,
-               int32_t xpBreak)
+void CHR::Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, int32_t cpMin, int32_t cpLim, int32_t xpBase,
+               int32_t xpLimLine, int32_t xpBreak)
 {
     AssertVarMem(pchp);
     AssertVarMem(ppap);
@@ -1697,7 +1697,8 @@ void TXTG::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Draws some lines of the document.
 ***************************************************************************/
-void TXTG::DrawLines(PGNV pgnv, RC *prcClip, int32_t dxp, int32_t dyp, int32_t ilinMin, int32_t ilinLim, uint32_t grftxtg)
+void TXTG::DrawLines(PGNV pgnv, RC *prcClip, int32_t dxp, int32_t dyp, int32_t ilinMin, int32_t ilinLim,
+                     uint32_t grftxtg)
 {
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
@@ -2507,7 +2508,8 @@ void TXTG::GetNaturalSize(int32_t *pdxp, int32_t *pdyp)
 /***************************************************************************
     Constructor for the plain line text document display gob.
 ***************************************************************************/
-TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab) : TXLG_PAR(ptxtb, pgcb)
+TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab)
+    : TXLG_PAR(ptxtb, pgcb)
 {
     RC rc;
     achar ch = kchSpace;

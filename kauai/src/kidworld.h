@@ -36,10 +36,10 @@ struct CUME
     uint32_t grfcustMask; // what cursor states this CUME is good for
     uint32_t grfcust;
     uint32_t grfbitSno; // what button states this CUME is good for
-    CNO cnoCurs;     // the cursor to use
-    CHID chidScript; // execution script (absolute)
+    CNO cnoCurs;        // the cursor to use
+    CHID chidScript;    // execution script (absolute)
     int32_t cidDefault; // default command
-    CNO cnoTopic;    // tool tip topic
+    CNO cnoTopic;       // tool tip topic
 };
 VERIFY_STRUCT_SIZE(CUME, 28);
 

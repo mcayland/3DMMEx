@@ -127,14 +127,14 @@ class APP : public APP_PAR
     STN _stnProductShort; // Short version of product name
     STN _stnUser;         // User's name
     int32_t _sidProduct;
-    FNI _fniCurrentDir; // fni of current working directory
-    FNI _fniExe;        // fni of this executable file
-    FNI _fniMsKidsDir;  // e.g., \mskids
-    FNI _fniUsersDir;   // e.g., \mskids\users
-    FNI _fniMelanieDir; // e.g., \mskids\users\melanie
-    FNI _fniProductDir; // e.g., \mskids\3dmovie or \mskids\otherproduct
-    FNI _fniUserDir;    // User's preferred directory
-    FNI _fni3DMovieDir; // e.g., \mskids\3dMovie
+    FNI _fniCurrentDir;  // fni of current working directory
+    FNI _fniExe;         // fni of this executable file
+    FNI _fniMsKidsDir;   // e.g., \mskids
+    FNI _fniUsersDir;    // e.g., \mskids\users
+    FNI _fniMelanieDir;  // e.g., \mskids\users\melanie
+    FNI _fniProductDir;  // e.g., \mskids\3dmovie or \mskids\otherproduct
+    FNI _fniUserDir;     // User's preferred directory
+    FNI _fni3DMovieDir;  // e.g., \mskids\3dMovie
     int32_t _dypTextDef; // Default text height
 
     int32_t _cactDisable; // disable count for keyboard accelerators

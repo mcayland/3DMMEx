@@ -137,7 +137,8 @@ ZBMP::~ZBMP(void)
 /***************************************************************************
     Draw the ZBMP into prgbPixels
 ***************************************************************************/
-void ZBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip,
+                PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp));
@@ -198,7 +199,8 @@ void ZBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, 
     Draw the ZBMP into prgbPixels, squashing the clip region vertically by
     two (for BWLD's "half mode")
 ***************************************************************************/
-void ZBMP::DrawHalf(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::DrawHalf(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip,
+                    PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp / 2));

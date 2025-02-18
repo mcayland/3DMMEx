@@ -126,9 +126,9 @@ class CRF : public CRF_PAR
   protected:
     struct CRE
     {
-        PFNRPO pfnrpo;    // object reader
+        PFNRPO pfnrpo;       // object reader
         int32_t cactRelease; // the last time this object was released
-        BACO *pbaco;      // the object
+        BACO *pbaco;         // the object
         int32_t cb;          // size of data
     };
 

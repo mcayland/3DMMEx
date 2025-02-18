@@ -54,19 +54,19 @@ class APE : public APE_PAR
     CMD_MAP_DEC(APE)
 
   protected:
-    PBWLD _pbwld;       // BRender world to draw actor in
-    PTMPL _ptmpl;       // Template (or TDT) of the actor being previewed
-    PBODY _pbody;       // Body of the actor being previewed
-    APET _apet;         // Currently selected tool
-    PGL _pglgms;        // What materials are attached to what body part sets
-    int32_t _celn;      // Current cel of action
-    CLOK _clok;         // To time cel cycling
-    BLIT _blit;         // BRender light data
-    BACT _bact;         // BRender light actor
-    int32_t _anid;      // Current action ID
-    int32_t _iview;     // Current camera view
-    bool _fCycleCels;   // If cycling cels
-    PRCA _prca;         // resource source (for cursors)
+    PBWLD _pbwld;          // BRender world to draw actor in
+    PTMPL _ptmpl;          // Template (or TDT) of the actor being previewed
+    PBODY _pbody;          // Body of the actor being previewed
+    APET _apet;            // Currently selected tool
+    PGL _pglgms;           // What materials are attached to what body part sets
+    int32_t _celn;         // Current cel of action
+    CLOK _clok;            // To time cel cycling
+    BLIT _blit;            // BRender light data
+    BACT _bact;            // BRender light actor
+    int32_t _anid;         // Current action ID
+    int32_t _iview;        // Current camera view
+    bool _fCycleCels;      // If cycling cels
+    PRCA _prca;            // resource source (for cursors)
     int32_t _ibsetOnlyAcc; // ibset of accessory, if only one (else ivNil)
 
   protected:

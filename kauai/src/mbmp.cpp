@@ -33,8 +33,8 @@ MBMP::~MBMP(void)
     the upper-left corner).  bTransparent should be the pixel value for the
     transparent color for the MBMP.
 ***************************************************************************/
-PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef, uint8_t bTransparent,
-                     uint32_t grfmbmp, uint8_t bDefault)
+PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef,
+                     uint8_t bTransparent, uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -53,8 +53,8 @@ PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, i
 /***************************************************************************
     Initialize the MBMP based on the given pixels.
 ***************************************************************************/
-bool MBMP::_FInit(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef, uint8_t bTransparent,
-                  uint32_t grfmbmp, uint8_t bDefault)
+bool MBMP::_FInit(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef,
+                  uint8_t bTransparent, uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -528,7 +528,8 @@ bool MBMP::FReadMbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, in
             pfUpsideDown	--	fTrue if the bitmap is upside down
         returns fTrue if it succeeds
 ***************************************************************************/
-bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, int32_t *pdxp, int32_t *pdyp, bool *pfUpsideDown, uint8_t bTransparent)
+bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, int32_t *pdxp, int32_t *pdyp, bool *pfUpsideDown,
+                 uint8_t bTransparent)
 {
     AssertPo(pfni, ffniFile);
     AssertNilOrVarMem(pprgb);
@@ -566,9 +567,9 @@ bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, int32_t *pdxp, int32_
 
     fRle = (bmh.bmih.biCompression == BI_RLE8);
     cbSrc = bmh.bmih.biSizeImage;
-    if (((int32_t)bmh.bmfh.bfSize != fpMac) || bmh.bmfh.bfType != 'MB' || !FIn(bmh.bmfh.bfOffBits, SIZEOF(BMH), fpMac) ||
-        bmh.bmfh.bfReserved1 != 0 || bmh.bmfh.bfReserved2 != 0 || bmh.bmih.biSize != SIZEOF(bmh.bmih) ||
-        bmh.bmih.biPlanes != 1)
+    if (((int32_t)bmh.bmfh.bfSize != fpMac) || bmh.bmfh.bfType != 'MB' ||
+        !FIn(bmh.bmfh.bfOffBits, SIZEOF(BMH), fpMac) || bmh.bmfh.bfReserved1 != 0 || bmh.bmfh.bfReserved2 != 0 ||
+        bmh.bmih.biSize != SIZEOF(bmh.bmih) || bmh.bmih.biPlanes != 1)
     {
         Warn("bad bitmap file");
         goto LFail;
@@ -578,7 +579,8 @@ bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, int32_t *pdxp, int32_
         Warn("not an 8-bit bitmap");
         goto LFail;
     }
-    if (bmh.bmih.biCompression != BI_RGB && !fRle || cbSrc != fpMac - (int32_t)bmh.bmfh.bfOffBits && (cbSrc != 0 || fRle))
+    if (bmh.bmih.biCompression != BI_RGB && !fRle ||
+        cbSrc != fpMac - (int32_t)bmh.bmfh.bfOffBits && (cbSrc != 0 || fRle))
     {
         Warn("bad compression type or bitmap file is wrong length");
         goto LFail;

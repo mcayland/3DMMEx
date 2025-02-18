@@ -32,7 +32,7 @@ class MP : public MP_PAR
 
   protected:
     int32_t _cid; // cid to enqueue to apply selection
-    PCMH _pcmh; // command handler to enqueue command to
+    PCMH _pcmh;   // command handler to enqueue command to
 
   protected:
     virtual void _ApplySelection(int32_t ithumSelect, int32_t sid);
@@ -43,8 +43,8 @@ class MP : public MP_PAR
     bool _FInit(PRCA prca);
 
   public:
-    static PMP PmpNew(int32_t kidParent, int32_t kidMenu, PRCA prca, PCMD pcmd, BWS bws, int32_t ithumSelect, int32_t sidSelect,
-                      CKI ckiRoot, CTG ctg, PCMH pcmh, int32_t cid, bool fMoveTop);
+    static PMP PmpNew(int32_t kidParent, int32_t kidMenu, PRCA prca, PCMD pcmd, BWS bws, int32_t ithumSelect,
+                      int32_t sidSelect, CKI ckiRoot, CTG ctg, PCMH pcmh, int32_t cid, bool fMoveTop);
 
     virtual bool FCmdSelIdle(PCMD pcmd);
 };

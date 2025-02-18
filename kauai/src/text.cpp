@@ -25,8 +25,8 @@ const int32_t kdxpInsetSled = 2;
 /***************************************************************************
     Constructor for edit control parameter block.
 ***************************************************************************/
-EDPAR::EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont, int32_t dypFont,
-             int32_t tah, int32_t tav, ACR acrFore, ACR acrBack, int32_t cmhl)
+EDPAR::EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
+             int32_t dypFont, int32_t tah, int32_t tav, ACR acrFore, ACR acrBack, int32_t cmhl)
     : _gcb(hid, pgob, grfgob, gin, prcAbs, prcRel)
 {
     _onn = onn;
@@ -42,8 +42,8 @@ EDPAR::EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, R
 /***************************************************************************
     Set the data in the EDPAR.
 ***************************************************************************/
-void EDPAR::Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
-                int32_t dypFont, int32_t tah, int32_t tav, ACR acrFore, ACR acrBack, int32_t cmhl)
+void EDPAR::Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn,
+                uint32_t grfont, int32_t dypFont, int32_t tah, int32_t tav, ACR acrFore, ACR acrBack, int32_t cmhl)
 {
     _gcb.Set(hid, pgob, grfgob, gin, prcAbs, prcRel);
     _onn = onn;

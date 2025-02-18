@@ -205,7 +205,8 @@ bool BRWD::_FInitGok(PRCA prca, int32_t kid)
  * pcmd->rglw[3] = x,y offsets
  *
  ****************************************************/
-void BRWD::Init(PCMD pcmd, int32_t ithumSelect, int32_t ithumDisplay, PSTDIO pstdio, bool fWrapScroll, int32_t cthumScroll)
+void BRWD::Init(PCMD pcmd, int32_t ithumSelect, int32_t ithumDisplay, PSTDIO pstdio, bool fWrapScroll,
+                int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -2465,7 +2466,8 @@ void BRWT::SetGst(PGST pgst)
  * Initialize BRWT TGOB & text
  *
  ****************************************************/
-bool BRWT::FInit(PCMD pcmd, int32_t thumSelect, int32_t thumDisplay, PSTDIO pstdio, bool fWrapScroll, int32_t cthumScroll)
+bool BRWT::FInit(PCMD pcmd, int32_t thumSelect, int32_t thumDisplay, PSTDIO pstdio, bool fWrapScroll,
+                 int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);

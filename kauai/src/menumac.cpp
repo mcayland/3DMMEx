@@ -345,7 +345,7 @@ void MUB::Clean(void)
             {
                 // need the item name in a GG
                 GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
-                cch = (int32_t)*(uint8_t *)st;
+                cch = (int32_t) * (uint8_t *)st;
                 if ((cmd.pgg = GG::PggNew(0, 1, cch)) != pvNil)
                     AssertDo(cmd.pgg->FInsert(0, cch, st + 1), 0);
             }
@@ -451,7 +451,7 @@ bool MUB::_FGetCmdFromCode(int32_t lwCode, CMD *pcmd)
     {
         // need the item name in a GG
         GetItem(mnu.hnsmu, imni + 1, (uint8_t *)st);
-        cch = (int32_t)*(uint8_t *)st;
+        cch = (int32_t) * (uint8_t *)st;
         if (pvNil == (pcmd->pgg = GG::PggNew(0, 1, cch)))
             return fFalse;
         AssertDo(pcmd->pgg->FInsert(0, cch, st + 1), 0);

@@ -180,16 +180,16 @@ class LSND : public LSND_PAR
     MARKMEM
 
   protected:
-    PGL _pgltag;      // PGL in case of chained sounds
-    int32_t _vlm;     // Initial volume
-    int32_t _vlmNew;  // User can redefine with slider
-    bool _fLoop;      // Looping sound
-    int32_t _objID;   // Owner's object ID
-    int32_t _sty;     // Sound type
-    int32_t _kidVol;  // Kid of volume slider
-    int32_t _kidIcon; // Kid of sound-type icon
+    PGL _pgltag;         // PGL in case of chained sounds
+    int32_t _vlm;        // Initial volume
+    int32_t _vlmNew;     // User can redefine with slider
+    bool _fLoop;         // Looping sound
+    int32_t _objID;      // Owner's object ID
+    int32_t _sty;        // Sound type
+    int32_t _kidVol;     // Kid of volume slider
+    int32_t _kidIcon;    // Kid of sound-type icon
     int32_t _kidEditBox; // Kid of sound-name box
-    bool _fMatcher;   // Whether this is a motion-matched sound
+    bool _fMatcher;      // Whether this is a motion-matched sound
 
   public:
     LSND(void)
@@ -198,8 +198,8 @@ class LSND : public LSND_PAR
     }
     ~LSND(void);
 
-    bool FInit(int32_t sty, int32_t kidVol, int32_t kidIcon, int32_t kidEditBox, PGL *ppgltag, int32_t vlm, bool fLoop, int32_t objID,
-               bool fMatcher);
+    bool FInit(int32_t sty, int32_t kidVol, int32_t kidIcon, int32_t kidEditBox, PGL *ppgltag, int32_t vlm, bool fLoop,
+               int32_t objID, bool fMatcher);
     bool FValidSnd(void);
     void SetVlmNew(int32_t vlmNew)
     {
@@ -262,13 +262,13 @@ class ESLR : public ESLR_PAR
     CMD_MAP_DEC(ESLR)
 
   protected:
-    PMVIE _pmvie;      // The movie to insert sound into
-    bool _fSpeech;     // Recording Speech or SFX?
-    PEDSL _pedsl;      // Single-line edit control for sound name
-    PSREC _psrec;      // Sound recording object
-    CLOK _clok;        // Clock to limit sound length
-    bool _fRecording;  // Are we recording right now?
-    bool _fPlaying;    // Are we playing back the recording?
+    PMVIE _pmvie;         // The movie to insert sound into
+    bool _fSpeech;        // Recording Speech or SFX?
+    PEDSL _pedsl;         // Single-line edit control for sound name
+    PSREC _psrec;         // Sound recording object
+    CLOK _clok;           // Clock to limit sound length
+    bool _fRecording;     // Are we recording right now?
+    bool _fPlaying;       // Are we playing back the recording?
     uint32_t _tsStartRec; // Time at which we started recording
 
   protected:

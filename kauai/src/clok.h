@@ -47,7 +47,7 @@ class CLOK : public CLOK_PAR
     PCLOK _pclokNext;
     uint32_t _tsBase;
     uint32_t _timBase;
-    uint32_t _timCur; // current time
+    uint32_t _timCur;    // current time
     uint32_t _dtimAlarm; // processing alarms up to _timCur + _dtimAlarm
     uint32_t _timNext;   // next alarm time to process (for speed)
     uint32_t _grfclok;

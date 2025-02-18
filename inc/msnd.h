@@ -77,9 +77,9 @@ struct MSNDF
 {
     int16_t bo;
     int16_t osk;
-    int32_t sty;     // sound type
+    int32_t sty;        // sound type
     int32_t vlmDefault; // default volume
-    bool fInvalid;   // Invalid flag
+    bool fInvalid;      // Invalid flag
 };
 VERIFY_STRUCT_SIZE(MSNDF, 16);
 const BOM kbomMsndf = 0x5FC00000;
@@ -177,7 +177,8 @@ class MSND : public MSND_PAR
         return _fNoSound;
     }
 
-    void Play(int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr = fFalse, uint32_t dtsStart = 0);
+    void Play(int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr = fFalse,
+              uint32_t dtsStart = 0);
 };
 
 /****************************************
@@ -197,13 +198,13 @@ const int32_t kcsqeGrow = 10; // quantum growth for sqe
 // Movie sound queue entry
 struct SQE
 {
-    int32_t objID;  // Unique identifier (actor id, eg)
-    bool fLoop;     // Looping sound flag
-    bool fQueue;    // Queued sound
-    int32_t vlmMod; // Volume modification
-    int32_t spr;    // Priority
-    bool fActr;     // Actor vs Scene (to generate unique class)
-    PMSND pmsnd;    // PMSND
+    int32_t objID;     // Unique identifier (actor id, eg)
+    bool fLoop;        // Looping sound flag
+    bool fQueue;       // Queued sound
+    int32_t vlmMod;    // Volume modification
+    int32_t spr;       // Priority
+    bool fActr;        // Actor vs Scene (to generate unique class)
+    PMSND pmsnd;       // PMSND
     uint32_t dtsStart; // How far into the sound to start playing
 };
 
@@ -215,7 +216,7 @@ class MSQ : public MSQ_PAR
     CMD_MAP_DEC(MSQ)
 
   protected:
-    PGL _pglsqe; // Sound queue entries
+    PGL _pglsqe;   // Sound queue entries
     int32_t _dtim; // Time sound allowed to play
     PCLOK _pclok;
 

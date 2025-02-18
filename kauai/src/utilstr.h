@@ -188,7 +188,8 @@ uint32_t FcmpCompareRgch(const achar *prgch1, int32_t cch1, const achar *prgch2,
 /***************************************************************************
     User level (case insensitive, locale aware) comparison and sorting.
 ***************************************************************************/
-bool FEqualUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2, uint32_t grfstn = fstnIgnoreCase);
+bool FEqualUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2,
+                    uint32_t grfstn = fstnIgnoreCase);
 uint32_t FcmpCompareUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2,
                              uint32_t grfstn = fstnIgnoreCase);
 

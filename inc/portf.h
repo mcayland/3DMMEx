@@ -12,8 +12,9 @@
 
 // Top level portoflio routines.
 bool FPortGetFniMovieOpen(FNI *pfni);
-bool FPortDisplayWithIds(FNI *pfni, bool fOpen, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPCTSTR lpstrDefExt,
-                         PSTN pstnDefFileName, FNI *pfniInitialDir, uint32_t grfPrevType, CNO cnoWave);
+bool FPortDisplayWithIds(FNI *pfni, bool fOpen, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle,
+                         LPCTSTR lpstrDefExt, PSTN pstnDefFileName, FNI *pfniInitialDir, uint32_t grfPrevType,
+                         CNO cnoWave);
 bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pfniInitialDir, uint32_t grfPrevType,
                      CNO cnoWave);
 bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR lpstrDefExt, PSTN pstnDefFileName,
@@ -32,11 +33,11 @@ LRESULT CALLBACK SubClassDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 typedef struct dlginfo
 {
-    bool fIsOpen;      // fTrue if Open file, (ie not Save file)
-    bool fDrawnBkgnd;  // fTrue if portfolio background bitmap has been displayed.
-    RCS rcsDlg;        // Initial size of the portfolio common dlg window client area.
+    bool fIsOpen;         // fTrue if Open file, (ie not Save file)
+    bool fDrawnBkgnd;     // fTrue if portfolio background bitmap has been displayed.
+    RCS rcsDlg;           // Initial size of the portfolio common dlg window client area.
     uint32_t grfPrevType; // Bits for types of preview required, (eg movie, sound etc) == 0 if no preview
-    CNO cnoWave;       // Wave file cno for audio when portfolio is invoked.
+    CNO cnoWave;          // Wave file cno for audio when portfolio is invoked.
 } DLGINFO;
 typedef DLGINFO *PDLGINFO;
 

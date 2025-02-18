@@ -163,7 +163,8 @@ bool DOCG::_FRead(PBLCK pblck)
         if (idit != kiditOkGrpbNew)
             goto LFail;
 
-        if (!pdlg->FGetLwFromEdit(kiditSizeGrpbNew, &cb, &fEmpty) && !fEmpty || !FIn(cb, cbMin, kcbMax / SIZEOF(int32_t)))
+        if (!pdlg->FGetLwFromEdit(kiditSizeGrpbNew, &cb, &fEmpty) && !fEmpty ||
+            !FIn(cb, cbMin, kcbMax / SIZEOF(int32_t)))
         {
             goto LFail;
         }
@@ -1105,7 +1106,8 @@ bool DCGG::FCmdAddItem(PCMD pcmd)
     Constructor for the DCST class.  This class displays (and allows
     editing of) a GST or AST.
 ***************************************************************************/
-DCST::DCST(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb) : DCGB(pdocb, pgstb, cls, pgstb->CbExtra() > 0 ? 2 : 1, pgcb)
+DCST::DCST(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb)
+    : DCGB(pdocb, pgstb, cls, pgstb->CbExtra() > 0 ? 2 : 1, pgcb)
 {
 }
 

@@ -136,12 +136,12 @@ struct AROP
     int32_t clwFixed;   // number of fixed arguments
     int32_t clwVar;     // number of arguments per variable group
     int32_t cactMinVar; // minimum number of variable groups
-    bool fVoid;      // return a value?
+    bool fVoid;         // return a value?
 };
 
 // script version numbers
 // if you bump these, also bump the numbers in scrcomg.h
-const int16_t kswCurSccb = 0xA; // this version
+const int16_t kswCurSccb = 0xA;  // this version
 const int16_t kswBackSccb = 0xA; // we can be read back to this version
 const int16_t kswMinSccb = 0xA;  // we can read back to this version
 
@@ -183,22 +183,22 @@ class SCCB : public SCCB_PAR
         fsccTop = 2
     };
 
-    PLEXB _plexb;       // the lexer
-    PSCPT _pscpt;       // the script we're building
-    PGL _pgletnTree;    // expression tree (in-fix only)
-    PGL _pgletnStack;   // token stack for building expression tree (in-fix only)
-    PGL _pglcstd;       // control structure stack (in-fix only)
-    PGST _pgstNames;    // encountered names (in-fix only)
-    PGST _pgstLabel;    // encountered labels, sorted, extra long is label value
-    PGST _pgstReq;      // label references, extra long is address of reference
-    int32_t _ilwOpLast;    // address of the last opcode
-    int32_t _lwLastLabel;  // for internal temporary labels
-    bool _fError : 1;   // whether an error has occured during compiling
-    bool _fForceOp : 1; // when pushing a constant, make sure the last long
-                        // is an opcode (because a label references this loc)
-    bool _fHitEnd : 1;  // we've exhausted our input stream
-    int32_t _ttEnd;        // stop compiling when we see this
-    PMSNK _pmsnk;       // the message sink - for error reporting when compiling
+    PLEXB _plexb;         // the lexer
+    PSCPT _pscpt;         // the script we're building
+    PGL _pgletnTree;      // expression tree (in-fix only)
+    PGL _pgletnStack;     // token stack for building expression tree (in-fix only)
+    PGL _pglcstd;         // control structure stack (in-fix only)
+    PGST _pgstNames;      // encountered names (in-fix only)
+    PGST _pgstLabel;      // encountered labels, sorted, extra long is label value
+    PGST _pgstReq;        // label references, extra long is address of reference
+    int32_t _ilwOpLast;   // address of the last opcode
+    int32_t _lwLastLabel; // for internal temporary labels
+    bool _fError : 1;     // whether an error has occured during compiling
+    bool _fForceOp : 1;   // when pushing a constant, make sure the last long
+                          // is an opcode (because a label references this loc)
+    bool _fHitEnd : 1;    // we've exhausted our input stream
+    int32_t _ttEnd;       // stop compiling when we see this
+    PMSNK _pmsnk;         // the message sink - for error reporting when compiling
 
     bool _FInit(PLEXB plexb, bool fInFix, PMSNK pmsnk);
     void _Free(void);
@@ -234,7 +234,8 @@ class SCCB : public SCCB_PAR
     bool _FResolveToOpl(int32_t opl, int32_t oplMin, int32_t *pietn);
     void _EmitCode(int32_t ietnTop, uint32_t grfscc, int32_t *pclwArg);
     void _EmitVarAccess(int32_t ietn, RTVN *prtvn, int32_t *popPush, int32_t *popPop, int32_t *pclwStack);
-    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar, bool *pfVoid);
+    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                                 bool *pfVoid);
     bool _FGetArop(PSTN pstn, AROP *prgarop, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
                    bool *pfVoid);
     void _PushLabelRequestIetn(int32_t ietn);

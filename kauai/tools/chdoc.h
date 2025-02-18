@@ -287,7 +287,7 @@ class DCLB : public DCLB_PAR
     ASSERT
 
   protected:
-    int32_t _onn;    // fixed width font to use
+    int32_t _onn;       // fixed width font to use
     int32_t _dypHeader; // height of the header
     int32_t _dypLine;   // height of one line
     int32_t _dxpChar;   // width of a character
@@ -405,8 +405,8 @@ class DCD : public DCD_PAR
 
   protected:
     int32_t _dypBorder; // height of border (included in _dypLine)
-    PCFL _pcfl;      // the chunky file
-    SEL _sel;        // the current selection
+    PCFL _pcfl;         // the chunky file
+    SEL _sel;           // the current selection
 
     DCD(PDOCB pdocb, PCFL pcfl, PGCB pgcb);
     void _DrawSel(PGNV pgnv);
@@ -477,7 +477,7 @@ class DCH : public DCH_PAR
     MARKMEM
 
   protected:
-    PBSF _pbsf;   // the byte stream
+    PBSF _pbsf;      // the byte stream
     int32_t _cbLine; // number of bytes per line
 
     // the selection
@@ -546,9 +546,9 @@ class DCGB : public DCGB_PAR
     int32_t _clnItem;   // number of lines for each item
     int32_t _ivCur;     // which item is selected
     int32_t _dlnCur;    // which line in the item is selected
-    PGRPB _pgrpb;     // the group we're displaying
+    PGRPB _pgrpb;       // the group we're displaying
     int32_t _cls;       // the class of the group
-    bool _fAllocated; // whether the class is allocated or general
+    bool _fAllocated;   // whether the class is allocated or general
 
     DCGB(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t clnItem, PGCB pgcb);
 

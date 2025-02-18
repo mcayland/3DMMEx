@@ -97,9 +97,9 @@ class ACTN : public ACTN_PAR
     MARKMEM
 
   protected:
-    PGG _pggcel;    // GG of CELs; variable part is a rgcps[]
-    PGL _pglbmat34; // GL of transformation matrices used in this action
-    PGL _pgltagSnd; // GL of motion-match sounds for this action
+    PGG _pggcel;       // GG of CELs; variable part is a rgcps[]
+    PGL _pglbmat34;    // GL of transformation matrices used in this action
+    PGL _pgltagSnd;    // GL of motion-match sounds for this action
     uint32_t _grfactn; // various flags for this action
 
   protected:

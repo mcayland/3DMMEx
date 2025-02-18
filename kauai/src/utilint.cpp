@@ -325,7 +325,7 @@ int32_t LwRoundClosest(int32_t lwSrc, int32_t lwBase)
 uint32_t FcmpCompareFracs(int32_t lwNum1, int32_t lwDen1, int32_t lwNum2, int32_t lwDen2)
 {
     int32_t lwHigh1, lwHigh2; // must be signed
-    uint32_t luLow1, luLow2; // must be unsigned
+    uint32_t luLow1, luLow2;  // must be unsigned
 
     MulLw(lwNum1, lwDen2, &lwHigh1, &luLow1);
     MulLw(lwNum2, lwDen1, &lwHigh2, &luLow2);
@@ -1047,7 +1047,8 @@ void RC::SetToCell(RC *prcSrc, int32_t crcWidth, int32_t crcHeight, int32_t ircW
     Determines which cell the given (xp, yp) is in.  This is essentially
     the inverse of SetToCell.
 ***************************************************************************/
-bool RC::FMapToCell(int32_t xp, int32_t yp, int32_t crcWidth, int32_t crcHeight, int32_t *pircWidth, int32_t *pircHeight)
+bool RC::FMapToCell(int32_t xp, int32_t yp, int32_t crcWidth, int32_t crcHeight, int32_t *pircWidth,
+                    int32_t *pircHeight)
 {
     AssertThisMem();
     AssertIn(crcWidth, 1, kcbMax);

@@ -20,7 +20,8 @@ ASSERTNAME
     the reference point of the MBMP.  The drawing will be clipped to both
     prcClip and pregnClip, which may be nil.
 ***************************************************************************/
-void MBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip, PREGN pregnClip)
+void MBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip,
+                PREGN pregnClip)
 {
     AssertThis(0);
     AssertIn(cbRow, 1, kcbMax);

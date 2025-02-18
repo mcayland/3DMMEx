@@ -19,15 +19,15 @@ ASSERTNAME
 struct HQH
 {
 #ifdef DEBUG
-    short swMagic;   // to detect memory trashing
-    short cactRef;   // for marking memory
-    schar *pszsFile; // source file that allocation request is coming from
-    int32_t lwLine;     // line in file that allocation request is coming from
-    HQ hqPrev;       // previous hq in doubly linked list
-    HQ hqNext;       // next hq in doubly linked list
-#endif               // DEBUG
-    uint8_t cactLock;   // lock count
-    uint8_t cbExtra;    // count of extra bytes
+    short swMagic;    // to detect memory trashing
+    short cactRef;    // for marking memory
+    schar *pszsFile;  // source file that allocation request is coming from
+    int32_t lwLine;   // line in file that allocation request is coming from
+    HQ hqPrev;        // previous hq in doubly linked list
+    HQ hqNext;        // next hq in doubly linked list
+#endif                // DEBUG
+    uint8_t cactLock; // lock count
+    uint8_t cbExtra;  // count of extra bytes
 };
 
 #ifdef DEBUG

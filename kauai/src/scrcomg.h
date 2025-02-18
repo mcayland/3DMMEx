@@ -142,7 +142,7 @@ enum
     kopLimSccg
 };
 
-const int16_t kswCurSccg = 0x101D; // this version
+const int16_t kswCurSccg = 0x101D;  // this version
 const int16_t kswBackSccg = 0x101D; // we can be read back to this version
 const int16_t kswMinSccg = 0x1015;  // we can read back to this version
 
@@ -162,7 +162,8 @@ class SCCG : public SCCG_PAR
     virtual int16_t _SwMin(void);
 
     virtual int32_t _OpFromStn(PSTN pstn);
-    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar, bool *pfVoid);
+    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                                 bool *pfVoid);
     virtual bool _FGetStnFromOp(int32_t op, PSTN pstn);
 };
 

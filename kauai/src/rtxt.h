@@ -22,12 +22,12 @@
 ***************************************************************************/
 struct CHP
 {
-    uint32_t grfont; // bold, italic, etc
+    uint32_t grfont;   // bold, italic, etc
     int32_t onn;       // which font
     int32_t dypFont;   // size of the font
     int32_t dypOffset; // sub/superscript (-128 to 127)
-    ACR acrFore;    // text color
-    ACR acrBack;    // background color
+    ACR acrFore;       // text color
+    ACR acrBack;       // background color
 
     void Clear(void)
     {
@@ -144,10 +144,12 @@ class TXTB : public TXTB_PAR
     virtual void SetDxpDef(int32_t dxp);
 
     virtual void FetchRgch(int32_t cp, int32_t ccp, achar *prgch);
-    virtual bool FReplaceRgch(const void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, uint32_t grfdoc = fdocUpdate);
+    virtual bool FReplaceRgch(const void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel,
+                              uint32_t grfdoc = fdocUpdate);
     virtual bool FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, int16_t osk = koskCur,
                              uint32_t grfdoc = fdocUpdate);
-    virtual bool FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc = fdocUpdate);
+    virtual bool FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel,
+                             uint32_t grfdoc = fdocUpdate);
     virtual bool FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel,
                               uint32_t grfdoc = fdocUpdate);
     virtual bool FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc);
@@ -254,7 +256,7 @@ class TXRD : public TXRD_PAR
     {
         uint32_t spcp; // sprm in the high byte and cp in the low 3 bytes
         int32_t lw;    // the associated value - meaning depends on the sprm,
-                    // but 0 is _always_ the default
+                       // but 0 is _always_ the default
     };
     VERIFY_STRUCT_SIZE(MPE, 8);
 
@@ -287,7 +289,7 @@ class TXRD : public TXRD_PAR
     int32_t _onnDef; // default font and font size
     int32_t _dypFontDef;
     int16_t _oskFont; // osk for the default font
-    STN _stnFontDef; // name of default font
+    STN _stnFontDef;  // name of default font
 
     // cached CHP and PAP (from FetchChp and FetchPap)
     CHP _chp;
@@ -317,7 +319,8 @@ class TXRD : public TXRD_PAR
         return (int32_t)(spcp & 0x00FFFFFF);
     }
     bool _FFindMpe(uint32_t spcp, MPE *pmpe, int32_t *pcpLim = pvNil, int32_t *pimpe = pvNil);
-    bool _FFetchProp(int32_t impe, uint8_t *psprm, int32_t *plw = pvNil, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
+    bool _FFetchProp(int32_t impe, uint8_t *psprm, int32_t *plw = pvNil, int32_t *pcpMin = pvNil,
+                     int32_t *pcpLim = pvNil);
     bool _FEnsureInAg(uint8_t sprm, void *pv, int32_t cb, int32_t *pjv);
     void _ReleaseInAg(int32_t jv);
     void _AddRefInAg(int32_t jv);
@@ -331,13 +334,14 @@ class TXRD : public TXRD_PAR
     void _ApplyRgspvm(int32_t cp, int32_t ccp, SPVM *prgspvm, int32_t cspvm);
     void _GetParaBounds(int32_t *pcpMin, int32_t *pccp, bool fExpand);
     void _AdjustMpe(int32_t cp, int32_t ccpIns, int32_t ccpDel);
-    void _CopyProps(PTXRD ptxrd, int32_t cpSrc, int32_t cpDst, int32_t ccpSrc, int32_t ccpDst, uint8_t sprmMin, uint8_t sprmLim);
+    void _CopyProps(PTXRD ptxrd, int32_t cpSrc, int32_t cpDst, int32_t ccpSrc, int32_t ccpDst, uint8_t sprmMin,
+                    uint8_t sprmLim);
 
     virtual bool _FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
     virtual bool _FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip);
 
-    bool _FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, int32_t cpSrc, int32_t ccpIns, int32_t cp, int32_t ccpDel,
-                       PCHP pchp, PPAP ppap, uint32_t grfdoc);
+    bool _FReplaceCore(void *prgch, PFLO pflo, bool fCopy, PBSF pbsf, int32_t cpSrc, int32_t ccpIns, int32_t cp,
+                       int32_t ccpDel, PCHP pchp, PPAP ppap, uint32_t grfdoc);
 
     static bool _FSprmInAg(uint8_t sprm);
 
@@ -363,16 +367,18 @@ class TXRD : public TXRD_PAR
                               uint32_t grfdoc = fdocUpdate);
     bool FReplaceRgch(void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil,
                       uint32_t grfdoc = fdocUpdate);
-    bool FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil, int16_t osk = koskCur,
-                     uint32_t grfdoc = fdocUpdate);
-    bool FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil,
-                     uint32_t grfdoc = fdocUpdate);
-    bool FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil,
+    bool FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil,
+                     int16_t osk = koskCur, uint32_t grfdoc = fdocUpdate);
+    bool FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp,
+                     PPAP ppap = pvNil, uint32_t grfdoc = fdocUpdate);
+    bool FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, PCHP pchp,
+                      PPAP ppap = pvNil, uint32_t grfdoc = fdocUpdate);
+    bool FReplaceTxrd(PTXRD ptxrd, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel,
                       uint32_t grfdoc = fdocUpdate);
-    bool FReplaceTxrd(PTXRD ptxrd, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel, uint32_t grfdoc = fdocUpdate);
 
     bool FFetchObject(int32_t cpMin, int32_t *pcp, void **ppv = pvNil, int32_t *pcb = pvNil);
-    virtual bool FInsertObject(void *pv, int32_t cb, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil, uint32_t grfdoc = fdocUpdate);
+    virtual bool FInsertObject(void *pv, int32_t cb, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil,
+                               uint32_t grfdoc = fdocUpdate);
     virtual bool FApplyObjectProps(void *pv, int32_t cb, int32_t cp, uint32_t grfdoc = fdocUpdate);
 
     virtual bool FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc);
@@ -402,7 +408,7 @@ class RTUN : public RTUN_PAR
 
   protected:
     int32_t _cactCombine; // RTUNs with different values can't be combined
-    PTXRD _ptxrd;      // copy of replaced text
+    PTXRD _ptxrd;         // copy of replaced text
     int32_t _cpMin;       // where the text came from in the original RTXD
     int32_t _ccpIns;      // how many characters the original text was replaced with
 
@@ -483,7 +489,8 @@ class TXTG : public TXTG_PAR
     virtual void _FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) = 0;
 
     void _CalcLine(int32_t cpMin, int32_t dyp, LIN *plin);
-    void _Reformat(int32_t cp, int32_t ccpIns, int32_t ccpDel, int32_t *pyp = pvNil, int32_t *pdypIns = pvNil, int32_t *pdypDel = pvNil);
+    void _Reformat(int32_t cp, int32_t ccpIns, int32_t ccpDel, int32_t *pyp = pvNil, int32_t *pdypIns = pvNil,
+                   int32_t *pdypDel = pvNil);
     void _ReformatAndDraw(int32_t cp, int32_t ccpIns, int32_t ccpDel);
 
     void _FetchLin(int32_t ilin, LIN *plin, int32_t *pilinActual = pvNil);
@@ -492,7 +499,8 @@ class TXTG : public TXTG_PAR
 
     bool _FGetCpFromPt(int32_t xp, int32_t yp, int32_t *pcp, bool fClosest = fTrue);
     bool _FGetCpFromXp(int32_t xp, LIN *plin, int32_t *pcp, bool fClosest = fTrue);
-    void _GetXpYpFromCp(int32_t cp, int32_t *pypMin, int32_t *pypLim, int32_t *pxp, int32_t *pdypBaseLine = pvNil, bool fView = fTrue);
+    void _GetXpYpFromCp(int32_t cp, int32_t *pypMin, int32_t *pypLim, int32_t *pxp, int32_t *pdypBaseLine = pvNil,
+                        bool fView = fTrue);
     int32_t _DxpFromCp(int32_t cpLine, int32_t cp);
     void _SwitchSel(bool fOn, int32_t gin = kginDraw);
     void _InvertSel(PGNV pgnv, int32_t gin = kginDraw);

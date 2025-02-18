@@ -162,9 +162,9 @@ const int16_t kcvnMin = 1;
 //
 struct MFP
 {
-    int16_t bo; // byte order
+    int16_t bo;  // byte order
     int16_t osk; // which system wrote this
-    DVER dver; // chunky file version
+    DVER dver;   // chunky file version
 };
 const BOM kbomMfp = 0x55000000;
 

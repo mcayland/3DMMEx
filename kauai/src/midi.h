@@ -20,12 +20,12 @@ typedef class MIDS *PMIDS;
 // midi event
 struct MIDEV
 {
-    uint32_t ts;  // time stamp of this event
+    uint32_t ts;     // time stamp of this event
     int32_t cb;      // number of bytes to send (in rgbSend)
     int32_t lwTempo; // the current tempo - at a tempo change, cb will be 0
     union {
         uint8_t rgbSend[4]; // bytes to send if pvLong is nil
-        int32_t lwSend;        // for convenience
+        int32_t lwSend;     // for convenience
     };
 };
 typedef MIDEV *PMIDEV;

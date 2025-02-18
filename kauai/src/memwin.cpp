@@ -19,7 +19,7 @@ struct HQH
     int32_t cactLock; // lock count
 #ifdef DEBUG
     int32_t lwMagic; // for detecting memory trashing
-#endif            // DEBUG
+#endif               // DEBUG
 };
 
 #ifdef DEBUG

@@ -31,7 +31,8 @@ class CODC : public CODC_PAR
 
     // Decompression should be extremely fast. Compression may be
     // (painfully) slow.
-    virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst) = 0;
+    virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst,
+                          int32_t *pcbDst) = 0;
 };
 
 /***************************************************************************
@@ -115,7 +116,8 @@ class KCDC : public KCDC_PAR
     {
         return kcfmtKauai2 == cfmt || kcfmtKauai == cfmt;
     }
-    virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
+    virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst,
+                          int32_t *pcbDst);
 };
 
 #endif //! CODEC_H

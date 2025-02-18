@@ -533,8 +533,8 @@ void BWLD::Prerender(void)
 
     Render();
 
-    _pzbmpWorking->Draw((uint8_t *)_pzbmpBackground->Prgb(), _pzbmpBackground->CbRow(), _rcBuffer.Dyp(), 0, 0, &_rcBuffer,
-                        pvNil);
+    _pzbmpWorking->Draw((uint8_t *)_pzbmpBackground->Prgb(), _pzbmpBackground->CbRow(), _rcBuffer.Dyp(), 0, 0,
+                        &_rcBuffer, pvNil);
 
     // Need to detach _pzbmpBackground from the CRF so when we unprerender,
     // a fresh copy of the ZBMP is fetched

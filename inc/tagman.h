@@ -54,9 +54,9 @@ struct TAG
 #endif // DEBUG
 
     int32_t sid; // Source ID (or ksidUseCrf)
-    PCRF pcrf; // File to look in for this chunk if sid is ksidUseCrf
-    CTG ctg;   // CTG of chunk
-    CNO cno;   // CNO of chunk
+    PCRF pcrf;   // File to look in for this chunk if sid is ksidUseCrf
+    CTG ctg;     // CTG of chunk
+    CNO cno;     // CNO of chunk
 };
 VERIFY_STRUCT_SIZE(TAG, 16);
 const BOM kbomTag = 0xFF000000;

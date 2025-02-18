@@ -32,9 +32,9 @@ class SCEG : public SCEG_PAR
     // thru _PgobThis.  When something is done that may cause the gob to be
     // freed (such as calling another script), set this to nil.
     PGOB _pgob;
-    int32_t _hid;    // the handler id of the initialization gob
-    int32_t _grid;   // the unique gob run-time id of the initialization gob
-    PWOKS _pwoks; // the kidspace world this script belongs to
+    int32_t _hid;  // the handler id of the initialization gob
+    int32_t _grid; // the unique gob run-time id of the initialization gob
+    PWOKS _pwoks;  // the kidspace world this script belongs to
 
     virtual PGOB _PgobThis(void);
     virtual PGOB _PgobFromHid(int32_t hid);

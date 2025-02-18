@@ -577,7 +577,8 @@ class RC
     int32_t LwArea(void);
     bool FContains(RC *prc);
     void SetToCell(RC *prcSrc, int32_t crcWidth, int32_t crcHeight, int32_t ircWidth, int32_t ircHeight);
-    bool FMapToCell(int32_t xp, int32_t yp, int32_t crcWidth, int32_t crcHeight, int32_t *pircWidth, int32_t *pircHeight);
+    bool FMapToCell(int32_t xp, int32_t yp, int32_t crcWidth, int32_t crcHeight, int32_t *pircWidth,
+                    int32_t *pircHeight);
 };
 
 /****************************************

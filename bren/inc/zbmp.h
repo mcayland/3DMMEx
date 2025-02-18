@@ -40,7 +40,7 @@ class ZBMP : public ZBMP_PAR
     MARKMEM
 
   protected:
-    RC _rc;      // bounding rectangle of ZBMP
+    RC _rc;         // bounding rectangle of ZBMP
     int32_t _cbRow; // bytes per row
     int32_t _cb;    // count of bytes in Z buffer
     uint8_t *_prgb; // Z buffer

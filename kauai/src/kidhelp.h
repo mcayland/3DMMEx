@@ -44,7 +44,7 @@ struct HTOPF
 // edit control object
 struct ECOS
 {
-    CTG ctg;  // kctgEditControl
+    CTG ctg;     // kctgEditControl
     int32_t dxp; // width
 };
 
@@ -93,15 +93,15 @@ class TXHD : public TXHD_PAR
 
     bool FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil,
                         uint32_t grfdoc = fdocUpdate);
-    bool FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil,
-                       uint32_t grfdoc = fdocUpdate);
+    bool FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel,
+                       PCHP pchp = pvNil, uint32_t grfdoc = fdocUpdate);
     PRCA Prca(void)
     {
         return _prca;
     }
     bool FGroupText(int32_t cp1, int32_t cp2, uint8_t bGroup, CNO cnoTopic = cnoNil, PSTN pstnTopic = pvNil);
-    bool FGrouped(int32_t cp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil,
-                  PSTN pstnTopic = pvNil);
+    bool FGrouped(int32_t cp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil, uint8_t *pbGroup = pvNil,
+                  CNO *pcnoTopic = pvNil, PSTN pstnTopic = pvNil);
 
     void GetHtop(PHTOP phtop);
     void SetHtop(PHTOP phtop);

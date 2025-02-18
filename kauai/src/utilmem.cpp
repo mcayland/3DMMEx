@@ -26,14 +26,14 @@ const int32_t kclwStackMbh = 5;
 struct MBH
 {
     int32_t cb;                      // size of block, including header and footer
-    PSZS pszsFile;                // source file that allocation request is coming from
+    PSZS pszsFile;                   // source file that allocation request is coming from
     int32_t lwLine;                  // line in file that allocation request is coming from
     int32_t lwThread;                // thread id
-    MBH *pmbhPrev;                // previous allocated block (in doubly linked list)
-    MBH *pmbhNext;                // next allocated block
+    MBH *pmbhPrev;                   // previous allocated block (in doubly linked list)
+    MBH *pmbhNext;                   // next allocated block
     int32_t rglwStack[kclwStackMbh]; // the EBP/A6 chain
-    int16_t cactRef;              // for marking memory
-    int16_t swMagic;              // magic number, to detect memory trashing
+    int16_t cactRef;                 // for marking memory
+    int16_t swMagic;                 // magic number, to detect memory trashing
 };
 
 // memory block footer

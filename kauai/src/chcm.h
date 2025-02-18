@@ -194,14 +194,14 @@ class CHCM : public CHCM_PAR
     PCFL _pcfl;       // current sub file
     PGL _pglckiLoner; // the chunks that must be loners
 
-    BSF _bsf;     // temporary buffer for the chunk data
-    PCHLX _pchlx; // lexer for compiling
-    int32_t _sm;     // current string mode
-    int32_t _cbNum;  // current numerical size (1, 2, or 4)
-    int16_t _bo;  // current byte order and osk
+    BSF _bsf;       // temporary buffer for the chunk data
+    PCHLX _pchlx;   // lexer for compiling
+    int32_t _sm;    // current string mode
+    int32_t _cbNum; // current numerical size (1, 2, or 4)
+    int16_t _bo;    // current byte order and osk
     int16_t _osk;
-    PMSNK _pmsnkError; // error message sink
-    int32_t _cactError;   // how many errors we've encountered
+    PMSNK _pmsnkError;  // error message sink
+    int32_t _cactError; // how many errors we've encountered
 
   protected:
     struct PHP // parenthesized header parameter
@@ -272,10 +272,10 @@ class CHDC : public CHDC_PAR
     NOCOPY(CHDC)
 
   protected:
-    int32_t _ert;  // error type
-    PCFL _pcfl; // the chunky file to read from
-    BSF _bsf;   // temporary buffer for the chunk data
-    int16_t _bo; // current byte order and osk
+    int32_t _ert; // error type
+    PCFL _pcfl;   // the chunky file to read from
+    BSF _bsf;     // temporary buffer for the chunk data
+    int16_t _bo;  // current byte order and osk
     int16_t _osk;
     CHSE _chse; // chunky source emitter
 

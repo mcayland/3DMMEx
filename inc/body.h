@@ -57,15 +57,15 @@ class BODY : public BODY_PAR
     PBACT _PbactHilite(void) // ptr to hilite BACT
     {
         return _prgbact + 1;
-    }                            // skip root BACT
+    }                               // skip root BACT
     PBACT _PbactPart(int32_t ipart) // ptr to ipart'th body part
     {
         return _prgbact + 1 + 1 + ipart;
-    }                 // skip root and hilite BACTs
+    }                    // skip root and hilite BACTs
     int32_t _Cbact(void) // count in _prgbact
     {
         return 1 + 1 + _cbactPart;
-    }                       // root, hilite, and body part BACTs
+    }                             // root, hilite, and body part BACTs
     int32_t _Ibset(int32_t ipart) // body part set that this part belongs to
     {
         return *(int16_t *)_pglibset->QvGet(ipart);
@@ -137,7 +137,7 @@ class COST : public COST_PAR
 
   private:
     int32_t _cbset; // count of body part sets in _prgpo
-    BASE **_prgpo; // array of MTRLs and CMTLs
+    BASE **_prgpo;  // array of MTRLs and CMTLs
 
   private:
     void _Clear(void); // release _prgpo and material references

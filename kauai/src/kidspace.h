@@ -310,10 +310,10 @@ class GOK : public GOK_PAR
     PRCA _prca;   // Chunky resource chain
     PCRF _pcrf;   // Chunky resource file
 
-    int16_t _sno;     // state number
+    int16_t _sno;       // state number
     int16_t _cactMouse; // mouse click count of last mouse down
     uint32_t _grfcust;  // cursor state at last mouse down
-    int32_t _gmsCur;     // gob mouse tracking state
+    int32_t _gmsCur;    // gob mouse tracking state
 
     bool _fRect : 1;          // whether to use rectangular hit testing exclusively
     bool _fNoHit : 1;         // invisible to the mouse
@@ -324,10 +324,10 @@ class GOK : public GOK_PAR
     bool _fStream : 1;        // once we switch reps, we won't use this one again
 
     int32_t _cactDeferGorp; // defer marking and positioning the gorp
-    PGORP _pgorp;        // the graphical representation
-    CKI _ckiGorp;        // cki of the current gorp
+    PGORP _pgorp;           // the graphical representation
+    CKI _ckiGorp;           // cki of the current gorp
 
-    int32_t _dtim;       // current time increment for animation
+    int32_t _dtim;    // current time increment for animation
     PSCEG _pscegAnim; // animation script
     CHID _chidAnim;   // chid of current animation
 
@@ -335,7 +335,7 @@ class GOK : public GOK_PAR
 
     int32_t _siiSound;     // sound to kill when we go away
     int32_t _siiMouse;     // mouse tracking sound - kill it when we go away
-    CKI _ckiMouseSnd;   // for deferred playing of the mouse sound
+    CKI _ckiMouseSnd;      // for deferred playing of the mouse sound
     int32_t _cactDeferSnd; // defer starting the mouse sound if this is > 0
 
     // cid/hid filtering
@@ -431,7 +431,8 @@ class GOK : public GOK_PAR
     virtual int32_t NfrMac(void);
     virtual int32_t NfrCur(void);
 
-    virtual int32_t SiiPlaySound(CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr, int32_t scl);
+    virtual int32_t SiiPlaySound(CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                                 int32_t spr, int32_t scl);
     virtual int32_t SiiPlayMouseSound(CTG ctg, CNO cno);
 
     virtual void Suspend(void);

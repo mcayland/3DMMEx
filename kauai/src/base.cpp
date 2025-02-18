@@ -26,14 +26,14 @@ int32_t vcactAV = kswMax;
 const int32_t kclwStackDoi = 10;
 struct DOI
 {
-    int16_t swMagic;    // magic number == kswMagicMem
-    int16_t cactRef;    // for marking memory and asserting on unused objects
-    PSZS pszsFile;      // file NewObj appears in
+    int16_t swMagic;       // magic number == kswMagicMem
+    int16_t cactRef;       // for marking memory and asserting on unused objects
+    PSZS pszsFile;         // file NewObj appears in
     int32_t lwLine;        // line NewObj appears on
     int32_t cbTot;         // total size of the block, including the DOI
     int32_t lwThread;      // thread that allocated this
     int32_t rglwStack[10]; // what we get from following the EBP/A6 chain
-    DOI *pdoiNext;      // singly linked list
+    DOI *pdoiNext;         // singly linked list
     DOI **ppdoiPrev;
 };
 

@@ -1713,7 +1713,8 @@ int32_t GOK::NfrCur(void)
     Play a sound and attach the sound to this GOK so that when the GOK
     goes away, the sound will be killed.
 ***************************************************************************/
-int32_t GOK::SiiPlaySound(CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr, int32_t scl)
+int32_t GOK::SiiPlaySound(CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr,
+                          int32_t scl)
 {
     AssertThis(0);
 

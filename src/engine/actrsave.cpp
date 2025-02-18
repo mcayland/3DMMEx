@@ -26,13 +26,13 @@ const CHID kchidGgae = 0;
 
 struct ACTF // Actor chunk on file
 {
-    int16_t bo;     // Byte order
-    int16_t osk;     // OS kind
-    XYZ dxyzFullRte; // Translation of the route
-    int32_t arid;    // Unique id assigned to this actor.
+    int16_t bo;        // Byte order
+    int16_t osk;       // OS kind
+    XYZ dxyzFullRte;   // Translation of the route
+    int32_t arid;      // Unique id assigned to this actor.
     int32_t nfrmFirst; // First frame in this actor's stage life
     int32_t nfrmLast;  // Last frame in this actor's stage life
-    TAG tagTmpl;     // Tag to actor's template
+    TAG tagTmpl;       // Tag to actor's template
 };
 const BOM kbomActf = 0x5ffc0000 | kbomTag;
 

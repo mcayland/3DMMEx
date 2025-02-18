@@ -228,10 +228,10 @@ enum
 // expression tree node - for in-fix compilation
 struct ETN
 {
-    int16_t tt;   // the token type
-    int16_t op;   // operator (or function) to generate
-    int16_t opl;  // operator precedence level
-    int16_t grfop; // flags
+    int16_t tt;      // the token type
+    int16_t op;      // operator (or function) to generate
+    int16_t opl;     // operator precedence level
+    int16_t grfop;   // flags
     int32_t lwValue; // value if a ttLong; an istn if a ttName
     int32_t ietn1;   // indices into _pgletnTree for the operands
     int32_t ietn2;
@@ -253,11 +253,11 @@ enum
 struct CSTD
 {
     int32_t cst;
-    int32_t lwLabel1;  // use depends on cst
-    int32_t lwLabel2;  // use depends on cst
-    int32_t lwLabel3;  // use depends on cst
-    PGL pgletnTree; // for while loops - the expression tree
-    int32_t ietnTop;   // the top of the expression tree
+    int32_t lwLabel1; // use depends on cst
+    int32_t lwLabel2; // use depends on cst
+    int32_t lwLabel3; // use depends on cst
+    PGL pgletnTree;   // for while loops - the expression tree
+    int32_t ietnTop;  // the top of the expression tree
 };
 
 /***************************************************************************
@@ -2275,7 +2275,8 @@ bool SCCB::_FGetArop(PSTN pstn, AROP *prgarop, int32_t *pop, int32_t *pclwFixed,
     See if the given name is a function and give argument and return type
     information.
 ***************************************************************************/
-bool SCCB::_FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar, bool *pfVoid)
+bool SCCB::_FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                           bool *pfVoid)
 {
     AssertThis(0);
     return _FGetArop(pstn, _rgarop, pop, pclwFixed, pclwVar, pcactMinVar, pfVoid);

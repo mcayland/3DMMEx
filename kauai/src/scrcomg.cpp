@@ -292,7 +292,8 @@ bool SCCG::_FGetStnFromOp(int32_t op, PSTN pstn)
     Map a string to an operator with argument information (for in-fix
     compiler).
 ***************************************************************************/
-bool SCCG::_FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar, bool *pfVoid)
+bool SCCG::_FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                           bool *pfVoid)
 {
     if (_FGetArop(pstn, _rgaropSccg, pop, pclwFixed, pclwVar, pcactMinVar, pfVoid))
     {

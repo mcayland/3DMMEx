@@ -1634,7 +1634,8 @@ bool GOB::FCmdMouseMove(PCMD_MOUSE pcmd)
     [zpMinActive, zpLimActive), the bar is filled with solid invert, otherwise
     with patterned (50%) invert.
 ***************************************************************************/
-int32_t GOB::ZpDragRc(RC *prc, bool fVert, int32_t zp, int32_t zpMin, int32_t zpLim, int32_t zpMinActive, int32_t zpLimActive)
+int32_t GOB::ZpDragRc(RC *prc, bool fVert, int32_t zp, int32_t zpMin, int32_t zpLim, int32_t zpMinActive,
+                      int32_t zpLimActive)
 {
     RC rcBound, rcActive;
     PT pt, dpt;

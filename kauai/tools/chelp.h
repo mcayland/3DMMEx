@@ -123,8 +123,8 @@ class LIG : public LIG_PAR
     CMD_MAP_DEC(LIG)
 
   protected:
-    PTXHD _ptxhd;  // the document to put the chunk in
-    PSCB _pscb;    // our scroll bar
+    PTXHD _ptxhd;     // the document to put the chunk in
+    PSCB _pscb;       // our scroll bar
     int32_t _dypCell; // how tall are our cells
 
     LIG(PLID plid, GCB *pgcb);
@@ -289,13 +289,13 @@ class HEDG : public HEDG_PAR
     ASSERT
 
   protected:
-    int32_t _onn;    // fixed width font to use
+    int32_t _onn;       // fixed width font to use
     int32_t _dypHeader; // height of the header
     int32_t _dypLine;   // height of one line
     int32_t _dxpChar;   // width of a character
     int32_t _dypBorder; // height of border (included in _dypLine)
-    PCFL _pcfl;      // the chunky file
-    TSEL _tsel;      // the selection
+    PCFL _pcfl;         // the chunky file
+    TSEL _tsel;         // the selection
 
     HEDG(PHEDO phedo, PCFL pcfl, PGCB pgcb);
     virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
@@ -502,8 +502,8 @@ class HTRU : public HTRU_PAR
     HTRU(GCB *pgcb, PTXTG ptxtg);
 
   public:
-    static PHTRU PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft, int32_t onn,
-                          int32_t dypFont, uint32_t grfont);
+    static PHTRU PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft,
+                          int32_t onn, int32_t dypFont, uint32_t grfont);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);

@@ -30,17 +30,17 @@
 ***************************************************************************/
 #define RTCLASS_DEC                                                                                                    \
   public:                                                                                                              \
-    static bool FWouldBe(int32_t cls);                                                                                    \
+    static bool FWouldBe(int32_t cls);                                                                                 \
                                                                                                                        \
   public:                                                                                                              \
-    virtual bool FIs(int32_t cls);                                                                                        \
+    virtual bool FIs(int32_t cls);                                                                                     \
                                                                                                                        \
   public:                                                                                                              \
     virtual int32_t Cls(void);
 
 #define RTCLASS_INLINE(foo)                                                                                            \
   public:                                                                                                              \
-    static bool FWouldBe(int32_t cls)                                                                                     \
+    static bool FWouldBe(int32_t cls)                                                                                  \
     {                                                                                                                  \
         if (kcls##foo == cls)                                                                                          \
             return fTrue;                                                                                              \
@@ -48,29 +48,29 @@
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
-    virtual bool FIs(int32_t cls)                                                                                         \
+    virtual bool FIs(int32_t cls)                                                                                      \
     {                                                                                                                  \
         return FWouldBe(cls);                                                                                          \
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
-    virtual int32_t Cls(void)                                                                                             \
+    virtual int32_t Cls(void)                                                                                          \
     {                                                                                                                  \
         return kcls##foo;                                                                                              \
     }
 
 #define RTCLASS(foo)                                                                                                   \
-    bool foo::FWouldBe(int32_t cls)                                                                                       \
+    bool foo::FWouldBe(int32_t cls)                                                                                    \
     {                                                                                                                  \
         if (kcls##foo == cls)                                                                                          \
             return fTrue;                                                                                              \
         return foo##_PAR::FWouldBe(cls);                                                                               \
     }                                                                                                                  \
-    bool foo::FIs(int32_t cls)                                                                                            \
+    bool foo::FIs(int32_t cls)                                                                                         \
     {                                                                                                                  \
         return FWouldBe(cls);                                                                                          \
     }                                                                                                                  \
-    int32_t foo::Cls(void)                                                                                                \
+    int32_t foo::Cls(void)                                                                                             \
     {                                                                                                                  \
         return kcls##foo;                                                                                              \
     }

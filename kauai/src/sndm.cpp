@@ -320,8 +320,8 @@ int32_t SNDM::VlmCur(void)
 /***************************************************************************
     Play the given sound.
 ***************************************************************************/
-int32_t SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr,
-                   int32_t scl)
+int32_t SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                      int32_t spr, int32_t scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
@@ -684,7 +684,8 @@ void SNDMQ::Suspend(bool fSuspend)
 /***************************************************************************
     Play the given sound.
 ***************************************************************************/
-int32_t SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr, int32_t scl)
+int32_t SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                       int32_t spr, int32_t scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
@@ -989,7 +990,8 @@ void SNQUE::_Flush(void)
 /***************************************************************************
     Put the given sound on the queue.
 ***************************************************************************/
-void SNQUE::Enqueue(int32_t sii, PRCA prca, CTG ctg, CNO cno, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr, int32_t scl)
+void SNQUE::Enqueue(int32_t sii, PRCA prca, CTG ctg, CNO cno, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                    int32_t spr, int32_t scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);

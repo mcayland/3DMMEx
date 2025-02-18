@@ -322,9 +322,9 @@ class DMW : public DMW_PAR
     // child iff it has a right child.
     struct DSED
     {
-        bool fVert; // splits its parent vertically, so the edge is horizontal
-        int32_t rel;   // where it splits its parent
-        RC rcRel;   // current relative rectangle (in the DMW)
+        bool fVert;  // splits its parent vertically, so the edge is horizontal
+        int32_t rel; // where it splits its parent
+        RC rcRel;    // current relative rectangle (in the DMW)
         int32_t idsedLeft;
         int32_t idsedRight;
         int32_t idsedPar;

@@ -123,15 +123,15 @@ class SCEN : public SCEN_PAR
     //
     // These variables keep track of the internal frame numbers.
     //
-    int32_t _nfrmCur; // Current frame number
-    int32_t _nfrmLast; // Last frame number in scene.
+    int32_t _nfrmCur;   // Current frame number
+    int32_t _nfrmLast;  // Last frame number in scene.
     int32_t _nfrmFirst; // First frame number in scene.
 
     //
     // Frames with events in them.  This stuff works as follows.
     //   _isevFrmLim is the index into the GG of a sev with nfrm > nCurFrm.
     //
-    PGG _pggsevFrm;   // List of events that occur in frames.
+    PGG _pggsevFrm;      // List of events that occur in frames.
     int32_t _isevFrmLim; // Next event to process.
 
     //
@@ -162,7 +162,7 @@ class SCEN : public SCEN_PAR
     // Event stuff
     //
     bool _FPlaySev(PSEV psev, void *qvVar, uint32_t grfscen); // Plays a single scene event.
-    bool _FUnPlaySev(PSEV psev, void *qvVar);              // Undoes a single scene event.
+    bool _FUnPlaySev(PSEV psev, void *qvVar);                 // Undoes a single scene event.
     bool _FAddSev(PSEV psev, int32_t cbVar, void *pvVar);     // Adds scene event to the current frame.
     void _MoveBackFirstFrame(int32_t nfrm);
 
@@ -290,9 +290,9 @@ class SCEN : public SCEN_PAR
     {
         return _pactrSelected;
     }
-    void SelectActr(ACTR *pactr);                      // Sets the selected actor
+    void SelectActr(ACTR *pactr);                               // Sets the selected actor
     PACTR PactrFromPt(int32_t xp, int32_t yp, int32_t *pibset); // Gets actor pointed at by the mouse.
-    PGL PglRollCall(void)                              // Return a list of all actors in scene.
+    PGL PglRollCall(void)                                       // Return a list of all actors in scene.
     {
         return (_pglpactr);
     } // Only to be used by the movie-class
@@ -310,9 +310,10 @@ class SCEN : public SCEN_PAR
     bool FAddSndCore(bool fLoop, bool fQueue, int32_t vlm, int32_t sty, int32_t ctag,
                      PTAG prgtag); // Adds a sound to the current frame.
     bool FAddSndCoreTagc(bool fLoop, bool fQueue, int32_t vlm, int32_t sty, int32_t ctagc, PTAGC prgtagc);
-    bool FAddSnd(PTAG ptag, bool fLoop, bool fQueue, int32_t vlm, int32_t sty); // Adds a sound to the current frame, and undo
-    void RemSndCore(int32_t sty);                       // Removes the sound from current frame.
-    bool FRemSnd(int32_t sty);                          // Removes the sound from current frame, and undo
+    bool FAddSnd(PTAG ptag, bool fLoop, bool fQueue, int32_t vlm,
+                 int32_t sty);                             // Adds a sound to the current frame, and undo
+    void RemSndCore(int32_t sty);                          // Removes the sound from current frame.
+    bool FRemSnd(int32_t sty);                             // Removes the sound from current frame, and undo
     bool FGetSnd(int32_t sty, bool *pfFound, PSSE *ppsse); // Allows for retrieval of sounds.
     void PlayBkgdSnd(void);
     bool FQuerySnd(int32_t sty, PGL *pgltagSnd, int32_t *pvlm, bool *pfLoop);
@@ -323,12 +324,12 @@ class SCEN : public SCEN_PAR
     //
     // Text box functions
     //
-    bool FAddTboxCore(PTBOX ptbox);   // Adds a text box to the current frame.
-    bool FAddTbox(PTBOX ptbox);       // Adds a text box to the current frame.
-    bool FRemTboxCore(PTBOX ptbox);   // Removes a text box from the scene.
-    bool FRemTbox(PTBOX ptbox);       // Removes a text box from the scene.
+    bool FAddTboxCore(PTBOX ptbox);      // Adds a text box to the current frame.
+    bool FAddTbox(PTBOX ptbox);          // Adds a text box to the current frame.
+    bool FRemTboxCore(PTBOX ptbox);      // Removes a text box from the scene.
+    bool FRemTbox(PTBOX ptbox);          // Removes a text box from the scene.
     PTBOX PtboxFromItbox(int32_t itbox); // Returns the ith tbox in this frame.
-    PTBOX PtboxSelected(void)         // Returns the tbox currently selected.
+    PTBOX PtboxSelected(void)            // Returns the tbox currently selected.
     {
         return _ptboxSelected;
     }
@@ -353,11 +354,11 @@ class SCEN : public SCEN_PAR
     BKGD *Pbkgd(void)
     {
         return _pbkgd;
-    }                                               // Gets the background for this scene.
+    }                                                     // Gets the background for this scene.
     bool FChangeCamCore(int32_t icam, int32_t *picamOld); // Changes camera viewpoint at current frame.
     bool FChangeCam(int32_t icam);                        // Changes camera viewpoint at current frame, and undo
-    PMBMP PmbmpThumbnail(void);                     // Returns the thumbnail.
-    bool FGetTagBkgd(PTAG ptag);                    // Returns the tag for the background for this scene
+    PMBMP PmbmpThumbnail(void);                           // Returns the thumbnail.
+    bool FGetTagBkgd(PTAG ptag);                          // Returns the tag for the background for this scene
 
     //
     // Movie functions

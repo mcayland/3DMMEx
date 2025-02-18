@@ -435,7 +435,8 @@ bool TXHD::_FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, in
 /***************************************************************************
     Insert a picture into the help text document.
 ***************************************************************************/
-bool TXHD::FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp, uint32_t grfdoc)
+bool TXHD::FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp,
+                          uint32_t grfdoc)
 {
     AssertThis(0);
     AssertPvCb(pvExtra, cbExtra);
@@ -1249,8 +1250,8 @@ HBTN::HBTN(GCB *pgcb) : HBTN_PAR(pgcb)
 /***************************************************************************
     Create a new help balloon button
 ***************************************************************************/
-PHBTN HBTN::PhbtnNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic, int32_t xpLeft,
-                     int32_t ypBottom)
+PHBTN HBTN::PhbtnNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic,
+                     int32_t xpLeft, int32_t ypBottom)
 {
     AssertPo(pwoks, 0);
     AssertNilOrPo(pgobPar, 0);

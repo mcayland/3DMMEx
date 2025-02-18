@@ -100,7 +100,8 @@ struct GCB
     GCB(void)
     {
     }
-    GCB(int32_t hid, PGOB pgob, uint32_t grfgob = fgobNil, int32_t gin = kginDefault, RC *prcAbs = pvNil, RC *prcRel = pvNil)
+    GCB(int32_t hid, PGOB pgob, uint32_t grfgob = fgobNil, int32_t gin = kginDefault, RC *prcAbs = pvNil,
+        RC *prcRel = pvNil)
     {
         Set(hid, pgob, grfgob, gin, prcAbs, prcRel);
     }
@@ -269,7 +270,8 @@ class GOB : public GOB_PAR
     virtual bool FPtIn(int32_t xp, int32_t yp);
     virtual bool FPtInBounds(int32_t xp, int32_t yp);
     virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual int32_t ZpDragRc(RC *prc, bool fVert, int32_t zp, int32_t zpMin, int32_t zpLim, int32_t zpMinActive, int32_t zpLimActive);
+    virtual int32_t ZpDragRc(RC *prc, bool fVert, int32_t zp, int32_t zpMin, int32_t zpLim, int32_t zpMinActive,
+                             int32_t zpLimActive);
     void SetCurs(PCURS pcurs);
     void SetCursCno(PRCA prca, CNO cno);
 

@@ -20,8 +20,8 @@
     These must be unsigned longs!  We sort on them and assume in the code
     that they are unsinged.
 ***************************************************************************/
-typedef uint32_t CTG; // chunk tag/type
-typedef uint32_t CNO; // chunk number
+typedef uint32_t CTG;  // chunk tag/type
+typedef uint32_t CNO;  // chunk number
 typedef uint32_t CHID; // child chunk id
 
 enum
@@ -309,7 +309,7 @@ class CGE : public CGE_PAR
         esDone      // we're done with the enumeration
     };
 
-    int32_t _es;    // current state
+    int32_t _es; // current state
     PCFL _pcfl;  // the chunky file
     PGL _pgldps; // our stack of DPSs
     DPS _dps;    // the current DPS

@@ -122,11 +122,11 @@ class SCEB : public SCEB_PAR
     PGL _pgllwStack;   // the execution stack
     PGL _pglrtvm;      // the local variables
     PSCPT _pscpt;      // the script
-    int32_t _ilwMac;      // the length of the script
-    int32_t _ilwCur;      // the current location in the script
+    int32_t _ilwMac;   // the length of the script
+    int32_t _ilwCur;   // the current location in the script
     bool _fError : 1;  // an error has occured
     bool _fPaused : 1; // if we're paused
-    int32_t _lwReturn;    // the return value from the script
+    int32_t _lwReturn; // the return value from the script
 
     void _Push(int32_t lw)
     {

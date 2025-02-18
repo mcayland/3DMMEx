@@ -362,13 +362,13 @@ class MPQUE : public MPQUE_PAR
     bool _fChanged; // also signals new input - for extra protection
     HN _hth;        // the thread handle
 
-    MUTX _mutx;    // mutex to restrict access to member variables
-    MSTP _mstp;    // midi stream parser
+    MUTX _mutx;       // mutex to restrict access to member variables
+    MSTP _mstp;       // midi stream parser
     int32_t _dtsSlip; // amount of time we've slipped by
     int32_t _sii;     // id and priority of sound we're currently serving
     int32_t _spr;
     int32_t _vlm;      // volume to play back at
-    MIDEV _midev;   // current midi event
+    MIDEV _midev;      // current midi event
     uint32_t _tsStart; // time current sound was started
     uint32_t _grfmido; // options for midi output device
 

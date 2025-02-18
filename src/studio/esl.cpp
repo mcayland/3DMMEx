@@ -20,8 +20,8 @@
 #include "studio.h"
 ASSERTNAME
 
-const int32_t kcchMaxTdt = 50;                  // max length of a spletter
-const int32_t kdtsMaxRecord = 10 * kdtsSecond;  // max time to record a sound
+const int32_t kcchMaxTdt = 50;                     // max length of a spletter
+const int32_t kdtsMaxRecord = 10 * kdtsSecond;     // max time to record a sound
 const int32_t kdtimMeterUpdate = kdtimSecond / 10; // interval to update meter
 const int32_t kcsampSec = 11025;                   // sampling rate for recorder easel
 int32_t csampSec;                                  // sampling rate for recorder easel
@@ -1454,8 +1454,8 @@ void ESLL::MarkMem(void)
     Initialize a LSND.  Note that the LSND takes over the reference to
     *ppgltag.
 ***************************************************************************/
-bool LSND::FInit(int32_t sty, int32_t kidVol, int32_t kidIcon, int32_t kidEditBox, PGL *ppgltag, int32_t vlm, bool fLoop, int32_t objID,
-                 bool fMatcher)
+bool LSND::FInit(int32_t sty, int32_t kidVol, int32_t kidIcon, int32_t kidEditBox, PGL *ppgltag, int32_t vlm,
+                 bool fLoop, int32_t objID, bool fMatcher)
 {
     AssertBaseThis(0);
     AssertIn(sty, 0, styLim);

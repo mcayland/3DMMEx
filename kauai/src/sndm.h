@@ -45,8 +45,8 @@ class SNDV : public SNDV_PAR
     virtual void SetVlm(int32_t vlm) = 0;
     virtual int32_t VlmCur(void) = 0;
 
-    virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull, int32_t cactPlay = 1,
-                         uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil) = 0;
+    virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull,
+                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil) = 0;
 
     virtual void Stop(int32_t sii) = 0;
     virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil) = 0;
@@ -86,9 +86,9 @@ class SNDM : public SNDM_PAR
 
     PGL _pglsndmpe; // sound type to device mapper
 
-    int32_t _cactSuspend;  // nesting level for suspending
-    bool _fActive : 1;  // whether the app is active
-    bool _fFreeing : 1; // we're in the destructor
+    int32_t _cactSuspend; // nesting level for suspending
+    bool _fActive : 1;    // whether the app is active
+    bool _fFreeing : 1;   // we're in the destructor
 
     SNDM(void);
     bool _FInit(void);
@@ -110,8 +110,8 @@ class SNDM : public SNDM_PAR
     virtual void SetVlm(int32_t vlm);
     virtual int32_t VlmCur(void);
 
-    virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull, int32_t cactPlay = 1,
-                         uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil);
+    virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull,
+                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil);
 
     virtual void Stop(int32_t sii);
     virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
@@ -171,8 +171,8 @@ class SNDMQ : public SNDMQ_PAR
     virtual void Activate(bool fActive);
     virtual void Suspend(bool fSuspend);
 
-    virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull, int32_t cactPlay = 1,
-                         uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil);
+    virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull,
+                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil);
 
     virtual void Stop(int32_t sii);
     virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
@@ -194,7 +194,7 @@ class SNDMQ : public SNDMQ_PAR
 ***************************************************************************/
 struct SNDIN
 {
-    PBACO pbaco;    // the sound to play
+    PBACO pbaco;       // the sound to play
     int32_t sii;       // the sound instance id
     int32_t vlm;       // volume to play at
     int32_t cactPlay;  // how many times to play
@@ -218,7 +218,7 @@ class SNQUE : public SNQUE_PAR
     MARKMEM
 
   protected:
-    PGL _pglsndin;   // the queue
+    PGL _pglsndin;      // the queue
     int32_t _isndinCur; // SNDIN that we should be playing
 
     SNQUE(void);
@@ -236,7 +236,8 @@ class SNQUE : public SNQUE_PAR
   public:
     ~SNQUE(void);
 
-    void Enqueue(int32_t sii, PRCA prca, CTG ctg, CNO cno, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr, int32_t scl);
+    void Enqueue(int32_t sii, PRCA prca, CTG ctg, CNO cno, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                 int32_t spr, int32_t scl);
 
     int32_t SprCur(void);
     void Stop(int32_t sii);

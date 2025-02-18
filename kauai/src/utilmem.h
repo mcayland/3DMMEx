@@ -17,7 +17,7 @@
 #define UTILMEM_H
 
 // used for asserts and limiting memory
-const uint8_t kbGarbage = 0xA3; // new blocks are filled with this
+const uint8_t kbGarbage = 0xA3;    // new blocks are filled with this
 const int32_t kcbMax = 0x08000000; // 128 Megabytes
 const int16_t kswMagicMem = (int16_t)0xA253;
 const int32_t klwMagicMem = (int32_t)0xA253A253;
@@ -166,7 +166,8 @@ inline void *QvFromHq(HQ hq)
 #ifdef DEBUG
 
 // allocation routine
-bool FAllocPvDebug(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr, schar *pszsFile, int32_t lwLine, DMAGL *pdmagl);
+bool FAllocPvDebug(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr, schar *pszsFile, int32_t lwLine,
+                   DMAGL *pdmagl);
 #define FAllocPv(ppv, cb, grfmem, mpr) FAllocPvDebug(ppv, cb, grfmem, mpr, __szsFile, __LINE__, &vdmglob.dmaglPv)
 
 // resizing routine - WIN only

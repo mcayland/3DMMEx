@@ -112,28 +112,28 @@ class BRWD : public BRWD_PAR
     CMD_MAP_DEC(BRWD)
 
   protected:
-    int32_t _kidFrmFirst;  // kid of first frame
+    int32_t _kidFrmFirst;     // kid of first frame
     int32_t _kidControlFirst; // kid of first control button
     int32_t _dxpFrmOffset;    // x inset of thumb in frame
     int32_t _dypFrmOffset;    // y inset of thumb in frame
     int32_t _sidDefault;      // default sid
     int32_t _thumDefault;     // default thum
-    PBRCN _pbrcn;          // context carryover
+    PBRCN _pbrcn;             // context carryover
     int32_t _idsFont;         // string id of Font
     int32_t _kidThumOverride; // projects may override one thum gobid
     int32_t _ithumOverride;   // projects may override one thum gobid
-    PTGOB _ptgobPage;      // for page numbers
+    PTGOB _ptgobPage;         // for page numbers
     PSTDIO _pstdio;
 
     // Display State variables
-    int32_t _cthumCD;       // Non-user content
-    int32_t _ithumSelect;   // Hilited frame
+    int32_t _cthumCD;        // Non-user content
+    int32_t _ithumSelect;    // Hilited frame
     int32_t _ithumPageFirst; // Index to thd of first frame on current page
     int32_t _cfrmPageCur;    // Number of visible thumbnails per current page
     int32_t _cfrm;           // Total frames possible per page
     int32_t _cthumScroll;    // #items to scroll on fwd/back.  default ivNil -> page scrolling
-    bool _fWrapScroll;      // Wrap around.  Default = fTrue;
-    bool _fNoRepositionSel; // Don't reposition selection : default = fFalse;
+    bool _fWrapScroll;       // Wrap around.  Default = fTrue;
+    bool _fNoRepositionSel;  // Don't reposition selection : default = fFalse;
 
   protected:
     void _SetScrollState(void);
@@ -456,8 +456,8 @@ class BRWL : public BRWL_PAR
     ~BRWL(void);
 
     static PBRWL PbrwlNew(PRCA prca, int32_t kidPar, int32_t kidBrwl);
-    virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
-                       PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
+    virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent,
+                       PSTDIO pstdio, PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
 };
 
 /************************************
@@ -535,8 +535,8 @@ class BRWN : public BRWN_PAR
     {
     }
     ~BRWN(void){};
-    virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
-                       PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
+    virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent,
+                       PSTDIO pstdio, PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
 
     virtual bool FCmdOk(PCMD pcmd);
 };
@@ -693,7 +693,7 @@ class BRWM : public BRWM_PAR
 
   protected:
     int32_t _sty; // Identifies type of sound
-    PCRF _pcrf; // NOT created here (autosave or BRWI file)
+    PCRF _pcrf;   // NOT created here (autosave or BRWI file)
 
     virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
     virtual bool _FUpdateLists(); // By all entries in pcrf of correct type

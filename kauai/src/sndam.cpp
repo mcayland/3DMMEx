@@ -25,12 +25,12 @@ ASSERTNAME
 // Initialize the maximum mem footprint of wave sounds.
 int32_t SDAM::vcbMaxMemWave = 40 * 1024;
 
-static IAMMixer *_pamix; // the audioman mixer
-static DWORD _luGroup;   // the group number
-static bool _fGrouped;   // whether new sounds are grouped
-static int32_t _cactGroup;  // group nesting count
+static IAMMixer *_pamix;   // the audioman mixer
+static DWORD _luGroup;     // the group number
+static bool _fGrouped;     // whether new sounds are grouped
+static int32_t _cactGroup; // group nesting count
 
-static uint32_t _luFormat; // format mixer is in
+static uint32_t _luFormat;    // format mixer is in
 static uint32_t _luCacheTime; // buffer size for mixer
 
 RTCLASS(SDAM)

@@ -95,7 +95,7 @@ class SREC : public SREC_PAR
     int32_t _csampSec; // sampling rate (number of samples per second)
     int32_t _cchan;    // 1 = mono, 2 = stereo
     int32_t _cbSample; // bytes per sample (1 = 8 bit, 2 = 16 bit, etc)
-    uint32_t _dtsMax; // maximum length to record
+    uint32_t _dtsMax;  // maximum length to record
     bool _fRecording;
     bool _fPlaying;
     bool _fHaveSound;   // have you recorded a sound yet?

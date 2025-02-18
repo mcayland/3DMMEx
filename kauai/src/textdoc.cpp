@@ -357,7 +357,8 @@ LDone:
 /***************************************************************************
     Find new line starts starting at lnMin.
 ***************************************************************************/
-void TXDD::_ReformatEdit(int32_t ichMinEdit, int32_t cchIns, int32_t cchDel, int32_t *plnNew, int32_t *pclnIns, int32_t *pclnDel)
+void TXDD::_ReformatEdit(int32_t ichMinEdit, int32_t cchIns, int32_t cchDel, int32_t *plnNew, int32_t *pclnIns,
+                         int32_t *pclnDel)
 {
     AssertThis(0);
     AssertIn(ichMinEdit, 0, kcbMax);

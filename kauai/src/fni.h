@@ -168,7 +168,7 @@ class FNE : public FNE_PAR
         WIN32_FIND_DATA wfd;
         uint32_t grfvol; // which volumes are available (for enumerating volumes)
         int32_t chVol;   // which volume we're on (for enumerating volumes)
-#endif                // WIN
+#endif                   // WIN
     };
 
     FTG _rgftg[kcftgFneBase];

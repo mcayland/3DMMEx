@@ -3473,8 +3473,8 @@ HTRU::HTRU(GCB *pgcb, PTXTG ptxtg) : HTRU_PAR(pgcb)
 /***************************************************************************
     Create a new text ruler.
 ***************************************************************************/
-PHTRU HTRU::PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft, int32_t onn, int32_t dypFont,
-                     uint32_t grfont)
+PHTRU HTRU::PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft,
+                     int32_t onn, int32_t dypFont, uint32_t grfont)
 {
     AssertVarMem(pgcb);
     AssertPo(ptxtg, 0);

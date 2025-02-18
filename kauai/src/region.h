@@ -38,11 +38,11 @@ class REGN : public REGN_PAR
     // The dyp is the height of the strip in pixels, the xp's are boundary points
     // The xp's are relative to _rc.xpLeft + _dxp. _pglxp is nil iff the region
     // is strictly rectangular.
-    RC _rc;     // bounding rectangle
-    int32_t _dxp;  // additional offset for xp values
-    PGL _pglxp; // region data - see above
-    HRGN _hrgn; // for HrgnEnsure
-    PT _dptRgn; // offset of _hrgn relative to this region
+    RC _rc;       // bounding rectangle
+    int32_t _dxp; // additional offset for xp values
+    PGL _pglxp;   // region data - see above
+    HRGN _hrgn;   // for HrgnEnsure
+    PT _dptRgn;   // offset of _hrgn relative to this region
 
     REGN(void)
     {
@@ -84,7 +84,7 @@ class REGSC : public REGSC_PAR
     RTCLASS_DEC
 
   protected:
-    PGL _pglxpSrc;    // the list of points
+    PGL _pglxpSrc;       // the list of points
     int32_t *_pxpLimSrc; // the end of the list
     int32_t *_pxpLimCur; // the end of the current row
 
@@ -97,7 +97,7 @@ class REGSC : public REGSC_PAR
     int32_t _xpRight; // the right edge of the active area - left edge is 0
 
     // current state
-    bool _fOn;    // whether the current xp is a transition to on or off
+    bool _fOn;       // whether the current xp is a transition to on or off
     int32_t _xp;     // the current xp
     int32_t _dyp;    // the remaining height that this scan is effective for
     int32_t _dypTot; // the remaining total height of the active area

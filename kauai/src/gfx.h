@@ -306,7 +306,7 @@ struct OLY // pOLYgon
 {
 #ifdef MAC
     int16_t cb; // size of the whole thing
-    RCS rcs;  // bounding rectangle
+    RCS rcs;    // bounding rectangle
     PTS rgpts[1];
 
     int32_t Cpts(void)
@@ -396,12 +396,12 @@ enum
 struct GDD
 {
     uint32_t grfgdd; // what to do
-    APT apt;       // pattern to use
-    ACR acrFore;   // foreground color (used for solid fills also)
-    ACR acrBack;   // background color
-    int32_t dxpPen;   // pen width (used if framing)
-    int32_t dypPen;   // pen height
-    RCS *prcsClip; // clipping (may be pvNil)
+    APT apt;         // pattern to use
+    ACR acrFore;     // foreground color (used for solid fills also)
+    ACR acrBack;     // background color
+    int32_t dxpPen;  // pen width (used if framing)
+    int32_t dypPen;  // pen height
+    RCS *prcsClip;   // clipping (may be pvNil)
 };
 
 /****************************************
@@ -443,7 +443,8 @@ class GNV : public GNV_PAR
 
     // transition related methods
     bool _FInitPaletteTrans(PGL pglclr, PGL *ppglclrOld, PGL *ppglclrTrans, int32_t cbitPixel = 0);
-    void _PaletteTrans(PGL pglclrOld, PGL pglclrNew, int32_t lwNum, int32_t lwDen, PGL pglclrTrans, CLR *pclrSub = pvNil);
+    void _PaletteTrans(PGL pglclrOld, PGL pglclrNew, int32_t lwNum, int32_t lwDen, PGL pglclrTrans,
+                       CLR *pclrSub = pvNil);
     bool _FEnsureTempGnv(PGNV *ppgnv, RC *prc);
 
   public:
@@ -538,7 +539,8 @@ class GNV : public GNV_PAR
     void SetFontAlign(int32_t tah, int32_t tav);
     void GetDsf(DSF *pdsf);
     void SetDsf(DSF *pdsf);
-    void DrawRgch(const achar *prgch, int32_t cch, int32_t xp, int32_t yp, ACR acrFore = kacrBlack, ACR acrBack = kacrClear);
+    void DrawRgch(const achar *prgch, int32_t cch, int32_t xp, int32_t yp, ACR acrFore = kacrBlack,
+                  ACR acrBack = kacrClear);
     void DrawStn(PSTN pstn, int32_t xp, int32_t yp, ACR acrFore = kacrBlack, ACR acrBack = kacrClear);
     void GetRcFromRgch(RC *prc, const achar *prgch, int32_t cch, int32_t xp = 0, int32_t yp = 0);
     void GetRcFromStn(RC *prc, PSTN pstn, int32_t xp = 0, int32_t yp = 0);
@@ -598,11 +600,11 @@ class GPT : public GPT_PAR
 
     HDC _hdc;
     HWND _hwnd;
-    HBMP _hbmp;        // nil if not an offscreen port
+    HBMP _hbmp;           // nil if not an offscreen port
     uint8_t *_prgbPixels; // nil if not a dib section port
     int32_t _cbitPixel;
     int32_t _cbRow;
-    RC _rcOff;      // bounding rectangle for a metafile or dib port
+    RC _rcOff;         // bounding rectangle for a metafile or dib port
     int32_t _cactPal;  // which palette this port has selected
     int32_t _cactDraw; // last draw - for knowing when to call GdiFlush
     int32_t _cactLock; // lock count
@@ -658,7 +660,7 @@ class GPT : public GPT_PAR
     HGD _hgd;
     PPRT _pprtSav; // may be a GWorldPtr
     HGD _hgdSav;
-    int16_t _cactLock; // lock count for pixels (if offscreen)
+    int16_t _cactLock;  // lock count for pixels (if offscreen)
     int16_t _cbitPixel; // depth of bitmap (if offscreen)
     bool _fSet : 1;
     bool _fOffscreen : 1;
@@ -766,12 +768,12 @@ bool FEqualRgn(HRGN hrgn1, HRGN hrgn2);
 bool FInitGfx(void);
 
 // stretch by a factor of 2 in each dimension.
-void DoubleStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
-                   int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip);
+void DoubleStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst,
+                   int32_t dypDst, int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip);
 
 // stretch by a factor of 2 in vertical direction only.
-void DoubleVertStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst, int32_t cbRowDst, int32_t dypDst,
-                       int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip);
+void DoubleVertStretch(uint8_t *prgbSrc, int32_t cbRowSrc, int32_t dypSrc, RC *prcSrc, uint8_t *prgbDst,
+                       int32_t cbRowDst, int32_t dypDst, int32_t xpDst, int32_t ypDst, RC *prcClip, PREGN pregnClip);
 
 // Number of times that the palette has changed (via a call to CclrSetPalette
 // or SetActiveColors). This can be used by other modules to detect a palette

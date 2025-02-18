@@ -55,16 +55,16 @@ struct RPT
 VERIFY_STRUCT_SIZE(RPT, 16);
 const BOM kbomRpt = 0xff000000;
 
-const int32_t knfrmInvalid = klwMax;                               // invalid frame state.  Regenerate correct state
-const int32_t kcrptGrow = 32;                                      // quantum growth for rpt
-const int32_t kcsmmGrow = 2;                                       // quantum growth for smm
-const int32_t kctagSndGrow = 2;                                    // quantum growth for tagSnd
-const int32_t smmNil = -1;                                         // Not motion match sound
-const BRS kdwrNil = BR_SCALAR(-1.0);                               // flags use of template cel stepsize
-const BRS kzrDefault = BR_SCALAR(-25.0);                           // initial default z position
-const BRS kdwrMax = BR_SCALAR(32767.0);                            // large BRS value
+const int32_t knfrmInvalid = klwMax;                                  // invalid frame state.  Regenerate correct state
+const int32_t kcrptGrow = 32;                                         // quantum growth for rpt
+const int32_t kcsmmGrow = 2;                                          // quantum growth for smm
+const int32_t kctagSndGrow = 2;                                       // quantum growth for tagSnd
+const int32_t smmNil = -1;                                            // Not motion match sound
+const BRS kdwrNil = BR_SCALAR(-1.0);                                  // flags use of template cel stepsize
+const BRS kzrDefault = BR_SCALAR(-25.0);                              // initial default z position
+const BRS kdwrMax = BR_SCALAR(32767.0);                               // large BRS value
 const uint32_t kdtsThreshRte = (kdtsSecond >> 2) + (kdtsSecond >> 1); // time threshhold before record in place
-const BRS kdwrThreshRte = BR_SCALAR(2.0);                          // distance threshhold before entering record mode
+const BRS kdwrThreshRte = BR_SCALAR(2.0);                             // distance threshhold before entering record mode
 const int32_t kcaevInit = 10;
 const BRS kdwrFast = BR_SCALAR(3.0);       // delta world coord change for fast mouse move
 const BRS krOriWeightMin = BR_SCALAR(0.1); // orientation weighting for slow mouse move
@@ -151,10 +151,10 @@ struct RTEL // RouTE Location - a function of space and time
 // Fixed part of the GG:
 struct AEV
 {
-    int32_t aet; // Actor Event Type
+    int32_t aet;  // Actor Event Type
     int32_t nfrm; // Absolute frame number (* Only valid < current event)
-    RTEL rtel; // RouTE Location for this event
-};             // Additional event parameters (in the GG)
+    RTEL rtel;    // RouTE Location for this event
+};                // Additional event parameters (in the GG)
 VERIFY_STRUCT_SIZE(AEV, 20);
 typedef AEV *PAEV;
 
@@ -341,17 +341,17 @@ class ACTR : public ACTR_PAR
     // Note: In addition to these components, any complete actor must
     // have either fLifeDirty set or _nfrmLast current.
     // Note: _tagTmpl cannot be derived from _ptmpl
-    PGG _pggaev;      // GG pointer to Actor EVent list
-    PGL _pglrpt;      // GL pointer to actor's route
-    TMPL *_ptmpl;     // Actor body & action list template
-    BODY *_pbody;     // Actor's body
-    TAG _tagTmpl;     // Note: The sid cannot be queried at save time
-    TAG _tagSnd;      // Sound (played on entrance)
-    SCEN *_pscen;     // Underlying scene
-    XYZ _dxyzFullRte; // Origin of the route
+    PGG _pggaev;        // GG pointer to Actor EVent list
+    PGL _pglrpt;        // GL pointer to actor's route
+    TMPL *_ptmpl;       // Actor body & action list template
+    BODY *_pbody;       // Actor's body
+    TAG _tagTmpl;       // Note: The sid cannot be queried at save time
+    TAG _tagSnd;        // Sound (played on entrance)
+    SCEN *_pscen;       // Underlying scene
+    XYZ _dxyzFullRte;   // Origin of the route
     int32_t _nfrmFirst; // klwMax -or- First frame : Set	when event created
     int32_t _arid;      // Unique id assigned to this actor.
-    uint32_t _grfactn; // Cached current grfactn
+    uint32_t _grfactn;  // Cached current grfactn
 
     // Frame Dependent State Information
     XYZ _dxyzRte;            //_dxyzFullRte + _dxyzSubRte : Set when Add processed
@@ -434,13 +434,15 @@ class ACTR : public ACTR_PAR
     void _UpdateXyzRte(void);
     bool _FInsertAev(int32_t iaev, int32_t cbNew, void *pvVar, void *paev, bool fUpdateState = fTrue);
     void _RemoveAev(int32_t iaev, bool fUpdateState = fTrue);
-    void _PrepXfrmFill(int32_t aet, void *pvVar, int32_t cbVar, int32_t iaevMin, int32_t iaevCmp = ivNil, uint32_t grfaet = faetNil);
+    void _PrepXfrmFill(int32_t aet, void *pvVar, int32_t cbVar, int32_t iaevMin, int32_t iaevCmp = ivNil,
+                       uint32_t grfaet = faetNil);
     void _PrepActnFill(int32_t iaevMin, int32_t anidPrev, int32_t anidNew, uint32_t grfaet);
     void _PrepCostFill(int32_t iaevMin, AEVCOST *paevcost);
     void _AdjustAevForRteIns(int32_t irptAdjust, int32_t iaevMin);
     void _AdjustAevForRteDel(int32_t irptAdjust, int32_t iaevMin);
     bool _FInsertStop(void);
-    void _CalcRteOrient(BMAT34 *pbmat34, BRA *pxa = pvNil, BRA *pya = pvNil, BRA *pza = pvNil, uint32_t *pgrfbra = pvNil);
+    void _CalcRteOrient(BMAT34 *pbmat34, BRA *pxa = pvNil, BRA *pya = pvNil, BRA *pza = pvNil,
+                        uint32_t *pgrfbra = pvNil);
     void _ApplyRotFromVec(XYZ *pxyz, BMAT34 *pbmat34, BRA *pxa = pvNil, BRA *pya = pvNil, BRA *pza = pvNil,
                           uint32_t *grfbra = pvNil);
     void _SaveCurPathOrien(void);

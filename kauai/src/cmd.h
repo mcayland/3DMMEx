@@ -43,9 +43,9 @@ struct CMD
 {
     ASSERT
 
-    PCMH pcmh;          // the target of the command - may be nil
+    PCMH pcmh;             // the target of the command - may be nil
     int32_t cid;           // the command id
-    PGG pgg;            // additional parameters for the command
+    PGG pgg;               // additional parameters for the command
     int32_t rglw[kclwCmd]; // standard parameters
 };
 typedef CMD *PCMD;
@@ -68,9 +68,9 @@ struct CMDF
     struct CMD_##foo                                                                                                   \
     {                                                                                                                  \
         PCMH pcmh;                                                                                                     \
-        int32_t cid;                                                                                                      \
+        int32_t cid;                                                                                                   \
         PGG pgg;                                                                                                       \
-        int32_t a, b, c, d;                                                                                               \
+        int32_t a, b, c, d;                                                                                            \
     };                                                                                                                 \
     typedef CMD_##foo *PCMD_##foo
 
@@ -232,20 +232,20 @@ class CEX : public CEX_PAR
     };
 
     // recording and playback
-    int32_t _rs;       // recording/playback state
-    int32_t _rec;      // recording/playback errors
+    int32_t _rs;    // recording/playback state
+    int32_t _rec;   // recording/playback errors
     PCFL _pcfl;     // the file we are recording to or playing from
     PGL _pglcmdf;   // the command stream
     CNO _cno;       // which macro is being played
-    int32_t _icmdf;    // current command for recording or playback
+    int32_t _icmdf; // current command for recording or playback
     CHID _chidLast; // last chid used for recording
-    int32_t _cact;     // number of times on this command
+    int32_t _cact;  // number of times on this command
     CMD _cmd;       // previous command recorded or played
 
     // dispatching
-    CMD _cmdCur;     // command being dispatched
+    CMD _cmdCur;        // command being dispatched
     int32_t _icmheNext; // next command handler to dispatch to
-    PGOB _pgobTrack; // the gob that is tracking the mouse
+    PGOB _pgobTrack;    // the gob that is tracking the mouse
 #ifdef WIN
     HWND _hwndCapture; // the hwnd that we captured the mouse with
 #endif                 // WIN
@@ -260,7 +260,7 @@ class CEX : public CEX_PAR
 
 #ifdef DEBUG
     int32_t _ccmdMax; // running max
-#endif             // DEBUG
+#endif                // DEBUG
 
     CEX(void);
 
@@ -304,10 +304,10 @@ class CEX : public CEX_PAR
     // queueing and dispatching
     virtual void EnqueueCmd(PCMD pcmd);
     virtual void PushCmd(PCMD pcmd);
-    virtual void EnqueueCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0, int32_t lw2 = 0,
-                            int32_t lw3 = 0);
-    virtual void PushCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0, int32_t lw2 = 0,
-                         int32_t lw3 = 0);
+    virtual void EnqueueCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0,
+                            int32_t lw2 = 0, int32_t lw3 = 0);
+    virtual void PushCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0,
+                         int32_t lw2 = 0, int32_t lw3 = 0);
     virtual bool FDispatchNextCmd(void);
     virtual bool FGetNextKey(PCMD pcmd);
     virtual bool FCidIn(int32_t cid);
@@ -316,8 +316,7 @@ class CEX : public CEX_PAR
     // menu marking
     virtual uint32_t GrfedsForCmd(PCMD pcmd);
     virtual uint32_t GrfedsForCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0,
-                                  int32_t lw2 = 0,
-                               int32_t lw3 = 0);
+                                  int32_t lw2 = 0, int32_t lw3 = 0);
 
     // mouse tracking
     virtual void TrackMouse(PGOB pgob);
