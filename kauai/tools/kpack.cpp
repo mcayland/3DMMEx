@@ -140,10 +140,10 @@ int __cdecl main(int cpszs, char *prgpszs[])
     {
         long lwSwapped;
 
-        if (floSrc.cb < size(long))
+        if (floSrc.cb < SIZEOF(long))
             goto LBadSrc;
 
-        if (!floSrc.FReadRgb(&lwSig, size(long), 0))
+        if (!floSrc.FReadRgb(&lwSig, SIZEOF(long), 0))
         {
             fprintf(stderr, "Reading source file failed\n\n");
             goto LFail;
@@ -162,7 +162,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
             goto LFail;
         }
 
-        blck.Set(floSrc.pfil, size(long), floSrc.cb - size(long), fPacked);
+        blck.Set(floSrc.pfil, SIZEOF(long), floSrc.cb - SIZEOF(long), fPacked);
         if (fPacked && !blck.FUnpackData())
         {
             fprintf(stderr, "Unpacking source failed\n\n");
@@ -183,13 +183,13 @@ int __cdecl main(int cpszs, char *prgpszs[])
             lwSig = klwSigPackedFile;
         else
             lwSig = klwSigUnpackedFile;
-        if (!floDst.pfil->FWriteRgb(&lwSig, size(long), 0))
+        if (!floDst.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0))
         {
             fprintf(stderr, "Writing destination failed\n\n");
             goto LFail;
         }
 
-        floDst.fp = size(long);
+        floDst.fp = SIZEOF(long);
         floDst.cb = blck.Cb(fTrue);
     }
 

@@ -91,7 +91,7 @@ ACR _rgacr[] = {kacrBlack,   kacrBlue,   kacrGreen, kacrCyan,  kacrRed,
                 kacrMagenta, kacrYellow, kacrWhite, kacrClear, kacrInvert};
 achar *_rgszColors[] = {PszLit("bla"), PszLit("blu"), PszLit("gre"), PszLit("cya"), PszLit("red"),
                         PszLit("mag"), PszLit("yel"), PszLit("whi"), PszLit("cle"), PszLit("inv")};
-const long _cacr = size(_rgacr) / size(_rgacr[0]);
+const long _cacr = SIZEOF(_rgacr) / SIZEOF(_rgacr[0]);
 
 RTCLASS(APP)
 
@@ -853,7 +853,7 @@ bool APP::FCmdNewTestWnd(PCMD pcmd)
             goto LFail;
     }
 
-    pcmd->pgg->GetRgb(2, 0, size(long), &lw);
+    pcmd->pgg->GetRgb(2, 0, SIZEOF(long), &lw);
     switch (lw)
     {
     case 0: // new graphics window
@@ -1469,11 +1469,11 @@ DOCPIC *DOCPIC::PdocpicNew(void)
     PGL pglclr;
     RC rc(0, 0, 16, 16);
 
-    if (pvNil == (pglclr = GL::PglNew(size(CLR), 256)))
+    if (pvNil == (pglclr = GL::PglNew(SIZEOF(CLR), 256)))
         return pvNil;
     for (i = 0; i < 256; i++)
     {
-        ClearPb(&clr, size(clr));
+        ClearPb(&clr, SIZEOF(clr));
         switch (_cact)
         {
         default:
@@ -1704,11 +1704,11 @@ DOCGPT *DOCGPT::PdocgptNew(void)
     PT pt(0, 0);
     ACR acr63(63), acr127(127), acr191(191);
 
-    if (pvNil == (pglclr = GL::PglNew(size(CLR), 256)))
+    if (pvNil == (pglclr = GL::PglNew(SIZEOF(CLR), 256)))
         return pvNil;
     for (i = 0; i < 256; i++)
     {
-        ClearPb(&clr, size(clr));
+        ClearPb(&clr, SIZEOF(clr));
         switch (_cact)
         {
         default:
@@ -1792,17 +1792,17 @@ DOCGPT *DOCGPT::PdocgptNew(void)
         pgpt = pvNil;
     }
 
-    if (pvNil == (pglclr = GL::PglNew(size(CLR), 256)))
+    if (pvNil == (pglclr = GL::PglNew(SIZEOF(CLR), 256)))
         goto LFail;
     for (i = 0; i < 128; i++)
     {
-        ClearPb(&clr, size(clr));
+        ClearPb(&clr, SIZEOF(clr));
         clr.bGreen = byte(i * 2);
         pglclr->FPush(&clr);
     }
     for (; i < 256; i++)
     {
-        ClearPb(&clr, size(clr));
+        ClearPb(&clr, SIZEOF(clr));
         clr.bGreen = 255;
         clr.bRed = clr.bBlue = (byte)((i - 128) * 2);
         pglclr->FPush(&clr);

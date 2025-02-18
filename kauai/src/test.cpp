@@ -216,7 +216,7 @@ void TestGl(void)
     short *qsw;
     PGL pglsw;
 
-    pglsw = GL::PglNew(size(short));
+    pglsw = GL::PglNew(SIZEOF(short));
     if (pvNil == pglsw)
     {
         Bug("PglNew failed");
@@ -332,7 +332,7 @@ void TestFil(void)
         AssertPo(pfil, 0);
         AssertDo(pfil->FSetFpMac(100), 0);
         AssertDo(pfil->FpMac() == 100, 0);
-        AssertDo(pfil->FWriteRgb(&fni, size(fni), 0), 0);
+        AssertDo(pfil->FWriteRgb(&fni, SIZEOF(fni), 0), 0);
         pfil->SetTemp(fTrue);
         pfil->Mark();
         ReleasePpo(&pfil);
@@ -500,7 +500,7 @@ void TestCfl(void)
             AssertDo(FEqualRgb(stn.Prgch(), perel->psz, stn.Cch()), 0);
             AssertDo(pcfl->FFind(perel->ctg, perel->cno, &blck), 0);
             AssertDo(blck.FRead(rgch), 0);
-            AssertDo(FEqualRgb(rgch, perel->psz, CchSz(perel->psz) * size(achar)), 0);
+            AssertDo(FEqualRgb(rgch, perel->psz, CchSz(perel->psz) * SIZEOF(achar)), 0);
         }
 
         // copy all the chunks - they should already be there, but this
@@ -540,8 +540,8 @@ void TestCfl(void)
             AssertDo(pcfl->FGetName(cki.ctg, cki.cno, &stn), 0);
             AssertDo(pcfl->FFind(cki.ctg, cki.cno, &blck), 0);
             AssertDo(blck.FRead(rgch), 0);
-            AssertDo(FEqualRgb(rgch, stn.Prgch(), stn.Cch() * size(achar)), 0);
-            AssertDo(stn.Cch() * size(achar) == blck.Cb(), 0);
+            AssertDo(FEqualRgb(rgch, stn.Prgch(), stn.Cch() * SIZEOF(achar)), 0);
+            AssertDo(stn.Cch() * SIZEOF(achar) == blck.Cb(), 0);
         }
 
         // copy all the chunks back

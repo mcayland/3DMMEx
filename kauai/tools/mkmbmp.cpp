@@ -155,7 +155,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
         fprintf(stderr, "Couldn't create destination file\n\n");
         goto LFail;
     }
-    flo.fp = size(long);
+    flo.fp = SIZEOF(long);
     flo.cb = pmbmp->CbOnFile();
 
     if (cfmtNil != cfmt)
@@ -175,7 +175,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
             lwSig = klwSigPackedFile;
             flo.cb = blck.Cb(fTrue);
         }
-        if (!flo.pfil->FWriteRgb(&lwSig, size(long), 0) || !blck.FWriteToFlo(&flo, fTrue))
+        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0) || !blck.FWriteToFlo(&flo, fTrue))
         {
             fprintf(stderr, "writing to destination file failed\n\n");
             goto LFail;
@@ -184,7 +184,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
     else
     {
         lwSig = klwSigUnpackedFile;
-        if (!flo.pfil->FWriteRgb(&lwSig, size(long), 0) || !pmbmp->FWriteFlo(&flo))
+        if (!flo.pfil->FWriteRgb(&lwSig, SIZEOF(long), 0) || !pmbmp->FWriteFlo(&flo))
         {
             fprintf(stderr, "writing to destination file failed\n\n");
             goto LFail;
