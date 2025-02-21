@@ -15,7 +15,7 @@ ASSERTNAME
 
 RTCLASS(TRUL)
 
-const long kdxpMax = 0x01000000;
+const int32_t kdxpMax = 0x01000000;
 
 /***************************************************************************
     Character run data.
@@ -23,17 +23,17 @@ const long kdxpMax = 0x01000000;
 typedef struct CHRD *PCHRD;
 struct CHRD
 {
-    long cpLim;
-    long cpLimDraw;
-    long xpLim;
-    long xpLimDraw;
+    int32_t cpLim;
+    int32_t cpLimDraw;
+    int32_t xpLim;
+    int32_t xpLimDraw;
 };
 
 /***************************************************************************
     Character run class. This is used to format a line, draw a line,
     map between cp and xp on a line, etc.
 ***************************************************************************/
-const long kcchMaxChr = 128;
+const int32_t kcchMaxChr = 128;
 class CHR
 {
     ASSERT
@@ -47,17 +47,17 @@ class CHR
     bool _fBreak : 1;
     bool _fObject : 1;
 
-    long _cpMin;
-    long _cpLim;
-    long _cpLimFetch;
-    long _xpMin;
-    long _xpBreak;
+    int32_t _cpMin;
+    int32_t _cpLim;
+    int32_t _cpLimFetch;
+    int32_t _xpMin;
+    int32_t _xpBreak;
 
     CHRD _chrd;
     CHRD _chrdBop;
 
-    long _dypAscent;
-    long _dypDescent;
+    int32_t _dypAscent;
+    int32_t _dypDescent;
 
     achar _rgch[kcchMaxChr];
 
@@ -67,8 +67,8 @@ class CHR
     void _DoTab(void);
 
   public:
-    void Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, long cpMin, long cpLim, long xpBase, long xpLimLine,
-              long xpBreak);
+    void Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, int32_t cpMin, int32_t cpLim, int32_t xpBase,
+              int32_t xpLimLine, int32_t xpBreak);
 
     void GetNextRun(bool fMustAdvance = fFalse);
     bool FBreak(void)
@@ -85,19 +85,19 @@ class CHR
         if (pvNil != pchrdBop)
             *pchrdBop = _chrdBop;
     }
-    long DypAscent(void)
+    int32_t DypAscent(void)
     {
         return _dypAscent;
     }
-    long DypDescent(void)
+    int32_t DypDescent(void)
     {
         return _dypDescent;
     }
-    long XpMin(void)
+    int32_t XpMin(void)
     {
         return _xpMin;
     }
-    long XpBreak(void)
+    int32_t XpBreak(void)
     {
         return _xpBreak;
     }
@@ -105,7 +105,7 @@ class CHR
     {
         return _rgch;
     }
-    long CpMin(void)
+    int32_t CpMin(void)
     {
         return _cpMin;
     }
@@ -119,7 +119,7 @@ class CHR
 /***************************************************************************
     Assert the validity of a CHR.
 ***************************************************************************/
-void CHR::AssertValid(ulong grf)
+void CHR::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertPo(_ptxtb, 0);
@@ -130,8 +130,8 @@ void CHR::AssertValid(ulong grf)
 /***************************************************************************
     Initialize the CHR.
 ***************************************************************************/
-void CHR::Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, long cpMin, long cpLim, long xpBase, long xpLimLine,
-               long xpBreak)
+void CHR::Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, int32_t cpMin, int32_t cpLim, int32_t xpBase,
+               int32_t xpLimLine, int32_t xpBreak)
 {
     AssertVarMem(pchp);
     AssertVarMem(ppap);
@@ -203,7 +203,7 @@ void CHR::Init(CHP *pchp, PAP *ppap, PTXTB ptxtb, PGNV pgnv, long cpMin, long cp
 void CHR::GetNextRun(bool fMustAdvance)
 {
     AssertThis(0);
-    ulong grfch;
+    uint32_t grfch;
     achar ch;
     RC rc;
 
@@ -221,7 +221,7 @@ void CHR::GetNextRun(bool fMustAdvance)
     // Refill the buffer
     if (_cpLimFetch < _cpLim && _cpLimFetch < _cpMin + kcchMaxChr)
     {
-        long cpFetch = LwMax(_cpMin, _cpLimFetch);
+        int32_t cpFetch = LwMax(_cpMin, _cpLimFetch);
 
         _cpLimFetch = LwMin(kcchMaxChr, _cpLim - _cpMin) + _cpMin;
         _ptxtb->FetchRgch(cpFetch, _cpLimFetch - cpFetch, _rgch + cpFetch - _cpMin);
@@ -284,7 +284,7 @@ void CHR::GetNextRun(bool fMustAdvance)
             if (grfch & fchWhiteOverhang)
             {
                 // see if everything but this character fits
-                long xp = _chrd.xpLim;
+                int32_t xp = _chrd.xpLim;
 
                 _chrd.cpLimDraw--;
                 if (_FFit())
@@ -388,8 +388,8 @@ void CHR::_SetToBop(void)
         Assert(_chrd.cpLimDraw > _cpMin, "why is _chrd.cpLimDraw == _cpMin?");
 
         RC rc;
-        long ivMin, ivLim, iv;
-        long dxp = _xpBreak - _xpMin;
+        int32_t ivMin, ivLim, iv;
+        int32_t dxp = _xpBreak - _xpMin;
 
         for (ivMin = 0, ivLim = _chrd.cpLimDraw - _cpMin; ivMin < ivLim;)
         {
@@ -433,7 +433,7 @@ void CHR::_SkipIgnores(void)
     if (_chrd.cpLim == _cpLimFetch)
     {
         achar ch;
-        long cpMac = _ptxtb->CpMac();
+        int32_t cpMac = _ptxtb->CpMac();
 
         while (_chrd.cpLim < cpMac)
         {
@@ -509,7 +509,7 @@ TXTG::~TXTG(void)
 /***************************************************************************
     Assert the validity of a TXTG.
 ***************************************************************************/
-void TXTG::AssertValid(ulong grf)
+void TXTG::AssertValid(uint32_t grf)
 {
     TXTG_PAR::AssertValid(0);
     AssertPo(_pgllin, 0);
@@ -572,7 +572,7 @@ bool TXTG::_FInit(void)
     _ilinInval = 0;
     if (_DxpDoc() > 0)
     {
-        long cpMac = _ptxtb->CpMac();
+        int32_t cpMac = _ptxtb->CpMac();
         _Reformat(0, cpMac, cpMac);
     }
 
@@ -597,18 +597,18 @@ void TXTG::_Activate(bool fActive)
     _CalcLine is called repeatedly and new lines are added to _pgllin.
     The actual index of the returned line is put in *pilinActual (if not nil).
 ***************************************************************************/
-void TXTG::_FetchLin(long ilin, LIN *plin, long *pilinActual)
+void TXTG::_FetchLin(int32_t ilin, LIN *plin, int32_t *pilinActual)
 {
     AssertThis(0);
     AssertIn(ilin, 0, kcbMax);
     AssertVarMem(plin);
     AssertNilOrVarMem(pilinActual);
 
-    long cpLim, cpMac;
-    long dypTot;
+    int32_t cpLim, cpMac;
+    int32_t dypTot;
     LIN *qlin;
     bool fAdd;
-    long ilinLim = LwMin(_pgllin->IvMac(), ilin + 1);
+    int32_t ilinLim = LwMin(_pgllin->IvMac(), ilin + 1);
 
     if (pvNil != pilinActual)
         *pilinActual = ilin;
@@ -680,7 +680,7 @@ void TXTG::_FetchLin(long ilin, LIN *plin, long *pilinActual)
     If fCalcLines is false, we won't calculate any new lines and the
     returned LIN may be before cpFind.
 ***************************************************************************/
-void TXTG::_FindCp(long cpFind, LIN *plin, long *pilin, bool fCalcLines)
+void TXTG::_FindCp(int32_t cpFind, LIN *plin, int32_t *pilin, bool fCalcLines)
 {
     AssertThis(0);
     AssertIn(cpFind, 0, _ptxtb->CpMac());
@@ -689,9 +689,9 @@ void TXTG::_FindCp(long cpFind, LIN *plin, long *pilin, bool fCalcLines)
 
     LIN *qlin;
     LIN lin;
-    long dypTot;
-    long cpLim;
-    long ilinMac;
+    int32_t dypTot;
+    int32_t cpLim;
+    int32_t ilinMac;
     bool fAdd;
 
     // get the starting cp and dypTot values for _ilinInval
@@ -712,7 +712,7 @@ void TXTG::_FindCp(long cpFind, LIN *plin, long *pilin, bool fCalcLines)
     if (cpFind < cpLim)
     {
         // do a binary search to find the LIN containing cpFind
-        long ivMin, ivLim, iv;
+        int32_t ivMin, ivLim, iv;
 
         for (ivMin = 0, ivLim = _ilinInval; ivMin < ivLim;)
         {
@@ -800,7 +800,7 @@ void TXTG::_FindCp(long cpFind, LIN *plin, long *pilin, bool fCalcLines)
     If fCalcLines is false, we won't calculate any new lines and the
     returned LIN may be before dypFind.
 ***************************************************************************/
-void TXTG::_FindDyp(long dypFind, LIN *plin, long *pilin, bool fCalcLines)
+void TXTG::_FindDyp(int32_t dypFind, LIN *plin, int32_t *pilin, bool fCalcLines)
 {
     AssertThis(0);
     AssertIn(dypFind, 0, kcbMax);
@@ -809,9 +809,9 @@ void TXTG::_FindDyp(long dypFind, LIN *plin, long *pilin, bool fCalcLines)
 
     LIN *qlin;
     LIN lin;
-    long dypTot;
-    long cpLim, cpMac;
-    long ilinMac;
+    int32_t dypTot;
+    int32_t cpLim, cpMac;
+    int32_t ilinMac;
     bool fAdd;
 
     // get the starting cp and dypTot values for _ilinInval
@@ -832,7 +832,7 @@ void TXTG::_FindDyp(long dypFind, LIN *plin, long *pilin, bool fCalcLines)
     if (dypFind < dypTot)
     {
         // do a binary search to find the LIN containing dypFind
-        long ivMin, ivLim, iv;
+        int32_t ivMin, ivLim, iv;
 
         for (ivMin = 0, ivLim = _ilinInval; ivMin < ivLim;)
         {
@@ -934,7 +934,7 @@ void TXTG::_FindDyp(long dypFind, LIN *plin, long *pilin, bool fCalcLines)
     Recalculate the _pgllin after an edit.  Sets *pyp, *pdypIns, *pdypDel
     to indicate the vertical display space that was affected.
 ***************************************************************************/
-void TXTG::_Reformat(long cp, long ccpIns, long ccpDel, long *pyp, long *pdypIns, long *pdypDel)
+void TXTG::_Reformat(int32_t cp, int32_t ccpIns, int32_t ccpDel, int32_t *pyp, int32_t *pdypIns, int32_t *pdypDel)
 {
     AssertThis(0);
     AssertIn(cp, 0, _ptxtb->CpMac());
@@ -944,9 +944,9 @@ void TXTG::_Reformat(long cp, long ccpIns, long ccpDel, long *pyp, long *pdypIns
     AssertNilOrVarMem(pdypIns);
     AssertNilOrVarMem(pdypDel);
 
-    long ypDel, dypDel, dypIns, dypCur;
-    long ccp, cpCur, cpNext, cpMac;
-    long ilin, ilinOld;
+    int32_t ypDel, dypDel, dypIns, dypCur;
+    int32_t ccp, cpCur, cpNext, cpMac;
+    int32_t ilin, ilinOld;
     LIN linOld, lin, linT;
 
     _fClear = _ptxtb->AcrBack() == kacrClear;
@@ -1089,7 +1089,7 @@ void TXTG::_Reformat(long cp, long ccpIns, long ccpDel, long *pyp, long *pdypIns
     Calculate the end of the line, the left position of the line, the height
     of the line and the ascent of the line.
 ***************************************************************************/
-void TXTG::_CalcLine(long cpMin, long dypBase, LIN *plin)
+void TXTG::_CalcLine(int32_t cpMin, int32_t dypBase, LIN *plin)
 {
     AssertThis(0);
     AssertIn(cpMin, 0, _ptxtb->CpMac());
@@ -1097,16 +1097,16 @@ void TXTG::_CalcLine(long cpMin, long dypBase, LIN *plin)
 
     struct RUN
     {
-        long cpLim;
-        long xpLim;
-        long dypAscent;
-        long dypDescent;
+        int32_t cpLim;
+        int32_t xpLim;
+        int32_t dypAscent;
+        int32_t dypDescent;
     };
 
-    long dxpDoc;
+    int32_t dxpDoc;
     PAP pap;
     CHP chp;
-    long cpLimPap, cpLimChp;
+    int32_t cpLimPap, cpLimChp;
     CHR chr;
     CHRD chrd, chrdBop;
     RUN run, runSure, runT;
@@ -1180,27 +1180,27 @@ void TXTG::_CalcLine(long cpMin, long dypBase, LIN *plin)
         plin->xpLeft = 0;
         break;
     case jcRight:
-        plin->xpLeft = (short)(dxpDoc - run.xpLim);
+        plin->xpLeft = (int16_t)(dxpDoc - run.xpLim);
         break;
     case jcCenter:
         plin->xpLeft = (dxpDoc - run.xpLim) / 2;
         break;
     }
 
-    plin->ccp = (short)(run.cpLim - cpMin);
-    plin->dyp = (short)(run.dypAscent + run.dypDescent);
+    plin->ccp = (int16_t)(run.cpLim - cpMin);
+    plin->dyp = (int16_t)(run.dypAscent + run.dypDescent);
     if (pap.numLine != kdenLine)
-        plin->dyp = (short)LwMulDiv(plin->dyp, pap.numLine, kdenLine);
+        plin->dyp = (int16_t)LwMulDiv(plin->dyp, pap.numLine, kdenLine);
     plin->dyp += pap.dypExtraLine;
     if (_ptxtb->FMinPara(run.cpLim) || run.cpLim == _ptxtb->CpMac())
     {
         if (pap.numAfter != kdenAfter)
-            plin->dyp = (short)LwMulDiv(plin->dyp, pap.numAfter, kdenAfter);
+            plin->dyp = (int16_t)LwMulDiv(plin->dyp, pap.numAfter, kdenAfter);
         plin->dyp += pap.dypExtraAfter;
     }
     if (plin->dyp <= 0)
         plin->dyp = 1;
-    plin->dypAscent = (short)run.dypAscent;
+    plin->dypAscent = (int16_t)run.dypAscent;
     if (plin->dypAscent <= 0)
         plin->dypAscent = 1;
     plin->cpMin = cpMin;
@@ -1212,7 +1212,7 @@ void TXTG::_CalcLine(long cpMin, long dypBase, LIN *plin)
     cp boundary that the point is closest to (for traditional selection).
     If fClosest is false, it finds the character that the point is over.
 ***************************************************************************/
-bool TXTG::_FGetCpFromPt(long xp, long yp, long *pcp, bool fClosest)
+bool TXTG::_FGetCpFromPt(int32_t xp, int32_t yp, int32_t *pcp, bool fClosest)
 {
     AssertThis(0);
     AssertVarMem(pcp);
@@ -1242,7 +1242,7 @@ bool TXTG::_FGetCpFromPt(long xp, long yp, long *pcp, bool fClosest)
     that the xp is over. This only returns false if fClosest is false and
     the xp is before the beginning of the line.
 ***************************************************************************/
-bool TXTG::_FGetCpFromXp(long xp, LIN *plin, long *pcp, bool fClosest)
+bool TXTG::_FGetCpFromXp(int32_t xp, LIN *plin, int32_t *pcp, bool fClosest)
 {
     AssertThis(0);
     AssertVarMem(plin);
@@ -1254,8 +1254,8 @@ bool TXTG::_FGetCpFromXp(long xp, LIN *plin, long *pcp, bool fClosest)
     CHP chp;
     PAP pap;
     CHR chr;
-    long cpCur, cpLimChp, cpLim;
-    long xpCur, dxpDoc;
+    int32_t cpCur, cpLimChp, cpLim;
+    int32_t xpCur, dxpDoc;
     CHRD chrd;
 
     xp -= plin->xpLeft + kdxpIndentTxtg - _scvHorz;
@@ -1299,7 +1299,7 @@ bool TXTG::_FGetCpFromXp(long xp, LIN *plin, long *pcp, bool fClosest)
 
         if (chr.FBreak() && (chrd.xpLim >= chr.XpBreak() || chrd.cpLim >= cpLim))
         {
-            long cpPrev = _ptxtb->CpPrev(chrd.cpLim);
+            int32_t cpPrev = _ptxtb->CpPrev(chrd.cpLim);
 
             if (!fClosest || chrd.cpLim >= cpLim)
                 goto LPrev;
@@ -1337,7 +1337,7 @@ bool TXTG::_FGetCpFromXp(long xp, LIN *plin, long *pcp, bool fClosest)
     view coordinates. If fView is false, the values are in logical values
     (independent of the current scrolling of the view).
 ***************************************************************************/
-void TXTG::_GetXpYpFromCp(long cp, long *pypMin, long *pypLim, long *pxp, long *pypBaseLine, bool fView)
+void TXTG::_GetXpYpFromCp(int32_t cp, int32_t *pypMin, int32_t *pypLim, int32_t *pxp, int32_t *pypBaseLine, bool fView)
 {
     AssertThis(0);
     AssertIn(cp, 0, _ptxtb->CpMac());
@@ -1347,7 +1347,7 @@ void TXTG::_GetXpYpFromCp(long cp, long *pypMin, long *pypLim, long *pxp, long *
     AssertNilOrVarMem(pypBaseLine);
 
     LIN lin;
-    long xp;
+    int32_t xp;
 
     _FindCp(cp, &lin);
     xp = lin.xpLeft;
@@ -1373,7 +1373,7 @@ void TXTG::_GetXpYpFromCp(long cp, long *pypMin, long *pypLim, long *pxp, long *
     kdxpIndentTxtg, but doesn't include centering or right justification
     correction.
 ***************************************************************************/
-long TXTG::_DxpFromCp(long cpLine, long cp)
+int32_t TXTG::_DxpFromCp(int32_t cpLine, int32_t cp)
 {
     AssertThis(0);
     AssertIn(cpLine, 0, _ptxtb->CpMac());
@@ -1382,8 +1382,8 @@ long TXTG::_DxpFromCp(long cpLine, long cp)
     CHP chp;
     PAP pap;
     CHR chr;
-    long cpCur, cpLimChp, cpLim;
-    long xpCur;
+    int32_t cpCur, cpLimChp, cpLim;
+    int32_t xpCur;
     CHRD chrd;
 
     cpLimChp = cpCur = cpLine;
@@ -1420,7 +1420,7 @@ long TXTG::_DxpFromCp(long cpLine, long cp)
 /***************************************************************************
     Replaces the characters between cp1 and cp2 with the given ones.
 ***************************************************************************/
-bool TXTG::FReplace(achar *prgch, long cch, long cp1, long cp2)
+bool TXTG::FReplace(achar *prgch, int32_t cch, int32_t cp1, int32_t cp2)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -1442,14 +1442,14 @@ bool TXTG::FReplace(achar *prgch, long cch, long cp1, long cp2)
 /***************************************************************************
     Invalidate the display from cp.  If we're the active TXTG, also redraw.
 ***************************************************************************/
-void TXTG::InvalCp(long cp, long ccpIns, long ccpDel)
+void TXTG::InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel)
 {
     AssertThis(0);
     AssertIn(cp, 0, _ptxtb->CpMac() + 1);
     AssertIn(ccpIns, 0, _ptxtb->CpMac() + 1 - cp);
     AssertIn(ccpDel, 0, kcbMax);
     Assert(!_fSelOn, "selection is on in InvalCp!");
-    long cpAnchor, cpOther;
+    int32_t cpAnchor, cpOther;
 
     // adjust the sel
     cpAnchor = _cpAnchor;
@@ -1475,10 +1475,10 @@ void TXTG::InvalCp(long cp, long ccpIns, long ccpDel)
     Reformat the TXTG and update the display.  If this TXTG is not the
     active one, the display is invalidated instead of updated.
 ***************************************************************************/
-void TXTG::_ReformatAndDraw(long cp, long ccpIns, long ccpDel)
+void TXTG::_ReformatAndDraw(int32_t cp, int32_t ccpIns, int32_t ccpDel)
 {
     RC rcLoc, rc;
-    long yp, dypIns, dypDel;
+    int32_t yp, dypIns, dypDel;
     RC rcUpdate(0, 0, 0, 0);
 
     // reformat
@@ -1526,10 +1526,10 @@ void TXTG::_ReformatAndDraw(long cp, long ccpIns, long ccpDel)
 /***************************************************************************
     Perform a scroll according to scaHorz and scaVert.
 ***************************************************************************/
-void TXTG::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
+void TXTG::_Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz, int32_t scvVert)
 {
     RC rc;
-    long dxp, dyp;
+    int32_t dxp, dyp;
 
     GetRc(&rc, cooLocal);
     dxp = 0;
@@ -1561,9 +1561,9 @@ void TXTG::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
     dyp = 0;
     if (scaVert != scaNil)
     {
-        long cpT;
+        int32_t cpT;
         LIN lin, linDisp;
-        long ilin;
+        int32_t ilin;
         RC rc;
 
         switch (scaVert)
@@ -1661,7 +1661,7 @@ void TXTG::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
 /***************************************************************************
     Move the bits in the window.
 ***************************************************************************/
-void TXTG::_ScrollDxpDyp(long dxp, long dyp)
+void TXTG::_ScrollDxpDyp(int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     RC rcLoc, rcBad1, rcBad2;
@@ -1697,7 +1697,8 @@ void TXTG::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Draws some lines of the document.
 ***************************************************************************/
-void TXTG::DrawLines(PGNV pgnv, RC *prcClip, long dxp, long dyp, long ilinMin, long ilinLim, ulong grftxtg)
+void TXTG::DrawLines(PGNV pgnv, RC *prcClip, int32_t dxp, int32_t dyp, int32_t ilinMin, int32_t ilinLim,
+                     uint32_t grftxtg)
 {
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
@@ -1706,10 +1707,10 @@ void TXTG::DrawLines(PGNV pgnv, RC *prcClip, long dxp, long dyp, long ilinMin, l
     CHR chr;
     CHRD chrd;
     RC rc;
-    long xpBase, xp, yp, xpChr, dxpDoc;
-    long cpLine, cpCur, cpLimChp, cpLim, cpLimLine;
+    int32_t xpBase, xp, yp, xpChr, dxpDoc;
+    int32_t cpLine, cpCur, cpLimChp, cpLim, cpLimLine;
     LIN lin;
-    long ilin;
+    int32_t ilin;
 
     cpLim = _ptxtb->CpMac();
     dxpDoc = _DxpDoc();
@@ -1789,7 +1790,7 @@ void TXTG::DrawLines(PGNV pgnv, RC *prcClip, long dxp, long dyp, long ilinMin, l
     Gives a subclass an opportunity to draw extra stuff associated with
     the line. Default does nothing.
 ***************************************************************************/
-void TXTG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, ulong grftxtg)
+void TXTG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, int32_t dxp, int32_t yp, uint32_t grftxtg)
 {
 }
 
@@ -1801,10 +1802,10 @@ bool TXTG::FCmdTrackMouse(PCMD_MOUSE pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
     RC rc;
-    long cp;
-    long scaHorz, scaVert;
-    long xp = pcmd->xp;
-    long yp = pcmd->yp;
+    int32_t cp;
+    int32_t scaHorz, scaVert;
+    int32_t xp = pcmd->xp;
+    int32_t yp = pcmd->yp;
 
     if (pcmd->cid == cidMouseDown)
     {
@@ -1890,7 +1891,7 @@ bool TXTG::FCmdSelIdle(PCMD pcmd)
 /***************************************************************************
     Get the current selection.
 ***************************************************************************/
-void TXTG::GetSel(long *pcpAnchor, long *pcpOther)
+void TXTG::GetSel(int32_t *pcpAnchor, int32_t *pcpOther)
 {
     AssertThis(0);
     AssertVarMem(pcpAnchor);
@@ -1903,10 +1904,10 @@ void TXTG::GetSel(long *pcpAnchor, long *pcpOther)
 /***************************************************************************
     Set the selection.
 ***************************************************************************/
-void TXTG::SetSel(long cpAnchor, long cpOther, long gin)
+void TXTG::SetSel(int32_t cpAnchor, int32_t cpOther, int32_t gin)
 {
     AssertThis(0);
-    long cpMac = _ptxtb->CpMac();
+    int32_t cpMac = _ptxtb->CpMac();
 
     cpAnchor = LwBound(cpAnchor, 0, cpMac);
     cpOther = LwBound(cpOther, 0, cpMac);
@@ -1948,13 +1949,13 @@ void TXTG::SetSel(long cpAnchor, long cpOther, long gin)
 void TXTG::ShowSel(void)
 {
     AssertThis(0);
-    long cpScroll;
-    long ilinOther, ilinAnchor, ilin;
-    long dxpScroll, dypSel;
-    long xpMin, xpLim;
+    int32_t cpScroll;
+    int32_t ilinOther, ilinAnchor, ilin;
+    int32_t dxpScroll, dypSel;
+    int32_t xpMin, xpLim;
     RC rc;
     LIN linOther, linAnchor, lin;
-    long cpAnchor = _cpAnchor;
+    int32_t cpAnchor = _cpAnchor;
 
     // find the lines we want to show
     _FindCp(_cpOther, &linOther, &ilinOther);
@@ -2042,7 +2043,7 @@ void TXTG::HideSel(void)
 /***************************************************************************
     Turn the sel on or off according to fOn.
 ***************************************************************************/
-void TXTG::_SwitchSel(bool fOn, long gin)
+void TXTG::_SwitchSel(bool fOn, int32_t gin)
 {
     AssertThis(0);
 
@@ -2060,7 +2061,7 @@ void TXTG::_SwitchSel(bool fOn, long gin)
 /***************************************************************************
     Invert the current selection.
 ***************************************************************************/
-void TXTG::_InvertSel(PGNV pgnv, long gin)
+void TXTG::_InvertSel(PGNV pgnv, int32_t gin)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
@@ -2087,7 +2088,7 @@ void TXTG::_InvertSel(PGNV pgnv, long gin)
 /***************************************************************************
     Invert a range.
 ***************************************************************************/
-void TXTG::_InvertCpRange(PGNV pgnv, long cp1, long cp2, long gin)
+void TXTG::_InvertCpRange(PGNV pgnv, int32_t cp1, int32_t cp2, int32_t gin)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
@@ -2156,17 +2157,17 @@ void TXTG::_InvertCpRange(PGNV pgnv, long cp1, long cp2, long gin)
 ***************************************************************************/
 bool TXTG::FCmdKey(PCMD_KEY pcmd)
 {
-    const long kcchInsBuf = 64;
+    const int32_t kcchInsBuf = 64;
     AssertThis(0);
     AssertVarMem(pcmd);
-    ulong grfcust;
-    long vkDone;
-    long ichLim;
-    long cact;
-    long dcp, cpT;
+    uint32_t grfcust;
+    int32_t vkDone;
+    int32_t ichLim;
+    int32_t cact;
+    int32_t dcp, cpT;
     CMD cmd;
     LIN lin, linT;
-    long ilin, ilinT;
+    int32_t ilin, ilinT;
     RC rc;
     achar rgch[kcchInsBuf + 1];
 
@@ -2384,10 +2385,10 @@ LInsert:
 /***************************************************************************
     Return the maximum scroll value for this view of the doc.
 ***************************************************************************/
-long TXTG::_ScvMax(bool fVert)
+int32_t TXTG::_ScvMax(bool fVert)
 {
     RC rc;
-    long dxp;
+    int32_t dxp;
 
     if (fVert)
         return _ptxtb->CpMac() - 1;
@@ -2400,7 +2401,7 @@ long TXTG::_ScvMax(bool fVert)
 /***************************************************************************
     Return the logical width of the text "page".
 ***************************************************************************/
-long TXTG::_DxpDoc(void)
+int32_t TXTG::_DxpDoc(void)
 {
     return _ptxtb->DxpDef();
 }
@@ -2408,7 +2409,7 @@ long TXTG::_DxpDoc(void)
 /***************************************************************************
     Set the tab width.  Default does nothing.
 ***************************************************************************/
-void TXTG::SetDxpTab(long dxp)
+void TXTG::SetDxpTab(int32_t dxp)
 {
     AssertThis(0);
 }
@@ -2416,7 +2417,7 @@ void TXTG::SetDxpTab(long dxp)
 /***************************************************************************
     Set the document width.  Default calls SetDxpDef on the TXTB.
 ***************************************************************************/
-void TXTG::SetDxpDoc(long dxp)
+void TXTG::SetDxpDoc(int32_t dxp)
 {
     AssertThis(0);
     dxp = LwBound(dxp, 1, kcbMax);
@@ -2430,7 +2431,7 @@ void TXTG::ShowRuler(bool fShow)
 {
     AssertThis(0);
     RC rcAbs, rcRel;
-    long dyp;
+    int32_t dyp;
 
     if (FPure(fShow) == (_ptrul != pvNil))
         return;
@@ -2470,7 +2471,7 @@ void TXTG::ShowRuler(bool fShow)
 /***************************************************************************
     Return the height of the ruler.
 ***************************************************************************/
-long TXTG::_DypTrul(void)
+int32_t TXTG::_DypTrul(void)
 {
     AssertThis(0);
     return 0;
@@ -2488,7 +2489,7 @@ PTRUL TXTG::_PtrulNew(PGCB pgcb)
 /***************************************************************************
     Get the natural width and height of the view on the document.
 ***************************************************************************/
-void TXTG::GetNaturalSize(long *pdxp, long *pdyp)
+void TXTG::GetNaturalSize(int32_t *pdxp, int32_t *pdyp)
 {
     AssertThis(0);
     AssertNilOrVarMem(pdxp);
@@ -2507,7 +2508,8 @@ void TXTG::GetNaturalSize(long *pdxp, long *pdyp)
 /***************************************************************************
     Constructor for the plain line text document display gob.
 ***************************************************************************/
-TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab) : TXLG_PAR(ptxtb, pgcb)
+TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab)
+    : TXLG_PAR(ptxtb, pgcb)
 {
     RC rc;
     achar ch = kchSpace;
@@ -2525,7 +2527,7 @@ TXLG::TXLG(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cc
 /***************************************************************************
     Static method to create a new plain line text doc display gob.
 ***************************************************************************/
-PTXLG TXLG::PtxlgNew(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab)
+PTXLG TXLG::PtxlgNew(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab)
 {
     PTXLG ptxlg;
 
@@ -2544,7 +2546,7 @@ PTXLG TXLG::PtxlgNew(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFon
     Get the width of the logical "page".  For a TXLG, this is some big
     value, so we do no word wrap.
 ***************************************************************************/
-long TXLG::_DxpDoc(void)
+int32_t TXLG::_DxpDoc(void)
 {
     return kswMax;
 }
@@ -2552,10 +2554,10 @@ long TXLG::_DxpDoc(void)
 /***************************************************************************
     Set the tab width.
 ***************************************************************************/
-void TXLG::SetDxpTab(long dxp)
+void TXLG::SetDxpTab(int32_t dxp)
 {
     AssertThis(0);
-    long cch;
+    int32_t cch;
 
     cch = LwBound(dxp / _dxpChar, 1, kswMax / _dxpChar);
     if (cch != _cchTab)
@@ -2568,7 +2570,7 @@ void TXLG::SetDxpTab(long dxp)
 /***************************************************************************
     Set the document width.  Does nothing.
 ***************************************************************************/
-void TXLG::SetDxpDoc(long dxp)
+void TXLG::SetDxpDoc(int32_t dxp)
 {
     AssertThis(0);
 }
@@ -2577,7 +2579,7 @@ void TXLG::SetDxpDoc(long dxp)
     Get the character properties for display.  These are the same for all
     characters in the TXLG.
 ***************************************************************************/
-void TXLG::_FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
+void TXLG::_FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin, int32_t *pcpLim)
 {
     AssertIn(cp, 0, _ptxtb->CpMac());
     AssertVarMem(pchp);
@@ -2600,7 +2602,7 @@ void TXLG::_FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
     Get the paragraph properties for disply.  These are constant for all
     characters in the TXLG.
 ***************************************************************************/
-void TXLG::_FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
+void TXLG::_FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin, int32_t *pcpLim)
 {
     AssertIn(cp, 0, _ptxtb->CpMac());
     AssertVarMem(ppap);
@@ -2608,7 +2610,7 @@ void TXLG::_FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
     AssertNilOrVarMem(pcpLim);
 
     ClearPb(ppap, SIZEOF(PAP));
-    ppap->dxpTab = (short)LwMul(_cchTab, _dxpChar);
+    ppap->dxpTab = (int16_t)LwMul(_cchTab, _dxpChar);
     ppap->numLine = kdenLine;
     ppap->numAfter = kdenAfter;
     if (pvNil != pcpMin)
@@ -2634,8 +2636,8 @@ bool TXLG::_FCopySel(PDOCB *ppdocb)
 
     if (pvNil != (ptxpd = TXPD::PtxpdNew(pvNil)))
     {
-        long cpMin = LwMin(_cpAnchor, _cpOther);
-        long cpLim = LwMax(_cpAnchor, _cpOther);
+        int32_t cpMin = LwMin(_cpAnchor, _cpOther);
+        int32_t cpLim = LwMax(_cpAnchor, _cpOther);
 
         ptxpd->SuspendUndo();
         if (!ptxpd->FReplaceBsf(_ptxtb->Pbsf(), cpMin, cpLim - cpMin, 0, 0, fdocNil))
@@ -2664,12 +2666,12 @@ void TXLG::_ClearSel(void)
 /***************************************************************************
     Paste the selection.
 ***************************************************************************/
-bool TXLG::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool TXLG::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     AssertThis(0);
     AssertPo(pclip, 0);
-    long cp1, cp2;
-    long ccp;
+    int32_t cp1, cp2;
+    int32_t ccp;
     PTXTB ptxtb;
 
     if (cid != cidPaste || !pclip->FGetFormat(kclsTXTB))
@@ -2733,7 +2735,7 @@ PTXRG TXRG::PtxrgNew(PTXRD ptxrd, PGCB pgcb)
 /***************************************************************************
     Assert the validity of a TXRG.
 ***************************************************************************/
-void TXRG::AssertValid(ulong grf)
+void TXRG::AssertValid(uint32_t grf)
 {
     TXRG_PAR::AssertValid(0);
     AssertNilOrPo(_ptrul, 0);
@@ -2743,7 +2745,7 @@ void TXRG::AssertValid(ulong grf)
 /***************************************************************************
     Get the character properties for displaying the given cp.
 ***************************************************************************/
-void TXRG::_FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
+void TXRG::_FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin, int32_t *pcpLim)
 {
     ((PTXRD)_ptxtb)->FetchChp(cp, pchp, pcpMin, pcpLim);
 }
@@ -2751,7 +2753,7 @@ void TXRG::_FetchChp(long cp, PCHP pchp, long *pcpMin, long *pcpLim)
 /***************************************************************************
     Get the paragraph properties for displaying the given cp.
 ***************************************************************************/
-void TXRG::_FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
+void TXRG::_FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin, int32_t *pcpLim)
 {
     ((PTXRD)_ptxtb)->FetchPap(cp, ppap, pcpMin, pcpLim);
 }
@@ -2759,10 +2761,10 @@ void TXRG::_FetchPap(long cp, PPAP ppap, long *pcpMin, long *pcpLim)
 /***************************************************************************
     Set the tab width for the currently selected paragraph(s).
 ***************************************************************************/
-void TXRG::SetDxpTab(long dxp)
+void TXRG::SetDxpTab(int32_t dxp)
 {
     AssertThis(0);
-    long cpMin, cpLim, cpAnchor, cpOther;
+    int32_t cpMin, cpLim, cpAnchor, cpOther;
     PAP papOld, papNew;
 
     dxp = LwRoundClosest(dxp, kdzpInch / 8);
@@ -2773,7 +2775,7 @@ void TXRG::SetDxpTab(long dxp)
     cpMin = LwMin(cpAnchor = _cpAnchor, cpOther = _cpOther);
     cpLim = LwMax(_cpAnchor, _cpOther);
 
-    papNew.dxpTab = (short)dxp;
+    papNew.dxpTab = (int16_t)dxp;
     _SwitchSel(fFalse, ginNil);
     if (!((PTXRD)_ptxtb)->FApplyPap(cpMin, cpLim - cpMin, &papNew, &papOld, &cpMin, &cpLim))
     {
@@ -2788,10 +2790,10 @@ void TXRG::SetDxpTab(long dxp)
     Set the selection for the TXRG.  Invalidates _chpIns if the selection
     changes.
 ***************************************************************************/
-void TXRG::SetSel(long cpAnchor, long cpOther, long gin)
+void TXRG::SetSel(int32_t cpAnchor, int32_t cpOther, int32_t gin)
 {
     AssertThis(0);
-    long cpMac = _ptxtb->CpMac();
+    int32_t cpMac = _ptxtb->CpMac();
 
     cpAnchor = LwBound(cpAnchor, 0, cpMac);
     cpOther = LwBound(cpOther, 0, cpMac);
@@ -2816,12 +2818,12 @@ void TXRG::SetSel(long cpAnchor, long cpOther, long gin)
     of the previous character. Otherwise gets the chp of the character at
     LwMin(cp1, cp2).
 ***************************************************************************/
-void TXRG::_FetchChpSel(long cp1, long cp2, PCHP pchp)
+void TXRG::_FetchChpSel(int32_t cp1, int32_t cp2, PCHP pchp)
 {
     AssertThis(0);
     AssertVarMem(pchp);
 
-    long cp = LwMin(cp1, cp2);
+    int32_t cp = LwMin(cp1, cp2);
 
     if (cp1 == cp2 && cp1 > 0)
     {
@@ -2855,7 +2857,7 @@ void TXRG::_EnsureChpIns(void)
 /***************************************************************************
     Replaces the characters between cp1 and cp2 with the given ones.
 ***************************************************************************/
-bool TXRG::FReplace(achar *prgch, long cch, long cp1, long cp2)
+bool TXRG::FReplace(achar *prgch, int32_t cch, int32_t cp1, int32_t cp2)
 {
     AssertIn(cch, 0, kcbMax);
     AssertPvCb(prgch, cch);
@@ -2908,8 +2910,8 @@ bool TXRG::_FCopySel(PDOCB *ppdocb)
 
     if (pvNil != (ptxrd = TXRD::PtxrdNew(pvNil)))
     {
-        long cpMin = LwMin(_cpAnchor, _cpOther);
-        long cpLim = LwMax(_cpAnchor, _cpOther);
+        int32_t cpMin = LwMin(_cpAnchor, _cpOther);
+        int32_t cpLim = LwMax(_cpAnchor, _cpOther);
 
         ptxrd->SuspendUndo();
         if (!ptxrd->FReplaceTxrd((PTXRD)_ptxtb, cpMin, cpLim - cpMin, 0, 0, fdocNil))
@@ -2936,11 +2938,11 @@ void TXRG::_ClearSel(void)
 /***************************************************************************
     Paste the selection.
 ***************************************************************************/
-bool TXRG::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool TXRG::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     AssertThis(0);
-    long cp1, cp2;
-    long ccp;
+    int32_t cp1, cp2;
+    int32_t ccp;
     PTXTB ptxtb;
     bool fRet;
 
@@ -2997,8 +2999,8 @@ bool TXRG::FApplyChp(PCHP pchp, PCHP pchpDiff)
     AssertVarMem(pchp);
     AssertNilOrVarMem(pchpDiff);
 
-    long cpMin, cpLim, cpAnchor, cpOther;
-    ulong grfont;
+    int32_t cpMin, cpLim, cpAnchor, cpOther;
+    uint32_t grfont;
 
     cpMin = LwMin(cpAnchor = _cpAnchor, cpOther = _cpOther);
     cpLim = LwMax(_cpAnchor, _cpOther);
@@ -3050,7 +3052,7 @@ bool TXRG::FApplyPap(PPAP ppap, PPAP ppapDiff, bool fExpand)
     AssertThis(0);
     AssertVarMem(ppap);
     AssertNilOrVarMem(ppapDiff);
-    long cpMin, cpLim, cpAnchor, cpOther;
+    int32_t cpMin, cpLim, cpAnchor, cpOther;
 
     cpMin = LwMin(cpAnchor = _cpAnchor, cpOther = _cpOther);
     cpLim = LwMax(_cpAnchor, _cpOther);
@@ -3077,7 +3079,7 @@ bool TXRG::FCmdApplyProperty(PCMD pcmd)
     AssertVarMem(pcmd);
     CHP chpOld, chpNew;
     PAP papOld, papNew;
-    long onn;
+    int32_t onn;
     STN stn;
 
     ClearPb(&papOld, SIZEOF(PAP));
@@ -3090,7 +3092,7 @@ bool TXRG::FCmdApplyProperty(PCMD pcmd)
     {
     case cidPlain:
         chpNew.grfont = fontNil;
-        chpOld.grfont = (ulong)~fontNil;
+        chpOld.grfont = (uint32_t)~fontNil;
         goto LApplyChp;
     case cidBold:
         chpNew.grfont ^= fontBold;
@@ -3116,7 +3118,7 @@ bool TXRG::FCmdApplyProperty(PCMD pcmd)
         // used to indicate that we're to ask the user.
         if (pcmd->rglw[0] == 0)
         {
-            long dyp = _chpIns.dypOffset;
+            int32_t dyp = _chpIns.dypOffset;
 
             // ask the user for the amount to sub/superscript by
             if (!_FGetOtherSubSuper(&dyp))
@@ -3129,7 +3131,7 @@ bool TXRG::FCmdApplyProperty(PCMD pcmd)
     case cidChooseFontSize:
         if (pcmd->rglw[0] == 0)
         {
-            long dyp = _chpIns.dypFont;
+            int32_t dyp = _chpIns.dypFont;
 
             // ask the user for the font size
             if (!_FGetOtherSize(&dyp))
@@ -3182,7 +3184,7 @@ bool TXRG::FCmdApplyProperty(PCMD pcmd)
 /***************************************************************************
     Get a font size from the user.
 ***************************************************************************/
-bool TXRG::_FGetOtherSize(long *pdypFont)
+bool TXRG::_FGetOtherSize(int32_t *pdypFont)
 {
     AssertThis(0);
     AssertVarMem(pdypFont);
@@ -3194,7 +3196,7 @@ bool TXRG::_FGetOtherSize(long *pdypFont)
 /***************************************************************************
     Get the amount to sub/superscript from the user.
 ***************************************************************************/
-bool TXRG::_FGetOtherSubSuper(long *pdypOffset)
+bool TXRG::_FGetOtherSubSuper(int32_t *pdypOffset)
 {
     AssertThis(0);
     AssertVarMem(pdypOffset);
@@ -3237,7 +3239,7 @@ bool TXRG::FSetColor(ACR *pacrFore, ACR *pacrBack)
 /***************************************************************************
     Enable, check/uncheck property commands.
 ***************************************************************************/
-bool TXRG::FEnablePropCmd(PCMD pcmd, ulong *pgrfeds)
+bool TXRG::FEnablePropCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     PAP pap;
     bool fCheck;

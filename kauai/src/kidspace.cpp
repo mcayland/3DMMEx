@@ -28,13 +28,13 @@ ON_CID_ALL(cidKey, &GOK::FCmdAll, pvNil)
 ON_CID_ALL(cidSelIdle, &GOK::FCmdAll, pvNil)
 END_CMD_MAP(&GOK::FCmdAll, pvNil, kgrfcmmAll)
 
-const long kcmhlGok = -10000;
+const int32_t kcmhlGok = -10000;
 
 /***************************************************************************
     Create a new kidspace gob as described in the GOKD with given cno
     in the given RCA.
 ***************************************************************************/
-PGOK GOK::PgokNew(PWOKS pwoks, PGOB pgobPar, long hid, PGOKD pgokd, PRCA prca)
+PGOK GOK::PgokNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, PGOKD pgokd, PRCA prca)
 {
     AssertPo(pgobPar, 0);
     AssertPo(pgokd, 0);
@@ -71,7 +71,7 @@ PGOK GOK::PgokNew(PWOKS pwoks, PGOB pgobPar, long hid, PGOKD pgokd, PRCA prca)
     Static method to find the GOB that should be before a new GOK with
     this zp.
 ***************************************************************************/
-PGOB GOK::_PgobBefore(PGOB pgobPar, long zp)
+PGOB GOK::_PgobBefore(PGOB pgobPar, int32_t zp)
 {
     AssertPo(pgobPar, 0);
     PGOB pgobBefore, pgobT;
@@ -225,8 +225,8 @@ enum
 ***************************************************************************/
 struct GMSE
 {
-    Debug(long gms;) long gmsDst;
-    ulong grfact;
+    Debug(int32_t gms;) int32_t gmsDst;
+    uint32_t grfact;
 };
 
 #ifdef DEBUG
@@ -481,7 +481,7 @@ bool GOK::_FAdjustGms(GMSE *pmpgmsgmse)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FSetGms(long gms, ulong grfact)
+bool GOK::_FSetGms(int32_t gms, uint32_t grfact)
 {
     AssertThis(0);
     AssertIn(gms, gmsNil, kgmsLim);
@@ -520,7 +520,7 @@ bool GOK::_FSetGms(long gms, ulong grfact)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FSetGmsCore(long gms, ulong grfact, bool *pfStable)
+bool GOK::_FSetGmsCore(int32_t gms, uint32_t grfact, bool *pfStable)
 {
     AssertThis(0);
     AssertIn(gms, gmsNil, kgmsLim);
@@ -584,10 +584,10 @@ bool GOK::_FSetGmsCore(long gms, ulong grfact, bool *pfStable)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FSetRep(CHID chid, ulong grfgok, CTG ctg, long dxp, long dyp, bool *pfSet)
+bool GOK::_FSetRep(CHID chid, uint32_t grfgok, CTG ctg, int32_t dxp, int32_t dyp, bool *pfSet)
 {
     AssertThis(0);
-    long ikid;
+    int32_t ikid;
     KID kid;
     PGORP pgorp;
     bool fSet = fFalse;
@@ -702,9 +702,9 @@ bool GOK::_FAdvanceFrame(void)
 
     bool fExists, fRet, fPaused;
     PWOKS pwoks = _pwoks;
-    ulong dtim = 0;
+    uint32_t dtim = 0;
     PSCEG psceg = _pscegAnim;
-    long grid = Grid();
+    int32_t grid = Grid();
 
     if (pvNil == psceg)
     {
@@ -775,14 +775,14 @@ LSetGorp:
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::_FEnterState(long sno)
+bool GOK::_FEnterState(int32_t sno)
 {
     AssertThis(0);
     AssertIn(sno, 0, kswMax);
 
     struct GMMPE
     {
-        Debug(long gms;) long gmsPar;
+        Debug(int32_t gms;) int32_t gmsPar;
     };
 
 #ifdef DEBUG
@@ -821,9 +821,9 @@ bool GOK::_FEnterState(long sno)
         _Gmmpe(kgmsWait, kgmsReleaseOn),
     };
 
-    long rggms[kgmsLim];
-    long igms;
-    long gms, gmsPrev;
+    int32_t rggms[kgmsLim];
+    int32_t igms;
+    int32_t gms, gmsPrev;
     bool fStable;
 
     for (gms = _gmsCur, igms = 0; gmsNil != gms;)
@@ -837,7 +837,7 @@ bool GOK::_FEnterState(long sno)
     _DeferGorp(fTrue);
 
     // change the state number
-    _sno = (short)sno;
+    _sno = (int16_t)sno;
 
     // put it in gmsNil
     if (!_FSetGmsCore(gmsNil, factNil, &fStable))
@@ -866,7 +866,7 @@ bool GOK::_FEnterState(long sno)
 /***************************************************************************
     See if the given point is in this GOK.
 ***************************************************************************/
-bool GOK::FPtIn(long xp, long yp)
+bool GOK::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     RC rc;
@@ -888,7 +888,7 @@ bool GOK::FPtIn(long xp, long yp)
     See if the given point is in the rectangular bounds of this GOK (ie,
     whether there's any chance the point is in a child of this GOK).
 ***************************************************************************/
-bool GOK::FPtInBounds(long xp, long yp)
+bool GOK::FPtInBounds(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     RC rc;
@@ -928,7 +928,7 @@ bool GOK::FCmdAlarm(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
     CHID chid;
-    long hid = pcmd->rglw[0];
+    int32_t hid = pcmd->rglw[0];
 
     if (_pwoks->PclokAnim()->Hid() == hid || _pwoks->PclokNoSlip()->Hid() == hid)
     {
@@ -994,8 +994,8 @@ bool GOK::_FFilterCmd(PCMD pcmd, CHID chidScript, bool *pfFilter)
     AssertThis(0);
     AssertVarMem(pcmd);
     AssertVarMem(pfFilter);
-    long rglw[6];
-    long lw;
+    int32_t rglw[6];
+    int32_t lw;
     bool fGokExists;
     tribool tRet;
 
@@ -1017,11 +1017,11 @@ bool GOK::_FFilterCmd(PCMD pcmd, CHID chidScript, bool *pfFilter)
     If both cid and hid are nil, chidScript should be nil. If the cid, hid
     and chidScript are all nil, we turn off all filtering.
 ***************************************************************************/
-bool GOK::FFilterCidHid(long cid, long hid, CHID chidScript)
+bool GOK::FFilterCidHid(int32_t cid, int32_t hid, CHID chidScript)
 {
     AssertThis(0);
     CMFLT cmflt;
-    long icmflt;
+    int32_t icmflt;
     KID kid;
 
     if (chidNil == chidScript ||
@@ -1075,13 +1075,13 @@ bool GOK::FFilterCidHid(long cid, long hid, CHID chidScript)
 /***************************************************************************
     Look for the given (cid, hid) pair in the filtering map.
 ***************************************************************************/
-bool GOK::_FFindCmflt(long cid, long hid, CMFLT *pcmflt, long *picmflt)
+bool GOK::_FFindCmflt(int32_t cid, int32_t hid, CMFLT *pcmflt, int32_t *picmflt)
 {
     AssertThis(0);
     Assert(cid != cidNil || hid != hidNil, "cid and hid are both nil!");
     AssertNilOrVarMem(pcmflt);
     AssertNilOrVarMem(picmflt);
-    long ivMin, ivLim, iv;
+    int32_t ivMin, ivLim, iv;
     CMFLT cmflt;
 
     ivMin = 0;
@@ -1144,7 +1144,7 @@ bool GOK::FCmdMouseMove(PCMD_MOUSE pcmd)
 /***************************************************************************
     Set the cursor for this GOK and the given cursor state.
 ***************************************************************************/
-void GOK::SetCursor(ulong grfcust)
+void GOK::SetCursor(uint32_t grfcust)
 {
     AssertThis(0);
     PGOK pgok;
@@ -1189,7 +1189,7 @@ bool GOK::FCmdTrackMouse(PCMD_MOUSE pcmd)
             return fTrue;
 
         _grfcust = pcmd->grfcust;
-        _cactMouse = (short)pcmd->cact;
+        _cactMouse = (int16_t)pcmd->cact;
         if (!_FAdjustGms(_mpgmsgmseMouseDown))
             return fTrue;
         SetCursor(pcmd->grfcust);
@@ -1222,7 +1222,7 @@ bool GOK::FCmdTrackMouse(PCMD_MOUSE pcmd)
     Put up a tool tip if this GOK has one. Return true if tool tips are
     still active.
 ***************************************************************************/
-bool GOK::FEnsureToolTip(PGOB *ppgobCurTip, long xpMouse, long ypMouse)
+bool GOK::FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse)
 {
     AssertThis(0);
     AssertVarMem(ppgobCurTip);
@@ -1287,7 +1287,7 @@ CNO GOK::_CnoToolTip(void)
 /***************************************************************************
     Makes the GOK get its tool tip from the GOK having the given hid.
 ***************************************************************************/
-void GOK::SetHidToolTip(long hidSrc)
+void GOK::SetHidToolTip(int32_t hidSrc)
 {
     AssertThis(0);
 
@@ -1298,7 +1298,7 @@ void GOK::SetHidToolTip(long hidSrc)
     Get the state information for the GOK (for testing). High 16 bits are
     the state number; next 14 bits are _gmsCur; low 2 bits are set.
 ***************************************************************************/
-long GOK::LwState(void)
+int32_t GOK::LwState(void)
 {
     AssertThis(0);
 
@@ -1308,7 +1308,7 @@ long GOK::LwState(void)
 /***************************************************************************
     Get the registration point of the given GOK in its parent's coordinates.
 ***************************************************************************/
-void GOK::GetPtReg(PT *ppt, long coo)
+void GOK::GetPtReg(PT *ppt, int32_t coo)
 {
     AssertThis(0);
     AssertVarMem(ppt);
@@ -1340,7 +1340,7 @@ void GOK::GetRcContent(RC *prc)
 /***************************************************************************
     Set the GOK's z plane.
 ***************************************************************************/
-void GOK::SetZPlane(long zp)
+void GOK::SetZPlane(int32_t zp)
 {
     AssertThis(0);
     PGOB pgobBefore;
@@ -1377,7 +1377,7 @@ void GOK::SetNoSlip(bool fNoSlip)
     succeeded.
     CAUTION: this GOK may not exist on return.
 ***************************************************************************/
-bool GOK::FRunScript(CHID chid, long *prglw, long clw, long *plwReturn, tribool *ptSuccess)
+bool GOK::FRunScript(CHID chid, int32_t *prglw, int32_t clw, int32_t *plwReturn, tribool *ptSuccess)
 {
     AssertThis(0);
     AssertNilOrVarMem(plwReturn);
@@ -1400,7 +1400,7 @@ bool GOK::FRunScript(CHID chid, long *prglw, long clw, long *plwReturn, tribool 
     was a failure, tYes if the script exists and running it succeeded.
     CAUTION: this GOK may not exist on return.
 ***************************************************************************/
-bool GOK::FRunScriptCno(CNO cno, long *prglw, long clw, long *plwReturn, tribool *ptSuccess)
+bool GOK::FRunScriptCno(CNO cno, int32_t *prglw, int32_t clw, int32_t *plwReturn, tribool *ptSuccess)
 {
     AssertThis(0);
     AssertNilOrVarMem(plwReturn);
@@ -1413,7 +1413,7 @@ bool GOK::FRunScriptCno(CNO cno, long *prglw, long clw, long *plwReturn, tribool
     if (pvNil != pscpt)
     {
         AssertPo(pscpt, 0);
-        long grid = Grid();
+        int32_t grid = Grid();
         PWOKS pwoks = _pwoks;
         PSCEG psceg = _pwoks->PscegNew(_prca, this);
 
@@ -1441,7 +1441,7 @@ bool GOK::FRunScriptCno(CNO cno, long *prglw, long clw, long *plwReturn, tribool
     Change the current state of the GOK to the given state number.
     CAUTION: this GOK may not exist on return.
 ***************************************************************************/
-bool GOK::FChangeState(long sno)
+bool GOK::FChangeState(int32_t sno)
 {
     AssertThis(0);
     AssertIn(sno, 0, kswMax);
@@ -1456,7 +1456,7 @@ bool GOK::FChangeState(long sno)
     CAUTION: this GOK may not exist on return. Returns false iff the GOK
     doesn't exist on return.
 ***************************************************************************/
-bool GOK::FSetRep(CHID chid, ulong grfgok, CTG ctg, long dxp, long dyp, ulong dtim)
+bool GOK::FSetRep(CHID chid, uint32_t grfgok, CTG ctg, int32_t dxp, int32_t dyp, uint32_t dtim)
 {
     AssertThis(0);
 
@@ -1479,12 +1479,12 @@ bool GOK::FCmdClicked(PCMD_MOUSE pcmd)
     AssertThis(0);
     PGOK pgok;
     PGOB pgob;
-    long rglw[3];
-    long lw;
+    int32_t rglw[3];
+    int32_t lw;
     tribool tRet;
     CUME cume;
-    long hid = Hid();
-    long grid = Grid();
+    int32_t hid = Hid();
+    int32_t grid = Grid();
 
     _DeferSnd(fTrue);
     if (kgmsWait == _gmsCur)
@@ -1568,7 +1568,7 @@ PGORP GOK::_PgorpNew(PCRF pcrf, CTG ctg, CNO cno)
 /***************************************************************************
     Set the current graphical representation to this one.
 ***************************************************************************/
-void GOK::_SetGorp(PGORP pgorp, long dxp, long dyp)
+void GOK::_SetGorp(PGORP pgorp, int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     AssertNilOrPo(pgorp, 0);
@@ -1676,13 +1676,13 @@ void GOK::Stop(void)
 /***************************************************************************
     Goto the given frame of the current representation.
 ***************************************************************************/
-void GOK::GotoNfr(long nfr)
+void GOK::GotoNfr(int32_t nfr)
 {
     AssertThis(0);
 
     if (pvNil != _pgorp)
     {
-        long nfrOld = _pgorp->NfrCur();
+        int32_t nfrOld = _pgorp->NfrCur();
         _pgorp->GotoNfr(nfr);
         if (nfrOld != _pgorp->NfrCur())
             InvalRc(pvNil, kginMark);
@@ -1692,7 +1692,7 @@ void GOK::GotoNfr(long nfr)
 /***************************************************************************
     Return the number of frames in the current representation.
 ***************************************************************************/
-long GOK::NfrMac(void)
+int32_t GOK::NfrMac(void)
 {
     AssertThis(0);
 
@@ -1702,7 +1702,7 @@ long GOK::NfrMac(void)
 /***************************************************************************
     Return the current frame number of the current representation.
 ***************************************************************************/
-long GOK::NfrCur(void)
+int32_t GOK::NfrCur(void)
 {
     AssertThis(0);
 
@@ -1713,7 +1713,8 @@ long GOK::NfrCur(void)
     Play a sound and attach the sound to this GOK so that when the GOK
     goes away, the sound will be killed.
 ***************************************************************************/
-long GOK::SiiPlaySound(CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+int32_t GOK::SiiPlaySound(CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart, int32_t spr,
+                          int32_t scl)
 {
     AssertThis(0);
 
@@ -1757,7 +1758,7 @@ void GOK::_DeferSnd(bool fDefer)
     sound, so that when the GOK goes away and the mouse state changes,
     the sound will be killed.
 ***************************************************************************/
-long GOK::SiiPlayMouseSound(CTG ctg, CNO cno)
+int32_t GOK::SiiPlayMouseSound(CTG ctg, CNO cno)
 {
     AssertThis(0);
 
@@ -1842,7 +1843,7 @@ void GOK::Stream(bool fStream)
 /***************************************************************************
     Assert the validity of a GOK.
 ***************************************************************************/
-void GOK::AssertValid(ulong grf)
+void GOK::AssertValid(uint32_t grf)
 {
     GOK_PAR::AssertValid(0);
     AssertPo(_pwoks, 0);
@@ -1880,7 +1881,7 @@ void GOK::MarkMem(void)
 /***************************************************************************
     Stub method for non-frame based representations.
 ***************************************************************************/
-long GORP::NfrMac(void)
+int32_t GORP::NfrMac(void)
 {
     AssertThis(0);
     return 0;
@@ -1889,7 +1890,7 @@ long GORP::NfrMac(void)
 /***************************************************************************
     Stub method for non-frame based representations.
 ***************************************************************************/
-long GORP::NfrCur(void)
+int32_t GORP::NfrCur(void)
 {
     AssertThis(0);
     return 0;
@@ -1898,7 +1899,7 @@ long GORP::NfrCur(void)
 /***************************************************************************
     Stub method for non-frame based representations.
 ***************************************************************************/
-void GORP::GotoNfr(long nfr)
+void GORP::GotoNfr(int32_t nfr)
 {
     AssertThis(0);
 }
@@ -1957,12 +1958,12 @@ void GORP::Stream(bool fStream)
 // a FILL chunk
 struct GOKFL
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     RC rc;
-    long lwAcrFore;
-    long lwAcrBack;
-    byte rgbPat[8];
+    int32_t lwAcrFore;
+    int32_t lwAcrBack;
+    uint8_t rgbPat[8];
 };
 VERIFY_STRUCT_SIZE(GOKFL, 36);
 const BOM kbomGokfl = 0x5FFF0000;
@@ -2026,7 +2027,7 @@ void GORF::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Return whether the point is in the representation.
 ***************************************************************************/
-bool GORF::FPtIn(long xp, long yp)
+bool GORF::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     return FIn(xp, 0, _dxp) && FIn(yp, 0, _dyp);
@@ -2036,7 +2037,7 @@ bool GORF::FPtIn(long xp, long yp)
     Set the internal state of the GORF to accomodate the given preferred
     size of the content area.
 ***************************************************************************/
-void GORF::SetDxpDyp(long dxpPref, long dypPref)
+void GORF::SetDxpDyp(int32_t dxpPref, int32_t dypPref)
 {
     AssertThis(0);
     AssertIn(dxpPref, 0, kcbMax);
@@ -2131,7 +2132,7 @@ void GORB::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Return whether the point is in the bitmap.
 ***************************************************************************/
-bool GORB::FPtIn(long xp, long yp)
+bool GORB::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     PMBMP pmbmp;
@@ -2155,7 +2156,7 @@ bool GORB::FPtIn(long xp, long yp)
     Set the internal state of the GORB to accomodate the given preferred
     size of the content area.
 ***************************************************************************/
-void GORB::SetDxpDyp(long dxpPref, long dypPref)
+void GORB::SetDxpDyp(int32_t dxpPref, int32_t dypPref)
 {
     AssertThis(0);
     AssertIn(dxpPref, 0, kcbMax);
@@ -2231,7 +2232,7 @@ PGORT GORT::PgortNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno)
     }
 
     if (kboOther == gotil.bo)
-        SwapBytesRgsw(&gotil, SIZEOF(gotil) / SIZEOF(short));
+        SwapBytesRgsw(&gotil, SIZEOF(gotil) / SIZEOF(int16_t));
 
 #pragma warning(push)
 #pragma warning(disable : 4804)
@@ -2298,7 +2299,7 @@ void GORT::Draw(PGNV pgnv, RC *prcClip)
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
-    long ypLim, dyp;
+    int32_t ypLim, dyp;
     PMBMP pmbmp;
     RC rcRow;
 
@@ -2353,14 +2354,14 @@ void GORT::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Draw a row of the tiled bitmap.
 ***************************************************************************/
-void GORT::_DrawRow(PGNV pgnv, PMBMP pmbmp, RC *prcRow, RC *prcClip, long dxp, long dyp)
+void GORT::_DrawRow(PGNV pgnv, PMBMP pmbmp, RC *prcRow, RC *prcClip, int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertPo(pmbmp, 0);
     AssertVarMem(prcRow);
     AssertVarMem(prcClip);
-    long xpLim;
+    int32_t xpLim;
     RC rcClip, rc, rcMbmp;
 
     if (!rcClip.FIntersect(prcRow, prcClip))
@@ -2435,7 +2436,7 @@ void GORT::_DrawRow(PGNV pgnv, PMBMP pmbmp, RC *prcRow, RC *prcClip, long dxp, l
 /***************************************************************************
     Do hit testing on a tiled bitmap.
 ***************************************************************************/
-bool GORT::FPtIn(long xp, long yp)
+bool GORT::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     PMBMP pmbmp;
@@ -2465,12 +2466,12 @@ bool GORT::FPtIn(long xp, long yp)
     Map the point from flexed coordinates to zero based mbmp coordinates
     for hit testing.
 ***************************************************************************/
-void GORT::_MapZpToMbmp(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRightFlex)
+void GORT::_MapZpToMbmp(int32_t *pzp, int16_t *prgdzp, int32_t dzpLeftFlex, int32_t dzpRightFlex)
 {
     AssertThis(0);
     AssertVarMem(pzp);
-    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(short)));
-    long dzp;
+    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(int16_t)));
+    int32_t dzp;
 
     if (*pzp < (dzp = prgdzp[idzpLeft]))
         ;
@@ -2489,7 +2490,7 @@ void GORT::_MapZpToMbmp(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRigh
     Set the internal state of the GORT to accomodate the given preferred
     size of the content area.
 ***************************************************************************/
-void GORT::SetDxpDyp(long dxpPref, long dypPref)
+void GORT::SetDxpDyp(int32_t dxpPref, int32_t dypPref)
 {
     AssertThis(0);
     AssertIn(dxpPref, 0, kcbMax);
@@ -2506,24 +2507,24 @@ void GORT::SetDxpDyp(long dxpPref, long dypPref)
 /***************************************************************************
     Compute the flex values in one direction.
 ***************************************************************************/
-void GORT::_ComputeFlexZp(long *pdzpLeftFlex, long *pdzpRightFlex, long dzp, short *prgdzp)
+void GORT::_ComputeFlexZp(int32_t *pdzpLeftFlex, int32_t *pdzpRightFlex, int32_t dzp, int16_t *prgdzp)
 {
     AssertThis(0);
     AssertVarMem(pdzpLeftFlex);
     AssertVarMem(pdzpRightFlex);
-    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(short)));
+    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(int16_t)));
 
     *pdzpRightFlex = LwMax(0, dzp - prgdzp[idzpLeft] - prgdzp[idzpMid] - prgdzp[idzpRight]);
     *pdzpLeftFlex = LwMulDiv(*pdzpRightFlex, prgdzp[idzpLeftFlex], prgdzp[idzpLeftFlex] + prgdzp[idzpRightFlex]);
     if (*pdzpLeftFlex > 0)
     {
-        long dzpT = LwRoundToward(*pdzpLeftFlex, prgdzp[idzpLeftFlex]);
+        int32_t dzpT = LwRoundToward(*pdzpLeftFlex, prgdzp[idzpLeftFlex]);
         *pdzpLeftFlex = dzpT + LwMin(prgdzp[idzpLeftFlex], LwRoundAway(*pdzpLeftFlex - dzpT, prgdzp[idzpLeftInc]));
     }
     *pdzpRightFlex = LwMax(0, *pdzpRightFlex - *pdzpLeftFlex);
     if (*pdzpRightFlex > 0)
     {
-        long dzpT = LwRoundToward(*pdzpRightFlex, prgdzp[idzpRightFlex]);
+        int32_t dzpT = LwRoundToward(*pdzpRightFlex, prgdzp[idzpRightFlex]);
         *pdzpRightFlex = dzpT + LwMin(prgdzp[idzpRightFlex], LwRoundAway(*pdzpRightFlex - dzpT, prgdzp[idzpRightInc]));
     }
 }
@@ -2565,12 +2566,12 @@ void GORT::GetRc(RC *prc)
     Map the point from MBMP coordinates to flexed coordinates for setting the
     registration point. WARNING: this is not the inverse of _MapZpToMbmp.
 ***************************************************************************/
-void GORT::_MapZpFlex(long *pzp, short *prgdzp, long dzpLeftFlex, long dzpRightFlex)
+void GORT::_MapZpFlex(int32_t *pzp, int16_t *prgdzp, int32_t dzpLeftFlex, int32_t dzpRightFlex)
 {
     AssertThis(0);
     AssertVarMem(pzp);
-    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(short)));
-    long dzp;
+    AssertPvCb(prgdzp, LwMul(idzpLimGort, SIZEOF(int16_t)));
+    int32_t dzp;
 
     if (*pzp < (dzp = prgdzp[idzpLeft]))
         ;
@@ -2644,7 +2645,7 @@ bool GORV::_FInit(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno)
     STN stn;
     FNI fni;
     RC rc;
-    byte bT;
+    uint8_t bT;
 
     pcfl = pcrf->Pcfl();
     if (!pcfl->FFind(ctg, cno, &blck) || !blck.FUnpackData() || blck.Cb() < 2 || !blck.FReadRgb(&bT, 1, 0) ||
@@ -2690,7 +2691,7 @@ void GORV::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Return whether the point is in the representation.
 ***************************************************************************/
-bool GORV::FPtIn(long xp, long yp)
+bool GORV::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     return FIn(xp, 0, _dxp) && FIn(yp, 0, _dyp);
@@ -2700,7 +2701,7 @@ bool GORV::FPtIn(long xp, long yp)
     Set the internal state of the GORF to accomodate the given preferred
     size of the content area.
 ***************************************************************************/
-void GORV::SetDxpDyp(long dxpPref, long dypPref)
+void GORV::SetDxpDyp(int32_t dxpPref, int32_t dypPref)
 {
     AssertThis(0);
     AssertIn(dxpPref, 0, kcbMax);
@@ -2739,7 +2740,7 @@ void GORV::GetRcContent(RC *prc)
 /***************************************************************************
     Return the length of the video.
 ***************************************************************************/
-long GORV::NfrMac(void)
+int32_t GORV::NfrMac(void)
 {
     AssertThis(0);
     return _pgvid->NfrMac();
@@ -2748,7 +2749,7 @@ long GORV::NfrMac(void)
 /***************************************************************************
     Return the current frame of the video.
 ***************************************************************************/
-long GORV::NfrCur(void)
+int32_t GORV::NfrCur(void)
 {
     AssertThis(0);
     return _pgvid->NfrCur();
@@ -2757,7 +2758,7 @@ long GORV::NfrCur(void)
 /***************************************************************************
     Goto a particular frame.
 ***************************************************************************/
-void GORV::GotoNfr(long nfr)
+void GORV::GotoNfr(int32_t nfr)
 {
     AssertThis(0);
     _pgvid->GotoNfr(nfr);
@@ -2831,7 +2832,7 @@ void GORV::Resume(void)
 /***************************************************************************
     Assert the validity of a GORV.
 ***************************************************************************/
-void GORV::AssertValid(ulong grf)
+void GORV::AssertValid(uint32_t grf)
 {
     GORV_PAR::AssertValid(0);
     AssertPo(_pgvid, 0);

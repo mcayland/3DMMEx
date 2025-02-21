@@ -228,15 +228,15 @@ enum
 // expression tree node - for in-fix compilation
 struct ETN
 {
-    short tt;     // the token type
-    short op;     // operator (or function) to generate
-    short opl;    // operator precedence level
-    short grfop;  // flags
-    long lwValue; // value if a ttLong; an istn if a ttName
-    long ietn1;   // indices into _pgletnTree for the operands
-    long ietn2;
-    long ietn3;
-    long cetnDeep; // depth of the etn tree to here
+    int16_t tt;      // the token type
+    int16_t op;      // operator (or function) to generate
+    int16_t opl;     // operator precedence level
+    int16_t grfop;   // flags
+    int32_t lwValue; // value if a ttLong; an istn if a ttName
+    int32_t ietn1;   // indices into _pgletnTree for the operands
+    int32_t ietn2;
+    int32_t ietn3;
+    int32_t cetnDeep; // depth of the etn tree to here
 };
 
 // control structure types - these are the keywords that are followed
@@ -252,12 +252,12 @@ enum
 // control structure descriptor
 struct CSTD
 {
-    long cst;
-    long lwLabel1;  // use depends on cst
-    long lwLabel2;  // use depends on cst
-    long lwLabel3;  // use depends on cst
-    PGL pgletnTree; // for while loops - the expression tree
-    long ietnTop;   // the top of the expression tree
+    int32_t cst;
+    int32_t lwLabel1; // use depends on cst
+    int32_t lwLabel2; // use depends on cst
+    int32_t lwLabel3; // use depends on cst
+    PGL pgletnTree;   // for while loops - the expression tree
+    int32_t ietnTop;  // the top of the expression tree
 };
 
 /***************************************************************************
@@ -291,7 +291,7 @@ SCCB::~SCCB(void)
 /***************************************************************************
     Assert the validity of a SCCB.
 ***************************************************************************/
-void SCCB::AssertValid(ulong grf)
+void SCCB::AssertValid(uint32_t grf)
 {
     SCCB_PAR::AssertValid(0);
     AssertNilOrPo(_plexb, 0);
@@ -319,7 +319,7 @@ void SCCB::MarkMem(void)
     MarkMemObj(_pgletnStack);
     if (pvNil != _pglcstd)
     {
-        long icstd;
+        int32_t icstd;
         CSTD cstd;
 
         MarkMemObj(_pglcstd);
@@ -345,7 +345,7 @@ bool SCCB::_FInit(PLEXB plexb, bool fInFix, PMSNK pmsnk)
     AssertThis(0);
     AssertPo(plexb, 0);
     AssertPo(pmsnk, 0);
-    long lw;
+    int32_t lw;
 
     _Free();
     _fError = fFalse;
@@ -369,7 +369,7 @@ bool SCCB::_FInit(PLEXB plexb, bool fInFix, PMSNK pmsnk)
         _pgletnStack->SetMinGrow(100);
     }
 
-    if (pvNil == (_pscpt = NewObj SCPT) || pvNil == (_pscpt->_pgllw = GL::PglNew(SIZEOF(long))))
+    if (pvNil == (_pscpt = NewObj SCPT) || pvNil == (_pscpt->_pgllw = GL::PglNew(SIZEOF(int32_t))))
     {
         ReleasePpo(&_pscpt);
     }
@@ -422,7 +422,7 @@ void SCCB::_Free(void)
     allows scripts to be embedded in source for other tools (such as
     chomp.exe).
 ***************************************************************************/
-PSCPT SCCB::PscptCompileLex(PLEXB plexb, bool fInFix, PMSNK pmsnk, long ttEnd)
+PSCPT SCCB::PscptCompileLex(PLEXB plexb, bool fInFix, PMSNK pmsnk, int32_t ttEnd)
 {
     AssertThis(0);
     AssertPo(plexb, 0);
@@ -442,8 +442,8 @@ PSCPT SCCB::PscptCompileLex(PLEXB plexb, bool fInFix, PMSNK pmsnk, long ttEnd)
     if (pvNil != _pgstReq)
     {
         AssertPo(_pgstReq, 0);
-        long istn;
-        long lw, ilw;
+        int32_t istn;
+        int32_t lw, ilw;
         STN stn;
 
         for (istn = _pgstReq->IstnMac(); istn-- > 0;)
@@ -527,7 +527,7 @@ bool SCCB::_FGetTok(PTOK ptok)
     a virtual method so subclasses of SCCB can provide their own
     version numbers.
 ***************************************************************************/
-short SCCB::_SwCur(void)
+int16_t SCCB::_SwCur(void)
 {
     AssertBaseThis(0);
     return kswCurSccb;
@@ -537,7 +537,7 @@ short SCCB::_SwCur(void)
     Return the back version number of the script compiler.  Versions
     back to here can read this script.
 ***************************************************************************/
-short SCCB::_SwBack(void)
+int16_t SCCB::_SwBack(void)
 {
     AssertBaseThis(0);
     return kswBackSccb;
@@ -547,7 +547,7 @@ short SCCB::_SwBack(void)
     Return the min version number of the script compiler.  We can read
     scripts back to this version.
 ***************************************************************************/
-short SCCB::_SwMin(void)
+int16_t SCCB::_SwMin(void)
 {
     AssertBaseThis(0);
     return kswMinSccb;
@@ -574,7 +574,7 @@ void SCCB::_ReportError(PSZ psz)
 /***************************************************************************
     The given long is immediate data to be pushed onto the execution stack.
 ***************************************************************************/
-void SCCB::_PushLw(long lw)
+void SCCB::_PushLw(int32_t lw)
 {
     AssertThis(0);
 
@@ -597,7 +597,7 @@ void SCCB::_PushString(PSTN pstn)
     AssertThis(0);
     AssertPo(pstn, 0);
     RTVN rtvn;
-    long istn;
+    int32_t istn;
 
     if (_fError)
         return;
@@ -618,11 +618,11 @@ void SCCB::_PushString(PSTN pstn)
 /***************************************************************************
     Add an opcode to the compiled script.
 ***************************************************************************/
-void SCCB::_PushOp(long op)
+void SCCB::_PushOp(int32_t op)
 {
     AssertThis(0);
-    Assert((long)(short)op == op, "bad opcode");
-    long lw;
+    Assert((int32_t)(int16_t)op == op, "bad opcode");
+    int32_t lw;
 
     if (_fError)
         return;
@@ -630,7 +630,7 @@ void SCCB::_PushOp(long op)
     AssertPo(_pscpt, 0);
     _EndOp(); // complete the previous opcode
     _ilwOpLast = _pscpt->_pgllw->IvMac();
-    lw = LwHighLow(0, (short)op);
+    lw = LwHighLow(0, (int16_t)op);
     if (!_pscpt->_pgllw->FPush(&lw))
         _ReportError(_pszOom);
     _fForceOp = fFalse;
@@ -642,8 +642,8 @@ void SCCB::_PushOp(long op)
 void SCCB::_EndOp(void)
 {
     AssertThis(0);
-    long ilw;
-    long lw;
+    int32_t ilw;
+    int32_t lw;
 
     if (_fError)
         return;
@@ -655,7 +655,7 @@ void SCCB::_EndOp(void)
         // set the count of longs in the previous op
         AssertIn(ilw - _ilwOpLast - 1, 1, kclwLimPush);
         _pscpt->_pgllw->Get(_ilwOpLast, &lw);
-        lw = LwHighLow(SuHighLow(B3Lw(lw), (byte)(ilw - _ilwOpLast - 1)), SuLow(lw));
+        lw = LwHighLow(SuHighLow(B3Lw(lw), (uint8_t)(ilw - _ilwOpLast - 1)), SuLow(lw));
         _pscpt->_pgllw->Put(_ilwOpLast, &lw);
     }
 }
@@ -663,12 +663,12 @@ void SCCB::_EndOp(void)
 /***************************************************************************
     Add an opcode that acts on a variable.
 ***************************************************************************/
-void SCCB::_PushVarOp(long op, RTVN *prtvn)
+void SCCB::_PushVarOp(int32_t op, RTVN *prtvn)
 {
     AssertThis(0);
-    Assert((long)(byte)op == op, "bad opcode");
+    Assert((int32_t)(uint8_t)op == op, "bad opcode");
     AssertVarMem(prtvn);
-    long lw;
+    int32_t lw;
 
     _PushOp(opNil); // push a nil op, then fill it in below
     if (_fError)
@@ -687,12 +687,12 @@ void SCCB::_PushVarOp(long op, RTVN *prtvn)
 /***************************************************************************
     Look up the indicated label and put it's location in *plwLoc.
 ***************************************************************************/
-bool SCCB::_FFindLabel(PSTN pstn, long *plwLoc)
+bool SCCB::_FFindLabel(PSTN pstn, int32_t *plwLoc)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
     AssertVarMem(plwLoc);
-    long istn;
+    int32_t istn;
 
     if (pvNil == _pgstLabel || !_pgstLabel->FFindStn(pstn, &istn, fgstSorted))
     {
@@ -710,10 +710,10 @@ void SCCB::_AddLabel(PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long lw;
-    long istn;
+    int32_t lw;
+    int32_t istn;
 
-    if (pvNil == _pgstLabel && pvNil == (_pgstLabel = GST::PgstNew(SIZEOF(long), 5, 100)))
+    if (pvNil == _pgstLabel && pvNil == (_pgstLabel = GST::PgstNew(SIZEOF(int32_t), 5, 100)))
     {
         _ReportError(_pszOom);
         return;
@@ -747,12 +747,12 @@ void SCCB::_PushLabelRequest(PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long lw;
+    int32_t lw;
 
     if (_fError)
         return;
 
-    if (pvNil == _pgstReq && pvNil == (_pgstReq = GST::PgstNew(SIZEOF(long), 10, 200)))
+    if (pvNil == _pgstReq && pvNil == (_pgstReq = GST::PgstNew(SIZEOF(int32_t), 10, 200)))
     {
         _ReportError(_pszOom);
         return;
@@ -771,7 +771,7 @@ void SCCB::_PushLabelRequest(PSTN pstn)
     Add an internal label.  These are numeric to avoid conflicting with
     a user defined label.
 ***************************************************************************/
-void SCCB::_AddLabelLw(long lw)
+void SCCB::_AddLabelLw(int32_t lw)
 {
     AssertThis(0);
     STN stn;
@@ -783,7 +783,7 @@ void SCCB::_AddLabelLw(long lw)
 /***************************************************************************
     Push an internal label request.
 ***************************************************************************/
-void SCCB::_PushLabelRequestLw(long lw)
+void SCCB::_PushLabelRequestLw(int32_t lw)
 {
     AssertThis(0);
     STN stn;
@@ -795,7 +795,7 @@ void SCCB::_PushLabelRequestLw(long lw)
 /***************************************************************************
     Find the opcode that corresponds to the given stn.
 ***************************************************************************/
-long SCCB::_OpFromStn(PSTN pstn)
+int32_t SCCB::_OpFromStn(PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -807,7 +807,7 @@ long SCCB::_OpFromStn(PSTN pstn)
     Check the pstn against the strings in the prgszop and return the
     corresponding op code.
 ***************************************************************************/
-long SCCB::_OpFromStnRgszop(PSTN pstn, SZOP *prgszop)
+int32_t SCCB::_OpFromStnRgszop(PSTN pstn, SZOP *prgszop)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -826,7 +826,7 @@ long SCCB::_OpFromStnRgszop(PSTN pstn, SZOP *prgszop)
     Find the string corresponding to the given opcode.  This is used during
     disassembly.
 ***************************************************************************/
-bool SCCB::_FGetStnFromOp(long op, PSTN pstn)
+bool SCCB::_FGetStnFromOp(int32_t op, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -838,7 +838,7 @@ bool SCCB::_FGetStnFromOp(long op, PSTN pstn)
     Check the op against the ops in the prgszop and return the corresponding
     string.
 ***************************************************************************/
-bool SCCB::_FGetStnFromOpRgszop(long op, PSTN pstn, SZOP *prgszop)
+bool SCCB::_FGetStnFromOpRgszop(int32_t op, PSTN pstn, SZOP *prgszop)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -865,7 +865,7 @@ void SCCB::_CompilePost(void)
     AssertThis(0);
     AssertPo(_plexb, 0);
     TOK tok;
-    long op;
+    int32_t op;
     RTVN rtvn;
 
     while (_FGetTok(&tok))
@@ -1032,13 +1032,13 @@ enum
 // token-operator map entry
 struct TOME
 {
-    short tt;
-    short grfop;
-    short op;
-    short oplResolve;
-    short oplMinRes;
-    short ttPop;
-    short oplPush;
+    int16_t tt;
+    int16_t grfop;
+    int16_t op;
+    int16_t oplResolve;
+    int16_t oplMinRes;
+    int16_t ttPop;
+    int16_t oplPush;
 };
 
 #define _TomeCore(tt, grfop, op, oplRes, oplMin, ttPop, oplPush)                                                       \
@@ -1112,7 +1112,7 @@ TOME _rgtomeOp[] = {
 /***************************************************************************
     Find the TOME corresponding to this token and fOp.
 ***************************************************************************/
-TOME *_PtomeFromTt(long tt, bool fOp)
+TOME *_PtomeFromTt(int32_t tt, bool fOp)
 {
     TOME *ptome;
 
@@ -1127,7 +1127,7 @@ TOME *_PtomeFromTt(long tt, bool fOp)
 /***************************************************************************
     Resolve the ETN stack to something at the given opl.
 ***************************************************************************/
-bool SCCB::_FResolveToOpl(long opl, long oplMin, long *pietn)
+bool SCCB::_FResolveToOpl(int32_t opl, int32_t oplMin, int32_t *pietn)
 {
     AssertThis(0);
     AssertIn(opl, oplNil + 1, koplMax);
@@ -1136,7 +1136,7 @@ bool SCCB::_FResolveToOpl(long opl, long oplMin, long *pietn)
     AssertPo(_pgletnTree, 0);
     AssertVarMem(pietn);
     ETN etn, etnT;
-    long ietn, cetn;
+    int32_t ietn, cetn;
 
     _pgletnStack->Get(_pgletnStack->IvMac() - 1, &etn);
     if (etn.grfop & fopOp)
@@ -1199,15 +1199,15 @@ bool SCCB::_FResolveToOpl(long opl, long oplMin, long *pietn)
     be simplified to nuke () groupings and unary plus operators and just
     add the rest to _pgletnTree.
 ***************************************************************************/
-bool SCCB::_FAddToTree(ETN *petn, long *pietn)
+bool SCCB::_FAddToTree(ETN *petn, int32_t *pietn)
 {
     AssertThis(0);
     AssertVarMem(petn);
     AssertVarMem(pietn);
-    long lw1, lw2, lw;
+    int32_t lw1, lw2, lw;
     bool fConst1, fConst2;
     ETN etnT1, etnT2, etn;
-    long ietnConst;
+    int32_t ietnConst;
     bool fCommute = fFalse;
 
     Assert((petn->ietn3 == ivNil || petn->ietn2 != ivNil) && (petn->ietn2 == ivNil || petn->ietn1 != ivNil), "bad etn");
@@ -1502,7 +1502,7 @@ void SCCB::_SetDepth(ETN *petn, bool fCommute)
     Return true iff the given etn is constant.  If so, set *plw to its
     value.
 ***************************************************************************/
-bool SCCB::_FConstEtn(long ietn, long *plw)
+bool SCCB::_FConstEtn(int32_t ietn, int32_t *plw)
 {
     AssertThis(0);
     AssertVarMem(plw);
@@ -1528,7 +1528,7 @@ bool SCCB::_FConstEtn(long ietn, long *plw)
     Put the result in *plw.  Return false if we can't combine the values
     using op.
 ***************************************************************************/
-bool SCCB::_FCombineConstValues(long op, long lw1, long lw2, long *plw)
+bool SCCB::_FCombineConstValues(int32_t op, int32_t lw1, int32_t lw2, int32_t *plw)
 {
     AssertBaseThis(0);
     AssertVarMem(plw);
@@ -1558,10 +1558,10 @@ bool SCCB::_FCombineConstValues(long op, long lw1, long lw2, long *plw)
             *plw = op == kopDiv ? lw1 / lw2 : lw1 % lw2;
         break;
     case kopShr:
-        *plw = (ulong)lw1 >> lw2;
+        *plw = (uint32_t)lw1 >> lw2;
         break;
     case kopShl:
-        *plw = (ulong)lw1 << lw2;
+        *plw = (uint32_t)lw1 << lw2;
         break;
     case kopBOr:
         *plw = lw1 | lw2;
@@ -1611,7 +1611,7 @@ bool SCCB::_FCombineConstValues(long op, long lw1, long lw2, long *plw)
 
     This is highly recursive, so limit the stack space needed.
 ***************************************************************************/
-void SCCB::_EmitCode(long ietnTop, ulong grfscc, long *pclwArg)
+void SCCB::_EmitCode(int32_t ietnTop, uint32_t grfscc, int32_t *pclwArg)
 {
     AssertThis(0);
     AssertPo(_pgletnTree, 0);
@@ -1620,10 +1620,10 @@ void SCCB::_EmitCode(long ietnTop, ulong grfscc, long *pclwArg)
     AssertNilOrVarMem(pclwArg);
     ETN etn;
     RTVN rtvn;
-    long opPush, opPop;
-    long clwStack;
-    long lw1, lw2;
-    long cst;
+    int32_t opPush, opPop;
+    int32_t clwStack;
+    int32_t lw1, lw2;
+    int32_t cst;
 
     _pgletnTree->Get(ietnTop, &etn);
 
@@ -1779,7 +1779,7 @@ void SCCB::_EmitCode(long ietnTop, ulong grfscc, long *pclwArg)
         else
         {
             // get the arguments and count them
-            long clwArg;
+            int32_t clwArg;
 
             if (etn.ietn2 == ivNil)
                 clwArg = 0;
@@ -1861,10 +1861,10 @@ void SCCB::_EmitCode(long ietnTop, ulong grfscc, long *pclwArg)
 /***************************************************************************
     If the etn is for a control structure, return the cst.
 ***************************************************************************/
-long SCCB::_CstFromName(long ietn)
+int32_t SCCB::_CstFromName(int32_t ietn)
 {
     AssertThis(0);
-    long istn;
+    int32_t istn;
     STN stn;
 
     _GetIstnNameFromIetn(ietn, &istn);
@@ -1882,13 +1882,13 @@ long SCCB::_CstFromName(long ietn)
 /***************************************************************************
     Begin a new control structure.
 ***************************************************************************/
-void SCCB::_BeginCst(long cst, long ietn)
+void SCCB::_BeginCst(int32_t cst, int32_t ietn)
 {
     AssertThis(0);
     AssertPo(_pglcstd, 0);
     CSTD cstd;
     CSTD cstdPrev;
-    long cetn;
+    int32_t cetn;
 
     ClearPb(&cstd, SIZEOF(cstd));
     cstd.cst = cst;
@@ -1985,15 +1985,15 @@ void SCCB::_BeginCst(long cst, long ietn)
     If this name token is "End", "Break", "Continue" or "Else", deal with it
     and return true.
 ***************************************************************************/
-bool SCCB::_FHandleCst(long ietn)
+bool SCCB::_FHandleCst(int32_t ietn)
 {
     AssertThis(0);
     AssertPo(_pglcstd, 0);
-    long istn;
+    int32_t istn;
     STN stn;
     CSTD cstd;
-    long icstd;
-    long *plwLabel;
+    int32_t icstd;
+    int32_t *plwLabel;
 
     _GetIstnNameFromIetn(ietn, &istn);
     _GetStnFromIstn(istn, &stn);
@@ -2135,7 +2135,7 @@ bool SCCB::_FHandleCst(long ietn)
     variable (iff the variable is a remote variable or an array access).
     Fills in *prtvn.
 ***************************************************************************/
-void SCCB::_EmitVarAccess(long ietn, RTVN *prtvn, long *popPush, long *popPop, long *pclwStack)
+void SCCB::_EmitVarAccess(int32_t ietn, RTVN *prtvn, int32_t *popPush, int32_t *popPop, int32_t *pclwStack)
 {
     AssertThis(0);
     AssertPo(_pgletnTree, 0);
@@ -2145,8 +2145,8 @@ void SCCB::_EmitVarAccess(long ietn, RTVN *prtvn, long *popPush, long *popPop, l
     AssertNilOrVarMem(popPop);
     AssertNilOrVarMem(pclwStack);
     ETN etn;
-    long opPop, opPush;
-    long clwStack = 0;
+    int32_t opPop, opPush;
+    int32_t clwStack = 0;
 
     _pgletnTree->Get(ietn, &etn);
     switch (etn.tt)
@@ -2210,12 +2210,12 @@ void SCCB::_EmitVarAccess(long ietn, RTVN *prtvn, long *popPush, long *popPop, l
 /***************************************************************************
     Push the opcode for a function and verify parameters and return type.
 ***************************************************************************/
-void SCCB::_PushOpFromName(long ietn, ulong grfscc, long clwArg)
+void SCCB::_PushOpFromName(int32_t ietn, uint32_t grfscc, int32_t clwArg)
 {
     AssertThis(0);
-    long istn;
+    int32_t istn;
     STN stn;
-    long op, clwFixed, clwVar, cactMinVar;
+    int32_t op, clwFixed, clwVar, cactMinVar;
     bool fVoid;
 
     _GetIstnNameFromIetn(ietn, &istn);
@@ -2243,7 +2243,7 @@ void SCCB::_PushOpFromName(long ietn, ulong grfscc, long clwArg)
     Find the string in the given rgarop and get the associated parameter
     and return type information.
 ***************************************************************************/
-bool SCCB::_FGetArop(PSTN pstn, AROP *prgarop, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar,
+bool SCCB::_FGetArop(PSTN pstn, AROP *prgarop, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
                      bool *pfVoid)
 {
     AssertThis(0);
@@ -2275,7 +2275,8 @@ bool SCCB::_FGetArop(PSTN pstn, AROP *prgarop, long *pop, long *pclwFixed, long 
     See if the given name is a function and give argument and return type
     information.
 ***************************************************************************/
-bool SCCB::_FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar, bool *pfVoid)
+bool SCCB::_FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                           bool *pfVoid)
 {
     AssertThis(0);
     return _FGetArop(pstn, _rgarop, pop, pclwFixed, pclwVar, pcactMinVar, pfVoid);
@@ -2284,7 +2285,7 @@ bool SCCB::_FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar,
 /***************************************************************************
     Add the given string to _pgstNames.
 ***************************************************************************/
-void SCCB::_AddNameRef(PSTN pstn, long *pistn)
+void SCCB::_AddNameRef(PSTN pstn, int32_t *pistn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2306,7 +2307,7 @@ void SCCB::_AddNameRef(PSTN pstn, long *pistn)
 /***************************************************************************
     Make sure (assert) the given ietn is a name and get the istn for the name.
 ***************************************************************************/
-void SCCB::_GetIstnNameFromIetn(long ietn, long *pistn)
+void SCCB::_GetIstnNameFromIetn(int32_t ietn, int32_t *pistn)
 {
     AssertThis(0);
     AssertPo(_pgletnTree, 0);
@@ -2324,7 +2325,7 @@ void SCCB::_GetIstnNameFromIetn(long ietn, long *pistn)
 /***************************************************************************
     Get the rtvn for the given string (in _pgstNames).
 ***************************************************************************/
-void SCCB::_GetStnFromIstn(long istn, PSTN pstn)
+void SCCB::_GetStnFromIstn(int32_t istn, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2341,7 +2342,7 @@ void SCCB::_GetStnFromIstn(long istn, PSTN pstn)
 /***************************************************************************
     Get the rtvn for the given string (in _pgstNames).
 ***************************************************************************/
-void SCCB::_GetRtvnFromName(long istn, RTVN *prtvn)
+void SCCB::_GetRtvnFromName(int32_t istn, RTVN *prtvn)
 {
     AssertThis(0);
     AssertVarMem(prtvn);
@@ -2360,9 +2361,9 @@ bool SCCB::_FKeyWord(PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long op, clwFixed, clwVar, cactMinVar;
+    int32_t op, clwFixed, clwVar, cactMinVar;
     bool fVoid;
-    long ipsz;
+    int32_t ipsz;
 
     if (_FGetOpFromName(pstn, &op, &clwFixed, &clwVar, &cactMinVar, &fVoid))
         return fTrue;
@@ -2378,10 +2379,10 @@ bool SCCB::_FKeyWord(PSTN pstn)
 /***************************************************************************
     Push a label request using the name in the given ietn.
 ***************************************************************************/
-void SCCB::_PushLabelRequestIetn(long ietn)
+void SCCB::_PushLabelRequestIetn(int32_t ietn)
 {
     AssertThis(0);
-    long istn;
+    int32_t istn;
     STN stn;
 
     _GetIstnNameFromIetn(ietn, &istn);
@@ -2392,10 +2393,10 @@ void SCCB::_PushLabelRequestIetn(long ietn)
 /***************************************************************************
     Add the label here.
 ***************************************************************************/
-void SCCB::_AddLabelIetn(long ietn)
+void SCCB::_AddLabelIetn(int32_t ietn)
 {
     AssertThis(0);
-    long istn;
+    int32_t istn;
     STN stn;
 
     _GetIstnNameFromIetn(ietn, &istn);
@@ -2406,7 +2407,7 @@ void SCCB::_AddLabelIetn(long ietn)
 /***************************************************************************
     "Push" a string constant that is currently in the name string table.
 ***************************************************************************/
-void SCCB::_PushStringIstn(long istn)
+void SCCB::_PushStringIstn(int32_t istn)
 {
     AssertThis(0);
     STN stn;
@@ -2427,7 +2428,7 @@ void SCCB::_CompileIn(void)
     TOK tok;
     TOME *ptome;
     ETN etn, etnT;
-    long ietn;
+    int32_t ietn;
     bool fDone;
 
     // push the new record
@@ -2482,7 +2483,7 @@ void SCCB::_CompileIn(void)
         }
 
         ClearPb(&etn, SIZEOF(etn));
-        etn.tt = (short)tok.tt;
+        etn.tt = (int16_t)tok.tt;
         etn.lwValue = tok.lw;
         etn.op = ptome->op;
         etn.opl = ptome->oplPush;
@@ -2561,15 +2562,15 @@ bool SCCB::FDisassemble(PSCPT pscpt, PMSNK pmsnk, PMSNK pmsnkError)
     AssertPo(pmsnk, 0);
     AssertPo(pmsnkError, 0);
     RTVN rtvn;
-    long ilwMac, ilw, clwPush;
-    long lw;
-    long op;
+    int32_t ilwMac, ilw, clwPush;
+    int32_t lw;
+    int32_t op;
     STN stn;
     DVER dver;
     PGL pgllw = pscpt->_pgllw;
     PSZ pszError = pvNil;
     AssertPo(pgllw, 0);
-    Assert(pgllw->CbEntry() == SIZEOF(long), "bad script");
+    Assert(pgllw->CbEntry() == SIZEOF(int32_t), "bad script");
 
     ilwMac = pgllw->IvMac();
     if (ilwMac < 1)
@@ -2613,7 +2614,7 @@ bool SCCB::FDisassemble(PSCPT pscpt, PMSNK pmsnk, PMSNK pmsnkError)
                 goto LFail;
             }
             clwPush--;
-            rtvn.lu1 = (ulong)SuLow(lw);
+            rtvn.lu1 = (uint32_t)SuLow(lw);
             pgllw->Get(ilw++, &rtvn.lu2);
             if (rtvn.lu1 == 0)
             {
@@ -2732,10 +2733,10 @@ void RTVN::SetFromStn(PSTN pstn)
 {
     AssertThisMem();
     AssertPo(pstn, 0);
-    byte rgb[8];
-    byte bT;
-    long lw, ib, ibDst, cbit;
-    long cch = pstn->Cch();
+    uint8_t rgb[8];
+    uint8_t bT;
+    int32_t lw, ib, ibDst, cbit;
+    int32_t cch = pstn->Cch();
     PSZ psz = pstn->Psz();
 
     // There are 52 letters, plus 10 digits, plus the underscore character,
@@ -2753,7 +2754,7 @@ void RTVN::SetFromStn(PSTN pstn)
             bT = 0;
         else
         {
-            bT = (byte)(schar)psz[ib];
+            bT = (uint8_t)(schar)psz[ib];
             if (FIn(bT, '0', '9' + 1))
                 bT -= '0' - 1;
             else if (FIn(bT, 'A', 'Z' + 1))
@@ -2769,7 +2770,7 @@ void RTVN::SetFromStn(PSTN pstn)
 
         // pack the encoded value into its 6 bit slot
         AssertIn(bT, 0, 64);
-        lw = (long)bT << (cbit + 2);
+        lw = (int32_t)bT << (cbit + 2);
         rgb[ibDst] = rgb[ibDst] & (-1L << cbit) | B1Lw(lw);
         if ((cbit += 2) <= 8)
             rgb[++ibDst] = B0Lw(lw);
@@ -2777,7 +2778,7 @@ void RTVN::SetFromStn(PSTN pstn)
             cbit -= 8;
     }
 
-    // put the bytes together into the rtvn's ulongs.
+    // put the bytes together into the rtvn's uint32_ts.
     lu1 = LwFromBytes(0, 0, rgb[0], rgb[1]);
     lu2 = LwFromBytes(rgb[2], rgb[3], rgb[4], rgb[5]);
 }
@@ -2789,19 +2790,19 @@ void RTVN::GetStn(PSTN pstn)
 {
     AssertThisMem();
     AssertPo(pstn, 0);
-    byte rgb[8];
-    byte bT;
-    long ib;
+    uint8_t rgb[8];
+    uint8_t bT;
+    int32_t ib;
 
     // unpack the individual bytes
-    rgb[0] = (byte)((lu1 & 0x0000FC00) >> 10);
-    rgb[1] = (byte)((lu1 & 0x000003F0) >> 4);
-    rgb[2] = (byte)(((lu1 & 0x0000000F) << 2) | ((lu2 & 0xC0000000) >> 30));
-    rgb[3] = (byte)((lu2 & 0x3F000000) >> 24);
-    rgb[4] = (byte)((lu2 & 0x00FC0000) >> 18);
-    rgb[5] = (byte)((lu2 & 0x0003F000) >> 12);
-    rgb[6] = (byte)((lu2 & 0x00000FC0) >> 6);
-    rgb[7] = (byte)(lu2 & 0x0000003F);
+    rgb[0] = (uint8_t)((lu1 & 0x0000FC00) >> 10);
+    rgb[1] = (uint8_t)((lu1 & 0x000003F0) >> 4);
+    rgb[2] = (uint8_t)(((lu1 & 0x0000000F) << 2) | ((lu2 & 0xC0000000) >> 30));
+    rgb[3] = (uint8_t)((lu2 & 0x3F000000) >> 24);
+    rgb[4] = (uint8_t)((lu2 & 0x00FC0000) >> 18);
+    rgb[5] = (uint8_t)((lu2 & 0x0003F000) >> 12);
+    rgb[6] = (uint8_t)((lu2 & 0x00000FC0) >> 6);
+    rgb[7] = (uint8_t)(lu2 & 0x0000003F);
 
     // convert the bytes to characters and append them to the stn
     pstn->SetNil();

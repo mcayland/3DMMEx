@@ -31,14 +31,14 @@ class TAGL : public TAGL_PAR
 
   protected:
     bool _FInit(void);
-    bool _FFindTag(PTAG ptag, long *pitag);
+    bool _FFindTag(PTAG ptag, int32_t *pitag);
 
   public:
     static PTAGL PtaglNew(void);
     ~TAGL(void);
 
-    long Ctag(void);
-    void GetTag(long itag, PTAG ptag);
+    int32_t Ctag(void);
+    void GetTag(int32_t itag, PTAG ptag);
 
     bool FInsertTag(PTAG ptag, bool fCacheChildren = fTrue);
     bool FInsertChild(PTAG ptag, CHID chid, CTG ctg);

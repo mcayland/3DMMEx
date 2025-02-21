@@ -33,7 +33,7 @@ MUB::~MUB(void)
 /***************************************************************************
     Static method to load and set a new menu bar.
 ***************************************************************************/
-PMUB MUB::PmubNew(ulong ridMenuBar)
+PMUB MUB::PmubNew(uint32_t ridMenuBar)
 {
     PMUB pmub;
 
@@ -77,10 +77,10 @@ void MUB::Set(void)
 ***************************************************************************/
 void MUB::Clean(void)
 {
-    long imnu, imni, cmnu;
-    ulong grfeds;
+    int32_t imnu, imni, cmnu;
+    uint32_t grfeds;
     HMENU hmenu;
-    long wcid;
+    int32_t wcid;
     CMD cmd;
 
     // adjust for the goofy mdi window's menu
@@ -133,7 +133,7 @@ void MUB::Clean(void)
     The given wcid is the value Windows handed us in a WM_COMMAND message.
     Remap it to a real command id and enqueue the result.
 ***************************************************************************/
-void MUB::EnqueueWcid(long wcid)
+void MUB::EnqueueWcid(int32_t wcid)
 {
     CMD cmd;
 
@@ -145,14 +145,14 @@ void MUB::EnqueueWcid(long wcid)
     Adds an item identified by the given list cid, long parameter
     and string.
 ***************************************************************************/
-bool MUB::FAddListCid(long cid, long lw0, PSTN pstn)
+bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long imlst, ilw;
+    int32_t imlst, ilw;
     MLST mlst;
     HMENU hmenuPrev;
-    long dimni;
+    int32_t dimni;
     bool fSeparator;
     bool fRet = true;
 
@@ -179,7 +179,7 @@ bool MUB::FAddListCid(long cid, long lw0, PSTN pstn)
 
         if (pvNil == mlst.pgllw)
         {
-            if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(long))))
+            if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(int32_t))))
             {
                 fRet = fFalse;
                 goto LAdjustSeparator;
@@ -242,16 +242,16 @@ bool MUB::FAddListCid(long cid, long lw0, PSTN pstn)
     or string.  If pstn is non-nil, it is used to find the item.
     If pstn is nil, lw0 is used to identify the item.
 ***************************************************************************/
-bool MUB::FRemoveListCid(long cid, long lw0, PSTN pstn)
+bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn)
 {
     AssertThis(0);
     AssertNilOrPo(pstn, 0);
-    long imlst, ilw, cch;
+    int32_t imlst, ilw, cch;
     MLST mlst;
     SZ sz;
     HMENU hmenuPrev;
-    long dimni;
-    long lw;
+    int32_t dimni;
+    int32_t lw;
     bool fSeparator, fSetWcid;
     bool fRet = fTrue;
 
@@ -351,13 +351,13 @@ bool MUB::FRemoveListCid(long cid, long lw0, PSTN pstn)
 /***************************************************************************
     Removes all items identified by the given list cid.
 ***************************************************************************/
-bool MUB::FRemoveAllListCid(long cid)
+bool MUB::FRemoveAllListCid(int32_t cid)
 {
     AssertThis(0);
-    long imlst, ilw;
+    int32_t imlst, ilw;
     MLST mlst;
     HMENU hmenuPrev;
-    long dimni;
+    int32_t dimni;
     bool fSeparator;
     bool fRet = fTrue;
 
@@ -435,12 +435,12 @@ bool MUB::FRemoveAllListCid(long cid)
     lwNew is set as the new long parameter and if pstnNew is non-nil,
     it is used as the new menu item text.
 ***************************************************************************/
-bool MUB::FChangeListCid(long cid, long lwOld, PSTN pstnOld, long lwNew, PSTN pstnNew)
+bool MUB::FChangeListCid(int32_t cid, int32_t lwOld, PSTN pstnOld, int32_t lwNew, PSTN pstnNew)
 {
     AssertThis(0);
     AssertNilOrPo(pstnOld, 0);
     AssertNilOrPo(pstnNew, 0);
-    long imlst, ilw, cch, lw;
+    int32_t imlst, ilw, cch, lw;
     MLST mlst;
     SZ sz;
     bool fRet = fTrue;
@@ -485,7 +485,7 @@ bool MUB::FChangeListCid(long cid, long lwOld, PSTN pstnOld, long lwNew, PSTN ps
 /***************************************************************************
     Fill in the CMD structure for the given wcid.
 ***************************************************************************/
-bool MUB::_FGetCmdForWcid(long wcid, PCMD pcmd)
+bool MUB::_FGetCmdForWcid(int32_t wcid, PCMD pcmd)
 {
     AssertVarMem(pcmd);
     MLST mlst;
@@ -493,7 +493,7 @@ bool MUB::_FGetCmdForWcid(long wcid, PCMD pcmd)
     ClearPb(pcmd, SIZEOF(*pcmd));
     if (wcid >= wcidListBase && _FFindMlst(wcid, &mlst))
     {
-        long lw, cch;
+        int32_t lw, cch;
         SZ sz;
         STN stn;
 
@@ -516,9 +516,9 @@ bool MUB::_FGetCmdForWcid(long wcid, PCMD pcmd)
 /***************************************************************************
     See if the given item is in a list.
 ***************************************************************************/
-bool MUB::_FFindMlst(long wcid, MLST *pmlst, long *pimlst)
+bool MUB::_FFindMlst(int32_t wcid, MLST *pmlst, int32_t *pimlst)
 {
-    long imlst;
+    int32_t imlst;
     MLST mlst;
 
     if (pvNil == _pglmlst)
@@ -549,14 +549,14 @@ bool MUB::_FFindMlst(long wcid, MLST *pmlst, long *pimlst)
 ***************************************************************************/
 bool MUB::_FInitLists(void)
 {
-    long imnu, imni, cmni, cmnu;
+    int32_t imnu, imni, cmni, cmnu;
     HMENU hmenu;
-    long cid;
+    int32_t cid;
     MLST mlst;
     SZ sz;
     STN stn;
-    long onn;
-    long wcidList = wcidListBase;
+    int32_t onn;
+    int32_t wcidList = wcidListBase;
 
     cmnu = GetMenuItemCount(_hmenu);
     Assert(cmnu == _cmnu, "bad _cmnu");
@@ -599,7 +599,7 @@ bool MUB::_FInitLists(void)
                 mlst.wcidList = wcidList;
                 wcidList += dwcidList;
                 mlst.cid = cid;
-                if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(long), vntl.OnnMac())))
+                if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(int32_t), vntl.OnnMac())))
                     return fFalse;
 
                 for (onn = 0; onn < vntl.OnnMac(); onn++)
@@ -648,7 +648,7 @@ bool MUB::_FInitLists(void)
 void MUB::MarkMem(void)
 {
     AssertThis(0);
-    long imlst;
+    int32_t imlst;
     MLST mlst;
 
     MUB_PAR::MarkMem();

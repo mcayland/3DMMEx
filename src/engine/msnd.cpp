@@ -46,7 +46,7 @@ const WORD knBlockAlign = 1;
     A PFNRPO to read a MSND from a file
 
 ***************************************************************************/
-bool MSND::FReadMsnd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool MSND::FReadMsnd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -79,7 +79,7 @@ bool MSND::FReadMsnd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     Retrieve information contained in the msnd chunk
 
 ***************************************************************************/
-bool MSND::FGetMsndInfo(PCFL pcfl, CTG ctg, CNO cno, bool *pfInvalid, long *psty, long *pvlm)
+bool MSND::FGetMsndInfo(PCFL pcfl, CTG ctg, CNO cno, bool *pfInvalid, int32_t *psty, int32_t *pvlm)
 {
     AssertPo(pcfl, 0);
 
@@ -202,7 +202,7 @@ LFail:
     ie, write the MSND chunk, its name, and the midi child
 
 ***************************************************************************/
-bool MSND::FWriteWave(PFIL pfilSrc, PCFL pcflDest, long sty, STN *pstnName, CNO *pcno)
+bool MSND::FWriteWave(PFIL pfilSrc, PCFL pcflDest, int32_t sty, STN *pstnName, CNO *pcno)
 {
     AssertPo(pfilSrc, 0);
     AssertIn(sty, 0, styLim);
@@ -294,7 +294,7 @@ LFail:
     Copy the wave file to a chunk in the current movie
 
 ***************************************************************************/
-bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, long sty, CNO *pcno, PSTN pstn)
+bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, int32_t sty, CNO *pcno, PSTN pstn)
 {
     AssertPo(pfilSrc, 0);
     AssertPo(pcflDest, 0);
@@ -323,11 +323,11 @@ bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, long sty, CNO *pcno, PSTN pstn
     ACMSTREAMHEADER acmhdr;
     DWORD dwTag;
     DWORD dwLength;
-    long cbOriginalFile = 0;
-    long cbCompressedFile = 0;
+    int32_t cbOriginalFile = 0;
+    int32_t cbCompressedFile = 0;
     FP fpNew;
     bool fCompress = fTrue;
-    long lwProp = 0;
+    int32_t lwProp = 0;
 
     pfilSrc->GetFni(&fniSrc);
     if (pvNil == pstn)
@@ -612,11 +612,11 @@ MSND::~MSND(void)
     Static function
 
 ***************************************************************************/
-long MSND::SqnActr(long sty, long objid)
+int32_t MSND::SqnActr(int32_t sty, int32_t objid)
 {
     AssertIn(sty, 0, styLim);
 
-    long sqnsty = sty << ksqnStyShift;
+    int32_t sqnsty = sty << ksqnStyShift;
     return (sqnActr | sqnsty | SwLow(objid));
 }
 
@@ -627,9 +627,9 @@ long MSND::SqnActr(long sty, long objid)
     Static function
 
 ***************************************************************************/
-long MSND::SqnBkgd(long sty, long objid)
+int32_t MSND::SqnBkgd(int32_t sty, int32_t objid)
 {
-    long sqnsty = sty << ksqnStyShift;
+    int32_t sqnsty = sty << ksqnStyShift;
     return (sqnBkgd | sqnsty | SwLow(objid));
 }
 
@@ -638,7 +638,7 @@ long MSND::SqnBkgd(long sty, long objid)
     Return the priority for a tool,sty combination
 
 ***************************************************************************/
-long MSND::Spr(long tool)
+int32_t MSND::Spr(int32_t tool)
 {
     AssertThis(0);
     Assert(tool == toolMatcher || tool == toolSounder || tool == toolLooper, "Invalid tool");
@@ -673,16 +673,16 @@ long MSND::Spr(long tool)
     Play this sound
 
 ***************************************************************************/
-void MSND::Play(long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr, ulong dtsStart)
+void MSND::Play(int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr, uint32_t dtsStart)
 {
     AssertThis(0);
 
-    long cactRepeat;
-    long sqn; // sound queue
-    long scl; // sound class
-    long sii{};
+    int32_t cactRepeat;
+    int32_t sqn; // sound queue
+    int32_t scl; // sound class
+    int32_t sii{};
 
-    static long _siiLastMidi;
+    static int32_t _siiLastMidi;
     static CTG _ctgLastMidi;
     static CNO _cnoLastMidi;
 
@@ -747,17 +747,17 @@ PMSQ MSQ::PmsqNew(void)
     Enqueue a sound	in the MSQ.  Overwrites sounds of the same type.
 
 ***************************************************************************/
-bool MSQ::FEnqueue(PMSND pmsnd, long objID, bool fLoop, bool fQueue, long vlm, long spr, bool fActr, ulong dtsStart,
-                   bool fLowPri)
+bool MSQ::FEnqueue(PMSND pmsnd, int32_t objID, bool fLoop, bool fQueue, int32_t vlm, int32_t spr, bool fActr,
+                   uint32_t dtsStart, bool fLowPri)
 {
     AssertThis(0);
     AssertPo(pmsnd, 0);
 
     SQE sqe;
     SQE *psqe;
-    long sqn;
-    long sqnT;
-    long isqe;
+    int32_t sqn;
+    int32_t sqnT;
+    int32_t isqe;
 
     if (_dtim == kdtimOffMsq)
         return fTrue;
@@ -904,7 +904,7 @@ MSQ::~MSQ(void)
 /***************************************************************************
     Assert the validity of the MSND.
 ***************************************************************************/
-void MSND::AssertValid(ulong grf)
+void MSND::AssertValid(uint32_t grf)
 {
     MSND_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_prca, 0);
@@ -925,7 +925,7 @@ void MSND::MarkMem(void)
 /***************************************************************************
     Assert the validity of the MSQ.
 ***************************************************************************/
-void MSQ::AssertValid(ulong grf)
+void MSQ::AssertValid(uint32_t grf)
 {
     MSQ_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglsqe, 0);

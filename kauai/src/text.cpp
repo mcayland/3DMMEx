@@ -19,14 +19,14 @@ RTCLASS(EDPL)
 RTCLASS(EDML)
 RTCLASS(EDMW)
 
-const long kdxpInsetEdcb = 2;
-const long kdxpInsetSled = 2;
+const int32_t kdxpInsetEdcb = 2;
+const int32_t kdxpInsetSled = 2;
 
 /***************************************************************************
     Constructor for edit control parameter block.
 ***************************************************************************/
-EDPAR::EDPAR(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont, long dypFont,
-             long tah, long tav, ACR acrFore, ACR acrBack, long cmhl)
+EDPAR::EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
+             int32_t dypFont, int32_t tah, int32_t tav, ACR acrFore, ACR acrBack, int32_t cmhl)
     : _gcb(hid, pgob, grfgob, gin, prcAbs, prcRel)
 {
     _onn = onn;
@@ -42,8 +42,8 @@ EDPAR::EDPAR(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel
 /***************************************************************************
     Set the data in the EDPAR.
 ***************************************************************************/
-void EDPAR::Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont,
-                long dypFont, long tah, long tav, ACR acrFore, ACR acrBack, long cmhl)
+void EDPAR::Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn,
+                uint32_t grfont, int32_t dypFont, int32_t tah, int32_t tav, ACR acrFore, ACR acrBack, int32_t cmhl)
 {
     _gcb.Set(hid, pgob, grfgob, gin, prcAbs, prcRel);
     _onn = onn;
@@ -59,7 +59,7 @@ void EDPAR::Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prc
 /***************************************************************************
     Set the font portion of the EDPAR.
 ***************************************************************************/
-void EDPAR::SetFont(long onn, ulong grfont, long dypFont, long tah, long tav, ACR acrFore, ACR acrBack)
+void EDPAR::SetFont(int32_t onn, uint32_t grfont, int32_t dypFont, int32_t tah, int32_t tav, ACR acrFore, ACR acrBack)
 {
     _onn = onn;
     _grfont = grfont;
@@ -73,7 +73,7 @@ void EDPAR::SetFont(long onn, ulong grfont, long dypFont, long tah, long tav, AC
 /***************************************************************************
     Constructor for edit control.
 ***************************************************************************/
-EDCB::EDCB(PGCB pgcb, long cmhl) : GOB(pgcb)
+EDCB::EDCB(PGCB pgcb, int32_t cmhl) : GOB(pgcb)
 {
     AssertBaseThis(0);
     _cmhl = cmhl;
@@ -125,7 +125,7 @@ void EDCB::Draw(PGNV pgnv, RC *prcClip)
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
-    long ln, lnLast;
+    int32_t ln, lnLast;
     RC rc;
 
     _GetRcContent(&rc);
@@ -149,7 +149,7 @@ bool EDCB::FCmdTrackMouse(PCMD_MOUSE pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long ln, ich;
+    int32_t ln, ich;
 
     if (pcmd->cid == cidMouseDown)
     {
@@ -195,14 +195,14 @@ bool EDCB::FCmdTrackMouse(PCMD_MOUSE pcmd)
 ***************************************************************************/
 bool EDCB::FCmdKey(PCMD_KEY pcmd)
 {
-    const long kcchInsBuf = 64;
+    const int32_t kcchInsBuf = 64;
     AssertThis(0);
     AssertVarMem(pcmd);
-    ulong grfcust;
-    long vkDone;
-    long dich, ichLim;
-    long dlnSel, ln, lnMac;
-    long cact;
+    uint32_t grfcust;
+    int32_t vkDone;
+    int32_t dich, ichLim;
+    int32_t dlnSel, ln, lnMac;
+    int32_t cact;
     CMD cmd;
     achar rgch[kcchInsBuf + 1];
     bool fPage;
@@ -333,7 +333,7 @@ LInsert:
             {
                 // determine dlnSel
                 RC rc;
-                long yp, dyp;
+                int32_t yp, dyp;
 
                 _GetRcContent(&rc);
                 yp = _YpFromLn(ln);
@@ -358,7 +358,7 @@ LInsert:
         }
         else
         {
-            long ichT = _ichOther;
+            int32_t ichT = _ichOther;
 
             if (ichT == _ichAnchor || (grfcust & fcustCmd))
                 ichT += dich;
@@ -462,10 +462,10 @@ void EDCB::_NewRc(void)
 /***************************************************************************
     Set the selection.
 ***************************************************************************/
-void EDCB::SetSel(long ichAnchor, long ichOther, long gin)
+void EDCB::SetSel(int32_t ichAnchor, int32_t ichOther, int32_t gin)
 {
     AssertThis(0);
-    long ichMac = IchMac();
+    int32_t ichMac = IchMac();
 
     ichAnchor = LwBound(ichAnchor, 0, ichMac + 1);
     ichOther = LwBound(ichOther, 0, ichMac + 1);
@@ -504,7 +504,7 @@ void EDCB::SetSel(long ichAnchor, long ichOther, long gin)
 /***************************************************************************
     Turn the sel on or off according to fOn.
 ***************************************************************************/
-void EDCB::_SwitchSel(bool fOn, long gin)
+void EDCB::_SwitchSel(bool fOn, int32_t gin)
 {
     AssertThis(0);
 
@@ -522,14 +522,14 @@ void EDCB::_SwitchSel(bool fOn, long gin)
 /***************************************************************************
     Make sure the selection is visible (or at least _ichOther is).
 ***************************************************************************/
-void EDCB::ShowSel(bool fForceJustification, long gin)
+void EDCB::ShowSel(bool fForceJustification, int32_t gin)
 {
     AssertThis(0);
-    long ln, lnHope;
-    long dxpScroll, dypScroll;
-    long zpMin, zpLim;
+    int32_t ln, lnHope;
+    int32_t dxpScroll, dypScroll;
+    int32_t zpMin, zpLim;
     RC rc;
-    long ichAnchor = _ichAnchor;
+    int32_t ichAnchor = _ichAnchor;
 
     // find the lines we want to show
     ln = _LnFromIch(_ichOther);
@@ -588,12 +588,12 @@ void EDCB::ShowSel(bool fForceJustification, long gin)
 /***************************************************************************
     Invert the current selection.
 ***************************************************************************/
-void EDCB::_InvertSel(PGNV pgnv, long gin)
+void EDCB::_InvertSel(PGNV pgnv, int32_t gin)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
     RC rc, rcT;
-    long ln;
+    int32_t ln;
 
     if (_ichAnchor == _ichOther)
     {
@@ -619,14 +619,14 @@ void EDCB::_InvertSel(PGNV pgnv, long gin)
 /***************************************************************************
     Invert a range.
 ***************************************************************************/
-void EDCB::_InvertIchRange(PGNV pgnv, long ich1, long ich2, long gin)
+void EDCB::_InvertIchRange(PGNV pgnv, int32_t ich1, int32_t ich2, int32_t gin)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertIn(ich1, 0, IchMac() + 1);
     AssertIn(ich2, 0, IchMac() + 1);
     RC rc, rcClip, rcT;
-    long ln1, ln2, xp2;
+    int32_t ln1, ln2, xp2;
 
     if (ich1 == ich2)
         return;
@@ -692,7 +692,7 @@ void EDCB::_InvertIchRange(PGNV pgnv, long ich1, long ich2, long gin)
 /***************************************************************************
     Update the correct lines on screen.
 ***************************************************************************/
-void EDCB::_UpdateLn(long ln, long clnIns, long clnDel, long dypDel, long gin)
+void EDCB::_UpdateLn(int32_t ln, int32_t clnIns, int32_t clnDel, int32_t dypDel, int32_t gin)
 {
     AssertThis(0);
     AssertIn(ln, 0, _LnMac());
@@ -700,8 +700,8 @@ void EDCB::_UpdateLn(long ln, long clnIns, long clnDel, long dypDel, long gin)
     AssertIn(clnDel, 0, kcbMax);
     AssertIn(dypDel, 0, kcbMax);
     RC rcLoc, rc;
-    long yp, dypIns;
-    long lnMac = _LnFromIch(IchMac());
+    int32_t yp, dypIns;
+    int32_t lnMac = _LnFromIch(IchMac());
 
     _GetRcContent(&rcLoc);
 
@@ -746,7 +746,7 @@ void EDCB::_UpdateLn(long ln, long clnIns, long clnDel, long dypDel, long gin)
 /***************************************************************************
     Scroll the text in the edit control.
 ***************************************************************************/
-void EDCB::_Scroll(long dxp, long dyp, long gin)
+void EDCB::_Scroll(int32_t dxp, int32_t dyp, int32_t gin)
 {
     AssertThis(0);
     RC rc;
@@ -760,7 +760,7 @@ void EDCB::_Scroll(long dxp, long dyp, long gin)
 /***************************************************************************
     Return the yp for the given character.
 ***************************************************************************/
-long EDCB::_YpFromIch(long ich)
+int32_t EDCB::_YpFromIch(int32_t ich)
 {
     return _YpFromLn(_LnFromIch(ich));
 }
@@ -768,7 +768,7 @@ long EDCB::_YpFromIch(long ich)
 /***************************************************************************
     Return the single character at ich.
 ***************************************************************************/
-achar EDCB::_ChFetch(long ich)
+achar EDCB::_ChFetch(int32_t ich)
 {
     AssertThis(0);
     AssertIn(ich, 0, IchMac());
@@ -782,7 +782,7 @@ achar EDCB::_ChFetch(long ich)
     Return ich of the previous character, skipping line feed characters. If
     fWord is true, skip to the beginning of a word.
 ***************************************************************************/
-long EDCB::_IchPrev(long ich, bool fWord)
+int32_t EDCB::_IchPrev(int32_t ich, bool fWord)
 {
     AssertThis(0);
     AssertIn(ich, 0, IchMac() + 2);
@@ -814,11 +814,11 @@ long EDCB::_IchPrev(long ich, bool fWord)
     Return ich of the next character, skipping line feed characters. If
     fWord is true, skip to the beginning of the next word.
 ***************************************************************************/
-long EDCB::_IchNext(long ich, bool fWord)
+int32_t EDCB::_IchNext(int32_t ich, bool fWord)
 {
     AssertThis(0);
     AssertIn(ich, 0, IchMac() + 1);
-    long ichMac = IchMac();
+    int32_t ichMac = IchMac();
 
     if (ich >= ichMac)
         return ichMac;
@@ -846,7 +846,7 @@ long EDCB::_IchNext(long ich, bool fWord)
 /***************************************************************************
     Assert the validity of the EDCB
 ***************************************************************************/
-void EDCB::AssertValid(ulong grf)
+void EDCB::AssertValid(uint32_t grf)
 {
     EDCB_PAR::AssertValid(0);
     AssertIn(_ichAnchor, 0, kcbMax);
@@ -906,7 +906,7 @@ bool EDPL::_FInit(void)
 /***************************************************************************
     Return the yp for the given line.
 ***************************************************************************/
-long EDPL::_YpFromLn(long ln)
+int32_t EDPL::_YpFromLn(int32_t ln)
 {
     AssertThis(0);
     AssertIn(ln, 0, _LnMac() + 1);
@@ -927,10 +927,10 @@ long EDPL::_YpFromLn(long ln)
 /***************************************************************************
     Return which line the yp belongs in.
 ***************************************************************************/
-long EDPL::_LnFromYp(long yp)
+int32_t EDPL::_LnFromYp(int32_t yp)
 {
     AssertThis(0);
-    long yp0 = _YpFromLn(0);
+    int32_t yp0 = _YpFromLn(0);
     return LwBound((yp - yp0) / _dypLine, 0, _LnMac() + 1);
 }
 
@@ -947,14 +947,14 @@ void EDPL::_HiliteRc(PGNV pgnv, RC *prc)
 /***************************************************************************
     Return the xp for the given character.
 ***************************************************************************/
-long EDPL::_XpFromIch(long ich)
+int32_t EDPL::_XpFromIch(int32_t ich)
 {
     AssertThis(0);
     AssertIn(ich, 0, IchMac() + 1);
     RC rc;
     achar *prgch;
-    long ln, ichMin, cch;
-    long xp = _XpOrigin();
+    int32_t ln, ichMin, cch;
+    int32_t xp = _XpOrigin();
 
     ln = _LnFromIch(ich);
     ichMin = _IchMinLn(ln);
@@ -984,14 +984,14 @@ long EDPL::_XpFromIch(long ich)
     (for traditional selection). If fClosest is false, it finds the character
     that the xp value is over.
 ***************************************************************************/
-long EDPL::_IchFromLnXp(long ln, long xp, bool fClosest)
+int32_t EDPL::_IchFromLnXp(int32_t ln, int32_t xp, bool fClosest)
 {
     AssertThis(0);
-    long xpT;
-    long ich;
-    long ichMin = _IchMinLn(ln);
-    long ichMinLn = ichMin;
-    long ichLim = _IchPrev(_IchMinLn(ln + 1));
+    int32_t xpT;
+    int32_t ich;
+    int32_t ichMin = _IchMinLn(ln);
+    int32_t ichMinLn = ichMin;
+    int32_t ichLim = _IchPrev(_IchMinLn(ln + 1));
 
     while (ichMin < ichLim)
     {
@@ -1018,21 +1018,21 @@ long EDPL::_IchFromLnXp(long ln, long xp, bool fClosest)
 /***************************************************************************
     Draw the given line in the given GNV.
 ***************************************************************************/
-void EDPL::_DrawLine(PGNV pgnv, long ln)
+void EDPL::_DrawLine(PGNV pgnv, int32_t ln)
 {
     AssertThis(0);
     AssertIn(ln, 0, _LnMac() + 1);
     RC rcSrc;
     achar *prgch;
-    long cch;
-    long ypTop;
+    int32_t cch;
+    int32_t ypTop;
 
     _GetRcContent(&rcSrc);
     ypTop = _YpFromLn(ln);
     if (_FLockLn(ln, &prgch, &cch))
     {
         AssertPvCb(prgch, cch * SIZEOF(achar));
-        long xp = _XpOrigin();
+        int32_t xp = _XpOrigin();
 
         pgnv->SetFont(_onn, _grfont, _dypFont, _tah);
         if (ln > 0)
@@ -1053,7 +1053,7 @@ void EDPL::_DrawLine(PGNV pgnv, long ln)
 /***************************************************************************
     Return the origin for drawing text.
 ***************************************************************************/
-long EDPL::_XpOrigin(void)
+int32_t EDPL::_XpOrigin(void)
 {
     AssertThis(0);
     RC rc;
@@ -1074,7 +1074,7 @@ long EDPL::_XpOrigin(void)
 /***************************************************************************
     Assert the validity of a single-line edit control.
 ***************************************************************************/
-void EDPL::AssertValid(ulong grf)
+void EDPL::AssertValid(uint32_t grf)
 {
     EDPL_PAR::AssertValid(0);
     Assert(vntl.FValidOnn(_onn), 0);
@@ -1116,7 +1116,7 @@ PEDSL EDSL::PedslNew(PEDPAR pedpar)
 /***************************************************************************
     Get a pointer to the characters for the given line.
 ***************************************************************************/
-bool EDSL::_FLockLn(long ln, achar **pprgch, long *pcch)
+bool EDSL::_FLockLn(int32_t ln, achar **pprgch, int32_t *pcch)
 {
     AssertBaseThis(0);
     AssertVarMem(pprgch);
@@ -1136,7 +1136,7 @@ bool EDSL::_FLockLn(long ln, achar **pprgch, long *pcch)
 /***************************************************************************
     Unlock a line.
 ***************************************************************************/
-void EDSL::_UnlockLn(long ln, achar *prgch)
+void EDSL::_UnlockLn(int32_t ln, achar *prgch)
 {
     AssertBaseThis(0);
     Assert(prgch == _rgch, "bad call to _UnlockLn");
@@ -1145,7 +1145,7 @@ void EDSL::_UnlockLn(long ln, achar *prgch)
 /***************************************************************************
     Return the line that ich is on.
 ***************************************************************************/
-long EDSL::_LnFromIch(long ich)
+int32_t EDSL::_LnFromIch(int32_t ich)
 {
     AssertBaseThis(0);
     AssertIn(ich, 0, kcbMax);
@@ -1155,7 +1155,7 @@ long EDSL::_LnFromIch(long ich)
 /***************************************************************************
     Return the first ich for the given line.
 ***************************************************************************/
-long EDSL::_IchMinLn(long ln)
+int32_t EDSL::_IchMinLn(int32_t ln)
 {
     AssertBaseThis(0);
     return ln == 0 ? 0 : IchMac() + 1;
@@ -1164,7 +1164,7 @@ long EDSL::_IchMinLn(long ln)
 /***************************************************************************
     Return the number of characters.
 ***************************************************************************/
-long EDSL::IchMac(void)
+int32_t EDSL::IchMac(void)
 {
     AssertBaseThis(0);
     return _cch;
@@ -1173,7 +1173,7 @@ long EDSL::IchMac(void)
 /***************************************************************************
     Return the number of lines.
 ***************************************************************************/
-long EDSL::_LnMac(void)
+int32_t EDSL::_LnMac(void)
 {
     AssertBaseThis(0);
     return 1;
@@ -1183,7 +1183,7 @@ long EDSL::_LnMac(void)
     Replace the characters between ich1 and ich2 with those in (prgch, cchIns).
     Calls _UpdateLn() to clean up the display.
 ***************************************************************************/
-bool EDSL::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin)
+bool EDSL::FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin)
 {
     AssertThis(0);
     AssertIn(cchIns, 0, kcbMax);
@@ -1247,7 +1247,7 @@ void EDSL::GetStn(PSTN pstn)
     Set the text in the edit control.  Sets the selection to an insertion
     point at the end of the text.
 ***************************************************************************/
-void EDSL::SetStn(PSTN pstn, long gin)
+void EDSL::SetStn(PSTN pstn, int32_t gin)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -1258,7 +1258,7 @@ void EDSL::SetStn(PSTN pstn, long gin)
 /***************************************************************************
     Get some text.
 ***************************************************************************/
-long EDSL::CchFetch(achar *prgch, long ich, long cchWant)
+int32_t EDSL::CchFetch(achar *prgch, int32_t ich, int32_t cchWant)
 {
     AssertThis(0);
     AssertIn(cchWant, 0, kcbMax);
@@ -1274,9 +1274,9 @@ long EDSL::CchFetch(achar *prgch, long ich, long cchWant)
 /***************************************************************************
     Assert the validity of a single-line edit control.
 ***************************************************************************/
-void EDSL::AssertValid(ulong grf)
+void EDSL::AssertValid(uint32_t grf)
 {
-    long ich;
+    int32_t ich;
 
     EDSL_PAR::AssertValid(0);
     AssertIn(_cch, 0, kcchMaxEdsl + 1);
@@ -1325,9 +1325,9 @@ PEDML EDML::PedmlNew(PEDPAR pedpar)
 ***************************************************************************/
 bool EDML::_FInit(void)
 {
-    long ich;
+    int32_t ich;
 
-    if (pvNil == (_pglich = GL::PglNew(SIZEOF(long))))
+    if (pvNil == (_pglich = GL::PglNew(SIZEOF(int32_t))))
         return fFalse;
     _pglich->SetMinGrow(20);
     ich = 0;
@@ -1337,13 +1337,13 @@ bool EDML::_FInit(void)
 /***************************************************************************
     Get a pointer to the characters for the given line.
 ***************************************************************************/
-bool EDML::_FLockLn(long ln, achar **pprgch, long *pcch)
+bool EDML::_FLockLn(int32_t ln, achar **pprgch, int32_t *pcch)
 {
     AssertThis(0);
     AssertIn(ln, 0, _pglich->IvMac() + 1);
     AssertVarMem(pprgch);
     AssertVarMem(pcch);
-    long ich;
+    int32_t ich;
 
     if (ln >= _pglich->IvMac())
     {
@@ -1357,7 +1357,7 @@ bool EDML::_FLockLn(long ln, achar **pprgch, long *pcch)
         *pcch = IchMac() - ich;
     else
     {
-        long ichT;
+        int32_t ichT;
 
         _pglich->Get(ln + 1, pcch);
         ichT = LwMax(ich, _IchPrev(*pcch));
@@ -1375,7 +1375,7 @@ bool EDML::_FLockLn(long ln, achar **pprgch, long *pcch)
 /***************************************************************************
     Unlock a line.
 ***************************************************************************/
-void EDML::_UnlockLn(long ln, achar *prgch)
+void EDML::_UnlockLn(int32_t ln, achar *prgch)
 {
     AssertThis(0);
     _bsm.Unlock();
@@ -1384,12 +1384,12 @@ void EDML::_UnlockLn(long ln, achar *prgch)
 /***************************************************************************
     Return the line that ich is on.
 ***************************************************************************/
-long EDML::_LnFromIch(long ich)
+int32_t EDML::_LnFromIch(int32_t ich)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ich, 0, IchMac() + 1);
-    long lnMin, lnLim, ln;
-    long ichT;
+    int32_t lnMin, lnLim, ln;
+    int32_t ichT;
 
     if (ich > IchMac())
     {
@@ -1415,10 +1415,10 @@ long EDML::_LnFromIch(long ich)
 /***************************************************************************
     Return the first ich for the given line.
 ***************************************************************************/
-long EDML::_IchMinLn(long ln)
+int32_t EDML::_IchMinLn(int32_t ln)
 {
     AssertThis(0);
-    long ich;
+    int32_t ich;
 
     if (ln >= _pglich->IvMac())
         return IchMac() + 1;
@@ -1429,7 +1429,7 @@ long EDML::_IchMinLn(long ln)
 /***************************************************************************
     Return the number of characters.
 ***************************************************************************/
-long EDML::IchMac(void)
+int32_t EDML::IchMac(void)
 {
     AssertBaseThis(0);
     Assert(_bsm.IbMac() % SIZEOF(achar) == 0, "ibMac not divisible by SIZEOF(achar)");
@@ -1439,7 +1439,7 @@ long EDML::IchMac(void)
 /***************************************************************************
     Return the number of lines.
 ***************************************************************************/
-long EDML::_LnMac(void)
+int32_t EDML::_LnMac(void)
 {
     AssertThis(0);
     return _pglich->IvMac();
@@ -1449,16 +1449,16 @@ long EDML::_LnMac(void)
     Replace the characters between ich1 and ich2 with those in (prgch, cchIns).
     Calls _UpdateLn() to clean up the display.
 ***************************************************************************/
-bool EDML::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin)
+bool EDML::FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cchIns, 0, kcbMax);
     AssertPvCb(prgch, cchIns * SIZEOF(achar));
     AssertIn(ich1, 0, IchMac() + 1);
     AssertIn(ich2, 0, IchMac() + 1);
-    long lnMin, clnDel, clnDel2, clnIns, ln;
-    long dich;
-    long ypOld, ypNew;
+    int32_t lnMin, clnDel, clnDel2, clnIns, ln;
+    int32_t dich;
+    int32_t ypOld, ypNew;
 
     ich1 = LwBound(ich1, 0, dich = IchMac() + 1);
     ich2 = LwBound(ich2, 0, dich);
@@ -1487,10 +1487,10 @@ bool EDML::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long 
     // adjust the ich's further in the _pglich
     if (0 != (dich = cchIns - ich2 + ich1))
     {
-        long *pich;
-        long lnLim;
+        int32_t *pich;
+        int32_t lnLim;
 
-        pich = (long *)_pglich->QvGet(++ln);
+        pich = (int32_t *)_pglich->QvGet(++ln);
         for (lnLim = _pglich->IvMac(); ln < lnLim; ln++, pich++)
             *pich += dich;
     }
@@ -1514,7 +1514,7 @@ bool EDML::FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long 
 /***************************************************************************
     Do a replace operation just on the text.
 ***************************************************************************/
-bool EDML::_FReplaceCore(const achar *prgch, long cchIns, long ich, long cchDel)
+bool EDML::_FReplaceCore(const achar *prgch, int32_t cchIns, int32_t ich, int32_t cchDel)
 {
     return _bsm.FReplace(prgch, cchIns, ich, cchDel);
 }
@@ -1522,10 +1522,10 @@ bool EDML::_FReplaceCore(const achar *prgch, long cchIns, long ich, long cchDel)
 /***************************************************************************
     Estimate the number of new lines (exact for a simple EDML).
 ***************************************************************************/
-long EDML::_ClnEstimate(const achar *prgch, long cch)
+int32_t EDML::_ClnEstimate(const achar *prgch, int32_t cch)
 {
-    long cln;
-    long ich;
+    int32_t cln;
+    int32_t ich;
 
     cln = 0;
     for (ich = 0; ich < cch; ich++)
@@ -1539,12 +1539,12 @@ long EDML::_ClnEstimate(const achar *prgch, long cch)
 /***************************************************************************
     Find new line starts starting at lnMin.
 ***************************************************************************/
-long EDML::_LnReformat(long lnMin, long *pclnDel, long *pclnIns)
+int32_t EDML::_LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns)
 {
-    long ln;
-    long ichPrev;
-    long ich = _IchMinLn(lnMin);
-    long ichNext = _IchMinLn(lnMin + 1);
+    int32_t ln;
+    int32_t ichPrev;
+    int32_t ich = _IchMinLn(lnMin);
+    int32_t ichNext = _IchMinLn(lnMin + 1);
 
     ln = lnMin + 1;
     while ((ich = _IchNext(ichPrev = ich)) < ichNext && ichPrev < ich)
@@ -1569,7 +1569,7 @@ long EDML::_LnReformat(long lnMin, long *pclnDel, long *pclnIns)
 ***************************************************************************/
 bool EDML::_FFilterCh(achar ch)
 {
-    ulong grfch = GrfchFromCh(ch);
+    uint32_t grfch = GrfchFromCh(ch);
 
     return !(fchControl & grfch) || (fchBreak & grfch);
 }
@@ -1577,7 +1577,7 @@ bool EDML::_FFilterCh(achar ch)
 /***************************************************************************
     Get some text.
 ***************************************************************************/
-long EDML::CchFetch(achar *prgch, long ich, long cchWant)
+int32_t EDML::CchFetch(achar *prgch, int32_t ich, int32_t cchWant)
 {
     AssertThis(0);
     AssertIn(cchWant, 0, kcbMax);
@@ -1593,15 +1593,15 @@ long EDML::CchFetch(achar *prgch, long ich, long cchWant)
 /***************************************************************************
     Assert the validity of a multi-line edit control.
 ***************************************************************************/
-void EDML::AssertValid(ulong grf)
+void EDML::AssertValid(uint32_t grf)
 {
     EDML_PAR::AssertValid(0);
     AssertPo(_pglich, 0);
     AssertPo(&_bsm, 0);
     AssertIn(_pglich->IvMac(), 1, kcbMax);
 
-    long ibMac = _bsm.IbMac();
-    long ichMac = ibMac / SIZEOF(achar);
+    int32_t ibMac = _bsm.IbMac();
+    int32_t ichMac = ibMac / SIZEOF(achar);
 
     Assert(ibMac % SIZEOF(achar) == 0, "ibMac not a divisible by SIZEOF(achar)");
     AssertIn(_ichAnchor, 0, ichMac + 1);
@@ -1609,7 +1609,7 @@ void EDML::AssertValid(ulong grf)
 
     if (grf & fobjAssertFull)
     {
-        long ichPrev, ich, ln;
+        int32_t ichPrev, ich, ln;
 
         ichPrev = ichMac + 1;
         for (ln = _pglich->IvMac(); ln-- > 0;)
@@ -1662,14 +1662,14 @@ PEDMW EDMW::PedmwNew(PEDPAR pedpar)
 /***************************************************************************
     Return an estimate of how many new lines there are in the text to insert.
 ***************************************************************************/
-long EDMW::_ClnEstimate(achar *prgch, long cch)
+int32_t EDMW::_ClnEstimate(achar *prgch, int32_t cch)
 {
     // the common case
     if (cch <= 1)
         return 1;
 
     RC rc;
-    long dxp, cln;
+    int32_t dxp, cln;
 
     _GetRcContent(&rc);
     rc.Inset(kdxpInsetEdcb, 0);
@@ -1686,18 +1686,18 @@ long EDMW::_ClnEstimate(achar *prgch, long cch)
     lnMin's line start.  Returns the first line that changed (1 less than
     the first line start that changed).
 ***************************************************************************/
-long EDMW::_LnReformat(long lnMin, long *pclnDel, long *pclnIns)
+int32_t EDMW::_LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns)
 {
-    const long kcichMax = 128;
-    long rgich[kcichMax];
+    const int32_t kcichMax = 128;
+    int32_t rgich[kcichMax];
     RC rc;
-    long dxp;
-    long ich, cich, ivMin, ivLim, iv, ichNew;
-    long iichCur;
-    long lnCur;
-    ulong grfch;
+    int32_t dxp;
+    int32_t ich, cich, ivMin, ivLim, iv, ichNew;
+    int32_t iichCur;
+    int32_t lnCur;
+    uint32_t grfch;
     achar *prgch;
-    long clnIns = 0, clnDel = 0;
+    int32_t clnIns = 0, clnDel = 0;
 
     _GetRcContent(&rc);
     rc.Inset(kdxpInsetEdcb, 0);
@@ -1712,7 +1712,7 @@ long EDMW::_LnReformat(long lnMin, long *pclnDel, long *pclnIns)
     if (lnMin > 0 && !(fchBreak & GrfchFromCh(prgch[_IchPrev(ich)])))
     {
         // see if some of the text will fit on the previous line
-        long ichPrev = _IchMinLn(lnMin - 1);
+        int32_t ichPrev = _IchMinLn(lnMin - 1);
 
         _pgnv->GetRcFromRgch(&rc, prgch + ichPrev, rgich[0] - ichPrev);
         if (rc.Dxp() <= dxp)
@@ -1827,13 +1827,13 @@ LDone:
     Doesn't continue past a return character.  Return the number of locations
     found.
 ***************************************************************************/
-long EDMW::_CichGetBreakables(achar *prgch, long ich, long *prgich, long cichMax)
+int32_t EDMW::_CichGetBreakables(achar *prgch, int32_t ich, int32_t *prgich, int32_t cichMax)
 {
     AssertIn(ich, 0, IchMac() + 1);
     AssertPvCb(prgch, IchMac() * SIZEOF(achar));
-    AssertPvCb(prgich, LwMul(cichMax, SIZEOF(long)));
-    long cich;
-    ulong grfch;
+    AssertPvCb(prgich, LwMul(cichMax, SIZEOF(int32_t)));
+    int32_t cich;
+    uint32_t grfch;
 
     for (cich = 0; ich < IchMac(); ich++)
     {
@@ -1863,7 +1863,7 @@ long EDMW::_CichGetBreakables(achar *prgch, long ich, long *prgich, long cichMax
 void EDMW::_NewRc(void)
 {
     AssertThis(0);
-    long clnDel, clnIns;
+    int32_t clnDel, clnIns;
 
     AssertDo(_pglich->FSetIvMac(1), 0);
     _LnReformat(0, &clnDel, &clnIns);

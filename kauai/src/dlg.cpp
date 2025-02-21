@@ -18,7 +18,7 @@ RTCLASS(DLG)
 /***************************************************************************
     Constructor for a dialog object.
 ***************************************************************************/
-DLG::DLG(long rid) : GG(SIZEOF(DIT))
+DLG::DLG(int32_t rid) : GG(SIZEOF(DIT))
 {
     _rid = rid;
 }
@@ -26,7 +26,7 @@ DLG::DLG(long rid) : GG(SIZEOF(DIT))
 /***************************************************************************
     Static method to create a new DLG.  Does NewObj then calls _FInit.
 ***************************************************************************/
-PDLG DLG::PdlgNew(long rid, PFNDLG pfn, void *pv)
+PDLG DLG::PdlgNew(int32_t rid, PFNDLG pfn, void *pv)
 {
     PDLG pdlg;
 
@@ -46,12 +46,12 @@ PDLG DLG::PdlgNew(long rid, PFNDLG pfn, void *pv)
     Get the values for [iditMin, iditLim) from the actual dialog and put
     them in the GGDIT.
 ***************************************************************************/
-bool DLG::FGetValues(long iditMin, long iditLim)
+bool DLG::FGetValues(int32_t iditMin, int32_t iditLim)
 {
     AssertThis(0);
-    long idit;
+    int32_t idit;
     DIT dit;
-    long lw;
+    int32_t lw;
     STN stn;
 
     AssertIn(iditMin, 0, iditLim);
@@ -93,15 +93,15 @@ bool DLG::FGetValues(long iditMin, long iditLim)
     Set the values for [iditMin, iditLim) from the GGDIT into the actual
     dialog.
 ***************************************************************************/
-void DLG::SetValues(long iditMin, long iditLim)
+void DLG::SetValues(int32_t iditMin, int32_t iditLim)
 {
     AssertThis(0);
-    long idit;
+    int32_t idit;
     DIT dit;
     STN stn;
-    long lw;
-    long cb, cbT, ib;
-    byte *prgb;
+    int32_t lw;
+    int32_t cb, cbT, ib;
+    uint8_t *prgb;
 
     if (_pgob == pvNil)
     {
@@ -139,7 +139,7 @@ void DLG::SetValues(long iditMin, long iditLim)
                 _SetEditText(idit, &stn);
                 break;
             }
-            prgb = (byte *)PvLock(idit);
+            prgb = (uint8_t *)PvLock(idit);
             if (!stn.FSetData(prgb, cb, &cbT))
             {
                 Bug("bad combo item");
@@ -165,9 +165,9 @@ void DLG::SetValues(long iditMin, long iditLim)
 /***************************************************************************
     Get the item number from a system item number.
 ***************************************************************************/
-long DLG::IditFromSit(long sit)
+int32_t DLG::IditFromSit(int32_t sit)
 {
-    long idit;
+    int32_t idit;
     DIT dit;
 
     for (idit = IvMac(); idit-- != 0;)
@@ -185,7 +185,7 @@ long DLG::IditFromSit(long sit)
     to change *pidit.  If a nil PFNDLG was specified (in PdlgNew),
     this returns true (dismisses the dialog) on any button hit.
 ***************************************************************************/
-bool DLG::_FDitChange(long *pidit)
+bool DLG::_FDitChange(int32_t *pidit)
 {
     if (pvNil == _pfn)
     {
@@ -204,12 +204,12 @@ bool DLG::_FDitChange(long *pidit)
 /***************************************************************************
     Get the stn (for an edit item).
 ***************************************************************************/
-void DLG::GetStn(long idit, PSTN pstn)
+void DLG::GetStn(int32_t idit, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
     AssertPo(pstn, 0);
-    long cb;
+    int32_t cb;
 
 #ifdef DEBUG
     DIT dit;
@@ -230,13 +230,13 @@ void DLG::GetStn(long idit, PSTN pstn)
 /***************************************************************************
     Put the stn into the DLG.
 ***************************************************************************/
-bool DLG::FPutStn(long idit, PSTN pstn)
+bool DLG::FPutStn(int32_t idit, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
     AssertPo(pstn, 0);
     DIT dit;
-    long cbOld, cbNew;
+    int32_t cbOld, cbNew;
 
     GetDit(idit, &dit);
     cbOld = Cb(idit);
@@ -279,11 +279,11 @@ bool DLG::FPutStn(long idit, PSTN pstn)
 /***************************************************************************
     Get the value of a radio group.
 ***************************************************************************/
-long DLG::LwGetRadio(long idit)
+int32_t DLG::LwGetRadio(int32_t idit)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
-    long lw;
+    int32_t lw;
 
 #ifdef DEBUG
     DIT dit;
@@ -291,14 +291,14 @@ long DLG::LwGetRadio(long idit)
     Assert(ditkRadioGroup == dit.ditk, "not a radio group");
 #endif // DEBUG
 
-    GetRgb(idit, 0, SIZEOF(long), &lw);
+    GetRgb(idit, 0, SIZEOF(int32_t), &lw);
     return lw;
 }
 
 /***************************************************************************
     Set the value of the radio group.
 ***************************************************************************/
-void DLG::PutRadio(long idit, long lw)
+void DLG::PutRadio(int32_t idit, int32_t lw)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
@@ -310,17 +310,17 @@ void DLG::PutRadio(long idit, long lw)
     AssertIn(lw, 0, dit.sitLim - dit.sitMin);
 #endif // DEBUG
 
-    PutRgb(idit, 0, SIZEOF(long), &lw);
+    PutRgb(idit, 0, SIZEOF(int32_t), &lw);
 }
 
 /***************************************************************************
     Get the value of a check box.
 ***************************************************************************/
-bool DLG::FGetCheck(long idit)
+bool DLG::FGetCheck(int32_t idit)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
-    long lw;
+    int32_t lw;
 
 #ifdef DEBUG
     DIT dit;
@@ -328,18 +328,18 @@ bool DLG::FGetCheck(long idit)
     Assert(ditkCheckBox == dit.ditk, "not a check box");
 #endif // DEBUG
 
-    GetRgb(idit, 0, SIZEOF(long), &lw);
+    GetRgb(idit, 0, SIZEOF(int32_t), &lw);
     return lw;
 }
 
 /***************************************************************************
     Set the value of a check box item.
 ***************************************************************************/
-void DLG::PutCheck(long idit, bool fOn)
+void DLG::PutCheck(int32_t idit, bool fOn)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
-    long lw;
+    int32_t lw;
 
 #ifdef DEBUG
     DIT dit;
@@ -348,7 +348,7 @@ void DLG::PutCheck(long idit, bool fOn)
 #endif // DEBUG
 
     lw = FPure(fOn);
-    PutRgb(idit, 0, SIZEOF(long), &lw);
+    PutRgb(idit, 0, SIZEOF(int32_t), &lw);
 }
 
 /***************************************************************************
@@ -357,7 +357,7 @@ void DLG::PutCheck(long idit, bool fOn)
     is not nil) and returns false.  If the string doesn't parse as a number,
     returns false.
 ***************************************************************************/
-bool DLG::FGetLwFromEdit(long idit, long *plw, bool *pfEmpty)
+bool DLG::FGetLwFromEdit(int32_t idit, int32_t *plw, bool *pfEmpty)
 {
     AssertThis(0);
     AssertVarMem(plw);
@@ -385,7 +385,7 @@ bool DLG::FGetLwFromEdit(long idit, long *plw, bool *pfEmpty)
 /***************************************************************************
     Put the long into the indicated edit item (in decimal).
 ***************************************************************************/
-bool DLG::FPutLwInEdit(long idit, long lw)
+bool DLG::FPutLwInEdit(int32_t idit, int32_t lw)
 {
     AssertThis(0);
     STN stn;
@@ -397,10 +397,10 @@ bool DLG::FPutLwInEdit(long idit, long lw)
 /***************************************************************************
     Add the string to the given list item.
 ***************************************************************************/
-bool DLG::FAddToList(long idit, PSTN pstn)
+bool DLG::FAddToList(int32_t idit, PSTN pstn)
 {
     AssertThis(0);
-    long cb, cbTot;
+    int32_t cb, cbTot;
 
 #ifdef DEBUG
     DIT dit;
@@ -431,11 +431,11 @@ bool DLG::FAddToList(long idit, PSTN pstn)
 /***************************************************************************
     Empty the list of options for the list item.
 ***************************************************************************/
-void DLG::ClearList(long idit)
+void DLG::ClearList(int32_t idit)
 {
     AssertThis(0);
     AssertIn(idit, 0, IvMac());
-    long cbOld, cbNew;
+    int32_t cbOld, cbNew;
     STN stn;
 
 #ifdef DEBUG

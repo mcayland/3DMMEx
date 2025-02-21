@@ -21,12 +21,12 @@ RTCLASS(SFL)
     Constructs a pseudo-random number generator.  If luSeed is zero,
     generates a seed from the current system time (TsCurrentSystem).
 ***************************************************************************/
-RND::RND(ulong luSeed)
+RND::RND(uint32_t luSeed)
 {
     if (0 == luSeed)
     {
         luSeed = TsCurrentSystem();
-        SwapBytesRglw((long *)&luSeed, 1);
+        SwapBytesRglw((int32_t *)&luSeed, 1);
     }
     _luSeed = luSeed;
     AssertThis(0);
@@ -36,7 +36,7 @@ RND::RND(ulong luSeed)
     Return the next pseudo-random number within the range 0 to lwLim - 1,
     inclusive.
 ***************************************************************************/
-long RND::LwNext(long lwLim)
+int32_t RND::LwNext(int32_t lwLim)
 {
     AssertThis(0);
     AssertIn(lwLim, 1, kcbMax);
@@ -44,15 +44,15 @@ long RND::LwNext(long lwLim)
     // high bits are more random than the low ones
     // See Knuth vol 2, page 102, line 24 of table 1.
     // value of kdluRand doesn't matter much
-    const ulong kluRandMul = 1566083941L;
-    const long kdluRand = 2531011L;
-    long lw;
+    const uint32_t kluRandMul = 1566083941L;
+    const int32_t kdluRand = 2531011L;
+    int32_t lw;
 
     _luSeed = _luSeed * kluRandMul + kdluRand;
 
     // multiply lw by lwLim and divide by 2^32
 #ifdef IN_80386
-    ulong luSeedT = _luSeed;
+    uint32_t luSeedT = _luSeed;
     __asm
     {
 		mov		eax,luSeedT
@@ -63,7 +63,7 @@ long RND::LwNext(long lwLim)
     double dou;
 
     dou = (double)_luSeed * lwLim / (double)0x40000000 / 4;
-    lw = (long)dou;
+    lw = (int32_t)dou;
 #endif //! IN_80386
 
     Assert(lw < lwLim, "random number out of range");
@@ -73,7 +73,7 @@ long RND::LwNext(long lwLim)
 /***************************************************************************
     Constructs a shuffled array.
 ***************************************************************************/
-SFL::SFL(ulong luSeed) : RND(luSeed)
+SFL::SFL(uint32_t luSeed) : RND(luSeed)
 {
     _clw = 0;
     _ilw = 0;
@@ -95,13 +95,13 @@ SFL::~SFL(void)
 /***************************************************************************
     Assert the validity of a SFL.
 ***************************************************************************/
-void SFL::AssertValid(ulong grf)
+void SFL::AssertValid(uint32_t grf)
 {
     SFL_PAR::AssertValid(0);
     if (_hqrglw != hqNil)
     {
         AssertHq(_hqrglw);
-        Assert(CbOfHq(_hqrglw) == LwMul(_clw, SIZEOF(long)), "HQ wrong size");
+        Assert(CbOfHq(_hqrglw) == LwMul(_clw, SIZEOF(int32_t)), "HQ wrong size");
     }
     else
         Assert(0 == _clw, "_clw wrong");
@@ -121,19 +121,19 @@ void SFL::MarkMem(void)
 /***************************************************************************
     Shuffle the numbers [0, lwLim).
 ***************************************************************************/
-void SFL::Shuffle(long lwLim)
+void SFL::Shuffle(int32_t lwLim)
 {
     AssertThis(0);
     AssertIn(lwLim, 0, kcbMax);
-    long ilw;
-    long *qrglw;
+    int32_t ilw;
+    int32_t *qrglw;
 
     if (!_FEnsureHq(lwLim))
         return;
     _ilw = 0;
     Assert(_clw == lwLim, "wrong _clw");
 
-    qrglw = (long *)QvFromHq(_hqrglw);
+    qrglw = (int32_t *)QvFromHq(_hqrglw);
     // fill the array with [0, _clw)
     for (ilw = 0; ilw < _clw; ilw++)
         qrglw[ilw] = ilw;
@@ -145,11 +145,11 @@ void SFL::Shuffle(long lwLim)
 /***************************************************************************
     Fill the SFL with the values in prglw and shuffle them.
 ***************************************************************************/
-void SFL::ShuffleRglw(long clw, long *prglw)
+void SFL::ShuffleRglw(int32_t clw, int32_t *prglw)
 {
     AssertThis(0);
     AssertIn(clw, 0, kcbMax);
-    AssertPvCb(prglw, LwMul(clw, SIZEOF(long)));
+    AssertPvCb(prglw, LwMul(clw, SIZEOF(int32_t)));
 
     if (!_FEnsureHq(clw))
         return;
@@ -157,7 +157,7 @@ void SFL::ShuffleRglw(long clw, long *prglw)
     Assert(_clw == clw, "wrong _clw");
 
     // fill the HQ with the stuff in prglw
-    CopyPb(prglw, QvFromHq(_hqrglw), LwMul(clw, SIZEOF(long)));
+    CopyPb(prglw, QvFromHq(_hqrglw), LwMul(clw, SIZEOF(int32_t)));
 
     _fCustom = fTrue;
     _ShuffleCore();
@@ -170,12 +170,12 @@ void SFL::_ShuffleCore(void)
 {
     AssertThis(0);
     Assert(_clw > 0, 0);
-    long lw;
-    long ilw, ilwSwap;
-    long *qrglw;
+    int32_t lw;
+    int32_t ilw, ilwSwap;
+    int32_t *qrglw;
 
     // swap stuff
-    qrglw = (long *)QvFromHq(_hqrglw);
+    qrglw = (int32_t *)QvFromHq(_hqrglw);
     for (ilw = _clw; --ilw > 0;)
     {
         ilwSwap = RND::LwNext(ilw + 1);
@@ -191,7 +191,7 @@ void SFL::_ShuffleCore(void)
 /***************************************************************************
     Make sure the HQ is the correct size and set clw appropriately.
 ***************************************************************************/
-bool SFL::_FEnsureHq(long clw)
+bool SFL::_FEnsureHq(int32_t clw)
 {
     AssertThis(0);
     AssertIn(clw, 0, kcbMax);
@@ -199,11 +199,11 @@ bool SFL::_FEnsureHq(long clw)
     if (clw <= 0)
         goto LFail;
 
-    if (_hqrglw == hqNil && !FAllocHq(&_hqrglw, LwMul(_clw = clw, SIZEOF(long)), fmemNil, mprNormal))
+    if (_hqrglw == hqNil && !FAllocHq(&_hqrglw, LwMul(_clw = clw, SIZEOF(int32_t)), fmemNil, mprNormal))
     {
         goto LFail;
     }
-    if (clw != _clw && !FResizePhq(&_hqrglw, LwMul(_clw = clw, SIZEOF(long)), fmemNil, mprNormal))
+    if (clw != _clw && !FResizePhq(&_hqrglw, LwMul(_clw = clw, SIZEOF(int32_t)), fmemNil, mprNormal))
     {
     LFail:
         // we are low on memory, so be nice and give some up
@@ -222,7 +222,7 @@ bool SFL::_FEnsureHq(long clw)
     zero, uses the numbers already in the SFL.  Otherwise, numbers
     range from 0 to (lwLim - 1), inclusive.
 ***************************************************************************/
-long SFL::LwNext(long lwLim)
+int32_t SFL::LwNext(int32_t lwLim)
 {
     AssertThis(0);
     AssertIn(lwLim, 0, kcbMax);
@@ -252,5 +252,5 @@ long SFL::LwNext(long lwLim)
     }
 
     AssertIn(_ilw, 0, _clw);
-    return ((long *)QvFromHq(_hqrglw))[_ilw++];
+    return ((int32_t *)QvFromHq(_hqrglw))[_ilw++];
 }

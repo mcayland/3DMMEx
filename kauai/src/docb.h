@@ -63,31 +63,31 @@ class DOCB : public DOCB_PAR
     friend class DTE;
 
   protected:
-    static long _cactLast;
+    static int32_t _cactLast;
     static PDOCB _pdocbFirst;
 
     PDOCB _pdocbPar;
     PDOCB _pdocbSib;
     PDOCB _pdocbChd;
 
-    long _cactUntitled; // 0 if titled
+    int32_t _cactUntitled; // 0 if titled
     bool _fDirty : 1;
     bool _fFreeing : 1;
     bool _fInternal : 1;
     PGL _pglpddg; // keep track of the DDGs based on this doc
 
     PGL _pglpundb; // keep track of undo items
-    long _ipundbLimDone;
-    long _cundbMax;
+    int32_t _ipundbLimDone;
+    int32_t _cundbMax;
 
-    bool _FFindDdg(PDDG pddg, long *pipddg);
+    bool _FFindDdg(PDDG pddg, int32_t *pipddg);
     virtual tribool _TQuerySave(bool fForce);
 
-    DOCB(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    DOCB(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
     ~DOCB(void);
 
   public:
-    static bool FQueryCloseAll(ulong grfdoc);
+    static bool FQueryCloseAll(uint32_t grfdoc);
     static PDOCB PdocbFromFni(FNI *pfni);
 
     static PDOCB PdocbFirst(void)
@@ -115,7 +115,7 @@ class DOCB : public DOCB_PAR
 
     // low level calls - generally not for public consumption
     virtual PDMW PdmwNew(PGCB pgcb);
-    virtual PDSG PdsgNew(PDMW pdwm, PDSG pdsgSplit, ulong grfdsg, long rel);
+    virtual PDSG PdsgNew(PDMW pdwm, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel);
     virtual PDDG PddgNew(PGCB pgcb);
 
     // DDG management - only to be called by DDGs
@@ -125,18 +125,18 @@ class DOCB : public DOCB_PAR
     void CloseAllDdg(void);
 
     // General DDG management
-    long Cddg(void)
+    int32_t Cddg(void)
     {
         return pvNil == _pglpddg ? 0 : _pglpddg->IvMac();
     }
-    PDDG PddgGet(long ipddg);
+    PDDG PddgGet(int32_t ipddg);
     PDDG PddgActive(void);
 
     virtual void UpdateName(void);
     virtual void GetName(PSTN pstn);
-    virtual bool FQueryClose(ulong grfdoc);
+    virtual bool FQueryClose(uint32_t grfdoc);
     virtual bool FQueryCloseDmd(PDMD pdmd);
-    virtual bool FSave(long cid = cidSave);
+    virtual bool FSave(int32_t cid = cidSave);
 
     virtual bool FGetFni(FNI *pfni);
     virtual bool FGetFniSave(FNI *pfni);
@@ -156,17 +156,17 @@ class DOCB : public DOCB_PAR
     virtual bool FAddUndo(PUNDB pundb);
     virtual void ClearUndo(void);
     virtual void ClearRedo(void);
-    virtual void SetCundbMax(long cundbMax);
-    virtual long CundbMax(void);
-    virtual long CundbUndo(void);
-    virtual long CundbRedo(void);
+    virtual void SetCundbMax(int32_t cundbMax);
+    virtual int32_t CundbMax(void);
+    virtual int32_t CundbUndo(void);
+    virtual int32_t CundbRedo(void);
 
     bool FInternal(void);
     void SetAsClipboard(void);
     void SetInternal(bool fInternal = fTrue);
 
     virtual void ExportFormats(PCLIP pclip);
-    virtual bool FGetFormat(long cls, PDOCB *ppdocb = pvNil);
+    virtual bool FGetFormat(int32_t cls, PDOCB *ppdocb = pvNil);
 };
 
 /***************************************************************************
@@ -201,14 +201,14 @@ class DTE : public DTE_PAR
         esDone
     };
 
-    long _es;
+    int32_t _es;
     PDOCB _pdocbRoot;
     PDOCB _pdocbCur;
 
   public:
     DTE(void);
     void Init(PDOCB pdocb);
-    bool FNextDoc(PDOCB *ppdocb, ulong *pgrfdteOut, ulong grfdteIn = fdteNil);
+    bool FNextDoc(PDOCB *ppdocb, uint32_t *pgrfdteOut, uint32_t grfdteIn = fdteNil);
 };
 
 /***************************************************************************
@@ -227,8 +227,8 @@ class DDG : public DDG_PAR
   protected:
     PDOCB _pdocb;
     bool _fActive;
-    long _scvVert; // scroll values
-    long _scvHorz;
+    int32_t _scvVert; // scroll values
+    int32_t _scvHorz;
 
     DDG(PDOCB pdocb, PGCB pgcb);
     ~DDG(void);
@@ -238,15 +238,15 @@ class DDG : public DDG_PAR
     virtual void _NewRc(void);
 
     // scrolling support
-    virtual long _ScvMax(bool fVert);
+    virtual int32_t _ScvMax(bool fVert);
     virtual void _SetScrollValues(void);
-    virtual void _Scroll(long scaHorz, long scaVert, long scvHorz = 0, long scvVert = 0);
-    virtual void _ScrollDxpDyp(long dxp, long dyp);
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
+    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp);
 
     // clipboard support
     virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
     virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, long cid);
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
 
   public:
     static PDDG PddgNew(PDOCB pdocb, PGCB pgcb);
@@ -272,7 +272,7 @@ class DDG : public DDG_PAR
     virtual bool FCmdCloseDoc(PCMD pcmd);
     virtual bool FCmdSave(PCMD pcmd);
     virtual bool FCmdClip(PCMD pcmd);
-    virtual bool FEnableDdgCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdUndo(PCMD pcmd);
 };
 
@@ -322,16 +322,16 @@ class DMW : public DMW_PAR
     // child iff it has a right child.
     struct DSED
     {
-        bool fVert; // splits its parent vertically, so the edge is horizontal
-        long rel;   // where it splits its parent
-        RC rcRel;   // current relative rectangle (in the DMW)
-        long idsedLeft;
-        long idsedRight;
-        long idsedPar;
+        bool fVert;  // splits its parent vertically, so the edge is horizontal
+        int32_t rel; // where it splits its parent
+        RC rcRel;    // current relative rectangle (in the DMW)
+        int32_t idsedLeft;
+        int32_t idsedRight;
+        int32_t idsedPar;
         PDSG pdsg;
     };
     PAL _paldsed; // the tree of DSEDs
-    long _idsedRoot;
+    int32_t _idsedRoot;
     PDOCB _pdocb;
 
     DMW(PDOCB pdocb, PGCB pgcb);
@@ -339,15 +339,15 @@ class DMW : public DMW_PAR
     virtual bool _FInit(void);
     virtual void _NewRc(void);
 
-    void _Layout(long idsedStart);
-    long _IdsedNext(long idsed, long idsedRoot);
-    long _IdsedEdge(long idsed, long idsedRoot);
-    void _RemoveDsg(PDSG pdsg, long *pidsedStartLayout);
-    DSED *_Qdsed(long idsed)
+    void _Layout(int32_t idsedStart);
+    int32_t _IdsedNext(int32_t idsed, int32_t idsedRoot);
+    int32_t _IdsedEdge(int32_t idsed, int32_t idsedRoot);
+    void _RemoveDsg(PDSG pdsg, int32_t *pidsedStartLayout);
+    DSED *_Qdsed(int32_t idsed)
     {
         return (DSED *)_paldsed->QvGet(idsed);
     }
-    void _SplitRcRel(long idsed, RC *prcLeft, RC *prcRight);
+    void _SplitRcRel(int32_t idsed, RC *prcLeft, RC *prcRight);
 
   public:
     static PDMW PdmwNew(PDOCB pdocb, PGCB pgcb);
@@ -357,12 +357,12 @@ class DMW : public DMW_PAR
         return _pdocb;
     }
 
-    bool FAddDsg(PDSG pdsg, PDSG pdsgSplit, ulong grfdsg, long rel);
+    bool FAddDsg(PDSG pdsg, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel);
     void RemoveDsg(PDSG pdsg);
-    long Cdsg(void);
+    int32_t Cdsg(void);
 
     void GetRcSplit(PDSG pdsg, RC *prcBounds, RC *prcSplit);
-    void MoveSplit(PDSG pdsg, long relNew);
+    void MoveSplit(PDSG pdsg, int32_t relNew);
     tribool TVert(PDSG pdsg);
 
     virtual void Release(void);
@@ -384,17 +384,17 @@ class DSG : public DSG_PAR
     friend DMW;
 
   private:
-    long _dsno; // this is how the DMW refers to this DSG
+    int32_t _dsno; // this is how the DMW refers to this DSG
     PDDG _pddg;
 
   protected:
     DSG(PGCB pgcb);
     ~DSG(void);
 
-    virtual bool _FInit(PDSG pdsgSplit, ulong grfdsg, long rel);
+    virtual bool _FInit(PDSG pdsgSplit, uint32_t grfdsg, int32_t rel);
 
   public:
-    static PDSG PdsgNew(PDMW pdmw, PDSG pdsgSplit, ulong grfdsg, long rel);
+    static PDSG PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel);
     virtual void GetMinMax(RC *prcMinMax);
 
     PDMW Pdmw(void)
@@ -402,7 +402,7 @@ class DSG : public DSG_PAR
         return (PDMW)PgobPar();
     }
 
-    virtual void Split(ulong grfdsg, long rel);
+    virtual void Split(uint32_t grfdsg, int32_t rel);
     virtual bool FCmdScroll(PCMD pcmd);
 };
 
@@ -428,18 +428,18 @@ class DSSP : public DSSP_PAR
     DSSP(PGCB pgcb);
 
   public:
-    static long DypNormal(void)
+    static int32_t DypNormal(void)
     {
         return SCB::DypNormal() / 2;
     }
-    static long DxpNormal(void)
+    static int32_t DxpNormal(void)
     {
         return SCB::DxpNormal() / 2;
     }
-    static PDSSP PdsspNew(PDSG pdsg, ulong grfdssp);
+    static PDSSP PdsspNew(PDSG pdsg, uint32_t grfdssp);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
 };
 
 enum
@@ -471,7 +471,7 @@ class DSSM : public DSSM_PAR
     static PDSSM PdssmNew(PDSG pdsg);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     tribool TVert(void);
 };
 

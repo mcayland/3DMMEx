@@ -24,8 +24,8 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Create a new popup menu
 ***************************************************************************/
-PMP MP::PmpNew(long kidParent, long kidMenu, PRCA prca, PCMD pcmd, BWS bws, long ithumSelect, long sidSelect,
-               CKI ckiRoot, CTG ctg, PCMH pcmh, long cid, bool fMoveTop)
+PMP MP::PmpNew(int32_t kidParent, int32_t kidMenu, PRCA prca, PCMD pcmd, BWS bws, int32_t ithumSelect,
+               int32_t sidSelect, CKI ckiRoot, CTG ctg, PCMH pcmh, int32_t cid, bool fMoveTop)
 {
     AssertPo(prca, 0);
     AssertVarMem(pcmd);
@@ -34,8 +34,8 @@ PMP MP::PmpNew(long kidParent, long kidMenu, PRCA prca, PCMD pcmd, BWS bws, long
     PMP pmp;
     GCB gcb;
     PSTDIO pstdio;
-    long cthum;
-    long cfrm;
+    int32_t cthum;
+    int32_t cfrm;
 
     pstdio = vpapp->Pstdio();
     if (pvNil == pstdio)
@@ -79,8 +79,8 @@ PMP MP::PmpNew(long kidParent, long kidMenu, PRCA prca, PCMD pcmd, BWS bws, long
     if (cthum <= cfrm)
     {
         PGOB pgob;
-        long dypFrm;
-        long dypTop;
+        int32_t dypFrm;
+        int32_t dypTop;
         RC rc;
         RC rcAbs;
         RC rcRel;
@@ -107,7 +107,7 @@ LFail:
 /***************************************************************************
     Enqueue a cid saying what was selected
 ***************************************************************************/
-void MP::_ApplySelection(long ithumSelect, long sid)
+void MP::_ApplySelection(int32_t ithumSelect, int32_t sid)
 {
     AssertThis(0);
 
@@ -137,11 +137,11 @@ void MP::_ApplySelection(long ithumSelect, long sid)
     Keywords:
 
 ************************************************************ PETED ***********/
-long MP::_IthumFromThum(long thumSelect, long sidSelect)
+int32_t MP::_IthumFromThum(int32_t thumSelect, int32_t sidSelect)
 {
     AssertBaseThis(0);
 
-    long ithum;
+    int32_t ithum;
 
     if (_ckiRoot.ctg == kctgTyth)
     {
@@ -178,7 +178,7 @@ bool MP::FCmdSelIdle(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the MP.
 ***************************************************************************/
-void MP::AssertValid(ulong grf)
+void MP::AssertValid(uint32_t grf)
 {
     MP_PAR::AssertValid(fobjAllocated);
     AssertBasePo(_pcmh, 0);
@@ -210,7 +210,7 @@ END_CMD_MAP_NIL()
 /***************************************************************************
     Create a new font menu
 ***************************************************************************/
-PMPFNT MPFNT::PmpfntNew(PRCA prca, long kidParent, long kidMenu, PCMD pcmd, long ithumSelect, PGST pgst)
+PMPFNT MPFNT::PmpfntNew(PRCA prca, int32_t kidParent, int32_t kidMenu, PCMD pcmd, int32_t ithumSelect, PGST pgst)
 {
     AssertPo(prca, 0);
     AssertVarMem(pcmd);
@@ -226,7 +226,7 @@ PMPFNT MPFNT::PmpfntNew(PRCA prca, long kidParent, long kidMenu, PCMD pcmd, long
         return pvNil;
     }
 
-    if (pgst->CbExtra() != SIZEOF(long))
+    if (pgst->CbExtra() != SIZEOF(int32_t))
     {
         Bug("GST CbExtra isn't the right size for an onn");
         return pvNil;
@@ -272,12 +272,12 @@ LFail:
 /***************************************************************************
     Set the font of the TGOB to the font listed in the menu item
 ***************************************************************************/
-bool MPFNT::_FSetThumFrame(long istn, PGOB pgobPar)
+bool MPFNT::_FSetThumFrame(int32_t istn, PGOB pgobPar)
 {
     if (MPFNT_PAR::_FSetThumFrame(istn, pgobPar))
     {
         PTGOB ptgob = (PTGOB)pgobPar->PgobFirstChild();
-        long onn;
+        int32_t onn;
 
         /* By the time we get this far, MPFNT_PAR should have already checked
             these */
@@ -295,11 +295,11 @@ bool MPFNT::_FSetThumFrame(long istn, PGOB pgobPar)
 /***************************************************************************
     Tell the studio that the font was selected
 ***************************************************************************/
-void MPFNT::_ApplySelection(long ithumSelect, long sid)
+void MPFNT::_ApplySelection(int32_t ithumSelect, int32_t sid)
 {
     AssertThis(0);
 
-    long onn;
+    int32_t onn;
 
     _pgst->GetExtra(ithumSelect, &onn);
     vpcex->EnqueueCid(cidTextSetFont, _pstdio, pvNil, onn);
@@ -308,11 +308,11 @@ void MPFNT::_ApplySelection(long ithumSelect, long sid)
 /***************************************************************************
     Hide the scroll arrows if necessary
 ***************************************************************************/
-void MPFNT::_AdjustRc(long cthum, long cfrm)
+void MPFNT::_AdjustRc(int32_t cthum, int32_t cfrm)
 {
     PGOB pgob;
-    long dypFrm;
-    long dypTop;
+    int32_t dypFrm;
+    int32_t dypTop;
     RC rc;
     RC rcAbs;
     RC rcRel;
@@ -353,7 +353,7 @@ bool MPFNT::FCmdSelIdle(PCMD pcmd)
 /***************************************************************************
     Assert the validity of the MPFNT.
 ***************************************************************************/
-void MPFNT::AssertValid(ulong grf)
+void MPFNT::AssertValid(uint32_t grf)
 {
     MPFNT_PAR::AssertValid(0);
 }

@@ -29,7 +29,7 @@ END_CMD_MAP_NIL()
 RTCLASS(SCRT)
 
 #ifdef DEBUG
-void SCRT::AssertValid(ulong grf)
+void SCRT::AssertValid(uint32_t grf)
 {
     SCRT_PAR::AssertValid(0);
     if (_iscenMac > 0)
@@ -42,12 +42,12 @@ void SCRT::AssertValid(ulong grf)
         it's important to the SCRT that we keep things in the right order. */
     if (_cmvi.pglscend != pvNil)
     {
-        long imviedMac;
+        int32_t imviedMac;
 
         AssertPo(_cmvi.pglscend, 0);
         AssertPo(_cmvi.pglmvied, 0);
         imviedMac = _cmvi.pglmvied->IvMac();
-        for (long iscend = 0; iscend < _cmvi.pglscend->IvMac(); iscend++)
+        for (int32_t iscend = 0; iscend < _cmvi.pglscend->IvMac(); iscend++)
         {
             SCEND scend;
 
@@ -112,7 +112,7 @@ SCRT::~SCRT(void)
     Returns: the pointer to the new SCRT, pvNil if the routine fails
 
 ************************************************************ PETED ***********/
-PSCRT SCRT::PscrtNew(long hid, PMVIE pmvie, PSTDIO pstdio, PRCA prca)
+PSCRT SCRT::PscrtNew(int32_t hid, PMVIE pmvie, PSTDIO pstdio, PRCA prca)
 {
     AssertPo(pmvie, 0);
     AssertPo(pstdio, 0);
@@ -195,7 +195,7 @@ bool SCRT::FCmdInit(PCMD pcmd)
     AssertThis(0);
 
     bool fSuccess = fFalse;
-    long kidCur, kidThumb;
+    int32_t kidCur, kidThumb;
     PGOK pgokFrame;
 
     /* If I'm already inited, this must be for some other scene sorter */
@@ -259,7 +259,7 @@ bool SCRT::FCmdSelect(PCMD pcmd)
     Assert(pcmd->rglw[0] - _kidFrameMin < _cfrmPage * _cgokFrame, "Bogus kid for select");
     Assert(_iscenMac > 0, "Can't select scene in an empty movie");
 
-    long iscen;
+    int32_t iscen;
 
     iscen = _IscenFromKid(pcmd->rglw[0]);
     if (iscen < _iscenMac)
@@ -295,7 +295,7 @@ bool SCRT::FCmdInsert(PCMD pcmd)
     AssertThis(0);
     Assert(pcmd->rglw[0] - _kidFrameMin <= _cfrmPage * _cgokFrame, "Bogus kid for insert");
 
-    long iscenTo = _IscenFromKid(pcmd->rglw[0]);
+    int32_t iscenTo = _IscenFromKid(pcmd->rglw[0]);
 
     if (iscenTo != _iscenCur)
     {
@@ -334,7 +334,7 @@ bool SCRT::FCmdScroll(PCMD pcmd)
     AssertThis(0);
 
     bool fHideSel = pcmd->rglw[1] != 0;
-    long iscenT;
+    int32_t iscenT;
 
     iscenT = _iscenTop + pcmd->rglw[0];
     if (FIn(iscenT, 0, _iscenMac) && _iscenTop != iscenT)
@@ -365,7 +365,7 @@ void SCRT::_EnableScroll(void)
     pgok = (PGOK)vapp.Pkwa()->PgobFromHid(_kidScbtnsMin);
     if (pgok != pvNil)
     {
-        long lwState;
+        int32_t lwState;
 
         lwState = (_iscenTop > 0) ? kstBrowserEnabled : kstBrowserDisabled;
         Assert(pgok->FIs(kclsGOK), "Scroll up button is not a GOK");
@@ -379,7 +379,7 @@ void SCRT::_EnableScroll(void)
     pgok = (PGOK)vapp.Pkwa()->PgobFromHid(_kidScbtnsMin + 1);
     if (pgok != pvNil)
     {
-        long lwState;
+        int32_t lwState;
 
         lwState = (_iscenTop + _cfrmPage < _iscenMac) ? kstBrowserEnabled : kstBrowserDisabled;
         Assert(pgok->FIs(kclsGOK), "Scroll down button is not a GOK");
@@ -529,7 +529,7 @@ bool SCRT::FCmdTransition(PCMD pcmd)
     AssertThis(0);
     Assert(_iscenMac > 0, "Can't set transition when movie is empty");
 
-    long iscen = _IscenFromKid(pcmd->rglw[0]);
+    int32_t iscen = _IscenFromKid(pcmd->rglw[0]);
     SCEND scend;
     PGOK pgokFrame = (PGOK)vapp.Pkwa()->PgobFromHid(pcmd->rglw[0]);
 
@@ -571,7 +571,7 @@ void SCRT::_SetSelectionVis(bool fShow, bool fHideSel)
 
         if (pgok != pvNil)
         {
-            long lwState;
+            int32_t lwState;
 
             Assert(pgok->FIs(kclsGOK), "Didn't get a GOK GOB");
             lwState = fShow ? (fHideSel ? kstBrowserScrollingSel : kstBrowserSelected) : kstBrowserEnabled;
@@ -598,9 +598,9 @@ void SCRT::_SetSelectionVis(bool fShow, bool fHideSel)
 bool SCRT::_FResetThumbnails(bool fHideSel)
 {
     bool fSuccess = fFalse;
-    long kidCur = _kidFrameMin - 1, kidFrameCur = _kidFrameMin;
-    long iscen = _iscenTop, cFrame = _cfrmPage;
-    long lwSelState = fHideSel ? kstBrowserScrollingSel : kstBrowserSelected;
+    int32_t kidCur = _kidFrameMin - 1, kidFrameCur = _kidFrameMin;
+    int32_t iscen = _iscenTop, cFrame = _cfrmPage;
+    int32_t lwSelState = fHideSel ? kstBrowserScrollingSel : kstBrowserSelected;
     PGOK pgokFrame;
     PGOMP pgomp;
     SCEND scend;
@@ -623,7 +623,7 @@ bool SCRT::_FResetThumbnails(bool fHideSel)
         Assert(pgokFrame->FIs(kclsGOK), "Frame GOB isn't a GOK");
         if (iscen < _iscenMac)
         {
-            long lwStateNew;
+            int32_t lwStateNew;
 
             _cmvi.pglscend->Get(iscen, &scend);
             pmbmp = scend.pmbmp;
@@ -699,8 +699,8 @@ bool SCRT::_FResetTransition(PGOK pgokPar, TRANS trans)
 {
     bool fRedrawTrans = fFalse;
     PGOK pgokTrans, pgokThumb;
-    long lwTrans = kctrans, lwThis = _LwFromTrans(trans);
-    long lwStateCur, lwStateNew;
+    int32_t lwTrans = kctrans, lwThis = _LwFromTrans(trans);
+    int32_t lwStateCur, lwStateNew;
 
     pgokThumb = (PGOK)pgokPar->PgobFirstChild();
     Assert(pgokThumb->FIs(kclsGOK), "First child wasn't a GOK");
@@ -732,7 +732,7 @@ bool SCRT::_FResetTransition(PGOK pgokPar, TRANS trans)
     Returns: the actual transition
 
 ************************************************************ PETED ***********/
-TRANS SCRT::_TransFromLw(long lwTrans)
+TRANS SCRT::_TransFromLw(int32_t lwTrans)
 {
     AssertIn(lwTrans, 0, kctrans);
 
@@ -749,9 +749,9 @@ TRANS SCRT::_TransFromLw(long lwTrans)
     Returns: the scene sorter long
 
 ************************************************************ PETED ***********/
-long SCRT::_LwFromTrans(TRANS trans)
+int32_t SCRT::_LwFromTrans(TRANS trans)
 {
-    long lw;
+    int32_t lw;
 
     for (lw = 0; lw < kctrans; lw++)
         if (_mplwtrans[lw] == trans)
@@ -771,7 +771,7 @@ long SCRT::_LwFromTrans(TRANS trans)
 RTCLASS(GOMP)
 
 #ifdef DEBUG
-void GOMP::AssertValid(ulong grf)
+void GOMP::AssertValid(uint32_t grf)
 {
     GOMP_PAR::AssertValid(0);
     AssertNilOrPo(_pmbmp, 0);
@@ -814,7 +814,7 @@ GOMP::GOMP(PGCB pgcb) : GOB(pgcb)
     Returns: pointer to the GOMP if it succeeds, pvNil otherwise
 
 ************************************************************ PETED ***********/
-PGOMP GOMP::PgompNew(PGOB pgobPar, long hid)
+PGOMP GOMP::PgompNew(PGOB pgobPar, int32_t hid)
 {
     AssertPo(pgobPar, 0);
 
@@ -899,7 +899,7 @@ bool GOMP::FSetMbmp(PMBMP pmbmp)
     Returns: pointer to the GOMP
 
 ************************************************************ PETED ***********/
-PGOMP GOMP::PgompFromHidScr(long hid)
+PGOMP GOMP::PgompFromHidScr(int32_t hid)
 {
     PGOMP pgomp;
 

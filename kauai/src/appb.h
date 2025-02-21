@@ -38,10 +38,10 @@ struct WIG
 
     HWND hwndApp;
     HDC hdcApp;
-    HWND hwndClient;     // MDI client window
-    HACCEL haccel;       // main accelerator table
-    HWND hwndNextViewer; // next clipboard viewer
-    long lwThreadMain;   // main thread
+    HWND hwndClient;      // MDI client window
+    HACCEL haccel;        // main accelerator table
+    HWND hwndNextViewer;  // next clipboard viewer
+    int32_t lwThreadMain; // main thread
 };
 extern WIG vwig;
 #endif // WIN
@@ -49,7 +49,7 @@ extern WIG vwig;
 /***************************************************************************
     The base application class.
 ***************************************************************************/
-const long kcmhlAppb = klwMax; // appb goes at the end of the cmh list
+const int32_t kcmhlAppb = klwMax; // appb goes at the end of the cmh list
 
 enum
 {
@@ -80,17 +80,17 @@ class APPB : public APPB_PAR
     // map from a property id to its value
     struct PROP
     {
-        long prid;
-        long lw;
+        int32_t prid;
+        int32_t lw;
     };
 
     // modal context
     struct MODCX
     {
-        long cactLongOp;
+        int32_t cactLongOp;
         PCEX pcex;
         PUSAC pusac;
-        ulong luScale;
+        uint32_t luScale;
     };
 
 #ifdef DEBUG
@@ -106,46 +106,46 @@ class APPB : public APPB_PAR
     bool _fEndModal : 1;        // set to end the topmost modal loop
     bool _fFlushCursor : 1;     // flush cursor events when setting cursor position
 
-    PGL _pglmkrgn;        // list of marked regions for fast updating
-    long _onnDefFixed;    // default fixed pitch font
-    long _onnDefVariable; // default variable pitched font
-    PGPT _pgptOff;        // cached offscreen GPT for offscreen updates
-    long _dxpOff;         // size of the offscreen GPT
-    long _dypOff;
+    PGL _pglmkrgn;           // list of marked regions for fast updating
+    int32_t _onnDefFixed;    // default fixed pitch font
+    int32_t _onnDefVariable; // default variable pitched font
+    PGPT _pgptOff;           // cached offscreen GPT for offscreen updates
+    int32_t _dxpOff;         // size of the offscreen GPT
+    int32_t _dypOff;
 
-    long _xpMouse; // location of mouse on last reported mouse move
-    long _ypMouse;
-    PGOB _pgobMouse;     // gob mouse was last over
-    ulong _grfcustMouse; // cursor state on last mouse move
+    int32_t _xpMouse; // location of mouse on last reported mouse move
+    int32_t _ypMouse;
+    PGOB _pgobMouse;        // gob mouse was last over
+    uint32_t _grfcustMouse; // cursor state on last mouse move
 
     // for determining the multiplicity of a click
-    long _tsMouse;   // time of last mouse click
-    long _cactMouse; // multiplicity of last mouse click
+    int32_t _tsMouse;   // time of last mouse click
+    int32_t _cactMouse; // multiplicity of last mouse click
 
     // for tool tips
-    ulong _tsMouseEnter;     // when the mouse entered _pgobMouse
-    ulong _dtsToolTip;       // time lag for tool tip
+    uint32_t _tsMouseEnter;  // when the mouse entered _pgobMouse
+    uint32_t _dtsToolTip;    // time lag for tool tip
     PGOB _pgobToolTipTarget; // if there is a tool tip up, it's for this gob
 
-    PCURS _pcurs;     // current cursor
-    PCURS _pcursWait; // cursor to use for long operations
-    long _cactLongOp; // long operation count
-    ulong _grfcust;   // current cursor state
+    PCURS _pcurs;        // current cursor
+    PCURS _pcursWait;    // cursor to use for long operations
+    int32_t _cactLongOp; // long operation count
+    uint32_t _grfcust;   // current cursor state
 
-    long _gft;     // transition to apply during next fast update
-    long _lwGft;   // parameter for transition
-    ulong _dtsGft; // how much time to give the transition
-    PGL _pglclr;   // palette to transition to
-    ACR _acr;      // intermediate color to transition to
+    int32_t _gft;     // transition to apply during next fast update
+    int32_t _lwGft;   // parameter for transition
+    uint32_t _dtsGft; // how much time to give the transition
+    PGL _pglclr;      // palette to transition to
+    ACR _acr;         // intermediate color to transition to
 
     PGL _pglprop; // the properties
 
-    PGL _pglmodcx;   // The modal context stack
-    long _lwModal;   // Return value from modal loop
-    long _cactModal; // how deep we are in application loops
+    PGL _pglmodcx;      // The modal context stack
+    int32_t _lwModal;   // Return value from modal loop
+    int32_t _cactModal; // how deep we are in application loops
 
     // initialization, running and clean up
-    virtual bool _FInit(ulong grfapp, ulong grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
 #ifdef DEBUG
     virtual bool _FInitDebug(void);
 #endif // DEBUG
@@ -153,7 +153,7 @@ class APPB : public APPB_PAR
     virtual bool _FInitMenu(void);
     virtual void _Loop(void);
     virtual void _CleanUp(void);
-    virtual bool _FInitSound(long wav);
+    virtual bool _FInitSound(int32_t wav);
 
     // event fetching and dispatching
     virtual bool _FGetNextEvt(PEVT pevt);
@@ -173,7 +173,7 @@ class APPB : public APPB_PAR
 #endif
 
     // fast updating
-    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp = fappNil, PGPT pgpt = pvNil);
+    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
     virtual void _CopyPixels(PGNV pgvnSrc, RC *prcSrc, PGNV pgnvDst, RC *prcDst);
     void _MarkRegnRc(PREGN pregn, RC *prc, PGOB pgobCoo);
     void _UnmarkRegnRc(PREGN pregn, RC *prc, PGOB pgobCoo);
@@ -182,8 +182,8 @@ class APPB : public APPB_PAR
     virtual PGPT _PgptEnsure(RC *prc);
 
     // property list management
-    bool _FFindProp(long prid, PROP *pprop, long *piprop = pvNil);
-    bool _FSetProp(long prid, long lw);
+    bool _FFindProp(int32_t prid, PROP *pprop, int32_t *piprop = pvNil);
+    bool _FSetProp(int32_t prid, int32_t lw);
 
     // tool tip support
     void _TakeDownToolTip(void);
@@ -191,12 +191,12 @@ class APPB : public APPB_PAR
 
 // window procs
 #ifdef WIN
-    static LRESULT CALLBACK _LuWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lParam);
-    static LRESULT CALLBACK _LuMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK _LuWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK _LuMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam);
 
-    virtual bool _FFrameWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
-    virtual bool _FMdiWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
-    virtual bool _FCommonWndProc(HWND hwnd, uint wm, WPARAM wParam, LPARAM lw, long *plwRet);
+    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet);
+    virtual bool _FMdiWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet);
+    virtual bool _FCommonWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet);
 
     // remove ourself from the clipboard viewer chain
     void _ShutDownViewer(void);
@@ -211,7 +211,7 @@ class APPB : public APPB_PAR
 
 #ifdef MAC
     // setting up the heap
-    static void _SetupHeap(long cbExtraStack, long cactMoreMasters);
+    static void _SetupHeap(int32_t cbExtraStack, int32_t cactMoreMasters);
     virtual void SetupHeap(void);
 #elif defined(WIN)
     static void CreateConsole();
@@ -227,7 +227,7 @@ class APPB : public APPB_PAR
     }
 
     // initialization, running and quitting
-    virtual void Run(ulong grfapp, ulong grfgob, long ginDef);
+    virtual void Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
     virtual void Quit(bool fForce);
     virtual void Abort(void);
     virtual void TopOfLoop(void);
@@ -244,10 +244,10 @@ class APPB : public APPB_PAR
 
     // command handler stuff
     virtual void BuryCmh(PCMH pcmh);
-    virtual PCMH PcmhFromHid(long hid);
+    virtual PCMH PcmhFromHid(int32_t hid);
 
     // drawing
-    virtual void UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp = fappNil);
+    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
     virtual void MarkRc(RC *prc, PGOB pgobCoo);
     virtual void MarkRegn(PREGN pregn, PGOB pgobCoo);
     virtual void UnmarkRc(RC *prc, PGOB pgobCoo);
@@ -255,20 +255,20 @@ class APPB : public APPB_PAR
     virtual bool FGetMarkedRc(HWND hwnd, RC *prc);
     virtual void UpdateMarked(void);
     virtual void InvalMarked(HWND hwnd);
-    virtual void SetGft(long gft, long lwGft, ulong dts = kdtsSecond, PGL pglclr = pvNil, ACR acr = kacrClear);
+    virtual void SetGft(int32_t gft, int32_t lwGft, uint32_t dts = kdtsSecond, PGL pglclr = pvNil, ACR acr = kacrClear);
 
     // default fonts
-    virtual long OnnDefVariable(void);
-    virtual long OnnDefFixed(void);
-    virtual long DypTextDef(void);
+    virtual int32_t OnnDefVariable(void);
+    virtual int32_t OnnDefFixed(void);
+    virtual int32_t DypTextDef(void);
 
     // basic alert handling
-    virtual tribool TGiveAlertSz(const PSZ psz, long bk, long cok);
+    virtual tribool TGiveAlertSz(const PSZ psz, int32_t bk, int32_t cok);
 
     // common commands
     virtual bool FCmdQuit(PCMD pcmd);
     virtual bool FCmdShowClipboard(PCMD pcmd);
-    virtual bool FEnableAppCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableAppCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdIdle(PCMD pcmd);
     virtual bool FCmdChooseWnd(PCMD pcmd);
 #ifdef MAC
@@ -276,39 +276,40 @@ class APPB : public APPB_PAR
 #endif // MAC
 
 #ifdef DEBUG
-    virtual bool FAssertProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb);
-    virtual void WarnProcApp(PSZS pszsFile, long lwLine, PSZS pszsMsg);
+    virtual bool FAssertProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t cb);
+    virtual void WarnProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg);
 #endif // DEBUG
 
     // cursor stuff
     virtual void SetCurs(PCURS pcurs, bool fLongOp = fFalse);
     virtual void SetCursCno(PRCA prca, CNO cno, bool fLongOp = fFalse);
     virtual void RefreshCurs(void);
-    virtual ulong GrfcustCur(bool fAsynch = fFalse);
-    virtual void ModifyGrfcust(ulong grfcustOr, ulong grfcustXor);
+    virtual uint32_t GrfcustCur(bool fAsynch = fFalse);
+    virtual void ModifyGrfcust(uint32_t grfcustOr, uint32_t grfcustXor);
     virtual void HideCurs(void);
     virtual void ShowCurs(void);
-    virtual void PositionCurs(long xpScreen, long ypScreen);
+    virtual void PositionCurs(int32_t xpScreen, int32_t ypScreen);
     virtual void BeginLongOp(void);
     virtual void EndLongOp(bool fAll = fFalse);
 
     // setting and fetching properties
-    virtual bool FSetProp(long prid, long lw);
-    virtual bool FGetProp(long prid, long *plw);
+    virtual bool FSetProp(int32_t prid, int32_t lw);
+    virtual bool FGetProp(int32_t prid, int32_t *plw);
 
     // clipboard importing - normally only called by the clipboard object
-    virtual bool FImportClip(long clfm, void *pv = pvNil, long cb = 0, PDOCB *ppdocb = pvNil, bool *pfDelay = pvNil);
+    virtual bool FImportClip(int32_t clfm, void *pv = pvNil, int32_t cb = 0, PDOCB *ppdocb = pvNil,
+                             bool *pfDelay = pvNil);
 
     // reset tooltip tracking.
     virtual void ResetToolTip(void);
 
     // modal loop support
     virtual bool FPushModal(PCEX pcex = pvNil);
-    virtual bool FModalLoop(long *plwRet);
-    virtual void EndModal(long lwRet);
+    virtual bool FModalLoop(int32_t *plwRet);
+    virtual void EndModal(int32_t lwRet);
     virtual void PopModal(void);
     virtual bool FCmdEndModal(PCMD pcmd);
-    long CactModal(void)
+    int32_t CactModal(void)
     {
         return _cactModal;
     }
@@ -318,7 +319,7 @@ class APPB : public APPB_PAR
     virtual tribool TQuerySaveDoc(PDOCB pdocb, bool fForce);
 
     // flush user generated events from the system event queue.
-    virtual void FlushUserEvents(ulong grfevt = kgrfevtAll);
+    virtual void FlushUserEvents(uint32_t grfevt = kgrfevtAll);
 
     // whether to allow a screen saver to come up
     virtual bool FAllowScreenSaver(void);

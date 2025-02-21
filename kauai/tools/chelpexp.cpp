@@ -15,7 +15,7 @@ ASSERTNAME
 
 static bool _FWriteHelpChunk(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar);
 static bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar);
-static void _AppendHelpStnLw(PSTN pstn, PGST pgst, long istn, long lw);
+static void _AppendHelpStnLw(PSTN pstn, PGST pgst, int32_t istn, int32_t lw);
 
 /***************************************************************************
     Export the help topics in their textual representation for compilation
@@ -28,11 +28,11 @@ bool FExportHelpText(PCFL pcfl, PMSNK pmsnk)
 
     BLCK blck;
     PGST pgst;
-    long icki;
+    int32_t icki;
     CKI cki, ckiPar;
     KID kid;
     CGE cge;
-    ulong grfcge;
+    uint32_t grfcge;
     HTOPF htopf;
     CHSE chse;
     STN stn, stnT;
@@ -255,14 +255,14 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
     PAG pag;
     short bo, osk;
     STN stn, stnT, stnT2;
-    byte rgb[2 * kcbMaxDataStn];
+    uint8_t rgb[2 * kcbMaxDataStn];
     BLCK blck;
-    long iv, lw, cb, ib, cbRead;
+    int32_t iv, lw, cb, ib, cbRead;
     CKI cki;
 
     pag = pvNil;
     if (!pcfl->FFind(pkid->cki.ctg, pkid->cki.cno, &blck) || pvNil == (pag = AG::PagRead(&blck, &bo, &osk)) ||
-        bo != kboCur || osk != koskCur || SIZEOF(long) != pag->CbFixed())
+        bo != kboCur || osk != koskCur || SIZEOF(int32_t) != pag->CbFixed())
     {
         ReleasePpo(&pag);
         return fFalse;
@@ -304,7 +304,7 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
         switch (B3Lw(lw))
         {
         case 64: // sprmGroup
-            if (cb <= SIZEOF(byte) + SIZEOF(CNO))
+            if (cb <= SIZEOF(uint8_t) + SIZEOF(CNO))
                 goto LWriteCore;
             if (cb > SIZEOF(rgb))
             {
@@ -313,14 +313,14 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
             }
 
             pag->GetRgb(iv, 0, cb, rgb);
-            ib = SIZEOF(byte) + SIZEOF(CNO);
+            ib = SIZEOF(uint8_t) + SIZEOF(CNO);
             if (!stnT.FSetData(rgb + ib, cb - ib) || stnT.Cch() == 0)
             {
                 Bug("bad group data");
                 goto LWriteCore;
             }
 
-            stn.FFormatSz(PszLit("\t\tVAR BYTE %d LONG %s __HELP_SYMBOL( STN \""), (long)rgb[0], &stnT);
+            stn.FFormatSz(PszLit("\t\tVAR BYTE %d LONG %s __HELP_SYMBOL( STN \""), (int32_t)rgb[0], &stnT);
             stnT.FExpandControls();
             stn.FAppendStn(&stnT);
             stn.FAppendSz(PszLit("\" )"));
@@ -361,7 +361,7 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
                 break;
 
             case kctgGokd:
-                ib = SIZEOF(CKI) + SIZEOF(long);
+                ib = SIZEOF(CKI) + SIZEOF(int32_t);
                 if (ib >= cb)
                     goto LWriteCore;
                 if ((cb -= ib) > SIZEOF(rgb))
@@ -395,7 +395,7 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
                 }
                 else
                 {
-                    pag->GetRgb(iv, SIZEOF(CKI), SIZEOF(long), &lw);
+                    pag->GetRgb(iv, SIZEOF(CKI), SIZEOF(int32_t), &lw);
                     stnT2.FFormatSz(PszLit("0x%x"), lw);
                     stn.FAppendStn(&stnT2);
                     stnT2.SetNil();
@@ -441,7 +441,7 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
 /***************************************************************************
     Append a string or number.
 ***************************************************************************/
-void _AppendHelpStnLw(PSTN pstn, PGST pgst, long istn, long lw)
+void _AppendHelpStnLw(PSTN pstn, PGST pgst, int32_t istn, int32_t lw)
 {
     AssertPo(pstn, 0);
     AssertNilOrPo(pgst, 0);

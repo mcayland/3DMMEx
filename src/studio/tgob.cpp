@@ -38,7 +38,7 @@ TGOB::TGOB(GCB *pgcb) : GOB(pgcb)
  * Constructor for text gobs.
  *
  ****************************************************/
-TGOB::TGOB(long hid) : GOB(hid)
+TGOB::TGOB(int32_t hid) : GOB(hid)
 {
     _acrFore = kacrBlack;
     _acrBack = kacrClear;
@@ -63,7 +63,7 @@ void TGOB::Draw(PGNV pgnv, RC *prcClip)
     AssertVarMem(prcClip);
 
     RC rc, rcText;
-    long xp, yp;
+    int32_t xp, yp;
     STN stnDraw(_stn);
 
     // Use a temporary stn here for the displayed text. For example, the tgob
@@ -133,14 +133,14 @@ void TGOB::Draw(PGNV pgnv, RC *prcClip)
  *		tav = text align vertical
  *
  ****************************************************/
-PTGOB TGOB::PtgobCreate(long kidFrm, long idsFont, long tav, long hid)
+PTGOB TGOB::PtgobCreate(int32_t kidFrm, int32_t idsFont, int32_t tav, int32_t hid)
 {
     RC rcRel;
     RC rcAbs;
     PGOB pgob;
     STN stn;
     GCB gcb;
-    long onn;
+    int32_t onn;
     PTGOB ptgob;
 
     rcRel.xpLeft = rcRel.ypTop = krelZero;
@@ -185,7 +185,7 @@ PTGOB TGOB::PtgobCreate(long kidFrm, long idsFont, long tav, long hid)
         long tah  --  the horizontal alignment
         long tav  --  the vertical alignment
 ************************************************************ PETED ***********/
-void TGOB::SetAlign(long tah, long tav)
+void TGOB::SetAlign(int32_t tah, int32_t tav)
 {
     if (tah != tahLim)
         _tah = tah;
@@ -201,7 +201,7 @@ void TGOB::SetAlign(long tah, long tav)
         long *ptah  --  pointer to take the horizontal alignment
         long *ptav  --  pointer to take the vertical alignment
 ************************************************************ PETED ***********/
-void TGOB::GetAlign(long *ptah, long *ptav)
+void TGOB::GetAlign(int32_t *ptah, int32_t *ptav)
 {
     if (ptah != pvNil)
         *ptah = _tah;
@@ -240,7 +240,7 @@ void TGOB::MarkMem(void)
  *		Nothing.
  *
 \*****************************************************************************/
-void TGOB::AssertValid(ulong grf)
+void TGOB::AssertValid(uint32_t grf)
 {
     TGOB_PAR::AssertValid(fobjAllocated);
 }

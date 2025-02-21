@@ -112,7 +112,7 @@ END_CMD_MAP_NIL()
  *	A pointer to the object, else pvNil.
  *
  ****************************************************/
-PBRWD BRWD::PbrwdNew(PRCA prca, long kidPar, long kidGlass)
+PBRWD BRWD::PbrwdNew(PRCA prca, int32_t kidPar, int32_t kidGlass)
 {
     AssertPo(prca, 0);
 
@@ -140,7 +140,7 @@ PBRWD BRWD::PbrwdNew(PRCA prca, long kidPar, long kidGlass)
  * Build the GOB creation block
  *
  ****************************************************/
-bool BRWD::_FBuildGcb(GCB *pgcb, long kidPar, long kidGlass)
+bool BRWD::_FBuildGcb(GCB *pgcb, int32_t kidPar, int32_t kidGlass)
 {
     AssertVarMem(pgcb);
 
@@ -174,7 +174,7 @@ bool BRWD::_FBuildGcb(GCB *pgcb, long kidPar, long kidGlass)
  * Do everything PgokNew would have done but didn't
  *
  ****************************************************/
-bool BRWD::_FInitGok(PRCA prca, long kid)
+bool BRWD::_FInitGok(PRCA prca, int32_t kid)
 {
     AssertBaseThis(0);
     AssertPo(prca, 0);
@@ -205,7 +205,8 @@ bool BRWD::_FInitGok(PRCA prca, long kid)
  * pcmd->rglw[3] = x,y offsets
  *
  ****************************************************/
-void BRWD::Init(PCMD pcmd, long ithumSelect, long ithumDisplay, PSTDIO pstdio, bool fWrapScroll, long cthumScroll)
+void BRWD::Init(PCMD pcmd, int32_t ithumSelect, int32_t ithumDisplay, PSTDIO pstdio, bool fWrapScroll,
+                int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -234,7 +235,7 @@ void BRWD::Init(PCMD pcmd, long ithumSelect, long ithumDisplay, PSTDIO pstdio, b
  * pcmd->rglw[3] = x,y offsets
  *
  ****************************************************/
-void BRWD::_InitStateVars(PCMD pcmd, PSTDIO pstdio, bool fWrapScroll, long cthumScroll)
+void BRWD::_InitStateVars(PCMD pcmd, PSTDIO pstdio, bool fWrapScroll, int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -263,10 +264,10 @@ void BRWD::_InitStateVars(PCMD pcmd, PSTDIO pstdio, bool fWrapScroll, long cthum
  *		page displayed
  *
  ****************************************************/
-void BRWD::_InitFromData(PCMD pcmd, long ithumSelect, long ithumDisplay)
+void BRWD::_InitFromData(PCMD pcmd, int32_t ithumSelect, int32_t ithumDisplay)
 {
     AssertThis(0);
-    long cthum;
+    int32_t cthum;
 
     // Context carryover
     if (_pbrcn != pvNil)
@@ -298,8 +299,8 @@ void BRWD::_InitFromData(PCMD pcmd, long ithumSelect, long ithumDisplay)
 void BRWD::_SetVarForOverride(void)
 {
     AssertThis(0);
-    long thumOverride = -1;
-    long thumSidOverride = -1;
+    int32_t thumOverride = -1;
+    int32_t thumSidOverride = -1;
 
     // Projects need to be able to hard wire one of the gob id's
     if (vpappb->FGetProp(kpridBrwsOverrideThum, &thumOverride) &&
@@ -327,13 +328,13 @@ void BRWD::_SetVarForOverride(void)
  *
  ****************************************************/
 
-void BRWD::_GetThumFromIthum(long ithum, void *pThumSelect, long *psid)
+void BRWD::_GetThumFromIthum(int32_t ithum, void *pThumSelect, int32_t *psid)
 {
     AssertThis(0);
-    AssertVarMem((long *)pThumSelect);
+    AssertVarMem((int32_t *)pThumSelect);
     AssertVarMem(psid);
 
-    *((long *)pThumSelect) = ithum;
+    *((int32_t *)pThumSelect) = ithum;
     TrashVar(psid);
 }
 
@@ -342,12 +343,12 @@ void BRWD::_GetThumFromIthum(long ithum, void *pThumSelect, long *psid)
  * Count the number of frames possible per page
  *
  ****************************************************/
-long BRWD::_CfrmCalc(void)
+int32_t BRWD::_CfrmCalc(void)
 {
     AssertThis(0);
 
     PGOB pgob;
-    long ifrm;
+    int32_t ifrm;
 
     for (ifrm = 0;; ifrm++)
     {
@@ -373,7 +374,7 @@ long BRWD::_CfrmCalc(void)
 void BRWD::_CalcIthumPageFirst(void)
 {
     AssertThis(0);
-    long cthum = _Cthum();
+    int32_t cthum = _Cthum();
 
     // Place the selection as close to the top as _cthumScroll permits
     if (!_fNoRepositionSel || _cthumScroll == ivNil)
@@ -416,9 +417,9 @@ bool BRWD::FDraw(void)
 
     PGOB pgobPar;
     GCB gcb;
-    long ithum;
-    long ifrm;
-    long cthum = _Cthum();
+    int32_t ithum;
+    int32_t ifrm;
+    int32_t cthum = _Cthum();
 
     _CalcIthumPageFirst();
 
@@ -464,8 +465,8 @@ bool BRWD::FDraw(void)
     // Update page number
     if (pvNil != _ptgobPage)
     {
-        long pagen;
-        long cpage;
+        int32_t pagen;
+        int32_t cpage;
         STN stn;
         STN stnT;
         pagen = (_cfrm == 0) ? 0 : (_ithumPageFirst / _cfrm);
@@ -483,10 +484,10 @@ bool BRWD::FDraw(void)
  * Find a unique hid for the current frame
  *
  ****************************************************/
-long BRWD::_KidThumFromIfrm(long ifrm)
+int32_t BRWD::_KidThumFromIfrm(int32_t ifrm)
 {
     AssertBaseThis(0);
-    long kidThum;
+    int32_t kidThum;
 
     if (_ithumPageFirst + ifrm == _ithumOverride)
         kidThum = _kidThumOverride;
@@ -501,7 +502,7 @@ long BRWD::_KidThumFromIfrm(long ifrm)
  * Compute the pgob of the parent for frame ifrm
  *
  ****************************************************/
-PGOB BRWD::_PgobFromIfrm(long ifrm)
+PGOB BRWD::_PgobFromIfrm(int32_t ifrm)
 {
     AssertBaseThis(0);
     PGOB pgob;
@@ -521,7 +522,7 @@ void BRWD::_SetScrollState(void)
     AssertThis(0);
 
     PGOB pgob;
-    long st = (_Cthum() <= _cfrm) ? kstBrowserInvisible : kstBrowserEnabled;
+    int32_t st = (_Cthum() <= _cfrm) ? kstBrowserInvisible : kstBrowserEnabled;
 
     pgob = vapp.Pkwa()->PgobFromHid(_kidControlFirst);
     if (pvNil != pgob)
@@ -549,7 +550,7 @@ bool BRWD::FCmdFwd(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long cthumAdd;
+    int32_t cthumAdd;
 
     // Default _cthumScroll -> page scrolling
     if (ivNil == _cthumScroll)
@@ -651,7 +652,7 @@ bool BRWD::FCmdSelect(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long ifrmSelect = pcmd->rglw[0] - _kidFrmFirst;
+    int32_t ifrmSelect = pcmd->rglw[0] - _kidFrmFirst;
 
     _UnhiliteCurFrm();
     _ithumSelect = _ithumPageFirst + ifrmSelect;
@@ -674,8 +675,8 @@ bool BRWD::FCreateAllTgob(void)
 {
     AssertThis(0);
 
-    long ifrm;
-    long hid;
+    int32_t ifrm;
+    int32_t hid;
     PTGOB ptgob;
     RC rcAbs;
     RC rcRel;
@@ -705,7 +706,7 @@ bool BRWD::FCreateAllTgob(void)
  * Hilite frame
  *
  ****************************************************/
-bool BRWD::_FHiliteFrm(long ifrmSelect)
+bool BRWD::_FHiliteFrm(int32_t ifrmSelect)
 {
     AssertThis(0);
     AssertIn(ifrmSelect, 0, _cfrm);
@@ -735,7 +736,7 @@ void BRWD::_UnhiliteCurFrm(void)
 {
     AssertThis(0);
     PGOB pgob;
-    long ifrmSelectOld = _ithumSelect - _ithumPageFirst;
+    int32_t ifrmSelectOld = _ithumSelect - _ithumPageFirst;
 
     // Unhilite currently selected frame
     if ((_ithumPageFirst <= _ithumSelect) && (_ithumPageFirst + _cfrmPageCur > _ithumSelect))
@@ -790,8 +791,8 @@ bool BRWD::FCmdOk(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long sid;
-    long thumSelect;
+    int32_t sid;
+    int32_t thumSelect;
 
     _pstdio->SetDisplayCast(fFalse);
 
@@ -838,7 +839,7 @@ void BRWD::_CacheContext(void)
  *  A pointer to the view, else pvNil.
  *
  ****************************************************/
-PBRWL BRWL::PbrwlNew(PRCA prca, long kidPar, long kidGlass)
+PBRWL BRWL::PbrwlNew(PRCA prca, int32_t kidPar, int32_t kidGlass)
 {
     AssertPo(prca, 0);
 
@@ -886,15 +887,15 @@ PBRWL BRWL::PbrwlNew(PRCA prca, long kidPar, long kidGlass)
  *	thumSelect is the thumbnail to be hilited
  *
  ****************************************************/
-bool BRWL::FInit(PCMD pcmd, BWS bws, long thumSelect, long sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
-                 PBRCNL pbrcnl, bool fWrapScroll, long cthumScroll)
+bool BRWL::FInit(PCMD pcmd, BWS bws, int32_t thumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
+                 PBRCNL pbrcnl, bool fWrapScroll, int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long ithumDisplay;
-    long ccrf = 1;
-    long ithumSelect;
+    int32_t ithumDisplay;
+    int32_t ccrf = 1;
+    int32_t ithumSelect;
     bool fBuildGl;
 
     _bws = bws;
@@ -940,7 +941,7 @@ bool BRWL::FInit(PCMD pcmd, BWS bws, long thumSelect, long sidSelect, CKI ckiRoo
 
         _pcrm = pbrcnl->pcrm;
         _pcrm->AddRef();
-        for (long icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
+        for (int32_t icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
             _pcrm->PcrfGet(icrf)->SetCbMax(kcbMaxCrm);
 
         // First thumbnail on display page is inherited
@@ -1007,7 +1008,7 @@ LDismiss:
  * browser is invoked
  *
  ****************************************************/
-bool BRWL::_FInitNew(PCMD pcmd, BWS bws, long thumSelect, CKI ckiRoot, CTG ctgContent)
+bool BRWL::_FInitNew(PCMD pcmd, BWS bws, int32_t thumSelect, CKI ckiRoot, CTG ctgContent)
 {
     AssertThis(0);
 
@@ -1117,7 +1118,7 @@ LFail:
  * Virtual function
  *
  ****************************************************/
-void BRWL::_GetThumFromIthum(long ithum, void *pvthumSelect, long *psid)
+void BRWL::_GetThumFromIthum(int32_t ithum, void *pvthumSelect, int32_t *psid)
 {
     AssertThis(0);
     AssertIn(ithum, 0, _Cthum());
@@ -1128,7 +1129,7 @@ void BRWL::_GetThumFromIthum(long ithum, void *pvthumSelect, long *psid)
     if (_bws == kbwsIndex)
     {
         *psid = thd.tag.sid;
-        *((long *)pvthumSelect) = ithum;
+        *((int32_t *)pvthumSelect) = ithum;
         return;
     }
 
@@ -1194,13 +1195,13 @@ void BRWL::_CacheContext(void)
         AssertDo(pbrcnl->pglthd->FSetIvMac(_cthumCD), "Tried to grow pglthd (bad) and failed (also bad)");
         if (pbrcnl->pgst != pvNil)
         {
-            long istn;
+            int32_t istn;
 
             istn = pbrcnl->pgst->IstnMac();
             while (istn > _cthumCD)
                 pbrcnl->pgst->Delete(--istn);
         }
-        for (long icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
+        for (int32_t icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
             _pcrm->PcrfGet(icrf)->SetCbMax(kcbMaxCrm);
 
         pbrcnl->cthumCD = _cthumCD;
@@ -1217,13 +1218,13 @@ void BRWL::_SortThd(void)
 {
     AssertThis(0);
 
-    long ithd;
-    long jthd;
-    long *plwJ, *plwI;
+    int32_t ithd;
+    int32_t jthd;
+    int32_t *plwJ, *plwI;
     THD thdi;
     THD thdj;
-    long sid;
-    long jthdMin = 0;
+    int32_t sid;
+    int32_t jthdMin = 0;
     bool fSortBySid;
 
     if (_bws == kbwsIndex)
@@ -1232,15 +1233,15 @@ void BRWL::_SortThd(void)
     switch (_bws)
     {
     case kbwsChid:
-        Assert(SIZEOF(thdj.chidThum) == SIZEOF(long), "Bad pointer cast");
-        plwJ = (long *)&thdj.chidThum;
-        plwI = (long *)&thdi.chidThum;
+        Assert(SIZEOF(thdj.chidThum) == SIZEOF(int32_t), "Bad pointer cast");
+        plwJ = (int32_t *)&thdj.chidThum;
+        plwI = (int32_t *)&thdi.chidThum;
         fSortBySid = fFalse;
         break;
     case kbwsCnoRoot:
-        Assert(SIZEOF(thdj.tag.cno) == SIZEOF(long), "Bad pointer cast");
-        plwJ = (long *)&thdj.tag.cno;
-        plwI = (long *)&thdi.tag.cno;
+        Assert(SIZEOF(thdj.tag.cno) == SIZEOF(int32_t), "Bad pointer cast");
+        plwJ = (int32_t *)&thdj.tag.cno;
+        plwI = (int32_t *)&thdi.tag.cno;
         fSortBySid = fTrue;
         break;
     default:
@@ -1271,7 +1272,7 @@ void BRWL::_SortThd(void)
             // but only view it once
             if (*plwJ == *plwI)
             {
-                long ithdT;
+                int32_t ithdT;
                 THD thdT;
                 if (pvNil != _pgst && thdi.ithd < _pgst->IvMac())
                 {
@@ -1310,11 +1311,11 @@ void BRWL::_SortThd(void)
  * not an index into either pgl.
  *
  ****************************************************/
-long BRWL::_IthumFromThum(long thumSelect, long sidSelect)
+int32_t BRWL::_IthumFromThum(int32_t thumSelect, int32_t sidSelect)
 {
     AssertThis(0);
 
-    long *plw;
+    int32_t *plw;
     THD thd;
 
     if (thumSelect == ivNil)
@@ -1326,20 +1327,20 @@ long BRWL::_IthumFromThum(long thumSelect, long sidSelect)
         return thumSelect;
 
     case kbwsChid:
-        Assert(SIZEOF(thd.chid) == SIZEOF(long), "Bad pointer cast");
-        plw = (long *)&thd.chid;
+        Assert(SIZEOF(thd.chid) == SIZEOF(int32_t), "Bad pointer cast");
+        plw = (int32_t *)&thd.chid;
         break;
 
     case kbwsCnoRoot:
-        Assert(SIZEOF(thd.tag.cno) == SIZEOF(long), "Bad pointer cast");
-        plw = (long *)&thd.tag.cno;
+        Assert(SIZEOF(thd.tag.cno) == SIZEOF(int32_t), "Bad pointer cast");
+        plw = (int32_t *)&thd.tag.cno;
         break;
 
     default:
         Assert(0, "Invalid _bws");
     }
 
-    for (long ithd = 0; ithd < _pglthd->IvMac(); ithd++)
+    for (int32_t ithd = 0; ithd < _pglthd->IvMac(); ithd++)
     {
         _pglthd->Get(ithd, &thd);
         if ((*plw == thumSelect) && (sidSelect == ksidInvalid || thd.tag.sid == sidSelect))
@@ -1358,7 +1359,7 @@ long BRWL::_IthumFromThum(long thumSelect, long sidSelect)
  * Advance the gob (thumbnail) index
  *
  ****************************************************/
-bool BRWL::_FSetThumFrame(long ithd, PGOB pgobPar)
+bool BRWL::_FSetThumFrame(int32_t ithd, PGOB pgobPar)
 {
     AssertThis(0);
     AssertPo(pgobPar, 0);
@@ -1367,7 +1368,7 @@ bool BRWL::_FSetThumFrame(long ithd, PGOB pgobPar)
     PGOK pgok;
     RC rcAbs;
     RC rcRel;
-    long kidThum;
+    int32_t kidThum;
 
     // Associate the gob with the current frame
     _pglthd->Get(ithd, &thd);
@@ -1390,7 +1391,7 @@ bool BRWL::_FSetThumFrame(long ithd, PGOB pgobPar)
  * Assumes gob based.
  *
  ****************************************************/
-void BRWL::_ReleaseThumFrame(long ifrm)
+void BRWL::_ReleaseThumFrame(int32_t ifrm)
 {
     AssertThis(0);
     PGOB pgob;
@@ -1507,7 +1508,7 @@ bool BCL::_FBuildThd(PCRM pcrm)
 
     bool fRet = fTrue;
     PCFL pcfl;
-    long sid;
+    int32_t sid;
     FNET fnet;
     FNI fniThd;
 
@@ -1562,17 +1563,17 @@ bool BCL::_FBuildThd(PCRM pcrm)
  *	A value of cnoNil => wild card search
  *
  ****************************************************/
-bool BCL::_FAddFileToThd(PCFL pcfl, long sid)
+bool BCL::_FAddFileToThd(PCFL pcfl, int32_t sid)
 {
     AssertThis(0);
     AssertPo(pcfl, 0);
 
-    long ickiRoot;
-    long cckiRoot;
+    int32_t ickiRoot;
+    int32_t cckiRoot;
     CKI ckiRoot;
     KID kidPar;
-    long ikidPar;
-    long ckidPar;
+    int32_t ikidPar;
+    int32_t ckidPar;
 
     Assert(ctgNil != _ctgRoot, "Illegal call");
 
@@ -1628,7 +1629,7 @@ bool BCL::_FAddFileToThd(PCFL pcfl, long sid)
     return fTrue;
 }
 
-bool BCL::_FAddGokdToThd(PCFL pcfl, long sid, CKI *pcki)
+bool BCL::_FAddGokdToThd(PCFL pcfl, int32_t sid, CKI *pcki)
 {
     KID kid;
 
@@ -1644,7 +1645,7 @@ bool BCL::_FAddGokdToThd(PCFL pcfl, long sid, CKI *pcki)
  *  cnoPar is read from the ckiPar chunk
  *
  ****************************************************/
-bool BCL::_FAddGokdToThd(PCFL pcfl, long sid, KID *pkid)
+bool BCL::_FAddGokdToThd(PCFL pcfl, int32_t sid, KID *pkid)
 {
     AssertThis(0);
     AssertPo(pcfl, 0);
@@ -1702,7 +1703,7 @@ LFail:
     return fFalse;
 }
 
-bool BCLS::_FAddGokdToThd(PCFL pcfl, long sid, KID *pkid)
+bool BCLS::_FAddGokdToThd(PCFL pcfl, int32_t sid, KID *pkid)
 {
     AssertThis(0);
     AssertPo(pcfl, 0);
@@ -1771,7 +1772,7 @@ bool FNET::FInit(void)
  * Note: _idir == 0 -> current product
  *
  ****************************************************/
-bool FNET::FNext(FNI *pfni, long *psid)
+bool FNET::FNext(FNI *pfni, int32_t *psid)
 {
     AssertThis(0);
     AssertPo(pfni, 0);
@@ -1817,7 +1818,7 @@ bool FNET::FNext(FNI *pfni, long *psid)
  * This uses the current fne.
  *
  ****************************************************/
-bool FNET::_FNextFni(FNI *pfni, long *psid)
+bool FNET::_FNextFni(FNI *pfni, int32_t *psid)
 {
     AssertThis(0);
     STN stnProduct;
@@ -1840,8 +1841,8 @@ bool FNET::_FNextFni(FNI *pfni, long *psid)
  * -> BRWL Initialization plus tgob creation
  *
  ****************************************************/
-bool BRWN::FInit(PCMD pcmd, BWS bws, long thumSelect, long sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
-                 PBRCNL pbrcnl, bool fWrapScroll, long cthumScroll)
+bool BRWN::FInit(PCMD pcmd, BWS bws, int32_t thumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent, PSTDIO pstdio,
+                 PBRCNL pbrcnl, bool fWrapScroll, int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -1902,7 +1903,7 @@ LFail:
  * Removes the text from the unused tgob
  *
  ****************************************************/
-void BRWN::_ReleaseThumFrame(long ifrm)
+void BRWN::_ReleaseThumFrame(int32_t ifrm)
 {
     AssertThis(0);
     AssertIn(ifrm, 0, _cfrm);
@@ -1926,7 +1927,7 @@ void BRWN::_ReleaseThumFrame(long ifrm)
  * current frame
  *
  ****************************************************/
-bool BRWN::_FSetThumFrame(long ithd, PGOB pgobPar)
+bool BRWN::_FSetThumFrame(int32_t ithd, PGOB pgobPar)
 {
     AssertThis(0);
     AssertIn(ithd, 0, _pglthd->IvMac());
@@ -1987,7 +1988,7 @@ bool BRWN::FCmdOk(PCMD pcmd)
  * Create a BRoWser Music Sound object
  *
  ****************************************************/
-PBRWM BRWM::PbrwmNew(PRCA prca, long kidGlass, long sty, PSTDIO pstdio)
+PBRWM BRWM::PbrwmNew(PRCA prca, int32_t kidGlass, int32_t sty, PSTDIO pstdio)
 {
     AssertPo(prca, 0);
     AssertPo(pstdio, 0);
@@ -2039,10 +2040,10 @@ bool BRWM::_FUpdateLists(void)
 
     STN stn;
     THD thd;
-    long ithd;
-    long ithdOld;
-    long ccki;
-    long icki;
+    int32_t ithd;
+    int32_t ithdOld;
+    int32_t ccki;
+    int32_t icki;
     CKI cki;
     TAG tag;
     PMSND pmsnd = pvNil;
@@ -2106,11 +2107,11 @@ bool BRWM::_FUpdateLists(void)
  * Test to see if a sound is already in the lists
  *
  ****************************************************/
-bool BRWM::_FSndListed(CNO cno, long *pithd)
+bool BRWM::_FSndListed(CNO cno, int32_t *pithd)
 {
     AssertBaseThis(0);
 
-    long ithd;
+    int32_t ithd;
     THD *pthd;
 
     for (ithd = _cthumCD; ithd < _pglthd->IvMac(); ithd++)
@@ -2168,8 +2169,8 @@ void BRWM::_ProcessSelection(void)
     AssertThis(0);
     PMSND pmsnd;
     TAG tag;
-    long thumSelect;
-    long sid;
+    int32_t thumSelect;
+    int32_t sid;
 
     // Get Selection from virtual function
     _GetThumFromIthum(_ithumSelect, &thumSelect, &sid);
@@ -2208,11 +2209,11 @@ bool BRWM::FCmdFile(PCMD pcmd)
     AssertVarMem(pcmd);
 
     FNI fni;
-    long kidBrws;
+    int32_t kidBrws;
     PFIL pfil = pvNil; // Wave or midi file
     PCFL pcfl = pvNil; // Movie file
-    long icki;
-    long ccki;
+    int32_t icki;
+    int32_t ccki;
     STN stn;
     CKI cki;
     CMD cmd;
@@ -2263,7 +2264,7 @@ bool BRWM::FCmdFile(PCMD pcmd)
         for (icki = 0; icki < ccki; icki++)
         {
             bool fInvalid;
-            long sty;
+            int32_t sty;
             if (!pcfl->FGetCkiCtg(kctgMsnd, icki, &cki))
                 goto LEnd;
             if (!MSND::FGetMsndInfo(pcfl, kctgMsnd, cki.cno, &fInvalid, &sty))
@@ -2342,7 +2343,7 @@ bool BRWM::FCmdDel(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long sid;
+    int32_t sid;
     TAG tag;
     PTAG ptag;
     PMSND pmsnd;
@@ -2419,7 +2420,7 @@ bool BRWM::FCmdDel(PCMD pcmd)
  *	A pointer to the object, else pvNil.
  *
  ****************************************************/
-PBRWT BRWT::PbrwtNew(PRCA prca, long kidPar, long kidGlass)
+PBRWT BRWT::PbrwtNew(PRCA prca, int32_t kidPar, int32_t kidGlass)
 {
     AssertPo(prca, 0);
 
@@ -2465,7 +2466,8 @@ void BRWT::SetGst(PGST pgst)
  * Initialize BRWT TGOB & text
  *
  ****************************************************/
-bool BRWT::FInit(PCMD pcmd, long thumSelect, long thumDisplay, PSTDIO pstdio, bool fWrapScroll, long cthumScroll)
+bool BRWT::FInit(PCMD pcmd, int32_t thumSelect, int32_t thumDisplay, PSTDIO pstdio, bool fWrapScroll,
+                 int32_t cthumScroll)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -2490,7 +2492,7 @@ bool BRWT::FInit(PCMD pcmd, long thumSelect, long thumDisplay, PSTDIO pstdio, bo
  * current frame
  *
  ****************************************************/
-bool BRWT::_FSetThumFrame(long istn, PGOB pgobPar)
+bool BRWT::_FSetThumFrame(int32_t istn, PGOB pgobPar)
 {
     AssertThis(0);
     AssertIn(istn, 0, _pgst->IvMac());
@@ -2603,8 +2605,8 @@ bool BRWA::FBuildGst(PSCEN pscen)
 
     STN stn;
     PTMPL ptmpl;
-    long cactn;
-    long iactn;
+    int32_t cactn;
+    int32_t iactn;
     PGST pgst;
 
     Assert(pvNil != pscen && pvNil != pscen->PactrSelected(), "kidBrwsAction: Invalid actor");
@@ -2668,8 +2670,8 @@ bool BRWA::FCmdChangeCel(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long st;
-    long ccel;
+    int32_t st;
+    int32_t ccel;
     PACTR pactr = _pstdio->Pmvie()->Pscen()->PactrSelected();
 
     if (!pactr->Ptmpl()->FGetCcelActn(_pape->Anid(), &ccel))
@@ -2714,7 +2716,7 @@ bool BRWA::FCmdChangeCel(PCMD pcmd)
  *  A pointer to the view, else pvNil.
  *
  ****************************************************/
-PBRWI BRWI::PbrwiNew(PRCA prca, long kidGlass, long sty)
+PBRWI BRWI::PbrwiNew(PRCA prca, int32_t kidGlass, int32_t sty)
 {
     AssertPo(prca, 0);
 
@@ -2797,7 +2799,7 @@ LFail:
  *  A pointer to the view, else pvNil.
  *
  ****************************************************/
-PBRWP BRWP::PbrwpNew(PRCA prca, long kidGlass)
+PBRWP BRWP::PbrwpNew(PRCA prca, int32_t kidGlass)
 {
     AssertPo(prca, 0);
 
@@ -2889,8 +2891,8 @@ bool BRWB::FCmdCancel(PCMD pcmd)
 void BRWL::_SetCbPcrmMin(void)
 {
     AssertThis(0);
-    long dwTotalPhys;
-    long dwAvailPhys;
+    int32_t dwTotalPhys;
+    int32_t dwAvailPhys;
 
     // If short on memory, pull in the cache
     ((APP *)vpappb)->MemStat(&dwTotalPhys, &dwAvailPhys);
@@ -2899,7 +2901,7 @@ void BRWL::_SetCbPcrmMin(void)
 
     if (pvNil != _pcrm)
     {
-        for (long icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
+        for (int32_t icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
         {
             _pcrm->PcrfGet(icrf)->SetCbMax(0);
         }
@@ -2967,7 +2969,7 @@ bool BRWC::FCmdCancel(PCMD pcmd)
  * Create a BRoWser Roll Call object
  *
  ****************************************************/
-PBRWR BRWR::PbrwrNew(PRCA prca, long kid)
+PBRWR BRWR::PbrwrNew(PRCA prca, int32_t kid)
 {
     AssertPo(prca, 0);
 
@@ -2995,15 +2997,15 @@ PBRWR BRWR::PbrwrNew(PRCA prca, long kid)
  * Initialize a BRoWser Roll Call object
  *
  ****************************************************/
-bool BRWR::FInit(PCMD pcmd, CTG ctgTmplThum, long ithumDisplay, PSTDIO pstdio)
+bool BRWR::FInit(PCMD pcmd, CTG ctgTmplThum, int32_t ithumDisplay, PSTDIO pstdio)
 {
     AssertThis(0);
 
-    long ccrf = 1;
+    int32_t ccrf = 1;
     PCFL pcfl;
     BLCK blck;
-    long ccki;
-    long icki;
+    int32_t ccki;
+    int32_t icki;
     CKI cki;
     TFC tfc;
     KID kid;
@@ -3080,10 +3082,10 @@ LFail:
  * Update the RollCall : Select actor arid
  *
  ****************************************************/
-bool BRWR::FUpdate(long arid, PSTDIO pstdio)
+bool BRWR::FUpdate(int32_t arid, PSTDIO pstdio)
 {
     AssertThis(0);
-    long ithumDisplay;
+    int32_t ithumDisplay;
 
     _pstdio = pstdio;
     _ithumSelect = ithumDisplay = _IthumFromArid(arid);
@@ -3119,8 +3121,8 @@ void BRWR::_ProcessSelection(void)
 {
     AssertThis(0);
 
-    long thumSelect;
-    long sid;
+    int32_t thumSelect;
+    int32_t sid;
 
     // Get Selection from virtual function
     _GetThumFromIthum(_ithumSelect, &thumSelect, &sid);
@@ -3134,14 +3136,14 @@ void BRWR::_ProcessSelection(void)
  * Browser Roll Call Cthum
  *
  ****************************************************/
-long BRWR::_Cthum(void)
+int32_t BRWR::_Cthum(void)
 {
     AssertThis(0);
     STN stn;
-    long iarid;
-    long arid;
-    long cactRef;
-    long cthum = 0;
+    int32_t iarid;
+    int32_t arid;
+    int32_t cactRef;
+    int32_t cthum = 0;
     bool fProp;
 
     Assert(_ctg == kctgPrth || _ctg == kctgTmth, "Invalid BRWR initialization");
@@ -3170,15 +3172,15 @@ long BRWR::_Cthum(void)
  * Iarid from Ithum
  *
  ****************************************************/
-long BRWR::_IaridFromIthum(long ithum, long iaridFirst)
+int32_t BRWR::_IaridFromIthum(int32_t ithum, int32_t iaridFirst)
 {
     AssertThis(0);
     STN stn;
-    long iarid;
-    long arid;
-    long cactRef;
+    int32_t iarid;
+    int32_t arid;
+    int32_t cactRef;
     bool fProp;
-    long cthum = 0;
+    int32_t cthum = 0;
 
     if (_pstdio->Pmvie() == pvNil)
         return ivNil;
@@ -3208,16 +3210,16 @@ long BRWR::_IaridFromIthum(long ithum, long iaridFirst)
  * copy of Billy)
  *
  ****************************************************/
-long BRWR::_IthumFromArid(long aridSelect)
+int32_t BRWR::_IthumFromArid(int32_t aridSelect)
 {
     AssertThis(0);
 
     STN stn;
-    long iarid;
-    long arid;
-    long cactRef;
+    int32_t iarid;
+    int32_t arid;
+    int32_t cactRef;
     bool fProp;
-    long ithum = 0;
+    int32_t ithum = 0;
 
     if (_pstdio->Pmvie() == pvNil)
         return ivNil;
@@ -3253,7 +3255,7 @@ long BRWR::_IthumFromArid(long aridSelect)
  * Advance the gob (thumbnail) index
  *
  ****************************************************/
-bool BRWR::_FSetThumFrame(long ithum, PGOB pgobPar)
+bool BRWR::_FSetThumFrame(int32_t ithum, PGOB pgobPar)
 {
     AssertThis(0);
     AssertIn(ithum, 0, _pstdio->Pmvie()->CmactrMac());
@@ -3263,14 +3265,14 @@ bool BRWR::_FSetThumFrame(long ithum, PGOB pgobPar)
     RC rcAbs;
     RC rcRel;
     STN stnLabel;
-    long stid;
-    long cactRef;
-    long arid;
-    long iarid;
+    int32_t stid;
+    int32_t cactRef;
+    int32_t arid;
+    int32_t iarid;
     TAG tag;
     STN stn;
-    long dxp;
-    long dyp;
+    int32_t dxp;
+    int32_t dyp;
 
     // Associate the gob with the current frame
     iarid = _IaridFromIthum(ithum);
@@ -3283,7 +3285,7 @@ bool BRWR::_FSetThumFrame(long ithum, PGOB pgobPar)
     {
         PGOK pgok;
         CNO cno = _pstdio->CnoGokdFromCnoTmpl(tag.cno);
-        long kidThum = _KidThumFromIfrm(_cfrmPageCur);
+        int32_t kidThum = _KidThumFromIfrm(_cfrmPageCur);
         pgok = vapp.Pkwa()->PgokNew(pgobPar, kidThum, cno, _pcrm);
         if (pvNil == pgok)
             return fFalse;
@@ -3303,8 +3305,8 @@ bool BRWR::_FSetThumFrame(long ithum, PGOB pgobPar)
     {
         PTGOB ptgob;
         STN stn = stnLabel;
-        long cch = stn.Cch();
-        long hidThum;
+        int32_t cch = stn.Cch();
+        int32_t hidThum;
 
         // Display the text as the thumbnail
         hidThum = _KidThumFromIfrm(_cfrmPageCur);
@@ -3327,14 +3329,14 @@ bool BRWR::_FSetThumFrame(long ithum, PGOB pgobPar)
  * Clear rollover help
  *
  ****************************************************/
-bool BRWR::_FClearHelp(long ifrm)
+bool BRWR::_FClearHelp(int32_t ifrm)
 {
     AssertThis(0);
     AssertIn(ifrm, 0, _cfrm);
 
     STN stn;
     stn.SetNil();
-    long stid = (_ctg == kctgPrth) ? kstidProp : kstidActor;
+    int32_t stid = (_ctg == kctgPrth) ? kstidProp : kstidActor;
     stid += ifrm;
     return vapp.Pkwa()->Pstrg()->FPut(stid, &stn);
 }
@@ -3345,7 +3347,7 @@ bool BRWR::_FClearHelp(long ifrm)
  * Assumes gob based.
  *
  ****************************************************/
-void BRWR::_ReleaseThumFrame(long ifrm)
+void BRWR::_ReleaseThumFrame(int32_t ifrm)
 {
     AssertThis(0);
     AssertIn(ifrm, 0, _cfrm);
@@ -3562,7 +3564,7 @@ void BCLS::MarkMem(void)
     Assert the validity of the BRCN
 
  ****************************************************/
-void BRCN::AssertValid(ulong grfobj)
+void BRCN::AssertValid(uint32_t grfobj)
 {
     BRCN_PAR::AssertValid(fobjAllocated);
 }
@@ -3572,7 +3574,7 @@ void BRCN::AssertValid(ulong grfobj)
     Assert the validity of the BRCNL
 
  ****************************************************/
-void BRCNL::AssertValid(ulong grfobj)
+void BRCNL::AssertValid(uint32_t grfobj)
 {
     BRCNL_PAR::AssertValid(fobjAllocated);
 }
@@ -3582,12 +3584,12 @@ void BRCNL::AssertValid(ulong grfobj)
     BCL AssertValid
 
  ****************************************************/
-void BCLS::AssertValid(ulong grf)
+void BCLS::AssertValid(uint32_t grf)
 {
     BCLS_PAR::AssertValid(grf);
     AssertPo(_pgst, 0);
 }
-void BCL::AssertValid(ulong grf)
+void BCL::AssertValid(uint32_t grf)
 {
     BCL_PAR::AssertValid(grf);
     AssertPo(_pglthd, 0);
@@ -3598,7 +3600,7 @@ void BCL::AssertValid(ulong grf)
     Assert the validity of the BRWD
 
  ****************************************************/
-void BRWD::AssertValid(ulong grfobj)
+void BRWD::AssertValid(uint32_t grfobj)
 {
     BRWD_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pbrcn, 0);
@@ -3609,7 +3611,7 @@ void BRWD::AssertValid(ulong grfobj)
     Assert the validity of the BRWL
 
  ****************************************************/
-void BRWL::AssertValid(ulong grfobj)
+void BRWL::AssertValid(uint32_t grfobj)
 {
 
     BRWL_PAR::AssertValid(fobjAllocated);
@@ -3623,7 +3625,7 @@ void BRWL::AssertValid(ulong grfobj)
     Assert the validity of the BRWR
 
  ****************************************************/
-void BRWR::AssertValid(ulong grfobj)
+void BRWR::AssertValid(uint32_t grfobj)
 {
 
     BRWR_PAR::AssertValid(fobjAllocated);
@@ -3635,7 +3637,7 @@ void BRWR::AssertValid(ulong grfobj)
     Assert the validity of the BRWI
 
  ****************************************************/
-void BRWI::AssertValid(ulong grfobj)
+void BRWI::AssertValid(uint32_t grfobj)
 {
 
     BRWI_PAR::AssertValid(fobjAllocated);
@@ -3647,7 +3649,7 @@ void BRWI::AssertValid(ulong grfobj)
     Assert the validity of the BRWT
 
  ****************************************************/
-void BRWT::AssertValid(ulong grfobj)
+void BRWT::AssertValid(uint32_t grfobj)
 {
     BRWT_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pgst, 0);
@@ -3658,7 +3660,7 @@ void BRWT::AssertValid(ulong grfobj)
     Assert the validity of the BRWA
 
  ****************************************************/
-void BRWA::AssertValid(ulong grfobj)
+void BRWA::AssertValid(uint32_t grfobj)
 {
     BRWA_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pape, 0);

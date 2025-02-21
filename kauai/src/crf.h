@@ -48,8 +48,8 @@ class BACO : public BACO_PAR
     PCRF _pcrf; // The BACO has a ref count on this iff !_fAttached
     CTG _ctg;
     CNO _cno;
-    long _crep : 16;
-    long _fAttached : 1;
+    int32_t _crep : 16;
+    int32_t _fAttached : 1;
 
     friend class CRF;
 
@@ -60,7 +60,7 @@ class BACO : public BACO_PAR
   public:
     virtual void Release(void);
 
-    virtual void SetCrep(long crep);
+    virtual void SetCrep(int32_t crep);
     virtual void Detach(void);
 
     CTG Ctg(void)
@@ -75,7 +75,7 @@ class BACO : public BACO_PAR
     {
         return _pcrf;
     }
-    long Crep(void)
+    int32_t Crep(void)
     {
         return _crep;
     }
@@ -85,7 +85,7 @@ class BACO : public BACO_PAR
     // objects don't need to know what the actual class is.
     virtual bool FWrite(PBLCK pblck);
     virtual bool FWriteFlo(PFLO pflo);
-    virtual long CbOnFile(void);
+    virtual int32_t CbOnFile(void);
 };
 
 /***************************************************************************
@@ -94,7 +94,7 @@ class BACO : public BACO_PAR
 ***************************************************************************/
 // Object reader function - must handle ppo == pvNil, in which case, the
 // *pcb should be set to an estimate of the size when read.
-typedef bool FNRPO(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+typedef bool FNRPO(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
 typedef FNRPO *PFNRPO;
 
 typedef class RCA *PRCA;
@@ -105,10 +105,10 @@ class RCA : public RCA_PAR
     RTCLASS_DEC
 
   public:
-    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, long crep = crepNormal) = 0;
+    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal) = 0;
     virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil) = 0;
     virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) = 0;
-    virtual bool FSetCrep(long crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) = 0;
+    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) = 0;
     virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil) = 0;
 };
 
@@ -126,38 +126,38 @@ class CRF : public CRF_PAR
   protected:
     struct CRE
     {
-        PFNRPO pfnrpo;    // object reader
-        long cactRelease; // the last time this object was released
-        BACO *pbaco;      // the object
-        long cb;          // size of data
+        PFNRPO pfnrpo;       // object reader
+        int32_t cactRelease; // the last time this object was released
+        BACO *pbaco;         // the object
+        int32_t cb;          // size of data
     };
 
     PCFL _pcfl;
     PGL _pglcre; // sorted by (cki, pfnrpo)
-    long _cbMax;
-    long _cbCur;
-    long _cactRelease;
+    int32_t _cbMax;
+    int32_t _cbCur;
+    int32_t _cactRelease;
 
-    CRF(PCFL pcfl, long cbMax);
-    bool _FFindCre(CTG ctg, CNO cno, PFNRPO pfnrpo, long *picre);
-    bool _FFindBaco(PBACO pbaco, long *picre);
-    bool _FPurgeCb(long cbPurge, long crepLast);
+    CRF(PCFL pcfl, int32_t cbMax);
+    bool _FFindCre(CTG ctg, CNO cno, PFNRPO pfnrpo, int32_t *picre);
+    bool _FFindBaco(PBACO pbaco, int32_t *picre);
+    bool _FPurgeCb(int32_t cbPurge, int32_t crepLast);
 
   public:
     ~CRF(void);
-    static PCRF PcrfNew(PCFL pcfl, long cbMax);
+    static PCRF PcrfNew(PCFL pcfl, int32_t cbMax);
 
-    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, long crep = crepNormal);
+    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal);
     virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil);
     virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
-    virtual bool FSetCrep(long crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
+    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
     virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil);
 
-    long CbMax(void)
+    int32_t CbMax(void)
     {
         return _cbMax;
     }
-    void SetCbMax(long cbMax);
+    void SetCbMax(int32_t cbMax);
 
     PCFL Pcfl(void)
     {
@@ -190,21 +190,21 @@ class CRM : public CRM_PAR
 
   public:
     ~CRM(void);
-    static PCRM PcrmNew(long ccrfInit);
+    static PCRM PcrmNew(int32_t ccrfInit);
 
-    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, long crep = crepNormal);
+    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal);
     virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil);
     virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
-    virtual bool FSetCrep(long crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
+    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
     virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil);
 
-    bool FAddCfl(PCFL pcfl, long cbMax, long *piv = pvNil);
-    long Ccrf(void)
+    bool FAddCfl(PCFL pcfl, int32_t cbMax, int32_t *piv = pvNil);
+    int32_t Ccrf(void)
     {
         AssertThis(0);
         return _pglpcrf->IvMac();
     }
-    PCRF PcrfGet(long icrf);
+    PCRF PcrfGet(int32_t icrf);
 };
 
 /***************************************************************************
@@ -232,7 +232,7 @@ class GHQ : public GHQ_PAR
     }
 
     // An object reader for a GHQ.
-    static bool FReadGhq(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadGhq(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
 };
 
 /***************************************************************************

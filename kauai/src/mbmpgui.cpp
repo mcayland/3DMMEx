@@ -20,7 +20,8 @@ ASSERTNAME
     the reference point of the MBMP.  The drawing will be clipped to both
     prcClip and pregnClip, which may be nil.
 ***************************************************************************/
-void MBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void MBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip,
+                PREGN pregnClip)
 {
     AssertThis(0);
     AssertIn(cbRow, 1, kcbMax);
@@ -36,11 +37,11 @@ void MBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, 
     // on the complexity of the transparency (the more complex, the more
     // improvement over the C version).
 
-    long yp, dxpT, xpOn;
-    byte *qbRowSrc, *qbLastSrc, *pbOff;
-    short *qcb;
-    byte bFill;
-    long lwFill;
+    int32_t yp, dxpT, xpOn;
+    uint8_t *qbRowSrc, *qbLastSrc, *pbOff;
+    int16_t *qcb;
+    uint8_t bFill;
+    int32_t lwFill;
     REGSC regsc;
     RC rcClip(0, 0, cbRow, dyp);
     MBMPH *qmbmph = _Qmbmph();
@@ -65,7 +66,7 @@ void MBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, 
         regsc.InitRc(&rcClip, &rcClip);
 
     qcb = _Qrgcb();
-    qbRowSrc = (byte *)PvAddBv(qcb, _cbRgcb);
+    qbRowSrc = (uint8_t *)PvAddBv(qcb, _cbRgcb);
     prgbPixels += LwMul(rcClip.ypTop, cbRow) + rcClip.xpLeft;
     rcMbmp.Offset(-rcClip.xpLeft, -rcClip.ypTop);
     rcClip.OffsetToOrigin();
@@ -86,7 +87,7 @@ void MBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, 
         if ((xpOn = regsc.XpCur()) == klwMax)
         {
             // empty strip of the region
-            long dypT;
+            int32_t dypT;
 
             dypT = regsc.DypCur();
             if ((yp += dypT) >= rcClip.ypBottom)
@@ -287,10 +288,10 @@ LFill:
 
 #else //! IN_80386
 
-    long yp, dxp, dypT, dxpT;
-    byte *qbRowSrc, *qbSrc, *qbLastSrc;
-    byte *pbOn, *pbOff, *pbDst;
-    short *qcb;
+    int32_t yp, dxp, dypT, dxpT;
+    uint8_t *qbRowSrc, *qbSrc, *qbLastSrc;
+    uint8_t *pbOn, *pbOff, *pbDst;
+    int16_t *qcb;
     REGSC regsc;
     RC rcClip(0, 0, cbRow, dyp);
     MBMPH *qmbmph = _Qmbmph();
@@ -315,7 +316,7 @@ LFill:
         regsc.InitRc(&rcClip, &rcClip);
 
     qcb = _Qrgcb();
-    qbRowSrc = (byte *)PvAddBv(qcb, _cbRgcb);
+    qbRowSrc = (uint8_t *)PvAddBv(qcb, _cbRgcb);
     prgbPixels += LwMul(rcClip.ypTop, cbRow) + rcClip.xpLeft;
     rcMbmp.Offset(-rcClip.xpLeft, -rcClip.ypTop);
     rcClip.OffsetToOrigin();
@@ -418,7 +419,7 @@ LFill:
     written where the MBMP is transparent and ones are written where
     it is non-transparent.
 ***************************************************************************/
-void MBMP::DrawMask(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip)
+void MBMP::DrawMask(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip)
 {
     AssertThis(0);
     AssertIn(cbRow, 1, kcbMax);
@@ -426,12 +427,12 @@ void MBMP::DrawMask(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypR
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp));
     AssertNilOrVarMem(prcClip);
 
-    long yp, xp, dxp;
-    byte *qbRowSrc, *qbSrc, *qbLimSrc;
-    short *qcb;
+    int32_t yp, xp, dxp;
+    uint8_t *qbRowSrc, *qbSrc, *qbLimSrc;
+    int16_t *qcb;
     bool fTrans;
-    long ib, ibNext;
-    byte bMask, bMaskNext;
+    int32_t ib, ibNext;
+    uint8_t bMask, bMaskNext;
     MBMPH *qmbmph = _Qmbmph();
     RC rcClip(0, 0, LwMul(cbRow, 8), dyp);
     RC rcMbmp = qmbmph->rc;
@@ -449,7 +450,7 @@ void MBMP::DrawMask(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypR
         return;
 
     qcb = _Qrgcb();
-    qbRowSrc = (byte *)PvAddBv(qcb, _cbRgcb);
+    qbRowSrc = (uint8_t *)PvAddBv(qcb, _cbRgcb);
     prgbPixels += LwMul(rcClip.ypTop, cbRow);
 
     // Step down through rgcb until to top of clipping rc

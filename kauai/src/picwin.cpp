@@ -65,7 +65,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
     PICH *ppich;
     PPIC ppic;
     RC rc;
-    long cb;
+    int32_t cb;
 
     if (!pblck->FUnpackData())
         return pvNil;
@@ -82,7 +82,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
     if (rc.FEmpty() || ppich->cb != cb)
         hpic = hNil;
     else
-        hpic = SetEnhMetaFileBits(cb - SIZEOF(PICH), (byte *)(ppich + 1));
+        hpic = SetEnhMetaFileBits(cb - SIZEOF(PICH), (uint8_t *)(ppich + 1));
     UnlockHq(hq);
     FreePhq(&hq);
     if (hNil == hpic)
@@ -103,7 +103,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
 /***************************************************************************
     Return the total size on file.
 ***************************************************************************/
-long PIC::CbOnFile(void)
+int32_t PIC::CbOnFile(void)
 {
     AssertThis(0);
     return GetEnhMetaFileBits(_hpic, 0, pvNil) + SIZEOF(PICH);
@@ -116,7 +116,7 @@ bool PIC::FWrite(PBLCK pblck)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
-    long cb, cbTot;
+    int32_t cb, cbTot;
     bool fT;
     PICH *ppich;
 
@@ -128,7 +128,7 @@ bool PIC::FWrite(PBLCK pblck)
         return fFalse;
     ppich->rc = _rc;
     ppich->cb = cbTot;
-    fT = (GetEnhMetaFileBits(_hpic, cb, (byte *)(ppich + 1)) == (ulong)cb) && pblck->FWrite(ppich);
+    fT = (GetEnhMetaFileBits(_hpic, cb, (uint8_t *)(ppich + 1)) == (uint32_t)cb) && pblck->FWrite(ppich);
     FreePpv((void **)&ppich);
     return fT;
 }
@@ -186,11 +186,11 @@ PPIC PIC::PpicReadNative(FNI *pfni)
 typedef struct _MEFH
 {
     DWORD lwKey;
-    short w1;
-    short xpLeft;
-    short ypTop;
-    short xpRight;
-    short ypBottom;
+    int16_t w1;
+    int16_t xpLeft;
+    int16_t ypTop;
+    int16_t xpRight;
+    int16_t ypBottom;
     WORD w2;
     DWORD dw1;
     WORD w3;
@@ -204,21 +204,21 @@ HPIC PIC::_HpicReadWmf(FNI *pfni)
     MEFH mefh;
     METAHEADER mh;
     HPIC hpic;
-    long lw;
-    long cb;
+    int32_t lw;
+    int32_t cb;
     PFIL pfil;
     void *pv;
     bool fT;
     FP fp;
 
-    const long kcbMefh = 22;
-    const long kcbMetaHeader = 18;
+    const int32_t kcbMefh = 22;
+    const int32_t kcbMetaHeader = 18;
 
     if (pvNil == (pfil = FIL::PfilOpen(pfni)))
         return hNil;
 
     // check for type of meta file
-    if (!pfil->FReadRgb(&lw, SIZEOF(long), 0))
+    if (!pfil->FReadRgb(&lw, SIZEOF(int32_t), 0))
         goto LFail;
 
     // read placeable meta file header - NOTE: we can't just use SIZEOF(MEFH) for
@@ -254,7 +254,7 @@ HPIC PIC::_HpicReadWmf(FNI *pfni)
     }
 
     // convert the old style metafile to an enhanced metafile
-    hpic = SetWinMetaFileBits(cb, (byte *)pv, hNil, pvNil);
+    hpic = SetWinMetaFileBits(cb, (uint8_t *)pv, hNil, pvNil);
     FreePpv(&pv);
 
     return hpic;

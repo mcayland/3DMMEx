@@ -19,8 +19,8 @@
 /***************************************************************************
     Universal scalable application clock and other time stuff
 ***************************************************************************/
-const ulong kdtsSecond = MacWin(60, 1000);
-const ulong kluTimeScaleNormal = 0x00010000;
+const uint32_t kdtsSecond = MacWin(60, 1000);
+const uint32_t kluTimeScaleNormal = 0x00010000;
 
 typedef class USAC *PUSAC;
 #define USAC_PAR BASE
@@ -30,20 +30,20 @@ class USAC : public USAC_PAR
     RTCLASS_DEC
 
   private:
-    ulong _tsBaseSys; // base system time
-    ulong _tsBaseApp; // base application time
-    ulong _luScale;
+    uint32_t _tsBaseSys; // base system time
+    uint32_t _tsBaseApp; // base application time
+    uint32_t _luScale;
 
   public:
     USAC(void);
 
-    ulong TsCur(void);
-    void Scale(ulong luScale);
-    ulong LuScale(void)
+    uint32_t TsCur(void);
+    void Scale(uint32_t luScale);
+    uint32_t LuScale(void)
     {
         return _luScale;
     }
-    void Jump(ulong dtsJump)
+    void Jump(uint32_t dtsJump)
     {
         _tsBaseApp += dtsJump;
     }
@@ -51,16 +51,16 @@ class USAC : public USAC_PAR
 
 extern PUSAC vpusac;
 
-inline ulong TsCurrent(void)
+inline uint32_t TsCurrent(void)
 {
     return vpusac->TsCur();
 }
-inline ulong TsCurrentSystem(void)
+inline uint32_t TsCurrentSystem(void)
 {
     // n.b. WIN: timeGetTime is more accurate than GetTickCount
     return MacWin(TickCount(), timeGetTime());
 }
-inline ulong DtsCaret(void)
+inline uint32_t DtsCaret(void)
 {
     return MacWin(GetCaretTime(), GetCaretBlinkTime());
 }

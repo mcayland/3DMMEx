@@ -98,8 +98,8 @@ enum
 
 struct TOK
 {
-    long tt;
-    long lw;
+    int32_t tt;
+    int32_t lw;
     STN stn;
 };
 typedef TOK *PTOK;
@@ -119,40 +119,40 @@ class LEXB : public LEXB_PAR
     MARKMEM
 
   protected:
-    static ushort _mpchgrfct[];
+    static uint16_t _mpchgrfct[];
 
     PFIL _pfil; // exactly one of _pfil, _pbsf should be non-nil
     PBSF _pbsf;
     STN _stnFile;
-    long _lwLine;  // which line
-    long _ichLine; // which character on the line
+    int32_t _lwLine;  // which line
+    int32_t _ichLine; // which character on the line
 
     FP _fpCur;
     FP _fpMac;
-    long _ichLim;
-    long _ichCur;
+    int32_t _ichLim;
+    int32_t _ichCur;
     achar _rgch[kcchLexbBuf];
     bool _fLineStart : 1;
     bool _fSkipToNextLine : 1;
     bool _fUnionStrings : 1;
 
-    ulong _GrfctCh(achar ch)
+    uint32_t _GrfctCh(achar ch)
     {
-        return (uchar)ch < 128 ? _mpchgrfct[(byte)ch] : fctNil;
+        return (uchar)ch < 128 ? _mpchgrfct[(uint8_t)ch] : fctNil;
     }
-    bool _FFetchRgch(achar *prgch, long cch = 1);
-    void _Advance(long cch = 1)
+    bool _FFetchRgch(achar *prgch, int32_t cch = 1);
+    void _Advance(int32_t cch = 1)
     {
         _ichCur += cch;
         _ichLine += cch;
     }
     bool _FSkipWhiteSpace(void);
-    virtual void _ReadNumber(long *plw, achar ch, long lwBase, long cchMax);
-    virtual void _ReadNumTok(PTOK ptok, achar ch, long lwBase, long cchMax)
+    virtual void _ReadNumber(int32_t *plw, achar ch, int32_t lwBase, int32_t cchMax);
+    virtual void _ReadNumTok(PTOK ptok, achar ch, int32_t lwBase, int32_t cchMax)
     {
         _ReadNumber(&ptok->lw, ch, lwBase, cchMax);
     }
-    bool _FReadHex(long *plw);
+    bool _FReadHex(int32_t *plw);
     bool _FReadControlCh(achar *pch);
 
   public:
@@ -161,15 +161,15 @@ class LEXB : public LEXB_PAR
     ~LEXB(void);
 
     virtual bool FGetTok(PTOK ptok);
-    virtual long CbExtra(void);
+    virtual int32_t CbExtra(void);
     virtual void GetExtra(void *pv);
 
     void GetStnFile(PSTN pstn);
-    long LwLine(void)
+    int32_t LwLine(void)
     {
         return _lwLine;
     }
-    long IchLine(void)
+    int32_t IchLine(void)
     {
         return _ichLine;
     }

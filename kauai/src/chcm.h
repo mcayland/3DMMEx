@@ -71,7 +71,7 @@ enum
 struct KEYTT
 {
     const PSZ pszKeyword;
-    long tt;
+    int32_t tt;
 };
 
 /***************************************************************************
@@ -194,31 +194,31 @@ class CHCM : public CHCM_PAR
     PCFL _pcfl;       // current sub file
     PGL _pglckiLoner; // the chunks that must be loners
 
-    BSF _bsf;     // temporary buffer for the chunk data
-    PCHLX _pchlx; // lexer for compiling
-    long _sm;     // current string mode
-    long _cbNum;  // current numerical size (1, 2, or 4)
-    short _bo;    // current byte order and osk
-    short _osk;
-    PMSNK _pmsnkError; // error message sink
-    long _cactError;   // how many errors we've encountered
+    BSF _bsf;       // temporary buffer for the chunk data
+    PCHLX _pchlx;   // lexer for compiling
+    int32_t _sm;    // current string mode
+    int32_t _cbNum; // current numerical size (1, 2, or 4)
+    int16_t _bo;    // current byte order and osk
+    int16_t _osk;
+    PMSNK _pmsnkError;  // error message sink
+    int32_t _cactError; // how many errors we've encountered
 
   protected:
     struct PHP // parenthesized header parameter
     {
-        long lw;
+        int32_t lw;
         PSTN pstn;
     };
 
-    void _Error(long ert, PSZ pszMessage = pvNil);
-    void _GetRgbFromLw(long lw, byte *prgb);
+    void _Error(int32_t ert, PSZ pszMessage = pvNil);
+    void _GetRgbFromLw(int32_t lw, uint8_t *prgb);
     void _ErrorOnData(PSZ pszPreceed);
-    bool _FParseParenHeader(PHP *prgphp, long cphpMax, long *pcphp);
+    bool _FParseParenHeader(PHP *prgphp, int32_t cphpMax, int32_t *pcphp);
     bool _FGetCleanTok(TOK *ptok, bool fEofOk = fFalse);
-    void _SkipPastTok(long tt);
+    void _SkipPastTok(int32_t tt);
     void _ParseChunkHeader(CTG *pctg, CNO *pcno);
     void _AppendString(PSTN pstnValue);
-    void _AppendNumber(long lwValue);
+    void _AppendNumber(int32_t lwValue);
     void _ParseBodyChild(CTG ctg, CNO cno);
     void _ParseBodyParent(CTG ctg, CNO cno);
     void _ParseBodyAlign(void);
@@ -242,7 +242,7 @@ class CHCM : public CHCM_PAR
     void _ParseAdopt(void);
     void _ParsePackFmt(void);
 
-    bool _FPrepWrite(bool fPack, long cb, CTG ctg, CNO cno, PBLCK pblck);
+    bool _FPrepWrite(bool fPack, int32_t cb, CTG ctg, CNO cno, PBLCK pblck);
     bool _FEndWrite(bool fPack, CTG ctg, CNO cno, PBLCK pblck);
 
   public:
@@ -272,11 +272,11 @@ class CHDC : public CHDC_PAR
     NOCOPY(CHDC)
 
   protected:
-    long _ert;  // error type
-    PCFL _pcfl; // the chunky file to read from
-    BSF _bsf;   // temporary buffer for the chunk data
-    short _bo;  // current byte order and osk
-    short _osk;
+    int32_t _ert; // error type
+    PCFL _pcfl;   // the chunky file to read from
+    BSF _bsf;     // temporary buffer for the chunk data
+    int16_t _bo;  // current byte order and osk
+    int16_t _osk;
     CHSE _chse; // chunky source emitter
 
   protected:
@@ -284,7 +284,7 @@ class CHDC : public CHDC_PAR
     bool _FDumpList(PBLCK pblck, bool fAl);
     bool _FDumpGroup(PBLCK pblck, bool fAg);
     bool _FDumpStringTable(PBLCK pblck, bool fAst);
-    void _WritePack(long cfmt);
+    void _WritePack(int32_t cfmt);
 
   public:
     CHDC(void);

@@ -44,7 +44,7 @@ class CHSE : public CHSE_PAR
     bool _fError;
 
   protected:
-    void _DumpBsf(long cactTab);
+    void _DumpBsf(int32_t cactTab);
 
   public:
     CHSE(void);
@@ -53,9 +53,9 @@ class CHSE : public CHSE_PAR
     void Uninit(void);
 
     void DumpHeader(CTG ctg, CNO cno, PSTN pstnName = pvNil, bool fPack = fFalse);
-    void DumpRgb(void *prgb, long cb, long cactTab = 1);
+    void DumpRgb(void *prgb, int32_t cb, int32_t cactTab = 1);
     void DumpParentCmd(CTG ctg, CNO cno, CHID chid);
-    void DumpBitmapCmd(byte bTransparent, long dxp, long dyp, PSTN pstnFile);
+    void DumpBitmapCmd(uint8_t bTransparent, int32_t dxp, int32_t dyp, PSTN pstnFile);
     void DumpFileCmd(PSTN pstnFile, bool fPacked = fFalse);
     void DumpAdoptCmd(CKI *pcki, KID *pkid);
     void DumpList(PGLB pglb);

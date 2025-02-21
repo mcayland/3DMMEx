@@ -31,8 +31,8 @@ bool ACTR::FCopy(PACTR *ppactr, bool fEntireScene)
     AssertThis(0);
     AssertVarMem(ppactr);
 
-    long iaev;
-    long iaevLast;
+    int32_t iaev;
+    int32_t iaevLast;
     AEV aev;
     AEVACTN aevactn;
     AEVSND aevsnd;
@@ -205,8 +205,8 @@ bool ACTR::FCopy(PACTR *ppactr, bool fEntireScene)
     {
         // Locate the amount of route to copy
         //
-        long irptLim = _pglrpt->IvMac();
-        long irpt;
+        int32_t irptLim = _pglrpt->IvMac();
+        int32_t irpt;
 
         if (!fEntireScene)
         {
@@ -264,7 +264,7 @@ bool ACTR::FDup(PACTR *ppactr, bool fReset)
     AssertThis(0);
     AssertVarMem(ppactr);
 
-    long cactRef;
+    int32_t cactRef;
     PACTR pactrSrc = this;
     PACTR pactrDest;
 
@@ -319,7 +319,7 @@ void ACTR::Restore(PACTR pactr)
     AssertThis(0);
     AssertVarMem(pactr);
 
-    long cactRef;
+    int32_t cactRef;
     PACTR pactrSrc = pactr;
     PACTR pactrDest = this;
 
@@ -359,7 +359,7 @@ void ACTR::_RestoreFromUndo(PACTR pactrRestore)
     AssertVarMem(pactrRestore);
     Assert(pactrRestore->_pbody == pvNil, "Not restoring from undo object");
 
-    long nfrmCur = _nfrmCur;
+    int32_t nfrmCur = _nfrmCur;
     PSCEN pscen = pactrRestore->_pscen;
 
     // Modify pactrRestore for Restore()
@@ -405,7 +405,7 @@ bool ACTR::_FDupCopy(PACTR pactrSrc, PACTR pactrDest)
 
     {
         _pggaev->Lock();
-        for (long iaev = 0; iaev < _pggaev->IvMac(); iaev++)
+        for (int32_t iaev = 0; iaev < _pggaev->IvMac(); iaev++)
         {
             PTAG ptag;
 
@@ -466,9 +466,9 @@ bool ACTR::FCopyRte(PACTR *ppactr, bool fEntireScene)
     AssertThis(0);
     AssertVarMem(ppactr);
 
-    long irpt;
-    long dnrpt;
-    long irptLim;
+    int32_t irpt;
+    int32_t dnrpt;
+    int32_t irptLim;
     RPT rpt;
     RPT rpt1;
     RPT rptNode;
@@ -578,13 +578,13 @@ bool ACTR::FPasteRte(PACTR pactr)
     RPT rpt;
     RPT rptCur;
     XYZ dxyz;
-    long iaev;
-    long irpt;
+    int32_t iaev;
+    int32_t irpt;
 #ifdef STATIC
     bool fStatic;
 #endif // STATIC
-    long crptDel = 0;
-    long crptNew = pactr->_pglrpt->IvMac() - 1;
+    int32_t crptDel = 0;
+    int32_t crptNew = pactr->_pglrpt->IvMac() - 1;
 
     if (crptNew <= 0)
     {
@@ -702,7 +702,7 @@ bool ACTR::FPasteRte(PACTR pactr)
     //
     // Set new end of path freeze & step events
     //
-    long faevfrz = (long)fTrue;
+    int32_t faevfrz = (int32_t)fTrue;
     BRS dwrStep = rZero;
     aev.aet = aetFreeze;
     aev.rtel.irpt = _rtelCur.irpt + crptNew;
@@ -728,7 +728,7 @@ bool ACTR::FPasteRte(PACTR pactr)
     Put an already existing actor in this scene.
 
 ***************************************************************************/
-bool ACTR::FPaste(long nfrm, SCEN *pscen)
+bool ACTR::FPaste(int32_t nfrm, SCEN *pscen)
 {
     AssertThis(0);
 
@@ -740,8 +740,8 @@ bool ACTR::FPaste(long nfrm, SCEN *pscen)
     BRS yrCam = rZero;
     BRS zrCam = kzrDefault;
     BRS xr, yr, zr;
-    long iaev;
-    long dnfrm;
+    int32_t iaev;
+    int32_t dnfrm;
 #ifdef BUG1888
     PTMPL ptmpl;
     PCRF pcrf;
@@ -1048,7 +1048,7 @@ void ACLP::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void ACLP::AssertValid(ulong grf)
+void ACLP::AssertValid(uint32_t grf)
 {
     ACLP_PAR::AssertValid(fobjAllocated);
     _pactr->AssertValid(grf);
@@ -1103,7 +1103,7 @@ bool ACTR::FCreateUndo(PACTR pactrDup, bool fSndUndo, PSTN pstn)
     Add (or replace) an action, and create an undo object
 
 ***************************************************************************/
-bool ACTR::FSetAction(long anid, long celn, bool fFreeze, PACTR *ppactrDup)
+bool ACTR::FSetAction(int32_t anid, int32_t celn, bool fFreeze, PACTR *ppactrDup)
 {
     AssertThis(0);
     AssertNilOrVarMem(ppactrDup);
@@ -1177,7 +1177,7 @@ bool ACTR::FAddOnStage(void)
     Normalize an actor.
 
 ***************************************************************************/
-bool ACTR::FNormalize(ulong grfnorm)
+bool ACTR::FNormalize(uint32_t grfnorm)
 {
     AssertThis(0);
 
@@ -1212,7 +1212,7 @@ bool ACTR::FNormalize(ulong grfnorm)
     Add the event to the event list
 
 ***************************************************************************/
-bool ACTR::FSetCostume(long ibset, TAG *ptag, long cmid, tribool fCmtl)
+bool ACTR::FSetCostume(int32_t ibset, TAG *ptag, int32_t cmid, tribool fCmtl)
 {
     AssertThis(0);
     Assert(fCmtl || ibset >= 0, "Invalid ibset argument");
@@ -1254,7 +1254,7 @@ bool ACTR::FDelete(bool *pfAlive, bool fDeleteAll)
 {
     AssertThis(0);
     PACTR pactrDup;
-    long iaevCurSav;
+    int32_t iaevCurSav;
     AEV *paev;
 
     if (!FDup(&pactrDup))
@@ -1411,7 +1411,7 @@ bool AUND::FDo(PDOCB pdocb)
     AssertThis(0);
     AssertPo(pdocb, 0);
 
-    long nfrmTmp;
+    int32_t nfrmTmp;
     bool fRet;
 
     if (!_fSoonerLater)
@@ -1576,7 +1576,7 @@ void AUND::MarkMem(void)
 /***************************************************************************
     Assert the validity of the AUND.
 ***************************************************************************/
-void AUND::AssertValid(ulong grf)
+void AUND::AssertValid(uint32_t grf)
 {
     AssertNilOrPo(_pactr, 0);
 }

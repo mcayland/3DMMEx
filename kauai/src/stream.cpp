@@ -15,7 +15,7 @@
 ASSERTNAME
 
 // min size of initial piece on file
-const long kcbMinFloFile = 2048;
+const int32_t kcbMinFloFile = 2048;
 
 RTCLASS(BSM)
 RTCLASS(BSF)
@@ -44,7 +44,7 @@ BSM::~BSM(void)
 /***************************************************************************
     Set the amount to grow by.
 ***************************************************************************/
-void BSM::SetMinGrow(long cb)
+void BSM::SetMinGrow(int32_t cb)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);
@@ -56,7 +56,7 @@ void BSM::SetMinGrow(long cb)
     Make sure there is at least cb bytes of space.  If fShrink is true,
     the amount of memory allocated by the BSM may decrease.
 ***************************************************************************/
-bool BSM::FEnsureSpace(long cb, bool fShrink)
+bool BSM::FEnsureSpace(int32_t cb, bool fShrink)
 {
     AssertThis(0);
 
@@ -67,7 +67,7 @@ bool BSM::FEnsureSpace(long cb, bool fShrink)
     Return a locked pointer into the byte stream.  The stream is stored
     contiguously.
 ***************************************************************************/
-void *BSM::PvLock(long ib)
+void *BSM::PvLock(int32_t ib)
 {
     AssertThis(0);
     AssertIn(ib, 0, _ibMac + 1);
@@ -91,7 +91,7 @@ void BSM::Unlock(void)
 /***************************************************************************
     Fetch some bytes from the stream.
 ***************************************************************************/
-void BSM::FetchRgb(long ib, long cb, void *prgb)
+void BSM::FetchRgb(int32_t ib, int32_t cb, void *prgb)
 {
     AssertThis(0);
     AssertIn(ib, 0, _ibMac + 1);
@@ -106,19 +106,19 @@ void BSM::FetchRgb(long ib, long cb, void *prgb)
     Replace the range [ib,ib + cbDel) with cbIns bytes from prgb.  If cbIns
     is zero, prgb may be nil.
 ***************************************************************************/
-bool BSM::FReplace(const void *prgb, long cbIns, long ib, long cbDel)
+bool BSM::FReplace(const void *prgb, int32_t cbIns, int32_t ib, int32_t cbDel)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cbIns, 0, kcbMax);
     AssertPvCb(prgb, cbIns);
     AssertIn(ib, 0, _ibMac + 1);
     AssertIn(cbDel, 0, _ibMac + 1 - ib);
-    byte *qrgb;
+    uint8_t *qrgb;
 
     if (!_FEnsureSize(_ibMac + cbIns - cbDel, fFalse))
         return fFalse;
 
-    qrgb = (byte *)QvFromHq(_hqrgb);
+    qrgb = (uint8_t *)QvFromHq(_hqrgb);
     if (ib < _ibMac - cbDel && cbDel != cbIns)
         BltPb(qrgb + ib + cbDel, qrgb + ib + cbIns, _ibMac - cbDel - ib);
     if (cbIns > 0)
@@ -131,7 +131,7 @@ bool BSM::FReplace(const void *prgb, long cbIns, long ib, long cbDel)
 /***************************************************************************
     Write the byte stream to a file.
 ***************************************************************************/
-bool BSM::FWriteRgb(PFLO pflo, long ib)
+bool BSM::FWriteRgb(PFLO pflo, int32_t ib)
 {
     AssertThis(0);
     AssertPo(pflo, 0);
@@ -143,7 +143,7 @@ bool BSM::FWriteRgb(PFLO pflo, long ib)
 /***************************************************************************
     Write the byte stream to a block.
 ***************************************************************************/
-bool BSM::FWriteRgb(PBLCK pblck, long ib)
+bool BSM::FWriteRgb(PBLCK pblck, int32_t ib)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pblck, 0);
@@ -166,11 +166,11 @@ bool BSM::FWriteRgb(PBLCK pblck, long ib)
     Make sure the hq is at least cbMin bytes.  If fShrink is true, make the
     hq exactly cbMin bytes long.
 ***************************************************************************/
-bool BSM::_FEnsureSize(long cbMin, bool fShrink)
+bool BSM::_FEnsureSize(int32_t cbMin, bool fShrink)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cbMin, 0, kcbMax);
-    long cb = hqNil == _hqrgb ? 0 : CbOfHq(_hqrgb);
+    int32_t cb = hqNil == _hqrgb ? 0 : CbOfHq(_hqrgb);
 
     if (cbMin <= cb && (!fShrink || cbMin == cb))
         return fTrue;
@@ -196,7 +196,7 @@ bool BSM::_FEnsureSize(long cbMin, bool fShrink)
 /***************************************************************************
     Assert the validity of a byte stream (BSF).
 ***************************************************************************/
-void BSM::AssertValid(ulong grf)
+void BSM::AssertValid(uint32_t grf)
 {
     BSM_PAR::AssertValid(grf);
     AssertIn(_ibMac, 0, kcbMax);
@@ -237,7 +237,7 @@ BSF::BSF(void)
 BSF::~BSF(void)
 {
     AssertThis(fobjAssertFull);
-    long iflo;
+    int32_t iflo;
     FLO flo;
 
     if (0 < _ibMac)
@@ -257,13 +257,13 @@ BSF::~BSF(void)
     Find the flo that contains the given ib and assign *pib the postion
     of the first byte in the flo and *pcb the size of the flo.
 ***************************************************************************/
-long BSF::_IfloFind(long ib, long *pib, long *pcb)
+int32_t BSF::_IfloFind(int32_t ib, int32_t *pib, int32_t *pcb)
 {
     AssertBaseThis(0);
     AssertIn(ib, 0, _ibMac + 1);
     AssertVarMem(pib);
     AssertNilOrVarMem(pcb);
-    long iflo, cb;
+    int32_t iflo, cb;
     FLO flo;
 
     iflo = 0;
@@ -291,12 +291,12 @@ long BSF::_IfloFind(long ib, long *pib, long *pcb)
 /***************************************************************************
     Make sure ib is on a piece boundary.
 ***************************************************************************/
-bool BSF::_FEnsureSplit(long ib, long *piflo)
+bool BSF::_FEnsureSplit(int32_t ib, int32_t *piflo)
 {
     AssertBaseThis(0);
     AssertIn(ib, 0, _ibMac + 1);
     AssertNilOrVarMem(piflo);
-    long iflo, ibMin, cbT;
+    int32_t iflo, ibMin, cbT;
     FLO flo;
 
     if (pvNil == _pggflo)
@@ -350,12 +350,12 @@ bool BSF::_FEnsureSplit(long ib, long *piflo)
     Enumerate over all pieces spanning ibMin to ibLim and attempt to merge
     any adjacent ones.
 ***************************************************************************/
-void BSF::_AttemptMerge(long ibMin, long ibLim)
+void BSF::_AttemptMerge(int32_t ibMin, int32_t ibLim)
 {
     AssertBaseThis(0);
     AssertIn(ibMin, 0, _ibMac + 1);
     AssertIn(ibLim, ibMin, _ibMac + 1);
-    long iflo, ib;
+    int32_t iflo, ib;
     FLO flo, floT;
 
     if (pvNil == _pggflo)
@@ -392,7 +392,7 @@ void BSF::_AttemptMerge(long ibMin, long ibLim)
     Replace a range in this bsf with the range in the given bsf.  This
     does the complete insertion, then the deletion.
 ***************************************************************************/
-bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbDel)
+bool BSF::FReplaceBsf(PBSF pbsfSrc, int32_t ibSrc, int32_t cbSrc, int32_t ibDst, int32_t cbDel)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pbsfSrc, 0);
@@ -401,11 +401,11 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
     AssertIn(ibDst, 0, _ibMac + 1);
     AssertIn(cbDel, 0, _ibMac + 1 - ibDst);
 
-    long ifloMinSrc, ifloLimSrc, ifloMinWhole, ifloDst, iflo;
-    long ibMinSrc, ibLimSrc, ibMinWhole, ib;
-    long cbMinFlo, cbLimFlo, cbIns, cbT;
+    int32_t ifloMinSrc, ifloLimSrc, ifloMinWhole, ifloDst, iflo;
+    int32_t ibMinSrc, ibLimSrc, ibMinWhole, ib;
+    int32_t cbMinFlo, cbLimFlo, cbIns, cbT;
     FLO flo;
-    byte *pb;
+    uint8_t *pb;
     bool fRet;
 
     // REVIEW shonk: if we're only inserting a non-file piece of pbsfSrc, should
@@ -464,7 +464,7 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
             if (pvNil == flo.pfil)
             {
                 // a memory piece
-                pb = (byte *)pbsfSrc->_pggflo->PvLock(ifloMinSrc);
+                pb = (uint8_t *)pbsfSrc->_pggflo->PvLock(ifloMinSrc);
                 fRet = FReplace(pb + ibSrc - ibMinSrc, cbT, ibDst, 0);
                 pbsfSrc->_pggflo->Unlock();
             }
@@ -498,7 +498,7 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
             if (pvNil == flo.pfil)
             {
                 // a memory piece
-                pb = (byte *)pbsfSrc->_pggflo->PvLock(ifloLimSrc);
+                pb = (uint8_t *)pbsfSrc->_pggflo->PvLock(ifloLimSrc);
                 fRet = FReplace(pb + ib - ibLimSrc, cbT, ibDst + cbIns, cbDel);
                 pbsfSrc->_pggflo->Unlock();
             }
@@ -532,15 +532,15 @@ bool BSF::FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbD
 /***************************************************************************
     Replace the range [ib, ib + cbDel) with cbIns bytes from prgb.
 ***************************************************************************/
-bool BSF::FReplace(const void *prgb, long cbIns, long ib, long cbDel)
+bool BSF::FReplace(const void *prgb, int32_t cbIns, int32_t ib, int32_t cbDel)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ib, 0, _ibMac + 1);
     AssertIn(cbDel, 0, _ibMac - ib + 1);
     AssertIn(cbIns, 0, kcbMax);
     AssertPvCb(prgb, cbIns);
-    long ibT;
-    long iflo, cbT;
+    int32_t ibT;
+    int32_t iflo, cbT;
     FLO flo;
 
     if (cbDel == 0 && cbIns == 0)
@@ -673,13 +673,13 @@ LTryMerge:
 /***************************************************************************
     Replace the range [ib, ib + cbDel) with the flo.
 ***************************************************************************/
-bool BSF::FReplaceFlo(PFLO pflo, bool fCopy, long ib, long cbDel)
+bool BSF::FReplaceFlo(PFLO pflo, bool fCopy, int32_t ib, int32_t cbDel)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pflo, ffloReadable);
     AssertIn(ib, 0, _ibMac + 1);
     AssertIn(cbDel, 0, _ibMac - ib + 1);
-    long iflo;
+    int32_t iflo;
     FLO flo;
     bool fRet;
 
@@ -740,13 +740,13 @@ bool BSF::FReplaceFlo(PFLO pflo, bool fCopy, long ib, long cbDel)
 /***************************************************************************
     Fetch cb bytes from position ib into prgb.
 ***************************************************************************/
-void BSF::FetchRgb(long ib, long cb, void *prgb)
+void BSF::FetchRgb(int32_t ib, int32_t cb, void *prgb)
 {
     AssertThis(fobjAssertFull);
     AssertIn(ib, 0, _ibMac + 1);
     AssertIn(cb, 0, _ibMac - ib + 1);
     AssertPvCb(prgb, cb);
-    long iflo, cbT, ibMin;
+    int32_t iflo, cbT, ibMin;
     FLO flo;
 
     iflo = _IfloFind(ib, &ibMin);
@@ -783,7 +783,7 @@ void BSF::FetchRgb(long ib, long cb, void *prgb)
 /***************************************************************************
     Write a portion of a BSF to the given flo.
 ***************************************************************************/
-bool BSF::FWriteRgb(PFLO pflo, long ib)
+bool BSF::FWriteRgb(PFLO pflo, int32_t ib)
 {
     AssertThis(0);
     AssertPo(pflo, 0);
@@ -795,16 +795,16 @@ bool BSF::FWriteRgb(PFLO pflo, long ib)
 /***************************************************************************
     Write a portion of a BSF to the given block.
 ***************************************************************************/
-bool BSF::FWriteRgb(PBLCK pblck, long ib)
+bool BSF::FWriteRgb(PBLCK pblck, int32_t ib)
 {
     AssertThis(fobjAssertFull);
     AssertPo(pblck, 0);
     AssertIn(ib, 0, _ibMac + 1);
     AssertIn(pblck->Cb(), 0, kcbMax);
-    long iflo;
+    int32_t iflo;
     FLO flo;
-    long cb, ibT, ibDst;
-    long cbWrite = pblck->Cb();
+    int32_t cb, ibT, ibDst;
+    int32_t cbWrite = pblck->Cb();
     bool fRet = fTrue;
 
     if (ib + cbWrite > _ibMac)
@@ -894,7 +894,7 @@ LShrinkGg:
 /***************************************************************************
     Assert the validity of a byte stream (BSF).
 ***************************************************************************/
-void BSF::AssertValid(ulong grfobj)
+void BSF::AssertValid(uint32_t grfobj)
 {
     BSF_PAR::AssertValid(grfobj);
     if (pvNil == _pggflo)
@@ -906,7 +906,7 @@ void BSF::AssertValid(ulong grfobj)
     if (!(grfobj & fobjAssertFull))
         return;
 
-    long cb, cbT, iflo;
+    int32_t cb, cbT, iflo;
     FLO flo;
 
     for (cb = 0, iflo = _pggflo->IvMac(); iflo-- > 0;)

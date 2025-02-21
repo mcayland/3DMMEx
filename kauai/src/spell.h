@@ -61,18 +61,18 @@ class SPLC : public SPLC_PAR
     bool _fSplidValid : 1;
     bool _fMdrsValid : 1;
     bool _fUdrValid : 1;
-    ulong _splid;
+    uint32_t _splid;
     SC_MDRS _mdrs;
     SC_UDR _udr;
 
     achar _rgchSuggest[512];
-    long _ichSuggest;
+    int32_t _ichSuggest;
 
 #ifdef WIN
     HINSTANCE _hlib;
 
     SC_SEC(__cdecl *_pfnInit)(SC_SPLID *psplid, SC_WSC *pwsc);
-    SC_SEC(__cdecl *_pfnOptions)(SC_SPLID splid, long grfso);
+    SC_SEC(__cdecl *_pfnOptions)(SC_SPLID splid, int32_t grfso);
     SC_SEC(__cdecl *_pfnCheck)(SC_SPLID splid, SC_CC sccc, LPSC_SIB psib, LPSC_SRB psrb);
     SC_SEC(__cdecl *_pfnTerminate)(SC_SPLID splid, SC_BOOL fForce);
     SC_SEC(__cdecl *_pfnOpenMdr)
@@ -88,7 +88,7 @@ class SPLC : public SPLC_PAR
 
     // SC_SEC SpellVer(SC_WORD *pwVer, SC_WORD *pwEngine, SC_WORD *pwType);
     SC_SEC SpellInit(SC_SPLID *psplid, SC_WSC *pwsc);
-    SC_SEC SpellOptions(SC_SPLID splid, long grfso);
+    SC_SEC SpellOptions(SC_SPLID splid, int32_t grfso);
     SC_SEC SpellCheck(SC_SPLID splid, SC_CC sccc, LPSC_SIB psib, LPSC_SRB psrb);
     SC_SEC SpellTerminate(SC_SPLID splid, SC_BOOL fForce);
     // SC_SEC SpellVerifyMdr(LPSC_PATH ppath, SC_LID lidExpected, SC_LID *plid);
@@ -119,9 +119,9 @@ class SPLC : public SPLC_PAR
     ~SPLC(void);
     static PSPLC PsplcNew(SC_LID sclid, PSTN pstnCustom = pvNil);
 
-    virtual bool FSetOptions(ulong grfsplc);
-    virtual bool FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PSTN pstn, long *pscrs);
-    virtual bool FSuggest(achar *prgch, long cch, bool fFirst, PSTN pstn);
+    virtual bool FSetOptions(uint32_t grfsplc);
+    virtual bool FCheck(achar *prgch, int32_t cch, int32_t *pichMinBad, int32_t *pichLimBad, PSTN pstn, int32_t *pscrs);
+    virtual bool FSuggest(achar *prgch, int32_t cch, bool fFirst, PSTN pstn);
 
     virtual bool FIgnoreAll(PSTN pstn);
     virtual bool FChange(PSTN pstnSrc, PSTN pstnDst, bool fAll);

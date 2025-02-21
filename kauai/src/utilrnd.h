@@ -29,11 +29,11 @@ class RND : public RND_PAR
     NOCOPY(RND)
 
   protected:
-    ulong _luSeed;
+    uint32_t _luSeed;
 
   public:
-    RND(ulong luSeed = 0L);
-    virtual long LwNext(long lwLim);
+    RND(uint32_t luSeed = 0L);
+    virtual int32_t LwNext(int32_t lwLim);
 };
 
 /***************************************************************************
@@ -50,21 +50,21 @@ class SFL : public SFL_PAR
     NOCOPY(SFL)
 
   protected:
-    long _clw;
-    long _ilw;
+    int32_t _clw;
+    int32_t _ilw;
     HQ _hqrglw;
     bool _fCustom; // false iff the values in the hq are [0, _clw)
 
-    bool _FEnsureHq(long clw);
+    bool _FEnsureHq(int32_t clw);
     void _ShuffleCore(void);
 
   public:
-    SFL(ulong luSeed = 0L);
+    SFL(uint32_t luSeed = 0L);
     ~SFL(void);
-    void Shuffle(long lwLim);
-    void ShuffleRglw(long clw, long *prglw);
+    void Shuffle(int32_t lwLim);
+    void ShuffleRglw(int32_t clw, int32_t *prglw);
 
-    virtual long LwNext(long lwLim = 0);
+    virtual int32_t LwNext(int32_t lwLim = 0);
 };
 
 #endif // UTILRND_H

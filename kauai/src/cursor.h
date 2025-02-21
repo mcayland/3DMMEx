@@ -24,13 +24,13 @@ enum
 // cursor on file - stored in a GG with the rgb's in the variable part
 struct CURF
 {
-    long curt; // type of cursor
-    byte xp;   // hot spot
-    byte yp;
-    byte dxp; // size - either 16 or 32 and they should match
-    byte dyp;
-    // byte rgbAnd[];
-    // byte rgbXor[];
+    int32_t curt; // type of cursor
+    uint8_t xp;   // hot spot
+    uint8_t yp;
+    uint8_t dxp; // size - either 16 or 32 and they should match
+    uint8_t dyp;
+    // uint8_t rgbAnd[];
+    // uint8_t rgbXor[];
 };
 VERIFY_STRUCT_SIZE(CURF, 8);
 const BOM kbomCurf = 0xC0000000;
@@ -57,7 +57,7 @@ class CURS : public CURS_PAR
     ~CURS(void);
 
   public:
-    static bool FReadCurs(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadCurs(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, int32_t *pcb);
 
     void Set(void);
 };

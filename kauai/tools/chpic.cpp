@@ -57,7 +57,7 @@ PDDG DOCPIC::PddgNew(PGCB pgcb)
 /***************************************************************************
     Return the size of the thing on file.
 ***************************************************************************/
-long DOCPIC::_CbOnFile(void)
+int32_t DOCPIC::_CbOnFile(void)
 {
     return _ppic->CbOnFile();
 }
@@ -89,7 +89,7 @@ bool DOCPIC::_FRead(PBLCK pblck)
 /***************************************************************************
     Assert the validity of a DOCPIC.
 ***************************************************************************/
-void DOCPIC::AssertValid(ulong grf)
+void DOCPIC::AssertValid(uint32_t grf)
 {
     DOCPIC_PAR::AssertValid(0);
     AssertPo(_ppic, 0);
@@ -162,7 +162,7 @@ void DCPIC::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Assert the validity of a DCPIC.
 ***************************************************************************/
-void DCPIC::AssertValid(ulong grf)
+void DCPIC::AssertValid(uint32_t grf)
 {
     DCPIC_PAR::AssertValid(0);
     AssertPo(_ppic, 0);

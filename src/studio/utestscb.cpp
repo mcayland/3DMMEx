@@ -94,7 +94,7 @@ PMSCB MSCB::PmscbNew(PMVIE pmvie, PGCB pgcb)
  ****************************************************/
 bool MSCB::FCmdScroll(PCMD pcmd)
 {
-    long hid, val, dval;
+    int32_t hid, val, dval;
     bool fUp, fPage;
     PSCB pscb;
 
@@ -338,7 +338,7 @@ void MSCB::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void MSCB::AssertValid(ulong grf)
+void MSCB::AssertValid(uint32_t grf)
 {
     MSCB_PAR::AssertValid(fobjAllocated);
 }

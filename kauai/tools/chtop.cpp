@@ -182,7 +182,7 @@ bool HEDO::FGetFniSave(FNI *pfni)
 void HEDO::InvalAllDdg(CNO cno)
 {
     AssertThis(0);
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
 
     // mark the document dirty
@@ -247,7 +247,7 @@ void HEDO::DoFindNext(PHETD phetd, CNO cno, bool fAdvance)
     AssertThis(0);
     AssertNilOrPo(phetd, 0);
     Assert(pvNil == phetd || phetd->PdocbPar() == this, "bad topic doc");
-    long cpMin, cpLim;
+    int32_t cpMin, cpLim;
     STN stn;
     PHETG phetg;
     PHETD phetdT;
@@ -318,7 +318,7 @@ PHETD HEDO::PhetdOpenNext(PHETD phetd)
     AssertThis(0);
     AssertNilOrPo(phetd, 0);
     Assert(pvNil == phetd || phetd->PdocbPar() == this, "bad topic doc");
-    long icki;
+    int32_t icki;
     CKI cki;
     PDOCB pdocb;
 
@@ -381,7 +381,7 @@ PHETD HEDO::PhetdOpenPrev(PHETD phetd)
     AssertThis(0);
     AssertNilOrPo(phetd, 0);
     Assert(pvNil == phetd || phetd->PdocbPar() == this, "bad topic doc");
-    long icki;
+    int32_t icki;
     CKI cki;
     PDOCB pdocb;
     PHETD phetdNew;
@@ -425,7 +425,7 @@ PHETD HEDO::PhetdOpenPrev(PHETD phetd)
 /***************************************************************************
     Assert the validity of the HEDO.
 ***************************************************************************/
-void HEDO::AssertValid(ulong grf)
+void HEDO::AssertValid(uint32_t grf)
 {
     HEDO_PAR::AssertValid(grf);
     AssertPo(_pcfl, 0);
@@ -457,7 +457,7 @@ void TSEL::_SetNil(void)
     Set the selection to the given line.  Return true iff the resulting
     selection is not nil.
 ***************************************************************************/
-bool TSEL::FSetIcki(long icki)
+bool TSEL::FSetIcki(int32_t icki)
 {
     AssertThis(0);
     CKI cki;
@@ -496,7 +496,7 @@ bool TSEL::FSetCno(CNO cno)
 void TSEL::Adjust(void)
 {
     AssertPo(_pcfl, 0);
-    long dicki;
+    int32_t dicki;
 
     if (ivNil == _icki || !_pcfl->FGetIcki(kctgHelpTopic, _cno, &_icki))
         _SetNil();
@@ -509,7 +509,7 @@ void TSEL::Adjust(void)
 /***************************************************************************
     Assert the validity of the sel.
 ***************************************************************************/
-void TSEL::AssertValid(ulong grf)
+void TSEL::AssertValid(uint32_t grf)
 {
     TSEL_PAR::AssertValid(0);
     AssertPo(_pcfl, 0);
@@ -578,7 +578,7 @@ void HEDG::_Activate(bool fActive)
 void HEDG::InvalCno(CNO cno)
 {
     AssertThis(0);
-    long icki, ickiT;
+    int32_t icki, ickiT;
     RC rc;
 
     // we need to recalculate the lnLim
@@ -615,8 +615,8 @@ void HEDG::Draw(PGNV pgnv, RC *prcClip)
     AssertVarMem(prcClip);
     STN stn, stnT;
     RC rc;
-    long yp, xp;
-    long icki;
+    int32_t yp, xp;
+    int32_t icki;
     CKI cki;
 
     pgnv->ClipRc(prcClip);
@@ -656,7 +656,7 @@ void HEDG::_DrawSel(PGNV pgnv)
     AssertThis(0);
     AssertPo(pgnv, 0);
     RC rc;
-    long icki;
+    int32_t icki;
 
     if (ivNil == (icki = _tsel.Icki()))
         return;
@@ -673,7 +673,7 @@ void HEDG::_DrawSel(PGNV pgnv)
     this uses the cno, otherwise it uses the icki.  If both are nil, it
     clears the selection.
 ***************************************************************************/
-void HEDG::_SetSel(long icki, CNO cno)
+void HEDG::_SetSel(int32_t icki, CNO cno)
 {
     AssertThis(0);
 
@@ -707,7 +707,7 @@ void HEDG::_ShowSel(void)
 {
     AssertThis(0);
     RC rc;
-    long icki, ccki;
+    int32_t icki, ccki;
 
     if (ivNil == (icki = _tsel.Icki()))
         return;
@@ -726,10 +726,10 @@ void HEDG::_ShowSel(void)
 /***************************************************************************
     Handle a mouse down in our content.
 ***************************************************************************/
-void HEDG::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void HEDG::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
-    long icki, ickiNew;
+    int32_t icki, ickiNew;
 
     if (ivNil != (ickiNew = _IckiFromYp(yp)))
     {
@@ -754,7 +754,7 @@ void HEDG::MouseDown(long xp, long yp, long cact, ulong grfcust)
 bool HEDG::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
-    long icki, ccki, ickiNew, cckiPage;
+    int32_t icki, ccki, ickiNew, cckiPage;
     RC rc;
 
     icki = _tsel.Icki();
@@ -822,7 +822,7 @@ bool HEDG::FCmdKey(PCMD_KEY pcmd)
 /***************************************************************************
     Return the maximum for the indicated scroll bar.
 ***************************************************************************/
-long HEDG::_ScvMax(bool fVert)
+int32_t HEDG::_ScvMax(bool fVert)
 {
     AssertThis(0);
     if (fVert)
@@ -838,7 +838,7 @@ long HEDG::_ScvMax(bool fVert)
 /***************************************************************************
     Handle enabling/disabling HEDG commands.
 ***************************************************************************/
-bool HEDG::FEnableHedgCmd(PCMD pcmd, ulong *pgrfeds)
+bool HEDG::FEnableHedgCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
@@ -991,13 +991,13 @@ void HEDG::_ClearSel(void)
 /***************************************************************************
     Paste all the topics of the given document into the current document.
 ***************************************************************************/
-bool HEDG::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool HEDG::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     AssertThis(0);
     AssertPo(pclip, 0);
     PHEDO phedo;
     PCFL pcfl;
-    long icki;
+    int32_t icki;
     CKI cki;
     CNO cnoSel;
     bool fFailed = fFalse;
@@ -1047,7 +1047,7 @@ void HEDG::_GetContent(RC *prc)
     Return the icki that corresponds with the given yp value.  If yp is in
     the header, returns ivNil.
 ***************************************************************************/
-long HEDG::_IckiFromYp(long yp)
+int32_t HEDG::_IckiFromYp(int32_t yp)
 {
     AssertThis(0);
     if (yp < _dypHeader)
@@ -1058,12 +1058,12 @@ long HEDG::_IckiFromYp(long yp)
 /***************************************************************************
     Perform a scroll according to scaHorz and scaVert.
 ***************************************************************************/
-void HEDG::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
+void HEDG::_Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz, int32_t scvVert)
 {
     AssertThis(0);
     RC rc;
-    long dscvHorz, dscvVert;
-    long dxp, dyp;
+    int32_t dscvHorz, dscvVert;
+    int32_t dxp, dyp;
 
     _GetContent(&rc);
     dscvHorz = dscvVert = 0;
@@ -1123,7 +1123,7 @@ void HEDG::_Scroll(long scaHorz, long scaVert, long scvHorz, long scvVert)
 /***************************************************************************
     Move the bits in the window.
 ***************************************************************************/
-void HEDG::_ScrollDxpDyp(long dxp, long dyp)
+void HEDG::_ScrollDxpDyp(int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     RC rc;
@@ -1170,9 +1170,9 @@ bool HEDG::FCmdPrint(PCMD pcmd)
     AssertVarMem(pcmd);
 
 #ifdef WIN
-    const long kdypFontTitle = 9;
-    const long kdzpBox = 2;
-    long icki;
+    const int32_t kdypFontTitle = 9;
+    const int32_t kdzpBox = 2;
+    int32_t icki;
     CKI cki;
     PDOCB pdocb;
     PRINTDLG pd;
@@ -1180,18 +1180,18 @@ bool HEDG::FCmdPrint(PCMD pcmd)
     STN stn, stnT;
     STN stnDoc;
     RC rcPage, rcSrc, rcDst, rcT;
-    long onnDef;
-    long yp, ypTopic;
-    long dxpTopic;
-    long dypLine, dyp;
-    long ilin;
+    int32_t onnDef;
+    int32_t yp, ypTopic;
+    int32_t dxpTopic;
+    int32_t dypLine, dyp;
+    int32_t ilin;
     HTOP htop;
 
     PHETD phetd = pvNil;
     PHETG phetg = pvNil;
     PGPT pgpt = pvNil;
     PGNV pgnv = pvNil;
-    long lwPage = 1;
+    int32_t lwPage = 1;
     bool fInPage = fFalse;
     PHEDO phedo = Phedo();
 
@@ -1413,7 +1413,7 @@ bool HEDG::FCmdPrint(PCMD pcmd)
 /***************************************************************************
     Print the page number and document name.
 ***************************************************************************/
-void HEDG::_StartPage(PGNV pgnv, PSTN pstnDoc, long lwPage, RC *prcPage, long onn)
+void HEDG::_StartPage(PGNV pgnv, PSTN pstnDoc, int32_t lwPage, RC *prcPage, int32_t onn)
 {
     STN stn;
 
@@ -1437,10 +1437,10 @@ bool HEDG::FCmdCheckSpelling(PCMD pcmd)
 #ifdef SPELL
     CNO cno;
     PDMD pdmd;
-    long cactT;
+    int32_t cactT;
     PHETD phetd, phetdT;
     PHETG phetg;
-    long cactTotal = 0;
+    int32_t cactTotal = 0;
     bool fContinue = fTrue;
     PHEDO phedo = Phedo();
 
@@ -1521,18 +1521,18 @@ bool HEDG::FCmdDump(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    const long kcchMax = 1024;
+    const int32_t kcchMax = 1024;
     achar rgch[kcchMax];
-    const long kcchEop = MacWin(1, 2);
+    const int32_t kcchEop = MacWin(1, 2);
     achar rgchEop[] = {kchReturn, kchLineFeed};
-    long icki;
+    int32_t icki;
     CKI cki;
     PDOCB pdocb;
     FNI fni;
     PFIL pfil;
-    long cpMac;
-    long cp;
-    long cch;
+    int32_t cpMac;
+    int32_t cp;
+    int32_t cch;
     bool fFirst;
     FP fpCur;
 
@@ -1617,7 +1617,7 @@ bool HEDG::FCmdDump(PCMD pcmd)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void HEDG::AssertValid(ulong grf)
+void HEDG::AssertValid(uint32_t grf)
 {
     HEDG_PAR::AssertValid(0);
     AssertPo(&_tsel, 0);
@@ -1792,7 +1792,7 @@ void HETD::GetName(PSTN pstn)
     Save the document.  Handles only cidSave.  Asserts on cidSaveAs and
     cidSaveCopy.
 ***************************************************************************/
-bool HETD::FSave(long cid)
+bool HETD::FSave(int32_t cid)
 {
     AssertThis(0);
     CKI cki;
@@ -1871,7 +1871,7 @@ PDMD HETD::PdmdNew(void)
     PDMD pdmd;
     PGOB pgob;
     RC rcRel, rcAbs;
-    long dxpLig, ypT;
+    int32_t dxpLig, ypT;
     GCB gcb;
 
     if (pvNil == (pdmd = HETD_PAR::PdmdNew()))
@@ -1963,7 +1963,7 @@ void HETD::EditHtop(void)
 {
     AssertThis(0);
     PDLG pdlg;
-    long dxp;
+    int32_t dxp;
     STN stn;
 
     if (pvNil == (pdlg = DLG::PdlgNew(dlidTopicInfo)))
@@ -2021,13 +2021,13 @@ void HETD::EditHtop(void)
         return;
     }
 
-    if (!pdlg->FGetLwFromEdit(kiditBalnTopic, (long *)&_htop.cnoBalloon))
+    if (!pdlg->FGetLwFromEdit(kiditBalnTopic, (int32_t *)&_htop.cnoBalloon))
         _htop.cnoBalloon = cnoNil;
     if (!pdlg->FGetLwFromEdit(kiditHidTopic, &_htop.hidThis))
         _htop.hidThis = hidNil;
     if (!pdlg->FGetLwFromEdit(kiditHidTargetTopic, &_htop.hidTarget))
         _htop.hidTarget = hidNil;
-    if (!pdlg->FGetLwFromEdit(kiditScriptTopic, (long *)&_htop.cnoScript))
+    if (!pdlg->FGetLwFromEdit(kiditScriptTopic, (int32_t *)&_htop.cnoScript))
         _htop.cnoScript = cnoNil;
     if (!pdlg->FGetLwFromEdit(kiditDxpTopic, &_htop.dxp))
         _htop.dxp = 0;
@@ -2036,7 +2036,7 @@ void HETD::EditHtop(void)
     if (pdlg->FGetLwFromEdit(kiditWidthTopic, &dxp) && FIn(dxp, 1, kcbMax))
         SetDxpDef(dxp);
 
-    if (!pdlg->FGetLwFromEdit(kiditCnoSoundTopic, (long *)&_htop.ckiSnd.cno))
+    if (!pdlg->FGetLwFromEdit(kiditCnoSoundTopic, (int32_t *)&_htop.ckiSnd.cno))
     {
         _htop.ckiSnd.cno = cnoNil;
         _htop.ckiSnd.ctg = kctgWave;
@@ -2057,7 +2057,7 @@ void HETD::EditHtop(void)
             stn.GetRgch(rgch);
 
             // first character becomes the high byte
-            _htop.ckiSnd.ctg = LwFromBytes((byte)rgch[0], (byte)rgch[1], (byte)rgch[2], (byte)rgch[3]);
+            _htop.ckiSnd.ctg = LwFromBytes((uint8_t)rgch[0], (uint8_t)rgch[1], (uint8_t)rgch[2], (uint8_t)rgch[3]);
         }
     }
 
@@ -2088,7 +2088,7 @@ void HETD::EditHtop(void)
 /***************************************************************************
     Do a search on this topic document.
 ***************************************************************************/
-bool HETD::FDoFind(long cpMin, long *pcpMin, long *pcpLim)
+bool HETD::FDoFind(int32_t cpMin, int32_t *pcpMin, int32_t *pcpLim)
 {
     AssertThis(0);
     AssertVarMem(pcpMin);
@@ -2109,7 +2109,7 @@ bool HETD::FDoFind(long cpMin, long *pcpMin, long *pcpLim)
 /***************************************************************************
     Do a replace on this topic document.
 ***************************************************************************/
-bool HETD::FDoReplace(long cp1, long cp2, long *pcpMin, long *pcpLim)
+bool HETD::FDoReplace(int32_t cp1, int32_t cp2, int32_t *pcpMin, int32_t *pcpLim)
 {
     AssertThis(0);
     AssertVarMem(pcpMin);
@@ -2128,7 +2128,7 @@ bool HETD::FDoReplace(long cp1, long cp2, long *pcpMin, long *pcpLim)
     Get a string corresponding to an entry in the HTOP. -1 means get the
     topic description.
 ***************************************************************************/
-void HETD::GetHtopStn(long istn, PSTN pstn)
+void HETD::GetHtopStn(int32_t istn, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -2145,7 +2145,7 @@ void HETD::GetHtopStn(long istn, PSTN pstn)
 /***************************************************************************
     Assert the validity of a HETD.
 ***************************************************************************/
-void HETD::AssertValid(ulong grf)
+void HETD::AssertValid(uint32_t grf)
 {
     HETD_PAR::AssertValid(0);
     AssertNilOrPo(_pcfl, 0);
@@ -2196,7 +2196,7 @@ PHETG HETG::PhetgNew(PHETD phetd, PGCB pgcb)
 /***************************************************************************
     Return the height of the ruler.
 ***************************************************************************/
-long HETG::_DypTrul(void)
+int32_t HETG::_DypTrul(void)
 {
     AssertThis(0);
     return kdzpInch / 2 + 1;
@@ -2209,7 +2209,7 @@ PTRUL HETG::_PtrulNew(PGCB pgcb)
 {
     AssertThis(0);
     PAP pap;
-    long dyp;
+    int32_t dyp;
 
     _FetchPap(LwMin(_cpAnchor, _cpOther), &pap);
     GetNaturalSize(pvNil, &dyp);
@@ -2233,11 +2233,11 @@ bool HETG::FInsertPicture(PCRF pcrf, CTG ctg, CNO cno)
     AssertThis(0);
     AssertPo(pcrf, 0);
     Assert(ctg == kctgMbmp, "bad mbmp chunk");
-    long cpMin, cpLim;
+    int32_t cpMin, cpLim;
     PDLG pdlg;
     STN stn;
-    long cb;
-    byte rgb[kcbMaxDataStn];
+    int32_t cb;
+    uint8_t rgb[kcbMaxDataStn];
 
     pdlg = DLG::PdlgNew(dlidFormatPicture);
     if (pvNil == pdlg)
@@ -2288,16 +2288,16 @@ enum
     kiditLimButton
 };
 
-bool _FDlgFormatButton(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgFormatButton(PDLG pdlg, int32_t *pidit, void *pv);
 
 /***************************************************************************
     Dialog proc for formatting a button.
 ***************************************************************************/
-bool _FDlgFormatButton(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgFormatButton(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
-    long lw;
+    int32_t lw;
 
     switch (*pidit)
     {
@@ -2333,12 +2333,12 @@ bool HETG::FInsertButton(PCRF pcrf, CTG ctg, CNO cno)
     AssertThis(0);
     AssertPo(pcrf, 0);
     Assert(ctg == kctgGokd, "bad button chunk");
-    long cpMin, cpLim;
-    long lw;
+    int32_t cpMin, cpLim;
+    int32_t lw;
     PDLG pdlg;
     STN stn;
-    byte rgb[2 * kcbMaxDataStn];
-    long cb;
+    uint8_t rgb[2 * kcbMaxDataStn];
+    int32_t cb;
 
     pdlg = DLG::PdlgNew(dlidFormatButton, _FDlgFormatButton);
     if (pvNil == pdlg)
@@ -2392,16 +2392,16 @@ enum
     kiditLimEdit
 };
 
-bool _FDlgFormatEdit(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgFormatEdit(PDLG pdlg, int32_t *pidit, void *pv);
 
 /***************************************************************************
     Dialog proc for formatting an edit control.
 ***************************************************************************/
-bool _FDlgFormatEdit(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgFormatEdit(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);
-    long lw;
+    int32_t lw;
 
     switch (*pidit)
     {
@@ -2436,7 +2436,7 @@ bool HETG::FCmdInsertEdit(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long cpMin, cpLim;
+    int32_t cpMin, cpLim;
     PDLG pdlg;
     ECOS ecos;
 
@@ -2488,8 +2488,8 @@ bool HETG::_FCopySel(PDOCB *ppdocb)
 
     if (pvNil != (phetd = HETD::PhetdNew(pvNil, Phetd()->Prca(), pvNil, cnoNil)))
     {
-        long cpMin = LwMin(_cpAnchor, _cpOther);
-        long cpLim = LwMax(_cpAnchor, _cpOther);
+        int32_t cpMin = LwMin(_cpAnchor, _cpOther);
+        int32_t cpLim = LwMax(_cpAnchor, _cpOther);
 
         phetd->SetInternal();
         phetd->SuspendUndo();
@@ -2509,14 +2509,14 @@ bool HETG::_FCopySel(PDOCB *ppdocb)
     Draw extra stuff for the line. In our case we put a box around grouped
     text.
 ***************************************************************************/
-void HETG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, long dxp, long yp, ulong grftxtg)
+void HETG::_DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, int32_t dxp, int32_t yp, uint32_t grftxtg)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
     AssertVarMem(plin);
-    long cp, cpLimBox;
-    long cpLim = plin->cpMin + plin->ccp;
+    int32_t cp, cpLimBox;
+    int32_t cpLim = plin->cpMin + plin->ccp;
     PHETD phetd = Phetd();
     RC rc;
 
@@ -2571,12 +2571,12 @@ bool HETG::FCmdGroupText(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long cpAnchor, cpOther;
+    int32_t cpAnchor, cpOther;
     PDLG pdlg;
     CNO cnoTopic;
     STN stnTopic;
-    byte bGroup;
-    long lw;
+    uint8_t bGroup;
+    int32_t lw;
 
     if (_cpAnchor == _cpOther)
         return fTrue;
@@ -2586,7 +2586,7 @@ bool HETG::FCmdGroupText(PCMD pcmd)
     if (pvNil == pdlg)
         goto LCancel;
     Phetd()->FGrouped(LwMin(_cpAnchor, _cpOther), pvNil, pvNil, &bGroup, &cnoTopic, &stnTopic);
-    pdlg->FPutLwInEdit(kiditLwGroupText, (long)bGroup);
+    pdlg->FPutLwInEdit(kiditLwGroupText, (int32_t)bGroup);
     pdlg->FPutLwInEdit(kiditTopicGroupText, cnoTopic);
     _TokenizeStn(&stnTopic);
     pdlg->FPutStn(kiditTopicStnGroupText, &stnTopic);
@@ -2600,7 +2600,7 @@ bool HETG::FCmdGroupText(PCMD pcmd)
         vpappb->TGiveAlertSz(PszLit("Group number must be between 0 and 255!"), bkOk, cokExclamation);
         lw = 0;
     }
-    bGroup = (byte)lw;
+    bGroup = (uint8_t)lw;
     if (bGroup != 0)
     {
         pdlg->GetStn(kiditTopicStnGroupText, &stnTopic);
@@ -2649,7 +2649,7 @@ bool HETG::FCmdLineSpacing(PCMD pcmd)
     AssertVarMem(pcmd);
     PDLG pdlg;
     PAP pap, papOld;
-    long lw;
+    int32_t lw;
 
     pdlg = DLG::PdlgNew(dlidSpacing);
     if (pvNil == pdlg)
@@ -2696,13 +2696,13 @@ bool HETG::FCmdLineSpacing(PCMD pcmd)
 /***************************************************************************
     Handle enabling/disabling HETG commands.
 ***************************************************************************/
-bool HETG::FEnableHetgCmd(PCMD pcmd, ulong *pgrfeds)
+bool HETG::FEnableHetgCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
     AssertVarMem(pgrfeds);
     void *pv;
-    long cp, cpT, cb;
+    int32_t cp, cpT, cb;
     STN stn;
 
     *pgrfeds = fedsDisable;
@@ -2762,8 +2762,8 @@ bool HETG::FCmdFormatPicture(PCMD pcmd)
     AssertVarMem(pcmd);
     void *pv;
     PDLG pdlg;
-    long cp, cpT, cb;
-    byte rgb[SIZEOF(CKI) + kcbMaxDataStn];
+    int32_t cp, cpT, cb;
+    uint8_t rgb[SIZEOF(CKI) + kcbMaxDataStn];
     STN stn;
     CKI *pcki = (CKI *)rgb;
 
@@ -2827,11 +2827,11 @@ bool HETG::FCmdFormatButton(PCMD pcmd)
     AssertVarMem(pcmd);
     void *pv;
     PDLG pdlg;
-    long cp, cpT, cb, ib, cbRead;
+    int32_t cp, cpT, cb, ib, cbRead;
     STN stn;
-    byte rgb[SIZEOF(CKI) + SIZEOF(long) + 2 * kcbMaxDataStn];
+    uint8_t rgb[SIZEOF(CKI) + SIZEOF(int32_t) + 2 * kcbMaxDataStn];
     CKI *pcki = (CKI *)rgb;
-    long *plw = (long *)(pcki + 1);
+    int32_t *plw = (int32_t *)(pcki + 1);
 
     if (LwAbs(_cpAnchor - _cpOther) > 1)
         return fTrue;
@@ -2840,7 +2840,7 @@ bool HETG::FCmdFormatButton(PCMD pcmd)
     if (!Phetd()->FFetchObject(cp, &cpT, &pv, &cb))
         return fTrue;
 
-    if (cp != cpT || !FIn(cb, SIZEOF(CKI) + SIZEOF(long), SIZEOF(rgb) + 1) || ((CKI *)pv)->ctg != kctgGokd)
+    if (cp != cpT || !FIn(cb, SIZEOF(CKI) + SIZEOF(int32_t), SIZEOF(rgb) + 1) || ((CKI *)pv)->ctg != kctgGokd)
     {
         FreePpv(&pv);
         return fFalse;
@@ -2853,7 +2853,7 @@ bool HETG::FCmdFormatButton(PCMD pcmd)
     if (pvNil == pdlg)
         return fFalse;
 
-    ib = SIZEOF(CKI) + SIZEOF(long);
+    ib = SIZEOF(CKI) + SIZEOF(int32_t);
     if (cb > ib && stn.FSetData(rgb + ib, cb - ib, &cbRead))
     {
         _TokenizeStn(&stn);
@@ -2875,7 +2875,7 @@ bool HETG::FCmdFormatButton(PCMD pcmd)
 
     pdlg->GetStn(kiditNameButton, &stn);
     _TokenizeStn(&stn);
-    ib = SIZEOF(CKI) + SIZEOF(long);
+    ib = SIZEOF(CKI) + SIZEOF(int32_t);
     stn.GetData(rgb + ib);
     ib += stn.CbData();
     pdlg->GetStn(kiditTopicNameButton, &stn);
@@ -2905,7 +2905,7 @@ bool HETG::FCmdFormatEdit(PCMD pcmd)
     AssertVarMem(pcmd);
     void *pv;
     PDLG pdlg;
-    long cp, cpT, cb;
+    int32_t cp, cpT, cb;
     ECOS ecos;
 
     if (LwAbs(_cpAnchor - _cpOther) > 1)
@@ -3017,7 +3017,7 @@ bool HETG::FCmdFind(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long cpMin, cpLim;
+    int32_t cpMin, cpLim;
     PHETD phetd;
 
     switch (pcmd->cid)
@@ -3166,7 +3166,7 @@ bool HETG::FCmdCheckSpelling(PCMD pcmd)
 
 #ifdef SPELL
     STN stn;
-    long cactChanges;
+    int32_t cactChanges;
 
     if (pvNil != vpsplc)
     {
@@ -3192,20 +3192,20 @@ bool HETG::FCmdCheckSpelling(PCMD pcmd)
 /***************************************************************************
     Spell check the topic.
 ***************************************************************************/
-bool HETG::FCheckSpelling(long *pcactChanges)
+bool HETG::FCheckSpelling(int32_t *pcactChanges)
 {
     AssertThis(0);
     AssertVarMem(pcactChanges);
 
 #ifdef SPELL
     achar rgch[1024];
-    long cpMin, cpMac;
-    long cchBuf;
-    long ichMin, ichLim;
-    long idit;
-    long cstn;
+    int32_t cpMin, cpMac;
+    int32_t cchBuf;
+    int32_t ichMin, ichLim;
+    int32_t idit;
+    int32_t cstn;
     STN stnSrc, stnDst;
-    long scrs;
+    int32_t scrs;
     PDLG pdlg = pvNil;
 
     *pcactChanges = 0;
@@ -3234,7 +3234,7 @@ bool HETG::FCheckSpelling(long *pcactChanges)
             if ((cchBuf = CvFromRgv(rgch)) + cpMin < cpMac)
             {
                 // make sure we end on a word boundary
-                long cpT = _ptxtb->CpPrev(cpMin + cchBuf, fTrue);
+                int32_t cpT = _ptxtb->CpPrev(cpMin + cchBuf, fTrue);
                 if (cpT > cpMin)
                     cchBuf = cpT - cpMin;
             }
@@ -3358,10 +3358,10 @@ bool HETG::FCheckSpelling(long *pcactChanges)
 /***************************************************************************
     Handle idle stuff - update the ruler with our new height.
 ***************************************************************************/
-void HETG::InvalCp(long cp, long ccpIns, long ccpDel)
+void HETG::InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel)
 {
     AssertThis(0);
-    long dyp;
+    int32_t dyp;
 
     HETG_PAR::InvalCp(cp, ccpIns, ccpDel);
     if (pvNil == _ptrul || !_ptrul->FIs(kclsHTRU))
@@ -3382,7 +3382,7 @@ enum
 /***************************************************************************
     Get a font size from the user.
 ***************************************************************************/
-bool HETG::_FGetOtherSize(long *pdypFont)
+bool HETG::_FGetOtherSize(int32_t *pdypFont)
 {
     AssertThis(0);
     AssertVarMem(pdypFont);
@@ -3417,7 +3417,7 @@ enum
 /***************************************************************************
     Get the amount to sub/superscript from the user.
 ***************************************************************************/
-bool HETG::_FGetOtherSubSuper(long *pdypOffset)
+bool HETG::_FGetOtherSubSuper(int32_t *pdypOffset)
 {
     AssertThis(0);
     AssertVarMem(pdypOffset);
@@ -3447,12 +3447,12 @@ bool HETG::_FGetOtherSubSuper(long *pdypOffset)
     Get the height of a particular line. Returns 0 if the line is past
     the end of the document.
 ***************************************************************************/
-long HETG::DypLine(long ilin)
+int32_t HETG::DypLine(int32_t ilin)
 {
     AssertThis(0);
     AssertIn(ilin, 0, kcbMax);
     LIN lin;
-    long ilinT;
+    int32_t ilinT;
 
     _FetchLin(ilin, &lin, &ilinT);
     if (ilin > ilinT)
@@ -3473,8 +3473,8 @@ HTRU::HTRU(GCB *pgcb, PTXTG ptxtg) : HTRU_PAR(pgcb)
 /***************************************************************************
     Create a new text ruler.
 ***************************************************************************/
-PHTRU HTRU::PhtruNew(GCB *pgcb, PTXTG ptxtg, long dxpTab, long dxpDoc, long dypDoc, long xpLeft, long onn, long dypFont,
-                     ulong grfont)
+PHTRU HTRU::PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft,
+                     int32_t onn, int32_t dypFont, uint32_t grfont)
 {
     AssertVarMem(pgcb);
     AssertPo(ptxtg, 0);
@@ -3621,7 +3621,7 @@ bool HETG::FCmdFontDialog(PCMD pcmd)
     PDLG pdlg;
     CHP chpNew, chpOld;
     STN stn;
-    long onn;
+    int32_t onn;
 
     if (pvNil == (pdlg = DLG::PdlgNew(dlidChooseFont)))
         return fTrue;
@@ -3658,7 +3658,7 @@ bool HETG::FCmdFontDialog(PCMD pcmd)
 /***************************************************************************
     Set the tab width.
 ***************************************************************************/
-void HTRU::SetDxpTab(long dxpTab)
+void HTRU::SetDxpTab(int32_t dxpTab)
 {
     AssertThis(0);
     if (dxpTab == _dxpTab)
@@ -3672,7 +3672,7 @@ void HTRU::SetDxpTab(long dxpTab)
 /***************************************************************************
     Set the document width.
 ***************************************************************************/
-void HTRU::SetDxpDoc(long dxpDoc)
+void HTRU::SetDxpDoc(int32_t dxpDoc)
 {
     AssertThis(0);
     if (dxpDoc == _dxpDoc)
@@ -3686,7 +3686,7 @@ void HTRU::SetDxpDoc(long dxpDoc)
 /***************************************************************************
     Change the location of the left edge of the document.
 ***************************************************************************/
-void HTRU::SetXpLeft(long xpLeft)
+void HTRU::SetXpLeft(int32_t xpLeft)
 {
     AssertThis(0);
     if (xpLeft == _xpLeft)
@@ -3700,7 +3700,7 @@ void HTRU::SetXpLeft(long xpLeft)
 /***************************************************************************
     Set the text height.
 ***************************************************************************/
-void HTRU::SetDypHeight(long dyp)
+void HTRU::SetDypHeight(int32_t dyp)
 {
     AssertThis(0);
     if (dyp == _dyp)
@@ -3715,7 +3715,7 @@ void HTRU::SetDypHeight(long dyp)
 /***************************************************************************
     Assert the validity of a HTRU.
 ***************************************************************************/
-void HTRU::AssertValid(ulong grf)
+void HTRU::AssertValid(uint32_t grf)
 {
     HTRU_PAR::AssertValid(0);
     AssertPo(_ptxtg, 0);
@@ -3762,12 +3762,12 @@ enum
     kiditLimFind
 };
 
-bool _FDlgFind(PDLG pdlg, long *pidit, void *pv);
+bool _FDlgFind(PDLG pdlg, int32_t *pidit, void *pv);
 
 /***************************************************************************
     Dialog proc for searching.
 ***************************************************************************/
-bool _FDlgFind(PDLG pdlg, long *pidit, void *pv)
+bool _FDlgFind(PDLG pdlg, int32_t *pidit, void *pv)
 {
     AssertPo(pdlg, 0);
     AssertVarMem(pidit);

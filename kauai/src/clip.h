@@ -37,13 +37,13 @@ class CLIP : public CLIP_PAR
     bool _fDelayImport : 1;
 
     HN _hnExport;
-    long _clfmExport;
-    long _clfmImport;
+    int32_t _clfmExport;
+    int32_t _clfmImport;
 
     void _EnsureDoc();
     void _ExportCur(void);
     void _ImportCur(void);
-    bool _FImportFormat(long clfm, void *pv = pvNil, long cb = 0, PDOCB *ppdocb = pvNil, bool *pfDelay = pvNil);
+    bool _FImportFormat(int32_t clfm, void *pv = pvNil, int32_t cb = 0, PDOCB *ppdocb = pvNil, bool *pfDelay = pvNil);
 
   public:
     CLIP(void);
@@ -52,10 +52,10 @@ class CLIP : public CLIP_PAR
     void Show(void);
 
     void Set(PDOCB pdocb = pvNil, bool fExport = fTrue);
-    bool FGetFormat(long cls, PDOCB *pdocb = pvNil);
+    bool FGetFormat(int32_t cls, PDOCB *pdocb = pvNil);
 
     bool FInitExport(void);
-    void *PvExport(long cb, long clfm);
+    void *PvExport(int32_t cb, int32_t clfm);
     void EndExport(void);
 
     void Import(void);
@@ -63,15 +63,15 @@ class CLIP : public CLIP_PAR
 
 extern PCLIP vpclip;
 
-const long clfmNil = 0;
+const int32_t clfmNil = 0;
 // REVIEW shonk: Mac unicode
-const long kclfmUniText = MacWin('WTXT', CF_UNICODETEXT);
-const long kclfmSbText = MacWin('TEXT', CF_TEXT);
+const int32_t kclfmUniText = MacWin('WTXT', CF_UNICODETEXT);
+const int32_t kclfmSbText = MacWin('TEXT', CF_TEXT);
 
 #ifdef UNICODE
-const long kclfmText = kclfmUniText;
+const int32_t kclfmText = kclfmUniText;
 #else  //! UNICODE
-const long kclfmText = kclfmSbText;
+const int32_t kclfmText = kclfmSbText;
 #endif //! UNICODE
 
 #endif //! CLIP_H

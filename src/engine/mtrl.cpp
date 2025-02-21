@@ -16,14 +16,14 @@ RTCLASS(MTRL)
 RTCLASS(CMTL)
 
 // REVIEW *****: kiclrBaseDefault and kcclrDefault are palette-specific
-const byte kiclrBaseDefault = 15; // base index of default color
-const byte kcclrDefault = 15;     // count of shades in default color
+const uint8_t kiclrBaseDefault = 15; // base index of default color
+const uint8_t kcclrDefault = 15;     // count of shades in default color
 
 const br_ufraction kbrufKaDefault = BR_UFRACTION(0.10);
 const br_ufraction kbrufKdDefault = BR_UFRACTION(0.60);
 const br_ufraction kbrufKsDefault = BR_UFRACTION(0.60);
 const BRS krPowerDefault = BR_SCALAR(50);
-const byte kbOpaque = 0xff;
+const uint8_t kbOpaque = 0xff;
 
 PTMAP MTRL::_ptmapShadeTable = pvNil; // shade table for all MTRLs
 
@@ -43,7 +43,7 @@ bool MTRL::FSetShadeTable(PCFL pcfl, CTG ctg, CNO cno)
 /***************************************************************************
     Create a new solid-color material
 ***************************************************************************/
-PMTRL MTRL::PmtrlNew(long iclrBase, long cclr)
+PMTRL MTRL::PmtrlNew(int32_t iclrBase, int32_t cclr)
 {
     if (ivNil != iclrBase)
         AssertIn(iclrBase, 0, kbMax);
@@ -65,7 +65,7 @@ PMTRL MTRL::PmtrlNew(long iclrBase, long cclr)
         ReleasePpo(&pmtrl);
         return pvNil;
     }
-    CopyPb(&pmtrl, pmtrl->_pbmtl->identifier, SIZEOF(long));
+    CopyPb(&pmtrl, pmtrl->_pbmtl->identifier, SIZEOF(int32_t));
 
     pmtrl->_pbmtl->ka = kbrufKaDefault;
     pmtrl->_pbmtl->kd = kbrufKdDefault;
@@ -74,11 +74,11 @@ PMTRL MTRL::PmtrlNew(long iclrBase, long cclr)
     if (ivNil == iclrBase)
         pmtrl->_pbmtl->index_base = kiclrBaseDefault;
     else
-        pmtrl->_pbmtl->index_base = (byte)iclrBase;
+        pmtrl->_pbmtl->index_base = (uint8_t)iclrBase;
     if (ivNil == cclr)
         pmtrl->_pbmtl->index_range = kcclrDefault;
     else
-        pmtrl->_pbmtl->index_range = (byte)cclr;
+        pmtrl->_pbmtl->index_range = (uint8_t)cclr;
     pmtrl->_pbmtl->opacity = kbOpaque; // all socrates objects are opaque
     pmtrl->_pbmtl->flags = BR_MATF_LIGHT | BR_MATF_GOURAUD;
     BrMaterialAdd(pmtrl->_pbmtl);
@@ -89,7 +89,7 @@ PMTRL MTRL::PmtrlNew(long iclrBase, long cclr)
 /***************************************************************************
     A PFNRPO to read MTRL objects.
 ***************************************************************************/
-bool MTRL::FReadMtrl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool MTRL::FReadMtrl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -146,7 +146,7 @@ bool MTRL::_FInit(PCRF pcrf, CTG ctg, CNO cno)
     _pbmtl = BrMaterialAllocate("1234");
     if (pvNil == _pbmtl)
         return fFalse;
-    CopyPb(&pmtrlThis, _pbmtl->identifier, SIZEOF(long));
+    CopyPb(&pmtrlThis, _pbmtl->identifier, SIZEOF(int32_t));
     _pbmtl->colour = mtrlf.brc;
     _pbmtl->ka = mtrlf.brufKa;
     _pbmtl->kd = mtrlf.brufKd;
@@ -231,7 +231,7 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     if (pvNil == pmtrl->_pbmtl)
         goto LFail;
     pbmtl = pmtrl->_pbmtl;
-    CopyPb(&pmtrl, pbmtl->identifier, SIZEOF(long));
+    CopyPb(&pmtrl, pbmtl->identifier, SIZEOF(int32_t));
     pbmtl->colour = 0; // this field is ignored
     pbmtl->ka = kbrufKaDefault;
     pbmtl->kd = kbrufKdDefault;
@@ -305,7 +305,7 @@ PMTRL MTRL::PmtrlFromBmtl(PBMTL pbmtl)
 {
     AssertVarMem(pbmtl);
 
-    PMTRL pmtrl = (PMTRL) * (long *)pbmtl->identifier;
+    PMTRL pmtrl = (PMTRL) * (int32_t *)pbmtl->identifier;
     AssertPo(pmtrl, 0);
     return pmtrl;
 }
@@ -395,7 +395,7 @@ MTRL::~MTRL(void)
 /***************************************************************************
     Assert the validity of the MTRL.
 ***************************************************************************/
-void MTRL::AssertValid(ulong grf)
+void MTRL::AssertValid(uint32_t grf)
 {
     MTRL_PAR::AssertValid(fobjAllocated);
 
@@ -477,11 +477,11 @@ bool CMTL::FEqualModels(PCFL pcfl, CNO cno1, CNO cno2)
 /***************************************************************************
     Create a new custom material
 ***************************************************************************/
-PCMTL CMTL::PcmtlNew(long ibset, long cbprt, PMTRL *prgpmtrl)
+PCMTL CMTL::PcmtlNew(int32_t ibset, int32_t cbprt, PMTRL *prgpmtrl)
 {
     AssertPvCb(prgpmtrl, LwMul(cbprt, SIZEOF(PMTRL)));
     PCMTL pcmtl;
-    long imtrl;
+    int32_t imtrl;
 
     pcmtl = NewObj CMTL;
     if (pvNil == pcmtl)
@@ -512,7 +512,7 @@ PCMTL CMTL::PcmtlNew(long ibset, long cbprt, PMTRL *prgpmtrl)
 /***************************************************************************
     A PFNRPO to read CMTL objects.
 ***************************************************************************/
-bool CMTL::FReadCmtl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool CMTL::FReadCmtl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -546,8 +546,8 @@ bool CMTL::_FInit(PCRF pcrf, CTG ctg, CNO cno)
     AssertBaseThis(0);
     AssertPo(pcrf, 0);
 
-    long ikid;
-    long imtrl;
+    int32_t ikid;
+    int32_t imtrl;
     KID kid;
     BLCK blck;
     PCFL pcfl = pcrf->Pcfl();
@@ -573,7 +573,7 @@ bool CMTL::_FInit(PCRF pcrf, CTG ctg, CNO cno)
     // note: there might be a faster way to compute _cbprt
     for (ikid = 0; pcfl->FGetKid(ctg, cno, ikid, &kid); ikid++)
     {
-        if ((long)kid.chid > (_cbprt - 1))
+        if ((int32_t)kid.chid > (_cbprt - 1))
             _cbprt = kid.chid + 1;
     }
     if (!FAllocPv((void **)&_prgpmtrl, LwMul(_cbprt, SIZEOF(PMTRL)), fmemClear, mprNormal))
@@ -610,7 +610,7 @@ CMTL::~CMTL(void)
 {
     AssertBaseThis(0);
 
-    long imtrl;
+    int32_t imtrl;
 
     if (pvNil != _prgpmtrl)
     {
@@ -630,7 +630,7 @@ CMTL::~CMTL(void)
 /***************************************************************************
     Return ibmtl'th BMTL
 ***************************************************************************/
-BMTL *CMTL::Pbmtl(long ibmtl)
+BMTL *CMTL::Pbmtl(int32_t ibmtl)
 {
     AssertThis(0);
     AssertIn(ibmtl, 0, _cbprt);
@@ -641,7 +641,7 @@ BMTL *CMTL::Pbmtl(long ibmtl)
 /***************************************************************************
     Return imodl'th MODL
 ***************************************************************************/
-PMODL CMTL::Pmodl(long imodl)
+PMODL CMTL::Pmodl(int32_t imodl)
 {
     AssertThis(0);
     AssertIn(imodl, 0, _cbprt);
@@ -657,7 +657,7 @@ bool CMTL::FHasModels(void)
 {
     AssertThis(0);
 
-    long imodl;
+    int32_t imodl;
 
     for (imodl = 0; imodl < _cbprt; imodl++)
     {
@@ -671,9 +671,9 @@ bool CMTL::FHasModels(void)
 /***************************************************************************
     Assert the validity of the CMTL
 ***************************************************************************/
-void CMTL::AssertValid(ulong grf)
+void CMTL::AssertValid(uint32_t grf)
 {
-    long imtrl;
+    int32_t imtrl;
 
     MTRL_PAR::AssertValid(fobjAllocated);
     AssertPvCb(_prgpmtrl, LwMul(_cbprt, SIZEOF(MTRL *)));
@@ -693,7 +693,7 @@ void CMTL::MarkMem(void)
 {
     AssertThis(0);
 
-    long imtrl;
+    int32_t imtrl;
 
     MTRL_PAR::MarkMem();
     MarkPv(_prgpmtrl);

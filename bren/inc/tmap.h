@@ -14,27 +14,27 @@ const CTG kctgTxxf = 'TXXF';
 // tmap on file
 struct TMAPF
 {
-    short bo;
-    short osk;
-    short cbRow;
-    byte type;
-    byte grftmap;
-    short xpLeft;
-    short ypTop;
-    short dxp;
-    short dyp;
-    short xpOrigin;
-    short ypOrigin;
+    int16_t bo;
+    int16_t osk;
+    int16_t cbRow;
+    uint8_t type;
+    uint8_t grftmap;
+    int16_t xpLeft;
+    int16_t ypTop;
+    int16_t dxp;
+    int16_t dyp;
+    int16_t xpOrigin;
+    int16_t ypOrigin;
     // void *rgb; 		// pixels follow immediately after TMAPF
 };
 VERIFY_STRUCT_SIZE(TMAPF, 20);
-const ulong kbomTmapf = 0x54555000;
+const uint32_t kbomTmapf = 0x54555000;
 
 /* A TeXture XransForm on File */
 typedef struct _txxff
 {
-    short bo;  // byte order
-    short osk; // OS kind
+    int16_t bo;  // byte order
+    int16_t osk; // OS kind
     BMAT23 bmat23;
 } TXXFF, *PTXXFF;
 VERIFY_STRUCT_SIZE(TXXFF, 28);
@@ -63,7 +63,7 @@ class TMAP : public TMAP_PAR
     {
     } // can't instantiate directly; must use PtmapRead
 #ifdef NOT_YET_REVIEWED
-    void TMAP::_SortInverseTable(byte *prgb, long cbRgb, BRCLR brclrLo, BRCLR brclrHi);
+    void TMAP::_SortInverseTable(uint8_t *prgb, int32_t cbRgb, BRCLR brclrLo, BRCLR brclrHi);
 #endif // NOT_YET_REVIEWED
   public:
     ~TMAP(void);
@@ -79,7 +79,7 @@ class TMAP : public TMAP_PAR
     bool FWrite(PCFL pcfl, CTG ctg, CNO *pcno);
 
     //	a chunky resource reader for a TMAP
-    static bool FReadTmap(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadTmap(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
 
     //	Given a BPMP (a Brender br_pixelmap), create a TMAP
     static PTMAP PtmapNewFromBpmp(BPMP *pbpmp);
@@ -97,10 +97,10 @@ class TMAP : public TMAP_PAR
     bool FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr = pvNil);
 
     // Creates a TMAP from the width, height, and an array of bytes
-    static PTMAP PtmapNew(byte *prgbPixels, long dxWidth, long dxHeight);
+    static PTMAP PtmapNew(uint8_t *prgbPixels, int32_t dxWidth, int32_t dxHeight);
 
     // Some useful file methods
-    long CbOnFile(void)
+    int32_t CbOnFile(void)
     {
         return (SIZEOF(TMAPF) + LwMul(_bpmp.row_bytes, _bpmp.height));
     }
@@ -108,7 +108,7 @@ class TMAP : public TMAP_PAR
 
 #ifdef NOT_YET_REVIEWED
     // Useful shade-table type method
-    byte *PrgbBuildInverseTable(void);
+    uint8_t *PrgbBuildInverseTable(void);
 #endif // NOT_YET_REVIEWED
 };
 

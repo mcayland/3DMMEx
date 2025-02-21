@@ -34,13 +34,13 @@ END_CMD_MAP_NIL()
 RTCLASS(CMH)
 RTCLASS(CEX)
 
-long CMH::_hidLast;
+int32_t CMH::_hidLast;
 
 #ifdef DEBUG
 /***************************************************************************
     Assert the validity of a CMD.
 ***************************************************************************/
-void CMD::AssertValid(ulong grf)
+void CMD::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertNilOrPo(pgg, 0);
@@ -60,10 +60,10 @@ void CMD::AssertValid(ulong grf)
     means that the returned hid is only unique over handlers that the
     application class knows about.
 ***************************************************************************/
-long CMH::HidUnique(long ccmh)
+int32_t CMH::HidUnique(int32_t ccmh)
 {
     AssertIn(ccmh, 1, 1000);
-    long ccmhT;
+    int32_t ccmhT;
 
     _hidLast |= 0x80000000L;
     for (ccmhT = ccmh; ccmhT-- > 0;)
@@ -85,7 +85,7 @@ long CMH::HidUnique(long ccmh)
 /***************************************************************************
     Constructor for a command handler - set the handler id.
 ***************************************************************************/
-CMH::CMH(long hid)
+CMH::CMH(int32_t hid)
 {
     AssertBaseThis(0);
     Assert(hid != hidNil, "bad hid");
@@ -107,7 +107,7 @@ CMH::~CMH(void)
 /***************************************************************************
     Assert the validity of a CMH.
 ***************************************************************************/
-void CMH::AssertValid(ulong grf)
+void CMH::AssertValid(uint32_t grf)
 {
     CMH_PAR::AssertValid(0);
     Assert(_hid != hidNil, 0);
@@ -118,7 +118,7 @@ void CMH::AssertValid(ulong grf)
     Protected virtual function to find a CMME (command map entry) for the
     given command id.
 ***************************************************************************/
-bool CMH::_FGetCmme(long cid, ulong grfcmmWanted, CMME *pcmme)
+bool CMH::_FGetCmme(int32_t cid, uint32_t grfcmmWanted, CMME *pcmme)
 {
     AssertThis(0);
     AssertVarMem(pcmme);
@@ -169,7 +169,7 @@ bool CMH::FDoCmd(PCMD pcmd)
     AssertThis(0);
     AssertPo(pcmd, 0);
     CMME cmme;
-    ulong grfcmm;
+    uint32_t grfcmm;
 
     if (pvNil == pcmd->pcmh)
         grfcmm = fcmmNobody;
@@ -189,13 +189,13 @@ bool CMH::FDoCmd(PCMD pcmd)
     doesn't normally handle the command, this returns false (and does
     nothing else). Otherwise sets the grfeds and returns true.
 ***************************************************************************/
-bool CMH::FEnableCmd(PCMD pcmd, ulong *pgrfeds)
+bool CMH::FEnableCmd(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
     AssertVarMem(pgrfeds);
     CMME cmme;
-    ulong grfcmm;
+    uint32_t grfcmm;
 
     if (pvNil == pcmd->pcmh)
         grfcmm = fcmmNobody;
@@ -234,7 +234,7 @@ CEX::~CEX(void)
 {
     AssertBaseThis(0);
     CMD cmd;
-    long icmd;
+    int32_t icmd;
 
     if (pvNil != _pglcmd)
     {
@@ -255,7 +255,7 @@ CEX::~CEX(void)
 /***************************************************************************
     Static method to create a new CEX object.
 ***************************************************************************/
-PCEX CEX::PcexNew(long ccmdInit, long ccmhInit)
+PCEX CEX::PcexNew(int32_t ccmdInit, int32_t ccmhInit)
 {
     AssertIn(ccmdInit, 0, kcbMax);
     AssertIn(ccmhInit, 0, kcbMax);
@@ -274,7 +274,7 @@ PCEX CEX::PcexNew(long ccmdInit, long ccmhInit)
 /***************************************************************************
     Initialization of the command dispatcher.
 ***************************************************************************/
-bool CEX::_FInit(long ccmdInit, long ccmhInit)
+bool CEX::_FInit(int32_t ccmdInit, int32_t ccmhInit)
 {
     AssertBaseThis(0);
     AssertIn(ccmdInit, 0, kcbMax);
@@ -341,7 +341,7 @@ void CEX::StopRecording(void)
 
     if (_rec == recNil)
     {
-        long cb;
+        int32_t cb;
 
         if (_cact > 1)
         {
@@ -424,7 +424,7 @@ void CEX::RecordCmd(PCMD pcmd)
     cmdf.hid = pcmd->pcmh == pvNil ? hidNil : pcmd->pcmh->Hid();
     cmdf.cact = 1;
     cmdf.chidGg = pcmd->pgg != pvNil ? ++_chidLast : 0;
-    CopyPb(pcmd->rglw, cmdf.rglw, kclwCmd * SIZEOF(long));
+    CopyPb(pcmd->rglw, cmdf.rglw, kclwCmd * SIZEOF(int32_t));
 
     if (!_pglcmdf->FInsert(_icmdf, &cmdf))
     {
@@ -437,7 +437,7 @@ void CEX::RecordCmd(PCMD pcmd)
     if (pvNil != pcmd->pgg)
     {
         BLCK blck;
-        long cb;
+        int32_t cb;
         CNO cno;
 
         cb = pcmd->pgg->CbOnFile();
@@ -467,7 +467,7 @@ void CEX::Play(PCFL pcfl, CNO cno)
     AssertThis(0);
     AssertPo(pcfl, 0);
     BLCK blck;
-    short bo, osk;
+    int16_t bo, osk;
 
     if (_rs != rsNormal)
     {
@@ -545,13 +545,13 @@ bool CEX::_FReadCmd(PCMD pcmd)
     pcmd->cid = cmdf.cid;
     pcmd->pcmh = vpappb->PcmhFromHid(cmdf.hid);
     pcmd->pgg = pvNil;
-    CopyPb(cmdf.rglw, pcmd->rglw, kclwCmd * SIZEOF(long));
+    CopyPb(cmdf.rglw, pcmd->rglw, kclwCmd * SIZEOF(int32_t));
 
     if (cmdf.chidGg != 0)
     {
         BLCK blck;
         KID kid;
-        short bo, osk;
+        int16_t bo, osk;
 
         Assert(cmdf.cact <= 1, 0);
 
@@ -614,12 +614,12 @@ bool CEX::_FCmhOk(PCMH pcmh)
     get first crack at commands. It is legal for a handler to be in the
     list more than once (even with the same cmhl value).
 ***************************************************************************/
-bool CEX::FAddCmh(PCMH pcmh, long cmhl, ulong grfcmm)
+bool CEX::FAddCmh(PCMH pcmh, int32_t cmhl, uint32_t grfcmm)
 {
     AssertThis(0);
     AssertPo(pcmh, 0);
     CMHE cmhe;
-    long icmhe;
+    int32_t icmhe;
 
     if (fcmmNil == (grfcmm & kgrfcmmAll))
     {
@@ -645,11 +645,11 @@ bool CEX::FAddCmh(PCMH pcmh, long cmhl, ulong grfcmm)
 /***************************************************************************
     Removes the the handler (at the given cmhl level) from the handler list.
 ***************************************************************************/
-void CEX::RemoveCmh(PCMH pcmh, long cmhl)
+void CEX::RemoveCmh(PCMH pcmh, int32_t cmhl)
 {
     AssertThis(0);
     AssertPo(pcmh, 0);
-    long icmhe, ccmhe;
+    int32_t icmhe, ccmhe;
     CMHE cmhe;
 
     if (!_FFindCmhl(cmhl, &icmhe))
@@ -678,7 +678,7 @@ void CEX::BuryCmh(PCMH pcmh)
 {
     AssertThis(0);
     Assert(pcmh != pvNil, 0);
-    long icmhe, icmd;
+    int32_t icmhe, icmd;
     CMHE cmhe;
     CMD cmd;
 
@@ -728,11 +728,11 @@ void CEX::BuryCmh(PCMH pcmh)
     Finds the first item with the given cmhl in the handler list. If there
     aren't any, still sets *picmhe to where they would be.
 ***************************************************************************/
-bool CEX::_FFindCmhl(long cmhl, long *picmhe)
+bool CEX::_FFindCmhl(int32_t cmhl, int32_t *picmhe)
 {
     AssertThis(0);
     AssertVarMem(picmhe);
-    long icmhe, icmheMin, icmheLim;
+    int32_t icmhe, icmheMin, icmheLim;
     CMHE *qrgcmhe;
 
     qrgcmhe = (CMHE *)_pglcmhe->QvGet(0);
@@ -752,7 +752,7 @@ bool CEX::_FFindCmhl(long cmhl, long *picmhe)
 /***************************************************************************
     Adds a command to the tail of the queue.
 ***************************************************************************/
-void CEX::EnqueueCid(long cid, PCMH pcmh, PGG pgg, long lw0, long lw1, long lw2, long lw3)
+void CEX::EnqueueCid(int32_t cid, PCMH pcmh, PGG pgg, int32_t lw0, int32_t lw1, int32_t lw2, int32_t lw3)
 {
     Assert(cid != cidNil, 0);
     AssertNilOrPo(pcmh, 0);
@@ -772,7 +772,7 @@ void CEX::EnqueueCid(long cid, PCMH pcmh, PGG pgg, long lw0, long lw1, long lw2,
 /***************************************************************************
     Pushes a command onto the head of the queue.
 ***************************************************************************/
-void CEX::PushCid(long cid, PCMH pcmh, PGG pgg, long lw0, long lw1, long lw2, long lw3)
+void CEX::PushCid(int32_t cid, PCMH pcmh, PGG pgg, int32_t lw0, int32_t lw1, int32_t lw2, int32_t lw3)
 {
     Assert(cid != cidNil, 0);
     AssertNilOrPo(pcmh, 0);
@@ -836,12 +836,12 @@ void CEX::PushCmd(PCMD pcmd)
 /***************************************************************************
     Checks if a cid is in the queue.
 ***************************************************************************/
-bool CEX::FCidIn(long cid)
+bool CEX::FCidIn(int32_t cid)
 {
     AssertThis(0);
     Assert(cid != cidNil, "why check for a nil command?");
 
-    long icmd;
+    int32_t icmd;
     CMD cmd;
 
     for (icmd = _pglcmd->IvMac(); icmd-- > 0;)
@@ -857,12 +857,12 @@ bool CEX::FCidIn(long cid)
 /***************************************************************************
     Flushes all instances of a cid in the queue.
 ***************************************************************************/
-void CEX::FlushCid(long cid)
+void CEX::FlushCid(int32_t cid)
 {
     AssertThis(0);
     Assert(cid != cidNil, "why flush a nil command?");
 
-    long icmd;
+    int32_t icmd;
     CMD cmd;
 
     for (icmd = _pglcmd->IvMac(); icmd-- > 0;)
@@ -1058,7 +1058,7 @@ bool CEX::FDispatchNextCmd(void)
 /***************************************************************************
     Give the handler a crack at enabling/disabling the command.
 ***************************************************************************/
-bool CEX::_FEnableCmd(PCMH pcmh, PCMD pcmd, ulong *pgrfeds)
+bool CEX::_FEnableCmd(PCMH pcmh, PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertPo(pcmh, 0);
     AssertPo(pcmd, 0);
@@ -1074,13 +1074,13 @@ bool CEX::_FEnableCmd(PCMH pcmh, PCMD pcmd, ulong *pgrfeds)
     Determines whether the given command is currently enabled. This is
     normally used for menu graying/checking etc and toolbar enabling/status.
 ***************************************************************************/
-ulong CEX::GrfedsForCmd(PCMD pcmd)
+uint32_t CEX::GrfedsForCmd(PCMD pcmd)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
-    long icmhe, ccmhe;
+    int32_t icmhe, ccmhe;
     CMHE cmhe;
-    ulong grfeds;
+    uint32_t grfeds;
 
     // pipe it through the command handlers, then to the target
     for (icmhe = 0, ccmhe = _pglcmhe->IvMac(); icmhe < ccmhe; icmhe++)
@@ -1122,7 +1122,7 @@ LDone:
     Determines whether the given command is currently enabled. This is
     normally used for menu graying/checking etc and toolbar enabling/status.
 ***************************************************************************/
-ulong CEX::GrfedsForCid(long cid, PCMH pcmh, PGG pgg, long lw0, long lw1, long lw2, long lw3)
+uint32_t CEX::GrfedsForCid(int32_t cid, PCMH pcmh, PGG pgg, int32_t lw0, int32_t lw1, int32_t lw2, int32_t lw3)
 {
     AssertThis(0);
     Assert(cid != cidNil, 0);
@@ -1148,7 +1148,7 @@ bool CEX::FGetNextKey(PCMD pcmd)
 {
     AssertThis(0);
     AssertVarMem(pcmd);
-    long iv;
+    int32_t iv;
 
     if (_rs != rsNormal)
         goto LFail;
@@ -1247,7 +1247,7 @@ void CEX::SetModalGob(PGOB pgob)
 /***************************************************************************
     Assert the validity of the command dispatcher
 ***************************************************************************/
-void CEX::AssertValid(ulong grf)
+void CEX::AssertValid(uint32_t grf)
 {
     CEX_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglcmhe, 0);
@@ -1264,7 +1264,7 @@ void CEX::MarkMem(void)
 {
     AssertThis(0);
     CMD cmd;
-    long icmd;
+    int32_t icmd;
 
     CEX_PAR::MarkMem();
     MarkMemObj(_pglcmhe);

@@ -16,7 +16,7 @@
 #ifndef UTILERROR_H
 #define UTILERROR_H
 
-const long kcerdMax = 20;
+const int32_t kcerdMax = 20;
 
 /***************************************************************************
     Error stack class
@@ -31,31 +31,31 @@ class ERS : public ERS_PAR
   private:
     struct ERD
     {
-        long erc;
+        int32_t erc;
 #ifdef DEBUG
         PSZS pszsFile;
-        long lwLine;
+        int32_t lwLine;
 #endif // DEBUG
     };
 
     MUTX _mutx;
-    long _cerd;
+    int32_t _cerd;
     ERD _rgerd[kcerdMax];
 
   public:
     ERS(void);
 
 #ifdef DEBUG
-    virtual void Push(long erc, schar *pszsFile, long lwLine);
+    virtual void Push(int32_t erc, schar *pszsFile, int32_t lwLine);
 #else  //! DEBUG
-    virtual void Push(long erc);
+    virtual void Push(int32_t erc);
 #endif //! DEBUG
-    virtual bool FPop(long *perc = pvNil);
-    virtual bool FIn(long erc);
-    virtual long Cerc(void);
-    virtual long ErcGet(long ierc);
+    virtual bool FPop(int32_t *perc = pvNil);
+    virtual bool FIn(int32_t erc);
+    virtual int32_t Cerc(void);
+    virtual int32_t ErcGet(int32_t ierc);
     virtual void Clear(void);
-    virtual void Flush(long erc);
+    virtual void Flush(int32_t erc);
 };
 
 extern ERS *vpers;

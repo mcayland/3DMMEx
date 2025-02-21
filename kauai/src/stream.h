@@ -37,28 +37,28 @@ class BSM : public BSM_PAR
 
   protected:
     HQ _hqrgb;
-    long _ibMac;
-    long _cbMinGrow;
+    int32_t _ibMac;
+    int32_t _cbMinGrow;
 
-    bool _FEnsureSize(long cbMin, bool fShrink);
+    bool _FEnsureSize(int32_t cbMin, bool fShrink);
 
   public:
     BSM(void);
     ~BSM(void);
 
-    void SetMinGrow(long cb);
-    bool FEnsureSpace(long cb, bool fShrink);
-    void *PvLock(long ib);
+    void SetMinGrow(int32_t cb);
+    bool FEnsureSpace(int32_t cb, bool fShrink);
+    void *PvLock(int32_t ib);
     void Unlock(void);
 
-    long IbMac(void)
+    int32_t IbMac(void)
     {
         return _ibMac;
     }
-    void FetchRgb(long ib, long cb, void *prgb);
-    bool FReplace(const void *prgb, long cbIns, long ib, long cbDel);
-    bool FWriteRgb(PFLO pflo, long ib = 0);
-    bool FWriteRgb(PBLCK pblck, long ib = 0);
+    void FetchRgb(int32_t ib, int32_t cb, void *prgb);
+    bool FReplace(const void *prgb, int32_t cbIns, int32_t ib, int32_t cbDel);
+    bool FWriteRgb(PFLO pflo, int32_t ib = 0);
+    bool FWriteRgb(PBLCK pblck, int32_t ib = 0);
 };
 
 /***************************************************************************
@@ -76,27 +76,27 @@ class BSF : public BSF_PAR
 
   protected:
     PGG _pggflo;
-    long _ibMac;
+    int32_t _ibMac;
 
-    long _IfloFind(long ib, long *pib, long *pcb = pvNil);
-    bool _FEnsureSplit(long ib, long *piflo = pvNil);
-    void _AttemptMerge(long ibMin, long ibLim);
-    bool _FReplaceCore(void *prgb, long cbIns, PFLO pflo, long ib, long cbDel);
+    int32_t _IfloFind(int32_t ib, int32_t *pib, int32_t *pcb = pvNil);
+    bool _FEnsureSplit(int32_t ib, int32_t *piflo = pvNil);
+    void _AttemptMerge(int32_t ibMin, int32_t ibLim);
+    bool _FReplaceCore(void *prgb, int32_t cbIns, PFLO pflo, int32_t ib, int32_t cbDel);
 
   public:
     BSF(void);
     ~BSF(void);
 
-    long IbMac(void)
+    int32_t IbMac(void)
     {
         return _ibMac;
     }
-    void FetchRgb(long ib, long cb, void *prgb);
-    bool FReplace(const void *prgb, long cbIns, long ib, long cbDel);
-    bool FReplaceFlo(PFLO pflo, bool fCopy, long ib, long cbDel);
-    bool FReplaceBsf(PBSF pbsfSrc, long ibSrc, long cbSrc, long ibDst, long cbDel);
-    bool FWriteRgb(PFLO pflo, long ib = 0);
-    bool FWriteRgb(PBLCK pblck, long ib = 0);
+    void FetchRgb(int32_t ib, int32_t cb, void *prgb);
+    bool FReplace(const void *prgb, int32_t cbIns, int32_t ib, int32_t cbDel);
+    bool FReplaceFlo(PFLO pflo, bool fCopy, int32_t ib, int32_t cbDel);
+    bool FReplaceBsf(PBSF pbsfSrc, int32_t ibSrc, int32_t cbSrc, int32_t ibDst, int32_t cbDel);
+    bool FWriteRgb(PFLO pflo, int32_t ib = 0);
+    bool FWriteRgb(PBLCK pblck, int32_t ib = 0);
     bool FCompact(void);
 };
 

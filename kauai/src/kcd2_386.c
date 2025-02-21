@@ -27,12 +27,12 @@ static FILE *output = NULL;
 
 void Setup(void);
 void End(void);
-void Advance(long cb);
-void Test(long ibit);
-void Block(long ibit);
-void Literal(long ibit, bool fDword, bool fSingle);
-void Offset(long ibit, bool fDword, long cbit, long cbitOH, long dibBase, long cbBase);
-void Copy(long ibit, bool fDword);
+void Advance(int32_t cb);
+void Test(int32_t ibit);
+void Block(int32_t ibit);
+void Literal(int32_t ibit, bool fDword, bool fSingle);
+void Offset(int32_t ibit, bool fDword, int32_t cbit, int32_t cbitOH, int32_t dibBase, int32_t cbBase);
+void Copy(int32_t ibit, bool fDword);
 
 int main(int argc, char *argv[])
 {
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    long ibit;
+    int32_t ibit;
 
     Setup();
 
@@ -82,9 +82,9 @@ int main(int argc, char *argv[])
 void Setup(void)
 {
     fprintf(output, "	// Setup\n"
-                    "	long cbTot;\n"
-                    "	byte *pbLimDst = (byte *)pvDst + cbDst;\n"
-                    "	byte *pbLimSrc = (byte *)pvSrc + cbSrc - kcbTailKcd2;\n\n"
+                    "	int32_t cbTot;\n"
+                    "	uint8_t *pbLimDst = (uint8_t *)pvDst + cbDst;\n"
+                    "	uint8_t *pbLimSrc = (uint8_t *)pvSrc + cbSrc - kcbTailKcd2;\n\n"
                     "__asm\n"
                     "	{\n"
                     "	mov edi,pvDst\n"
@@ -96,7 +96,7 @@ void Setup(void)
     fprintf(output, "	jmp LBlock0\n");
 }
 
-void Copy(long ibit, bool fDword)
+void Copy(int32_t ibit, bool fDword)
 {
     if (fDword)
         fprintf(output, "\n	// Copy Dword %d\nLCopyDword%d:\n", ibit, ibit);
@@ -140,7 +140,7 @@ void End(void)
                     "	}\n\n");
 }
 
-void Advance(long cb)
+void Advance(int32_t cb)
 {
     switch (cb)
     {
@@ -168,7 +168,7 @@ void Advance(long cb)
     }
 }
 
-void Test(long ibit)
+void Test(int32_t ibit)
 {
     if (ibit < 8)
         fprintf(output, "	test al,%d\n", 1 << ibit);
@@ -178,9 +178,9 @@ void Test(long ibit)
         fprintf(output, "	test eax,%d\n", 1 << ibit);
 }
 
-void Block(long ibit)
+void Block(int32_t ibit)
 {
-    long cbit, ibitT;
+    int32_t cbit, ibitT;
 
     fprintf(output, "\n	// Block %d\n", ibit);
     fprintf(output, "LBlock%d:\n", ibit);
@@ -238,7 +238,7 @@ void Block(long ibit)
     }
 }
 
-void Offset(long ibit, bool fDword, long cbit, long cbitOH, long dibBase, long cbBase)
+void Offset(int32_t ibit, bool fDword, int32_t cbit, int32_t cbitOH, int32_t dibBase, int32_t cbBase)
 {
     ibit = (ibit - cbit - cbitOH) & 0x07;
     if (fDword)
@@ -275,7 +275,7 @@ void Offset(long ibit, bool fDword, long cbit, long cbitOH, long dibBase, long c
         fprintf(output, "	jmp LCopyByte%d\n", ibit);
 }
 
-void Literal(long ibit, bool fDword, bool fSingle)
+void Literal(int32_t ibit, bool fDword, bool fSingle)
 {
     ibit = (ibit - 1) & 0x07;
     if (fDword)

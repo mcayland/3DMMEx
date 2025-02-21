@@ -390,7 +390,7 @@ class S2B : public S2B_PAR
 
   public:
     static PS2B Ps2bNew(PFIL pfilSrc, bool fSwapHand, uint mdVerbose, int iRound, int iRoundXF, char *pszApp);
-    bool FConvertSI(PMSNK pmsnkErr, PMSNK pmsnkDst, PFNI pfniInc = pvNil, ulong grfs2b = fs2bNil);
+    bool FConvertSI(PMSNK pmsnkErr, PMSNK pmsnkDst, PFNI pfniInc = pvNil, uint32_t grfs2b = fs2bNil);
 };
 
 #endif // !SITOBREN_H

@@ -130,37 +130,37 @@ class MVU : public MVU_PAR
   protected:
     /* Make these static; we want to be able to set and restore without having
         an actual MVU, and they shouldn't be getting set per-MVU anyway */
-    static bool _fKbdDelayed;  // fTrue == we have delayed the keyboard
-    static long _dtsKbdDelay;  // System keyboard delay before first repeat
-    static long _dtsKbdRepeat; // System keyboard delay between repeats
+    static bool _fKbdDelayed;     // fTrue == we have delayed the keyboard
+    static int32_t _dtsKbdDelay;  // System keyboard delay before first repeat
+    static int32_t _dtsKbdRepeat; // System keyboard delay between repeats
 
-    long _dxp;
-    long _dyp; // width and height rendered area.
+    int32_t _dxp;
+    int32_t _dyp; // width and height rendered area.
 
     bool _fTrackingMouse; // Is the mouse currently being tracked?
-    long _xpPrev;         // X location of the mouse.
-    long _ypPrev;         // Y location of the mouse.
+    int32_t _xpPrev;      // X location of the mouse.
+    int32_t _ypPrev;      // Y location of the mouse.
     BRS _dzrPrev;         // Z motion of the "mouse" (arrow keys)
-    long _grfcust;        // Options in effect when mouse was down.
+    int32_t _grfcust;     // Options in effect when mouse was down.
     PCURS _pcursDefault;  // Default cursor for when a tool is not applicable.
     PACTR _pactrListener; // Pactr of the actor being auditioned
     PACTR _pactrRestore;  // Restore for actor recording
 
-    long _anidTool;     // Current selected action
+    int32_t _anidTool;  // Current selected action
     TAG _tagTool;       // Tag associated with current tool.
     PTMPL _ptmplTool;   // Template associated with the current tool.
-    long _cmidTool;     // Costume id associated with current tool.
+    int32_t _cmidTool;  // Costume id associated with current tool.
     bool _fCyclingCels; // Are we cycling cels in toolRecord?
-    long _tool;         // Current tool loaded on cursor
+    int32_t _tool;      // Current tool loaded on cursor
 
     // REVIEW Seanse(SeanSe): MVIE should not be creating/mucking with actor undo
     //   objects.  V2.666 should revisit this issue and see if we can get ACTR to
     //   do all its own undo objects (e.g. Growing over a long drag could become
     //   a StartGrow/Grow/EndGrow sequence).  This also effects _pactrRestore.
-    PAUND _paund;        // Actor undo object to save from mouse down to drag.
-    ulong _tsLast;       // Last time a cell was recorded.
-    ulong _tsLastSample; // Last time mouse/kbd sampled
-    RC _rcFrame;         // Frame for creating a text box.
+    PAUND _paund;           // Actor undo object to save from mouse down to drag.
+    uint32_t _tsLast;       // Last time a cell was recorded.
+    uint32_t _tsLastSample; // Last time mouse/kbd sampled
+    RC _rcFrame;            // Frame for creating a text box.
 
     BRS _rgrAxis[3][3];   // Conversion from mouse points to 3D points.
     bool _fRecordDefault; // fTrue = Record; fFalse = Rerecord
@@ -175,11 +175,11 @@ class MVU : public MVU_PAR
     bool _fMouseDownSeen; // Was the mouse depressed during a place.
     PACTR _pactrUndo;     // Actor to use for undo object when roll-calling.
 
-    ACR _acr;         // Color for painting text.
-    long _onn;        // Font for text
-    long _dypFont;    // Font size for text
-    ulong _grfont;    // Font style for text
-    long _lwLastTime; // State variable for the last time through.
+    ACR _acr;            // Color for painting text.
+    int32_t _onn;        // Font for text
+    int32_t _dypFont;    // Font size for text
+    uint32_t _grfont;    // Font style for text
+    int32_t _lwLastTime; // State variable for the last time through.
 
     MVU(PDOCB pdocb, PGCB pgcb) : DDG(pdocb, pgcb)
     {
@@ -206,7 +206,7 @@ class MVU : public MVU_PAR
     //
     // Constructors and desctructors
     //
-    static MVU *PmvuNew(PMVIE pmvie, PGCB pgcb, long dxy, long dyp);
+    static MVU *PmvuNew(PMVIE pmvie, PGCB pgcb, int32_t dxy, int32_t dyp);
     ~MVU(void);
 
     //
@@ -226,23 +226,23 @@ class MVU : public MVU_PAR
     virtual bool FCmdUndo(PCMD pcmd);
     virtual bool FCloseDoc(bool fAssumeYes, bool fSaveDDG = fFalse);
     virtual bool FCmdSave(PCMD pcmd);
-    bool FDoClip(long tool);
+    bool FDoClip(int32_t tool);
     bool FCmdIdle(CMD *pcmd); // Called whenever an idle loop is seen.
     bool FCmdRollOff(CMD *pcmd);
 
     //
     // View specific functions.
     //
-    void SetTool(long tool);
-    long Tool(void)
+    void SetTool(int32_t tool);
+    int32_t Tool(void)
     {
         return _tool;
     }
-    long AnidTool(void)
+    int32_t AnidTool(void)
     {
         return _anidTool;
     }
-    long CmidTool(void)
+    int32_t CmidTool(void)
     {
         return _cmidTool;
     }
@@ -250,12 +250,12 @@ class MVU : public MVU_PAR
     {
         return &_tagTool;
     }
-    void SetAnidTool(long anid)
+    void SetAnidTool(int32_t anid)
     {
         _anidTool = anid;
     }
     void SetTagTool(PTAG ptag);
-    void SetCmidTool(long cmid)
+    void SetCmidTool(int32_t cmid)
     {
         _cmidTool = cmid;
     }
@@ -263,7 +263,7 @@ class MVU : public MVU_PAR
     void EndPlaceActor(void);
     void WarpCursToCenter(void);
     void WarpCursToActor(PACTR pactr);
-    void AdjustCursor(long xp, long yp);
+    void AdjustCursor(int32_t xp, int32_t yp);
     void MouseToWorld(BRS dxrMouse, BRS dyrMouse, BRS dzrMouse, BRS *pdxrWld, BRS *pdyrWld, BRS *pdzrWld, bool fRecord);
     void SetAxis(BRS rgrAxis[3][3])
     {
@@ -313,27 +313,27 @@ class MVU : public MVU_PAR
     {
         return _acr;
     }
-    void SetOnnTextCur(long onn)
+    void SetOnnTextCur(int32_t onn)
     {
         _onn = onn;
     }
-    long OnnTextCur(void)
+    int32_t OnnTextCur(void)
     {
         return _onn;
     }
-    void SetDypFontTextCur(long dypFont)
+    void SetDypFontTextCur(int32_t dypFont)
     {
         _dypFont = dypFont;
     }
-    long DypFontTextCur(void)
+    int32_t DypFontTextCur(void)
     {
         return _dypFont;
     }
-    void SetStyleTextCur(ulong grfont)
+    void SetStyleTextCur(uint32_t grfont)
     {
         _grfont = grfont;
     }
-    ulong GrfontStyleTextCur(void)
+    uint32_t GrfontStyleTextCur(void)
     {
         return _grfont;
     }
@@ -361,30 +361,30 @@ typedef MCC *PMCC;
 class MCC : public MCC_PAR
 {
   protected:
-    long _dxp;
-    long _dyp;
-    long _cbCache;
+    int32_t _dxp;
+    int32_t _dyp;
+    int32_t _cbCache;
 
   public:
-    MCC(long dxp, long dyp, long cbCache)
+    MCC(int32_t dxp, int32_t dyp, int32_t cbCache)
     {
         _dxp = dxp;
         _dyp = dyp;
         _cbCache = cbCache;
     }
-    virtual long Dxp(void)
+    virtual int32_t Dxp(void)
     {
         return _dxp;
     } // Width of the rendering area
-    virtual long Dyp(void)
+    virtual int32_t Dyp(void)
     {
         return _dyp;
     } // Height of the rendering area
-    virtual long CbCache(void)
+    virtual int32_t CbCache(void)
     {
         return _cbCache;
     } // Number of bytes to use for caching.
-    virtual void SetCurs(long tool)
+    virtual void SetCurs(int32_t tool)
     {
     } // Sets the cursor based on the tool, may be pvNil.
     virtual void UpdateRollCall(void)
@@ -399,7 +399,7 @@ class MCC : public MCC_PAR
     virtual void PlayStopped(void)
     {
     } // Tells the client that playback was stopped internally.
-    virtual void ChangeTool(long tool)
+    virtual void ChangeTool(int32_t tool)
     {
     } // Tells the client that the tool was changed internally.
     virtual void SceneNuked(void)
@@ -420,13 +420,13 @@ class MCC : public MCC_PAR
     virtual void TboxSelected(void)
     {
     } // Tells the client that a new text box was selected.
-    virtual void ActorSelected(long arid)
+    virtual void ActorSelected(int32_t arid)
     {
     } // Tells the client that an actor was selected
     virtual void ActorEasel(bool *pfActrChanged)
     {
     } // Lets client edit 3-D Text or costume
-    virtual void SetUndo(long undo)
+    virtual void SetUndo(int32_t undo)
     {
     } // Tells the client the state of the undo buffer.
     virtual void SceneChange(void)
@@ -453,12 +453,12 @@ class MCC : public MCC_PAR
     virtual void StartListenerEasel(void)
     {
     } // Tells the client to start up the listener easel.
-    virtual bool GetFniSave(FNI *pfni, long lFilterLabel, long lFilterExt, long lTitle, LPTSTR lpstrDefExt,
+    virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPTSTR lpstrDefExt,
                             PSTN pstnDefFileName)
     {
         return fFalse;
     } // Tells the client to start up the save portfolio.
-    virtual void PlayUISound(long tool, long grfcust = 0)
+    virtual void PlayUISound(int32_t tool, int32_t grfcust = 0)
     {
     } // Tells the client to play sound associated with use of tool.
     virtual void StopUISound(void)
@@ -473,14 +473,14 @@ class MCC : public MCC_PAR
     virtual void DisableAccel(void)
     {
     } // Tells the client to disable keyboard accelerators.
-    virtual void GetStn(long ids, PSTN pstn)
+    virtual void GetStn(int32_t ids, PSTN pstn)
     {
     } // Requests the client to fetch the given ids string.
-    virtual long DypTextDef(void)
+    virtual int32_t DypTextDef(void)
     {
         return vpappb->DypTextDef();
     }
-    virtual long DypTboxDef(void)
+    virtual int32_t DypTboxDef(void)
     {
         return 14;
     }
@@ -502,7 +502,7 @@ typedef struct _scend
 {
     /* The first fields are private...the client shouldn't change them, and
         in fact, generally shouldn't even look at them */
-    long imvied;     // index of the MVIED for this scene
+    int32_t imvied;  // index of the MVIED for this scene
     CNO cno;         // the CNO of this scene chunk
     CHID chid;       // the original CHID
     PMBMP pmbmp;     // pointer to thumbnail MBMP
@@ -514,9 +514,9 @@ typedef struct _scend
 /* A MoVIE Descriptor */
 typedef struct _mvied
 {
-    PCRF pcrf;    // the file this scene's movie is in
-    CNO cno;      // CNO of the MVIE chunk
-    long aridLim; // _aridLim from the MVIE
+    PCRF pcrf;       // the file this scene's movie is in
+    CNO cno;         // CNO of the MVIE chunk
+    int32_t aridLim; // _aridLim from the MVIE
 } MVIED, *PMVIED;
 
 /* A Composite MoVIe */
@@ -537,7 +537,7 @@ typedef struct _cmvi
 //
 //
 
-const long kccamMax = 9;
+const int32_t kccamMax = 9;
 
 typedef class MVIE *PMVIE;
 
@@ -551,7 +551,7 @@ class MVIE : public MVIE_PAR
     CMD_MAP_DEC(MVIE)
 
   protected:
-    long _aridLim; // Highest actor id in use.
+    int32_t _aridLim; // Highest actor id in use.
 
     PCRF _pcrfAutoSave; // CRF/CFL of auto save file.
     PFIL _pfilSave;     // User's document
@@ -562,8 +562,8 @@ class MVIE : public MVIE_PAR
 
     PGST _pgstmactr;             // GST of actors in the movie (for roll call)
     PSCEN _pscenOpen;            // Index of current open scene.
-    long _cscen;                 // Number of scenes in the movie.
-    long _iscen;                 // Number of scene open in the movie.
+    int32_t _cscen;              // Number of scenes in the movie.
+    int32_t _iscen;              // Number of scene open in the movie.
     bool _fAutosaveDirty : 1;    // Is the movie in memory different than disk
     bool _fFniSaveValid : 1;     // Does _fniSave contain a file name.
     bool _fPlaying : 1;          // Is the movie playing?
@@ -577,23 +577,23 @@ class MVIE : public MVIE_PAR
     bool _fGCSndsOnClose : 1;    // Garbage collection of sounds on close
     bool _fReadOnly : 1;         // Is the original file read-only?
 
-    PBWLD _pbwld;   // The brender world for this movie
-    PMSQ _pmsq;     // Message Sound Queue
-    CLOK _clok;     // Clock for playing the film
-    ulong _tsStart; // Time last play started.
-    long _cnfrm;    // Number of frames since last play started.
+    PBWLD _pbwld;      // The brender world for this movie
+    PMSQ _pmsq;        // Message Sound Queue
+    CLOK _clok;        // Clock for playing the film
+    uint32_t _tsStart; // Time last play started.
+    int32_t _cnfrm;    // Number of frames since last play started.
 
     PMCC _pmcc; // Parameters and callbacks.
 
     WIT _wit;     // Pausing type
-    long _dts;    // Number of clock ticks to pause.
+    int32_t _dts; // Number of clock ticks to pause.
     TRANS _trans; // Transition type to execute.
 
-    long _vlmOrg; // original SNDM volume, before fadeout, if we are done with fadeout, then 0
+    int32_t _vlmOrg; // original SNDM volume, before fadeout, if we are done with fadeout, then 0
 
 #ifdef DEBUG
     bool _fWriteBmps;
-    long _lwBmp;
+    int32_t _lwBmp;
 #endif // DEBUG
 
     PGL _pglclrThumbPalette; // Palette to use for thumbnail rendering.
@@ -644,7 +644,7 @@ class MVIE : public MVIE_PAR
     static PMVIE PmvieNew(bool fHalfMode, PMCC pmcc, FNI *pfni = pvNil, CNO cno = cnoNil);
     // Create a movie and read it if
     //   pfni != pvNil
-    static bool FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, long *paridLim = pvNil);
+    static bool FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim = pvNil);
     // reads roll call for a given movie
     void ForceSaveAs(void)
     {
@@ -686,53 +686,54 @@ class MVIE : public MVIE_PAR
     //
     // Scene stuff
     //
-    long Cscen(void) // Returns number of scenes in movie
+    int32_t Cscen(void) // Returns number of scenes in movie
     {
         return _cscen;
     }
-    long Iscen(void) // Returns the current scene number
+    int32_t Iscen(void) // Returns the current scene number
     {
         return _iscen;
     }
-    bool FSwitchScen(long iscen);                                // Loads and returns pointer to scene iscen,
+    bool FSwitchScen(int32_t iscen);                             // Loads and returns pointer to scene iscen,
                                                                  //   saving any current scene.
-    bool FRemScen(long iscen);                                   // Removes a scene from the movie, and undo
-    bool FChangeCam(long camid);                                 // Change the camera view in the scene.
+    bool FRemScen(int32_t iscen);                                // Removes a scene from the movie, and undo
+    bool FChangeCam(int32_t camid);                              // Change the camera view in the scene.
     bool FInsTbox(RC *prc, bool fStory);                         // Insert a text box into the scene.
     bool FHideTbox(void);                                        // Hide selected text box from the scene at this fram.
     bool FNukeTbox(void);                                        // Remove selected text box from the scene.
-    void SelectTbox(long itbox);                                 // Select the itbox'th text box in the frame.
+    void SelectTbox(int32_t itbox);                              // Select the itbox'th text box in the frame.
     void SetPaintAcr(ACR acr);                                   // Sets color that painting will occur with.
-    void SetOnnTextCur(long onn);                                // Sets font that text will be in
-    void SetDypFontTextCur(long dypFont);                        // Sets font size that text will be in
-    void SetStyleTextCur(ulong grfont);                          // Sets font style that text will be in
+    void SetOnnTextCur(int32_t onn);                             // Sets font that text will be in
+    void SetDypFontTextCur(int32_t dypFont);                     // Sets font size that text will be in
+    void SetStyleTextCur(uint32_t grfont);                       // Sets font style that text will be in
     bool FInsActr(PTAG ptag);                                    // Insert an actor into the scene.
     bool FRemActr(void);                                         // Remove selected actor from scene.
-    bool FAddOnstage(long arid);                                 // Bring this actor onto the stage.
+    bool FAddOnstage(int32_t arid);                              // Bring this actor onto the stage.
     bool FRotateActr(BRA xa, BRA ya, BRA za, bool fFromHereFwd); // Rotate selected actor by degrees
     bool FSquashStretchActr(BRS brs);                            // Squash/Stretch selected actor
-    bool FSoonerLaterActr(long nfrm);                            // Sooner/Later selected actor
+    bool FSoonerLaterActr(int32_t nfrm);                         // Sooner/Later selected actor
     bool FScaleActr(BRS brs);                                    // Scale selected actor
-    bool FCostumeActr(long ibprt, PTAG ptag, long cmid, tribool fCustom);
-    bool FAddScen(PTAG ptag);         // Add a scene after the current one, or change
-                                      //   change bkgd if scene is empty
-    bool FSetTransition(TRANS trans); // Set the transition type for the current scene.
-    void Play(void);                  // Start/Stop a movie playing.
-    bool FPause(WIT wit, long dts);   // Insert a pause here.
+    bool FCostumeActr(int32_t ibprt, PTAG ptag, int32_t cmid, tribool fCustom);
+    bool FAddScen(PTAG ptag);          // Add a scene after the current one, or change
+                                       //   change bkgd if scene is empty
+    bool FSetTransition(TRANS trans);  // Set the transition type for the current scene.
+    void Play(void);                   // Start/Stop a movie playing.
+    bool FPause(WIT wit, int32_t dts); // Insert a pause here.
 
-    bool FAddToCmvi(PCMVI pcmvi, long *piscendIns);
+    bool FAddToCmvi(PCMVI pcmvi, int32_t *piscendIns);
     // Add this movie to the CMVI
     bool FSetCmvi(PCMVI pcmvi); // Re-build the movie from the CMVI
-    bool _FAddMvieToRollCall(CNO cno, long aridMin);
+    bool _FAddMvieToRollCall(CNO cno, int32_t aridMin);
     // Updates roll call for an imported movie
-    bool _FInsertScend(PGL pglscend, long iscend, PSCEND pscend);
+    bool _FInsertScend(PGL pglscend, int32_t iscend, PSCEND pscend);
     // Insert an imported scene
-    void _DeleteScend(PGL pglscend, long iscend);   // Delete an imported scene
-    bool _FAdoptMsndInMvie(PCFL pcfl, CNO cnoScen); // Adopt msnd chunks as children of the movie
+    void _DeleteScend(PGL pglscend, int32_t iscend); // Delete an imported scene
+    bool _FAdoptMsndInMvie(PCFL pcfl, CNO cnoScen);  // Adopt msnd chunks as children of the movie
 
-    bool FAddBkgdSnd(PTAG ptag, tribool fLoop, tribool fQueue, long vlm = vlmNil,
-                     long sty = styNil);                                                              // Adds a sound
-    bool FAddActrSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fActnCel, long vlm, long sty); // Adds a sound
+    bool FAddBkgdSnd(PTAG ptag, tribool fLoop, tribool fQueue, int32_t vlm = vlmNil,
+                     int32_t sty = styNil); // Adds a sound
+    bool FAddActrSnd(PTAG ptag, tribool fLoop, tribool fQueue, tribool fActnCel, int32_t vlm,
+                     int32_t sty); // Adds a sound
 
     //
     // Auto save stuff
@@ -742,7 +743,7 @@ class MVIE : public MVIE_PAR
     {
         return TAGM::FSaveTag(ptag, _pcrfAutoSave, fTrue);
     }
-    bool FCopySndFileToMvie(PFIL pfil, long sty, CNO *pcno, PSTN pstn = pvNil);
+    bool FCopySndFileToMvie(PFIL pfil, int32_t sty, CNO *pcno, PSTN pstn = pvNil);
     bool FVerifyVersion(PCFL pcfl, CNO *pcno = pvNil);
     bool FEnsureAutosave(PCRF *pcrf = pvNil);
     bool FCopyMsndFromPcfl(PCFL pcfl, CNO cnoSrc, CNO *pcnoDest);
@@ -765,26 +766,26 @@ class MVIE : public MVIE_PAR
     //
     // Roll call
     //
-    bool FGetArid(long iarid, long *parid, PSTN pstn, long *pcactRef,
+    bool FGetArid(int32_t iarid, int32_t *parid, PSTN pstn, int32_t *pcactRef,
                   PTAG ptagTmpl = pvNil); // return actors one by one
-    bool FChooseArid(long arid);          // user chose arid in roll call
-    long AridSelected(void);
-    bool FGetName(long arid, PSTN pstn);      // Return the name of a specific actor.
-    bool FNameActr(long arid, PSTN pstn);     // Set the name of this actor.
-    void ChangeActrTag(long arid, PTAG ptag); // Change an actor's TMPL tag
-    long CmactrMac(void)
+    bool FChooseArid(int32_t arid);       // user chose arid in roll call
+    int32_t AridSelected(void);
+    bool FGetName(int32_t arid, PSTN pstn);      // Return the name of a specific actor.
+    bool FNameActr(int32_t arid, PSTN pstn);     // Set the name of this actor.
+    void ChangeActrTag(int32_t arid, PTAG ptag); // Change an actor's TMPL tag
+    int32_t CmactrMac(void)
     {
         AssertThis(0);
         return _pgstmactr->IvMac();
     }
-    bool FIsPropBrwsIarid(long iarid); // Identify the roll call browser iarids
-    bool FIsIaridTdt(long iarid);      // 3d spletter
+    bool FIsPropBrwsIarid(int32_t iarid); // Identify the roll call browser iarids
+    bool FIsIaridTdt(int32_t iarid);      // 3d spletter
 
     //
     // Overridden DOCB functions
     //
     bool FGetFni(FNI *pfni);                  // For saving to a file
-    bool FSave(long cid);                     // For saving to a file, (calls FGetFni and FSaveToFni)
+    bool FSave(int32_t cid);                  // For saving to a file, (calls FGetFni and FSaveToFni)
     bool FSaveToFni(FNI *pfni, bool fSetFni); // For doing a Save As or Save
     PDMD PdmdNew(void);                       // Do not use!
     bool FGetFniSave(FNI *pfni);              // For saving via the portfolio.
@@ -834,9 +835,9 @@ class MVIE : public MVIE_PAR
     //
     // Automated test APIs
     //
-    long LwQueryExists(long lwType, long lwId);     // Called by other apps to find if an actor/tbox exists.
-    long LwQueryLocation(long lwType, long lwId);   // Called by other apps to find where actor/tbox exists.
-    long LwSetMoviePos(long lwScene, long lwFrame); // Called by other apps to set the movie position.
+    int32_t LwQueryExists(int32_t lwType, int32_t lwId);     // Called by other apps to find if an actor/tbox exists.
+    int32_t LwQueryLocation(int32_t lwType, int32_t lwId);   // Called by other apps to find where actor/tbox exists.
+    int32_t LwSetMoviePos(int32_t lwScene, int32_t lwFrame); // Called by other apps to set the movie position.
 
     //
     // Scene stuff
@@ -844,12 +845,12 @@ class MVIE : public MVIE_PAR
     PSCEN Pscen(void)
     {
         return _pscenOpen;
-    }                                           // The currently open scene.
-    bool FInsScenCore(long iscen, SCEN *pscen); // Insert this scene as scene number.
-    bool FNewScenInsCore(long iscen);           // Inserts a blank scene before iscen
-    bool FRemScenCore(long iscen);              // Removes a scene from the movie
-    bool FPasteActr(PACTR pactr);               // Pastes an actor into current scene.
-    bool FPasteActrPath(PACTR pactr);           // Pastes the path onto selected actor.
+    }                                              // The currently open scene.
+    bool FInsScenCore(int32_t iscen, SCEN *pscen); // Insert this scene as scene number.
+    bool FNewScenInsCore(int32_t iscen);           // Inserts a blank scene before iscen
+    bool FRemScenCore(int32_t iscen);              // Removes a scene from the movie
+    bool FPasteActr(PACTR pactr);                  // Pastes an actor into current scene.
+    bool FPasteActrPath(PACTR pactr);              // Pastes the path onto selected actor.
     PMSQ Pmsq(void)
     {
         return _pmsq;
@@ -858,7 +859,7 @@ class MVIE : public MVIE_PAR
     //
     // Runtime Pausing
     //
-    void DoPause(WIT wit, long dts) // Make the movie pause during run.
+    void DoPause(WIT wit, int32_t dts) // Make the movie pause during run.
     {
         _wit = wit;
         _dts = dts;
@@ -872,8 +873,8 @@ class MVIE : public MVIE_PAR
     //
     // 3-D Text stuff
     //
-    bool FInsTdt(PSTN pstn, long tdts, PTAG ptagTdf); // Inserts a TDT into this movie.
-    bool FChangeActrTdt(PACTR pactr, PSTN pstn, long tdts, PTAG ptagTdf);
+    bool FInsTdt(PSTN pstn, int32_t tdts, PTAG ptagTdf); // Inserts a TDT into this movie.
+    bool FChangeActrTdt(PACTR pactr, PSTN pstn, int32_t tdts, PTAG ptagTdf);
 
     //
     // Marking (overridden DOCB methods)
@@ -953,11 +954,11 @@ class MVIE : public MVIE_PAR
     //
     // Frame rate information
     //
-    long Cnfrm(void)
+    int32_t Cnfrm(void)
     {
         return _cnfrm;
     }
-    ulong TsStart(void)
+    uint32_t TsStart(void)
     {
         return _tsStart;
     }

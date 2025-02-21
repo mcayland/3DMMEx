@@ -91,7 +91,7 @@ PPIC PIC::PpicRead(PBLCK pblck)
 /***************************************************************************
     Return the total size on file.
 ***************************************************************************/
-long PIC::CbOnFile(void)
+int32_t PIC::CbOnFile(void)
 {
     AssertThis(0);
     return GetHandleSize((HN)_hpic) + size(PICH);
@@ -104,7 +104,7 @@ bool PIC::FWrite(PBLCK pblck)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
-    long cb;
+    int32_t cb;
     bool fT;
     PICH pich;
     achar ch;

@@ -37,7 +37,7 @@
 
 typedef class SMCC *PSMCC;
 
-const long kcmhlStudio = 0x10000; // nice medium level for the Studio
+const int32_t kcmhlStudio = 0x10000; // nice medium level for the Studio
 
 extern APP vapp;
 
@@ -59,7 +59,7 @@ class STDIO : public STDIO_PAR
     PMVIE _pmvie;
     PSMCC _psmcc;
     PGL _pglpbrcn;
-    long _aridSelected;
+    int32_t _aridSelected;
     PBRWR _pbrwrActr;
     PBRWR _pbrwrProp;
     PGL _pglcmg;        // Cno map tmpl->gokd for rollcall
@@ -67,7 +67,7 @@ class STDIO : public STDIO_PAR
     bool _fDisplayCast; // Display movie's cast
 
     CMD _cmd;
-    long _dtimToolTipDelay;
+    int32_t _dtimToolTipDelay;
     bool _fStopUISound;
     PTGOB _ptgobTitle;
     bool _fStartedSoonerLater;
@@ -75,8 +75,8 @@ class STDIO : public STDIO_PAR
     STDIO(PGCB pgcb) : GOB(pgcb){};
     bool _FOpenStudio(bool fPaletteFade);
     void _SetToolStates(void);
-    bool _FBuildMenuCidCtg(long cid, CTG ctg, PGL pgl, ulong grfHotKey, ulong grfNum, bool fNew);
-    PBRCN _PbrcnFromBrwdid(long brwdid);
+    bool _FBuildMenuCidCtg(int32_t cid, CTG ctg, PGL pgl, uint32_t grfHotKey, uint32_t grfNum, bool fNew);
+    PBRCN _PbrcnFromBrwdid(int32_t brwdid);
 #ifdef BUG1959
     bool _FLoadMovie(PFNI pfni, CNO cno, bool *pfClosedOld);
 #endif // BUG1959
@@ -85,7 +85,7 @@ class STDIO : public STDIO_PAR
     //
     // Create and destroy functions
     //
-    static PSTDIO PstdioNew(long hid, PCRM pcrmStudio, PFNI pfniUserDoc = pvNil, bool fFailIfDocOpenFailed = fTrue);
+    static PSTDIO PstdioNew(int32_t hid, PCRM pcrmStudio, PFNI pfniUserDoc = pvNil, bool fFailIfDocOpenFailed = fTrue);
     void ReleaseBrcn(void);
     ~STDIO(void);
 
@@ -132,15 +132,15 @@ class STDIO : public STDIO_PAR
     // Call back functions
     //
     void PlayStopped(void);
-    void ChangeTool(long tool);
+    void ChangeTool(int32_t tool);
     void SceneNuked(void);
     void SceneUnnuked(void);
     void ActorNuked(void);
     void EnableActorTools(void);
     void EnableTboxTools(void);
     void TboxSelected(void);
-    void SetUndo(long undo);
-    void SetCurs(long tool);
+    void SetUndo(int32_t undo);
+    void SetCurs(int32_t tool);
     void ActorEasel(bool *pfActrChanged);
     void SceneChange(void);
     void PauseType(WIT wit);
@@ -150,16 +150,16 @@ class STDIO : public STDIO_PAR
     void NewActor(void);
     void StartActionBrowser(void);
     void StartListenerEasel(void);
-    void PlayUISound(long tool, long grfcust);
+    void PlayUISound(int32_t tool, int32_t grfcust);
     void StopUISound(void);
     void UpdateTitle(PSTN pstnTitle);
 
-    bool FEdit3DText(PSTN pstn, long *ptdts);
-    void SetAridSelected(long arid)
+    bool FEdit3DText(PSTN pstn, int32_t *ptdts);
+    void SetAridSelected(int32_t arid)
     {
         _aridSelected = arid;
     }
-    long AridSelected(void)
+    int32_t AridSelected(void)
     {
         return _aridSelected;
     }
@@ -185,7 +185,7 @@ class STDIO : public STDIO_PAR
     static void ResumeActionButton(void);
 
     // Misc Studio strings
-    void GetStnMisc(long ids, PSTN pstn);
+    void GetStnMisc(int32_t ids, PSTN pstn);
 
     //
     // Movie changing
@@ -218,24 +218,24 @@ class SMCC : public SMCC_PAR
   private:
     PSSCB _psscb;
     PSTDIO _pstdio;
-    long _dypTextTbox;
+    int32_t _dypTextTbox;
 
   public:
     ~SMCC(void)
     {
         ReleasePpo(&_psscb);
     }
-    SMCC(long dxp, long dyp, long cbCache, PSSCB psscb, PSTDIO pstdio);
+    SMCC(int32_t dxp, int32_t dyp, int32_t cbCache, PSSCB psscb, PSTDIO pstdio);
 
-    virtual long Dxp(void)
+    virtual int32_t Dxp(void)
     {
         return _dxp;
     }
-    virtual long Dyp(void)
+    virtual int32_t Dyp(void)
     {
         return _dyp;
     }
-    virtual long CbCache(void)
+    virtual int32_t CbCache(void)
     {
         return _cbCache;
     }
@@ -243,11 +243,11 @@ class SMCC : public SMCC_PAR
     {
         return _psscb;
     }
-    virtual void SetCurs(long tool)
+    virtual void SetCurs(int32_t tool)
     {
         _pstdio->SetCurs(tool);
     }
-    virtual void ActorSelected(long arid)
+    virtual void ActorSelected(int32_t arid)
     {
         _pstdio->SetAridSelected(arid);
         UpdateRollCall();
@@ -274,7 +274,7 @@ class SMCC : public SMCC_PAR
     {
         _pstdio->PlayStopped();
     }
-    virtual void ChangeTool(long tool)
+    virtual void ChangeTool(int32_t tool)
     {
         _pstdio->ChangeTool(tool);
     }
@@ -306,7 +306,7 @@ class SMCC : public SMCC_PAR
     {
         _pstdio->ActorEasel(pfActrChanged);
     }
-    virtual void SetUndo(long undo)
+    virtual void SetUndo(int32_t undo)
     {
         _pstdio->SetUndo(undo);
     }
@@ -342,13 +342,13 @@ class SMCC : public SMCC_PAR
     {
         _pstdio->StartListenerEasel();
     }
-    virtual bool GetFniSave(FNI *pfni, long lFilterLabel, long lFilterExt, long lTitle, LPTSTR lpstrDefExt,
+    virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPTSTR lpstrDefExt,
                             PSTN pstnDefFileName)
     {
         return (FPortDisplayWithIds(pfni, fFalse, lFilterLabel, lFilterExt, lTitle, lpstrDefExt, pstnDefFileName, pvNil,
                                     fpfPortPrevMovie, kwavPortSaveMovie));
     }
-    virtual void PlayUISound(long tool, long grfcust)
+    virtual void PlayUISound(int32_t tool, int32_t grfcust)
     {
         _pstdio->PlayUISound(tool, grfcust);
     }
@@ -368,11 +368,11 @@ class SMCC : public SMCC_PAR
     {
         vpapp->DisableAccel();
     }
-    virtual void GetStn(long ids, PSTN pstn)
+    virtual void GetStn(int32_t ids, PSTN pstn)
     {
         vpapp->FGetStnApp(ids, pstn);
     }
-    virtual long DypTboxDef(void);
+    virtual int32_t DypTboxDef(void);
     virtual void SetSndFrame(bool fSoundInFrame)
     {
         _psscb->SetSndFrame(fSoundInFrame);

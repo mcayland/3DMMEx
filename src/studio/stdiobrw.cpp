@@ -68,7 +68,7 @@ ASSERTNAME
  * 	fTrue if it handled the command, else fFalse.
  *
  **************************************************************************/
-const long kglpbrcnGrow = 5;
+const int32_t kglpbrcnGrow = 5;
 
 bool STDIO::FCmdBrowserReady(PCMD pcmd)
 {
@@ -82,9 +82,9 @@ bool STDIO::FCmdBrowserReady(PCMD pcmd)
     TAG tag;
     PTAG ptag;
     PMVU pmvu;
-    long thumSelect;
-    long sid = ((APP *)vpappb)->SidProduct();
-    long brwdid = pcmd->rglw[0];
+    int32_t thumSelect;
+    int32_t sid = ((APP *)vpappb)->SidProduct();
+    int32_t brwdid = pcmd->rglw[0];
 
     vapp.BeginLongOp();
 
@@ -113,7 +113,7 @@ bool STDIO::FCmdBrowserReady(PCMD pcmd)
 
         if (pvNil == _pmvie->Pscen())
         {
-            thumSelect = (long)cnoNil;
+            thumSelect = (int32_t)cnoNil;
             TrashVar(&sid);
         }
         else
@@ -229,7 +229,7 @@ bool STDIO::FCmdBrowserReady(PCMD pcmd)
 
         // Search for background thumbs of any cno
         ckiRoot.cno = cnoNil;
-        thumSelect = (long)cnoNil;
+        thumSelect = (int32_t)cnoNil;
 
         // Create BRCNL for context carryover (optional choice)
         if (pbrcn == pvNil)
@@ -351,7 +351,7 @@ LFail:
  **************************************************************************/
 void STDIO::ReleaseBrcn(void)
 {
-    long ipbrcn;
+    int32_t ipbrcn;
     PBRCN pbrcn;
 
     if (pvNil == _pglpbrcn)
@@ -370,10 +370,10 @@ void STDIO::ReleaseBrcn(void)
  * Locate a browser pbrwd
  *
  **************************************************************************/
-PBRCN STDIO::_PbrcnFromBrwdid(long brwdid)
+PBRCN STDIO::_PbrcnFromBrwdid(int32_t brwdid)
 {
     AssertThis(0);
-    long ipbrcn;
+    int32_t ipbrcn;
     PBRCN pbrcn;
 
     for (ipbrcn = 0; ipbrcn < _pglpbrcn->IvMac(); ipbrcn++)
@@ -393,7 +393,7 @@ PBRCN STDIO::_PbrcnFromBrwdid(long brwdid)
  * thumSelect is an index and a chid
  *
  **************************************************************************/
-void BRWC::_ApplySelection(long thumSelect, long sid)
+void BRWC::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
 
@@ -416,7 +416,7 @@ void BRWC::_ApplySelection(long thumSelect, long sid)
  * thumSelect is a cno
  *
  **************************************************************************/
-void BRWB::_ApplySelection(long thumSelect, long sid)
+void BRWB::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
 
@@ -456,7 +456,7 @@ void BRWB::_ApplySelection(long thumSelect, long sid)
  *
  *
  **************************************************************************/
-void BRWP::_ApplySelection(long thumSelect, long sid)
+void BRWP::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
 
@@ -492,7 +492,7 @@ LFail:
  * thumSelect is a chid
  *
  **************************************************************************/
-void BRWA::_ApplySelection(long thumSelect, long sid)
+void BRWA::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
     AssertPo(_pstdio->Pmvie(), 0);
@@ -533,7 +533,7 @@ void BRWA::_ApplySelection(long thumSelect, long sid)
  * thumSelect is a cnoContent
  *
  **************************************************************************/
-void BRWM::_ApplySelection(long thumSelect, long sid)
+void BRWM::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
     AssertPo(_pstdio->Pmvie(), 0);
@@ -595,12 +595,12 @@ void BRWM::_ApplySelection(long thumSelect, long sid)
  * thumSelect is a cnoContent
  *
  **************************************************************************/
-void BRWI::_ApplySelection(long thumSelect, long sid)
+void BRWI::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
     AssertPo(_pstdio->Pmvie(), 0);
     CNO cnoDest;
-    long kidBrws;
+    int32_t kidBrws;
 
     switch (_sty)
     {
@@ -642,17 +642,17 @@ void BRWI::_ApplySelection(long thumSelect, long sid)
  * thumSelect equals ithum
  *
  **************************************************************************/
-void BRWR::_ApplySelection(long thumSelect, long sid)
+void BRWR::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
 
     PMVU pmvu;
     PMVIE pmvie = _pstdio->Pmvie();
-    long arid;
+    int32_t arid;
     STN stn;
-    long cactRef;
+    int32_t cactRef;
 
-    long iarid = _IaridFromIthum(thumSelect);
+    int32_t iarid = _IaridFromIthum(thumSelect);
     if (!pmvie->FGetArid(iarid, &arid, &stn, &cactRef))
         return;
 

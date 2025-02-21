@@ -142,9 +142,9 @@ enum
     kopLimSccg
 };
 
-const short kswCurSccg = 0x101D;  // this version
-const short kswBackSccg = 0x101D; // we can be read back to this version
-const short kswMinSccg = 0x1015;  // we can read back to this version
+const int16_t kswCurSccg = 0x101D;  // this version
+const int16_t kswBackSccg = 0x101D; // we can be read back to this version
+const int16_t kswMinSccg = 0x1015;  // we can read back to this version
 
 /****************************************
     Gob based script compiler
@@ -157,13 +157,14 @@ class SCCG : public SCCG_PAR
     RTCLASS_DEC
 
   protected:
-    virtual short _SwCur(void);
-    virtual short _SwBack(void);
-    virtual short _SwMin(void);
+    virtual int16_t _SwCur(void);
+    virtual int16_t _SwBack(void);
+    virtual int16_t _SwMin(void);
 
-    virtual long _OpFromStn(PSTN pstn);
-    virtual bool _FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar, bool *pfVoid);
-    virtual bool _FGetStnFromOp(long op, PSTN pstn);
+    virtual int32_t _OpFromStn(PSTN pstn);
+    virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                                 bool *pfVoid);
+    virtual bool _FGetStnFromOp(int32_t op, PSTN pstn);
 };
 
 #endif //! SCRCOMG_H

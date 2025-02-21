@@ -36,17 +36,17 @@ class TATR : public TATR_PAR
     CMD_MAP_DEC(TATR)
 
   protected:
-    long _kidParent; // ID of gob parent of MVU
-    PMVIE _pmvie;    // Currently loaded movie
+    int32_t _kidParent; // ID of gob parent of MVU
+    PMVIE _pmvie;       // Currently loaded movie
 
   protected:
-    TATR(long hid) : CMH(hid)
+    TATR(int32_t hid) : CMH(hid)
     {
     }
-    bool _FInit(long kidParent);
+    bool _FInit(int32_t kidParent);
 
   public:
-    static PTATR PtatrNew(long kidParent);
+    static PTATR PtatrNew(int32_t kidParent);
     ~TATR(void);
 
     bool FCmdLoad(PCMD pcmd);

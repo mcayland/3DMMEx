@@ -21,8 +21,8 @@ RTCLASS(MISI)
 RTCLASS(WMS)
 RTCLASS(OMS)
 
-const long kdtsMinSlip = kdtsSecond / 30;
-const long kcbMaxWmsBuffer = 0x0000FFFF / SIZEOF(MEV) * SIZEOF(MEV);
+const int32_t kdtsMinSlip = kdtsSecond / 30;
+const int32_t kcbMaxWmsBuffer = 0x0000FFFF / SIZEOF(MEV) * SIZEOF(MEV);
 
 /***************************************************************************
     Constructor for the midi stream device.
@@ -44,7 +44,7 @@ MDPS::~MDPS(void)
 /***************************************************************************
     Assert the validity of a MDPS.
 ***************************************************************************/
-void MDPS::AssertValid(ulong grf)
+void MDPS::AssertValid(uint32_t grf)
 {
     MDPS_PAR::AssertValid(0);
     AssertPo(_pmsmix, 0);
@@ -121,7 +121,7 @@ void MDPS::_Suspend(bool fSuspend)
 /***************************************************************************
     Set the volume.
 ***************************************************************************/
-void MDPS::SetVlm(long vlm)
+void MDPS::SetVlm(int32_t vlm)
 {
     AssertThis(0);
 
@@ -131,7 +131,7 @@ void MDPS::SetVlm(long vlm)
 /***************************************************************************
     Get the current volume.
 ***************************************************************************/
-long MDPS::VlmCur(void)
+int32_t MDPS::VlmCur(void)
 {
     AssertThis(0);
 
@@ -157,7 +157,7 @@ MDWS::~MDWS(void)
 /***************************************************************************
     Assert the validity of a MDWS.
 ***************************************************************************/
-void MDWS::AssertValid(ulong grf)
+void MDWS::AssertValid(uint32_t grf)
 {
     MDWS_PAR::AssertValid(0);
     AssertPo(_pglmev, 0);
@@ -177,7 +177,7 @@ void MDWS::MarkMem(void)
 /***************************************************************************
     A baco reader for a midi stream.
 ***************************************************************************/
-bool MDWS::FReadMdws(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool MDWS::FReadMdws(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, fblckReadable);
@@ -235,7 +235,7 @@ bool MDWS::_FInit(PMIDS pmids)
     AssertPo(pmids, 0);
 
     MSTP mstp;
-    ulong tsCur;
+    uint32_t tsCur;
     MEV rgmev[100];
     PMEV pmev, pmevLim;
     MIDEV midev;
@@ -253,7 +253,7 @@ bool MDWS::_FInit(PMIDS pmids)
     // use 1 second per quarter. We'll use 1000 ticks per quarter when
     // setting up the stream. The net result is that milliseconds correspond
     // to ticks, so no conversion is necessary here.
-    pmev->dwEvent = ((ulong)MEVT_TEMPO << 24) | 1000000;
+    pmev->dwEvent = ((uint32_t)MEVT_TEMPO << 24) | 1000000;
     pmev++;
 
     mstp.Init(pmids, 0);
@@ -264,7 +264,7 @@ bool MDWS::_FInit(PMIDS pmids)
         if (pmev >= pmevLim || !fEvt)
         {
             // append the MEVs in rgmev to the _pglmev
-            long imev, cmev;
+            int32_t imev, cmev;
 
             imev = _pglmev->IvMac();
             cmev = pmev - rgmev;
@@ -277,7 +277,7 @@ bool MDWS::_FInit(PMIDS pmids)
                 // event left, it's not an important one.
                 rgmev[0].dwDeltaTime = 0;
                 rgmev[0].dwStreamID = 0;
-                rgmev[0].dwEvent = (ulong)MEVT_NOP << 24;
+                rgmev[0].dwEvent = (uint32_t)MEVT_NOP << 24;
                 if (!_pglmev->FAdd(&rgmev[0]))
                     return fFalse;
 
@@ -303,7 +303,7 @@ bool MDWS::_FInit(PMIDS pmids)
 /***************************************************************************
     Return a locked pointer to the data.
 ***************************************************************************/
-void *MDWS::PvLockData(long *pcb)
+void *MDWS::PvLockData(int32_t *pcb)
 {
     AssertThis(0);
     AssertVarMem(pcb);
@@ -345,7 +345,7 @@ MSQUE::~MSQUE(void)
 /***************************************************************************
     Assert the validity of a MSQUE.
 ***************************************************************************/
-void MSQUE::AssertValid(ulong grf)
+void MSQUE::AssertValid(uint32_t grf)
 {
     MSQUE_PAR::AssertValid(0);
     AssertPo(_pmsmix, 0);
@@ -428,7 +428,7 @@ PBACO MSQUE::_PbacoFetch(PRCA prca, CTG ctg, CNO cno)
 /***************************************************************************
     An item was added to or deleted from the queue.
 ***************************************************************************/
-void MSQUE::_Queue(long isndinMin)
+void MSQUE::_Queue(int32_t isndinMin)
 {
     AssertThis(0);
     SNDIN sndin;
@@ -461,7 +461,7 @@ LDone:
 /***************************************************************************
     One or more items in the queue were paused.
 ***************************************************************************/
-void MSQUE::_PauseQueue(long isndinMin)
+void MSQUE::_PauseQueue(int32_t isndinMin)
 {
     AssertThis(0);
     SNDIN sndin;
@@ -483,7 +483,7 @@ void MSQUE::_PauseQueue(long isndinMin)
 /***************************************************************************
     One or more items in the queue were resumed.
 ***************************************************************************/
-void MSQUE::_ResumeQueue(long isndinMin)
+void MSQUE::_ResumeQueue(int32_t isndinMin)
 {
     AssertThis(0);
 
@@ -574,14 +574,14 @@ PMSMIX MSMIX::PmsmixNew(void)
 bool MSMIX::_FInit(void)
 {
     AssertBaseThis(0);
-    ulong luThread;
+    DWORD luThread;
 
     if (pvNil == (_pglmsos = GL::PglNew(SIZEOF(MSOS))))
         return fFalse;
     _pglmsos->SetMinGrow(1);
 
-    if (pvNil == (_pmisi = WMS::PwmsNew(_MidiProc, (ulong)this)) &&
-        pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (ulong)this)))
+    if (pvNil == (_pmisi = WMS::PwmsNew(_MidiProc, (uint32_t)this)) &&
+        pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (uint32_t)this)))
     {
         return fFalse;
     }
@@ -602,7 +602,7 @@ bool MSMIX::_FInit(void)
 /***************************************************************************
     Assert the validity of a MSMIX.
 ***************************************************************************/
-void MSMIX::AssertValid(ulong grf)
+void MSMIX::AssertValid(uint32_t grf)
 {
     MSMIX_PAR::AssertValid(0);
     _mutx.Enter();
@@ -680,10 +680,10 @@ void MSMIX::_StopStream(void)
 /***************************************************************************
     Set the volume for the midi stream output device.
 ***************************************************************************/
-void MSMIX::SetVlm(long vlm)
+void MSMIX::SetVlm(int32_t vlm)
 {
     AssertThis(0);
-    ulong luHigh, luLow;
+    uint32_t luHigh, luLow;
 
     _mutx.Enter();
 
@@ -697,7 +697,7 @@ void MSMIX::SetVlm(long vlm)
 /***************************************************************************
     Get the current volume.
 ***************************************************************************/
-long MSMIX::VlmCur(void)
+int32_t MSMIX::VlmCur(void)
 {
     AssertThis(0);
 
@@ -707,12 +707,13 @@ long MSMIX::VlmCur(void)
 /***************************************************************************
     Play the given midi stream from the indicated queue.
 ***************************************************************************/
-bool MSMIX::FPlay(PMSQUE pmsque, PMDWS pmdws, long sii, long spr, long cactPlay, ulong dtsStart, long vlm)
+bool MSMIX::FPlay(PMSQUE pmsque, PMDWS pmdws, int32_t sii, int32_t spr, int32_t cactPlay, uint32_t dtsStart,
+                  int32_t vlm)
 {
     AssertThis(0);
     AssertPo(pmsque, 0);
     AssertNilOrPo(pmdws, 0);
-    long imsos;
+    int32_t imsos;
     MSOS msos;
     bool fNew = fFalse;
     bool fRet = fTrue;
@@ -792,7 +793,7 @@ void MSMIX::_Restart(bool fNew)
     {
         // start playing the first MSOS
         MSOS msos;
-        ulong tsCur = TsCurrentSystem();
+        uint32_t tsCur = TsCurrentSystem();
 
         if (fNew)
         {
@@ -811,14 +812,14 @@ void MSMIX::_Restart(bool fNew)
     Submit the buffer(s) for the current MSOS. Assumes the mutx is already
     checked out.
 ***************************************************************************/
-void MSMIX::_SubmitBuffers(ulong tsCur)
+void MSMIX::_SubmitBuffers(uint32_t tsCur)
 {
     Assert(!_fPlaying, "already playing!");
-    long cb, cbSkip;
+    int32_t cb, cbSkip;
     MSOS msos;
-    long imsos;
+    int32_t imsos;
     void *pvData;
-    long cactSkip;
+    int32_t cactSkip;
 
     for (imsos = 0; imsos < _pglmsos->IvMac(); imsos++)
     {
@@ -827,7 +828,7 @@ void MSMIX::_SubmitBuffers(ulong tsCur)
         cactSkip = (tsCur - msos.tsStart) / msos.dts;
         if (cactSkip > 0)
         {
-            ulong dtsSeek;
+            uint32_t dtsSeek;
 
             // we need to skip at least one loop of this sound
             if (msos.cactPlay > 0 && (msos.cactPlay -= cactSkip) <= 0)
@@ -867,7 +868,7 @@ void MSMIX::_SubmitBuffers(ulong tsCur)
 
         _cpvOut++;
         pvData = msos.pmdws->PvLockData(&cb);
-        if (_pmisi->FQueueBuffer(pvData, cb, cbSkip, msos.cactPlay, (ulong)msos.pmdws))
+        if (_pmisi->FQueueBuffer(pvData, cb, cbSkip, msos.cactPlay, (uint32_t)msos.pmdws))
         {
             // it worked!
             _fPlaying = fTrue;
@@ -896,7 +897,7 @@ void MSMIX::_SubmitBuffers(ulong tsCur)
     if (_fPlaying && imsos > 0)
     {
         // move the skipped ones to the end of the list
-        long cmsos = _pglmsos->IvMac();
+        int32_t cmsos = _pglmsos->IvMac();
 
         AssertIn(imsos, 1, cmsos);
         SwapBlocks(_pglmsos->QvGet(0), LwMul(imsos, SIZEOF(MSOS)), LwMul(cmsos - imsos, SIZEOF(MSOS)));
@@ -907,7 +908,7 @@ void MSMIX::_SubmitBuffers(ulong tsCur)
     Seek into the pmdws the given amount of time, and accumulate key events
     in _pglmevKey.
 ***************************************************************************/
-bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
+bool MSMIX::_FGetKeyEvents(PMDWS pmdws, uint32_t dtsSeek, int32_t *pcbSkip)
 {
     AssertPo(pmdws, 0);
     AssertVarMem(pcbSkip);
@@ -917,12 +918,12 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
     // controller changes.
     struct MKEY
     {
-        ushort grfbitProgram;
-        ushort grfbitChannelPressure;
-        ushort grfbitPitchWheel;
-        ushort fTempo : 1;
+        uint16_t grfbitProgram;
+        uint16_t grfbitChannelPressure;
+        uint16_t grfbitPitchWheel;
+        uint16_t fTempo : 1;
 
-        ushort rggrfbitControl[120];
+        uint16_t rggrfbitControl[120];
     };
 
     MKEY mkey;
@@ -934,12 +935,12 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
     PMEV pmevDst;
     PMEV pmevLimDst;
 
-    long cb;
-    ulong dts;
-    long igrfbit;
-    ushort fbit;
-    ushort *pgrfbit;
-    byte bT;
+    int32_t cb;
+    uint32_t dts;
+    int32_t igrfbit;
+    uint16_t fbit;
+    uint16_t *pgrfbit;
+    uint8_t bT;
 
     ClearPb(&mkey, SIZEOF(mkey));
     ClearPb(rgmev, SIZEOF(rgmev));
@@ -981,7 +982,7 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
         if (pmevDst <= rgmev || pmev <= pmevMin)
         {
             // destination buffer is full - write it out
-            long cmev, cmevNew;
+            int32_t cmev, cmevNew;
             PMEV qrgmev;
 
             cmev = _pglmevKey->IvMac();
@@ -1010,7 +1011,7 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
         switch (pmev->dwEvent >> 24)
         {
         case MEVT_SHORTMSG:
-            bT = (byte)pmev->dwEvent;
+            bT = (uint8_t)pmev->dwEvent;
 
             // The high nibble of bT is the status value
             // The low nibble is the channel
@@ -1066,7 +1067,7 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip)
 /***************************************************************************
     Call back from the midi stream stuff.
 ***************************************************************************/
-void MSMIX::_MidiProc(ulong luUser, void *pvData, ulong luData)
+void MSMIX::_MidiProc(uint32_t luUser, void *pvData, uint32_t luData)
 {
     PMSMIX pmsmix;
     PMDWS pmdws;
@@ -1138,7 +1139,7 @@ void MSMIX::_Notify(void *pvData, PMDWS pmdws)
 /***************************************************************************
     AT: Static method. Thread function for the MSMIX object.
 ***************************************************************************/
-ulong __stdcall MSMIX::_ThreadProc(void *pv)
+DWORD __stdcall MSMIX::_ThreadProc(LPVOID pv)
 {
     PMSMIX pmsmix = (PMSMIX)pv;
 
@@ -1151,14 +1152,14 @@ ulong __stdcall MSMIX::_ThreadProc(void *pv)
     AT: This thread just sleeps until the next sound is due to expire, then
     wakes up and nukes any expired sounds.
 ***************************************************************************/
-ulong MSMIX::_LuThread(void)
+DWORD MSMIX::_LuThread(void)
 {
     AssertThis(0);
-    ulong tsCur;
-    long imsos;
+    uint32_t tsCur;
+    int32_t imsos;
     MSOS msos;
-    long cactSkip;
-    ulong dtsNextStop = kluMax;
+    int32_t cactSkip;
+    uint32_t dtsNextStop = kluMax;
 
     for (;;)
     {
@@ -1189,7 +1190,7 @@ ulong MSMIX::_LuThread(void)
                 cactSkip = (tsCur - msos.tsStart) / msos.dts;
                 if (cactSkip > 0)
                 {
-                    ulong dtsSeek;
+                    uint32_t dtsSeek;
 
                     if (msos.cactPlay > 0 && (msos.cactPlay -= cactSkip) <= 0)
                     {
@@ -1222,7 +1223,7 @@ ulong MSMIX::_LuThread(void)
 /***************************************************************************
     Constructor for the MIDI stream interface.
 ***************************************************************************/
-MISI::MISI(PFNMIDI pfn, ulong luUser)
+MISI::MISI(PFNMIDI pfn, uint32_t luUser)
 {
     AssertBaseThis(0);
     Assert(pvNil != pfn, 0);
@@ -1231,7 +1232,7 @@ MISI::MISI(PFNMIDI pfn, ulong luUser)
     _luUser = luUser;
 
     _tBogusDriver = tMaybe;
-    _luVolSys = (ulong)(-1);
+    _luVolSys = (uint32_t)(-1);
     _vlmBase = kvlmFull;
 }
 
@@ -1241,7 +1242,7 @@ MISI::MISI(PFNMIDI pfn, ulong luUser)
 void MISI::_Reset(void)
 {
     Assert(hNil != _hms, 0);
-    long iv;
+    int32_t iv;
 
     midiOutReset(_hms);
 
@@ -1260,7 +1261,7 @@ void MISI::_Reset(void)
 void MISI::_GetSysVol(void)
 {
     Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
-    ulong lu0, lu1, lu2;
+    DWORD lu0, lu1, lu2;
 
     switch (_tBogusDriver)
     {
@@ -1310,10 +1311,10 @@ void MISI::_GetSysVol(void)
 /***************************************************************************
     Set the system volume level.
 ***************************************************************************/
-void MISI::_SetSysVol(ulong luVol)
+void MISI::_SetSysVol(uint32_t luVol)
 {
     Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
-    midiOutSetVolume(_hms, luVol);
+    midiOutSetVolume(_hms, DWORD(luVol));
 }
 
 /***************************************************************************
@@ -1323,7 +1324,7 @@ void MISI::_SetSysVol(ulong luVol)
 ***************************************************************************/
 void MISI::_SetSysVlm(void)
 {
-    ulong luVol;
+    uint32_t luVol;
 
     luVol = LuVolScale(_luVolSys, _vlmBase);
     _SetSysVol(luVol);
@@ -1332,7 +1333,7 @@ void MISI::_SetSysVlm(void)
 /***************************************************************************
     Set the volume for the midi stream output device.
 ***************************************************************************/
-void MISI::SetVlm(long vlm)
+void MISI::SetVlm(int32_t vlm)
 {
     AssertThis(0);
 
@@ -1347,7 +1348,7 @@ void MISI::SetVlm(long vlm)
 /***************************************************************************
     Get the current volume.
 ***************************************************************************/
-long MISI::VlmCur(void)
+int32_t MISI::VlmCur(void)
 {
     AssertThis(0);
 
@@ -1375,7 +1376,7 @@ bool MISI::FActivate(bool fActivate)
 /***************************************************************************
     Constructor for the Win95 Midi stream class.
 ***************************************************************************/
-WMS::WMS(PFNMIDI pfn, ulong luUser) : MISI(pfn, luUser)
+WMS::WMS(PFNMIDI pfn, uint32_t luUser) : MISI(pfn, luUser)
 {
 }
 
@@ -1410,7 +1411,7 @@ WMS::~WMS(void)
 /***************************************************************************
     Create a new WMS.
 ***************************************************************************/
-PWMS WMS::PwmsNew(PFNMIDI pfn, ulong luUser)
+PWMS WMS::PwmsNew(PFNMIDI pfn, uint32_t luUser)
 {
     PWMS pwms;
 
@@ -1429,7 +1430,7 @@ PWMS WMS::PwmsNew(PFNMIDI pfn, ulong luUser)
 bool WMS::_FInit(void)
 {
     OSVERSIONINFO osv;
-    ulong luThread;
+    DWORD luThread;
 
     // Make sure we're on Win95 and not NT, since the API exists on NT 3.51
     // but it fails.
@@ -1489,11 +1490,11 @@ bool WMS::_FInit(void)
 /***************************************************************************
     Assert the validity of a WMS.
 ***************************************************************************/
-void WMS::AssertValid(ulong grf)
+void WMS::AssertValid(uint32_t grf)
 {
     WMS_PAR::AssertValid(0);
     Assert(hNil != _hlib, 0);
-    long cpmsir;
+    int32_t cpmsir;
 
     _mutx.Enter();
     Assert(hNil != _hevt, "nil event");
@@ -1512,7 +1513,7 @@ void WMS::MarkMem(void)
 {
     AssertValid(0);
     PMSIR pmsir;
-    long ipmsir;
+    int32_t ipmsir;
 
     WMS_PAR::MarkMem();
 
@@ -1553,7 +1554,7 @@ bool WMS::_FOpen(void)
     if (hNil != _hms)
         goto LDone;
 
-    if (MMSYSERR_NOERROR != (*_pfnOpen)(&_hms, &uT, 1, (ulong)_MidiProc, (ulong)this, CALLBACK_FUNCTION))
+    if (MMSYSERR_NOERROR != (*_pfnOpen)(&_hms, &uT, 1, (uint32_t)_MidiProc, (uint32_t)this, CALLBACK_FUNCTION))
     {
         goto LFail;
     }
@@ -1564,7 +1565,7 @@ bool WMS::_FOpen(void)
     mt.cbStruct = SIZEOF(mt);
     mt.dwTimeDiv = 1000;
 
-    if (MMSYSERR_NOERROR != (*_pfnProperty)(_hms, (byte *)&mt, MIDIPROP_SET | MIDIPROP_TIMEDIV))
+    if (MMSYSERR_NOERROR != (*_pfnProperty)(_hms, (uint8_t *)&mt, MIDIPROP_SET | MIDIPROP_TIMEDIV))
     {
         (*_pfnClose)(_hms);
     LFail:
@@ -1677,7 +1678,7 @@ void WMS::_ResetStream(void)
     This submits a buffer and restarts the midi stream. If the data is
     bigger than 64K, this (in conjunction with _Notify) deals with it.
 ***************************************************************************/
-bool WMS::FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong luData)
+bool WMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData)
 {
     AssertThis(0);
     AssertPvCb(pvData, cb);
@@ -1685,7 +1686,7 @@ bool WMS::FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong
     Assert(cb % SIZEOF(MEV) == 0, "bad cb");
     Assert(ibStart % SIZEOF(MEV) == 0, "bad cb");
 
-    long ipmsir;
+    int32_t ipmsir;
     PMSIR pmsir = pvNil;
     bool fRet = fTrue;
 
@@ -1724,13 +1725,13 @@ bool WMS::FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong
 /***************************************************************************
     Submits buffers. Assumes the _mutx is already ours.
 ***************************************************************************/
-long WMS::_CmhSubmitBuffers(void)
+int32_t WMS::_CmhSubmitBuffers(void)
 {
     PMSIR pmsir;
-    long cbMh;
+    int32_t cbMh;
     PMH pmh;
-    long imh;
-    long cmh = 0;
+    int32_t imh;
+    int32_t cmh = 0;
 
     while (_ipmsirCur < _pglpmsir->IvMac())
     {
@@ -1766,7 +1767,7 @@ long WMS::_CmhSubmitBuffers(void)
         cbMh = LwMin(pmsir->cb - pmsir->ibNext, kcbMaxWmsBuffer);
         pmh->dwBufferLength = cbMh;
         pmh->dwBytesRecorded = cbMh;
-        pmh->dwUser = (ulong)pmsir;
+        pmh->dwUser = (uint32_t)pmsir;
         pmsir->ibNext += cbMh;
         pmsir->rgibLim[imh] = pmsir->ibNext;
 
@@ -1835,7 +1836,7 @@ void WMS::StopPlaying(void)
     to 0, this stops the midi stream. If the indicated sound is done,
     we notify the client.
 ***************************************************************************/
-void __stdcall WMS::_MidiProc(HMS hms, ulong msg, ulong luUser, ulong lu1, ulong lu2)
+void __stdcall WMS::_MidiProc(HMS hms, uint32_t msg, uint32_t luUser, uint32_t lu1, uint32_t lu2)
 {
     PWMS pwms;
     PMH pmh;
@@ -1864,7 +1865,7 @@ void WMS::_Notify(HMS hms, PMH pmh)
     AssertVarMem(pmh);
 
     PMSIR pmsir;
-    long imh;
+    int32_t imh;
 
     _mutx.Enter();
 
@@ -1911,7 +1912,7 @@ void WMS::_Notify(HMS hms, PMH pmh)
     just waits for the event to be triggered, indicating that we got
     a callback from the midiStream stuff and it's time to do our callbacks.
 ***************************************************************************/
-ulong __stdcall WMS::_ThreadProc(void *pv)
+DWORD __stdcall WMS::_ThreadProc(LPVOID pv)
 {
     PWMS pwms = (PWMS)pv;
 
@@ -1924,7 +1925,7 @@ ulong __stdcall WMS::_ThreadProc(void *pv)
     AT: This thread just sleeps until the next sound is due to expire, then
     wakes up and nukes any expired sounds.
 ***************************************************************************/
-ulong WMS::_LuThread(void)
+DWORD WMS::_LuThread(void)
 {
     AssertThis(0);
 
@@ -1962,7 +1963,7 @@ void WMS::_DoCallBacks()
         if (_cmhOut > 0)
         {
             // see if the MSIR is done
-            long imh;
+            int32_t imh;
 
             for (imh = 0; imh < kcmhMsir; imh++)
             {
@@ -1991,7 +1992,7 @@ void WMS::_DoCallBacks()
 /***************************************************************************
     Constructor for our own midi stream api implementation.
 ***************************************************************************/
-OMS::OMS(PFNMIDI pfn, ulong luUser) : MISI(pfn, luUser)
+OMS::OMS(PFNMIDI pfn, uint32_t luUser) : MISI(pfn, luUser)
 {
 }
 
@@ -2023,7 +2024,7 @@ OMS::~OMS(void)
 /***************************************************************************
     Create a new OMS.
 ***************************************************************************/
-POMS OMS::PomsNew(PFNMIDI pfn, ulong luUser)
+POMS OMS::PomsNew(PFNMIDI pfn, uint32_t luUser)
 {
     POMS poms;
 
@@ -2042,7 +2043,7 @@ POMS OMS::PomsNew(PFNMIDI pfn, ulong luUser)
 bool OMS::_FInit(void)
 {
     AssertBaseThis(0);
-    ulong luThread;
+    DWORD luThread;
 
     if (pvNil == (_pglmsb = GL::PglNew(SIZEOF(MSB))))
         return fFalse;
@@ -2069,7 +2070,7 @@ bool OMS::_FInit(void)
 /***************************************************************************
     Assert the validity of a OMS.
 ***************************************************************************/
-void OMS::AssertValid(ulong grf)
+void OMS::AssertValid(uint32_t grf)
 {
     OMS_PAR::AssertValid(0);
 
@@ -2165,7 +2166,7 @@ bool OMS::_FClose(void)
 /***************************************************************************
     Queue a buffer to the midi stream.
 ***************************************************************************/
-bool OMS::FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong luData)
+bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData)
 {
     AssertThis(0);
     AssertPvCb(pvData, cb);
@@ -2228,7 +2229,7 @@ void OMS::StopPlaying(void)
 /***************************************************************************
     AT: Static method. Thread function for the midi stream object.
 ***************************************************************************/
-ulong __stdcall OMS::_ThreadProc(void *pv)
+DWORD __stdcall OMS::_ThreadProc(void *pv)
 {
     POMS poms = (POMS)pv;
 
@@ -2240,14 +2241,14 @@ ulong __stdcall OMS::_ThreadProc(void *pv)
 /***************************************************************************
     AT: The midi stream playback thread.
 ***************************************************************************/
-ulong OMS::_LuThread(void)
+DWORD OMS::_LuThread(void)
 {
     AssertThis(0);
     MSB msb;
     bool fChanged; // whether the event went off
-    ulong tsCur;
-    const long klwInfinite = klwMax;
-    long dtsWait = klwInfinite;
+    uint32_t tsCur;
+    const int32_t klwInfinite = klwMax;
+    int32_t dtsWait = klwInfinite;
 
     for (;;)
     {
@@ -2279,7 +2280,7 @@ ulong OMS::_LuThread(void)
                     dtsWait = 0;
                 else
                 {
-                    ulong tsNew = TsCurrentSystem();
+                    uint32_t tsNew = TsCurrentSystem();
 
                     tsCur += _pmev->dwDeltaTime;
                     dtsWait = tsCur - tsNew;

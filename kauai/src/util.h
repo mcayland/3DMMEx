@@ -16,6 +16,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 #include <stddef.h>
+#include <cstdint>
 
 // define the endian-ness
 #ifdef IN_80386
@@ -60,7 +61,7 @@ typedef HCURSOR HCRS;
 
 #endif // WIN
 
-#define SIZEOF(foo) ((long)sizeof(foo))
+#define SIZEOF(foo) ((int32_t)sizeof(foo))
 #define offset(FOO, field) ((int)&((FOO *)0)->field)
 #define CvFromRgv(rgv) (SIZEOF(rgv) / SIZEOF(rgv[0]))
 #define BLOCK
@@ -72,23 +73,18 @@ typedef HCURSOR HCRS;
 #endif //! DEBUG
 
 // standard scalar types
-typedef unsigned char byte;
-const byte kbMax = 0xFF;
-const byte kbMin = 0;
+const uint8_t kbMax = 0xFF;
+const uint8_t kbMin = 0;
 
-typedef unsigned short ushort;
-const short kswMax = (short)0x7FFF;
-const short kswMin = -kswMax; // so -kswMin is positive
-const ushort ksuMax = 0xFFFF;
-const ushort ksuMin = 0;
+const int16_t kswMax = (int16_t)0x7FFF;
+const int16_t kswMin = -kswMax; // so -kswMin is positive
+const uint16_t ksuMax = 0xFFFF;
+const uint16_t ksuMin = 0;
 
-typedef unsigned int uint;
-
-typedef unsigned long ulong;
-const long klwMax = 0x7FFFFFFF;
-const long klwMin = -klwMax; // so -klwMin is positive
-const ulong kluMax = 0xFFFFFFFF;
-const ulong kluMin = 0;
+const int32_t klwMax = 0x7FFFFFFF;
+const int32_t klwMin = -klwMax; // so -klwMin is positive
+const uint32_t kluMax = 0xFFFFFFFF;
+const uint32_t kluMin = 0;
 
 // typedef int bool;
 
@@ -105,7 +101,7 @@ typedef char schar;
 const schar kschMax = (schar)0x7F;
 const schar kschMin = (schar)0x80;
 #endif //! MAC
-typedef ushort wchar;
+typedef uint16_t wchar;
 const wchar kwchMax = ksuMax;
 const wchar kwchMin = ksuMin;
 #ifdef UNICODE

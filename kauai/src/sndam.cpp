@@ -23,15 +23,15 @@ ASSERTNAME
 #define CHECK_AUDIO_DEVCAPS
 
 // Initialize the maximum mem footprint of wave sounds.
-long SDAM::vcbMaxMemWave = 40 * 1024;
+int32_t SDAM::vcbMaxMemWave = 40 * 1024;
 
-static IAMMixer *_pamix; // the audioman mixer
-static ulong _luGroup;   // the group number
-static bool _fGrouped;   // whether new sounds are grouped
-static long _cactGroup;  // group nesting count
+static IAMMixer *_pamix;   // the audioman mixer
+static DWORD _luGroup;     // the group number
+static bool _fGrouped;     // whether new sounds are grouped
+static int32_t _cactGroup; // group nesting count
 
-static ulong _luFormat;    // format mixer is in
-static ulong _luCacheTime; // buffer size for mixer
+static uint32_t _luFormat;    // format mixer is in
+static uint32_t _luCacheTime; // buffer size for mixer
 
 RTCLASS(SDAM)
 RTCLASS(CAMS)
@@ -91,7 +91,7 @@ STDMETHODIMP_(ULONG) STBL::AddRef(void)
 STDMETHODIMP_(ULONG) STBL::Release(void)
 {
     AssertThis(0);
-    long cactRef;
+    int32_t cactRef;
 
     if ((cactRef = --_cactRef) == 0)
         delete this;
@@ -150,7 +150,7 @@ STDMETHODIMP STBL::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *
         return E_INVALIDARG;
     }
 
-    _ib = (long)dlibMove.QuadPart;
+    _ib = (int32_t)dlibMove.QuadPart;
     if (pvNil != plibNewPosition)
         plibNewPosition->QuadPart = _ib;
     return S_OK;
@@ -224,7 +224,7 @@ PSTBL STBL::PstblNew(FLO *pflo, bool fPacked)
 /***************************************************************************
     Assert the validity of a STBL.
 ***************************************************************************/
-void STBL::AssertValid(ulong grf)
+void STBL::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertPo(&_blck, 0);
@@ -262,7 +262,7 @@ CAMS::~CAMS(void)
 /***************************************************************************
     Static BACO reader method to put together a Cached AudioMan sound.
 ***************************************************************************/
-bool CAMS::FReadCams(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool CAMS::FReadCams(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -305,7 +305,7 @@ bool CAMS::FReadCams(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
 /***************************************************************************
     Static BACO reader method to put together a Cached AudioMan sound.
 ***************************************************************************/
-PCAMS CAMS::PcamsNewLoop(PCAMS pcamsSrc, long cactPlay)
+PCAMS CAMS::PcamsNewLoop(PCAMS pcamsSrc, int32_t cactPlay)
 {
     AssertPo(pcamsSrc, 0);
     Assert(cactPlay != 1, "bad loop count");
@@ -330,7 +330,7 @@ PCAMS CAMS::PcamsNewLoop(PCAMS pcamsSrc, long cactPlay)
 /***************************************************************************
     Assert the validity of a CAMS.
 ***************************************************************************/
-void CAMS::AssertValid(ulong grf)
+void CAMS::AssertValid(uint32_t grf)
 {
     CAMS_PAR::AssertValid(0);
     AssertPo(_pstbl, 0);
@@ -371,7 +371,7 @@ void AMNOT::Set(PAMQUE pamque)
 /***************************************************************************
     Assert the validity of a AMNOT.
 ***************************************************************************/
-void AMNOT::AssertValid(ulong grf)
+void AMNOT::AssertValid(uint32_t grf)
 {
     AssertThisMem();
     AssertNilOrVarMem(_pamque);
@@ -411,7 +411,7 @@ STDMETHODIMP_(ULONG) AMNOT::AddRef(void)
 STDMETHODIMP_(ULONG) AMNOT::Release(void)
 {
     AssertThis(0);
-    long cactRef;
+    int32_t cactRef;
 
     if ((cactRef = --_cactRef) == 0)
         delete this;
@@ -450,7 +450,7 @@ AMQUE::~AMQUE(void)
 /***************************************************************************
     Assert the validity of a AMQUE.
 ***************************************************************************/
-void AMQUE::AssertValid(ulong grf)
+void AMQUE::AssertValid(uint32_t grf)
 {
     AMQUE_PAR::AssertValid(0);
     Assert(pvNil != _pchan, 0);
@@ -534,11 +534,11 @@ PBACO AMQUE::_PbacoFetch(PRCA prca, CTG ctg, CNO cno)
 /***************************************************************************
     An item was added to or deleted from the queue.
 ***************************************************************************/
-void AMQUE::_Queue(long isndinMin)
+void AMQUE::_Queue(int32_t isndinMin)
 {
     AssertThis(0);
     SNDIN sndin;
-    long isndin;
+    int32_t isndin;
 
     _Enter();
 
@@ -579,7 +579,7 @@ void AMQUE::_Queue(long isndinMin)
             _pchan->Stop();
 
             // set the volume
-            _pchan->SetVolume(LuVolScale((ulong)(-1), sndin.vlm));
+            _pchan->SetVolume(LuVolScale((uint32_t)(-1), sndin.vlm));
 
             // if the sound is in memory
             if (((PCAMS)sndin.pbaco)->FInMemory())
@@ -625,7 +625,7 @@ void AMQUE::_Queue(long isndinMin)
 /***************************************************************************
     One or more items in the queue were paused.
 ***************************************************************************/
-void AMQUE::_PauseQueue(long isndinMin)
+void AMQUE::_PauseQueue(int32_t isndinMin)
 {
     AssertThis(0);
     SNDIN sndin;
@@ -647,7 +647,7 @@ void AMQUE::_PauseQueue(long isndinMin)
 /***************************************************************************
     One or more items in the queue were resumed.
 ***************************************************************************/
-void AMQUE::_ResumeQueue(long isndinMin)
+void AMQUE::_ResumeQueue(int32_t isndinMin)
 {
     AssertThis(0);
 
@@ -694,7 +694,7 @@ void AMQUE::Notify(LPSOUND psnd)
 SDAM::SDAM(void)
 {
     _vlm = kvlmFull;
-    _luVolSys = (ulong)(-1);
+    _luVolSys = (uint32_t)(-1);
 }
 
 /***************************************************************************
@@ -712,7 +712,7 @@ SDAM::~SDAM(void)
 /***************************************************************************
     Assert the validity of a SDAM.
 ***************************************************************************/
-void SDAM::AssertValid(ulong grf)
+void SDAM::AssertValid(uint32_t grf)
 {
     SDAM_PAR::AssertValid(0);
     Assert(_pamix != pvNil, 0);
@@ -722,7 +722,7 @@ void SDAM::AssertValid(ulong grf)
 /***************************************************************************
     Static method to create the audioman device.
 ***************************************************************************/
-PSDAM SDAM::PsdamNew(long wav)
+PSDAM SDAM::PsdamNew(int32_t wav)
 {
     PSDAM psdam;
 
@@ -736,7 +736,7 @@ PSDAM SDAM::PsdamNew(long wav)
     return psdam;
 }
 
-static long _mpwavfmt[] = {
+static int32_t _mpwavfmt[] = {
     WAVE_FORMAT_1M08, WAVE_FORMAT_2M08, WAVE_FORMAT_4M08, WAVE_FORMAT_1S08, WAVE_FORMAT_2S08, WAVE_FORMAT_4S08,
     WAVE_FORMAT_1M16, WAVE_FORMAT_2M16, WAVE_FORMAT_4M16, WAVE_FORMAT_1S16, WAVE_FORMAT_2S16, WAVE_FORMAT_4S16,
 };
@@ -792,7 +792,7 @@ bool FHaveWaveDevice(DWORD dwReqFormats)
 /***************************************************************************
     Initialize the audioman device.
 ***************************************************************************/
-bool SDAM::_FInit(long wav)
+bool SDAM::_FInit(int32_t wav)
 {
     AssertBaseThis(0);
     MIXERCONFIG mixc;
@@ -903,7 +903,7 @@ void SDAM::_Suspend(bool fSuspend)
 /***************************************************************************
     Set the volume.
 ***************************************************************************/
-void SDAM::SetVlm(long vlm)
+void SDAM::SetVlm(int32_t vlm)
 {
     AssertThis(0);
 
@@ -918,7 +918,7 @@ void SDAM::SetVlm(long vlm)
 /***************************************************************************
     Get the current volume.
 ***************************************************************************/
-long SDAM::VlmCur(void)
+int32_t SDAM::VlmCur(void)
 {
     AssertThis(0);
 

@@ -63,7 +63,7 @@ ON_CID_GEN(cidWriteBmps, &STDIO::FCmdWriteBmps, pvNil)
 #endif // DEBUG
 END_CMD_MAP_NIL()
 
-const long kcbCursorCache = 1024;
+const int32_t kcbCursorCache = 1024;
 
 /***************************************************************************
  *
@@ -81,7 +81,7 @@ const long kcbCursorCache = 1024;
  *  Pointer to the studio if successful, else pvNil.
  *
  **************************************************************************/
-PSTDIO STDIO::PstdioNew(long hid, PCRM pcrmStudio, PFNI pfniUserDoc, bool fFailIfDocOpenFailed)
+PSTDIO STDIO::PstdioNew(int32_t hid, PCRM pcrmStudio, PFNI pfniUserDoc, bool fFailIfDocOpenFailed)
 {
     AssertPo(pcrmStudio, 0);
     AssertNilOrPo(pfniUserDoc, ffniFile);
@@ -194,9 +194,9 @@ bool STDIO::_FOpenStudio(bool fPaletteFade)
     RC rcAbs, rcRel;
     BLCK blck;
     bool fRet = fFalse;
-    long icrf;
+    int32_t icrf;
     PCRF pcrf;
-    long lwParm;
+    int32_t lwParm;
 
     vapp.BeginLongOp();
 
@@ -288,7 +288,7 @@ bool STDIO::FCmdLoadProjectMovie(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    long stid = pcmd->rglw[0];
+    int32_t stid = pcmd->rglw[0];
     STN stn;
     STN stnLeaf;
     FNI fni;
@@ -1174,8 +1174,8 @@ bool STDIO::FCmdCreatePopup(PCMD pcmd)
     AssertVarMem(pcmd);
 
     CKI ckiRoot;
-    long cid, kid, thumSel = ivNil;
-    ulong grfchp;
+    int32_t cid, kid, thumSel = ivNil;
+    uint32_t grfchp;
     BWS bws = kbwsCnoRoot;
     CHP chp;
     PTBOX ptbox;
@@ -1226,7 +1226,7 @@ bool STDIO::FCmdCreatePopup(PCMD pcmd)
         break;
     case cidTextFont: {
         PGST pgst;
-        long onnCur, onnSystem = vntl.OnnSystem();
+        int32_t onnCur, onnSystem = vntl.OnnSystem();
 
         if ((pgst = GST::PgstNew(SIZEOF(onnCur))) == pvNil)
             break;
@@ -1277,7 +1277,7 @@ bool STDIO::FCmdTextSetBkgdColor(PCMD pcmd)
     AssertVarMem(pcmd);
     AssertIn(pcmd->rglw[0], 0, kbMax);
 
-    byte iscr = (byte)pcmd->rglw[0];
+    uint8_t iscr = (uint8_t)pcmd->rglw[0];
     ACR acr(iscr);
     PMVU pmvu = (PMVU)_pmvie->PddgActive();
 
@@ -1307,7 +1307,7 @@ bool STDIO::FCmdTextSetColor(PCMD pcmd)
     AssertVarMem(pcmd);
     AssertIn(pcmd->rglw[0], 0, kbMax);
 
-    byte iscr = (byte)pcmd->rglw[0];
+    uint8_t iscr = (uint8_t)pcmd->rglw[0];
     ACR acr(iscr);
     PMVU pmvu = (PMVU)_pmvie->PddgActive();
 
@@ -1361,12 +1361,12 @@ bool STDIO::FCmdTextSetStyle(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
-    ulong grfont;
+    uint32_t grfont;
     PMVU pmvu = _pmvie->PmvuCur();
 
     grfont = pmvu->GrfontStyleTextCur();
-    grfont &= ~((ulong)pcmd->rglw[0]);
-    grfont |= (ulong)pcmd->rglw[1];
+    grfont &= ~((uint32_t)pcmd->rglw[0]);
+    grfont |= (uint32_t)pcmd->rglw[1];
 
     _pmvie->SetStyleTextCur(grfont);
     pmvu->SetTool(toolTboxStyle);
@@ -1403,10 +1403,10 @@ bool STDIO::FCmdTextSetFont(PCMD pcmd)
     Load a cursor only.  Do not set the tool permanently.  Used for
     roll over cursors.
 ***************************************************************************/
-void STDIO::SetCurs(long tool)
+void STDIO::SetCurs(int32_t tool)
 {
     PCURS pcurs;
-    long cursID;
+    int32_t cursID;
 
     switch (tool)
     {
@@ -1588,7 +1588,7 @@ void STDIO::PlayStopped(void)
 /***************************************************************************
     The movie engine changed the tool, now change the UI
 ***************************************************************************/
-void STDIO::ChangeTool(long tool)
+void STDIO::ChangeTool(int32_t tool)
 {
     AssertThis(0);
 
@@ -1834,7 +1834,7 @@ void STDIO::TboxSelected(void)
 /***************************************************************************
     The movie engine has a new undo buffer state
 ***************************************************************************/
-void STDIO::SetUndo(long undo)
+void STDIO::SetUndo(int32_t undo)
 {
     AssertThis(0);
 
@@ -1901,7 +1901,7 @@ void STDIO::PauseType(WIT wit)
     AssertThis(0);
 
     PGOK pgok;
-    long fFlag;
+    int32_t fFlag;
 
     fFlag = FPure(wit == witUntilSnd);
 
@@ -2120,7 +2120,7 @@ bool STDIO::FAddCmg(CNO cnoTmpl, CNO cnoGokd)
     CMG cmg;
 
 #ifdef DEBUG
-    long icmg;
+    int32_t icmg;
     for (icmg = 0; icmg < _pglcmg->IvMac(); icmg++)
     {
         _pglcmg->Get(icmg, &cmg);
@@ -2144,7 +2144,7 @@ CNO STDIO::CnoGokdFromCnoTmpl(CNO cnoTmpl)
 {
     AssertThis(0);
 
-    long icmg;
+    int32_t icmg;
     CMG cmg;
 
     for (icmg = 0; icmg < _pglcmg->IvMac(); icmg++)
@@ -2264,13 +2264,13 @@ void STDIO::ResumeActionButton(void)
 /***************************************************************************
     The movie engine is using the tool, now play the sound
 ***************************************************************************/
-void STDIO::PlayUISound(long tool, long grfcust)
+void STDIO::PlayUISound(int32_t tool, int32_t grfcust)
 {
     AssertThis(0);
 
     PCRF pcrf;
-    long cactRepeat = 1;
-    long cno;
+    int32_t cactRepeat = 1;
+    int32_t cno;
 
     _fStopUISound = fFalse;
 
@@ -2490,7 +2490,7 @@ void STDIO::StopUISound(void)
 /***************************************************************************
     Read a Misc Studio stn
 ***************************************************************************/
-void STDIO::GetStnMisc(long ids, PSTN pstn)
+void STDIO::GetStnMisc(int32_t ids, PSTN pstn)
 {
     AssertBaseThis(0);
     AssertDo(_pgstMisc->FFindExtra(&ids, pstn), "Invalid studio.cht or ids");
@@ -2632,7 +2632,7 @@ void STDIO::UpdateTitle(PSTN pstnTitle)
     AssertPo(pstnTitle, 0);
 
     STN stnFontSize;
-    long dypFontSize;
+    int32_t dypFontSize;
 
     // Set the movie title
     if (_ptgobTitle == pvNil)
@@ -2704,7 +2704,7 @@ void STDIO::MarkMem(void)
     //
     // Mark browser objects
     //
-    long ipbrcn;
+    int32_t ipbrcn;
     PBRCN pbrcn;
 
     if (_pglpbrcn != pvNil)
@@ -2728,7 +2728,7 @@ void STDIO::MarkMem(void)
  *  None.
  *
  **************************************************************************/
-void STDIO::AssertValid(ulong grf)
+void STDIO::AssertValid(uint32_t grf)
 {
     STDIO_PAR::AssertValid(fobjAllocated);
     AssertNilOrPo(_pmvie, 0);
@@ -2747,7 +2747,7 @@ void STDIO::AssertValid(ulong grf)
 /***************************************************************************
     Constructor for SMCC.
 ***************************************************************************/
-SMCC::SMCC(long dxp, long dyp, long cbCache, PSSCB psscb, PSTDIO pstdio) : MCC(dxp, dyp, cbCache)
+SMCC::SMCC(int32_t dxp, int32_t dyp, int32_t cbCache, PSSCB psscb, PSTDIO pstdio) : MCC(dxp, dyp, cbCache)
 {
     AssertNilOrPo(psscb, 0);
     // Note: Would like to do an AssertPo here but can't
@@ -2771,7 +2771,7 @@ void SMCC::UpdateRollCall(void)
     AssertThis(0);
 
     bool fUpdateActr, fUpdateProp;
-    long aridSel;
+    int32_t aridSel;
 
     aridSel = _pstdio->AridSelected();
 
@@ -2803,7 +2803,7 @@ void SMCC::UpdateRollCall(void)
     DypTextDef
         Retrieve a default text size for a textbox in a movie.
 ************************************************************ PETED ***********/
-long SMCC::DypTboxDef(void)
+int32_t SMCC::DypTboxDef(void)
 {
     if (_dypTextTbox == 0)
     {
@@ -2838,7 +2838,7 @@ bool SMCC::FQueryPurgeSounds(void)
 /***************************************************************************
     Assert the validity of the SMCC
 ***************************************************************************/
-void SMCC::AssertValid(ulong grf)
+void SMCC::AssertValid(uint32_t grf)
 {
     SMCC_PAR::AssertValid(0);
     AssertPo(_psscb, 0);

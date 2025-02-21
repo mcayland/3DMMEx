@@ -103,7 +103,7 @@ CHCM::~CHCM(void)
 /***************************************************************************
     Assert that the CHCM is a valid object.
 ***************************************************************************/
-void CHCM::AssertValid(ulong grf)
+void CHCM::AssertValid(uint32_t grf)
 {
     CHCM_PAR::AssertValid(grf);
     AssertNilOrPo(_pcfl, 0);
@@ -133,7 +133,7 @@ void CHCM::MarkMem(void)
     Registers an error, prints error message with filename and line number.
     pszMessage may be nil.
 ***************************************************************************/
-void CHCM::_Error(long ert, const PSZ pszMessage)
+void CHCM::_Error(int32_t ert, const PSZ pszMessage)
 {
     AssertThis(0);
     AssertIn(ert, ertNil, ertLim);
@@ -175,29 +175,29 @@ void CHCM::_Error(long ert, const PSZ pszMessage)
 /***************************************************************************
     Checks that lw could be accepted under the current numerical mode.
 ***************************************************************************/
-void CHCM::_GetRgbFromLw(long lw, byte *prgb)
+void CHCM::_GetRgbFromLw(int32_t lw, uint8_t *prgb)
 {
     AssertThis(0);
-    AssertPvCb(prgb, SIZEOF(long));
+    AssertPvCb(prgb, SIZEOF(int32_t));
 
     switch (_cbNum)
     {
-    case SIZEOF(byte):
+    case SIZEOF(uint8_t):
         if (lw < -128 || lw > kbMax)
             _Error(ertRangeByte);
         prgb[0] = B0Lw(lw);
         break;
 
-    case SIZEOF(short):
+    case SIZEOF(int16_t):
         if ((lw < kswMin) || (lw > ksuMax))
             _Error(ertRangeShort);
-        *(short *)prgb = SwLow(lw);
+        *(int16_t *)prgb = SwLow(lw);
         break;
 
     default:
-        Assert(_cbNum == SIZEOF(long), "invalid numerical mode");
-        _cbNum = SIZEOF(long);
-        *(long *)prgb = lw;
+        Assert(_cbNum == SIZEOF(int32_t), "invalid numerical mode");
+        _cbNum = SIZEOF(int32_t);
+        *(int32_t *)prgb = lw;
         break;
     }
 
@@ -233,7 +233,7 @@ bool CHCM::_FGetCleanTok(TOK *ptok, bool fEofOk)
     AssertThis(0);
     AssertVarMem(ptok);
 
-    long cactNegate = 0;
+    int32_t cactNegate = 0;
 
     for (;;)
     {
@@ -272,13 +272,13 @@ bool CHCM::_FGetCleanTok(TOK *ptok, bool fEofOk)
             _sm = smSt;
             break;
         case ttModeByte:
-            _cbNum = SIZEOF(byte);
+            _cbNum = SIZEOF(uint8_t);
             break;
         case ttModeShort:
-            _cbNum = SIZEOF(short);
+            _cbNum = SIZEOF(int16_t);
             break;
         case ttModeLong:
-            _cbNum = SIZEOF(long);
+            _cbNum = SIZEOF(int32_t);
             break;
         case ttMacBo:
             _bo = MacWin(kboCur, kboOther);
@@ -299,7 +299,7 @@ bool CHCM::_FGetCleanTok(TOK *ptok, bool fEofOk)
 /***************************************************************************
     Skip tokens until we encounter the given token type.
 ***************************************************************************/
-void CHCM::_SkipPastTok(long tt)
+void CHCM::_SkipPastTok(int32_t tt)
 {
     AssertThis(0);
     TOK tok;
@@ -311,7 +311,7 @@ void CHCM::_SkipPastTok(long tt)
 /***************************************************************************
     Parse a parenthesized header from the source file.
 ***************************************************************************/
-bool CHCM::_FParseParenHeader(PHP *prgphp, long cphpMax, long *pcphp)
+bool CHCM::_FParseParenHeader(PHP *prgphp, int32_t cphpMax, int32_t *pcphp)
 {
     AssertThis(0);
     AssertIn(cphpMax, 1, kcbMax);
@@ -319,7 +319,7 @@ bool CHCM::_FParseParenHeader(PHP *prgphp, long cphpMax, long *pcphp)
     AssertVarMem(pcphp);
 
     TOK tok;
-    long iphp;
+    int32_t iphp;
 
     if (!_pchlx->FGetTok(&tok))
     {
@@ -417,7 +417,7 @@ void CHCM::_ParseChunkHeader(CTG *pctg, CNO *pcno)
 
     STN stnChunkName;
     PHP rgphp[3];
-    long cphp;
+    int32_t cphp;
 
     ClearPb(rgphp, SIZEOF(rgphp));
     rgphp[2].pstn = &stnChunkName;
@@ -459,8 +459,8 @@ void CHCM::_AppendString(PSTN pstnValue)
     AssertPo(pstnValue, 0);
 
     void *pv;
-    long cb;
-    byte rgb[kcbMaxDataStn];
+    int32_t cb;
+    uint8_t rgb[kcbMaxDataStn];
 
     switch (_sm)
     {
@@ -493,10 +493,10 @@ void CHCM::_AppendString(PSTN pstnValue)
 /***************************************************************************
     Stores a numerical value in the chunk data stream.
 ***************************************************************************/
-void CHCM::_AppendNumber(long lwValue)
+void CHCM::_AppendNumber(int32_t lwValue)
 {
     AssertThis(0);
-    byte rgb[SIZEOF(long)];
+    uint8_t rgb[SIZEOF(int32_t)];
 
     _GetRgbFromLw(lwValue, rgb);
     if (!FError() && !_bsf.FReplace(rgb, _cbNum, _bsf.IbMac(), 0))
@@ -513,7 +513,7 @@ void CHCM::_ParseBodyChild(CTG ctg, CNO cno)
     CNO cnoChild;
     CHID chid;
     PHP rgphp[3];
-    long cphp;
+    int32_t cphp;
 
     ClearPb(rgphp, SIZEOF(rgphp));
     if (!_FParseParenHeader(rgphp, 3, &cphp) || cphp < 2)
@@ -557,7 +557,7 @@ void CHCM::_ParseBodyParent(CTG ctg, CNO cno)
     CNO cnoParent;
     CHID chid;
     PHP rgphp[3];
-    long cphp;
+    int32_t cphp;
 
     ClearPb(rgphp, SIZEOF(rgphp));
     if (!_FParseParenHeader(rgphp, 3, &cphp) || cphp < 2)
@@ -620,10 +620,10 @@ void CHCM::_ParseBodyAlign(void)
     if (!FError())
     {
         // actually do the padding
-        byte rgb[100];
-        long cb;
-        long ibMac = _bsf.IbMac();
-        long ibMacNew = LwRoundAway(ibMac, tok.lw);
+        uint8_t rgb[100];
+        int32_t cb;
+        int32_t ibMac = _bsf.IbMac();
+        int32_t ibMacNew = LwRoundAway(ibMac, tok.lw);
 
         AssertIn(ibMacNew, ibMac, ibMac + tok.lw);
         while ((ibMac = _bsf.IbMac()) < ibMacNew)
@@ -674,7 +674,7 @@ void CHCM::_ParseBodyFile(void)
     Otherwise, get the block on the CFL. The caller should write its data
     into the pblck, then call _FEndWrite to complete the operation.
 ***************************************************************************/
-bool CHCM::_FPrepWrite(bool fPack, long cb, CTG ctg, CNO cno, PBLCK pblck)
+bool CHCM::_FPrepWrite(bool fPack, int32_t cb, CTG ctg, CNO cno, PBLCK pblck)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -759,7 +759,7 @@ void CHCM::_ParseBodyBitmap(bool fPack, bool fMask, CTG ctg, CNO cno)
     BLCK blck;
     TOK tok;
     PHP rgphp[3];
-    long cphp;
+    int32_t cphp;
     PMBMP pmbmp = pvNil;
 
     ClearPb(rgphp, SIZEOF(rgphp));
@@ -775,7 +775,7 @@ void CHCM::_ParseBodyBitmap(bool fPack, bool fMask, CTG ctg, CNO cno)
         goto LFail;
     }
 
-    if (pvNil == (pmbmp = MBMP::PmbmpReadNative(&fni, (byte)rgphp[0].lw, rgphp[1].lw, rgphp[2].lw,
+    if (pvNil == (pmbmp = MBMP::PmbmpReadNative(&fni, (uint8_t)rgphp[0].lw, rgphp[1].lw, rgphp[2].lw,
                                                 fMask ? fmbmpMask : fmbmpNil)))
     {
         STN stn;
@@ -892,31 +892,31 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     // These are for parsing a Windows cursor file
     struct CURDIR
     {
-        byte dxp;
-        byte dyp;
-        byte bZero1;
-        byte bZero2;
-        short xp;
-        short yp;
-        long cb;
-        long bv;
+        uint8_t dxp;
+        uint8_t dyp;
+        uint8_t bZero1;
+        uint8_t bZero2;
+        int16_t xp;
+        int16_t yp;
+        int32_t cb;
+        int32_t bv;
     };
 
     struct CURH
     {
-        long cbCurh;
-        long dxp;
-        long dyp;
-        short swOne1;
-        short swOne2;
-        long lwZero1;
-        long lwZero2;
-        long lwZero3;
-        long lwZero4;
-        long lwZero5;
-        long lwZero6;
-        long lw1;
-        long lw2;
+        int32_t cbCurh;
+        int32_t dxp;
+        int32_t dyp;
+        int16_t swOne1;
+        int16_t swOne2;
+        int32_t lwZero1;
+        int32_t lwZero2;
+        int32_t lwZero3;
+        int32_t lwZero4;
+        int32_t lwZero5;
+        int32_t lwZero6;
+        int32_t lw1;
+        int32_t lw2;
     };
 
     AssertThis(0);
@@ -924,10 +924,10 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     BLCK blck;
     FLO floSrc;
     TOK tok;
-    long ccurdir, cbBits;
+    int32_t ccurdir, cbBits;
     CURF curf;
-    short rgsw[3];
-    byte *prgb;
+    int16_t rgsw[3];
+    uint8_t *prgb;
     CURDIR *pcurdir;
     CURH *pcurh;
     PGG pggcurf = pvNil;
@@ -965,7 +965,7 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
     }
     ReleasePpo(&floSrc.pfil);
 
-    prgb = (byte *)PvLockHq(hq);
+    prgb = (uint8_t *)PvLockHq(hq);
     pcurdir = (CURDIR *)prgb;
     if (pvNil == (pggcurf = GG::PggNew(SIZEOF(CURF), ccurdir)))
     {
@@ -984,13 +984,13 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
             goto LFail;
         }
         curf.curt = curtMonochrome;
-        curf.xp = (byte)pcurdir->xp;
-        curf.yp = (byte)pcurdir->yp;
+        curf.xp = (uint8_t)pcurdir->xp;
+        curf.yp = (uint8_t)pcurdir->yp;
         curf.dxp = pcurdir->dxp;
         curf.dyp = pcurdir->dyp;
 
         pcurh = (CURH *)PvAddBv(prgb, pcurdir->bv);
-        if (pcurh->cbCurh != SIZEOF(CURH) - 2 * SIZEOF(long) || pcurh->dxp != pcurdir->dxp ||
+        if (pcurh->cbCurh != SIZEOF(CURH) - 2 * SIZEOF(int32_t) || pcurh->dxp != pcurdir->dxp ||
             pcurh->dyp != 2 * pcurdir->dyp || pcurh->swOne1 != 1 || pcurh->swOne2 != 1 || pcurh->lwZero1 != 0 ||
             (pcurh->lwZero2 != 0 && pcurh->lwZero2 != pcurdir->cb - SIZEOF(CURH)) || pcurh->lwZero3 != 0 ||
             pcurh->lwZero4 != 0 || pcurh->lwZero5 != 0 || pcurh->lwZero6 != 0)
@@ -1001,16 +1001,16 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
 
         // The bits are stored in upside down DIB order!
         ReversePb(pcurh + 1, pcurdir->cb - SIZEOF(CURH));
-        SwapBytesRglw(pcurh + 1, (pcurdir->cb - SIZEOF(CURH)) / SIZEOF(long));
+        SwapBytesRglw(pcurh + 1, (pcurdir->cb - SIZEOF(CURH)) / SIZEOF(int32_t));
 
         if (pcurdir->dxp == 16)
         {
             // need to consolidate the bits, because they are stored 4 bytes per
             // row (2 bytes wasted) instead of 2 bytes per row.
-            long csw = 32;
-            short *pswSrc, *pswDst;
+            int32_t csw = 32;
+            int16_t *pswSrc, *pswDst;
 
-            pswSrc = pswDst = (short *)(pcurh + 1);
+            pswSrc = pswDst = (int16_t *)(pcurh + 1);
             while (csw-- != 0)
             {
                 *pswDst++ = *pswSrc++;
@@ -1018,7 +1018,7 @@ void CHCM::_ParseBodyCursor(bool fPack, CTG ctg, CNO cno)
             }
         }
 
-        if (!pggcurf->FInsert(pggcurf->IvMac(), (long)curf.dxp * curf.dyp / 4, pcurh + 1, &curf))
+        if (!pggcurf->FInsert(pggcurf->IvMac(), (int32_t)curf.dxp * curf.dyp / 4, pcurh + 1, &curf))
         {
             _Error(ertOom);
             goto LFail;
@@ -1069,10 +1069,10 @@ bool CHCM::_FParseData(PTOK ptok)
     AssertThis(0);
     AssertVarMem(ptok);
 
-    long cbNum;
-    long lw;
-    long cbNumPrev = _cbNum;
-    long ps = psNil;
+    int32_t cbNum;
+    int32_t lw;
+    int32_t cbNumPrev = _cbNum;
+    int32_t ps = psNil;
     bool fRet = fFalse;
 
     for (;;)
@@ -1145,14 +1145,14 @@ bool CHCM::_FParseData(PTOK ptok)
             case ttBo:
                 // insert the current byte order
                 cbNum = _cbNum;
-                _cbNum = SIZEOF(short);
+                _cbNum = SIZEOF(int16_t);
                 _AppendNumber(kboCur);
                 _cbNum = cbNum;
                 break;
             case ttOsk:
                 // insert the current osk
                 cbNum = _cbNum;
-                _cbNum = SIZEOF(short);
+                _cbNum = SIZEOF(int16_t);
                 _AppendNumber(_osk);
                 _cbNum = cbNum;
                 break;
@@ -1179,10 +1179,10 @@ void CHCM::_ParseBodyList(bool fPack, bool fAl, CTG ctg, CNO cno)
     AssertThis(0);
     TOK tok;
     PHP rgphp[1];
-    long cphp;
-    long cbEntry, cb;
-    byte *prgb;
-    long iv, iiv;
+    int32_t cphp;
+    int32_t cbEntry, cb;
+    uint8_t *prgb;
+    int32_t iv, iiv;
     BLCK blck;
     PGLB pglb = pvNil;
     PGL pglivFree = pvNil;
@@ -1228,7 +1228,7 @@ void CHCM::_ParseBodyList(bool fPack, bool fAl, CTG ctg, CNO cno)
             else if (!FError())
             {
                 iv = pglb->IvMac();
-                if (pvNil == pglivFree && pvNil == (pglivFree = GL::PglNew(SIZEOF(long))) || !pglivFree->FAdd(&iv))
+                if (pvNil == pglivFree && pvNil == (pglivFree = GL::PglNew(SIZEOF(int32_t))) || !pglivFree->FAdd(&iv))
                 {
                     _Error(ertOom);
                 }
@@ -1261,7 +1261,7 @@ void CHCM::_ParseBodyList(bool fPack, bool fAl, CTG ctg, CNO cno)
         else
         {
             Assert(iv == pglb->IvMac() - 1, "what?");
-            prgb = (byte *)pglb->PvLock(iv);
+            prgb = (uint8_t *)pglb->PvLock(iv);
             if (cb > 0)
                 _bsf.FetchRgb(0, cb, prgb);
             if (cb < cbEntry)
@@ -1310,10 +1310,10 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
     AssertThis(0);
     TOK tok;
     PHP rgphp[1];
-    long cphp;
-    long cbFixed, cb;
-    byte *prgb;
-    long iv, iiv;
+    int32_t cphp;
+    int32_t cbFixed, cb;
+    uint8_t *prgb;
+    int32_t iv, iiv;
     BLCK blck;
     bool fFree;
     PGGB pggb = pvNil;
@@ -1361,7 +1361,7 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
             else if (!FError())
             {
                 iv = pggb->IvMac();
-                if (pvNil == pglivFree && pvNil == (pglivFree = GL::PglNew(SIZEOF(long))) || !pglivFree->FAdd(&iv))
+                if (pvNil == pglivFree && pvNil == (pglivFree = GL::PglNew(SIZEOF(int32_t))) || !pglivFree->FAdd(&iv))
                 {
                     _Error(ertOom);
                 }
@@ -1395,7 +1395,7 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
             else
             {
                 Assert(iv == pggb->IvMac() - 1, "what?");
-                prgb = (byte *)pggb->PvFixedLock(iv);
+                prgb = (uint8_t *)pggb->PvFixedLock(iv);
                 if (cb > 0)
                     _bsf.FetchRgb(0, cb, prgb);
                 if (cb < cbFixed)
@@ -1421,7 +1421,7 @@ void CHCM::_ParseBodyGroup(bool fPack, bool fAg, CTG ctg, CNO cno)
             _Error(ertOom);
         else
         {
-            prgb = (byte *)pggb->PvLock(iv);
+            prgb = (uint8_t *)pggb->PvLock(iv);
             _bsf.FetchRgb(0, cb, prgb);
             pggb->Unlock();
         }
@@ -1467,9 +1467,9 @@ void CHCM::_ParseBodyStringTable(bool fPack, bool fAst, CTG ctg, CNO cno)
     AssertThis(0);
     TOK tok;
     PHP rgphp[1];
-    long cphp;
-    long cbExtra, cb;
-    long iv, iiv;
+    int32_t cphp;
+    int32_t cbExtra, cb;
+    int32_t iv, iiv;
     STN stn;
     BLCK blck;
     bool fFree;
@@ -1486,7 +1486,7 @@ void CHCM::_ParseBodyStringTable(bool fPack, bool fAst, CTG ctg, CNO cno)
         return;
     }
 
-    if (!FIn(cbExtra = rgphp[0].lw, 0, kcbMax) || cbExtra % SIZEOF(long) != 0)
+    if (!FIn(cbExtra = rgphp[0].lw, 0, kcbMax) || cbExtra % SIZEOF(int32_t) != 0)
     {
         _Error(ertGstEntrySize);
         _SkipPastTok(ttEndChunk);
@@ -1516,7 +1516,7 @@ void CHCM::_ParseBodyStringTable(bool fPack, bool fAst, CTG ctg, CNO cno)
             else if (!FError())
             {
                 iv = pgstb->IvMac();
-                if (pvNil == pglivFree && pvNil == (pglivFree = GL::PglNew(SIZEOF(long))) || !pglivFree->FAdd(&iv))
+                if (pvNil == pglivFree && pvNil == (pglivFree = GL::PglNew(SIZEOF(int32_t))) || !pglivFree->FAdd(&iv))
                 {
                     _Error(ertOom);
                 }
@@ -1632,18 +1632,18 @@ void CHCM::_ParseBodyScript(bool fPack, bool fInfix, CTG ctg, CNO cno)
 void CHCM::_ParseBodyPackedFile(bool *pfPacked)
 {
     AssertThis(0);
-    long lw, lwSwapped;
+    int32_t lw, lwSwapped;
     TOK tok;
 
     _ParseBodyFile();
-    if (_bsf.IbMac() < SIZEOF(long))
+    if (_bsf.IbMac() < SIZEOF(int32_t))
     {
         _Error(ertPackedFile, PszLit("bad packed file"));
         _SkipPastTok(ttEndChunk);
         return;
     }
 
-    _bsf.FetchRgb(0, SIZEOF(long), &lw);
+    _bsf.FetchRgb(0, SIZEOF(int32_t), &lw);
     lwSwapped = lw;
     SwapBytesRglw(&lwSwapped, 1);
     if (lw == klwSigPackedFile || lwSwapped == klwSigPackedFile)
@@ -1657,7 +1657,7 @@ void CHCM::_ParseBodyPackedFile(bool *pfPacked)
         return;
     }
 
-    _bsf.FReplace(pvNil, 0, 0, SIZEOF(long));
+    _bsf.FReplace(pvNil, 0, 0, SIZEOF(int32_t));
 
     if (!_FGetCleanTok(&tok) || ttEndChunk != tok.tt)
     {
@@ -1712,9 +1712,9 @@ void CHCM::_EndSubFile(void)
 
     if (!FError())
     {
-        long icki;
+        int32_t icki;
         CKI cki;
-        long cbTot, cbT;
+        int32_t cbTot, cbT;
         FP fpDst;
         PFIL pfilDst = pvNil;
         bool fRet = fFalse;
@@ -1794,8 +1794,8 @@ void CHCM::_ParsePackFmt(void)
 {
     AssertThis(0);
     PHP rgphp[1];
-    long cphp;
-    long cfmt;
+    int32_t cphp;
+    int32_t cfmt;
 
     // get the format
     ClearPb(rgphp, SIZEOF(rgphp));
@@ -1958,7 +1958,7 @@ void CHCM::_ParseAdopt(void)
     CNO cnoParent, cnoChild;
     CHID chid;
     PHP rgphp[5];
-    long cphp;
+    int32_t cphp;
 
     ClearPb(rgphp, SIZEOF(rgphp));
     if (!_FParseParenHeader(rgphp, 5, &cphp) || cphp < 4)
@@ -2058,7 +2058,7 @@ PCFL CHCM::PcflCompile(PBSF pbsfSrc, PSTN pstnFile, PFNI pfniDst, PMSNK pmsnk)
 
     _pmsnkError = pmsnk;
     _sm = smStz;
-    _cbNum = SIZEOF(long);
+    _cbNum = SIZEOF(int32_t);
     _bo = kboCur;
     _osk = koskCur;
 
@@ -2124,7 +2124,7 @@ PCFL CHCM::PcflCompile(PBSF pbsfSrc, PSTN pstnFile, PFNI pfniDst, PMSNK pmsnk)
     if (!FError() && pvNil != _pglckiLoner)
     {
         CKI cki;
-        long icki;
+        int32_t icki;
 
         for (icki = _pglckiLoner->IvMac(); icki-- > 0;)
         {
@@ -2197,8 +2197,8 @@ bool CHLX::FGetTok(PTOK ptok)
 {
     AssertThis(0);
     AssertVarMem(ptok);
-    long ikeytt;
-    long istn;
+    int32_t ikeytt;
+    int32_t istn;
 
     for (;;)
     {
@@ -2317,9 +2317,9 @@ bool CHLX::_FDoSet(PTOK ptok)
 {
     AssertThis(0);
     AssertVarMem(ptok);
-    long tt;
-    long lw;
-    long istn;
+    int32_t tt;
+    int32_t lw;
+    int32_t istn;
     bool fNegate;
 
     if (!CHLX_PAR::FGetTok(ptok) || ttName != ptok->tt)
@@ -2327,7 +2327,7 @@ bool CHLX::_FDoSet(PTOK ptok)
 
     lw = 0;
     istn = ivNil;
-    if (pvNil != _pgstVariables || pvNil != (_pgstVariables = GST::PgstNew(SIZEOF(long))))
+    if (pvNil != _pgstVariables || pvNil != (_pgstVariables = GST::PgstNew(SIZEOF(int32_t))))
     {
         if (_pgstVariables->FFindStn(&ptok->stn, &istn, fgstSorted))
             _pgstVariables->GetExtra(istn, &lw);
@@ -2368,7 +2368,7 @@ bool CHLX::_FDoSet(PTOK ptok)
                 break;
             if (ttName == ptok->tt)
             {
-                long istnT;
+                int32_t istnT;
                 if (!_pgstVariables->FFindStn(&ptok->stn, &istnT, fgstSorted))
                     return fFalse;
                 _pgstVariables->GetExtra(istnT, &ptok->lw);
@@ -2417,7 +2417,7 @@ bool CHLX::_FDoSet(PTOK ptok)
             break;
         case ttAShr:
             // do logical shift
-            lw = (ulong)lw >> ptok->lw;
+            lw = (uint32_t)lw >> ptok->lw;
             break;
         case ttAShl:
             lw <<= ptok->lw;
@@ -2438,7 +2438,7 @@ bool CHLX::_FDoSet(PTOK ptok)
 /***************************************************************************
     Assert that the CHLX is a valid object.
 ***************************************************************************/
-void CHLX::AssertValid(ulong grf)
+void CHLX::AssertValid(uint32_t grf)
 {
     CHLX_PAR::AssertValid(grf);
     AssertNilOrPo(_pgstVariables, 0);
@@ -2477,7 +2477,7 @@ CHDC::~CHDC(void)
 /***************************************************************************
     Assert the validity of a CHDC.
 ***************************************************************************/
-void CHDC::AssertValid(ulong grf)
+void CHDC::AssertValid(uint32_t grf)
 {
     CHDC_PAR::AssertValid(0);
     AssertNilOrPo(_pcfl, 0);
@@ -2504,7 +2504,7 @@ bool CHDC::FDecompile(PCFL pcflSrc, PMSNK pmsnk, PMSNK pmsnkError)
 {
     AssertThis(0);
     AssertPo(pcflSrc, 0);
-    long icki, ikid, ckid;
+    int32_t icki, ikid, ckid;
     CTG ctg;
     CKI cki;
     KID kid;
@@ -2607,7 +2607,7 @@ bool CHDC::_FDumpScript(CKI *pcki)
     PSCPT pscpt;
     bool fRet;
     SCCG sccg;
-    long cfmt;
+    int32_t cfmt;
     bool fPacked;
     BLCK blck;
 
@@ -2637,8 +2637,8 @@ bool CHDC::_FDumpList(PBLCK pblck, bool fAl)
     AssertPo(pblck, fblckReadable);
 
     PGLB pglb;
-    short bo, osk;
-    long cfmt;
+    int16_t bo, osk;
+    int32_t cfmt;
     bool fPacked = pblck->FPacked(&cfmt);
 
     pglb = fAl ? (PGLB)AL::PalRead(pblck, &bo, &osk) : (PGLB)GL::PglRead(pblck, &bo, &osk);
@@ -2689,8 +2689,8 @@ bool CHDC::_FDumpGroup(PBLCK pblck, bool fAg)
     AssertPo(pblck, fblckReadable);
 
     PGGB pggb;
-    short bo, osk;
-    long cfmt;
+    int16_t bo, osk;
+    int32_t cfmt;
     bool fPacked = pblck->FPacked(&cfmt);
 
     pggb = fAg ? (PGGB)AG::PagRead(pblck, &bo, &osk) : (PGGB)GG::PggRead(pblck, &bo, &osk);
@@ -2741,8 +2741,8 @@ bool CHDC::_FDumpStringTable(PBLCK pblck, bool fAst)
     AssertPo(pblck, fblckReadable);
 
     PGSTB pgstb;
-    short bo, osk;
-    long cfmt;
+    int16_t bo, osk;
+    int32_t cfmt;
     bool fPacked = pblck->FPacked(&cfmt);
     bool fRet;
 
@@ -2787,7 +2787,7 @@ bool CHDC::_FDumpStringTable(PBLCK pblck, bool fAst)
 /***************************************************************************
     Write out the PACKFMT and PACK commands
 ***************************************************************************/
-void CHDC::_WritePack(long cfmt)
+void CHDC::_WritePack(int32_t cfmt)
 {
     AssertThis(0);
     STN stn;

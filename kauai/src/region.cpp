@@ -16,7 +16,7 @@ ASSERTNAME
 RTCLASS(REGN)
 RTCLASS(REGSC)
 
-long const kcdxpBlock = 100;
+int32_t const kcdxpBlock = 100;
 
 /***************************************************************************
     Region builder class.  For building the _pglxp of a region and getting
@@ -28,15 +28,15 @@ typedef class REGBL *PREGBL;
 class REGBL : public REGBL_PAR
 {
   protected:
-    long _ypCur;
+    int32_t _ypCur;
     RC _rcRef;
     RC _rc;
     PGL _pglxp;
     bool _fResize;
 
-    long _idypPrev;
-    long _idypCur;
-    long _ixpCur;
+    int32_t _idypPrev;
+    int32_t _idypCur;
+    int32_t _ixpCur;
 
   public:
     REGBL(void)
@@ -49,9 +49,9 @@ class REGBL : public REGBL_PAR
     }
 
     bool FInit(RC *prcRef, PGL pglxp = pvNil);
-    bool FStartRow(long dyp, long cxpMax);
+    bool FStartRow(int32_t dyp, int32_t cxpMax);
     void EndRow(void);
-    void AddXp(long xp)
+    void AddXp(int32_t xp)
     {
         // can only be called while building a row.
         AssertThis(0);
@@ -62,7 +62,7 @@ class REGBL : public REGBL_PAR
             _rc.xpLeft = xp;
         if (_rc.xpRight < xp)
             _rc.xpRight = xp;
-        *(long *)_pglxp->QvGet(_ixpCur++) = xp;
+        *(int32_t *)_pglxp->QvGet(_ixpCur++) = xp;
     }
 
     bool FDone(void)
@@ -70,7 +70,7 @@ class REGBL : public REGBL_PAR
         AssertThis(0);
         return _ypCur >= _rcRef.ypBottom && _idypCur == ivNil;
     }
-    PGL PglxpFree(RC *prc, long *pdxp);
+    PGL PglxpFree(RC *prc, int32_t *pdxp);
 };
 
 /***************************************************************************
@@ -91,7 +91,7 @@ bool REGBL::FInit(RC *prcRef, PGL pglxp)
     }
     else
     {
-        if (pvNil == (_pglxp = GL::PglNew(SIZEOF(long))))
+        if (pvNil == (_pglxp = GL::PglNew(SIZEOF(int32_t))))
             return fFalse;
         _pglxp->SetMinGrow(kcdxpBlock);
         _fResize = fTrue;
@@ -110,14 +110,14 @@ bool REGBL::FInit(RC *prcRef, PGL pglxp)
 /***************************************************************************
     Begin a row.
 ***************************************************************************/
-bool REGBL::FStartRow(long dyp, long cxpMax)
+bool REGBL::FStartRow(int32_t dyp, int32_t cxpMax)
 {
     AssertThis(0);
     Assert(_idypCur == ivNil, "row already started");
     AssertIn(dyp, 0, kcbMax);
     Assert(_ypCur < _rcRef.ypBottom, "already filled");
     AssertIn(cxpMax, 0, kcbMax);
-    long ivLim;
+    int32_t ivLim;
 
     ivLim = _ixpCur + cxpMax + 2;
     if (_fResize)
@@ -137,7 +137,7 @@ bool REGBL::FStartRow(long dyp, long cxpMax)
 
     dyp = LwMin(dyp, _rcRef.ypBottom - _ypCur);
     _idypCur = _ixpCur;
-    *(long *)_pglxp->QvGet(_ixpCur++) = dyp;
+    *(int32_t *)_pglxp->QvGet(_ixpCur++) = dyp;
     _ypCur += dyp;
     return fTrue;
 }
@@ -150,8 +150,8 @@ void REGBL::EndRow(void)
     AssertThis(0);
     Assert((_ixpCur - _idypCur) & 1, "not an even number of xp values");
     Assert(_ixpCur < _pglxp->IvMac(), "overflow in EndRow");
-    long czp;
-    long *qrgxp = (long *)_pglxp->QvGet(0);
+    int32_t czp;
+    int32_t *qrgxp = (int32_t *)_pglxp->QvGet(0);
 
     qrgxp[_ixpCur++] = klwMax;
     if ((czp = _ixpCur - _idypCur) > 2)
@@ -159,7 +159,7 @@ void REGBL::EndRow(void)
 
     // see if this row matches the last one
     if (ivNil != _idypPrev && czp == _idypCur - _idypPrev &&
-        FEqualRgb(&qrgxp[_idypPrev + 1], &qrgxp[_idypCur + 1], (czp - 1) * SIZEOF(long)))
+        FEqualRgb(&qrgxp[_idypPrev + 1], &qrgxp[_idypCur + 1], (czp - 1) * SIZEOF(int32_t)))
     {
         // this row matches the previous row
         qrgxp[_idypPrev] += qrgxp[_idypCur];
@@ -180,7 +180,7 @@ void REGBL::EndRow(void)
 /***************************************************************************
     Clean up and return all the relevant information.
 ***************************************************************************/
-PGL REGBL::PglxpFree(RC *prc, long *pdxp)
+PGL REGBL::PglxpFree(RC *prc, int32_t *pdxp)
 {
     AssertThis(0);
     AssertVarMem(prc);
@@ -284,7 +284,7 @@ void REGSC::_InitCore(PGL pglxp, RC *prc, RC *prcRel)
     if (pvNil != (_pglxpSrc = pglxp))
     {
         _pglxpSrc->AddRef();
-        _pxpLimCur = (long *)_pglxpSrc->PvLock(0);
+        _pxpLimCur = (int32_t *)_pglxpSrc->PvLock(0);
         _pxpLimSrc = _pxpLimCur + _pglxpSrc->IvMac();
     }
     else
@@ -315,7 +315,7 @@ void REGSC::_InitCore(PGL pglxp, RC *prc, RC *prcRel)
 ***************************************************************************/
 void REGSC::_ScanNextCore(void)
 {
-    long dxpT;
+    int32_t dxpT;
 
     Assert(_dyp <= 0, "why is _ScanNextCore being called?");
     if (_dypTot <= 0)
@@ -462,7 +462,7 @@ void REGN::SetRc(RC *prc)
 /***************************************************************************
     Offset the region.
 ***************************************************************************/
-void REGN::Offset(long xp, long yp)
+void REGN::Offset(int32_t xp, int32_t yp)
 {
     AssertThis(0);
     _rc.Offset(xp, yp);
@@ -498,14 +498,14 @@ bool REGN::FIsRc(RC *prc)
 /***************************************************************************
     Scale the x values of the region by the given amount.
 ***************************************************************************/
-void REGN::Scale(long lwNumX, long lwDenX, long lwNumY, long lwDenY)
+void REGN::Scale(int32_t lwNumX, int32_t lwDenX, int32_t lwNumY, int32_t lwDenY)
 {
     AssertThis(0);
     Assert(lwDenX > 0 && lwNumX >= 0, "bad X scaling");
     Assert(lwDenY > 0 && lwNumY >= 0, "bad Y scaling");
     RC rcScaled;
-    long yp, ypScaled, dyp, dypScaled;
-    long xp1, xp2;
+    int32_t yp, ypScaled, dyp, dypScaled;
+    int32_t xp1, xp2;
     RAT ratXp(lwNumX, lwDenX);
     RAT ratYp(lwNumY, lwDenY);
 
@@ -678,7 +678,7 @@ bool REGN::_FUnionCore(RC *prc, PREGSC pregsc1, PREGSC pregsc2)
     AssertPo(pregsc1, 0);
     AssertPo(pregsc2, 0);
     void *pvSwap;
-    long dyp;
+    int32_t dyp;
     REGBL regbl;
 
     if (!regbl.FInit(prc))
@@ -843,7 +843,7 @@ bool REGN::_FIntersectCore(RC *prc, PREGSC pregsc1, PREGSC pregsc2)
     AssertThis(0);
     AssertPo(pregsc1, 0);
     AssertPo(pregsc2, 0);
-    long dyp;
+    int32_t dyp;
     void *pvSwap;
     REGBL regbl;
 
@@ -1025,8 +1025,8 @@ bool REGN::_FDiffCore(RC *prc, PREGSC pregsc1, PREGSC pregsc2)
     AssertThis(0);
     AssertPo(pregsc1, 0);
     AssertPo(pregsc2, 0);
-    long dyp;
-    long xp1, xp2;
+    int32_t dyp;
+    int32_t xp1, xp2;
     REGBL regbl;
 
     if (!regbl.FInit(prc))
@@ -1111,9 +1111,9 @@ HRGN REGN::HrgnCreate(void)
     RGNDATAHEADER *prd;
     RCS *prcs;
     REGSC regsc;
-    long crcMac, crc;
+    int32_t crcMac, crc;
     HRGN hrgn;
-    long yp, dyp;
+    int32_t yp, dyp;
 
     crcMac = _pglxp == pvNil ? 1 : _pglxp->IvMac() / 2;
     if (!FAllocPv((void **)&prd, SIZEOF(RGNDATAHEADER) + LwMul(crcMac, SIZEOF(RECT)), fmemNil, mprNormal))
@@ -1173,10 +1173,10 @@ HRGN REGN::HrgnCreate(void)
     REGSC regsc1;
     REGSC regsc2;
     RC rc;
-    long yp;
-    long cb;
-    long xp1, xp2;
-    short *psw;
+    int32_t yp;
+    int32_t cb;
+    int32_t xp1, xp2;
+    int16_t *psw;
 
     regsc1.Init(this, &_rc);
     rc = _rc;
@@ -1184,7 +1184,7 @@ HRGN REGN::HrgnCreate(void)
     regsc2.Init(this, &rc);
     for (yp = _rc.ypTop, cb = SIZEOF(Region);;)
     {
-        cb += SIZEOF(short);
+        cb += SIZEOF(int16_t);
         xp1 = regsc1.XpCur();
         xp2 = regsc2.XpCur();
         for (;;)
@@ -1199,38 +1199,38 @@ HRGN REGN::HrgnCreate(void)
             }
             else if (xp1 < xp2)
             {
-                cb += SIZEOF(short);
+                cb += SIZEOF(int16_t);
                 xp1 = regsc1.XpFetch();
             }
             else
             {
-                cb += SIZEOF(short);
+                cb += SIZEOF(int16_t);
                 xp2 = regsc2.XpFetch();
             }
         }
-        cb += SIZEOF(short);
+        cb += SIZEOF(int16_t);
         if (yp >= _rc.ypBottom)
             break;
         yp += regsc1.DypCur();
         regsc1.ScanNext(regsc1.DypCur());
         regsc2.ScanNext(regsc2.DypCur());
     }
-    cb += SIZEOF(short);
+    cb += SIZEOF(int16_t);
 
     if (hNil == (hrgn = (HRGN)NewHandle(cb)))
         return hNil;
 
     HLock((HN)hrgn);
-    (*hrgn)->rgnSize = (short)cb;
+    (*hrgn)->rgnSize = (int16_t)cb;
     (*hrgn)->rgnBBox = RCS(_rc);
 
     regsc1.Init(this, &_rc);
     rc = _rc;
     rc.ypTop--;
     regsc2.Init(this, &rc);
-    for (yp = _rc.ypTop, psw = (short *)((*hrgn) + 1);;)
+    for (yp = _rc.ypTop, psw = (int16_t *)((*hrgn) + 1);;)
     {
-        *psw++ = (short)yp;
+        *psw++ = (int16_t)yp;
         xp1 = regsc1.XpCur();
         xp2 = regsc2.XpCur();
         for (;;)
@@ -1245,12 +1245,12 @@ HRGN REGN::HrgnCreate(void)
             }
             else if (xp1 < xp2)
             {
-                *psw++ = (short)xp1;
+                *psw++ = (int16_t)xp1;
                 xp1 = regsc1.XpFetch();
             }
             else
             {
-                *psw++ = (short)xp2;
+                *psw++ = (int16_t)xp2;
                 xp2 = regsc2.XpFetch();
             }
         }
@@ -1278,7 +1278,7 @@ HRGN REGN::HrgnEnsure(void)
     {
         if (_dptRgn.xp != 0 || _dptRgn.yp != 0)
         {
-            OffsetRgn(_hrgn, (short)_dptRgn.xp, (short)_dptRgn.yp);
+            OffsetRgn(_hrgn, (int16_t)_dptRgn.xp, (int16_t)_dptRgn.yp);
             _dptRgn.xp = _dptRgn.yp = 0;
         }
         return _hrgn;
@@ -1293,7 +1293,7 @@ HRGN REGN::HrgnEnsure(void)
 /***************************************************************************
     Assert the validity of a REGN.
 ***************************************************************************/
-void REGN::AssertValid(ulong grf)
+void REGN::AssertValid(uint32_t grf)
 {
     REGN_PAR::AssertValid(0);
     AssertNilOrPo(_pglxp, 0);

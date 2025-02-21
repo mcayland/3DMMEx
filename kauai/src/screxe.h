@@ -23,11 +23,11 @@
 struct RTVM
 {
     RTVN rtvn;
-    long lwValue;
+    int32_t lwValue;
 };
 
-bool FFindRtvm(PGL pglrtvm, RTVN *prtvn, long *plwValue, long *pirtvm);
-bool FAssignRtvm(PGL *ppglrtvm, RTVN *prtvn, long lw);
+bool FFindRtvm(PGL pglrtvm, RTVN *prtvn, int32_t *plwValue, int32_t *pirtvm);
+bool FAssignRtvm(PGL *ppglrtvm, RTVN *prtvn, int32_t lw);
 
 /***************************************************************************
     A script.  This is here rather than in scrcom.* because scrcom is
@@ -60,7 +60,7 @@ class SCPT : public SCPT_PAR
 #endif // DEBUG
 
   public:
-    static bool FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     static PSCPT PscptRead(PCFL pcfl, CTG ctg, CNO cno);
     ~SCPT(void);
 
@@ -81,21 +81,21 @@ class STRG : public STRG_PAR
     NOCOPY(STRG)
 
   protected:
-    long _stidLast;
+    int32_t _stidLast;
     PGST _pgst;
 
-    bool _FFind(long stid, long *pistn);
+    bool _FFind(int32_t stid, int32_t *pistn);
     bool _FEnsureGst(void);
 
   public:
     STRG(void);
     ~STRG(void);
 
-    bool FPut(long stid, PSTN pstn);
-    bool FGet(long stid, PSTN pstn);
-    bool FAdd(long *pstid, PSTN pstn);
-    bool FMove(long stidSrc, long stidDst);
-    void Delete(long stid);
+    bool FPut(int32_t stid, PSTN pstn);
+    bool FGet(int32_t stid, PSTN pstn);
+    bool FAdd(int32_t *pstid, PSTN pstn);
+    bool FMove(int32_t stidSrc, int32_t stidDst);
+    void Delete(int32_t stid);
 };
 
 /***************************************************************************
@@ -122,50 +122,50 @@ class SCEB : public SCEB_PAR
     PGL _pgllwStack;   // the execution stack
     PGL _pglrtvm;      // the local variables
     PSCPT _pscpt;      // the script
-    long _ilwMac;      // the length of the script
-    long _ilwCur;      // the current location in the script
+    int32_t _ilwMac;   // the length of the script
+    int32_t _ilwCur;   // the current location in the script
     bool _fError : 1;  // an error has occured
     bool _fPaused : 1; // if we're paused
-    long _lwReturn;    // the return value from the script
+    int32_t _lwReturn; // the return value from the script
 
-    void _Push(long lw)
+    void _Push(int32_t lw)
     {
         if (!_fError && !_pgllwStack->FPush(&lw))
             _Error(fFalse);
     }
-    long _LwPop(void);
-    long *_QlwGet(long clw);
+    int32_t _LwPop(void);
+    int32_t *_QlwGet(int32_t clw);
     void _Error(bool fAssert);
 
-    void _Rotate(long clwTot, long clwShift);
-    void _Reverse(long clw);
-    void _DupList(long clw);
-    void _PopList(long clw);
-    void _Select(long clw, long ilw);
-    void _RndList(long clw);
-    void _Match(long clw);
-    void _CopySubStr(long stidSrc, long ichMin, long cch, long stidDst);
+    void _Rotate(int32_t clwTot, int32_t clwShift);
+    void _Reverse(int32_t clw);
+    void _DupList(int32_t clw);
+    void _PopList(int32_t clw);
+    void _Select(int32_t clw, int32_t ilw);
+    void _RndList(int32_t clw);
+    void _Match(int32_t clw);
+    void _CopySubStr(int32_t stidSrc, int32_t ichMin, int32_t cch, int32_t stidDst);
     void _MergeStrings(CNO cno, RSC rsc);
-    void _NumToStr(long lw, long stid);
-    void _StrToNum(long stid, long lwEmpty, long lwError);
-    void _ConcatStrs(long stidSrc1, long stidSrc2, long stidDst);
-    void _LenStr(long stid);
+    void _NumToStr(int32_t lw, int32_t stid);
+    void _StrToNum(int32_t stid, int32_t lwEmpty, int32_t lwError);
+    void _ConcatStrs(int32_t stidSrc1, int32_t stidSrc2, int32_t stidDst);
+    void _LenStr(int32_t stid);
 
-    virtual void _AddParameters(long *prglw, long clw);
+    virtual void _AddParameters(int32_t *prglw, int32_t clw);
     virtual void _AddStrings(PGST pgst);
-    virtual bool _FExecVarOp(long op, RTVN *prtvn);
-    virtual bool _FExecOp(long op);
+    virtual bool _FExecVarOp(int32_t op, RTVN *prtvn);
+    virtual bool _FExecOp(int32_t op);
     virtual void _PushVar(PGL pglrtvm, RTVN *prtvn);
-    virtual void _AssignVar(PGL *ppglrtvm, RTVN *prtvn, long lw);
+    virtual void _AssignVar(PGL *ppglrtvm, RTVN *prtvn, int32_t lw);
     virtual PGL _PglrtvmThis(void);
     virtual PGL *_PpglrtvmThis(void);
     virtual PGL _PglrtvmGlobal(void);
     virtual PGL *_PpglrtvmGlobal(void);
-    virtual PGL _PglrtvmRemote(long lw);
-    virtual PGL *_PpglrtvmRemote(long lw);
+    virtual PGL _PglrtvmRemote(int32_t lw);
+    virtual PGL *_PpglrtvmRemote(int32_t lw);
 
-    virtual short _SwCur(void);
-    virtual short _SwMin(void);
+    virtual int16_t _SwCur(void);
+    virtual int16_t _SwMin(void);
 
 #ifdef DEBUG
     void _WarnSz(PSZ psz, ...);
@@ -175,10 +175,10 @@ class SCEB : public SCEB_PAR
     SCEB(PRCA prca = pvNil, PSTRG pstrg = pvNil);
     ~SCEB(void);
 
-    virtual bool FRunScript(PSCPT pscpt, long *prglw = pvNil, long clw = 0, long *plwReturn = pvNil,
+    virtual bool FRunScript(PSCPT pscpt, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                             bool *pfPaused = pvNil);
-    virtual bool FResume(long *plwReturn = pvNil, bool *pfPaused = pvNil);
-    virtual bool FAttachScript(PSCPT pscpt, long *prglw = pvNil, long clw = 0);
+    virtual bool FResume(int32_t *plwReturn = pvNil, bool *pfPaused = pvNil);
+    virtual bool FAttachScript(PSCPT pscpt, int32_t *prglw = pvNil, int32_t clw = 0);
     virtual void Free(void);
 };
 

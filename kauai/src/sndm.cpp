@@ -17,7 +17,7 @@ RTCLASS(SNDM)
 RTCLASS(SNDMQ)
 RTCLASS(SNQUE)
 
-long SNDV::_siiLast;
+int32_t SNDV::_siiLast;
 
 /***************************************************************************
     This is the volume to use as the system volume if it is determined
@@ -28,7 +28,7 @@ long SNDV::_siiLast;
     reading is valid should set this so other devices can use the same
     value.
 ***************************************************************************/
-ulong vluSysVolFake = (ulong)-1;
+uint32_t vluSysVolFake = (uint32_t)-1;
 
 /***************************************************************************
     Start a synchronized group.
@@ -58,7 +58,7 @@ SNDM::~SNDM(void)
 {
     AssertBaseThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     if (pvNil != _pglsndmpe)
     {
@@ -75,7 +75,7 @@ SNDM::~SNDM(void)
 /***************************************************************************
     Assert the validity of a SNDM.
 ***************************************************************************/
-void SNDM::AssertValid(ulong grf)
+void SNDM::AssertValid(uint32_t grf)
 {
     SNDM_PAR::AssertValid(0);
     AssertPo(_pglsndmpe, 0);
@@ -87,7 +87,7 @@ void SNDM::AssertValid(ulong grf)
 void SNDM::MarkMem(void)
 {
     AssertValid(0);
-    long isndmpe;
+    int32_t isndmpe;
     SNDMPE sndmpe;
 
     SNDM_PAR::MarkMem();
@@ -137,12 +137,12 @@ bool SNDM::_FInit(void)
 /***************************************************************************
     Find the device that sounds of the given ctg are to be played on.
 ***************************************************************************/
-bool SNDM::_FFindCtg(CTG ctg, SNDMPE *psndmpe, long *pisndmpe)
+bool SNDM::_FFindCtg(CTG ctg, SNDMPE *psndmpe, int32_t *pisndmpe)
 {
     AssertThis(0);
     AssertNilOrVarMem(psndmpe);
     AssertNilOrVarMem(pisndmpe);
-    long isndmpe;
+    int32_t isndmpe;
     SNDMPE sndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
@@ -172,8 +172,8 @@ bool SNDM::FAddDevice(CTG ctg, PSNDV psndv)
     AssertThis(0);
     AssertPo(psndv, 0);
     SNDMPE sndmpe;
-    long isndmpe;
-    long cact;
+    int32_t isndmpe;
+    int32_t cact;
 
     psndv->AddRef();
     if (_FFindCtg(ctg, &sndmpe, &isndmpe))
@@ -220,7 +220,7 @@ void SNDM::RemoveSndv(CTG ctg)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     if (!_FFindCtg(ctg, &sndmpe, &isndmpe))
         return;
@@ -246,7 +246,7 @@ void SNDM::Activate(bool fActive)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     if (FPure(fActive) == FPure(_fActive))
         return;
@@ -266,7 +266,7 @@ void SNDM::Suspend(bool fSuspend)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     if (fSuspend)
         _cactSuspend++;
@@ -284,11 +284,11 @@ void SNDM::Suspend(bool fSuspend)
 /***************************************************************************
     Set the volume of all the devices.
 ***************************************************************************/
-void SNDM::SetVlm(long vlm)
+void SNDM::SetVlm(int32_t vlm)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -300,12 +300,12 @@ void SNDM::SetVlm(long vlm)
 /***************************************************************************
     Get the max of the volumes of all the devices.
 ***************************************************************************/
-long SNDM::VlmCur(void)
+int32_t SNDM::VlmCur(void)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
-    long vlm;
+    int32_t isndmpe;
+    int32_t vlm;
 
     vlm = 0;
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
@@ -320,7 +320,8 @@ long SNDM::VlmCur(void)
 /***************************************************************************
     Play the given sound.
 ***************************************************************************/
-long SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+int32_t SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                      int32_t spr, int32_t scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
@@ -335,11 +336,11 @@ long SNDM::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPla
 /***************************************************************************
     Stop the given sound instance.
 ***************************************************************************/
-void SNDM::Stop(long sii)
+void SNDM::Stop(int32_t sii)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -351,11 +352,11 @@ void SNDM::Stop(long sii)
 /***************************************************************************
     Stop all sounds of the given queue and class (one or both may be nil).
 ***************************************************************************/
-void SNDM::StopAll(long sqn, long scl)
+void SNDM::StopAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -367,11 +368,11 @@ void SNDM::StopAll(long sqn, long scl)
 /***************************************************************************
     Pause the given sound.
 ***************************************************************************/
-void SNDM::Pause(long sii)
+void SNDM::Pause(int32_t sii)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -383,11 +384,11 @@ void SNDM::Pause(long sii)
 /***************************************************************************
     Pause all sounds of the given queue and class (one or both may be nil).
 ***************************************************************************/
-void SNDM::PauseAll(long sqn, long scl)
+void SNDM::PauseAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -399,11 +400,11 @@ void SNDM::PauseAll(long sqn, long scl)
 /***************************************************************************
     Resume the given sound.
 ***************************************************************************/
-void SNDM::Resume(long sii)
+void SNDM::Resume(int32_t sii)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -415,11 +416,11 @@ void SNDM::Resume(long sii)
 /***************************************************************************
     Resume all sounds of the given queue and class (one or both may be nil).
 ***************************************************************************/
-void SNDM::ResumeAll(long sqn, long scl)
+void SNDM::ResumeAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -431,11 +432,11 @@ void SNDM::ResumeAll(long sqn, long scl)
 /***************************************************************************
     Return whether the given sound is playing.
 ***************************************************************************/
-bool SNDM::FPlaying(long sii)
+bool SNDM::FPlaying(int32_t sii)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -451,11 +452,11 @@ bool SNDM::FPlaying(long sii)
     Return whether any sounds of the given queue and class are playing
     (one or both of (sqn, scl) may be nil).
 ***************************************************************************/
-bool SNDM::FPlayingAll(long sqn, long scl)
+bool SNDM::FPlayingAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -474,7 +475,7 @@ void SNDM::Flush(void)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -490,7 +491,7 @@ void SNDM::BeginSynch(void)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -506,7 +507,7 @@ void SNDM::EndSynch(void)
 {
     AssertThis(0);
     SNDMPE sndmpe;
-    long isndmpe;
+    int32_t isndmpe;
 
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
@@ -525,7 +526,7 @@ void SNDM::EndSynch(void)
 SNDMQ::~SNDMQ(void)
 {
     AssertBaseThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     if (pvNil != _pglsnqd)
@@ -543,7 +544,7 @@ SNDMQ::~SNDMQ(void)
 /***************************************************************************
     Assert the validity of a SNDMQ.
 ***************************************************************************/
-void SNDMQ::AssertValid(ulong grf)
+void SNDMQ::AssertValid(uint32_t grf)
 {
     SNDMQ_PAR::AssertValid(0);
     AssertPo(_pglsnqd, 0);
@@ -555,7 +556,7 @@ void SNDMQ::AssertValid(ulong grf)
 void SNDMQ::MarkMem(void)
 {
     AssertValid(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     SNDMQ_PAR::MarkMem();
@@ -587,13 +588,13 @@ bool SNDMQ::_FInit(void)
 /***************************************************************************
     Ensure a queue exists for the given sqn and return it.
 ***************************************************************************/
-bool SNDMQ::_FEnsureQueue(long sqn, SNQD *psnqd, long *pisnqd)
+bool SNDMQ::_FEnsureQueue(int32_t sqn, SNQD *psnqd, int32_t *pisnqd)
 {
     AssertThis(0);
     AssertNilOrVarMem(psnqd);
     AssertNilOrVarMem(pisnqd);
 
-    long isnqd, isnqdEmpty;
+    int32_t isnqd, isnqdEmpty;
     SNQD snqd;
 
     isnqdEmpty = ivNil;
@@ -683,13 +684,14 @@ void SNDMQ::Suspend(bool fSuspend)
 /***************************************************************************
     Play the given sound.
 ***************************************************************************/
-long SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+int32_t SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                       int32_t spr, int32_t scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
-    long sii = _SiiAlloc();
+    int32_t sii = _SiiAlloc();
 
     if (sqn == sqnNil)
         sqn = ksqnNone;
@@ -707,10 +709,10 @@ long SNDMQ::SiiPlay(PRCA prca, CTG ctg, CNO cno, long sqn, long vlm, long cactPl
 /***************************************************************************
     Stop the given sound instance.
 ***************************************************************************/
-void SNDMQ::Stop(long sii)
+void SNDMQ::Stop(int32_t sii)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -723,10 +725,10 @@ void SNDMQ::Stop(long sii)
 /***************************************************************************
     Stop all sounds of the given queue and class (one or both may be nil).
 ***************************************************************************/
-void SNDMQ::StopAll(long sqn, long scl)
+void SNDMQ::StopAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -740,10 +742,10 @@ void SNDMQ::StopAll(long sqn, long scl)
 /***************************************************************************
     Pause the given sound.
 ***************************************************************************/
-void SNDMQ::Pause(long sii)
+void SNDMQ::Pause(int32_t sii)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -756,10 +758,10 @@ void SNDMQ::Pause(long sii)
 /***************************************************************************
     Pause all sounds of the given queue and class (one or both may be nil).
 ***************************************************************************/
-void SNDMQ::PauseAll(long sqn, long scl)
+void SNDMQ::PauseAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -773,10 +775,10 @@ void SNDMQ::PauseAll(long sqn, long scl)
 /***************************************************************************
     Resume the given sound.
 ***************************************************************************/
-void SNDMQ::Resume(long sii)
+void SNDMQ::Resume(int32_t sii)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -789,10 +791,10 @@ void SNDMQ::Resume(long sii)
 /***************************************************************************
     Resume all sounds of the given queue and class (one or both may be nil).
 ***************************************************************************/
-void SNDMQ::ResumeAll(long sqn, long scl)
+void SNDMQ::ResumeAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -806,10 +808,10 @@ void SNDMQ::ResumeAll(long sqn, long scl)
 /***************************************************************************
     Return whether the given sound is playing.
 ***************************************************************************/
-bool SNDMQ::FPlaying(long sii)
+bool SNDMQ::FPlaying(int32_t sii)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -826,10 +828,10 @@ bool SNDMQ::FPlaying(long sii)
     Return whether any sounds of the given queue and class are playing
     (one or both of (sqn, scl) may be nil).
 ***************************************************************************/
-bool SNDMQ::FPlayingAll(long sqn, long scl)
+bool SNDMQ::FPlayingAll(int32_t sqn, int32_t scl)
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     for (isnqd = 0; isnqd < _pglsnqd->IvMac(); isnqd++)
@@ -850,7 +852,7 @@ bool SNDMQ::FPlayingAll(long sqn, long scl)
 void SNDMQ::Flush()
 {
     AssertThis(0);
-    long isnqd;
+    int32_t isnqd;
     SNQD snqd;
 
     // Don't free the last channel
@@ -883,7 +885,7 @@ SNQUE::~SNQUE(void)
     _Enter();
     if (pvNil != _pglsndin)
     {
-        long isndin;
+        int32_t isndin;
         SNDIN sndin;
 
         for (isndin = _pglsndin->IvMac(); isndin-- > 0;)
@@ -900,7 +902,7 @@ SNQUE::~SNQUE(void)
 /***************************************************************************
     Assert the validity of a SNQUE.
 ***************************************************************************/
-void SNQUE::AssertValid(ulong grf)
+void SNQUE::AssertValid(uint32_t grf)
 {
     SNQUE_PAR::AssertValid(0);
 
@@ -916,7 +918,7 @@ void SNQUE::AssertValid(ulong grf)
 void SNQUE::MarkMem(void)
 {
     AssertValid(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
 
     SNQUE_PAR::MarkMem();
@@ -988,12 +990,13 @@ void SNQUE::_Flush(void)
 /***************************************************************************
     Put the given sound on the queue.
 ***************************************************************************/
-void SNQUE::Enqueue(long sii, PRCA prca, CTG ctg, CNO cno, long vlm, long cactPlay, ulong dtsStart, long spr, long scl)
+void SNQUE::Enqueue(int32_t sii, PRCA prca, CTG ctg, CNO cno, int32_t vlm, int32_t cactPlay, uint32_t dtsStart,
+                    int32_t spr, int32_t scl)
 {
     AssertThis(0);
     AssertPo(prca, 0);
     SNDIN sndin;
-    long isndin;
+    int32_t isndin;
 
     if (pvNil == (sndin.pbaco = _PbacoFetch(prca, ctg, cno)))
         return;
@@ -1023,11 +1026,11 @@ void SNQUE::Enqueue(long sii, PRCA prca, CTG ctg, CNO cno, long vlm, long cactPl
 /***************************************************************************
     Return the priority of the frontmost sound in the queue.
 ***************************************************************************/
-long SNQUE::SprCur(void)
+int32_t SNQUE::SprCur(void)
 {
     AssertThis(0);
     SNDIN sndin;
-    long spr;
+    int32_t spr;
 
     _Enter();
     _Flush();
@@ -1047,10 +1050,10 @@ long SNQUE::SprCur(void)
 /***************************************************************************
     If the given sound is in our queue, nuke it.
 ***************************************************************************/
-void SNQUE::Stop(long sii)
+void SNQUE::Stop(int32_t sii)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
 
     _Enter();
@@ -1079,12 +1082,12 @@ void SNQUE::Stop(long sii)
 /***************************************************************************
     Nuke all sounds of the given sound class. sclNil means nuke all.
 ***************************************************************************/
-void SNQUE::StopAll(long scl)
+void SNQUE::StopAll(int32_t scl)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
-    long isndinMin = klwMax;
+    int32_t isndinMin = klwMax;
 
     _Enter();
     _Flush();
@@ -1109,10 +1112,10 @@ void SNQUE::StopAll(long scl)
 /***************************************************************************
     If the given sound is in our queue, pause it.
 ***************************************************************************/
-void SNQUE::Pause(long sii)
+void SNQUE::Pause(int32_t sii)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
 
     _Enter();
@@ -1142,12 +1145,12 @@ void SNQUE::Pause(long sii)
 /***************************************************************************
     Pause all sounds of the given sound class. sclNil means nuke all.
 ***************************************************************************/
-void SNQUE::PauseAll(long scl)
+void SNQUE::PauseAll(int32_t scl)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
-    long isndinMin = klwMax;
+    int32_t isndinMin = klwMax;
 
     _Enter();
     _Flush();
@@ -1172,10 +1175,10 @@ void SNQUE::PauseAll(long scl)
 /***************************************************************************
     If the given sound is in our queue, make sure it's not paused.
 ***************************************************************************/
-void SNQUE::Resume(long sii)
+void SNQUE::Resume(int32_t sii)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
 
     _Enter();
@@ -1205,12 +1208,12 @@ void SNQUE::Resume(long sii)
 /***************************************************************************
     Resume all sounds of the given sound class. sclNil means nuke all.
 ***************************************************************************/
-void SNQUE::ResumeAll(long scl)
+void SNQUE::ResumeAll(int32_t scl)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
-    long isndinMin = klwMax;
+    int32_t isndinMin = klwMax;
 
     _Enter();
     _Flush();
@@ -1235,10 +1238,10 @@ void SNQUE::ResumeAll(long scl)
 /***************************************************************************
     Return whether the given sound is in our queue.
 ***************************************************************************/
-bool SNQUE::FPlaying(long sii)
+bool SNQUE::FPlaying(int32_t sii)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
 
     _Enter();
@@ -1263,10 +1266,10 @@ bool SNQUE::FPlaying(long sii)
     Return whether any sounds of the given sound class are in our queue.
     sclNil means any sounds at all.
 ***************************************************************************/
-bool SNQUE::FPlayingAll(long scl)
+bool SNQUE::FPlayingAll(int32_t scl)
 {
     AssertThis(0);
-    long isndin;
+    int32_t isndin;
     SNDIN sndin;
 
     _Enter();
@@ -1301,17 +1304,17 @@ void SNQUE::Flush(void)
 /***************************************************************************
     Scale the given system volume by the given Kauai volume.
 ***************************************************************************/
-ulong LuVolScale(ulong luVol, long vlm)
+uint32_t LuVolScale(uint32_t luVol, int32_t vlm)
 {
     Assert(kvlmFull == 0x10000, "this code assumes kvlmFull is 0x10000");
-    ulong luHigh, luLow;
-    ushort suHigh, suLow;
+    uint32_t luHigh, luLow;
+    uint16_t suHigh, suLow;
 
     MulLu(SuLow(luVol), vlm, &luHigh, &luLow);
-    suLow = (luHigh > 0) ? (ushort)(-1) : SuHigh(luLow);
+    suLow = (luHigh > 0) ? (uint16_t)(-1) : SuHigh(luLow);
 
     MulLu(SuHigh(luVol), vlm, &luHigh, &luLow);
-    suHigh = (luHigh > 0) ? (ushort)(-1) : SuHigh(luLow);
+    suHigh = (luHigh > 0) ? (uint16_t)(-1) : SuHigh(luLow);
 
     return LuHighLow(suHigh, suLow);
 }

@@ -29,7 +29,7 @@ END_CMD_MAP_NIL()
     Returns: pvNil on failure, pointer to SPLOT on success
 
 ************************************************************ PETED ***********/
-PSPLOT SPLOT::PsplotNew(long hidPar, long hid, PRCA prca)
+PSPLOT SPLOT::PsplotNew(int32_t hidPar, int32_t hid, PRCA prca)
 {
     PSPLOT psplot = pvNil;
     PGL pglclr = pvNil;
@@ -171,7 +171,7 @@ bool SPLOT::FCmdSplot(PCMD pcmd)
     }
     if (pcmd->rglw[0] != 0)
     {
-        long ithdBkgd;
+        int32_t ithdBkgd;
 
         ithdBkgd = _sflBkgd.LwNext(_pbclBkgd->IthdMac());
         if (ithdBkgd != _ithdBkgd)
@@ -295,7 +295,7 @@ bool SPLOT::FCmdUpdate(PCMD pcmd)
         // purge the cache if disk space is getting low on the volume that
         // tagman is caching to, but there's currently no way to do that, so
         // just purge every five pulls.
-        static long _cactPullTilClearCache = 5;
+        static int32_t _cactPullTilClearCache = 5;
 
         _pmvie->Pmsq()->StopAll(); // Make sure no sounds are streaming from HD cache
         if (--_cactPullTilClearCache == 0)
@@ -424,7 +424,7 @@ SPLOT::~SPLOT(void)
 }
 
 #ifdef DEBUG
-void SPLOT::AssertValid(ulong grf)
+void SPLOT::AssertValid(uint32_t grf)
 {
     SPLOT_PAR::AssertValid(grf);
     AssertPo(_pglclrSav, 0);

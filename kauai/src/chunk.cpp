@@ -88,11 +88,11 @@ ASSERTNAME
 
 // A file written by this version of chunk.cpp receives this cvn.  Any
 // file with this cvn value has exactly the same file format
-const short kcvnCur = 5;
+const int16_t kcvnCur = 5;
 
 // A file written by this version of chunk.cpp can be read by any version
 // of chunk.cpp whose kcvnCur is >= to this (this should be <= kcvnCur)
-const short kcvnBack = 4;
+const int16_t kcvnBack = 4;
 
 // A file whose cvn is less than kcvnMin cannot be directly read by
 // this version of chunk.cpp (maybe a converter will read it).
@@ -101,31 +101,31 @@ const short kcvnBack = 4;
 // _FReadIndex can be removed!
 // NOTE: (ShonK, 8/21/95): if this is >= 4, the fOldIndex handling in
 // _FReadIndex can be removed!
-const short kcvnMin = 1;
+const int16_t kcvnMin = 1;
 
 const auto kcvnMinStnNames = 3;
 const auto kcvnMinGrfcrp = 4;
 const auto kcvnMinSmallIndex = 4;
 const auto kcvnMinForest = 5;
 
-const long klwMagicChunky = BigLittle('CHN2', '2NHC'); // chunky file signature
+const int32_t klwMagicChunky = BigLittle('CHN2', '2NHC'); // chunky file signature
 
 // chunky file prefix
 struct CFP
 {
-    long lwMagic;   // identifies this as a chunky file
-    CTG ctgCreator; // program that created this file
-    DVER dver;      // chunky file version
-    short bo;       // byte order
-    short osk;      // which system wrote this
+    int32_t lwMagic; // identifies this as a chunky file
+    CTG ctgCreator;  // program that created this file
+    DVER dver;       // chunky file version
+    int16_t bo;      // byte order
+    int16_t osk;     // which system wrote this
 
-    FP fpMac;     // logical end of file
-    FP fpIndex;   // location of chunky index
-    long cbIndex; // size of chunky index
-    FP fpMap;     // location of free space map
-    long cbMap;   // size of free space map (may be 0)
+    FP fpMac;        // logical end of file
+    FP fpIndex;      // location of chunky index
+    int32_t cbIndex; // size of chunky index
+    FP fpMap;        // location of free space map
+    int32_t cbMap;   // size of free space map (may be 0)
 
-    long rglwReserved[23]; // reserved for future use - should be zero
+    int32_t rglwReserved[23]; // reserved for future use - should be zero
 };
 VERIFY_STRUCT_SIZE(CFP, 128);
 const BOM kbomCfp = 0xB55FFC00L;
@@ -134,7 +134,7 @@ const BOM kbomCfp = 0xB55FFC00L;
 struct FSM
 {
     FP fp;
-    long cb;
+    int32_t cb;
 };
 VERIFY_STRUCT_SIZE(FSM, 8);
 const BOM kbomFsm = 0xF0000000L;
@@ -151,59 +151,59 @@ enum
 
 // Chunk Representation (big version) - fixed element in pggcrp
 // variable part of group element is an rgkid and stn data (the name)
-const long kcbMaxCrpbg = klwMax;
+const int32_t kcbMaxCrpbg = klwMax;
 struct CRPBG
 {
-    CKI cki;      // chunk id
-    FP fp;        // location on file
-    long cb;      // size of data on file
-    long ckid;    // number of owned chunks
-    long ccrpRef; // number of owners of this chunk
-    long rti;     // run-time id
+    CKI cki;         // chunk id
+    FP fp;           // location on file
+    int32_t cb;      // size of data on file
+    int32_t ckid;    // number of owned chunks
+    int32_t ccrpRef; // number of owners of this chunk
+    int32_t rti;     // run-time id
     union {
         struct
         {
             // for cvn <= kcvnMinGrfcrp
-            byte fOnExtra; // fcrpOnExtra
-            byte fLoner;   // fcrpLoner
-            byte fPacked;  // fcrpPacked
-            byte bT;       // fcrpMarkT
+            uint8_t fOnExtra; // fcrpOnExtra
+            uint8_t fLoner;   // fcrpLoner
+            uint8_t fPacked;  // fcrpPacked
+            uint8_t bT;       // fcrpMarkT
         };
 
         // for cvn >= kcvnMinGrfcrp
-        ulong grfcrp;
+        uint32_t grfcrp;
     };
 
-    long BvRgch(void)
+    int32_t BvRgch(void)
     {
         return LwMul(ckid, SIZEOF(KID));
     }
-    long CbRgch(long cbVar)
+    int32_t CbRgch(int32_t cbVar)
     {
         return cbVar - BvRgch();
     }
 
-    ulong Grfcrp(ulong grfcrpMask = (ulong)(-1))
+    uint32_t Grfcrp(uint32_t grfcrpMask = (uint32_t)(-1))
     {
         return grfcrp & grfcrpMask;
     }
-    void ClearGrfcrp(ulong grfcrpT)
+    void ClearGrfcrp(uint32_t grfcrpT)
     {
         grfcrp &= ~grfcrpT;
     }
-    void SetGrfcrp(ulong grfcrpT)
+    void SetGrfcrp(uint32_t grfcrpT)
     {
         grfcrp |= grfcrpT;
     }
-    void AssignGrfcrp(ulong grfcrpT, ulong grfcrpMask = (ulong)(-1))
+    void AssignGrfcrp(uint32_t grfcrpT, uint32_t grfcrpMask = (uint32_t)(-1))
     {
         grfcrp = grfcrp & ~grfcrpMask | grfcrpT & grfcrpMask;
     }
-    long Cb(void)
+    int32_t Cb(void)
     {
         return cb;
     }
-    void SetCb(long cbT)
+    void SetCb(int32_t cbT)
     {
         cb = cbT;
     }
@@ -214,47 +214,47 @@ const BOM kbomCrpbgBytes = 0xFFFE0000L;
 
 // Chunk Representation (small version) - fixed element in pggcrp
 // variable part of group element is an rgkid and stn data (the name)
-const long kcbMaxCrpsm = 0x00FFFFFF;
-const long kcbitGrfcrp = 8;
-const ulong kgrfcrpAll = (1 << kcbitGrfcrp) - 1;
+const int32_t kcbMaxCrpsm = 0x00FFFFFF;
+const int32_t kcbitGrfcrp = 8;
+const uint32_t kgrfcrpAll = (1 << kcbitGrfcrp) - 1;
 struct CRPSM
 {
-    CKI cki;          // chunk id
-    FP fp;            // location on file
-    ulong luGrfcrpCb; // low byte is the grfcrp, high 3 bytes is cb
-    ushort ckid;      // number of owned chunks
-    ushort ccrpRef;   // number of owners of this chunk
+    CKI cki;             // chunk id
+    FP fp;               // location on file
+    uint32_t luGrfcrpCb; // low byte is the grfcrp, high 3 bytes is cb
+    uint16_t ckid;       // number of owned chunks
+    uint16_t ccrpRef;    // number of owners of this chunk
 
-    long BvRgch(void)
+    int32_t BvRgch(void)
     {
         return LwMul(ckid, SIZEOF(KID));
     }
-    long CbRgch(long cbVar)
+    int32_t CbRgch(int32_t cbVar)
     {
         return cbVar - BvRgch();
     }
 
-    ulong Grfcrp(ulong grfcrpMask = (ulong)(-1))
+    uint32_t Grfcrp(uint32_t grfcrpMask = (uint32_t)(-1))
     {
         return luGrfcrpCb & grfcrpMask & kgrfcrpAll;
     }
-    void ClearGrfcrp(ulong grfcrpT)
+    void ClearGrfcrp(uint32_t grfcrpT)
     {
         luGrfcrpCb &= ~(grfcrpT & kgrfcrpAll);
     }
-    void SetGrfcrp(ulong grfcrpT)
+    void SetGrfcrp(uint32_t grfcrpT)
     {
         luGrfcrpCb |= grfcrpT & kgrfcrpAll;
     }
-    void AssignGrfcrp(ulong grfcrpT, ulong grfcrpMask = (ulong)(-1))
+    void AssignGrfcrp(uint32_t grfcrpT, uint32_t grfcrpMask = (uint32_t)(-1))
     {
         luGrfcrpCb = luGrfcrpCb & ~(grfcrpMask & kgrfcrpAll) | grfcrpT & grfcrpMask & kgrfcrpAll;
     }
-    long Cb(void)
+    int32_t Cb(void)
     {
         return luGrfcrpCb >> kcbitGrfcrp;
     }
-    void SetCb(long cbT)
+    void SetCb(int32_t cbT)
     {
         luGrfcrpCb = (cbT << kcbitGrfcrp) | luGrfcrpCb & kgrfcrpAll;
     }
@@ -266,26 +266,26 @@ const BOM kbomCrpsm = 0xFF500000L;
 
 typedef CRPBG CRP;
 typedef CRPSM CRPOTH;
-const long kcbMaxCrp = kcbMaxCrpbg;
-typedef long CKID;
-const long kckidMax = kcbMax;
+const int32_t kcbMaxCrp = kcbMaxCrpbg;
+typedef int32_t CKID;
+const int32_t kckidMax = kcbMax;
 const BOM kbomCrpsm = kbomCrpbgGrfcrp;
 
 #else //! CHUNK_BIG_INDEX
 
 typedef CRPSM CRP;
 typedef CRPBG CRPOTH;
-const long kcbMaxCrp = kcbMaxCrpsm;
-typedef ushort CKID;
-const long kckidMax = ksuMax;
+const int32_t kcbMaxCrp = kcbMaxCrpsm;
+typedef uint16_t CKID;
+const int32_t kckidMax = ksuMax;
 const BOM kbomCrp = kbomCrpsm;
 
 #endif //! CHUNK_BIG_INDEX
 
 #define _BvKid(ikid) LwMul(ikid, SIZEOF(KID))
 
-const long rtiNil = 0; // no rti assigned
-long CFL::_rtiLast = rtiNil;
+const int32_t rtiNil = 0; // no rti assigned
+int32_t CFL::_rtiLast = rtiNil;
 PCFL CFL::_pcflFirst;
 
 #ifdef CHUNK_STATS
@@ -356,11 +356,11 @@ CFL::~CFL(void)
     Static method: open an existing file as a chunky file.  Increments the
     open count.
 ***************************************************************************/
-PCFL CFL::PcflOpen(FNI *pfni, ulong grfcfl)
+PCFL CFL::PcflOpen(FNI *pfni, uint32_t grfcfl)
 {
     AssertPo(pfni, ffniFile);
     PCFL pcfl;
-    ulong grffil;
+    uint32_t grffil;
 
     Assert(!(grfcfl & fcflTemp), "can't open a file as temp");
     if (pvNil != (pcfl = PcflFromFni(pfni)))
@@ -459,9 +459,9 @@ bool CFL::FReopen(void)
     Static method to get file options corresponding to the given chunky
     file options.
 ***************************************************************************/
-ulong CFL::_GrffilFromGrfcfl(ulong grfcfl)
+uint32_t CFL::_GrffilFromGrfcfl(uint32_t grfcfl)
 {
-    ulong grffil = ffilDenyWrite;
+    uint32_t grffil = ffilDenyWrite;
 
     if (grfcfl & fcflWriteEnable)
         grffil |= ffilWriteEnable | ffilDenyRead;
@@ -475,11 +475,11 @@ ulong CFL::_GrffilFromGrfcfl(ulong grfcfl)
 /***************************************************************************
     Static method: create a new file.  Increments the open count.
 ***************************************************************************/
-PCFL CFL::PcflCreate(FNI *pfni, ulong grfcfl)
+PCFL CFL::PcflCreate(FNI *pfni, uint32_t grfcfl)
 {
     AssertPo(pfni, ffniFile);
     PCFL pcfl;
-    ulong grffil;
+    uint32_t grffil;
 
     grfcfl |= fcflWriteEnable;
     grffil = _GrffilFromGrfcfl(grfcfl);
@@ -575,13 +575,13 @@ PCFL CFL::PcflFromFni(FNI *pfni)
 ***************************************************************************/
 struct ECDF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     CTG ctg;
     CHID chid;
-    long cb;
-    long ckid;
-    ulong grfcrp;
+    int32_t cb;
+    int32_t ckid;
+    uint32_t grfcrp;
 };
 VERIFY_STRUCT_SIZE(ECDF, 24);
 const BOM kbomEcdf = 0x5FFC0000L;
@@ -590,7 +590,7 @@ const BOM kbomEcdf = 0x5FFC0000L;
     Combine the indicated chunk and its children into an embedded chunk.
     If pfil is pvNil, just computes the size.
 ***************************************************************************/
-bool CFL::FWriteChunkTree(CTG ctg, CNO cno, PFIL pfilDst, FP fpDst, long *pcb)
+bool CFL::FWriteChunkTree(CTG ctg, CNO cno, PFIL pfilDst, FP fpDst, int32_t *pcb)
 {
     AssertThis(0);
     AssertNilOrPo(pfilDst, 0);
@@ -600,7 +600,7 @@ bool CFL::FWriteChunkTree(CTG ctg, CNO cno, PFIL pfilDst, FP fpDst, long *pcb)
     FLO floSrc, floDst;
     KID kid;
     CKI ckiPar;
-    ulong grfcge;
+    uint32_t grfcge;
 
     if (pvNil != pcb)
         *pcb = 0;
@@ -668,7 +668,7 @@ PCFL CFL::PcflReadForestFromFlo(PFLO pflo, bool fCopyData)
     {
         CTG ctg;
         CNO cno;
-        long ckid;
+        int32_t ckid;
     };
 
     PCFL pcfl;
@@ -737,7 +737,7 @@ PCFL CFL::PcflReadForestFromFlo(PFLO pflo, bool fCopyData)
         else
         {
             CRP *qcrp;
-            long icrp;
+            int32_t icrp;
 
             pcfl->_GetUniqueCno(ecdf.ctg, &icrp, &ecsdT.cno);
             if (!pcfl->_FAdd(0, ecdf.ctg, ecsdT.cno, icrp, pvNil))
@@ -802,7 +802,7 @@ PCFL CFL::PcflReadForestFromFlo(PFLO pflo, bool fCopyData)
 bool CFL::FForest(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -821,7 +821,7 @@ bool CFL::FForest(CTG ctg, CNO cno)
 void CFL::SetForest(CTG ctg, CNO cno, bool fForest)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -902,10 +902,10 @@ void CFL::CloseUnmarked(void)
     can only fail if fcflWriteEnable is specified and we can't make
     the base file write enabled.
 ***************************************************************************/
-bool CFL::FSetGrfcfl(ulong grfcfl, ulong grfcflMask)
+bool CFL::FSetGrfcfl(uint32_t grfcfl, uint32_t grfcflMask)
 {
     AssertThis(0);
-    ulong grffil, grffilMask;
+    uint32_t grffil, grffilMask;
 
     grfcfl &= grfcflMask;
     grffil = _GrffilFromGrfcfl(grfcfl);
@@ -940,10 +940,10 @@ bool CFL::FSetGrfcfl(ulong grfcfl, ulong grfcflMask)
 /***************************************************************************
     Return the level of error that we've encountered for this chunky file.
 ***************************************************************************/
-long CFL::ElError(void)
+int32_t CFL::ElError(void)
 {
     AssertThis(0);
-    long elT;
+    int32_t elT;
 
     elT = _csto.pfil->ElError();
     if (pvNil != _cstoExtra.pfil)
@@ -954,7 +954,7 @@ long CFL::ElError(void)
 /***************************************************************************
     Make sure the el level on both files is at or below el.
 ***************************************************************************/
-void CFL::ResetEl(long el)
+void CFL::ResetEl(int32_t el)
 {
     AssertThis(0);
     AssertIn(el, elNil, kcbMax);
@@ -988,22 +988,22 @@ void CFL::Release(void)
     of the index.  If fcflGraph, does fcflFull and checks the graph structure
     for cycles.
 ***************************************************************************/
-void CFL::AssertValid(ulong grfcfl)
+void CFL::AssertValid(uint32_t grfcfl)
 {
     CFL_PAR::AssertValid(fobjAllocated);
     bool fFirstCrp;
-    long cbTot = 0;
-    long cbTotExtra = 0;
+    int32_t cbTot = 0;
+    int32_t cbTotExtra = 0;
     CKI ckiOld;
     CKI ckiNew;
     KID kid, kidOld;
     bool fFirstKid;
-    long icrp, icrpT;
-    long ccrpRefTot = 0;
-    long ckidTot = 0;
-    long cbVar, cbRgch;
+    int32_t icrp, icrpT;
+    int32_t ccrpRefTot = 0;
+    int32_t ckidTot = 0;
+    int32_t cbVar, cbRgch;
     CRP crp;
-    long ikid;
+    int32_t ikid;
     FP fpBase = _fInvalidMainFile ? 0 : SIZEOF(CFP);
 
     Assert(!_fInvalidMainFile || _fAddToExtra, 0);
@@ -1103,7 +1103,7 @@ void CFL::AssertValid(ulong grfcfl)
 
     if (_csto.pglfsm != pvNil)
     {
-        long ifsm;
+        int32_t ifsm;
         FSM fsm;
         FP fpOld;
 
@@ -1120,7 +1120,7 @@ void CFL::AssertValid(ulong grfcfl)
     }
     if (_cstoExtra.pglfsm != pvNil)
     {
-        long ifsm;
+        int32_t ifsm;
         FSM fsm;
         FP fpOld;
 
@@ -1143,9 +1143,9 @@ void CFL::AssertValid(ulong grfcfl)
     // verify that the _pglrtie is in sorted order and all the chunks exist
     if (pvNil != _pglrtie && _pglrtie->IvMac() > 0)
     {
-        long irtie;
+        int32_t irtie;
         RTIE rtie, rtiePrev;
-        long icrp;
+        int32_t icrp;
 
         irtie = _pglrtie->IvMac() - 1;
         _pglrtie->Get(irtie, &rtie);
@@ -1188,14 +1188,14 @@ void CFL::MarkMem(void)
 tribool CFL::_TValidIndex(void)
 {
     // WARNING: this is called by a full CFL::AssertValid().
-    long icrp, icrpT;
+    int32_t icrp, icrpT;
     CRP *qcrp;
     CGE cge;
-    ulong grfcge, grfcgeIn;
+    uint32_t grfcge, grfcgeIn;
     KID kid;
-    long cbVar;
-    long ccrpRefTot;
-    long ckidTot;
+    int32_t cbVar;
+    int32_t ccrpRefTot;
+    int32_t ckidTot;
 
     // first clear all fcrpMarkT fields
     ccrpRefTot = ckidTot = 0;
@@ -1331,12 +1331,12 @@ bool CFL::_FReadIndex(void)
 
     CFP cfp;
     FP fpMac;
-    short bo;
-    short osk;
-    long cbVar;
-    long cbRgch;
-    long icrp, ccrp;
-    long cbFixed;
+    int16_t bo;
+    int16_t osk;
+    int32_t cbVar;
+    int32_t cbRgch;
+    int32_t icrp, ccrp;
+    int32_t cbFixed;
     BOM bom;
 
     // used for old name stuff
@@ -1426,13 +1426,13 @@ bool CFL::_FReadIndex(void)
             }
             if (bomNil != bom && pcrpbg->ckid > 0)
             {
-                SwapBytesRglw(_pggcrp->QvGet(icrp), pcrpbg->ckid * (SIZEOF(KID) / SIZEOF(long)));
+                SwapBytesRglw(_pggcrp->QvGet(icrp), pcrpbg->ckid * (SIZEOF(KID) / SIZEOF(int32_t)));
             }
             pcrpbg->rti = rtiNil;
 
             if (fOldIndex)
             {
-                ulong grfcrp = fcrpNil;
+                uint32_t grfcrp = fcrpNil;
 
                 if (pcrpbg->fLoner)
                     grfcrp |= fcrpLoner;
@@ -1451,11 +1451,11 @@ bool CFL::_FReadIndex(void)
             if (fOldNames && cbRgch > 0)
             {
                 // translate the name
-                long bvRgch = pcrpbg->BvRgch();
+                int32_t bvRgch = pcrpbg->BvRgch();
 
                 if (cbRgch < SIZEOF(szsName))
                 {
-                    long cbNew;
+                    int32_t cbNew;
 
                     CopyPb(PvAddBv(_pggcrp->QvGet(icrp), bvRgch), szsName, cbRgch);
                     szsName[cbRgch] = 0;
@@ -1508,7 +1508,7 @@ bool CFL::_FReadIndex(void)
             }
             if (pcrpsm->ckid > 0 && bomNil != bom)
             {
-                SwapBytesRglw(_pggcrp->QvGet(icrp), pcrpsm->ckid * (SIZEOF(KID) / SIZEOF(long)));
+                SwapBytesRglw(_pggcrp->QvGet(icrp), pcrpsm->ckid * (SIZEOF(KID) / SIZEOF(int32_t)));
             }
 
             pcrpsm->ClearGrfcrp(fcrpOnExtra);
@@ -1582,9 +1582,9 @@ void CFL::_ReadFreeMap(void)
     Assert(_fFreeMapNotRead, "free map already read");
     Assert(!_fInvalidMainFile, 0);
 
-    short bo;
-    short osk;
-    long cfsm;
+    int16_t bo;
+    int16_t osk;
+    int32_t cfsm;
 
     // clear this even if reading the free map fails - so we don't try to
     // read again
@@ -1609,7 +1609,7 @@ void CFL::_ReadFreeMap(void)
         AssertBomRglw(kbomFsm, SIZEOF(FSM));
         if (bo != kboCur && (cfsm = _csto.pglfsm->IvMac()) > 0)
         {
-            SwapBytesRglw(_csto.pglfsm->QvGet(0), cfsm * (SIZEOF(FSM) / SIZEOF(long)));
+            SwapBytesRglw(_csto.pglfsm->QvGet(0), cfsm * (SIZEOF(FSM) / SIZEOF(int32_t)));
         }
     }
 }
@@ -1626,7 +1626,7 @@ bool CFL::FSave(CTG ctgCreator, FNI *pfni)
 
     FNI fni;
     FLO floSrc, floDst;
-    long ccrp, icrp;
+    int32_t ccrp, icrp;
     CRP *qcrp;
     PFIL pfilOld;
 
@@ -1809,7 +1809,7 @@ bool CFL::FSaveACopy(CTG ctgCreator, FNI *pfni)
     AssertThis(fcflFull | fcflGraph);
     AssertPo(pfni, ffniFile);
     PCFL pcflDst;
-    long icrp, ccrp;
+    int32_t icrp, ccrp;
     CRP *pcrp;
     CRP crp;
     FLO floSrc, floDst;
@@ -1878,7 +1878,7 @@ bool CFL::FSaveACopy(CTG ctgCreator, FNI *pfni)
 bool CFL::FOnExtra(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -1895,7 +1895,7 @@ bool CFL::FOnExtra(CTG ctg, CNO cno)
 bool CFL::FEnsureOnExtra(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
         return fFalse;
@@ -1907,7 +1907,7 @@ bool CFL::FEnsureOnExtra(CTG ctg, CNO cno)
     Make sure the given chunk's data is on the extra file. Optionally get
     the flo for the data.
 ***************************************************************************/
-bool CFL::_FEnsureOnExtra(long icrp, FLO *pflo)
+bool CFL::_FEnsureOnExtra(int32_t icrp, FLO *pflo)
 {
     AssertThis(0);
     AssertNilOrVarMem(pflo);
@@ -1977,7 +1977,7 @@ bool CFL::_FEnsureOnExtra(long icrp, FLO *pflo)
 /***************************************************************************
     Get the FLO from the chunk.
 ***************************************************************************/
-void CFL::_GetFlo(long icrp, PFLO pflo)
+void CFL::_GetFlo(int32_t icrp, PFLO pflo)
 {
     AssertThis(0);
     AssertVarMem(pflo);
@@ -2010,7 +2010,7 @@ void CFL::_GetFlo(long icrp, PFLO pflo)
 /***************************************************************************
     Get the BLCK from the chunk.
 ***************************************************************************/
-void CFL::_GetBlck(long icrp, PBLCK pblck)
+void CFL::_GetBlck(int32_t icrp, PBLCK pblck)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
@@ -2031,7 +2031,7 @@ bool CFL::FFind(CTG ctg, CNO cno, BLCK *pblck)
     AssertThis(0);
     AssertNilOrPo(pblck, 0);
 
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
     {
@@ -2054,7 +2054,7 @@ bool CFL::FFindFlo(CTG ctg, CNO cno, PFLO pflo)
     AssertThis(0);
     AssertVarMem(pflo);
 
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
     {
@@ -2088,7 +2088,7 @@ bool CFL::FReadHq(CTG ctg, CNO cno, HQ *phq)
 void CFL::SetPacked(CTG ctg, CNO cno, bool fPacked)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -2114,7 +2114,7 @@ void CFL::SetPacked(CTG ctg, CNO cno, bool fPacked)
 bool CFL::FPacked(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -2181,14 +2181,14 @@ bool CFL::_FCreateExtra(void)
 /***************************************************************************
     Find a place to put a block the given size.
 ***************************************************************************/
-bool CFL::_FAllocFlo(long cb, PFLO pflo, bool fForceOnExtra)
+bool CFL::_FAllocFlo(int32_t cb, PFLO pflo, bool fForceOnExtra)
 {
     AssertBaseThis(0);
     AssertIn(cb, 0, kcbMax);
     AssertVarMem(pflo);
 
     CSTO *pcsto;
-    long cfsm, ifsm;
+    int32_t cfsm, ifsm;
     FSM *qfsm;
 
     if (cb > kcbMaxCrp)
@@ -2263,7 +2263,7 @@ bool CFL::_FAllocFlo(long cb, PFLO pflo, bool fForceOnExtra)
     Returns whether or not it was found.  Assumes the _pggcrp is sorted
     by (ctg, cno).  Does a binary search.
 ***************************************************************************/
-bool CFL::_FFindCtgCno(CTG ctg, CNO cno, long *picrp)
+bool CFL::_FFindCtgCno(CTG ctg, CNO cno, int32_t *picrp)
 {
     // WARNING:  this is called by CFL::AssertValid, so be careful about
     // asserting stuff in here
@@ -2271,7 +2271,7 @@ bool CFL::_FFindCtgCno(CTG ctg, CNO cno, long *picrp)
     AssertVarMem(picrp);
     AssertPo(_pggcrp, 0);
 
-    long ccrp, icrpMin, icrpLim, icrp;
+    int32_t ccrp, icrpMin, icrpLim, icrp;
     CKI cki;
 
     if ((ccrp = _pggcrp->IvMac()) == 0)
@@ -2307,13 +2307,13 @@ bool CFL::_FFindCtgCno(CTG ctg, CNO cno, long *picrp)
 /***************************************************************************
     Find an unused cno for the given ctg.  Fill in *picrp and *pcno.
 ***************************************************************************/
-void CFL::_GetUniqueCno(CTG ctg, long *picrp, CNO *pcno)
+void CFL::_GetUniqueCno(CTG ctg, int32_t *picrp, CNO *pcno)
 {
     AssertBaseThis(0);
     AssertVarMem(picrp);
     AssertVarMem(pcno);
 
-    long icrp, ccrp;
+    int32_t icrp, ccrp;
     CNO cno;
     CRP *qcrp;
 
@@ -2338,13 +2338,13 @@ void CFL::_GetUniqueCno(CTG ctg, long *picrp, CNO *pcno)
 /***************************************************************************
     Add a new chunk.
 ***************************************************************************/
-bool CFL::FAdd(long cb, CTG ctg, CNO *pcno, PBLCK pblck)
+bool CFL::FAdd(int32_t cb, CTG ctg, CNO *pcno, PBLCK pblck)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);
     AssertVarMem(pcno);
     AssertNilOrPo(pblck, 0);
-    long icrp;
+    int32_t icrp;
 
     _GetUniqueCno(ctg, &icrp, pcno);
     if (!_FAdd(cb, ctg, *pcno, icrp, pblck))
@@ -2360,7 +2360,7 @@ bool CFL::FAdd(long cb, CTG ctg, CNO *pcno, PBLCK pblck)
 /***************************************************************************
     Add a new chunk and write the pv to it.
 ***************************************************************************/
-bool CFL::FAddPv(void *pv, long cb, CTG ctg, CNO *pcno)
+bool CFL::FAddPv(void *pv, int32_t cb, CTG ctg, CNO *pcno)
 {
     AssertThis(0);
     AssertVarMem(pcno);
@@ -2389,7 +2389,7 @@ bool CFL::FAddHq(HQ hq, CTG ctg, CNO *pcno)
     AssertHq(hq);
 
     BLCK blck;
-    long cb = CbOfHq(hq);
+    int32_t cb = CbOfHq(hq);
 
     if (!FAdd(cb, ctg, pcno, &blck))
         return fFalse;
@@ -2412,7 +2412,7 @@ bool CFL::FAddBlck(PBLCK pblckSrc, CTG ctg, CNO *pcno)
     AssertVarMem(pcno);
 
     BLCK blck;
-    long cb = pblckSrc->Cb(fTrue);
+    int32_t cb = pblckSrc->Cb(fTrue);
 
     if (!FAdd(cb, ctg, pcno, &blck))
         return fFalse;
@@ -2432,7 +2432,7 @@ bool CFL::FAddBlck(PBLCK pblckSrc, CTG ctg, CNO *pcno)
     Adds the chunk and makes it a child of (ctgPar, cnoPar). The loner flag
     of the new chunk will be clear.
 ***************************************************************************/
-bool CFL::FAddChild(CTG ctgPar, CNO cnoPar, CHID chid, long cb, CTG ctg, CNO *pcno, PBLCK pblck)
+bool CFL::FAddChild(CTG ctgPar, CNO cnoPar, CHID chid, int32_t cb, CTG ctg, CNO *pcno, PBLCK pblck)
 {
     AssertThis(0);
     AssertVarMem(pcno);
@@ -2455,7 +2455,7 @@ bool CFL::FAddChild(CTG ctgPar, CNO cnoPar, CHID chid, long cb, CTG ctg, CNO *pc
     Adds the chunk and makes it a child of (ctgPar, cnoPar).  The child's
     loner flag will be clear.
 ***************************************************************************/
-bool CFL::FAddChildPv(CTG ctgPar, CNO cnoPar, CHID chid, void *pv, long cb, CTG ctg, CNO *pcno)
+bool CFL::FAddChildPv(CTG ctgPar, CNO cnoPar, CHID chid, void *pv, int32_t cb, CTG ctg, CNO *pcno)
 {
     if (!FAddPv(pv, cb, ctg, pcno))
         return fFalse;
@@ -2488,7 +2488,7 @@ bool CFL::FAddChildHq(CTG ctgPar, CNO cnoPar, CHID chid, HQ hq, CTG ctg, CNO *pc
 /***************************************************************************
     Low level add.  Sets the loner flag.
 ***************************************************************************/
-bool CFL::_FAdd(long cb, CTG ctg, CNO cno, long icrp, PBLCK pblck)
+bool CFL::_FAdd(int32_t cb, CTG ctg, CNO cno, int32_t icrp, PBLCK pblck)
 {
     AssertBaseThis(0);
     AssertIn(cb, 0, kcbMax);
@@ -2533,7 +2533,7 @@ bool CFL::_FAdd(long cb, CTG ctg, CNO cno, long icrp, PBLCK pblck)
 /***************************************************************************
     Replace or create a chunk of a particular cno.
 ***************************************************************************/
-bool CFL::FPut(long cb, CTG ctg, CNO cno, PBLCK pblck)
+bool CFL::FPut(int32_t cb, CTG ctg, CNO cno, PBLCK pblck)
 {
     AssertThis(0);
     AssertNilOrPo(pblck, 0);
@@ -2544,7 +2544,7 @@ bool CFL::FPut(long cb, CTG ctg, CNO cno, PBLCK pblck)
 /***************************************************************************
     Replace or create a chunk with the given cno and put the data in it.
 ***************************************************************************/
-bool CFL::FPutPv(const void *pv, long cb, CTG ctg, CNO cno)
+bool CFL::FPutPv(const void *pv, int32_t cb, CTG ctg, CNO cno)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);
@@ -2593,14 +2593,14 @@ bool CFL::FPutBlck(PBLCK pblckSrc, CTG ctg, CNO cno)
     else except the data.  If pblck isn't nil, this sets it to the location
     of the new data.  Doesn't change the packed flag.
 ***************************************************************************/
-bool CFL::_FPut(long cb, CTG ctg, CNO cno, PBLCK pblck, PBLCK pblckSrc, const void *pv)
+bool CFL::_FPut(int32_t cb, CTG ctg, CNO cno, PBLCK pblck, PBLCK pblckSrc, const void *pv)
 {
     AssertBaseThis(0);
     AssertIn(cb, 0, kcbMax);
     AssertNilOrPo(pblck, 0);
     AssertNilOrPo(pblckSrc, 0);
 
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
     FLO flo;
 
@@ -2685,12 +2685,12 @@ bool CFL::_FPut(long cb, CTG ctg, CNO cno, PBLCK pblck, PBLCK pblckSrc, const vo
 void CFL::SwapData(CTG ctg1, CNO cno1, CTG ctg2, CNO cno2)
 {
     AssertThis(0);
-    long icrp1, icrp2;
+    int32_t icrp1, icrp2;
     CRP *qcrp1, *qcrp2;
     FP fp;
-    long cb;
-    ulong grfcrpT;
-    const ulong kgrfcrpMask = fcrpOnExtra | fcrpPacked | fcrpForest;
+    int32_t cb;
+    uint32_t grfcrpT;
+    const uint32_t kgrfcrpMask = fcrpOnExtra | fcrpPacked | fcrpForest;
 
     if (!_FFindCtgCno(ctg1, cno1, &icrp1) || !_FFindCtgCno(ctg2, cno2, &icrp2))
     {
@@ -2727,9 +2727,9 @@ void CFL::SwapData(CTG ctg1, CNO cno1, CTG ctg2, CNO cno2)
 void CFL::SwapChildren(CTG ctg1, CNO cno1, CTG ctg2, CNO cno2)
 {
     AssertThis(0);
-    long icrp1, icrp2;
+    int32_t icrp1, icrp2;
     CRP *qcrp1, *qcrp2;
-    long cb1, cb2;
+    int32_t cb1, cb2;
 
     if (!_FFindCtgCno(ctg1, cno1, &icrp1) || !_FFindCtgCno(ctg2, cno2, &icrp2))
     {
@@ -2746,7 +2746,7 @@ void CFL::SwapChildren(CTG ctg1, CNO cno1, CTG ctg2, CNO cno2)
 
     // These FMoveRgb calls won't fail, because no padding is necessary for
     // child entries. (FMoveRgb can fail only if the number of bytes being
-    // moved is not a multiple of SIZEOF(long)).
+    // moved is not a multiple of SIZEOF(int32_t)).
     if (0 < cb1)
         AssertDo(_pggcrp->FMoveRgb(icrp1, 0, icrp2, cb2, cb1), 0);
     if (0 < cb2)
@@ -2764,10 +2764,10 @@ void CFL::SwapChildren(CTG ctg1, CNO cno1, CTG ctg2, CNO cno2)
 void CFL::Move(CTG ctg, CNO cno, CTG ctgNew, CNO cnoNew)
 {
     AssertThis(0);
-    long icrpCur, icrpTarget;
+    int32_t icrpCur, icrpTarget;
     CRP *qcrp;
-    long ccrpRef;
-    long rti;
+    int32_t ccrpRef;
+    int32_t rti;
 
     if (ctg == ctgNew && cno == cnoNew)
         return;
@@ -2792,7 +2792,7 @@ void CFL::Move(CTG ctg, CNO cno, CTG ctgNew, CNO cnoNew)
     {
         // chunk has some parents
         CRP crp;
-        long icrp, ikid, ikidNew;
+        int32_t icrp, ikid, ikidNew;
         KID *qkid, *qrgkid;
 
         // In debug, increment ccrpRef so we'll traverse the entire
@@ -2841,9 +2841,9 @@ void CFL::Move(CTG ctg, CNO cno, CTG ctgNew, CNO cnoNew)
 void CFL::Delete(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CGE cge;
-    ulong grfcgeIn, grfcge;
+    uint32_t grfcgeIn, grfcge;
     KID kid;
     CRP *qcrp;
 
@@ -2881,7 +2881,7 @@ void CFL::Delete(CTG ctg, CNO cno)
                 Warn("memory failure in CFL::Delete - adjusting ref counts");
                 // memory failure - adjust the ref counts of this chunk's
                 // children, but don't try to delete them
-                long ikid, icrpChild;
+                int32_t ikid, icrpChild;
                 KID kid;
 
                 qcrp = (CRP *)_pggcrp->QvFixedGet(icrp);
@@ -2910,7 +2910,7 @@ void CFL::Delete(CTG ctg, CNO cno)
 void CFL::SetLoner(CTG ctg, CNO cno, bool fLoner)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -2932,7 +2932,7 @@ void CFL::SetLoner(CTG ctg, CNO cno, bool fLoner)
 bool CFL::FLoner(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -2947,10 +2947,10 @@ bool CFL::FLoner(CTG ctg, CNO cno)
 /***************************************************************************
     Returns the number of parents of this chunk
 ***************************************************************************/
-long CFL::CckiRef(CTG ctg, CNO cno)
+int32_t CFL::CckiRef(CTG ctg, CNO cno)
 {
     AssertThis(0);
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -2971,7 +2971,7 @@ tribool CFL::TIsDescendent(CTG ctg, CNO cno, CTG ctgSub, CNO cnoSub)
     AssertThis(0);
     CGE cge;
     KID kid;
-    ulong grfcge;
+    uint32_t grfcge;
 
     if (CckiRef(ctgSub, cnoSub) == 0)
         return tNo;
@@ -2994,7 +2994,7 @@ tribool CFL::TIsDescendent(CTG ctg, CNO cno, CTG ctgSub, CNO cnoSub)
 void CFL::DeleteChild(CTG ctgPar, CNO cnoPar, CTG ctgChild, CNO cnoChild, CHID chid)
 {
     AssertThis(0);
-    long icrpPar, icrpChild, ikid;
+    int32_t icrpPar, icrpChild, ikid;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctgPar, cnoPar, &icrpPar) || !_FFindCtgCno(ctgChild, cnoChild, &icrpChild))
@@ -3026,7 +3026,7 @@ void CFL::DeleteChild(CTG ctgPar, CNO cnoPar, CTG ctgChild, CNO cnoChild, CHID c
     Decrements the reference count on the chunk.  Return true if the ref
     count becomes zero (after decrementing) and fcrpLoner is not set.
 ***************************************************************************/
-bool CFL::_FDecRefCount(long icrp)
+bool CFL::_FDecRefCount(int32_t icrp)
 {
     AssertBaseThis(0);
     CRP *qcrp;
@@ -3043,7 +3043,7 @@ bool CFL::_FDecRefCount(long icrp)
 /***************************************************************************
     Remove entry icrp from _pggcrp and add the file space to the free map.
 ***************************************************************************/
-void CFL::_DeleteCore(long icrp)
+void CFL::_DeleteCore(int32_t icrp)
 {
     AssertBaseThis(0);
     CRP *qcrp;
@@ -3059,14 +3059,14 @@ void CFL::_DeleteCore(long icrp)
 /***************************************************************************
     Add the (fp, cb) to the free map.
 ***************************************************************************/
-void CFL::_FreeFpCb(bool fOnExtra, FP fp, long cb)
+void CFL::_FreeFpCb(bool fOnExtra, FP fp, int32_t cb)
 {
     AssertBaseThis(0);
     Assert(cb > 0 || cb == 0 && fp == 0, "bad cb");
     Assert(fp >= 0 && (fOnExtra || fp >= SIZEOF(CFP) || cb == 0 || _fInvalidMainFile), "bad fp");
 
     PGL pglfsm;
-    long ifsm, ifsmMin, ifsmLim;
+    int32_t ifsm, ifsmMin, ifsmLim;
     FSM fsm, fsmT;
     CSTO *pcsto;
 
@@ -3178,7 +3178,7 @@ bool CFL::FSetName(CTG ctg, CNO cno, PSTN pstn)
 {
     AssertThis(0);
     AssertNilOrPo(pstn, 0);
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
     {
@@ -3198,14 +3198,14 @@ bool CFL::FSetName(CTG ctg, CNO cno, PSTN pstn)
 /***************************************************************************
     Set the name of the chunk at the given index.
 ***************************************************************************/
-bool CFL::_FSetName(long icrp, PSTN pstn)
+bool CFL::_FSetName(int32_t icrp, PSTN pstn)
 {
     AssertBaseThis(0);
     AssertIn(icrp, 0, _pggcrp->IvMac());
     AssertNilOrPo(pstn, 0);
-    long cbVar, cbOld, cbNew;
+    int32_t cbVar, cbOld, cbNew;
     CRP *qcrp;
-    long bvRgch;
+    int32_t bvRgch;
 
     if (pstn != pvNil && pstn->Cch() > 0)
         cbNew = pstn->CbData();
@@ -3242,7 +3242,7 @@ bool CFL::FGetName(CTG ctg, CNO cno, PSTN pstn)
     AssertThis(0);
     AssertPo(pstn, 0);
 
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
     {
@@ -3258,14 +3258,14 @@ bool CFL::FGetName(CTG ctg, CNO cno, PSTN pstn)
     Retrieve the name of the chunk at the given index.  Returns whether
     the string is non-empty.
 ***************************************************************************/
-bool CFL::_FGetName(long icrp, PSTN pstn)
+bool CFL::_FGetName(int32_t icrp, PSTN pstn)
 {
     AssertBaseThis(0);
     AssertIn(icrp, 0, _pggcrp->IvMac());
     AssertPo(pstn, 0);
 
-    long cbRgch, bvRgch;
-    long cbVar;
+    int32_t cbRgch, bvRgch;
+    int32_t cbVar;
     CRP *qcrp;
 
     qcrp = (CRP *)_pggcrp->QvFixedGet(icrp, &cbVar);
@@ -3292,8 +3292,8 @@ bool CFL::_FGetName(long icrp, PSTN pstn)
 bool CFL::FAdoptChild(CTG ctgPar, CNO cnoPar, CTG ctgChild, CNO cnoChild, CHID chid, bool fClearLoner)
 {
     AssertThis(0);
-    long icrpPar;
-    long ikid;
+    int32_t icrpPar;
+    int32_t ikid;
 
     if (!_FFindCtgCno(ctgPar, cnoPar, &icrpPar))
     {
@@ -3316,11 +3316,11 @@ bool CFL::FAdoptChild(CTG ctgPar, CNO cnoPar, CTG ctgChild, CNO cnoChild, CHID c
 /***************************************************************************
     Make (ctgChild, cnoChild) a child of icrpPar.
 ***************************************************************************/
-bool CFL::_FAdoptChild(long icrpPar, long ikid, CTG ctgChild, CNO cnoChild, CHID chid, bool fClearLoner)
+bool CFL::_FAdoptChild(int32_t icrpPar, int32_t ikid, CTG ctgChild, CNO cnoChild, CHID chid, bool fClearLoner)
 {
     AssertBaseThis(0);
     AssertIn(icrpPar, 0, _pggcrp->IvMac());
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
     KID kid;
 
@@ -3330,7 +3330,7 @@ bool CFL::_FAdoptChild(long icrpPar, long ikid, CTG ctgChild, CNO cnoChild, CHID
         return fFalse;
     }
     qcrp = (CRP *)_pggcrp->QvFixedGet(icrpPar);
-    AssertIn(ikid, 0, (long)qcrp->ckid + 1);
+    AssertIn(ikid, 0, (int32_t)qcrp->ckid + 1);
     if (tNo != TIsDescendent(ctgChild, cnoChild, qcrp->cki.ctg, qcrp->cki.cno))
     {
         Warn("Performing this adoption may cause a cycle");
@@ -3376,7 +3376,7 @@ bool CFL::_FAdoptChild(long icrpPar, long ikid, CTG ctgChild, CNO cnoChild, CHID
 void CFL::ChangeChid(CTG ctgPar, CNO cnoPar, CTG ctgChild, CNO cnoChild, CHID chidOld, CHID chidNew)
 {
     AssertThis(0);
-    long icrp, ikidOld, ikidNew;
+    int32_t icrp, ikidOld, ikidNew;
     KID *qkid, *qrgkid;
 
     if (chidOld == chidNew)
@@ -3405,7 +3405,7 @@ void CFL::ChangeChid(CTG ctgPar, CNO cnoPar, CTG ctgChild, CNO cnoChild, CHID ch
 /***************************************************************************
     Return the total number of chunks.
 ***************************************************************************/
-long CFL::Ccki(void)
+int32_t CFL::Ccki(void)
 {
     AssertThis(0);
     return _pggcrp->IvMac();
@@ -3415,7 +3415,7 @@ long CFL::Ccki(void)
     Finds the icki'th chunk.  If there is such a chunk (icki isn't too big),
     fills in *pcki and *pckid and returns true.  Otherwise, returns fFalse.
 ***************************************************************************/
-bool CFL::FGetCki(long icki, CKI *pcki, long *pckid, PBLCK pblck)
+bool CFL::FGetCki(int32_t icki, CKI *pcki, int32_t *pckid, PBLCK pblck)
 {
     AssertThis(0);
     AssertNilOrVarMem(pcki);
@@ -3447,7 +3447,7 @@ bool CFL::FGetCki(long icki, CKI *pcki, long *pckid, PBLCK pblck)
     Finds the icki corresponding to the given (ctg, cno).  If the (ctg, cno)
     is not in the CFL, fills *picki with where it would be.
 ***************************************************************************/
-bool CFL::FGetIcki(CTG ctg, CNO cno, long *picki)
+bool CFL::FGetIcki(CTG ctg, CNO cno, int32_t *picki)
 {
     AssertThis(0);
     AssertVarMem(picki);
@@ -3457,12 +3457,12 @@ bool CFL::FGetIcki(CTG ctg, CNO cno, long *picki)
 /***************************************************************************
     Return the total number of chunks of the given type in the file.
 ***************************************************************************/
-long CFL::CckiCtg(CTG ctg)
+int32_t CFL::CckiCtg(CTG ctg)
 {
     AssertThis(0);
-    long icrpMac;
-    long icrpMin;
-    long icrpLim;
+    int32_t icrpMac;
+    int32_t icrpMin;
+    int32_t icrpLim;
 
     if ((icrpMac = _pggcrp->IvMac()) == 0)
         return 0;
@@ -3482,7 +3482,7 @@ long CFL::CckiCtg(CTG ctg)
     Finds the icki'th chunk of type ctg.  If there is such a chunk,
     fills in *pcki and returns true.  Otherwise, returns fFalse.
 ***************************************************************************/
-bool CFL::FGetCkiCtg(CTG ctg, long icki, CKI *pcki, long *pckid, PBLCK pblck)
+bool CFL::FGetCkiCtg(CTG ctg, int32_t icki, CKI *pcki, int32_t *pckid, PBLCK pblck)
 {
     AssertThis(0);
     AssertIn(icki, 0, kcbMax);
@@ -3490,8 +3490,8 @@ bool CFL::FGetCkiCtg(CTG ctg, long icki, CKI *pcki, long *pckid, PBLCK pblck)
     AssertNilOrVarMem(pckid);
     AssertNilOrPo(pblck, 0);
     CRP *qcrp;
-    long icrpMac;
-    long icrp;
+    int32_t icrpMac;
+    int32_t icrp;
 
     if (!FIn(icki, 0, (icrpMac = _pggcrp->IvMac())))
         goto LFail;
@@ -3524,11 +3524,11 @@ bool CFL::FGetCkiCtg(CTG ctg, long icki, CKI *pcki, long *pckid, PBLCK pblck)
 /***************************************************************************
     Return the number of children of the given chunk.
 ***************************************************************************/
-long CFL::Ckid(CTG ctg, CNO cno)
+int32_t CFL::Ckid(CTG ctg, CNO cno)
 {
     AssertThis(0);
     CRP *qcrp;
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
     {
@@ -3544,13 +3544,13 @@ long CFL::Ckid(CTG ctg, CNO cno)
     If ikid is less than number of children of the given chunk,
     fill *pkid and return true.  Otherwise, return false.
 ***************************************************************************/
-bool CFL::FGetKid(CTG ctg, CNO cno, long ikid, KID *pkid)
+bool CFL::FGetKid(CTG ctg, CNO cno, int32_t ikid, KID *pkid)
 {
     AssertThis(0);
     AssertVarMem(pkid);
     AssertIn(ikid, 0, kcbMax);
     CRP *qcrp;
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
     {
@@ -3611,10 +3611,10 @@ bool CFL::_FFindChidCtg(CTG ctgPar, CNO cnoPar, CHID chid, CTG ctg, KID *pkid)
 {
     AssertThis(0);
     AssertVarMem(pkid);
-    long ikidMin, ikidLim, ikid;
+    int32_t ikidMin, ikidLim, ikid;
     CRP *qcrp;
     KID *qrgkid, *qkid;
-    long ckid, icrp;
+    int32_t ckid, icrp;
 
     if (!_FFindCtgCno(ctgPar, cnoPar, &icrp))
     {
@@ -3664,11 +3664,11 @@ LFail:
     the given chunk.  If the (ctg, cno, chid) is not a child of
     (ctgPar, cnoPar), fills *pikid with where it would be if it were.
 ***************************************************************************/
-bool CFL::FGetIkid(CTG ctgPar, CNO cnoPar, CTG ctg, CNO cno, CHID chid, long *pikid)
+bool CFL::FGetIkid(CTG ctgPar, CNO cnoPar, CTG ctg, CNO cno, CHID chid, int32_t *pikid)
 {
     AssertThis(0);
     AssertVarMem(pikid);
-    long icrp;
+    int32_t icrp;
 
     if (!_FFindCtgCno(ctgPar, cnoPar, &icrp))
     {
@@ -3685,13 +3685,13 @@ bool CFL::FGetIkid(CTG ctgPar, CNO cnoPar, CTG ctg, CNO cno, CHID chid, long *pi
     the index in *pikid.  If not set *pikid to where to insert it.  Kids are
     sorted by (chid, ctg, cno).
 ***************************************************************************/
-bool CFL::_FFindChild(long icrpPar, CTG ctgChild, CNO cnoChild, CHID chid, long *pikid)
+bool CFL::_FFindChild(int32_t icrpPar, CTG ctgChild, CNO cnoChild, CHID chid, int32_t *pikid)
 {
     AssertBaseThis(0);
     AssertVarMem(pikid);
     AssertIn(icrpPar, 0, _pggcrp->IvMac());
 
-    long ikidMin, ikidLim, ikid, ckid;
+    int32_t ikidMin, ikidLim, ikid, ckid;
     CRP *qcrp;
     KID *qrgkid, *qkid;
 
@@ -3740,19 +3740,19 @@ struct CNOM
     CNO cnoDst;
 };
 
-bool _FFindCnom(PGL pglcnom, CTG ctg, CNO cno, CNOM *pcnom = pvNil, long *picnom = pvNil);
+bool _FFindCnom(PGL pglcnom, CTG ctg, CNO cno, CNOM *pcnom = pvNil, int32_t *picnom = pvNil);
 bool _FAddCnom(PGL *ppglcnom, CNOM *pcnom);
 
 /***************************************************************************
     Look for a cnom for the given (ctg, cno). Whether or not it exists,
     fill *picnom with where it would go in the pglcnom.
 ***************************************************************************/
-bool _FFindCnom(PGL pglcnom, CTG ctg, CNO cno, CNOM *pcnom, long *picnom)
+bool _FFindCnom(PGL pglcnom, CTG ctg, CNO cno, CNOM *pcnom, int32_t *picnom)
 {
     AssertNilOrPo(pglcnom, 0);
     AssertNilOrVarMem(pcnom);
     AssertNilOrVarMem(picnom);
-    long ivMin, ivLim, iv;
+    int32_t ivMin, ivLim, iv;
     CNOM cnom;
 
     if (pvNil == pglcnom)
@@ -3799,7 +3799,7 @@ bool _FAddCnom(PGL *ppglcnom, CNOM *pcnom)
     AssertVarMem(ppglcnom);
     AssertNilOrPo(*ppglcnom, 0);
     AssertVarMem(pcnom);
-    long icnom;
+    int32_t icnom;
 
     if (pvNil == *ppglcnom && pvNil == (*ppglcnom = GL::PglNew(SIZEOF(CNOM))))
         return fFalse;
@@ -3821,13 +3821,13 @@ bool CFL::_FCopy(CTG ctgSrc, CNO cnoSrc, PCFL pcflDst, CNO *pcnoDst, bool fClone
     AssertPo(pcflDst, fcflFull);
     AssertVarMem(pcnoDst);
 
-    long icrpSrc, icrpDst;
-    long rtiSrc;
+    int32_t icrpSrc, icrpDst;
+    int32_t rtiSrc;
     CGE cge;
     KID kid;
     CKI ckiPar;
     BLCK blckSrc;
-    ulong grfcge, grfcgeIn;
+    uint32_t grfcge, grfcgeIn;
     CNOM cnom, cnomPar;
     STN stn;
     CRP *qcrp;
@@ -3984,13 +3984,13 @@ bool CFL::_FFindMatch(CTG ctgSrc, CNO cnoSrc, PCFL pcflDst, CNO *pcnoDst)
     AssertPo(pcflDst, 0);
     AssertVarMem(pcnoDst);
 
-    long rtiSrc, rtiKid;
-    long ckidSrc;
+    int32_t rtiSrc, rtiKid;
+    int32_t ckidSrc;
     CNO cnoMin, cnoDst;
     CGE cgeSrc, cgeDst;
     KID kidSrc, kidDst;
     CKI ckiParSrc, ckiParDst;
-    ulong grfcgeSrc, grfcgeDst;
+    uint32_t grfcgeSrc, grfcgeDst;
     bool fKidSrc, fKidDst;
 
     if (this == pcflDst || rtiNil == (rtiSrc = _Rti(ctgSrc, cnoSrc)))
@@ -4056,14 +4056,14 @@ bool CFL::_FFindMatch(CTG ctgSrc, CNO cnoSrc, PCFL pcflDst, CNO *pcnoDst)
     Looks for a chunk of the given type with assigned rti and cno at least
     cnoMin.
 ***************************************************************************/
-bool CFL::_FFindCtgRti(CTG ctg, long rti, CNO cnoMin, CNO *pcno)
+bool CFL::_FFindCtgRti(CTG ctg, int32_t rti, CNO cnoMin, CNO *pcno)
 {
     AssertBaseThis(0);
     AssertNilOrVarMem(pcno);
 
 #ifdef CHUNK_BIG_INDEX
 
-    long icrp, ccrp;
+    int32_t icrp, ccrp;
     CRP *qcrp;
 
     _FFindCtgCno(ctg, cnoMin, &icrp);
@@ -4084,7 +4084,7 @@ bool CFL::_FFindCtgRti(CTG ctg, long rti, CNO cnoMin, CNO *pcno)
 
 #else //! CHUNK_BIG_INDEX
 
-    long irtie, crtie;
+    int32_t irtie, crtie;
     RTIE rtie;
 
     if (pvNil != _pglrtie && 0 < (crtie = _pglrtie->IvMac()))
@@ -4138,13 +4138,13 @@ bool CFL::FClone(CTG ctgSrc, CNO cnoSrc, PCFL pcflDst, CNO *pcnoDst)
 /***************************************************************************
     Return the run time id of the given chunk.
 ***************************************************************************/
-long CFL::_Rti(CTG ctg, CNO cno)
+int32_t CFL::_Rti(CTG ctg, CNO cno)
 {
     AssertBaseThis(0);
 
 #ifdef CHUNK_BIG_INDEX
 
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -4168,13 +4168,13 @@ long CFL::_Rti(CTG ctg, CNO cno)
 /***************************************************************************
     Set the run time id of the given chunk.
 ***************************************************************************/
-bool CFL::_FSetRti(CTG ctg, CNO cno, long rti)
+bool CFL::_FSetRti(CTG ctg, CNO cno, int32_t rti)
 {
     AssertBaseThis(0);
 
 #ifdef CHUNK_BIG_INDEX
 
-    long icrp;
+    int32_t icrp;
     CRP *qcrp;
 
     if (!_FFindCtgCno(ctg, cno, &icrp))
@@ -4187,7 +4187,7 @@ bool CFL::_FSetRti(CTG ctg, CNO cno, long rti)
 #else //! CHUNK_BIG_INDEX
 
     RTIE rtie;
-    long irtie;
+    int32_t irtie;
 
     if (_FFindRtie(ctg, cno, &rtie, &irtie))
     {
@@ -4219,13 +4219,13 @@ bool CFL::_FSetRti(CTG ctg, CNO cno, long rti)
 /***************************************************************************
     Look for an RTIE entry for the given (ctg, cno).
 ***************************************************************************/
-bool CFL::_FFindRtie(CTG ctg, CNO cno, RTIE *prtie, long *pirtie)
+bool CFL::_FFindRtie(CTG ctg, CNO cno, RTIE *prtie, int32_t *pirtie)
 {
     AssertBaseThis(0);
     AssertNilOrVarMem(prtie);
     AssertNilOrVarMem(pirtie);
 
-    long ivMin, ivLim, iv;
+    int32_t ivMin, ivLim, iv;
     RTIE rtie;
 
     if (pvNil == _pglrtie)
@@ -4291,7 +4291,7 @@ CGE::~CGE(void)
 /***************************************************************************
     Assert the validity of the cge
 ***************************************************************************/
-void CGE::AssertValid(ulong grf)
+void CGE::AssertValid(uint32_t grf)
 {
     CGE_PAR::AssertValid(0);
     AssertIn(_es, esStart, esDone + 1);
@@ -4354,7 +4354,7 @@ void CGE::Init(PCFL pcfl, CTG ctg, CNO cno)
         fcgeRoot:  *pkid is valid (except the chid value); *pckiPar is
             invalid; the node is the root of the enumeration
 ***************************************************************************/
-bool CGE::FNextKid(KID *pkid, CKI *pckiPar, ulong *pgrfcgeOut, ulong grfcgeIn)
+bool CGE::FNextKid(KID *pkid, CKI *pckiPar, uint32_t *pgrfcgeOut, uint32_t grfcgeIn)
 {
     AssertThis(0);
     AssertVarMem(pkid);

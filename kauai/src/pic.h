@@ -36,7 +36,7 @@ class PIC : public PIC_PAR
     struct PICH
     {
         RC rc;
-        long cb;
+        int32_t cb;
     };
 
     HPIC _hpic;
@@ -62,11 +62,11 @@ class PIC : public PIC_PAR
     }
     bool FAddToCfl(PCFL pcfl, CTG ctg, CNO *pcno, CHID chid = 0);
     bool FPutInCfl(PCFL pcfl, CTG ctg, CNO cno, CHID chid = 0);
-    virtual long CbOnFile(void);
+    virtual int32_t CbOnFile(void);
     virtual bool FWrite(PBLCK pblck);
 };
 
 // a chunky resource reader to read picture 0 from a GRAF chunk
-bool FReadMainPic(PCFL pcfl, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+bool FReadMainPic(PCFL pcfl, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
 
 #endif //! PIC_H

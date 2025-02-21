@@ -49,7 +49,7 @@ class RIFF
     DWORD _dwDataLength;
 
   public:
-    void Set(long cchan, long csampSec, long cbSample, DWORD dwLength)
+    void Set(int32_t cchan, int32_t csampSec, int32_t cbSample, DWORD dwLength)
     {
         _dwRiffTag = RIFF_TAG;
         _dwRiffLength = sizeof(RIFF) + dwLength;
@@ -57,11 +57,11 @@ class RIFF
         _dwFmtTag = FMT__TAG;
         _dwFmtLength = sizeof(WAVEFORMATEX);
         _wfx.wFormatTag = WAVE_FORMAT_PCM;
-        _wfx.nChannels = (ushort)cchan;
+        _wfx.nChannels = (uint16_t)cchan;
         _wfx.nSamplesPerSec = csampSec;
         _wfx.nAvgBytesPerSec = csampSec * cbSample * cchan;
-        _wfx.nBlockAlign = (ushort)cchan * (ushort)cbSample;
-        _wfx.wBitsPerSample = (ushort)LwMul(8, cbSample);
+        _wfx.nBlockAlign = (uint16_t)cchan * (uint16_t)cbSample;
+        _wfx.wBitsPerSample = (uint16_t)LwMul(8, cbSample);
         _wfx.cbSize = 0;
         _dwDataTag = DATA_TAG;
         _dwDataLength = dwLength;
@@ -92,10 +92,10 @@ class SREC : public SREC_PAR
     MARKMEM
 
   protected:
-    long _csampSec; // sampling rate (number of samples per second)
-    long _cchan;    // 1 = mono, 2 = stereo
-    long _cbSample; // bytes per sample (1 = 8 bit, 2 = 16 bit, etc)
-    ulong _dtsMax;  // maximum length to record
+    int32_t _csampSec; // sampling rate (number of samples per second)
+    int32_t _cchan;    // 1 = mono, 2 = stereo
+    int32_t _cbSample; // bytes per sample (1 = 8 bit, 2 = 16 bit, etc)
+    uint32_t _dtsMax;  // maximum length to record
     bool _fRecording;
     bool _fPlaying;
     bool _fHaveSound;   // have you recorded a sound yet?
@@ -114,11 +114,11 @@ class SREC : public SREC_PAR
     static void _WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
 
   protected:
-    bool _FInit(long csampSec, long cchan, long cbSample, ulong dtsMax);
+    bool _FInit(int32_t csampSec, int32_t cchan, int32_t cbSample, uint32_t dtsMax);
     void _UpdateStatus(void);
 
   public:
-    static PSREC PsrecNew(long csampSec, long cchan, long cbSample, ulong dtsMax);
+    static PSREC PsrecNew(int32_t csampSec, int32_t cchan, int32_t cbSample, uint32_t dtsMax);
     ~SREC(void);
 
     bool FStart(void);

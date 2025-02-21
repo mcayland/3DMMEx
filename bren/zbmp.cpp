@@ -14,7 +14,7 @@ RTCLASS(ZBMP)
 /***************************************************************************
     Create a ZBMP of all 0xff's
 ***************************************************************************/
-PZBMP ZBMP::PzbmpNew(long dxp, long dyp)
+PZBMP ZBMP::PzbmpNew(int32_t dxp, int32_t dyp)
 {
     AssertIn(dxp, 1, klwMax);
     AssertIn(dyp, 1, klwMax);
@@ -56,7 +56,7 @@ PZBMP ZBMP::PzbmpNewFromBpmp(BPMP *pbpmp)
 /***************************************************************************
     Chunky resource reader for ZBMP
 ***************************************************************************/
-bool ZBMP::FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool ZBMP::FReadZbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -137,22 +137,23 @@ ZBMP::~ZBMP(void)
 /***************************************************************************
     Draw the ZBMP into prgbPixels
 ***************************************************************************/
-void ZBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::Draw(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip,
+                PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp));
     AssertNilOrVarMem(prcClip);
     AssertNilOrVarMem(pregnClip);
 
-    long yp;
-    long cbRowCopy;
-    byte *pbSrc;
-    byte *pbDst;
+    int32_t yp;
+    int32_t cbRowCopy;
+    uint8_t *pbSrc;
+    uint8_t *pbDst;
     REGSC regsc;
     RC rcZbmp = _rc;
     RC rcRegnBounds;
     RC rcClippedRegnBounds;
-    long xpLeft, xpRight;
+    int32_t xpLeft, xpRight;
 
     // Translate the zbmp's rc into coordinate system of prgbPixels' rc
     rcZbmp.Offset(xpRef, ypRef);
@@ -198,22 +199,23 @@ void ZBMP::Draw(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, 
     Draw the ZBMP into prgbPixels, squashing the clip region vertically by
     two (for BWLD's "half mode")
 ***************************************************************************/
-void ZBMP::DrawHalf(byte *prgbPixels, long cbRow, long dyp, long xpRef, long ypRef, RC *prcClip, PREGN pregnClip)
+void ZBMP::DrawHalf(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip,
+                    PREGN pregnClip)
 {
     AssertThis(0);
     AssertPvCb(prgbPixels, LwMul(cbRow, dyp / 2));
     AssertNilOrVarMem(prcClip);
     AssertNilOrVarMem(pregnClip);
 
-    long yp;
-    long cbRowCopy;
-    byte *pbSrc;
-    byte *pbDst;
+    int32_t yp;
+    int32_t cbRowCopy;
+    uint8_t *pbSrc;
+    uint8_t *pbDst;
     REGSC regsc;
     RC rcZbmp = _rc;
     RC rcRegnBounds;
     RC rcClippedRegnBounds;
-    long xpLeft, xpRight;
+    int32_t xpLeft, xpRight;
 
     rcZbmp.ypBottom *= 2;
 
@@ -271,10 +273,10 @@ bool ZBMP::FWrite(PCFL pcfl, CTG ctg, CNO *pcno)
 
     zbmpf.bo = kboCur;
     zbmpf.osk = koskCur;
-    zbmpf.xpLeft = (short)_rc.xpLeft;
-    zbmpf.ypTop = (short)_rc.ypTop;
-    zbmpf.dxp = (short)_rc.Dxp();
-    zbmpf.dyp = (short)_rc.Dyp();
+    zbmpf.xpLeft = (int16_t)_rc.xpLeft;
+    zbmpf.ypTop = (int16_t)_rc.ypTop;
+    zbmpf.dxp = (int16_t)_rc.Dxp();
+    zbmpf.dyp = (int16_t)_rc.Dyp();
 
     if (!pcfl->FAdd(SIZEOF(ZBMPF) + _cb, ctg, pcno, &blck))
         return fFalse;
@@ -289,7 +291,7 @@ bool ZBMP::FWrite(PCFL pcfl, CTG ctg, CNO *pcno)
 /***************************************************************************
     Assert the validity of the ZBMP.
 ***************************************************************************/
-void ZBMP::AssertValid(ulong grf)
+void ZBMP::AssertValid(uint32_t grf)
 {
     ZBMP_PAR::AssertValid(fobjAllocated);
     AssertPvCb(_prgb, _cb);

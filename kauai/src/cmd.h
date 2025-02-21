@@ -35,7 +35,7 @@ enum
     fedsCheck = 8,
     fedsBullet = 16
 };
-const ulong kgrfedsMark = fedsUncheck | fedsCheck | fedsBullet;
+const uint32_t kgrfedsMark = fedsUncheck | fedsCheck | fedsBullet;
 
 // command
 #define kclwCmd 4 // if this ever changes, change the CMD_TYPE macro also
@@ -43,21 +43,21 @@ struct CMD
 {
     ASSERT
 
-    PCMH pcmh;          // the target of the command - may be nil
-    long cid;           // the command id
-    PGG pgg;            // additional parameters for the command
-    long rglw[kclwCmd]; // standard parameters
+    PCMH pcmh;             // the target of the command - may be nil
+    int32_t cid;           // the command id
+    PGG pgg;               // additional parameters for the command
+    int32_t rglw[kclwCmd]; // standard parameters
 };
 typedef CMD *PCMD;
 
 // command on file - for saving recorded macros
 struct CMDF
 {
-    long cid;
-    long hid;
-    long cact;
+    int32_t cid;
+    int32_t hid;
+    int32_t cact;
     CHID chidGg; // child id of the pgg, 0 if none
-    long rglw[kclwCmd];
+    int32_t rglw[kclwCmd];
 };
 
 /***************************************************************************
@@ -68,9 +68,9 @@ struct CMDF
     struct CMD_##foo                                                                                                   \
     {                                                                                                                  \
         PCMH pcmh;                                                                                                     \
-        long cid;                                                                                                      \
+        int32_t cid;                                                                                                   \
         PGG pgg;                                                                                                       \
-        long a, b, c, d;                                                                                               \
+        int32_t a, b, c, d;                                                                                            \
     };                                                                                                                 \
     typedef CMD_##foo *PCMD_##foo
 
@@ -91,7 +91,7 @@ enum
     fcmmNobody = 2,
     fcmmOthers = 4,
 };
-const ulong kgrfcmmAll = fcmmThis | fcmmNobody | fcmmOthers;
+const uint32_t kgrfcmmAll = fcmmThis | fcmmNobody | fcmmOthers;
 
 // for including a command map in this class
 #define CMD_MAP_DEC(cls)                                                                                               \
@@ -142,23 +142,23 @@ class CMH : public CMH_PAR
     ASSERT
 
   private:
-    static long _hidLast; // for HidUnique
-    long _hid;            // handler id
+    static int32_t _hidLast; // for HidUnique
+    int32_t _hid;            // handler id
 
   protected:
     // command function
     typedef bool (CMH::*PFNCMD)(PCMD pcmd);
 
     // command enabler function
-    typedef bool (CMH::*PFNEDS)(PCMD pcmd, ulong *pgrfeds);
+    typedef bool (CMH::*PFNEDS)(PCMD pcmd, uint32_t *pgrfeds);
 
     // command map entry
     struct CMME
     {
-        long cid;
+        int32_t cid;
         PFNCMD pfncmd;
         PFNEDS pfneds;
-        ulong grfcmm;
+        uint32_t grfcmm;
     };
 
     // command map
@@ -171,22 +171,22 @@ class CMH : public CMH_PAR
     CMD_MAP_DEC(CMH)
 
   protected:
-    virtual bool _FGetCmme(long cid, ulong grfcmmWanted, CMME *pcmme);
+    virtual bool _FGetCmme(int32_t cid, uint32_t grfcmmWanted, CMME *pcmme);
 
   public:
-    CMH(long hid);
+    CMH(int32_t hid);
     ~CMH(void);
 
     // return indicates whether the command was handled, not success
     virtual bool FDoCmd(PCMD pcmd);
-    virtual bool FEnableCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableCmd(PCMD pcmd, uint32_t *pgrfeds);
 
-    long Hid(void)
+    int32_t Hid(void)
     {
         return _hid;
     }
 
-    static long HidUnique(long ccmh = 1);
+    static int32_t HidUnique(int32_t ccmh = 1);
 };
 
 /***************************************************************************
@@ -218,8 +218,8 @@ class CEX : public CEX_PAR
     struct CMHE
     {
         PCMH pcmh;
-        long cmhl;
-        ulong grfcmm;
+        int32_t cmhl;
+        uint32_t grfcmm;
     };
 
     // command recording/playback state
@@ -232,20 +232,20 @@ class CEX : public CEX_PAR
     };
 
     // recording and playback
-    long _rs;       // recording/playback state
-    long _rec;      // recording/playback errors
+    int32_t _rs;    // recording/playback state
+    int32_t _rec;   // recording/playback errors
     PCFL _pcfl;     // the file we are recording to or playing from
     PGL _pglcmdf;   // the command stream
     CNO _cno;       // which macro is being played
-    long _icmdf;    // current command for recording or playback
+    int32_t _icmdf; // current command for recording or playback
     CHID _chidLast; // last chid used for recording
-    long _cact;     // number of times on this command
+    int32_t _cact;  // number of times on this command
     CMD _cmd;       // previous command recorded or played
 
     // dispatching
-    CMD _cmdCur;     // command being dispatched
-    long _icmheNext; // next command handler to dispatch to
-    PGOB _pgobTrack; // the gob that is tracking the mouse
+    CMD _cmdCur;        // command being dispatched
+    int32_t _icmheNext; // next command handler to dispatch to
+    PGOB _pgobTrack;    // the gob that is tracking the mouse
 #ifdef WIN
     HWND _hwndCapture; // the hwnd that we captured the mouse with
 #endif                 // WIN
@@ -259,25 +259,25 @@ class CEX : public CEX_PAR
     PGOB _pgobModal;
 
 #ifdef DEBUG
-    long _ccmdMax; // running max
-#endif             // DEBUG
+    int32_t _ccmdMax; // running max
+#endif                // DEBUG
 
     CEX(void);
 
-    virtual bool _FInit(long ccmdInit, long ccmhInit);
-    virtual bool _FFindCmhl(long cmhl, long *picmhe);
+    virtual bool _FInit(int32_t ccmdInit, int32_t ccmhInit);
+    virtual bool _FFindCmhl(int32_t cmhl, int32_t *picmhe);
 
     virtual bool _FCmhOk(PCMH pcmh);
     virtual tribool _TGetNextCmd(void);
     virtual bool _FSendCmd(PCMH pcmh);
     virtual void _CleanUpCmd(void);
-    virtual bool _FEnableCmd(PCMH pcmh, PCMD pcmd, ulong *pgrfeds);
+    virtual bool _FEnableCmd(PCMH pcmh, PCMD pcmd, uint32_t *pgrfeds);
 
     // command recording and playback
     bool _FReadCmd(PCMD pcmd);
 
   public:
-    static PCEX PcexNew(long ccmdInit, long ccmhInit);
+    static PCEX PcexNew(int32_t ccmdInit, int32_t ccmhInit);
     ~CEX(void);
 
     // recording and play back
@@ -297,26 +297,26 @@ class CEX : public CEX_PAR
     void RecordCmd(PCMD pcmd);
 
     // managing the filter list
-    virtual bool FAddCmh(PCMH pcmh, long cmhl, ulong grfcmm = fcmmNobody);
-    virtual void RemoveCmh(PCMH pcmh, long cmhl);
+    virtual bool FAddCmh(PCMH pcmh, int32_t cmhl, uint32_t grfcmm = fcmmNobody);
+    virtual void RemoveCmh(PCMH pcmh, int32_t cmhl);
     virtual void BuryCmh(PCMH pcmh);
 
     // queueing and dispatching
     virtual void EnqueueCmd(PCMD pcmd);
     virtual void PushCmd(PCMD pcmd);
-    virtual void EnqueueCid(long cid, PCMH pcmh = pvNil, PGG pgg = pvNil, long lw0 = 0, long lw1 = 0, long lw2 = 0,
-                            long lw3 = 0);
-    virtual void PushCid(long cid, PCMH pcmh = pvNil, PGG pgg = pvNil, long lw0 = 0, long lw1 = 0, long lw2 = 0,
-                         long lw3 = 0);
+    virtual void EnqueueCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0,
+                            int32_t lw2 = 0, int32_t lw3 = 0);
+    virtual void PushCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0,
+                         int32_t lw2 = 0, int32_t lw3 = 0);
     virtual bool FDispatchNextCmd(void);
     virtual bool FGetNextKey(PCMD pcmd);
-    virtual bool FCidIn(long cid);
-    virtual void FlushCid(long cid);
+    virtual bool FCidIn(int32_t cid);
+    virtual void FlushCid(int32_t cid);
 
     // menu marking
-    virtual ulong GrfedsForCmd(PCMD pcmd);
-    virtual ulong GrfedsForCid(long cid, PCMH pcmh = pvNil, PGG pgg = pvNil, long lw0 = 0, long lw1 = 0, long lw2 = 0,
-                               long lw3 = 0);
+    virtual uint32_t GrfedsForCmd(PCMD pcmd);
+    virtual uint32_t GrfedsForCid(int32_t cid, PCMH pcmh = pvNil, PGG pgg = pvNil, int32_t lw0 = 0, int32_t lw1 = 0,
+                                  int32_t lw2 = 0, int32_t lw3 = 0);
 
     // mouse tracking
     virtual void TrackMouse(PGOB pgob);

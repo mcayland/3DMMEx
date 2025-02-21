@@ -39,7 +39,7 @@ void ACR::_SetFore(void)
 {
     AssertThis(facrRgb | facrIndex);
     SCR scr;
-    byte b;
+    uint8_t b;
 
     if (B3Lw(_lu) == kbIndexAcr)
         PmForeColor(B0Lw(_lu));
@@ -62,7 +62,7 @@ void ACR::_SetBack(void)
 {
     AssertThis(facrRgb | facrIndex);
     SCR scr;
-    byte b;
+    uint8_t b;
 
     if (B3Lw(_lu) == kbIndexAcr)
         PmBackColor(B0Lw(_lu));
@@ -101,10 +101,10 @@ void GPT::Flush(void)
 
     REVIEW shonk: Mac: implement fpalInitAnim and fpalAnimate.
 ***************************************************************************/
-void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
+void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
 {
     AssertNilOrPo(pglclr, 0);
-    long cclr, iclr, iv;
+    int32_t cclr, iclr, iv;
     HPAL hpal, hpalOld;
     SCR scr;
     CLR clr;
@@ -176,7 +176,7 @@ void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
         rcs.left = (qd.screenBits.bounds.left + qd.screenBits.bounds.right) / 2;
         rcs.bottom = rcs.top + 1;
         rcs.right = rcs.left + 1;
-        hwnd = (HWND)NewCWindow(pvNil, &rcs, (byte *)"\p", fTrue, plainDBox, GrafPtr(-1), fTrue, 0);
+        hwnd = (HWND)NewCWindow(pvNil, &rcs, (uint8_t *)"\p", fTrue, plainDBox, GrafPtr(-1), fTrue, 0);
         if (hNil != hwnd)
             DisposeWindow((PPRT)hwnd);
     }
@@ -193,7 +193,7 @@ void GPT::SetActiveColors(PGL pglclr, ulong grfpal)
     Static method to determine if the main screen supports this depth
     and color status.
 ***************************************************************************/
-bool GPT::FCanScreen(long cbitPixel, bool fColor)
+bool GPT::FCanScreen(int32_t cbitPixel, bool fColor)
 {
     if (cbitPixel == 24)
         cbitPixel = 32;
@@ -212,7 +212,7 @@ bool GPT::FCanScreen(long cbitPixel, bool fColor)
     Static method to attempt to set the depth and/or color status of the
     main screen (the one with the menu bar).
 ***************************************************************************/
-bool GPT::FSetScreenState(long cbitPixel, bool tColor)
+bool GPT::FSetScreenState(int32_t cbitPixel, bool tColor)
 {
     if (cbitPixel == 24)
         cbitPixel = 32;
@@ -237,7 +237,7 @@ bool GPT::FSetScreenState(long cbitPixel, bool tColor)
 /***************************************************************************
     Static method to get the state of the main screen.
 ***************************************************************************/
-void GPT::GetScreenState(long *pcbitPixel, bool *pfColor)
+void GPT::GetScreenState(int32_t *pcbitPixel, bool *pfColor)
 {
     AssertVarMem(pcbitPixel);
     AssertVarMem(pfColor);
@@ -296,7 +296,7 @@ GPT::~GPT(void)
 /***************************************************************************
     Return the clut that should be used for off-screen GPT's.
 ***************************************************************************/
-HCLT GPT::_HcltUse(long cbitPixel)
+HCLT GPT::_HcltUse(int32_t cbitPixel)
 {
     HGD hgd;
     HCLT hclt;
@@ -319,7 +319,7 @@ HCLT GPT::_HcltUse(long cbitPixel)
 /***************************************************************************
     Static method to create an offscreen port.
 ***************************************************************************/
-PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
+PGPT GPT::PgptNewOffscreen(RC *prc, int32_t cbitPixel)
 {
     AssertVarMem(prc);
     Assert(!prc->FEmpty(), "empty rc for offscreen");
@@ -354,7 +354,7 @@ PGPT GPT::PgptNewOffscreen(RC *prc, long cbitPixel)
     If this is an offscreen bitmap, return the pointer to the pixels and
     optionally get the bounds. Must balance with a call to Unlock().
 ***************************************************************************/
-byte *GPT::PrgbLockPixels(RC *prc)
+uint8_t *GPT::PrgbLockPixels(RC *prc)
 {
     AssertThis(0);
     AssertNilOrVarMem(prc);
@@ -368,13 +368,13 @@ byte *GPT::PrgbLockPixels(RC *prc)
     if (pvNil != prc)
         *prc = _rcOff;
 
-    return (byte *)(*hpix)->baseAddr;
+    return (uint8_t *)(*hpix)->baseAddr;
 }
 
 /***************************************************************************
     If this is an offscreen bitmap, return the number of bytes per row.
 ***************************************************************************/
-long GPT::CbRow(void)
+int32_t GPT::CbRow(void)
 {
     AssertThis(0);
     HPIX hpix;
@@ -388,7 +388,7 @@ long GPT::CbRow(void)
 /***************************************************************************
     If this is an offscreen bitmap, return the number of bits per pixel.
 ***************************************************************************/
-long GPT::CbitPixel(void)
+int32_t GPT::CbitPixel(void)
 {
     AssertThis(0);
 
@@ -502,7 +502,7 @@ void GPT::HiliteRcs(RCS *prcs, GDD *pgdd)
     Set(pgdd->prcsClip);
     ForeColor(blackColor);
     pgdd->acrBack._SetBack();
-    *(byte *)0x938 &= 0x7f; /* use color highlighting */
+    *(uint8_t *)0x938 &= 0x7f; /* use color highlighting */
     InvertRect(prcs);
     Restore();
 }
@@ -697,7 +697,7 @@ LDone:
 /***************************************************************************
     Scroll the given rectangle.
 ***************************************************************************/
-void GPT::ScrollRcs(RCS *prcs, long dxp, long dyp, GDD *pgdd)
+void GPT::ScrollRcs(RCS *prcs, int32_t dxp, int32_t dyp, GDD *pgdd)
 {
     AssertThis(0);
     AssertVarMem(prcs);
@@ -718,7 +718,7 @@ void GPT::ScrollRcs(RCS *prcs, long dxp, long dyp, GDD *pgdd)
 /***************************************************************************
     Draw the text.
 ***************************************************************************/
-void GPT::DrawRgch(achar *prgch, long cch, PTS pts, GDD *pgdd, DSF *pdsf)
+void GPT::DrawRgch(achar *prgch, int32_t cch, PTS pts, GDD *pgdd, DSF *pdsf)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -792,7 +792,7 @@ void GPT::DrawRgch(achar *prgch, long cch, PTS pts, GDD *pgdd, DSF *pdsf)
 /***************************************************************************
     Get the bounding text rectangle (in port coordinates).
 ***************************************************************************/
-void GPT::GetRcsFromRgch(RCS *prcs, achar *prgch, long cch, PTS pts, DSF *pdsf)
+void GPT::GetRcsFromRgch(RCS *prcs, achar *prgch, int32_t cch, PTS pts, DSF *pdsf)
 {
     Set(pvNil);
     _GetRcsFromRgch(prcs, prgch, (short)cch, &pts, pdsf);
@@ -964,7 +964,7 @@ void GPT::Set(RCS *prcsClip)
             // REVIEW shonk: does UpdateGWorld just copy the color table or does it do
             // other stuff, including changing the seed?
             NewCode();
-            long lw;
+            int32_t lw;
             RCS rcs = _rcOff;
 
             // REVIEW shonk: check for errors
@@ -1071,7 +1071,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
 
         Lock();
         hpix = _Hpix();
-        pmbmp->Draw((byte *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rcT.Dyp(), prcs->left, prcs->top, &rc,
+        pmbmp->Draw((uint8_t *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rcT.Dyp(), prcs->left, prcs->top, &rc,
                     _pregnClip);
         Unlock();
     }
@@ -1096,7 +1096,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
         Assert(pgpt->_rcOff == rc, 0);
         pgpt->Lock();
         hpix = pgpt->_Hpix();
-        pmbmp->DrawMask((byte *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
+        pmbmp->DrawMask((uint8_t *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
                         prcs->top - ptDst.yp);
 
         // set the mask bits to black
@@ -1122,7 +1122,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
             _pregnClip->Offset(-ptDst.xp, -ptDst.yp);
         pgpt->Lock();
         hpix = pgpt->_Hpix();
-        pmbmp->Draw((byte *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
+        pmbmp->Draw((uint8_t *)(*hpix)->baseAddr, (*hpix)->rowBytes & 0x7FFF, rc.Dyp(), prcs->left - ptDst.xp,
                     prcs->top - ptDst.yp, &rc, _pregnClip);
         if (pvNil != _pregnClip)
             _pregnClip->Offset(ptDst.xp, ptDst.yp);
@@ -1141,7 +1141,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
 /***************************************************************************
     Test the validity of the port.
 ***************************************************************************/
-void GPT::AssertValid(ulong grf)
+void GPT::AssertValid(uint32_t grf)
 {
     GPT_PAR::AssertValid(0);
     AssertIn(_cactRef, 1, kcbMax);
@@ -1167,19 +1167,19 @@ bool NTL::FInit(void)
     MenuHandle hmenu;
     achar st[kcbMaxSt];
     short ftc;
-    long ftcT;
-    long cstz, istz;
+    int32_t ftcT;
+    int32_t cstz, istz;
 
-    hmenu = NewMenu(1001, (byte *)"\pFont");
+    hmenu = NewMenu(1001, (uint8_t *)"\pFont");
     AddResMenu(hmenu, 'FONT');
     cstz = CountMItems(hmenu);
-    if ((_pgst = GST::PgstNew(size(long), cstz + 1, (cstz + 1) * 15)) == pvNil)
+    if ((_pgst = GST::PgstNew(size(int32_t), cstz + 1, (cstz + 1) * 15)) == pvNil)
         goto LFail;
 
     for (istz = 0; istz < cstz; istz++)
     {
-        GetItem(hmenu, istz + 1, (byte *)st);
-        GetFNum((byte *)st, &ftc);
+        GetItem(hmenu, istz + 1, (uint8_t *)st);
+        GetFNum((uint8_t *)st, &ftc);
         ftcT = ftc;
         AssertDo(!_pgst->FFindSt(st, &istz, fgstUserSorted), "font already found!");
         if (!_pgst->FInsertSt(istz, st, &ftcT))
@@ -1187,7 +1187,7 @@ bool NTL::FInit(void)
     }
 
     // add the system font
-    GetFontName(0, (byte *)st);
+    GetFontName(0, (uint8_t *)st);
     ftcT = 0;
     if (!_pgst->FFindSt(st, &_onnSystem, fgstUserSorted) && !_pgst->FInsertSt(_onnSystem, st, &ftcT))
     {
@@ -1204,10 +1204,10 @@ bool NTL::FInit(void)
 /***************************************************************************
     Return the system font code for this font number.
 ***************************************************************************/
-short NTL::FtcFromOnn(long onn)
+short NTL::FtcFromOnn(int32_t onn)
 {
     AssertThis(0);
-    long ftc;
+    int32_t ftc;
 
     _pgst->GetExtra(onn, &ftc);
     return (short)ftc;
@@ -1216,7 +1216,7 @@ short NTL::FtcFromOnn(long onn)
 /***************************************************************************
     Return true iff the font is a fixed pitch font.
 ***************************************************************************/
-bool NTL::FFixedPitch(long onn)
+bool NTL::FFixedPitch(int32_t onn)
 {
 #ifdef REVIEW // shonk: implement FFixedPitch on Mac
     AssertThis(0);

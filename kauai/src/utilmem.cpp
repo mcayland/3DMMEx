@@ -20,26 +20,26 @@
 ASSERTNAME
 
 #ifdef DEBUG
-const long kclwStackMbh = 5;
+const int32_t kclwStackMbh = 5;
 
 // memory block header
 struct MBH
 {
-    long cb;                      // size of block, including header and footer
-    PSZS pszsFile;                // source file that allocation request is coming from
-    long lwLine;                  // line in file that allocation request is coming from
-    long lwThread;                // thread id
-    MBH *pmbhPrev;                // previous allocated block (in doubly linked list)
-    MBH *pmbhNext;                // next allocated block
-    long rglwStack[kclwStackMbh]; // the EBP/A6 chain
-    short cactRef;                // for marking memory
-    short swMagic;                // magic number, to detect memory trashing
+    int32_t cb;                      // size of block, including header and footer
+    PSZS pszsFile;                   // source file that allocation request is coming from
+    int32_t lwLine;                  // line in file that allocation request is coming from
+    int32_t lwThread;                // thread id
+    MBH *pmbhPrev;                   // previous allocated block (in doubly linked list)
+    MBH *pmbhNext;                   // next allocated block
+    int32_t rglwStack[kclwStackMbh]; // the EBP/A6 chain
+    int16_t cactRef;                 // for marking memory
+    int16_t swMagic;                 // magic number, to detect memory trashing
 };
 
 // memory block footer
 struct MBF
 {
-    short swMagic; // magic number, to detect memory trashing
+    int16_t swMagic; // magic number, to detect memory trashing
 };
 
 MBH *_pmbhFirst; // head of the doubly linked list
@@ -90,7 +90,7 @@ bool DMAGL::FFail(void)
 /***************************************************************************
     Update values after an allocation
 ***************************************************************************/
-void DMAGL::Allocate(long cbT)
+void DMAGL::Allocate(int32_t cbT)
 {
     vmutxMem.Enter();
     if (cvRun < ++cv)
@@ -104,7 +104,7 @@ void DMAGL::Allocate(long cbT)
 /***************************************************************************
     Update values after a resize
 ***************************************************************************/
-void DMAGL::Resize(long dcb)
+void DMAGL::Resize(int32_t dcb)
 {
     vmutxMem.Enter();
     if (cbRun < (cb += dcb))
@@ -115,7 +115,7 @@ void DMAGL::Resize(long dcb)
 /***************************************************************************
     Update values after a block is freed
 ***************************************************************************/
-void DMAGL::Free(long cbT)
+void DMAGL::Free(int32_t cbT)
 {
     --cv;
     cb -= cbT;
@@ -126,14 +126,14 @@ void DMAGL::Free(long cbT)
     Allocates a fixed block.
 ***************************************************************************/
 #ifdef DEBUG
-bool FAllocPvDebug(void **ppv, long cb, ulong grfmem, long mpr, PSZS pszsFile, long lwLine, DMAGL *pdmagl)
+bool FAllocPvDebug(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr, PSZS pszsFile, int32_t lwLine, DMAGL *pdmagl)
 #else  //! DEBUG
-bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr)
+bool FAllocPv(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr)
 #endif //! DEBUG
 {
     AssertVarMem(ppv);
     AssertIn(cb, 0, kcbMax);
-    long cbFree;
+    int32_t cbFree;
 
     if (cb > kcbMax)
     {
@@ -203,13 +203,13 @@ bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr)
 
 #if defined(WIN) && defined(IN_80386)
     // follow the EBP chain....
-    long *plw;
-    long ilw;
+    int32_t *plw;
+    int32_t ilw;
 
     __asm { mov plw,ebp }
     for (ilw = 0; ilw < kclwStackMbh; ilw++)
     {
-        if (pvNil == plw || IsBadReadPtr(plw, 2 * SIZEOF(long)) || *plw <= (long)plw)
+        if (pvNil == plw || IsBadReadPtr(plw, 2 * SIZEOF(int32_t)) || *plw <= (int32_t)plw)
         {
             pmbh->rglwStack[ilw] = 0;
             plw = pvNil;
@@ -217,7 +217,7 @@ bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr)
         else
         {
             pmbh->rglwStack[ilw] = plw[1];
-            plw = (long *)*plw;
+            plw = (int32_t *)*plw;
         }
     }
 #endif // WIN && IN_80386
@@ -245,16 +245,16 @@ bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr)
     newly added space.
 ***************************************************************************/
 #ifdef DEBUG
-bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr, DMAGL *pdmagl)
+bool _FResizePpvDebug(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int32_t mpr, DMAGL *pdmagl)
 #else  //! DEBUG
-bool _FResizePpv(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr)
+bool _FResizePpv(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int32_t mpr)
 #endif //! DEBUG
 {
     AssertVarMem(ppv);
     AssertIn(cbNew, 0, kcbMax);
     AssertIn(cbOld, 0, kcbMax);
     AssertPvAlloced(*ppv, cbOld);
-    long cbFree;
+    int32_t cbFree;
     void *pvNew, *pvOld;
 
 #ifdef DEBUG
@@ -449,7 +449,7 @@ priv void _UnlinkMbh(MBH *pmbh, MBH *pmbhOld)
 ***************************************************************************/
 void _AssertMbh(MBH *pmbh)
 {
-    short sw;
+    int16_t sw;
 
     if (vcactSuspendCheckPointers != 0)
         return;
@@ -458,7 +458,7 @@ void _AssertMbh(MBH *pmbh)
     AssertVarMem(pmbh);
     Assert(pmbh->swMagic == kswMagicMem, "bad magic number");
     AssertIn(pmbh->cb - SIZEOF(MBH) - SIZEOF(MBF), 0, kcbMax);
-    Win(Assert(pmbh->cb <= (long)_msize(pmbh), "bigger than malloced block");) AssertPvCb(pmbh, pmbh->cb);
+    Win(Assert(pmbh->cb <= (int32_t)_msize(pmbh), "bigger than malloced block");) AssertPvCb(pmbh, pmbh->cb);
     if (pmbh->pmbhPrev != pvNil)
     {
         AssertVarMem(pmbh->pmbhPrev);
@@ -471,8 +471,8 @@ void _AssertMbh(MBH *pmbh)
         Assert(pmbh->pmbhNext->pmbhPrev == pmbh, "wrong prev in next");
     }
 
-    ((byte *)&sw)[0] = *(byte *)PvAddBv(pmbh, pmbh->cb - 2);
-    ((byte *)&sw)[1] = *(byte *)PvAddBv(pmbh, pmbh->cb - 1);
+    ((uint8_t *)&sw)[0] = *(uint8_t *)PvAddBv(pmbh, pmbh->cb - 2);
+    ((uint8_t *)&sw)[1] = *(uint8_t *)PvAddBv(pmbh, pmbh->cb - 1);
     Assert(sw == kswMagicMem, "bad tail magic number");
     vmutxMem.Leave();
 }
@@ -481,7 +481,7 @@ void _AssertMbh(MBH *pmbh)
     Assert the validity of an allocated fixed block.  Cb is the size.
     If cb is unknown, pass cvNil.
 ***************************************************************************/
-void AssertPvAlloced(void *pv, long cb)
+void AssertPvAlloced(void *pv, int32_t cb)
 {
     if (vcactSuspendCheckPointers != 0)
         return;
@@ -499,7 +499,7 @@ void AssertPvAlloced(void *pv, long cb)
 void AssertUnmarkedMem(void)
 {
     MBH *pmbh;
-    long lwThread = LwThreadCur();
+    int32_t lwThread = LwThreadCur();
 
     // enter the critical section
     vmutxMem.Enter();
@@ -515,7 +515,7 @@ void AssertUnmarkedMem(void)
             stn.FFormatSz(PszLit("\nLost block: size=%d, StackTrace=(use map file)"), pmbh->cb);
             stn.GetSzs(szs);
 
-            if (FAssertProc(pmbh->pszsFile, pmbh->lwLine, szs, pmbh->rglwStack, kclwStackMbh * SIZEOF(long)))
+            if (FAssertProc(pmbh->pszsFile, pmbh->lwLine, szs, pmbh->rglwStack, kclwStackMbh * SIZEOF(int32_t)))
             {
                 Debugger();
             }
@@ -533,7 +533,7 @@ void AssertUnmarkedMem(void)
 void UnmarkAllMem(void)
 {
     MBH *pmbh;
-    long lwThread = LwThreadCur();
+    int32_t lwThread = LwThreadCur();
 
     // enter the critical section
     vmutxMem.Enter();

@@ -50,7 +50,7 @@ void FrameMain(void)
 /***************************************************************************
     Assert the validity of a APP.
 ***************************************************************************/
-void APP::AssertValid(ulong grf)
+void APP::AssertValid(uint32_t grf)
 {
     APP_PAR::AssertValid(0);
     AssertNilOrPo(_pcrm, 0);
@@ -77,14 +77,14 @@ void APP::MarkMem(void)
     Initialize the app.  Add some stuff to the menus and do the command
     line parsing thing.
 ***************************************************************************/
-bool APP::_FInit(ulong grfapp, ulong grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
-    static long _rgdypFont[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28, 32, 36, 0};
+    static int32_t _rgdypFont[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28, 32, 36, 0};
 
     struct LANG
     {
         PSZ psz;
-        long sclid;
+        int32_t sclid;
     };
     static LANG _rglang[] = {
         {PszLit("American"), ksclidAmerican},
@@ -105,7 +105,7 @@ bool APP::_FInit(ulong grfapp, ulong grfgob, long ginDef)
         {PszLit("Other..."), 0},
     };
 
-    long iv, dyp;
+    int32_t iv, dyp;
     STN stn;
 
     if (!APP_PAR::_FInit(grfapp, grfgob, ginDef))
@@ -215,7 +215,7 @@ void APP::GetStnAppName(PSTN pstn)
     Update the given window.  *prc is the bounding rectangle of the update
     region.
 ***************************************************************************/
-void APP::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
+void APP::UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp)
 {
     AssertThis(0);
     PGOB pgob;
@@ -233,7 +233,7 @@ void APP::UpdateHwnd(HWND hwnd, RC *prc, ulong grfapp)
 /***************************************************************************
     Do a fast update of the gob and its descendents into the given gpt.
 ***************************************************************************/
-void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, ulong grfapp, PGPT pgpt)
+void APP::_FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp, PGPT pgpt)
 {
     AssertThis(0);
 
@@ -300,7 +300,7 @@ bool APP::FCmdOpen(PCMD pcmd)
 /***************************************************************************
     Load a document file.
 ***************************************************************************/
-bool APP::FOpenDocFile(PFNI pfni, long cid)
+bool APP::FOpenDocFile(PFNI pfni, int32_t cid)
 {
     AssertThis(0);
     AssertNilOrPo(pfni, 0);
@@ -402,7 +402,7 @@ bool APP::FLoadResFile(PFNI pfni)
     AssertThis(0);
     AssertPo(pfni, ffniFile);
     PCFL pcfl;
-    long ipcrf;
+    int32_t ipcrf;
     PCRF pcrf;
     BLCK blck;
 
@@ -452,7 +452,7 @@ bool APP::FLoadResFile(PFNI pfni)
 /***************************************************************************
     Check or uncheck the language as appropriate.
 ***************************************************************************/
-bool APP::FEnableChooseLanguage(PCMD pcmd, ulong *pgrfeds)
+bool APP::FEnableChooseLanguage(PCMD pcmd, uint32_t *pgrfeds)
 {
     AssertThis(0);
     AssertPo(pcmd, 0);
@@ -544,7 +544,7 @@ LID::~LID(void)
 /***************************************************************************
     Assert the validity of a LID.
 ***************************************************************************/
-void LID::AssertValid(ulong grf)
+void LID::AssertValid(uint32_t grf)
 {
     LID_PAR::AssertValid(0);
     AssertPo(_pcrm, 0);
@@ -606,14 +606,14 @@ bool LID::_FInit(PCRM pcrm, CTG ctg, CHID chid)
 bool LID::FRefresh(void)
 {
     AssertThis(0);
-    long ipcrf, icki;
+    int32_t ipcrf, icki;
     CACH cach, cachT;
     PCRF pcrf;
     PCFL pcfl;
     CKI cki;
-    long ivMin, ivLim, iv;
+    int32_t ivMin, ivLim, iv;
     KID kid;
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
     bool fRet = fFalse;
 
@@ -669,7 +669,7 @@ LFail:
 /***************************************************************************
     Return the number of items in the list.
 ***************************************************************************/
-long LID::Ccki(void)
+int32_t LID::Ccki(void)
 {
     AssertThis(0);
     return _pglcach->IvMac();
@@ -678,7 +678,7 @@ long LID::Ccki(void)
 /***************************************************************************
     Get the CKI for the indicated item.
 ***************************************************************************/
-void LID::GetCki(long icki, CKI *pcki, PCRF *ppcrf)
+void LID::GetCki(int32_t icki, CKI *pcki, PCRF *ppcrf)
 {
     AssertThis(0);
     AssertIn(icki, 0, _pglcach->IvMac());
@@ -696,7 +696,7 @@ void LID::GetCki(long icki, CKI *pcki, PCRF *ppcrf)
 /***************************************************************************
     Get an MBMP for the indicated item.
 ***************************************************************************/
-PMBMP LID::PmbmpGet(long icki)
+PMBMP LID::PmbmpGet(int32_t icki)
 {
     AssertThis(0);
     AssertIn(icki, 0, _pglcach->IvMac());
@@ -717,7 +717,7 @@ LIG::LIG(PLID plid, GCB *pgcb) : LIG_PAR(plid, pgcb)
 /***************************************************************************
     Assert the validity of a LIG.
 ***************************************************************************/
-void LIG::AssertValid(ulong grf)
+void LIG::AssertValid(uint32_t grf)
 {
     LIG_PAR::AssertValid(0);
     AssertPo(_pscb, 0);
@@ -739,7 +739,7 @@ void LIG::MarkMem(void)
 /***************************************************************************
     Static method to create a new list display gob.
 ***************************************************************************/
-PLIG LIG::PligNew(PLID plid, GCB *pgcb, PTXHD ptxhd, long dypCell)
+PLIG LIG::PligNew(PLID plid, GCB *pgcb, PTXHD ptxhd, int32_t dypCell)
 {
     AssertPo(plid, 0);
     AssertVarMem(pgcb);
@@ -769,7 +769,7 @@ PLID LIG::Plid(void)
 /***************************************************************************
     Initialization for the list display gob.
 ***************************************************************************/
-bool LIG::_FInit(PTXHD ptxhd, long dypCell)
+bool LIG::_FInit(PTXHD ptxhd, int32_t dypCell)
 {
     AssertPo(ptxhd, 0);
     AssertIn(dypCell, 1, kswMax);
@@ -800,7 +800,7 @@ bool LIG::_FInit(PTXHD ptxhd, long dypCell)
 void LIG::Refresh(void)
 {
     AssertThis(0);
-    long val;
+    int32_t val;
 
     InvalRc(pvNil);
     val = LwMax(0, LwMin(_pscb->Val(), Plid()->Ccki() - 1));
@@ -816,10 +816,10 @@ void LIG::Draw(PGNV pgnv, RC *prcClip)
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
     RC rc, rcT, rcCell, rcClip;
-    long icki;
+    int32_t icki;
     PMBMP pmbmp;
     PLID plid;
-    long ccki;
+    int32_t ccki;
 
     plid = Plid();
     ccki = plid->Ccki();
@@ -860,7 +860,7 @@ void LIG::Draw(PGNV pgnv, RC *prcClip)
 ***************************************************************************/
 bool LIG::FCmdScroll(PCMD pcmd)
 {
-    long dval, val;
+    int32_t dval, val;
     RC rc, rcT;
 
     GetRc(&rc, cooLocal);
@@ -913,10 +913,10 @@ bool LIG::FCmdScroll(PCMD pcmd)
     The mouse was clicked in the LIG.  Insert the object in the active
     DDG.
 ***************************************************************************/
-void LIG::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void LIG::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
-    long icki;
+    int32_t icki;
     CKI cki;
     RC rc, rcT;
     PHETG phetg;
@@ -957,7 +957,7 @@ void LIG::MouseDown(long xp, long yp, long cact, ulong grfcust)
 /***************************************************************************
     Constructor for the CCG.
 ***************************************************************************/
-CCG::CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, long cacrRow) : CCG_PAR(pgcb)
+CCG::CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, int32_t cacrRow) : CCG_PAR(pgcb)
 {
     AssertPo(ptxhd, 0);
     AssertIn(cacrRow, 1, 257);
@@ -970,7 +970,7 @@ CCG::CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, long cacrRow) : CCG_PAR(pgcb)
     Handle mousedown in a CCG.  Set the foreground or background color of
     the text in the active of DDG of the ptxhd.
 ***************************************************************************/
-void CCG::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void CCG::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
     PHETG phetg;
@@ -992,8 +992,8 @@ void CCG::Draw(PGNV pgnv, RC *prcClip)
     AssertThis(0);
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
-    long crcHeight, ircHeight, ircWidth;
-    long iscr;
+    int32_t crcHeight, ircHeight, ircWidth;
+    int32_t iscr;
     RC rc, rcT;
     ACR acr;
 
@@ -1015,7 +1015,7 @@ void CCG::Draw(PGNV pgnv, RC *prcClip)
             switch (iscr)
             {
             default:
-                acr.SetToIndex((byte)iscr);
+                acr.SetToIndex((uint8_t)iscr);
                 pgnv->FillRc(&rcT, acr);
                 break;
 
@@ -1035,15 +1035,15 @@ void CCG::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     Map the given point to a color.
 ***************************************************************************/
-bool CCG::_FGetAcrFromPt(long xp, long yp, ACR *pacr, RC *prc, long *piscr)
+bool CCG::_FGetAcrFromPt(int32_t xp, int32_t yp, ACR *pacr, RC *prc, int32_t *piscr)
 {
     AssertThis(0);
     AssertVarMem(pacr);
     AssertNilOrVarMem(prc);
     AssertNilOrVarMem(piscr);
     RC rc;
-    long iscr;
-    long ircWidth, ircHeight;
+    int32_t iscr;
+    int32_t ircWidth, ircHeight;
 
     GetRc(&rc, cooLocal);
     rc.ypTop += kdxpFrameCcg;
@@ -1063,7 +1063,7 @@ bool CCG::_FGetAcrFromPt(long xp, long yp, ACR *pacr, RC *prc, long *piscr)
     default:
         if (!FIn(iscr, 1, 256))
             return fFalse;
-        pacr->SetToIndex((byte)iscr);
+        pacr->SetToIndex((uint8_t)iscr);
         break;
 
     case 0:
@@ -1090,7 +1090,7 @@ bool CCG::_FGetAcrFromPt(long xp, long yp, ACR *pacr, RC *prc, long *piscr)
 /***************************************************************************
     Put up the CCG's tool tip.
 ***************************************************************************/
-bool CCG::FEnsureToolTip(PGOB *ppgobCurTip, long xpMouse, long ypMouse)
+bool CCG::FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse)
 {
     AssertThis(0);
     AssertVarMem(ppgobCurTip);
@@ -1117,7 +1117,7 @@ bool CCG::FCmdMouseMove(PCMD_MOUSE pcmd)
     RC rc, rcOld;
     ACR acr;
     STN stn;
-    long iscr;
+    int32_t iscr;
 
     if (pvNil == (pccgt = (PCCGT)PgobFromHid(khidToolTip)) || !pccgt->FIs(kclsCCGT))
     {
@@ -1157,7 +1157,7 @@ bool CCG::FCmdMouseMove(PCMD_MOUSE pcmd)
 /***************************************************************************
     Assert the validity of a CCG.
 ***************************************************************************/
-void CCG::AssertValid(ulong grf)
+void CCG::AssertValid(uint32_t grf)
 {
     CCG_PAR::AssertValid(0);
     AssertPo(_ptxhd, 0);

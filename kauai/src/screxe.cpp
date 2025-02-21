@@ -67,7 +67,7 @@ void SCEB::Free(void)
     if (pvNil != _pscpt && pvNil != _pstrg && pvNil != _pscpt->_pgstLiterals && pvNil != _pglrtvm)
     {
         RTVN rtvn;
-        long stid;
+        int32_t stid;
 
         rtvn.lu1 = 0;
         for (rtvn.lu2 = _pscpt->_pgstLiterals->IvMac(); rtvn.lu2-- > 0;)
@@ -87,7 +87,7 @@ void SCEB::Free(void)
 /***************************************************************************
     Assert the validity of a SCEB.
 ***************************************************************************/
-void SCEB::AssertValid(ulong grfsceb)
+void SCEB::AssertValid(uint32_t grfsceb)
 {
     SCEB_PAR::AssertValid(0);
     if (grfsceb & fscebRunnable)
@@ -123,7 +123,7 @@ void SCEB::MarkMem(void)
     Run the given script.  (prglw, clw) is the list of parameters for the
     script.
 ***************************************************************************/
-bool SCEB::FRunScript(PSCPT pscpt, long *prglw, long clw, long *plwReturn, bool *pfPaused)
+bool SCEB::FRunScript(PSCPT pscpt, int32_t *prglw, int32_t clw, int32_t *plwReturn, bool *pfPaused)
 {
     AssertThis(0);
     return FAttachScript(pscpt, prglw, clw) && FResume(plwReturn, pfPaused);
@@ -132,13 +132,13 @@ bool SCEB::FRunScript(PSCPT pscpt, long *prglw, long clw, long *plwReturn, bool 
 /***************************************************************************
     Attach a script to this SCEB and pause the script.
 ***************************************************************************/
-bool SCEB::FAttachScript(PSCPT pscpt, long *prglw, long clw)
+bool SCEB::FAttachScript(PSCPT pscpt, int32_t *prglw, int32_t clw)
 {
     AssertThis(0);
     AssertPo(pscpt, 0);
     AssertIn(clw, 0, kcbMax);
-    AssertPvCb(prglw, LwMul(clw, SIZEOF(long)));
-    long lw;
+    AssertPvCb(prglw, LwMul(clw, SIZEOF(int32_t)));
+    int32_t lw;
     DVER dver;
 
 #ifdef DEBUG
@@ -183,7 +183,7 @@ bool SCEB::FAttachScript(PSCPT pscpt, long *prglw, long clw)
     _fError = fFalse;
 
     // create the stack GL
-    if (pvNil == (_pgllwStack = GL::PglNew(SIZEOF(long), 10)))
+    if (pvNil == (_pgllwStack = GL::PglNew(SIZEOF(int32_t), 10)))
         goto LFail;
     _pgllwStack->SetMinGrow(10);
 
@@ -229,15 +229,15 @@ bool SCEB::FAttachScript(PSCPT pscpt, long *prglw, long clw)
 /***************************************************************************
     Resume a paused script.
 ***************************************************************************/
-bool SCEB::FResume(long *plwReturn, bool *pfPaused)
+bool SCEB::FResume(int32_t *plwReturn, bool *pfPaused)
 {
     AssertThis(fscebRunnable);
     AssertNilOrVarMem(plwReturn);
     AssertNilOrVarMem(pfPaused);
     RTVN rtvn;
-    long ilw, clwPush;
-    long lw;
-    long op;
+    int32_t ilw, clwPush;
+    int32_t lw;
+    int32_t op;
 
     TrashVar(plwReturn);
     TrashVar(pfPaused);
@@ -250,7 +250,7 @@ bool SCEB::FResume(long *plwReturn, bool *pfPaused)
     AssertIn(_ilwCur, 1, _ilwMac + 1);
     for (_fPaused = fFalse; _ilwCur < _ilwMac && !_fError && !_fPaused;)
     {
-        lw = *(long *)_pscpt->_pgllw->QvGet(_ilwCur++);
+        lw = *(int32_t *)_pscpt->_pgllw->QvGet(_ilwCur++);
         clwPush = B2Lw(lw);
         if (!FIn(clwPush, 0, _ilwMac - _ilwCur + 1))
         {
@@ -268,8 +268,8 @@ bool SCEB::FResume(long *plwReturn, bool *pfPaused)
                 goto LFail;
             }
             clwPush--;
-            rtvn.lu1 = (ulong)lw & 0x0000FFFF;
-            rtvn.lu2 = *(ulong *)_pscpt->_pgllw->QvGet(_ilwCur++);
+            rtvn.lu1 = (uint32_t)lw & 0x0000FFFF;
+            rtvn.lu2 = *(uint32_t *)_pscpt->_pgllw->QvGet(_ilwCur++);
             ilw = _ilwCur;
             if (!_FExecVarOp(op, &rtvn))
                 goto LFail;
@@ -291,7 +291,7 @@ bool SCEB::FResume(long *plwReturn, bool *pfPaused)
                 _Error(fFalse);
                 break;
             }
-            CopyPb(_pscpt->_pgllw->QvGet(_ilwCur), _pgllwStack->QvGet(ilw), LwMul(clwPush, SIZEOF(long)));
+            CopyPb(_pscpt->_pgllw->QvGet(_ilwCur), _pgllwStack->QvGet(ilw), LwMul(clwPush, SIZEOF(int32_t)));
             _ilwCur += clwPush;
         }
     }
@@ -312,13 +312,13 @@ bool SCEB::FResume(long *plwReturn, bool *pfPaused)
 /***************************************************************************
     Put the parameters in the local variable list.
 ***************************************************************************/
-void SCEB::_AddParameters(long *prglw, long clw)
+void SCEB::_AddParameters(int32_t *prglw, int32_t clw)
 {
     AssertThis(0);
     AssertIn(clw, 1, kcbMax);
-    AssertPvCb(prglw, LwMul(clw, SIZEOF(long)));
+    AssertPvCb(prglw, LwMul(clw, SIZEOF(int32_t)));
     STN stn;
-    long ilw;
+    int32_t ilw;
     RTVN rtvn;
 
     // put the parameters in the local variable gl
@@ -343,7 +343,7 @@ void SCEB::_AddStrings(PGST pgst)
     AssertThis(0);
     AssertPo(pgst, 0);
     RTVN rtvn;
-    long stid;
+    int32_t stid;
     STN stn;
 
     if (pvNil == _pstrg)
@@ -353,7 +353,7 @@ void SCEB::_AddStrings(PGST pgst)
     }
 
     rtvn.lu1 = 0;
-    for (rtvn.lu2 = 0; (long)rtvn.lu2 < pgst->IvMac(); rtvn.lu2++)
+    for (rtvn.lu2 = 0; (int32_t)rtvn.lu2 < pgst->IvMac(); rtvn.lu2++)
     {
         pgst->GetStn(rtvn.lu2, &stn);
         if (!_pstrg->FAdd(&stid, &stn))
@@ -373,7 +373,7 @@ void SCEB::_AddStrings(PGST pgst)
 /***************************************************************************
     Return the current version number of the script compiler.
 ***************************************************************************/
-short SCEB::_SwCur(void)
+int16_t SCEB::_SwCur(void)
 {
     AssertBaseThis(0);
     return kswCurSccb;
@@ -383,7 +383,7 @@ short SCEB::_SwCur(void)
     Return the min version number of the script compiler.  Read can read
     scripts back to this version.
 ***************************************************************************/
-short SCEB::_SwMin(void)
+int16_t SCEB::_SwMin(void)
 {
     AssertBaseThis(0);
     return kswMinSccb;
@@ -392,11 +392,11 @@ short SCEB::_SwMin(void)
 /***************************************************************************
     Execute an instruction that has a variable as an argument.
 ***************************************************************************/
-bool SCEB::_FExecVarOp(long op, RTVN *prtvn)
+bool SCEB::_FExecVarOp(int32_t op, RTVN *prtvn)
 {
     AssertThis(0);
     AssertVarMem(prtvn);
-    long lw;
+    int32_t lw;
 
     if (FIn(op, kopMinArray, kopLimArray))
     {
@@ -448,11 +448,11 @@ bool SCEB::_FExecVarOp(long op, RTVN *prtvn)
 /***************************************************************************
     Execute an instruction.
 ***************************************************************************/
-bool SCEB::_FExecOp(long op)
+bool SCEB::_FExecOp(int32_t op)
 {
     AssertThis(0);
     double dou;
-    long lw1, lw2, lw3;
+    int32_t lw1, lw2, lw3;
 
     // OP's that don't have any arguments
     switch (op)
@@ -504,10 +504,10 @@ bool SCEB::_FExecOp(long op)
         _Push(lw1 - 1);
         break;
     case kopShr:
-        _Push((ulong)_LwPop() >> lw1);
+        _Push((uint32_t)_LwPop() >> lw1);
         break;
     case kopShl:
-        _Push((ulong)_LwPop() << lw1);
+        _Push((uint32_t)_LwPop() << lw1);
         break;
     case kopBOr:
         _Push(_LwPop() | lw1);
@@ -565,7 +565,7 @@ bool SCEB::_FExecOp(long op)
             if (dou < (double)klwMin || dou > (double)klwMax)
                 _Error(fTrue);
             else
-                _Push((long)dou);
+                _Push((int32_t)dou);
         }
         break;
     case kopDup:
@@ -659,7 +659,7 @@ bool SCEB::_FExecOp(long op)
             _Error(fTrue);
         else
         {
-            long *prglw;
+            int32_t *prglw;
 
             _pgllwStack->Lock();
             prglw = _QlwGet(lw1);
@@ -725,9 +725,9 @@ bool SCEB::_FExecOp(long op)
 /***************************************************************************
     Pop a long off the stack.
 ***************************************************************************/
-long SCEB::_LwPop(void)
+int32_t SCEB::_LwPop(void)
 {
-    long lw, ilw;
+    int32_t lw, ilw;
 
     if (_fError)
         return 0;
@@ -738,7 +738,7 @@ long SCEB::_LwPop(void)
         _Error(fTrue);
         return 0;
     }
-    lw = *(long *)_pgllwStack->QvGet(--ilw);
+    lw = *(int32_t *)_pgllwStack->QvGet(--ilw);
     AssertDo(_pgllwStack->FSetIvMac(ilw), 0);
     return lw;
 }
@@ -746,9 +746,9 @@ long SCEB::_LwPop(void)
 /***************************************************************************
     Get a pointer to the element that is clw elements down from the top.
 ***************************************************************************/
-long *SCEB::_QlwGet(long clw)
+int32_t *SCEB::_QlwGet(int32_t clw)
 {
-    long ilwMac;
+    int32_t ilwMac;
 
     if (_fError)
         return pvNil;
@@ -758,7 +758,7 @@ long *SCEB::_QlwGet(long clw)
         _Error(fTrue);
         return pvNil;
     }
-    return (long *)_pgllwStack->QvGet(ilwMac - clw);
+    return (int32_t *)_pgllwStack->QvGet(ilwMac - clw);
 }
 
 /***************************************************************************
@@ -786,7 +786,7 @@ void SCEB::_WarnSz(PSZ psz, ...)
     STN stn1, stn2;
     SZS szs;
 
-    stn1.FFormatRgch(psz, CchSz(psz), (ulong *)(&psz + 1));
+    stn1.FFormatRgch(psz, CchSz(psz), (uint32_t *)(&psz + 1));
     stn2.FFormatSz(PszLit("Script ('%f', 0x%x, %d): %s"), _pscpt->Ctg(), _pscpt->Cno(), _ilwCur, &stn1);
     stn2.GetSzs(szs);
     Warn(szs);
@@ -796,10 +796,10 @@ void SCEB::_WarnSz(PSZ psz, ...)
 /***************************************************************************
     Rotate clwTot entries on the stack left by clwShift positions.
 ***************************************************************************/
-void SCEB::_Rotate(long clwTot, long clwShift)
+void SCEB::_Rotate(int32_t clwTot, int32_t clwShift)
 {
     AssertThis(0);
-    long *qlw;
+    int32_t *qlw;
 
     if (clwTot == 0 || clwTot == 1)
         return;
@@ -813,7 +813,7 @@ void SCEB::_Rotate(long clwTot, long clwShift)
         AssertIn(clwShift, 0, clwTot);
         if (clwShift != 0)
         {
-            SwapBlocks(qlw, LwMul(clwShift, SIZEOF(long)), LwMul(clwTot - clwShift, SIZEOF(long)));
+            SwapBlocks(qlw, LwMul(clwShift, SIZEOF(int32_t)), LwMul(clwTot - clwShift, SIZEOF(int32_t)));
         }
     }
 }
@@ -821,11 +821,11 @@ void SCEB::_Rotate(long clwTot, long clwShift)
 /***************************************************************************
     Reverse clw entries on the stack.
 ***************************************************************************/
-void SCEB::_Reverse(long clw)
+void SCEB::_Reverse(int32_t clw)
 {
     AssertThis(0);
-    long *qlw, *qlw2;
-    long lw;
+    int32_t *qlw, *qlw2;
+    int32_t lw;
 
     if (clw == 0 || clw == 1)
         return;
@@ -845,10 +845,10 @@ void SCEB::_Reverse(long clw)
 /***************************************************************************
     Duplicate clw entries on the stack.
 ***************************************************************************/
-void SCEB::_DupList(long clw)
+void SCEB::_DupList(int32_t clw)
 {
     AssertThis(0);
-    long *qlw;
+    int32_t *qlw;
 
     if (clw == 0)
         return;
@@ -863,17 +863,17 @@ void SCEB::_DupList(long clw)
     {
         qlw = _QlwGet(clw * 2);
         Assert(qlw != pvNil, "why did _QlwGet fail?");
-        CopyPb(qlw, qlw + clw, LwMul(clw, SIZEOF(long)));
+        CopyPb(qlw, qlw + clw, LwMul(clw, SIZEOF(int32_t)));
     }
 }
 
 /***************************************************************************
     Removes clw entries from the stack.
 ***************************************************************************/
-void SCEB::_PopList(long clw)
+void SCEB::_PopList(int32_t clw)
 {
     AssertThis(0);
-    long ilwMac;
+    int32_t ilwMac;
 
     if (clw == 0 || _fError)
         return;
@@ -889,10 +889,10 @@ void SCEB::_PopList(long clw)
     Select the ilw'th entry from the top clw entries.  ilw is indexed from
     the top entry in and is zero based.
 ***************************************************************************/
-void SCEB::_Select(long clw, long ilw)
+void SCEB::_Select(int32_t clw, int32_t ilw)
 {
     AssertThis(0);
-    long *qlw;
+    int32_t *qlw;
 
     if (pvNil == (qlw = _QlwGet(clw)))
         return;
@@ -912,11 +912,11 @@ void SCEB::_Select(long clw, long ilw)
     test value, push the correspongind return value.  Otherwise, push
     the default return value.
 ***************************************************************************/
-void SCEB::_Match(long clw)
+void SCEB::_Match(int32_t clw)
 {
     AssertThis(0);
-    long *qrglw;
-    long lwKey, lwPush, ilwTest;
+    int32_t *qrglw;
+    int32_t lwKey, lwPush, ilwTest;
 
     lwKey = _LwPop();
     lwPush = _LwPop();
@@ -939,7 +939,7 @@ void SCEB::_Match(long clw)
 /***************************************************************************
     Generates a random entry from a list of numbers on the stack.
 ***************************************************************************/
-void SCEB::_RndList(long clw)
+void SCEB::_RndList(int32_t clw)
 {
     AssertThis(0);
 
@@ -952,7 +952,7 @@ void SCEB::_RndList(long clw)
 /***************************************************************************
     Copy the string from stidSrc to stidDst.
 ***************************************************************************/
-void SCEB::_CopySubStr(long stidSrc, long ichMin, long cch, long stidDst)
+void SCEB::_CopySubStr(int32_t stidSrc, int32_t ichMin, int32_t cch, int32_t stidDst)
 {
     AssertThis(0);
     STN stn;
@@ -983,7 +983,7 @@ void SCEB::_CopySubStr(long stidSrc, long ichMin, long cch, long stidDst)
     Concatenate two strings and put the result in a third. Push the id
     of the destination.
 ***************************************************************************/
-void SCEB::_ConcatStrs(long stidSrc1, long stidSrc2, long stidDst)
+void SCEB::_ConcatStrs(int32_t stidSrc1, int32_t stidSrc2, int32_t stidDst)
 {
     AssertThis(0);
     STN stn1, stn2;
@@ -1017,7 +1017,7 @@ void SCEB::_ConcatStrs(long stidSrc1, long stidSrc2, long stidDst)
 /***************************************************************************
     Push the length of the given string.
 ***************************************************************************/
-void SCEB::_LenStr(long stid)
+void SCEB::_LenStr(int32_t stid)
 {
     AssertThis(0);
     STN stn;
@@ -1036,7 +1036,7 @@ void SCEB::_LenStr(long stid)
 /***************************************************************************
     CRF reader function to read a string registry string table.
 ***************************************************************************/
-bool _FReadStringReg(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool _FReadStringReg(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, fblckReadable);
@@ -1044,7 +1044,7 @@ bool _FReadStringReg(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
     AssertVarMem(pcb);
     PGST pgst;
     PCABO pcabo;
-    short bo;
+    int16_t bo;
 
     *pcb = pblck->Cb(fTrue);
     if (pvNil == ppbaco)
@@ -1054,14 +1054,14 @@ bool _FReadStringReg(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
         return fFalse;
     *pcb = pblck->Cb();
 
-    if (pvNil == (pgst = GST::PgstRead(pblck, &bo)) || pgst->CbExtra() != SIZEOF(long))
+    if (pvNil == (pgst = GST::PgstRead(pblck, &bo)) || pgst->CbExtra() != SIZEOF(int32_t))
     {
         goto LFail;
     }
 
     if (kboOther == bo)
     {
-        long istn, stid;
+        int32_t istn, stid;
 
         for (istn = pgst->IvMac(); istn-- > 0;)
         {
@@ -1092,7 +1092,7 @@ void SCEB::_MergeStrings(CNO cno, RSC rsc)
     AssertThis(0);
     PCABO pcabo;
     PGST pgst;
-    long istn, stid;
+    int32_t istn, stid;
     STN stn;
     bool fFail;
 
@@ -1121,7 +1121,7 @@ void SCEB::_MergeStrings(CNO cno, RSC rsc)
 
     Assert(pcabo->po->FIs(kclsGST), 0);
     pgst = (PGST)pcabo->po;
-    Assert(pgst->CbExtra() == SIZEOF(long), 0);
+    Assert(pgst->CbExtra() == SIZEOF(int32_t), 0);
 
     fFail = fFalse;
     for (istn = pgst->IvMac(); istn-- > 0;)
@@ -1143,7 +1143,7 @@ void SCEB::_MergeStrings(CNO cno, RSC rsc)
 /***************************************************************************
     Convert a number to a string and add the string to the registry.
 ***************************************************************************/
-void SCEB::_NumToStr(long lw, long stid)
+void SCEB::_NumToStr(int32_t lw, int32_t stid)
 {
     AssertThis(0);
     STN stn;
@@ -1167,11 +1167,11 @@ void SCEB::_NumToStr(long lw, long stid)
     Convert a string to a number and push the result. If the string is
     empty, push lwEmpty; if there is an error, push lwError.
 ***************************************************************************/
-void SCEB::_StrToNum(long stid, long lwEmpty, long lwError)
+void SCEB::_StrToNum(int32_t stid, int32_t lwEmpty, int32_t lwError)
 {
     AssertThis(0);
     STN stn;
-    long lw;
+    int32_t lw;
 
     if (pvNil == _pstrg)
         _Error(fTrue);
@@ -1195,7 +1195,7 @@ void SCEB::_PushVar(PGL pglrtvm, RTVN *prtvn)
     AssertThis(0);
     AssertVarMem(prtvn);
     AssertNilOrPo(pglrtvm, 0);
-    long lw;
+    int32_t lw;
 
     if (_fError)
         return;
@@ -1215,7 +1215,7 @@ void SCEB::_PushVar(PGL pglrtvm, RTVN *prtvn)
 /***************************************************************************
     Pop the top value off the runtime stack into a variable.
 ***************************************************************************/
-void SCEB::_AssignVar(PGL *ppglrtvm, RTVN *prtvn, long lw)
+void SCEB::_AssignVar(PGL *ppglrtvm, RTVN *prtvn, int32_t lw)
 {
     AssertThis(0);
     AssertVarMem(prtvn);
@@ -1277,7 +1277,7 @@ PGL *SCEB::_PpglrtvmGlobal(void)
 /***************************************************************************
     Get the variable map for a remote object.
 ***************************************************************************/
-PGL SCEB::_PglrtvmRemote(long lw)
+PGL SCEB::_PglrtvmRemote(int32_t lw)
 {
     PGL *ppgl = _PpglrtvmRemote(lw);
     if (pvNil == ppgl)
@@ -1289,7 +1289,7 @@ PGL SCEB::_PglrtvmRemote(long lw)
     Get the adress of the variable map master pointer for a remote object
     (so we can create the variable map if need be).
 ***************************************************************************/
-PGL *SCEB::_PpglrtvmRemote(long lw)
+PGL *SCEB::_PpglrtvmRemote(int32_t lw)
 {
     return pvNil;
 }
@@ -1299,14 +1299,14 @@ PGL *SCEB::_PpglrtvmRemote(long lw)
     If the RTVN is not in the GL, sets *pirtvm to where it would be if
     it were.
 ***************************************************************************/
-bool FFindRtvm(PGL pglrtvm, RTVN *prtvn, long *plw, long *pirtvm)
+bool FFindRtvm(PGL pglrtvm, RTVN *prtvn, int32_t *plw, int32_t *pirtvm)
 {
     AssertPo(pglrtvm, 0);
     AssertVarMem(prtvn);
     AssertNilOrVarMem(plw);
     AssertNilOrVarMem(pirtvm);
     RTVM *qrgrtvm, *qrtvm;
-    long irtvm, irtvmMin, irtvmLim;
+    int32_t irtvm, irtvmMin, irtvmLim;
 
     qrgrtvm = (RTVM *)pglrtvm->QvGet(0);
     for (irtvmMin = 0, irtvmLim = pglrtvm->IvMac(); irtvmMin < irtvmLim;)
@@ -1340,13 +1340,13 @@ bool FFindRtvm(PGL pglrtvm, RTVN *prtvn, long *plw, long *pirtvm)
 /***************************************************************************
     Put the given value into a runtime variable.
 ***************************************************************************/
-bool FAssignRtvm(PGL *ppglrtvm, RTVN *prtvn, long lw)
+bool FAssignRtvm(PGL *ppglrtvm, RTVN *prtvn, int32_t lw)
 {
     AssertVarMem(ppglrtvm);
     AssertNilOrPo(*ppglrtvm, 0);
     AssertVarMem(prtvn);
     RTVM rtvm;
-    long irtvm;
+    int32_t irtvm;
 
     rtvm.lwValue = lw;
     rtvm.rtvn = *prtvn;
@@ -1369,7 +1369,7 @@ bool FAssignRtvm(PGL *ppglrtvm, RTVN *prtvn, long lw)
 /***************************************************************************
     A chunky resource reader to read a script.
 ***************************************************************************/
-bool SCPT::FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool SCPT::FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, fblckReadable);
@@ -1389,7 +1389,7 @@ bool SCPT::FReadScript(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, 
 PSCPT SCPT::PscptRead(PCFL pcfl, CTG ctg, CNO cno)
 {
     AssertPo(pcfl, 0);
-    short bo;
+    int16_t bo;
     KID kid;
     BLCK blck;
     PSCPT pscpt = pvNil;
@@ -1399,7 +1399,7 @@ PSCPT SCPT::PscptRead(PCFL pcfl, CTG ctg, CNO cno)
     if (!pcfl->FFind(ctg, cno, &blck))
         goto LFail;
 
-    if (pvNil == (pgllw = GL::PglRead(&blck, &bo)) || pgllw->CbEntry() != SIZEOF(long))
+    if (pvNil == (pgllw = GL::PglRead(&blck, &bo)) || pgllw->CbEntry() != SIZEOF(int32_t))
     {
         goto LFail;
     }
@@ -1458,7 +1458,7 @@ bool SCPT::FSaveToChunk(PCFL pcfl, CTG ctg, CNO cno, bool fPack)
     AssertPo(pcfl, 0);
     BLCK blck;
     CNO cnoT, cnoStrs;
-    long cb;
+    int32_t cb;
 
     // write the script chunk
     cb = _pgllw->CbOnFile();
@@ -1516,7 +1516,7 @@ bool SCPT::FSaveToChunk(PCFL pcfl, CTG ctg, CNO cno, bool fPack)
 /***************************************************************************
     Assert the validity of a SCPT.
 ***************************************************************************/
-void SCPT::AssertValid(ulong grf)
+void SCPT::AssertValid(uint32_t grf)
 {
     SCPT_PAR::AssertValid(0);
     AssertPo(_pgllw, 0);
@@ -1557,7 +1557,7 @@ STRG::~STRG(void)
 /***************************************************************************
     Assert the validity of a STRG.
 ***************************************************************************/
-void STRG::AssertValid(ulong grf)
+void STRG::AssertValid(uint32_t grf)
 {
     STRG_PAR::AssertValid(0);
     AssertNilOrPo(_pgst, 0);
@@ -1577,11 +1577,11 @@ void STRG::MarkMem(void)
 /***************************************************************************
     Put the string in the registry with the given string id.
 ***************************************************************************/
-bool STRG::FPut(long stid, PSTN pstn)
+bool STRG::FPut(int32_t stid, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long istn;
+    int32_t istn;
 
     if (!_FEnsureGst())
         return fFalse;
@@ -1596,11 +1596,11 @@ bool STRG::FPut(long stid, PSTN pstn)
     Get the string with the given string id.  If the string isn't in the
     registry, sets pstn to an empty string and returns false.
 ***************************************************************************/
-bool STRG::FGet(long stid, PSTN pstn)
+bool STRG::FGet(int32_t stid, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    long istn;
+    int32_t istn;
 
     if (!_FFind(stid, &istn))
     {
@@ -1617,12 +1617,12 @@ bool STRG::FGet(long stid, PSTN pstn)
     id's are not repeated in the near future.  All assigned id's have their
     high bit set.
 ***************************************************************************/
-bool STRG::FAdd(long *pstid, PSTN pstn)
+bool STRG::FAdd(int32_t *pstid, PSTN pstn)
 {
     AssertThis(0);
     AssertVarMem(pstid);
     AssertPo(pstn, 0);
-    long istn;
+    int32_t istn;
 
     for (;;)
     {
@@ -1638,10 +1638,10 @@ bool STRG::FAdd(long *pstid, PSTN pstn)
 /***************************************************************************
     Delete a string from the registry.
 ***************************************************************************/
-void STRG::Delete(long stid)
+void STRG::Delete(int32_t stid)
 {
     AssertThis(0);
-    long istn;
+    int32_t istn;
 
     if (_FFind(stid, &istn))
         _pgst->Delete(istn);
@@ -1652,10 +1652,10 @@ void STRG::Delete(long stid)
     exists, it is replaced.  Returns false if the source string doesn't
     exist.  Can't fail if the source does exist.
 ***************************************************************************/
-bool STRG::FMove(long stidSrc, long stidDst)
+bool STRG::FMove(int32_t stidSrc, int32_t stidDst)
 {
     AssertThis(0);
-    long istnSrc, istnDst;
+    int32_t istnSrc, istnDst;
 
     if (stidSrc == stidDst)
         return _FFind(stidSrc, &istnSrc);
@@ -1680,12 +1680,12 @@ bool STRG::FMove(long stidSrc, long stidDst)
     in the registry.  In either case, sets *pistn with where the string
     should go.
 ***************************************************************************/
-bool STRG::_FFind(long stid, long *pistn)
+bool STRG::_FFind(int32_t stid, int32_t *pistn)
 {
     AssertThis(0);
     AssertVarMem(pistn);
-    long ivMin, ivLim, iv;
-    long stidT;
+    int32_t ivMin, ivLim, iv;
+    int32_t stidT;
 
     if (pvNil == _pgst)
     {
@@ -1721,7 +1721,7 @@ bool STRG::_FEnsureGst(void)
 
     if (pvNil != _pgst)
         return fTrue;
-    _pgst = GST::PgstNew(SIZEOF(long));
+    _pgst = GST::PgstNew(SIZEOF(int32_t));
     AssertThis(0);
 
     return pvNil != _pgst;

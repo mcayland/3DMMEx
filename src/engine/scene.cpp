@@ -63,7 +63,7 @@ enum SEVT
 struct SEVP
 {
     WIT wit;
-    long dts;
+    int32_t dts;
 };
 
 //
@@ -78,8 +78,8 @@ const auto kbTransparent = 250;
 //
 struct SEV
 {
-    long nfrm; // frame number of the event.
-    SEVT sevt; // event type
+    int32_t nfrm; // frame number of the event.
+    SEVT sevt;    // event type
 };
 
 const auto kbomSev = 0xF0000000;
@@ -90,10 +90,10 @@ const auto kbomLong = 0xC0000000;
 //
 struct SCENH
 {
-    short bo;
-    short osk;
-    long nfrmLast;
-    long nfrmFirst;
+    int16_t bo;
+    int16_t osk;
+    int32_t nfrmLast;
+    int32_t nfrmFirst;
     TRANS trans;
 };
 
@@ -117,45 +117,45 @@ const BOM kbomSse = 0xFF000000;
 typedef struct SSE *PSSE;
 struct SSE
 {
-    long vlm;
-    long sty; // sound type
+    int32_t vlm;
+    int32_t sty; // sound type
     bool fLoop;
-    long ctagc;
+    int32_t ctagc;
     //	TAGC _rgtagcSnd[_ctagc]; // variable array of tagcs follows SSE
 
   protected:
-    static long _Cb(long ctagc)
+    static int32_t _Cb(int32_t ctagc)
     {
         return SIZEOF(SSE) + LwMul(ctagc, SIZEOF(TAGC));
     }
     SSE(void){};
 
   public:
-    static PSSE PsseNew(long ctagc);
-    static PSSE PsseNew(long vlm, long sty, bool fLoop, long ctagc, TAGC *prgtagc);
-    static PSSE PsseDupFromGg(PGG pgg, long iv, bool fDupTags = fTrue);
+    static PSSE PsseNew(int32_t ctagc);
+    static PSSE PsseNew(int32_t vlm, int32_t sty, bool fLoop, int32_t ctagc, TAGC *prgtagc);
+    static PSSE PsseDupFromGg(PGG pgg, int32_t iv, bool fDupTags = fTrue);
 
-    PTAG Ptag(long itagc)
+    PTAG Ptag(int32_t itagc)
     {
         PTAGC prgtagc = (PTAGC)PvAddBv(this, SIZEOF(SSE));
         return &(prgtagc[itagc].tag);
     }
-    PTAGC Ptagc(long itagc)
+    PTAGC Ptagc(int32_t itagc)
     {
         PTAGC prgtagc = (PTAGC)PvAddBv(this, SIZEOF(SSE));
         return &(prgtagc[itagc]);
     }
-    CHID *Pchid(long itagc)
+    CHID *Pchid(int32_t itagc)
     {
         PTAGC prgtagc = (PTAGC)PvAddBv(this, SIZEOF(SSE));
         return &(prgtagc[itagc].chid);
     }
-    PSSE PsseAddTagChid(PTAG ptag, long chid);
+    PSSE PsseAddTagChid(PTAG ptag, int32_t chid);
     PSSE PsseDup(void);
-    void PlayAllSounds(PMVIE pmvie, ulong dtsStart = 0);
+    void PlayAllSounds(PMVIE pmvie, uint32_t dtsStart = 0);
     void SwapBytes(void)
     {
-        long itagc;
+        int32_t itagc;
 
         SwapBytesBom(this, kbomSse);
         for (itagc = 0; itagc < ctagc; itagc++)
@@ -164,7 +164,7 @@ struct SSE
             SwapBytesBom(Pchid(itagc), kbomChid);
         }
     }
-    long Cb(void)
+    int32_t Cb(void)
     {
         return SIZEOF(SSE) + LwMul(ctagc, SIZEOF(TAGC));
     }
@@ -216,7 +216,7 @@ class SUNK : public SUNK_PAR
 
   protected:
     TAG _tag;
-    long _icam;
+    int32_t _icam;
     bool _fSetBkgd;
     SUNK(void)
     {
@@ -230,7 +230,7 @@ class SUNK : public SUNK_PAR
     {
         _tag = *ptag;
     }
-    void SetIcam(long icam)
+    void SetIcam(int32_t icam)
     {
         _icam = icam;
     }
@@ -290,7 +290,7 @@ class SUNP : public SUNP_PAR
 
   protected:
     WIT _wit;
-    long _dts;
+    int32_t _dts;
     bool _fAdd;
     SUNP(void)
     {
@@ -304,7 +304,7 @@ class SUNP : public SUNP_PAR
     {
         _wit = wit;
     }
-    void SetDts(long dts)
+    void SetDts(int32_t dts)
     {
         _dts = dts;
     }
@@ -333,9 +333,9 @@ class SUNX : public SUNX_PAR
   protected:
     PTBOX _ptbox;
     bool _fAdd;
-    long _itbox;
-    long _nfrmFirst;
-    long _nfrmLast;
+    int32_t _itbox;
+    int32_t _nfrmFirst;
+    int32_t _nfrmLast;
     SUNX(void)
     {
     }
@@ -344,15 +344,15 @@ class SUNX : public SUNX_PAR
     static PSUNX PsunxNew(void);
     ~SUNX(void);
 
-    void SetNfrmFirst(long nfrm)
+    void SetNfrmFirst(int32_t nfrm)
     {
         _nfrmFirst = nfrm;
     }
-    void SetNfrmLast(long nfrm)
+    void SetNfrmLast(int32_t nfrm)
     {
         _nfrmLast = nfrm;
     }
-    void SetItbox(long itbox)
+    void SetItbox(int32_t itbox)
     {
         _itbox = itbox;
     }
@@ -383,8 +383,8 @@ class SUNS : public SUNS_PAR
     ASSERT
 
   protected:
-    PSSE _psse; // may be pvNil
-    long _sty;  // sty to use if _psse is pvNil
+    PSSE _psse;   // may be pvNil
+    int32_t _sty; // sty to use if _psse is pvNil
 
     SUNS(void)
     {
@@ -404,7 +404,7 @@ class SUNS : public SUNS_PAR
         _sty = _psse->sty;
         return fTrue;
     }
-    void SetSty(long sty)
+    void SetSty(int32_t sty)
     {
         _sty = sty;
     }
@@ -568,7 +568,7 @@ SCEN::~SCEN(void)
 {
     AssertBaseThis(0);
 
-    long isev;
+    int32_t isev;
     PSEV qsev;
     PTBOX ptbox;
     PACTR pactr;
@@ -636,7 +636,7 @@ SCEN::~SCEN(void)
 
             case sevtPlaySnd: {
                 PSSE psse;
-                long itagc;
+                int32_t itagc;
                 psse = (PSSE)_pggsevFrm->QvGet(isev);
                 for (itagc = 0; itagc < psse->ctagc; itagc++)
                 {
@@ -735,8 +735,8 @@ void SCEN::MarkMem(void)
 {
     AssertThis(0);
 
-    long iactr;
-    long itbox;
+    int32_t iactr;
+    int32_t itbox;
     PACTR pactr;
     PTBOX ptbox;
 
@@ -767,9 +767,9 @@ void SCEN::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SCEN.
 ***************************************************************************/
-void SCEN::AssertValid(ulong grf)
+void SCEN::AssertValid(uint32_t grf)
 {
-    long isev;
+    int32_t isev;
     SEV sev;
 
     SCEN_PAR::AssertValid(fobjAllocated);
@@ -906,7 +906,7 @@ bool SCEN::FSetName(PSTN pstn)
  *
  ****************************************************/
 
-bool SCEN::FGotoFrm(long nfrm)
+bool SCEN::FGotoFrm(int32_t nfrm)
 {
     AssertThis(0);
 
@@ -914,8 +914,8 @@ bool SCEN::FGotoFrm(long nfrm)
     SEV sev;
     PMVU pmvu;
     void *qvVar;
-    long isev;
-    long nfrmOld = _nfrmCur;
+    int32_t isev;
+    int32_t nfrmOld = _nfrmCur;
 
     if (nfrm < _nfrmCur)
     {
@@ -1078,12 +1078,12 @@ void SCEN::_DoPrerenderingWork(bool fStartNow)
 {
     AssertThis(0);
 
-    long isev;
+    int32_t isev;
     SEV sev;
-    long nfrmNextChange;
-    long ipactr;
+    int32_t nfrmNextChange;
+    int32_t ipactr;
     PACTR pactr;
-    long cactrPrerendered;
+    int32_t cactrPrerendered;
 
     //
     // If the movie was playing and there was a camera view change
@@ -1199,7 +1199,7 @@ void SCEN::_EndPrerendering(void)
 {
     AssertThis(0);
 
-    long ipactr;
+    int32_t ipactr;
     PACTR pactr;
 
     // Show all the actors that were being prerendered
@@ -1227,14 +1227,14 @@ void SCEN::_EndPrerendering(void)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FReplayFrm(ulong grfscen)
+bool SCEN::FReplayFrm(uint32_t grfscen)
 {
     AssertThis(0);
 
     SEV sev;
     void *qvVar;
-    long isev, iactr;
-    long nfrmOld = _nfrmCur;
+    int32_t isev, iactr;
+    int32_t nfrmOld = _nfrmCur;
     PACTR pactr;
 
     //
@@ -1291,8 +1291,8 @@ void SCEN::InvalFrmRange(void)
 
     PACTR pactr;
     PTBOX ptbox;
-    long ipo;
-    long nfrmStart, nfrmLast;
+    int32_t ipo;
+    int32_t nfrmStart, nfrmLast;
 
     for (ipo = 0; ipo < _pglpactr->IvMac(); ipo++)
     {
@@ -1349,7 +1349,7 @@ void SCEN::InvalFrmRange(void)
  *	fTrue if the event was played, fFalse in the case of failure.
  *
  ****************************************************/
-bool SCEN::_FPlaySev(PSEV psev, void *qvVar, ulong grfscen)
+bool SCEN::_FPlaySev(PSEV psev, void *qvVar, uint32_t grfscen)
 {
     AssertThis(0);
     AssertVarMem(psev);
@@ -1359,7 +1359,7 @@ bool SCEN::_FPlaySev(PSEV psev, void *qvVar, ulong grfscen)
     PBKGD pbkgd;
     TAG tag;
     WIT wit;
-    long dts;
+    int32_t dts;
 
     switch (psev->sevt)
     {
@@ -1438,7 +1438,7 @@ bool SCEN::_FPlaySev(PSEV psev, void *qvVar, ulong grfscen)
 
     case sevtPause:
 
-        wit = (WIT)(*(long *)qvVar);
+        wit = (WIT)(*(int32_t *)qvVar);
         Pmvie()->Pmcc()->PauseType(wit);
 
         if (grfscen & fscenPauses)
@@ -1446,7 +1446,7 @@ bool SCEN::_FPlaySev(PSEV psev, void *qvVar, ulong grfscen)
             return (fTrue);
         }
 
-        dts = *((long *)qvVar + 1);
+        dts = *((int32_t *)qvVar + 1);
         Pmvie()->DoPause(wit, dts);
         break;
 
@@ -1486,7 +1486,7 @@ bool SCEN::_FPlaySev(PSEV psev, void *qvVar, ulong grfscen)
         {
             return (fTrue);
         }
-        if (!_pbkgd->FSetCamera(_pmvie->Pbwld(), *(long *)qvVar))
+        if (!_pbkgd->FSetCamera(_pmvie->Pbwld(), *(int32_t *)qvVar))
         {
             return (fFalse);
         }
@@ -1520,7 +1520,7 @@ bool SCEN::_FUnPlaySev(PSEV psev, void *qvVar)
     AssertVarMem(psev);
 
     SEV sev;
-    long isev;
+    int32_t isev;
     PSEV qsevTmp;
 
     switch (psev->sevt)
@@ -1601,12 +1601,12 @@ bool SCEN::_FUnPlaySev(PSEV psev, void *qvVar)
  *	None.
  *
  ****************************************************/
-void SCEN::_MoveBackFirstFrame(long nfrm)
+void SCEN::_MoveBackFirstFrame(int32_t nfrm)
 {
     AssertThis(0);
     Assert(nfrm < _nfrmFirst, "Can only be called to extend scene back.");
 
-    long isev;
+    int32_t isev;
     SEV sev;
 
     //
@@ -1657,7 +1657,7 @@ void SCEN::_MoveBackFirstFrame(long nfrm)
  *	fTrue, if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FAddSndCore(bool fLoop, bool fQueue, long vlm, long sty, long ctag, PTAG prgtag)
+bool SCEN::FAddSndCore(bool fLoop, bool fQueue, int32_t vlm, int32_t sty, int32_t ctag, PTAG prgtag)
 {
     AssertThis(0);
     AssertPvCb(prgtag, LwMul(ctag, SIZEOF(TAG)));
@@ -1668,12 +1668,12 @@ bool SCEN::FAddSndCore(bool fLoop, bool fQueue, long vlm, long sty, long ctag, P
     SEV sev;
     PSSE psseOld;
     PSSE psseNew;
-    long isev;
+    int32_t isev;
     CHID chid;
-    long isevSnd = ivNil;
+    int32_t isevSnd = ivNil;
     PTAG ptag;
     PMSND pmsnd;
-    long itag, itagBase;
+    int32_t itag, itagBase;
 
     //
     // Find any other sevtPlaySnd events in this frame with the same sty
@@ -1706,7 +1706,7 @@ bool SCEN::FAddSndCore(bool fLoop, bool fQueue, long vlm, long sty, long ctag, P
     if (!fQueue)
     {
         PTAGC prgtagc;
-        long itagc;
+        int32_t itagc;
 
         if (!FAllocPv((void **)&prgtagc, LwMul(SIZEOF(TAGC), ctag), fmemClear, mprNormal))
             return fFalse;
@@ -1744,7 +1744,7 @@ bool SCEN::FAddSndCore(bool fLoop, bool fQueue, long vlm, long sty, long ctag, P
         {
             // Delete old event, if any
             PSSE psse;
-            long itagc;
+            int32_t itagc;
             psse = (PSSE)_pggsevFrm->QvGet(isevSnd);
             for (itagc = 0; itagc < psse->ctagc; itagc++)
             {
@@ -1842,7 +1842,7 @@ bool SCEN::FAddSndCore(bool fLoop, bool fQueue, long vlm, long sty, long ctag, P
  *	fTrue, if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FAddSndCoreTagc(bool fLoop, bool fQueue, long vlm, long sty, long ctagc, PTAGC prgtagc)
+bool SCEN::FAddSndCoreTagc(bool fLoop, bool fQueue, int32_t vlm, int32_t sty, int32_t ctagc, PTAGC prgtagc)
 {
     AssertThis(0);
     AssertPvCb(prgtagc, LwMul(ctagc, SIZEOF(TAGC)));
@@ -1853,8 +1853,8 @@ bool SCEN::FAddSndCoreTagc(bool fLoop, bool fQueue, long vlm, long sty, long cta
     SEV sev;
     PSSE psseOld;
     PSSE psseNew;
-    long isev;
-    long isevSnd = ivNil;
+    int32_t isev;
+    int32_t isevSnd = ivNil;
 
     //
     // Find any other sevtPlaySnd events in this frame with the same sty
@@ -1899,7 +1899,7 @@ bool SCEN::FAddSndCoreTagc(bool fLoop, bool fQueue, long vlm, long sty, long cta
         {
             // Delete old event, if any
             PSSE psse;
-            long itagc;
+            int32_t itagc;
             psse = (PSSE)_pggsevFrm->QvGet(isevSnd);
             for (itagc = 0; itagc < psse->ctagc; itagc++)
             {
@@ -1941,7 +1941,7 @@ bool SCEN::FAddSndCoreTagc(bool fLoop, bool fQueue, long vlm, long sty, long cta
  *	fTrue, if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FAddSnd(PTAG ptag, bool fLoop, bool fQueue, long vlm, long sty)
+bool SCEN::FAddSnd(PTAG ptag, bool fLoop, bool fQueue, int32_t vlm, int32_t sty)
 {
     AssertThis(0);
     AssertVarMem(ptag);
@@ -2007,13 +2007,13 @@ bool SCEN::FAddSnd(PTAG ptag, bool fLoop, bool fQueue, long vlm, long sty)
  *  None
  *
  ****************************************************/
-void SCEN::RemSndCore(long sty)
+void SCEN::RemSndCore(int32_t sty)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
 
     PSEV qsev;
-    long isev;
+    int32_t isev;
 
     //
     // Find the sound
@@ -2034,7 +2034,7 @@ void SCEN::RemSndCore(long sty)
             // Remove it
             //
             PSSE psse;
-            long itagc;
+            int32_t itagc;
             psse = (PSSE)_pggsevFrm->QvGet(isev);
             for (itagc = 0; itagc < psse->ctagc; itagc++)
             {
@@ -2071,14 +2071,14 @@ void SCEN::RemSndCore(long sty)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FRemSnd(long sty)
+bool SCEN::FRemSnd(int32_t sty)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
 
     PSUNS psuns;
     PSSE psse = pvNil;
-    long isev;
+    int32_t isev;
     PSEV qsev;
 
     psuns = SUNS::PsunsNew();
@@ -2143,14 +2143,14 @@ bool SCEN::FRemSnd(long sty)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FGetSnd(long sty, bool *pfFound, PSSE *ppsse)
+bool SCEN::FGetSnd(int32_t sty, bool *pfFound, PSSE *ppsse)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
     AssertVarMem(ppsse);
 
     PSEV qsev;
-    long isev;
+    int32_t isev;
 
     *pfFound = fFalse;
     //
@@ -2204,8 +2204,8 @@ void SCEN::PlayBkgdSnd(void)
 {
     AssertThis(0);
 
-    ulong dtsStart;
-    ulong dfrm;
+    uint32_t dtsStart;
+    uint32_t dfrm;
 
     if (pvNil != _psseBkgd)
     {
@@ -2228,7 +2228,7 @@ void SCEN::PlayBkgdSnd(void)
  *  fFalse if an error occurs
  *
  ****************************************************/
-bool SCEN::FQuerySnd(long sty, PGL *ppgltagSnd, long *pvlm, bool *pfLoop)
+bool SCEN::FQuerySnd(int32_t sty, PGL *ppgltagSnd, int32_t *pvlm, bool *pfLoop)
 {
     AssertThis(0);
     AssertVarMem(ppgltagSnd);
@@ -2237,7 +2237,7 @@ bool SCEN::FQuerySnd(long sty, PGL *ppgltagSnd, long *pvlm, bool *pfLoop)
 
     PSSE psse;
     bool fFound;
-    long itag;
+    int32_t itag;
 
     *ppgltagSnd = pvNil;
 
@@ -2280,14 +2280,14 @@ bool SCEN::FQuerySnd(long sty, PGL *ppgltagSnd, long *pvlm, bool *pfLoop)
  *  none
  *
  ****************************************************/
-void SCEN::SetSndVlmCore(long sty, long vlmNew)
+void SCEN::SetSndVlmCore(int32_t sty, int32_t vlmNew)
 {
     AssertThis(0);
     AssertIn(sty, 0, styLim);
     AssertIn(vlmNew, 0, kvlmFull + 1);
 
     PSEV qsev;
-    long isev;
+    int32_t isev;
     PSSE psse;
 
     //
@@ -2331,7 +2331,7 @@ void SCEN::SetSndVlmCore(long sty, long vlmNew)
 void SCEN::UpdateSndFrame(void)
 {
     bool fSoundInFrame = fFalse;
-    long iv = _isevFrmLim;
+    int32_t iv = _isevFrmLim;
 
     while (iv-- > 0)
     {
@@ -2381,7 +2381,7 @@ LDone:
  *	fTrue, if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::_FAddSev(PSEV psev, long cbVar, void *pvVar)
+bool SCEN::_FAddSev(PSEV psev, int32_t cbVar, void *pvVar)
 {
     AssertThis(0);
     AssertVarMem(psev);
@@ -2524,8 +2524,8 @@ bool SCEN::FAddActrCore(ACTR *pactr)
 
     PSEV qsev;
     SEV sev;
-    long isev;
-    long ipactr;
+    int32_t isev;
+    int32_t ipactr;
     STN stn;
     PACTR pactrOld;
     bool fRetValue;
@@ -2677,13 +2677,13 @@ bool SCEN::FAddActr(ACTR *pactr)
  *  None
  *
  ****************************************************/
-void SCEN::RemActrCore(long arid)
+void SCEN::RemActrCore(int32_t arid)
 {
     AssertThis(0);
 
     PSEV qsev;
     PACTR pactrTmp;
-    long isev;
+    int32_t isev;
 
     //
     // Check if actor is in Scene already.
@@ -2772,13 +2772,13 @@ void SCEN::RemActrCore(long arid)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FRemActr(long arid)
+bool SCEN::FRemActr(int32_t arid)
 {
     AssertThis(0);
     AssertIn(arid, 0, 500);
 
     PSUNA psuna;
-    long ipactr;
+    int32_t ipactr;
     PACTR pactr;
 
     //
@@ -2832,14 +2832,14 @@ bool SCEN::FRemActr(long arid)
  *  Pointer to the actor, pvNil if none.
  *
  ****************************************************/
-ACTR *SCEN::PactrFromPt(long xp, long yp, long *pibset)
+ACTR *SCEN::PactrFromPt(int32_t xp, int32_t yp, int32_t *pibset)
 {
     AssertThis(0);
     AssertVarMem(pibset);
 
     ACTR *pactr;
     BODY *pbody;
-    long ipactr;
+    int32_t ipactr;
 
     pbody = BODY::PbodyClicked(xp, yp, Pmvie()->Pbwld(), pibset);
     if (pvNil == pbody)
@@ -2887,7 +2887,7 @@ bool SCEN::FAddTboxCore(PTBOX ptbox)
 #ifdef DEBUG
 
     PSEV qsev;
-    long isev;
+    int32_t isev;
 
     //
     // Search for duplicate tbox
@@ -2944,8 +2944,8 @@ bool SCEN::FAddTboxCore(PTBOX ptbox)
 bool SCEN::FAddTbox(PTBOX ptbox)
 {
     PSUNX psunx;
-    long itbox;
-    long nfrmFirst, nfrmLast;
+    int32_t itbox;
+    int32_t nfrmFirst, nfrmLast;
 
     psunx = SUNX::PsunxNew();
 
@@ -3008,9 +3008,9 @@ bool SCEN::FRemTboxCore(PTBOX ptbox)
     AssertPo(ptbox, 0);
 
     PSEV qsev;
-    long isev;
-    long itbox;
-    long nfrmStart, nfrmLast;
+    int32_t isev;
+    int32_t itbox;
+    int32_t nfrmStart, nfrmLast;
 
     //
     // Check if currently selected tbox.
@@ -3097,7 +3097,7 @@ bool SCEN::FRemTbox(PTBOX ptbox)
     AssertPo(ptbox, 0);
 
     PSUNX psunx;
-    long nfrmFirst, nfrmLast;
+    int32_t nfrmFirst, nfrmLast;
 
     psunx = SUNX::PsunxNew();
 
@@ -3141,12 +3141,12 @@ bool SCEN::FRemTbox(PTBOX ptbox)
  *  Pointer to the text box if itbox is valid, else pvNil.
  *
  ****************************************************/
-TBOX *SCEN::PtboxFromItbox(long itbox)
+TBOX *SCEN::PtboxFromItbox(int32_t itbox)
 {
     AssertThis(0);
     Assert(itbox >= 0, "Bad index value");
 
-    long ipo;
+    int32_t ipo;
     PTBOX ptbox;
 
     for (ipo = 0; ipo < _pglptbox->IvMac(); ipo++)
@@ -3182,18 +3182,18 @@ TBOX *SCEN::PtboxFromItbox(long itbox)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FPauseCore(WIT *pwit, long *pdts)
+bool SCEN::FPauseCore(WIT *pwit, int32_t *pdts)
 {
     AssertThis(0);
     AssertIn(*pwit, witNil, witLim);
     AssertIn(*pdts, 0, klwMax);
 
     SEV sev;
-    long isev;
+    int32_t isev;
     PSEV qsev;
     SEVP sevp;
     WIT witOld;
-    long dtsOld;
+    int32_t dtsOld;
 
     //
     // Start at the first event of this frame.
@@ -3245,7 +3245,7 @@ bool SCEN::FPauseCore(WIT *pwit, long *pdts)
     sev.sevt = sevtPause;
     sevp.wit = *pwit;
     sevp.dts = *pdts;
-    if (!_FAddSev(&sev, SIZEOF(long) * 2, &sevp))
+    if (!_FAddSev(&sev, SIZEOF(int32_t) * 2, &sevp))
     {
         return (fFalse);
     }
@@ -3269,7 +3269,7 @@ bool SCEN::FPauseCore(WIT *pwit, long *pdts)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FPause(WIT wit, long dts)
+bool SCEN::FPause(WIT wit, int32_t dts)
 {
     PSUNP psunp;
 
@@ -3320,12 +3320,12 @@ bool SCEN::FSetBkgdCore(PTAG ptag, PTAG ptagOld)
     AssertVarMem(ptagOld);
 
     SEV sev;
-    long isev;
+    int32_t isev;
     TAG tag;
-    long vlm;
+    int32_t vlm;
     bool fLoop;
     PMSND pmsnd;
-    long sty;
+    int32_t sty;
 
     if (_pbkgd != pvNil)
     {
@@ -3452,7 +3452,7 @@ bool SCEN::FSetBkgd(PTAG ptag)
 
     TAG tagOld;
     PSUNK psunk;
-    long icam;
+    int32_t icam;
 
     if (_pbkgd != pvNil)
     {
@@ -3465,7 +3465,7 @@ bool SCEN::FSetBkgd(PTAG ptag)
     }
 
 #ifdef DEBUG
-    long lw;
+    int32_t lw;
 
     TrashVar(&lw);
     Assert(tagOld.sid != lw, "Use CORE function to set first background");
@@ -3520,7 +3520,7 @@ bool SCEN::FIsEmpty(void)
 {
     AssertThis(0);
 
-    long isev;
+    int32_t isev;
     SEV sev;
 
     if ((_pggsevStart->IvMac() != 1) || ((_nfrmLast - _nfrmFirst) > 0))
@@ -3553,7 +3553,7 @@ bool SCEN::FIsEmpty(void)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FChangeCamCore(long icam, long *picamOld)
+bool SCEN::FChangeCamCore(int32_t icam, int32_t *picamOld)
 {
     AssertThis(0);
     AssertIn(icam, 0, 500);
@@ -3561,7 +3561,7 @@ bool SCEN::FChangeCamCore(long icam, long *picamOld)
 
     PSEV qsev, qsevOld;
     SEV sev;
-    long isev, isevCam;
+    int32_t isev, isevCam;
 
     //
     // Check for a current camera change.
@@ -3642,7 +3642,7 @@ bool SCEN::FChangeCamCore(long icam, long *picamOld)
     sev.nfrm = _nfrmCur;
     sev.sevt = sevtChngCamera;
 
-    if (_FAddSev(&sev, SIZEOF(long), &icam))
+    if (_FAddSev(&sev, SIZEOF(int32_t), &icam))
     {
         if (_FPlaySev(&sev, &icam, _grfscen))
         {
@@ -3663,7 +3663,7 @@ LSuccess:
     //
     for (isev = _isevFrmLim; isev < _pggsevFrm->IvMac(); isev++)
     {
-        long icamNext;
+        int32_t icamNext;
         qsev = (PSEV)_pggsevFrm->QvFixedGet(isev);
         if (qsev->sevt == sevtChngCamera)
         {
@@ -3693,9 +3693,9 @@ LSuccess:
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::FChangeCam(long icam)
+bool SCEN::FChangeCam(int32_t icam)
 {
-    long icamOld;
+    int32_t icamOld;
     PSUNK psunk;
     TAG tagCam;
 
@@ -3765,11 +3765,11 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
     PSCEN pscen = pvNil;
     BLCK blck;
     KID kid;
-    long isevFrm = 0;
-    long isevStart = 0;
+    int32_t isevFrm = 0;
+    int32_t isevStart = 0;
     SEV sev;
     PSEV qsev;
-    short bo;
+    int16_t bo;
     PACTR pactr;
     PTBOX ptbox;
     CHID chid;
@@ -3884,7 +3884,7 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
         case sevtPlaySnd:
 
             PSSE psse;
-            long itag;
+            int32_t itag;
 
             psse = SSE::PsseDupFromGg(pscen->_pggsevFrm, isevFrm, fFalse);
             if (pvNil == psse)
@@ -4073,7 +4073,7 @@ LFail1:
 
         case sevtPlaySnd:
             PSSE qsse;
-            long itag;
+            int32_t itag;
 
             qsse = (PSSE)pscen->_pggsevFrm->QvGet(isevFrm);
             if (qsse->Cb() != (pscen->_pggsevFrm->CbFixed() + pscen->_pggsevFrm->Cb(isevFrm)))
@@ -4121,7 +4121,7 @@ bool SCEN::FPlayStartEvents(bool fActorsOnly)
 {
     AssertThis(0);
 
-    long isev;
+    int32_t isev;
 
     //
     // This needs to play all the events in _pggsevStart
@@ -4154,7 +4154,7 @@ bool SCEN::FGetTagBkgd(PTAG ptag)
     AssertVarMem(ptag);
 
     SEV sev;
-    long isevStart;
+    int32_t isevStart;
 
     for (isevStart = 0; isevStart < _pggsevStart->IvMac(); isevStart++)
     {
@@ -4191,9 +4191,9 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
     CHID chidActr, chidTbox;
     CNO cnoChild, cnoFrmEvent, cnoStartEvent;
     SCENH scenh;
-    long isevFrm = -1;
-    long isevStart = -1;
-    long cb;
+    int32_t isevFrm = -1;
+    int32_t isevStart = -1;
+    int32_t cb;
     BLCK blck;
     PCFL pcfl;
 
@@ -4233,7 +4233,7 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
         case sevtPlaySnd: {
             bool fSuccess = fFalse;
             PSSE psse;
-            long itag;
+            int32_t itag;
             KID kid;
 
             psse = SSE::PsseDupFromGg(_pggsevFrm, isevFrm);
@@ -4278,7 +4278,7 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
         }
 
         case sevtChngCamera:
-            if (!pggFrmTemp->FInsert(isevFrm, SIZEOF(long), _pggsevFrm->QvGet(isevFrm), &sev))
+            if (!pggFrmTemp->FInsert(isevFrm, SIZEOF(int32_t), _pggsevFrm->QvGet(isevFrm), &sev))
             {
                 goto LFail;
             }
@@ -4351,7 +4351,7 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
             break;
 
         case sevtChngCamera:
-            if (!pggStartTemp->FInsert(isevStart, SIZEOF(long), _pggsevStart->QvGet(isevStart), &sev))
+            if (!pggStartTemp->FInsert(isevStart, SIZEOF(int32_t), _pggsevStart->QvGet(isevStart), &sev))
             {
                 goto LFail;
             }
@@ -4509,8 +4509,8 @@ bool SCEN::FResolveAllSndTags(CNO cnoScen)
 {
     AssertThis(0);
 
-    long ipactr, ipactrMac;
-    long isev, isevMac;
+    int32_t ipactr, ipactrMac;
+    int32_t isev, isevMac;
     bool fSuccess = fFalse;
 
     ipactrMac = _pglpactr->IvMac();
@@ -4527,7 +4527,7 @@ bool SCEN::FResolveAllSndTags(CNO cnoScen)
     isevMac = _pggsevFrm->IvMac();
     for (isev = 0; isev < isevMac; isev++)
     {
-        long itag;
+        int32_t itag;
         PSSE psse;
         SEV sev;
 
@@ -4571,7 +4571,7 @@ void SCEN::RemActrsFromRollCall(bool fDelIfOnlyRef)
     AssertThis(0);
 
     PACTR pactr;
-    long ipactr;
+    int32_t ipactr;
 
     for (ipactr = 0; ipactr < _pglpactr->IvMac(); ipactr++)
     {
@@ -4596,7 +4596,7 @@ bool SCEN::FAddActrsToRollCall(void)
     AssertThis(0);
 
     PACTR pactr;
-    long ipactr;
+    int32_t ipactr;
     STN stn;
 
     for (ipactr = 0; ipactr < _pglpactr->IvMac(); ipactr++)
@@ -4658,14 +4658,14 @@ void SCEN::_UpdateThumbnail(void)
 {
     AssertThis(0);
 
-    long nfrmCur;
+    int32_t nfrmCur;
     PGPT pgpt, pgptThumb;
     PMVU pmvu;
     PTBOX ptbox = PtboxSelected();
     PACTR pactr = PactrSelected();
     RC rc, rcThumb;
-    long grfscenSave;
-    long dtimSnd;
+    int32_t grfscenSave;
+    int32_t dtimSnd;
 
     dtimSnd = Pmvie()->Pmsq()->DtimSnd();
     Pmvie()->Pmsq()->SndOff();
@@ -4869,13 +4869,13 @@ bool SCEN::FPasteActr(PACTR pactr)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::_FForceActorsToFrm(long nfrm, bool *pfSoundInFrame)
+bool SCEN::_FForceActorsToFrm(int32_t nfrm, bool *pfSoundInFrame)
 {
     AssertThis(0);
     AssertIn(nfrm, klwMin, klwMax);
 
     PACTR pactr;
-    long iactr;
+    int32_t iactr;
 
     for (iactr = 0; iactr < _pglpactr->IvMac(); iactr++)
     {
@@ -4902,13 +4902,13 @@ bool SCEN::_FForceActorsToFrm(long nfrm, bool *pfSoundInFrame)
  *  fTrue if successful, else fFalse.
  *
  ****************************************************/
-bool SCEN::_FForceTboxesToFrm(long nfrm)
+bool SCEN::_FForceTboxesToFrm(int32_t nfrm)
 {
     AssertThis(0);
     AssertIn(nfrm, klwMin, klwMax);
 
     PTBOX ptbox;
-    long itbox;
+    int32_t itbox;
 
     for (itbox = 0; itbox < _pglptbox->IvMac(); itbox++)
     {
@@ -4940,8 +4940,8 @@ void SCEN::HideTboxes(void)
     AssertThis(0);
 
     PTBOX ptbox;
-    long iptbox;
-    long nfrmStart, nfrmLast;
+    int32_t iptbox;
+    int32_t nfrmStart, nfrmLast;
 
     for (iptbox = 0; iptbox < _pglptbox->IvMac(); iptbox++)
     {
@@ -4969,7 +4969,7 @@ void SCEN::HideActors(void)
     AssertThis(0);
 
     PACTR pactr;
-    long ipactr;
+    int32_t ipactr;
 
     for (ipactr = 0; ipactr < _pglpactr->IvMac(); ipactr++)
     {
@@ -4994,7 +4994,7 @@ void SCEN::ShowActors(void)
     AssertThis(0);
 
     PACTR pactr;
-    long ipactr;
+    int32_t ipactr;
 
     for (ipactr = 0; ipactr < _pglpactr->IvMac(); ipactr++)
     {
@@ -5065,15 +5065,15 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
 
     BLCK blck;
     KID kid;
-    long isev;
+    int32_t isev;
     PSEV qsev;
-    short bo;
+    int16_t bo;
     PGG pggsev;
     TAG tag;
     TAG tagBkgd;
     PGL pgltagSrc;
     TAG tagSrc;
-    long itagSrc;
+    int32_t itagSrc;
     CHID chid;
 
     tagBkgd.sid = ksidInvalid;
@@ -5261,7 +5261,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
         case sevtPlaySnd:
 
             PSSE psse;
-            long itag;
+            int32_t itag;
 
             psse = SSE::PsseDupFromGg(pggsev, isev, fFalse);
             if (pvNil == psse)
@@ -5315,12 +5315,12 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
  *   pvNil if failure, else the actor.
  *
  ****************************************************/
-PACTR SCEN::PactrFromArid(long arid)
+PACTR SCEN::PactrFromArid(int32_t arid)
 {
     AssertThis(0);
     Assert(arid != aridNil, "Bad long");
 
-    long iactr;
+    int32_t iactr;
     PACTR pactr;
 
     //
@@ -5357,8 +5357,8 @@ bool SCEN::FChopCore()
     PTBOX ptbox;
     PACTR pactr;
     bool fAlive;
-    long ipo;
-    long nfrmStart, nfrmLast;
+    int32_t ipo;
+    int32_t nfrmStart, nfrmLast;
 
     if (_nfrmCur == _nfrmLast)
     {
@@ -5509,8 +5509,8 @@ bool SCEN::FChopBackCore()
     SEV sev;
     bool fAlive;
     bool fCopyCam;
-    long ipo;
-    long nfrmStart, nfrmLast;
+    int32_t ipo;
+    int32_t nfrmStart, nfrmLast;
 
     if (_nfrmCur == _nfrmFirst)
     {
@@ -5689,11 +5689,11 @@ bool SCEN::FStartPlaying()
 {
     AssertThis(0);
 
-    long ipactr, iptbox;
+    int32_t ipactr, iptbox;
     PACTR pactr;
     PTBOX ptbox;
     PTBXG ptbxg;
-    long nfrmFirst, nfrmLast;
+    int32_t nfrmFirst, nfrmLast;
 
     //
     // Make sure all actors have state variables updated
@@ -5741,7 +5741,7 @@ void SCEN::StopPlaying()
 {
     AssertThis(0);
 
-    long itbox;
+    int32_t itbox;
     PTBOX ptbox;
 
     _EndPrerendering(); // Stop prerendering
@@ -5934,7 +5934,7 @@ void SUNT::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNT.
 ***************************************************************************/
-void SUNT::AssertValid(ulong grf)
+void SUNT::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -5985,7 +5985,7 @@ bool SUNS::FDo(PDOCB pdocb)
     AssertThis(0);
     AssertPo(pdocb, 0);
 
-    long isevSnd = ivNil;
+    int32_t isevSnd = ivNil;
     bool fFound;
     PSSE psseOld = pvNil;
 
@@ -6103,7 +6103,7 @@ void SUNS::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNS.
 ***************************************************************************/
-void SUNS::AssertValid(ulong grf)
+void SUNS::AssertValid(uint32_t grf)
 {
     SUNS_PAR::AssertValid(grf);
     if (_psse != pvNil)
@@ -6335,7 +6335,7 @@ void SUNA::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNA.
 ***************************************************************************/
-void SUNA::AssertValid(ulong grf)
+void SUNA::AssertValid(uint32_t grf)
 {
     AssertPo(_pactr, 0);
 }
@@ -6574,7 +6574,7 @@ void SUNX::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNX.
 ***************************************************************************/
-void SUNX::AssertValid(ulong grf)
+void SUNX::AssertValid(uint32_t grf)
 {
     AssertPo(_ptbox, 0);
 }
@@ -6687,7 +6687,7 @@ void SUNR::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNR.
 ***************************************************************************/
-void SUNR::AssertValid(ulong grf)
+void SUNR::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -6800,7 +6800,7 @@ void SUNP::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNP.
 ***************************************************************************/
-void SUNP::AssertValid(ulong grf)
+void SUNP::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -6850,7 +6850,7 @@ bool SUNK::FDo(PDOCB pdocb)
     AssertThis(0);
 
     TAG tagOld;
-    long icamOld, icam;
+    int32_t icamOld, icam;
 
     if (!_pmvie->FSwitchScen(_iscen))
     {
@@ -6941,7 +6941,7 @@ void SUNK::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNK.
 ***************************************************************************/
-void SUNK::AssertValid(ulong grf)
+void SUNK::AssertValid(uint32_t grf)
 {
 }
 #endif
@@ -7138,7 +7138,7 @@ void SUNC::MarkMem(void)
 /***************************************************************************
     Assert the validity of the SUNC.
 ***************************************************************************/
-void SUNC::AssertValid(ulong grf)
+void SUNC::AssertValid(uint32_t grf)
 {
     AssertNilOrPo(_pcrf, grf);
 }
@@ -7147,7 +7147,7 @@ void SUNC::AssertValid(ulong grf)
 /***************************************************************************
     Static function to allocate a SSE with room for ctag TAGs.
 ***************************************************************************/
-PSSE SSE::PsseNew(long ctag)
+PSSE SSE::PsseNew(int32_t ctag)
 {
     Assert(ctag > 0, 0);
 
@@ -7161,12 +7161,12 @@ PSSE SSE::PsseNew(long ctag)
 /***************************************************************************
     Creates a new SSE
 ***************************************************************************/
-PSSE SSE::PsseNew(long vlm, long sty, bool fLoop, long ctagc, TAGC *prgtagc)
+PSSE SSE::PsseNew(int32_t vlm, int32_t sty, bool fLoop, int32_t ctagc, TAGC *prgtagc)
 {
     Assert(ctagc > 0, 0);
     AssertPvCb(prgtagc, LwMul(ctagc, SIZEOF(TAGC)));
     PSSE psse;
-    long itagc;
+    int32_t itagc;
 
     psse = PsseNew(ctagc);
     if (pvNil == psse)
@@ -7194,7 +7194,7 @@ void ReleasePpsse(PSSE *ppsse)
         return;
 
     PSSE psse = *ppsse;
-    long itagc;
+    int32_t itagc;
 
     AssertIn(psse->ctagc, 0, 1000); // sanity check on ctagc
     AssertIn(psse->sty, styNil, styLim);
@@ -7213,15 +7213,15 @@ void ReleasePpsse(PSSE *ppsse)
     because I can't do a pgg->Get() since the SSE is variable-sized, and
     I need to do QvGet twice since I'm allocating memory in this function.
 ***************************************************************************/
-PSSE SSE::PsseDupFromGg(PGG pgg, long iv, bool fDupTags)
+PSSE SSE::PsseDupFromGg(PGG pgg, int32_t iv, bool fDupTags)
 {
     AssertPo(pgg, 0);
     AssertIn(iv, 0, pgg->IvMac());
     Assert(pgg->Cb(iv) >= SIZEOF(SSE), "variable part too small");
 
-    long ctagc;
+    int32_t ctagc;
     PSSE psse;
-    long itagc;
+    int32_t itagc;
 
     ctagc = ((PSSE)pgg->QvGet(iv))->ctagc;
 
@@ -7251,7 +7251,7 @@ PSSE SSE::PsseDupFromGg(PGG pgg, long iv, bool fDupTags)
 /***************************************************************************
     Returns a PSSE just like this SSE except with ptag & chid added
 ***************************************************************************/
-PSSE SSE::PsseAddTagChid(PTAG ptag, long chid)
+PSSE SSE::PsseAddTagChid(PTAG ptag, int32_t chid)
 {
     AssertVarMem(ptag);
 
@@ -7278,7 +7278,7 @@ PSSE SSE::PsseAddTagChid(PTAG ptag, long chid)
 PSSE SSE::PsseDup(void)
 {
     PSSE psse;
-    long itagc;
+    int32_t itagc;
 
     if (!FAllocPv((void **)&psse, SIZEOF(SSE) + LwMul(ctagc, SIZEOF(TAGC)), fmemNil, mprNormal))
     {
@@ -7293,11 +7293,11 @@ PSSE SSE::PsseDup(void)
 /***************************************************************************
     Play all sounds in this SSE	-> Enqueue the sounds in the SSE
 ***************************************************************************/
-void SSE::PlayAllSounds(PMVIE pmvie, ulong dtsStart)
+void SSE::PlayAllSounds(PMVIE pmvie, uint32_t dtsStart)
 {
     PMSND pmsnd;
-    long itag;
-    long tool = fLoop ? toolLooper : toolSounder;
+    int32_t itag;
+    int32_t tool = fLoop ? toolLooper : toolSounder;
 
     for (itag = 0; itag < ctagc; itag++)
     {

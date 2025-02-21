@@ -23,23 +23,23 @@
 // location from parent map structure
 struct LOP
 {
-    long hidPar;
-    long xp;
-    long yp;
-    long zp; // the z-plane number used for placing the GOK in the GOB tree
+    int32_t hidPar;
+    int32_t xp;
+    int32_t yp;
+    int32_t zp; // the z-plane number used for placing the GOK in the GOB tree
 };
 VERIFY_STRUCT_SIZE(LOP, 16);
 
 // cursor map entry
 struct CUME
 {
-    ulong grfcustMask; // what cursor states this CUME is good for
-    ulong grfcust;
-    ulong grfbitSno; // what button states this CUME is good for
-    CNO cnoCurs;     // the cursor to use
-    CHID chidScript; // execution script (absolute)
-    long cidDefault; // default command
-    CNO cnoTopic;    // tool tip topic
+    uint32_t grfcustMask; // what cursor states this CUME is good for
+    uint32_t grfcust;
+    uint32_t grfbitSno; // what button states this CUME is good for
+    CNO cnoCurs;        // the cursor to use
+    CHID chidScript;    // execution script (absolute)
+    int32_t cidDefault; // default command
+    CNO cnoTopic;       // tool tip topic
 };
 VERIFY_STRUCT_SIZE(CUME, 28);
 
@@ -56,9 +56,9 @@ class GOKD : public GOKD_PAR
     }
 
   public:
-    virtual long Gokk(void) = 0;
-    virtual bool FGetCume(ulong grfcust, long sno, CUME *pcume) = 0;
-    virtual void GetLop(long hidPar, LOP *plop) = 0;
+    virtual int32_t Gokk(void) = 0;
+    virtual bool FGetCume(uint32_t grfcust, int32_t sno, CUME *pcume) = 0;
+    virtual void GetLop(int32_t hidPar, LOP *plop) = 0;
 };
 
 /***************************************************************************
@@ -68,9 +68,9 @@ class GOKD : public GOKD_PAR
 // GOK construction descriptor on file - these are stored in chunky resource files
 struct GOKDF
 {
-    short bo;
-    short osk;
-    long gokk;
+    int16_t bo;
+    int16_t osk;
+    int32_t gokk;
     // LOP rglop[];		ends with a default entry (hidPar == hidNil)
     // CUME rgcume[];	the cursor map
 };
@@ -88,9 +88,9 @@ class GKDS : public GKDS_PAR
 
   protected:
     HQ _hqData;
-    long _gokk;
-    long _clop;
-    long _ccume;
+    int32_t _gokk;
+    int32_t _clop;
+    int32_t _ccume;
 
     GKDS(void)
     {
@@ -98,12 +98,12 @@ class GKDS : public GKDS_PAR
 
   public:
     // An object reader for a GOKD.
-    static bool FReadGkds(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadGkds(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, int32_t *pcb);
     ~GKDS(void);
 
-    virtual long Gokk(void);
-    virtual bool FGetCume(ulong grfcust, long sno, CUME *pcume);
-    virtual void GetLop(long hidPar, LOP *plop);
+    virtual int32_t Gokk(void);
+    virtual bool FGetCume(uint32_t grfcust, int32_t sno, CUME *pcume);
+    virtual void GetLop(int32_t hidPar, LOP *plop);
 };
 
 /***************************************************************************
@@ -121,7 +121,7 @@ class WOKS : public WOKS_PAR
   protected:
     PSTRG _pstrg;
     STRG _strg;
-    ulong _grfcust;
+    uint32_t _grfcust;
 
     CLOK _clokAnim;
     CLOK _clokNoSlip;
@@ -139,20 +139,20 @@ class WOKS : public WOKS_PAR
 
     virtual bool FGobIn(PGOB pgob);
     virtual PGOKD PgokdFetch(CTG ctg, CNO cno, PRCA prca);
-    virtual PGOK PgokNew(PGOB pgobPar, long hid, CNO cno, PRCA prca);
+    virtual PGOK PgokNew(PGOB pgobPar, int32_t hid, CNO cno, PRCA prca);
     virtual PSCEG PscegNew(PRCA prca, PGOB pgob);
     virtual PHBAL PhbalNew(PGOB pgobPar, PRCA prca, CNO cnoTopic, PHTOP phtop = pvNil);
-    virtual PCMH PcmhFromHid(long hid);
+    virtual PCMH PcmhFromHid(int32_t hid);
     virtual PGOB PgobParGob(PGOB pgob);
     virtual bool FFindFile(PSTN pstnSrc, PFNI pfni);
-    virtual tribool TGiveAlert(PSTN pstn, long bk, long cok);
+    virtual tribool TGiveAlert(PSTN pstn, int32_t bk, int32_t cok);
     virtual void Print(PSTN pstn);
 
-    virtual ulong GrfcustCur(bool fAsynch = fFalse);
-    virtual void ModifyGrfcust(ulong grfcustOr, ulong grfcustXor);
-    virtual ulong GrfcustAdjust(ulong grfcust);
+    virtual uint32_t GrfcustCur(bool fAsynch = fFalse);
+    virtual void ModifyGrfcust(uint32_t grfcustOr, uint32_t grfcustXor);
+    virtual uint32_t GrfcustAdjust(uint32_t grfcust);
 
-    virtual bool FModalTopic(PRCA prca, CNO cnoTopic, long *plwRet);
+    virtual bool FModalTopic(PRCA prca, CNO cnoTopic, int32_t *plwRet);
     virtual PCLOK PclokAnim(void)
     {
         return &_clokAnim;
@@ -169,7 +169,7 @@ class WOKS : public WOKS_PAR
     {
         return &_clokReset;
     }
-    virtual PCLOK PclokFromHid(long hid);
+    virtual PCLOK PclokFromHid(int32_t hid);
 };
 
 #endif //! KIDWORLD_H

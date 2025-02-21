@@ -33,8 +33,8 @@ MBMP::~MBMP(void)
     the upper-left corner).  bTransparent should be the pixel value for the
     transparent color for the MBMP.
 ***************************************************************************/
-PMBMP MBMP::PmbmpNew(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, byte bTransparent,
-                     ulong grfmbmp, byte bDefault)
+PMBMP MBMP::PmbmpNew(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef,
+                     uint8_t bTransparent, uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -53,8 +53,8 @@ PMBMP MBMP::PmbmpNew(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef
 /***************************************************************************
     Initialize the MBMP based on the given pixels.
 ***************************************************************************/
-bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, long ypRef, byte bTransparent,
-                  ulong grfmbmp, byte bDefault)
+bool MBMP::_FInit(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, RC *prc, int32_t xpRef, int32_t ypRef,
+                  uint8_t bTransparent, uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertIn(cbRow, 1, kcbMax);
     AssertIn(dyp, 1, kcbMax);
@@ -62,17 +62,17 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
     AssertVarMem(prc);
     Assert(!prc->FEmpty() && prc->xpLeft >= 0 && prc->xpRight <= cbRow && prc->ypTop >= 0 && prc->ypBottom <= dyp,
            "Invalid rectangle");
-    short *qrgcb;
-    byte *pb, *pbRow, *pbLimRow;
-    byte *qbDst, *qbDstPrev;
-    long cbPixelData, cbPrev, cbOpaque, cbRun;
-    long dibRow;
+    int16_t *qrgcb;
+    uint8_t *pb, *pbRow, *pbLimRow;
+    uint8_t *qbDst, *qbDstPrev;
+    int32_t cbPixelData, cbPrev, cbOpaque, cbRun;
+    int32_t dibRow;
     bool fTrans, fMask;
-    long xpMin, xpLim, ypLim, xp, yp;
+    int32_t xpMin, xpLim, ypLim, xp, yp;
     RC rc = *prc;
 
     // allocate enough space for the rgcb
-    if (!FAllocHq(&_hqrgb, SIZEOF(MBMPH) + LwMul(rc.Dyp(), SIZEOF(short)), fmemNil, mprNormal))
+    if (!FAllocHq(&_hqrgb, SIZEOF(MBMPH) + LwMul(rc.Dyp(), SIZEOF(int16_t)), fmemNil, mprNormal))
     {
         return fFalse;
     }
@@ -141,7 +141,7 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
         {
             // set the row length in the rgcb.
             AssertIn(cbPixelData - cbPrev, 2 + !fMask, kswMax + 1);
-            qrgcb[yp - rc.ypTop] = (short)(cbPixelData - cbPrev);
+            qrgcb[yp - rc.ypTop] = (int16_t)(cbPixelData - cbPrev);
             ypLim = yp + 1;
         }
     }
@@ -155,9 +155,9 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
     }
 
     // reallocate the _hqrgb to the size actually needed
-    AssertIn(LwMul(rc.Dyp(), SIZEOF(short)), 0, CbOfHq(_hqrgb) - SIZEOF(MBMPH) + 1);
+    AssertIn(LwMul(rc.Dyp(), SIZEOF(int16_t)), 0, CbOfHq(_hqrgb) - SIZEOF(MBMPH) + 1);
 
-    _cbRgcb = LwMul(rc.Dyp(), SIZEOF(short));
+    _cbRgcb = LwMul(rc.Dyp(), SIZEOF(int16_t));
     if (!FResizePhq(&_hqrgb, _cbRgcb + SIZEOF(MBMPH) + cbPixelData, fmemNil, mprNormal))
     {
         return fFalse;
@@ -165,7 +165,7 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
 
     // now actually construct the pixel data
     qrgcb = _Qrgcb();
-    qbDst = (byte *)PvAddBv(qrgcb, _cbRgcb);
+    qbDst = (uint8_t *)PvAddBv(qrgcb, _cbRgcb);
     pbRow = prgbPixels + LwMul(cbRow, ((grfmbmp & fmbmpUpsideDown) ? dyp - rc.ypTop - 1 : rc.ypTop));
     for (yp = rc.ypTop; yp < rc.ypBottom; pbRow += dibRow, yp++)
     {
@@ -189,7 +189,7 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
             {
                 if (fTrans && pb == pbLimRow)
                     break;
-                *qbDst++ = (byte)cbRun;
+                *qbDst++ = (uint8_t)cbRun;
                 if (!fTrans)
                 {
                     if (!fMask)
@@ -214,7 +214,7 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
         // Set the row length in the rgcb.
         cbRun = qbDst - qbDstPrev;
         AssertIn(cbRun, 2 + !fMask, qrgcb[yp - rc.ypTop] + 1);
-        qrgcb[yp - rc.ypTop] = (short)cbRun;
+        qrgcb[yp - rc.ypTop] = (int16_t)cbRun;
     }
 
     // shrink _hqrgb to the actual size needed
@@ -237,12 +237,12 @@ bool MBMP::_FInit(byte *prgbPixels, long cbRow, long dyp, RC *prc, long xpRef, l
     transparent. The bitmap file must be uncompressed and have a bit depth
     of 8.  The palette information is be ignored.
 ****************************************************************************/
-PMBMP MBMP::PmbmpReadNative(FNI *pfni, byte bTransparent, long xp, long yp, ulong grfmbmp, byte bDefault)
+PMBMP MBMP::PmbmpReadNative(FNI *pfni, uint8_t bTransparent, int32_t xp, int32_t yp, uint32_t grfmbmp, uint8_t bDefault)
 {
     AssertPo(pfni, ffniFile);
-    byte *prgb;
+    uint8_t *prgb;
     RC rc;
-    long dxp, dyp;
+    int32_t dxp, dyp;
     bool fUpsideDown;
     PMBMP pmbmp = pvNil;
 
@@ -265,8 +265,8 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
     AssertPo(pblck, 0);
     PMBMP pmbmp;
     MBMPH *qmbmph;
-    long cbRgcb;
-    long cbTot;
+    int32_t cbRgcb;
+    int32_t cbTot;
     bool fSwap;
     RC rc;
     HQ hqrgb = hqNil;
@@ -297,7 +297,7 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
         qmbmph->rc.ypBottom = rc.ypTop;
     }
 
-    cbRgcb = LwMul(rc.Dyp(), SIZEOF(short));
+    cbRgcb = LwMul(rc.Dyp(), SIZEOF(int16_t));
     if (SIZEOF(MBMPH) + cbRgcb > cbTot)
         goto LFail;
 
@@ -319,11 +319,11 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
 
 #ifdef DEBUG
     // verify the rgcb and rgb
-    long ccb, cb, dxp;
-    byte *qb;
+    int32_t ccb, cb, dxp;
+    uint8_t *qb;
     bool fMask = pmbmp->_Qmbmph()->fMask;
-    short *qcb = pmbmp->_Qrgcb();
-    byte *qbRow = (byte *)PvAddBv(qcb, cbRgcb);
+    int16_t *qcb = pmbmp->_Qrgcb();
+    uint8_t *qbRow = (uint8_t *)PvAddBv(qcb, cbRgcb);
 
     cbTot -= SIZEOF(MBMPH) + cbRgcb;
     for (ccb = rc.Dyp(); ccb-- > 0;)
@@ -364,7 +364,7 @@ PMBMP MBMP::PmbmpRead(PBLCK pblck)
 /***************************************************************************
     Return the total size on file.
 ***************************************************************************/
-long MBMP::CbOnFile(void)
+int32_t MBMP::CbOnFile(void)
 {
     AssertThis(0);
     return CbOfHq(_hqrgb);
@@ -410,12 +410,12 @@ void MBMP::GetRc(RC *prc)
     Return whether the given (xp, yp) is in a non-transparent pixel of
     the MBMP.  (xp, yp) should be given in MBMP coordinates.
 ***************************************************************************/
-bool MBMP::FPtIn(long xp, long yp)
+bool MBMP::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThis(0);
-    byte *qb, *qbLim;
-    short *qcb;
-    short cb;
+    uint8_t *qb, *qbLim;
+    int16_t *qcb;
+    int16_t cb;
     MBMPH *qmbmph;
 
     qmbmph = _Qmbmph();
@@ -423,7 +423,7 @@ bool MBMP::FPtIn(long xp, long yp)
         return fFalse;
 
     qcb = _Qrgcb();
-    qb = (byte *)PvAddBv(qcb, _cbRgcb);
+    qb = (uint8_t *)PvAddBv(qcb, _cbRgcb);
     for (yp -= qmbmph->rc.ypTop; yp-- > 0;)
         qb += *qcb++;
 
@@ -446,11 +446,11 @@ bool MBMP::FPtIn(long xp, long yp)
 /***************************************************************************
     Assert the validity of a MBMP.
 ***************************************************************************/
-void MBMP::AssertValid(ulong grf)
+void MBMP::AssertValid(uint32_t grf)
 {
-    long ccb;
-    long cbTot;
-    short *qcb;
+    int32_t ccb;
+    int32_t cbTot;
+    int16_t *qcb;
     RC rc;
 
     MBMP_PAR::AssertValid(0);
@@ -458,7 +458,7 @@ void MBMP::AssertValid(ulong grf)
 
     rc = _Qmbmph()->rc;
     ccb = rc.Dyp();
-    Assert(_cbRgcb == LwMul(rc.Dyp(), SIZEOF(short)), "_cbRgcb wrong");
+    Assert(_cbRgcb == LwMul(rc.Dyp(), SIZEOF(int16_t)), "_cbRgcb wrong");
     cbTot = 0;
     qcb = _Qrgcb();
     while (ccb-- > 0)
@@ -483,7 +483,7 @@ void MBMP::MarkMem(void)
 /***************************************************************************
     A PFNRPO to read an MBMP.
 ***************************************************************************/
-bool MBMP::FReadMbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool MBMP::FReadMbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, fblckReadable);
@@ -528,7 +528,8 @@ bool MBMP::FReadMbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
             pfUpsideDown	--	fTrue if the bitmap is upside down
         returns fTrue if it succeeds
 ***************************************************************************/
-bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, bool *pfUpsideDown, byte bTransparent)
+bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, int32_t *pdxp, int32_t *pdyp, bool *pfUpsideDown,
+                 uint8_t bTransparent)
 {
     AssertPo(pfni, ffniFile);
     AssertNilOrVarMem(pprgb);
@@ -548,7 +549,7 @@ bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, 
 
     PFIL pfil;
     RC rc;
-    long fpMac, cbBitmap, cbSrc;
+    int32_t fpMac, cbBitmap, cbSrc;
     BMH bmh;
     bool fRet, fRle;
     FP fpCur = 0;
@@ -566,9 +567,9 @@ bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, 
 
     fRle = (bmh.bmih.biCompression == BI_RLE8);
     cbSrc = bmh.bmih.biSizeImage;
-    if (((long)bmh.bmfh.bfSize != fpMac) || bmh.bmfh.bfType != 'MB' || !FIn(bmh.bmfh.bfOffBits, SIZEOF(BMH), fpMac) ||
-        bmh.bmfh.bfReserved1 != 0 || bmh.bmfh.bfReserved2 != 0 || bmh.bmih.biSize != SIZEOF(bmh.bmih) ||
-        bmh.bmih.biPlanes != 1)
+    if (((int32_t)bmh.bmfh.bfSize != fpMac) || bmh.bmfh.bfType != 'MB' ||
+        !FIn(bmh.bmfh.bfOffBits, SIZEOF(BMH), fpMac) || bmh.bmfh.bfReserved1 != 0 || bmh.bmfh.bfReserved2 != 0 ||
+        bmh.bmih.biSize != SIZEOF(bmh.bmih) || bmh.bmih.biPlanes != 1)
     {
         Warn("bad bitmap file");
         goto LFail;
@@ -578,7 +579,8 @@ bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, 
         Warn("not an 8-bit bitmap");
         goto LFail;
     }
-    if (bmh.bmih.biCompression != BI_RGB && !fRle || cbSrc != fpMac - (long)bmh.bmfh.bfOffBits && (cbSrc != 0 || fRle))
+    if (bmh.bmih.biCompression != BI_RGB && !fRle ||
+        cbSrc != fpMac - (int32_t)bmh.bmfh.bfOffBits && (cbSrc != 0 || fRle))
     {
         Warn("bad compression type or bitmap file is wrong length");
         goto LFail;
@@ -626,10 +628,10 @@ bool FReadBitmap(FNI *pfni, byte **pprgb, PGL *ppglclr, long *pdxp, long *pdyp, 
 
     if (fRle)
     {
-        byte *pbSrc, *pbDst, *prgbSrc, *pbLimSrc, *pbLimDst;
-        byte bT;
-        long xp, cbT;
-        long cbRowDst = CbRoundToLong(rc.xpRight);
+        uint8_t *pbSrc, *pbDst, *prgbSrc, *pbLimSrc, *pbLimDst;
+        uint8_t bT;
+        int32_t xp, cbT;
+        int32_t cbRowDst = CbRoundToLong(rc.xpRight);
 
         // get the source
         if (!FAllocPv((void **)&prgbSrc, cbSrc, fmemNil, mprNormal))
@@ -768,7 +770,7 @@ LDone:
 
     Arguments:
         FNI *pfni         -- the name of the file to write
-        byte *prgb        -- the bits in the bitmap
+        uint8_t *prgb     -- the bits in the bitmap
         PGL pglclr        -- the palette of the bitmap
         long dxp          -- the width of the bitmap
         long dyp          -- the height of the bitmap
@@ -776,7 +778,7 @@ LDone:
 
     Returns: fTrue if it could write the file
 ***************************************************************************/
-bool FWriteBitmap(FNI *pfni, byte *prgb, PGL pglclr, long dxp, long dyp, bool fUpsideDown)
+bool FWriteBitmap(FNI *pfni, uint8_t *prgb, PGL pglclr, int32_t dxp, int32_t dyp, bool fUpsideDown)
 {
     AssertPo(pfni, ffniFile);
     AssertVarMem(prgb);
@@ -797,7 +799,7 @@ bool FWriteBitmap(FNI *pfni, byte *prgb, PGL pglclr, long dxp, long dyp, bool fU
 #pragma pack()
 
     bool fRet = fFalse;
-    long cbSrc;
+    int32_t cbSrc;
     PFIL pfil = pvNil;
     FP fpCur = 0;
     BMH bmh;
@@ -837,11 +839,11 @@ bool FWriteBitmap(FNI *pfni, byte *prgb, PGL pglclr, long dxp, long dyp, bool fU
     pglclr->Unlock();
 
     /* Write the bits */
-    Assert((ulong)fpCur == bmh.bmfh.bfOffBits, "Current file pos is wrong");
+    Assert((uint32_t)fpCur == bmh.bmfh.bfOffBits, "Current file pos is wrong");
     if (fUpsideDown)
     {
-        byte *pbCur;
-        long cbRow = CbRoundToLong(dxp);
+        uint8_t *pbCur;
+        int32_t cbRow = CbRoundToLong(dxp);
 
         pbCur = prgb + dyp * cbRow;
         fRet = fTrue;

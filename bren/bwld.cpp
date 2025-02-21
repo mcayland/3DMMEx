@@ -25,18 +25,18 @@ ASSERTNAME
 
 RTCLASS(BWLD)
 
-const long kcbitPixelRGB = 8; // RGB buffers are 8 bits deep
-const long kcbPixelRGB = 1;
+const int32_t kcbitPixelRGB = 8; // RGB buffers are 8 bits deep
+const int32_t kcbPixelRGB = 1;
 
-const long kcbitPixelZ = 16; // Z buffers are 16 bits deep
-const long kcbPixelZ = 2;
+const int32_t kcbitPixelZ = 16; // Z buffers are 16 bits deep
+const int32_t kcbPixelZ = 2;
 
 bool BWLD::_fBRenderInited = fFalse;
 
 /***************************************************************************
     Allocate a new BRender world
 ***************************************************************************/
-PBWLD BWLD::PbwldNew(long dxp, long dyp, bool fHalfX, bool fHalfY)
+PBWLD BWLD::PbwldNew(int32_t dxp, int32_t dyp, bool fHalfX, bool fHalfY)
 {
     AssertIn(dxp, 1, ksuMax); // BPMP's width and height are ushorts
     AssertIn(dyp, 1, ksuMax);
@@ -60,7 +60,7 @@ PBWLD BWLD::PbwldNew(long dxp, long dyp, bool fHalfX, bool fHalfY)
 /***************************************************************************
     Initialize the BWLD
 ***************************************************************************/
-bool BWLD::_FInit(long dxp, long dyp, bool fHalfX, bool fHalfY)
+bool BWLD::_FInit(int32_t dxp, int32_t dyp, bool fHalfX, bool fHalfY)
 {
     AssertBaseThis(0);
     AssertIn(dxp, 1, ksuMax); // BPMP's width and height are ushorts
@@ -111,7 +111,7 @@ bool BWLD::_FInit(long dxp, long dyp, bool fHalfX, bool fHalfY)
     and _fHalfY.  This function gets called by _FInit, and again every time
     FSetHalfMode is called.
 ***************************************************************************/
-bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
+bool BWLD::_FInitBuffers(int32_t dxp, int32_t dyp, bool fHalfX, bool fHalfY)
 {
     AssertBaseThis(0);
     AssertIn(dxp, 1, ksuMax); // BPMP's width and height are ushorts
@@ -138,9 +138,9 @@ bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
         return fFalse;
     Assert(kcbitPixelZ == 16, "change _bpmpZ.type");
     _bpmpZ.type = BR_PMT_DEPTH_16;
-    _bpmpZ.row_bytes = (short)LwMul(dxp, kcbPixelZ);
-    _bpmpZ.width = (ushort)dxp;
-    _bpmpZ.height = (ushort)dyp;
+    _bpmpZ.row_bytes = (int16_t)LwMul(dxp, kcbPixelZ);
+    _bpmpZ.width = (uint16_t)dxp;
+    _bpmpZ.height = (uint16_t)dyp;
     _bpmpZ.origin_x = dxp / 2;
     _bpmpZ.origin_y = dyp / 2;
     _bpmpZ.pixels = _pzbmpWorking->Prgb();
@@ -162,9 +162,9 @@ bool BWLD::_FInitBuffers(long dxp, long dyp, bool fHalfX, bool fHalfY)
         return fFalse;
     Assert(kcbitPixelRGB == 8, "change _bpmpRGB.type");
     _bpmpRGB.type = BR_PMT_INDEX_8;
-    _bpmpRGB.row_bytes = (short)LwMul(dxp, kcbPixelRGB);
-    _bpmpRGB.width = (ushort)dxp;
-    _bpmpRGB.height = (ushort)dyp;
+    _bpmpRGB.row_bytes = (int16_t)LwMul(dxp, kcbPixelRGB);
+    _bpmpRGB.width = (uint16_t)dxp;
+    _bpmpRGB.height = (uint16_t)dyp;
     _bpmpRGB.origin_x = dxp / 2;
     _bpmpRGB.origin_y = dyp / 2;
     _bpmpRGB.pixels = _pgptWorking->PrgbLockPixels();
@@ -300,16 +300,16 @@ void BWLD::CloseBRender(void)
     Copy pvSrc into pvDst, skipping every other short.  This is called by
     FSetBackground for each row in a ZBMP when _fHalfX is fTrue.
 ***************************************************************************/
-inline void SqueezePb(void *pvSrc, void *pvDst, long cbSrc)
+inline void SqueezePb(void *pvSrc, void *pvDst, int32_t cbSrc)
 {
     AssertIn(cbSrc, 0, kcbMax);
     Assert(cbSrc % (LwMul(2, kcbPixelZ)) == 0, "cbSrc is not aligned");
     AssertPvCb(pvSrc, cbSrc);
     AssertPvCb(pvDst, cbSrc / 2);
 
-    Assert(SIZEOF(short) == kcbPixelZ, 0);
-    short *pswSrc = (short *)pvSrc;
-    short *pswDst = (short *)pvDst;
+    Assert(SIZEOF(int16_t) == kcbPixelZ, 0);
+    int16_t *pswSrc = (int16_t *)pvSrc;
+    int16_t *pswDst = (int16_t *)pvDst;
 
     while (cbSrc != 0)
     {
@@ -356,11 +356,11 @@ bool BWLD::FSetBackground(PCRF pcrf, CTG ctgRGB, CNO cnoRGB, CTG ctgZ, CNO cnoZ)
         // full-size buffer, then reduced with CopyPixels.  For the
         // ZBMP, it is necessary to reduce it in code here.
         PGPT pgptFull;
-        long yp;
-        byte *pbSrc;
-        byte *pbDst;
-        long cbRowSrc;
-        long cbRowDst;
+        int32_t yp;
+        uint8_t *pbSrc;
+        uint8_t *pbDst;
+        int32_t cbRowSrc;
+        int32_t cbRowDst;
         pgptFull = GPT::PgptNewOffscreen(&_rcView, kcbitPixelRGB);
         if (pvNil == _pgptBackground)
         {
@@ -533,8 +533,8 @@ void BWLD::Prerender(void)
 
     Render();
 
-    _pzbmpWorking->Draw((byte *)_pzbmpBackground->Prgb(), _pzbmpBackground->CbRow(), _rcBuffer.Dyp(), 0, 0, &_rcBuffer,
-                        pvNil);
+    _pzbmpWorking->Draw((uint8_t *)_pzbmpBackground->Prgb(), _pzbmpBackground->CbRow(), _rcBuffer.Dyp(), 0, 0,
+                        &_rcBuffer, pvNil);
 
     // Need to detach _pzbmpBackground from the CRF so when we unprerender,
     // a fresh copy of the ZBMP is fetched
@@ -569,15 +569,15 @@ void BWLD::_CleanWorkingBuffers(void)
     AssertThis(0);
 
     REGSC regsc;
-    long yp;
-    long xpLeft;
+    int32_t yp;
+    int32_t xpLeft;
     RC rcRegnBounds;
     RC rcClippedRegnBounds;
-    byte *pbSrc;
-    byte *pbDst;
-    long cbRowCopy;
+    uint8_t *pbSrc;
+    uint8_t *pbDst;
+    int32_t cbRowCopy;
     RC rc;
-    long cbRowSrc, cbRowDst;
+    int32_t cbRowSrc, cbRowDst;
 
     if (_pregnDirtyWorking->FEmpty(&rcRegnBounds))
         return;
@@ -585,7 +585,7 @@ void BWLD::_CleanWorkingBuffers(void)
         return;
 
     // Clean the Z buffer
-    _pzbmpBackground->Draw((byte *)_bpmpZ.pixels, _bpmpZ.row_bytes, _bpmpZ.height, 0, 0, &rcClippedRegnBounds,
+    _pzbmpBackground->Draw((uint8_t *)_bpmpZ.pixels, _bpmpZ.row_bytes, _bpmpZ.height, 0, 0, &rcClippedRegnBounds,
                            _pregnDirtyWorking);
 
     // Clean the RGB buffer
@@ -637,7 +637,7 @@ void BWLD::_ActorRendered(PBACT pbact, PBMDL pbmdl, PBMTL pbmtl, br_uint_8 bStyl
     Mark the region that has been rendered (and needs to be copied to the
     screen)
 ***************************************************************************/
-void BWLD::MarkRenderedRegn(PGOB pgob, long dxp, long dyp)
+void BWLD::MarkRenderedRegn(PGOB pgob, int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     AssertPo(pgob, 0);
@@ -653,7 +653,7 @@ void BWLD::MarkRenderedRegn(PGOB pgob, long dxp, long dyp)
     have called BWLD::MarkRenderedRegn before calling this, so only
     _pregnDirtyScreen's bits will be copied.
 ***************************************************************************/
-void BWLD::Draw(PGNV pgnv, RC *prcClip, long dxp, long dyp)
+void BWLD::Draw(PGNV pgnv, RC *prcClip, int32_t dxp, int32_t dyp)
 {
     AssertThis(0);
     AssertPo(pgnv, 0);
@@ -703,7 +703,7 @@ int BWLD::_FFilter(BACT *pbact, PBMDL pbmdl, PBMTL pbmtl, BVEC3 *pbvec3RayPos, B
 /***************************************************************************
     Call pfnCallback for each actor under the point (xp, yp)
 ***************************************************************************/
-void BWLD::IterateActorsInPt(br_pick2d_cbfn *pfnCallback, void *pvArg, long xp, long yp)
+void BWLD::IterateActorsInPt(br_pick2d_cbfn *pfnCallback, void *pvArg, int32_t xp, int32_t yp)
 {
     AssertThis(0);
 
@@ -722,7 +722,7 @@ void BWLD::IterateActorsInPt(br_pick2d_cbfn *pfnCallback, void *pvArg, long xp, 
    If an actor is under (xp, yp), function returns fTrue and **pbact is the
    actor. If no actor is under (xp, yp), function returns fFalse.
 ***************************************************************************/
-bool BWLD::FClickedActor(long xp, long yp, BACT **ppbact)
+bool BWLD::FClickedActor(int32_t xp, int32_t yp, BACT **ppbact)
 {
     AssertThis(0);
     AssertVarMem(ppbact);
@@ -747,7 +747,7 @@ bool BWLD::FClickedActor(long xp, long yp, BACT **ppbact)
 /***************************************************************************
     Assert the validity of the BWLD.
 ***************************************************************************/
-void BWLD::AssertValid(ulong grf)
+void BWLD::AssertValid(uint32_t grf)
 {
     BWLD_PAR::AssertValid(fobjAllocated);
     AssertPo(_pgptWorking, 0);

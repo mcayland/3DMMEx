@@ -28,8 +28,8 @@
 ****************************************/
 struct CPS
 {
-    short chidModl; // CHID (under TMPL chunk) of model for this body part
-    short imat34;   // index into ACTN's GL of transforms
+    int16_t chidModl; // CHID (under TMPL chunk) of model for this body part
+    int16_t imat34;   // index into ACTN's GL of transforms
 };
 VERIFY_STRUCT_SIZE(CPS, 4);
 const BOM kbomCps = 0x50000000;
@@ -53,13 +53,13 @@ const BOM kbomCel = 0xf0000000;
 // template on file
 struct TMPLF
 {
-    short bo;
-    short osk;
+    int16_t bo;
+    int16_t osk;
     BRA xaRest; // reminder: BRAs are shorts
     BRA yaRest;
     BRA zaRest;
-    short swPad; // so grftmpl (and the whole TMPLF) is long-aligned
-    ulong grftmpl;
+    int16_t swPad; // so grftmpl (and the whole TMPLF) is long-aligned
+    uint32_t grftmpl;
 };
 VERIFY_STRUCT_SIZE(TMPLF, 16);
 #define kbomTmplf 0x554c0000
@@ -67,12 +67,12 @@ VERIFY_STRUCT_SIZE(TMPLF, 16);
 // action chunk on file
 struct ACTNF
 {
-    short bo;
-    short osk;
-    long grfactn;
+    int16_t bo;
+    int16_t osk;
+    int32_t grfactn;
 };
 VERIFY_STRUCT_SIZE(ACTNF, 8);
-const ulong kbomActnf = 0x5c000000;
+const uint32_t kbomActnf = 0x5c000000;
 
 // grfactn flags
 enum
@@ -97,10 +97,10 @@ class ACTN : public ACTN_PAR
     MARKMEM
 
   protected:
-    PGG _pggcel;    // GG of CELs; variable part is a rgcps[]
-    PGL _pglbmat34; // GL of transformation matrices used in this action
-    PGL _pgltagSnd; // GL of motion-match sounds for this action
-    ulong _grfactn; // various flags for this action
+    PGG _pggcel;       // GG of CELs; variable part is a rgcps[]
+    PGL _pglbmat34;    // GL of transformation matrices used in this action
+    PGL _pgltagSnd;    // GL of motion-match sounds for this action
+    uint32_t _grfactn; // various flags for this action
 
   protected:
     ACTN(void)
@@ -109,23 +109,23 @@ class ACTN : public ACTN_PAR
     bool _FInit(PCFL pcfl, CTG ctg, CNO cno);
 
   public:
-    static PACTN PactnNew(PGG pggcel, PGL pglbmat34, ulong grfactn);
-    static bool FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static PACTN PactnNew(PGG pggcel, PGL pglbmat34, uint32_t grfactn);
+    static bool FReadActn(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     ~ACTN(void);
 
-    ulong Grfactn(void)
+    uint32_t Grfactn(void)
     {
         return _grfactn;
     }
 
-    long Ccel(void)
+    int32_t Ccel(void)
     {
         return _pggcel->IvMac();
     }
-    void GetCel(long icel, CEL *pcel);
-    void GetCps(long icel, long icps, CPS *pcps);
-    void GetMatrix(long imat34, BMAT34 *pbmat34);
-    void GetSnd(long icel, PTAG ptagSnd);
+    void GetCel(int32_t icel, CEL *pcel);
+    void GetCps(int32_t icel, int32_t icps, CPS *pcps);
+    void GetMatrix(int32_t imat34, BMAT34 *pbmat34);
+    void GetSnd(int32_t icel, PTAG ptagSnd);
 };
 
 // grftmpl flags
@@ -155,13 +155,13 @@ class TMPL : public TMPL_PAR
     BRA _xaRest; // Rest orientation
     BRA _yaRest;
     BRA _zaRest;
-    ulong _grftmpl;
+    uint32_t _grftmpl;
     PGL _pglibactPar; // GL of parent IDs (shorts) to build BODY
     PGL _pglibset;    // GL of body-part-set IDs to build BODY
     PGG _pggcmid;     // List of costumes for each body part set
-    long _ccmid;      // Count of custom costumes
-    long _cbset;      // Count of body part sets
-    long _cactn;      // Count of actions
+    int32_t _ccmid;   // Count of custom costumes
+    int32_t _cbset;   // Count of body part sets
+    int32_t _cactn;   // Count of actions
     STN _stn;         // Template name
 
   protected:
@@ -170,12 +170,12 @@ class TMPL : public TMPL_PAR
     } // can't instantiate directly; must use FReadTmpl
     bool _FReadTmplf(PCFL pcfl, CTG ctg, CNO cno);
     virtual bool _FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl);
-    virtual PACTN _PactnFetch(long anid);
+    virtual PACTN _PactnFetch(int32_t anid);
     virtual PMODL _PmodlFetch(CHID chidModl);
     bool _FWriteTmplf(PCFL pcfl, CTG ctg, CNO *pcno);
 
   public:
-    static bool FReadTmpl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadTmpl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     ~TMPL(void);
     static PGL PgltagFetch(PCFL pcfl, CTG ctg, CNO cno, bool *pfError);
 
@@ -193,25 +193,25 @@ class TMPL : public TMPL_PAR
     }
 
     // Action stuff
-    long Cactn(void)
+    int32_t Cactn(void)
     {
         return _cactn;
     } // count of actions
-    virtual bool FGetActnName(long anid, PSTN pstn);
-    bool FSetActnCel(PBODY pbody, long anid, long celn, BRS *pdwr = pvNil);
-    bool FGetGrfactn(long anid, ulong *pgrfactn);
-    bool FGetDwrActnCel(long anid, long celn, BRS *pdwr);
-    bool FGetCcelActn(long anid, long *pccel);
-    bool FGetSndActnCel(long anid, long celn, bool *pfSoundExists, PTAG ptag);
+    virtual bool FGetActnName(int32_t anid, PSTN pstn);
+    bool FSetActnCel(PBODY pbody, int32_t anid, int32_t celn, BRS *pdwr = pvNil);
+    bool FGetGrfactn(int32_t anid, uint32_t *pgrfactn);
+    bool FGetDwrActnCel(int32_t anid, int32_t celn, BRS *pdwr);
+    bool FGetCcelActn(int32_t anid, int32_t *pccel);
+    bool FGetSndActnCel(int32_t anid, int32_t celn, bool *pfSoundExists, PTAG ptag);
 
     // Costume stuff
     virtual bool FSetDefaultCost(PBODY pbody); // applies default costume
-    virtual PCMTL PcmtlFetch(long cmid);
-    long CcmidOfBset(long ibset);
-    long CmidOfBset(long ibset, long icmid);
-    bool FBsetIsAccessory(long ibset); // whether ibset holds accessories
-    bool FIbsetAccOfIbset(long ibset, long *pibsetAcc);
-    bool FSameAccCmids(long cmid1, long cmid2);
+    virtual PCMTL PcmtlFetch(int32_t cmid);
+    int32_t CcmidOfBset(int32_t ibset);
+    int32_t CmidOfBset(int32_t ibset, int32_t icmid);
+    bool FBsetIsAccessory(int32_t ibset); // whether ibset holds accessories
+    bool FIbsetAccOfIbset(int32_t ibset, int32_t *pibsetAcc);
+    bool FSameAccCmids(int32_t cmid1, int32_t cmid2);
 };
 
 #endif // TMPL_H

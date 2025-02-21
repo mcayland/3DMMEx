@@ -264,12 +264,12 @@ AROP _rgaropSccg[] = {
 /***************************************************************************
     Map a string to an operator.
 ***************************************************************************/
-long SCCG::_OpFromStn(PSTN pstn)
+int32_t SCCG::_OpFromStn(PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
 
-    long op;
+    int32_t op;
     if (opNil != (op = _OpFromStnRgszop(pstn, _rgszopSccg)))
         return op;
     return SCCG_PAR::_OpFromStn(pstn);
@@ -278,7 +278,7 @@ long SCCG::_OpFromStn(PSTN pstn)
 /***************************************************************************
     Map an op code to a string.
 ***************************************************************************/
-bool SCCG::_FGetStnFromOp(long op, PSTN pstn)
+bool SCCG::_FGetStnFromOp(int32_t op, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -292,7 +292,8 @@ bool SCCG::_FGetStnFromOp(long op, PSTN pstn)
     Map a string to an operator with argument information (for in-fix
     compiler).
 ***************************************************************************/
-bool SCCG::_FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar, long *pcactMinVar, bool *pfVoid)
+bool SCCG::_FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
+                           bool *pfVoid)
 {
     if (_FGetArop(pstn, _rgaropSccg, pop, pclwFixed, pclwVar, pcactMinVar, pfVoid))
     {
@@ -304,7 +305,7 @@ bool SCCG::_FGetOpFromName(PSTN pstn, long *pop, long *pclwFixed, long *pclwVar,
 /***************************************************************************
     Return the current version number of the script compiler.
 ***************************************************************************/
-short SCCG::_SwCur(void)
+int16_t SCCG::_SwCur(void)
 {
     return kswCurSccg;
 }
@@ -313,7 +314,7 @@ short SCCG::_SwCur(void)
     Return the back version number of the script compiler.  Versions
     back to here can read this script.
 ***************************************************************************/
-short SCCG::_SwBack(void)
+int16_t SCCG::_SwBack(void)
 {
     return kswBackSccg;
 }
@@ -322,7 +323,7 @@ short SCCG::_SwBack(void)
     Return the min version number of the script compiler.  We can read
     scripts back to this version.
 ***************************************************************************/
-short SCCG::_SwMin(void)
+int16_t SCCG::_SwMin(void)
 {
     return kswMinSccg;
 }

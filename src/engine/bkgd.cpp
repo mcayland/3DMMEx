@@ -117,7 +117,7 @@ bool BKGD::FCacheToHD(PTAG ptagBkgd)
 /***************************************************************************
     A PFNRPO to read a BKGD from a file
 ***************************************************************************/
-bool BKGD::FReadBkgd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool BKGD::FReadBkgd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -159,7 +159,7 @@ bool BKGD::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     BKGDF bkgdf;
     KID kid;
     PGL pgllite = pvNil;
-    short bo;
+    int16_t bo;
 
     _ccam = _Ccam(pcfl, ctg, cno); // compute # of views in this background
     _icam = ivNil;
@@ -223,7 +223,7 @@ bool BKGD::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     AssertBomRglw(kbomLite, SIZEOF(LITE));
     if (kboOther == bo)
     {
-        SwapBytesRglw(pgllite->QvGet(0), LwMul(pgllite->IvMac(), SIZEOF(LITE) / SIZEOF(long)));
+        SwapBytesRglw(pgllite->QvGet(0), LwMul(pgllite->IvMac(), SIZEOF(LITE) / SIZEOF(int32_t)));
     }
     _cbactLight = pgllite->IvMac();
     if (!FAllocPv((void **)&_prgbactLight, LwMul(_cbactLight, SIZEOF(BACT)), fmemClear, mprNormal))
@@ -247,21 +247,21 @@ LFail:
     Return the number of camera views in this scene.  CAM chunks need to be
     contiguous CHIDs starting at CHID 0.
 ***************************************************************************/
-long BKGD::_Ccam(PCFL pcfl, CTG ctg, CNO cno)
+int32_t BKGD::_Ccam(PCFL pcfl, CTG ctg, CNO cno)
 {
     AssertBaseThis(0);
     AssertPo(pcfl, 0);
 
     KID kid;
-    long ccam;
+    int32_t ccam;
 
     for (ccam = 0; pcfl->FGetKidChidCtg(ctg, cno, ccam, kctgCam, &kid); ccam++)
     {
     }
 #ifdef DEBUG
     // Make sure chids are consecutive
-    long ckid;
-    long ccamT = 0;
+    int32_t ckid;
+    int32_t ccamT = 0;
     for (ckid = 0; pcfl->FGetKid(ctg, cno, ckid, &kid); ckid++)
     {
         if (kid.cki.ctg == kctgCam)
@@ -280,7 +280,7 @@ void BKGD::_SetupLights(PGL pgllite)
     AssertBaseThis(0);
     AssertPo(pgllite, 0);
 
-    long ilite;
+    int32_t ilite;
     LITE *qlite;
     BACT *pbact;
     BLIT *pblit;
@@ -290,7 +290,7 @@ void BKGD::_SetupLights(PGL pgllite)
         qlite = (LITE *)pgllite->QvGet(ilite);
         pbact = &_prgbactLight[ilite];
         pblit = &_prgblitLight[ilite];
-        pblit->type = (byte)qlite->lt;
+        pblit->type = (uint8_t)qlite->lt;
         pblit->colour = kbrcLight;
         pblit->attenuation_c = qlite->rIntensity;
         pbact->type = BR_ACTOR_LIGHT;
@@ -331,7 +331,7 @@ void BKGD::GetName(PSTN pstn)
     an error occurs.  Sets *ppglclr to an empty GL and *piclrMin to 0 if
     this background has no custom palette.
 ***************************************************************************/
-bool BKGD::FGetPalette(PGL *ppglclr, long *piclrMin)
+bool BKGD::FGetPalette(PGL *ppglclr, int32_t *piclrMin)
 {
     AssertThis(0);
     AssertVarMem(ppglclr);
@@ -375,7 +375,7 @@ void BKGD::TurnOnLights(PBWLD pbwld)
     AssertThis(0);
     AssertPo(pbwld, 0);
 
-    long ilite;
+    int32_t ilite;
     BACT *pbact;
 
     if (!_fLites)
@@ -398,7 +398,7 @@ void BKGD::TurnOffLights(void)
 {
     AssertThis(0);
 
-    long ilite;
+    int32_t ilite;
     BACT *pbact;
 
     if (!_fLites || _fLeaveLitesOn)
@@ -415,13 +415,13 @@ void BKGD::TurnOffLights(void)
 /***************************************************************************
     Set the camera and associated bitmaps to icam
 ***************************************************************************/
-bool BKGD::FSetCamera(PBWLD pbwld, long icam)
+bool BKGD::FSetCamera(PBWLD pbwld, int32_t icam)
 {
     AssertThis(0);
     AssertPo(pbwld, 0);
     AssertIn(icam, 0, Ccam());
 
-    long capos;
+    int32_t capos;
     KID kidCam;
     KID kidRGB;
     KID kidZ;
@@ -461,12 +461,12 @@ bool BKGD::FSetCamera(PBWLD pbwld, long icam)
     }
 #endif // DEBUG
 
-    Assert((SIZEOF(APOS) / SIZEOF(long)) * SIZEOF(long) == SIZEOF(APOS), "APOS not an even number of longs");
+    Assert((SIZEOF(APOS) / SIZEOF(int32_t)) * SIZEOF(int32_t) == SIZEOF(APOS), "APOS not an even number of longs");
     if (kboOther == cam.bo)
     {
         SwapBytesBom(&cam, kbomCam);
-        SwapBytesRglw(PvAddBv(&cam, offset(CAM, bmat34Cam)), SIZEOF(cam.bmat34Cam) / SIZEOF(long));
-        SwapBytesRglw(PvAddBv(&cam, SIZEOF(CAM)), capos * (SIZEOF(APOS) / SIZEOF(long)));
+        SwapBytesRglw(PvAddBv(&cam, offset(CAM, bmat34Cam)), SIZEOF(cam.bmat34Cam) / SIZEOF(int32_t));
+        SwapBytesRglw(PvAddBv(&cam, SIZEOF(CAM)), capos * (SIZEOF(APOS) / SIZEOF(int32_t)));
     }
     Assert(kboCur == cam.bo, "bad cam");
 
@@ -592,12 +592,12 @@ bool BKGD::FWritePlaceFile(BRS xrPlace, BRS yrPlace, BRS zrPlace)
     PFIL pfil = pvNil;
     STN stnData;
     FP fp;
-    long xr1 = BrScalarToInt(xrPlace);
-    long xr2 = LwAbs((long)(1000000.0 * BrScalarToFloat(xrPlace - BrIntToScalar(xr1))));
-    long yr1 = BrScalarToInt(yrPlace);
-    long yr2 = LwAbs((long)(1000000.0 * BrScalarToFloat(yrPlace - BrIntToScalar(yr1))));
-    long zr1 = BrScalarToInt(zrPlace);
-    long zr2 = LwAbs((long)(1000000.0 * BrScalarToFloat(zrPlace - BrIntToScalar(zr1))));
+    int32_t xr1 = BrScalarToInt(xrPlace);
+    int32_t xr2 = LwAbs((int32_t)(1000000.0 * BrScalarToFloat(xrPlace - BrIntToScalar(xr1))));
+    int32_t yr1 = BrScalarToInt(yrPlace);
+    int32_t yr2 = LwAbs((int32_t)(1000000.0 * BrScalarToFloat(yrPlace - BrIntToScalar(yr1))));
+    int32_t zr1 = BrScalarToInt(zrPlace);
+    int32_t zr2 = LwAbs((int32_t)(1000000.0 * BrScalarToFloat(zrPlace - BrIntToScalar(zr1))));
 
     if (!stnFile.FFormatSz("%s-cam.1-%d.pos", &_stn, _icam + 1))
         goto LFail;
@@ -633,7 +633,7 @@ LFail:
 /***************************************************************************
     Assert the validity of the BKGD.
 ***************************************************************************/
-void BKGD::AssertValid(ulong grf)
+void BKGD::AssertValid(uint32_t grf)
 {
     BKGD_PAR::AssertValid(fobjAllocated);
     AssertIn(_cbactLight, 1, 100); // 100 is sanity check

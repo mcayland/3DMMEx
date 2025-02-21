@@ -17,7 +17,7 @@ ASSERTNAME
  * @param cb Size of optional data
  * @return fFalse to not break into the debugger
  */
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t cb)
 {
     ADD_FAILURE_AT(pszsFile, lwLine) << pszsMsg;
     return fFalse;
@@ -30,7 +30,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMsg, void *pv, long cb)
  * @param lwLine Source line number
  * @param pszsMsg Warning message
  */
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMsg)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
 {
     // TODO: log warning messages somewhere
 }
@@ -38,21 +38,21 @@ void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMsg)
 
 TEST(KauaiTests, TestInt)
 {
-    EXPECT_EQ(SwHigh(0x12345678), (short)0x1234);
-    EXPECT_EQ(SwHigh(0xABCDEF01), (short)0xABCD);
-    EXPECT_EQ(SwLow(0x12345678), (short)0x5678);
-    EXPECT_EQ(SwLow(0xABCDEF01), (short)0xEF01);
+    EXPECT_EQ(SwHigh(0x12345678), (int16_t)0x1234);
+    EXPECT_EQ(SwHigh(0xABCDEF01), (int16_t)0xABCD);
+    EXPECT_EQ(SwLow(0x12345678), (int16_t)0x5678);
+    EXPECT_EQ(SwLow(0xABCDEF01), (int16_t)0xEF01);
 
     EXPECT_EQ(LwHighLow(0x1234, 0x5678), 0x12345678);
-    EXPECT_EQ(LwHighLow((short)0xABCD, (short)0xEF01), 0xABCDEF01);
+    EXPECT_EQ(LwHighLow((int16_t)0xABCD, (int16_t)0xEF01), 0xABCDEF01);
 
     EXPECT_EQ(BHigh(0x1234), 0x12);
-    EXPECT_EQ(BHigh((short)0xABCD), 0xAB);
+    EXPECT_EQ(BHigh((int16_t)0xABCD), 0xAB);
     EXPECT_EQ(BLow(0x1234), 0x34);
-    EXPECT_EQ(BLow((short)0xABCD), 0xCD);
+    EXPECT_EQ(BLow((int16_t)0xABCD), 0xCD);
 
-    EXPECT_EQ(SwHighLow(0x12, 0x56), (short)0x1256);
-    EXPECT_EQ(SwHighLow(0xAB, 0xEF), (short)0xABEF);
+    EXPECT_EQ(SwHighLow(0x12, 0x56), (int16_t)0x1256);
+    EXPECT_EQ(SwHighLow(0xAB, 0xEF), (int16_t)0xABEF);
 
     EXPECT_EQ(SwMin(kswMax, kswMin), kswMin);
     EXPECT_EQ(SwMin(kswMin, kswMax), kswMin);
@@ -116,7 +116,7 @@ TEST(KauaiTests, TestMem)
 #define kchq 18
     HQ rghq[kchq];
     HQ hqT, hq;
-    long cb, ihq;
+    int32_t cb, ihq;
 
     FillPb(rghq, SIZEOF(rghq), 0);
 
@@ -129,11 +129,11 @@ TEST(KauaiTests, TestMem)
         rghq[ihq] = hq;
         EXPECT_EQ(CbOfHq(hq), cb);
 
-        FillPb(QvFromHq(hq), cb, (byte)cb);
+        FillPb(QvFromHq(hq), cb, (uint8_t)cb);
         if (cb > 0)
         {
-            EXPECT_EQ(*(byte *)QvFromHq(hq), (byte)cb);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), cb - 1), (byte)cb);
+            EXPECT_EQ(*(uint8_t *)QvFromHq(hq), (uint8_t)cb);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), cb - 1), (uint8_t)cb);
         }
 
         EXPECT_EQ(PvLockHq(hq), QvFromHq(hq));
@@ -144,8 +144,8 @@ TEST(KauaiTests, TestMem)
             EXPECT_EQ(CbOfHq(hqT), cb);
             if (cb > 0)
             {
-                EXPECT_EQ(*(byte *)QvFromHq(hqT), (byte)cb);
-                EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hqT), cb - 1), (byte)cb);
+                EXPECT_EQ(*(uint8_t *)QvFromHq(hqT), (uint8_t)cb);
+                EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hqT), cb - 1), (uint8_t)cb);
             }
             FreePhq(&hqT);
         }
@@ -169,10 +169,10 @@ TEST(KauaiTests, TestMem)
         hq = rghq[ihq];
         if (cb > 0)
         {
-            EXPECT_EQ(*(byte *)QvFromHq(hq), (byte)cb);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), cb - 1), (byte)cb);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), cb), 0);
-            EXPECT_EQ(*(byte *)PvAddBv(QvFromHq(hq), 2 * cb - 1), 0);
+            EXPECT_EQ(*(uint8_t *)QvFromHq(hq), (uint8_t)cb);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), cb - 1), (uint8_t)cb);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), cb), 0);
+            EXPECT_EQ(*(uint8_t *)PvAddBv(QvFromHq(hq), 2 * cb - 1), 0);
         }
     }
 
@@ -189,12 +189,12 @@ TEST(KauaiTests, TestMem)
 
 TEST(KauaiTests, TestGl)
 {
-    short sw;
-    long isw;
-    short *qsw;
+    int16_t sw;
+    int32_t isw;
+    int16_t *qsw;
     PGL pglsw;
 
-    pglsw = GL::PglNew(SIZEOF(short));
+    pglsw = GL::PglNew(SIZEOF(int16_t));
     if (pvNil == pglsw)
     {
         Bug("PglNew failed");
@@ -210,7 +210,7 @@ TEST(KauaiTests, TestGl)
 
     for (isw = 0; isw < 10; isw++)
     {
-        qsw = (short *)pglsw->QvGet(isw);
+        qsw = (int16_t *)pglsw->QvGet(isw);
         EXPECT_EQ(*qsw, isw);
         pglsw->Get(isw, &sw);
         EXPECT_EQ(sw, isw);
@@ -224,11 +224,11 @@ TEST(KauaiTests, TestGl)
     {
         pglsw->Get(isw, &sw);
         EXPECT_EQ(sw, isw * 2 + 1);
-        sw = (short)isw * 100;
+        sw = (int16_t)isw * 100;
         pglsw->Put(isw, &sw);
-        qsw = (short *)pglsw->QvGet(isw);
+        qsw = (int16_t *)pglsw->QvGet(isw);
         EXPECT_EQ(*qsw, isw * 100);
-        *qsw = (short)isw;
+        *qsw = (int16_t)isw;
     }
 
     EXPECT_EQ(pglsw->IvMac(), 5);
@@ -237,7 +237,7 @@ TEST(KauaiTests, TestGl)
 
     for (isw = 5; isw-- != 0;)
     {
-        sw = (short)isw;
+        sw = (int16_t)isw;
         pglsw->FInsert(isw, &sw);
     }
 
@@ -310,9 +310,9 @@ TEST(KauaiTests, TestFil)
 TEST(KauaiTests, TestGg)
 {
     PGG pgg;
-    ulong grf;
-    long cb, iv;
-    byte *qb;
+    uint32_t grf;
+    int32_t cb, iv;
+    uint8_t *qb;
     PSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
 
@@ -329,7 +329,7 @@ TEST(KauaiTests, TestGg)
     for (iv = pgg->IvMac(); iv--;)
     {
         cb = pgg->Cb(iv);
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         EXPECT_TRUE(FEqualRgb(psz, qb, cb));
         grf |= 1L << cb;
         if (cb & 1)
@@ -343,7 +343,7 @@ TEST(KauaiTests, TestGg)
         cb = pgg->Cb(iv);
         EXPECT_TRUE(!(cb & 1));
         pgg->Get(iv, rgch);
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         EXPECT_TRUE(FEqualRgb(rgch, qb, cb));
         EXPECT_TRUE(FEqualRgb(rgch, psz, cb));
         grf |= 1L << cb;
@@ -361,7 +361,7 @@ TEST(KauaiTests, TestGg)
         grf |= 1L << cb;
         pgg->DeleteRgb(iv, LwMin(cb, iv), cb);
 
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         EXPECT_TRUE(FEqualRgb(psz, qb, cb));
     }
     EXPECT_EQ(grf, 0x00010554);
@@ -394,7 +394,7 @@ TEST(KauaiTests, TestCfl)
         CTG ctg;
         CNO cno;
         PSZ psz;
-        short relPar1, relPar2;
+        int16_t relPar1, relPar2;
     };
 
     const CTG kctgLan = 0x41414141;
@@ -413,8 +413,8 @@ TEST(KauaiTests, TestCfl)
     FNI fni, fniDst;
     PCFL pcfl, pcflDst;
     BLCK blck;
-    short rel;
-    long icki;
+    int16_t rel;
+    int32_t icki;
     CNO cno;
     CKI cki;
     EREL *perel, *perelPar;
@@ -520,8 +520,8 @@ TEST(KauaiTests, TestCfl)
 
 TEST(KauaiTests, TestErs)
 {
-    const long cercTest = 30;
-    long erc, ercT;
+    const int32_t cercTest = 30;
+    int32_t erc, ercT;
 
     vpers->Clear();
     ASSERT_EQ(vpers->Cerc(), 0) << "bad count of error codes on stack";

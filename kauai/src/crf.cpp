@@ -71,7 +71,7 @@ bool BACO::FWrite(PBLCK pblck)
 /***************************************************************************
     Placeholder function for BACO generic cb-getter.
 ***************************************************************************/
-long BACO::CbOnFile(void)
+int32_t BACO::CbOnFile(void)
 {
     AssertThis(0);
     RawRtn(); // Derived class should be defining this
@@ -82,7 +82,7 @@ long BACO::CbOnFile(void)
 /***************************************************************************
     Assert the validity of a BACO.
 ***************************************************************************/
-void BACO::AssertValid(ulong grf)
+void BACO::AssertValid(uint32_t grf)
 {
     BACO_PAR::AssertValid(fobjAllocated);
     Assert(!_fAttached || pvNil != _pcrf, "attached baco has no crf");
@@ -145,7 +145,7 @@ void BACO::Detach(void)
 /***************************************************************************
     Set the crep for the BACO.
 ***************************************************************************/
-void BACO::SetCrep(long crep)
+void BACO::SetCrep(int32_t crep)
 {
     AssertThis(0);
     // An AddRef followed by Release is done so that BacoReleased() is
@@ -159,7 +159,7 @@ void BACO::SetCrep(long crep)
 /***************************************************************************
     Constructor for CRF.  Increments the open count on the CFL.
 ***************************************************************************/
-CRF::CRF(PCFL pcfl, long cbMax)
+CRF::CRF(PCFL pcfl, int32_t cbMax)
 {
     AssertBaseThis(fobjAllocated);
     AssertPo(pcfl, 0);
@@ -199,7 +199,7 @@ CRF::~CRF(void)
 /***************************************************************************
     Static method to create a new chunky resource file cache.
 ***************************************************************************/
-PCRF CRF::PcrfNew(PCFL pcfl, long cbMax)
+PCRF CRF::PcrfNew(PCFL pcfl, int32_t cbMax)
 {
     AssertPo(pcfl, 0);
     AssertIn(cbMax, 0, kcbMax);
@@ -218,7 +218,7 @@ PCRF CRF::PcrfNew(PCFL pcfl, long cbMax)
     (all non-required BACOs are flushed) or is bigger than the current
     cbMax.
 ***************************************************************************/
-void CRF::SetCbMax(long cbMax)
+void CRF::SetCbMax(int32_t cbMax)
 {
     AssertThis(0);
     AssertIn(cbMax, 0, kcbMax);
@@ -226,7 +226,7 @@ void CRF::SetCbMax(long cbMax)
     if (0 == cbMax)
     {
         CRE cre;
-        long icre;
+        int32_t icre;
 
         for (icre = _pglcre->IvMac(); icre-- > 0;)
         {
@@ -254,13 +254,13 @@ void CRF::SetCbMax(long cbMax)
     tNo if the chunk isn't in the CRF and tMaybe if there wasn't room
     to cache the chunk.
 ***************************************************************************/
-tribool CRF::TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc, long crep)
+tribool CRF::TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc, int32_t crep)
 {
     AssertThis(0);
     Assert(pvNil != pfnrpo, "bad pfnrpo");
     Assert(crep > crepToss, "crep too small");
     CRE cre;
-    long icre;
+    int32_t icre;
     BLCK blck;
 
     // see if this CRF contains this resource type
@@ -341,7 +341,7 @@ PBACO CRF::PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError, RSC rsc)
     Assert(pvNil != pfnrpo, "bad pfnrpo");
     AssertNilOrVarMem(pfError);
     CRE cre;
-    long icre;
+    int32_t icre;
     BLCK blck;
 
     if (pvNil != pfError)
@@ -419,7 +419,7 @@ PBACO CRF::PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
     Assert(pvNil != pfnrpo, "bad pfnrpo");
 
     CRE cre;
-    long icre;
+    int32_t icre;
 
     // see if it's in the cache
     if (!_FFindCre(ctg, cno, pfnrpo, &icre) || rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
@@ -437,13 +437,13 @@ PBACO CRF::PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
     If the baco indicated chunk is cached, set its crep.  Returns true
     iff the baco was cached.
 ***************************************************************************/
-bool CRF::FSetCrep(long crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
+bool CRF::FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
 {
     AssertThis(0);
     Assert(pvNil != pfnrpo, "bad pfnrpo");
 
     CRE cre;
-    long icre;
+    int32_t icre;
 
     // see if it's in the cache
     if (!_FFindCre(ctg, cno, pfnrpo, &icre) || rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
@@ -482,7 +482,7 @@ void CRF::BacoDetached(PBACO pbaco)
     AssertThis(0);
     AssertPo(pbaco, 0);
     Assert(pbaco->_pcrf == this, "BACO doesn't have right CRF");
-    long icre;
+    int32_t icre;
     CRE cre;
 
     if (pbaco->_fAttached)
@@ -509,7 +509,7 @@ void CRF::BacoReleased(PBACO pbaco)
     AssertThis(0);
     AssertPo(pbaco, 0);
     Assert(pbaco->_pcrf == this, "BACO doesn't have right CRF");
-    long icre;
+    int32_t icre;
     CRE cre;
 
     if (!pbaco->_fAttached || pbaco->CactRef() != 0)
@@ -538,12 +538,12 @@ void CRF::BacoReleased(PBACO pbaco)
     Find the cre corresponding to the (ctg, cno, pfnrpo).  Set *picre to
     its location (or where it would be if it were in the list).
 ***************************************************************************/
-bool CRF::_FFindCre(CTG ctg, CNO cno, PFNRPO pfnrpo, long *picre)
+bool CRF::_FFindCre(CTG ctg, CNO cno, PFNRPO pfnrpo, int32_t *picre)
 {
     AssertThis(0);
     AssertVarMem(picre);
     CRE *qrgcre, *qcre;
-    long icreMin, icreLim, icre;
+    int32_t icreMin, icreLim, icre;
 
     // Do a binary search.  The CREs are sorted by (ctg, cno, pfnrpo).
     qrgcre = (CRE *)_pglcre->QvGet(0);
@@ -578,7 +578,7 @@ bool CRF::_FFindCre(CTG ctg, CNO cno, PFNRPO pfnrpo, long *picre)
 /***************************************************************************
     Find the cre corresponding to the BACO.  Set *picre to its location.
 ***************************************************************************/
-bool CRF::_FFindBaco(PBACO pbaco, long *picre)
+bool CRF::_FFindBaco(PBACO pbaco, int32_t *picre)
 {
     AssertThis(0);
     AssertPo(pbaco, 0);
@@ -587,7 +587,7 @@ bool CRF::_FFindBaco(PBACO pbaco, long *picre)
     CTG ctg;
     CNO cno;
     CRE *qrgcre, *qcre;
-    long icreMin, icreLim, icre;
+    int32_t icreMin, icreLim, icre;
 
     ctg = pbaco->_ctg;
     cno = pbaco->_cno;
@@ -650,7 +650,7 @@ bool CRF::_FFindBaco(PBACO pbaco, long *picre)
     Try to purge at least cbPurge bytes of space.  Doesn't free anything
     with a crep > crepLast or that is locked.
 ***************************************************************************/
-bool CRF::_FPurgeCb(long cbPurge, long crepLast)
+bool CRF::_FPurgeCb(int32_t cbPurge, int32_t crepLast)
 {
     AssertThis(0);
     AssertIn(cbPurge, 1, kcbMax);
@@ -658,7 +658,7 @@ bool CRF::_FPurgeCb(long cbPurge, long crepLast)
         return fFalse;
 
     CRE cre;
-    long icreMac;
+    int32_t icreMac;
 
     while (0 < (icreMac = _pglcre->IvMac()))
     {
@@ -673,12 +673,12 @@ bool CRF::_FPurgeCb(long cbPurge, long crepLast)
         // (by a factor of 3) than bytes beyond cbPurge, so we favor elements
         // that are larger than cbPurge.
         // REVIEW shonk: tune kcbRelease and the weighting factor...
-        const long kcbRelease = 256;
-        long icre, crep;
-        long lw, dcb;
-        long lwBest = klwMax;
-        long icreBest = ivNil;
-        long crepBest = crepLast;
+        const int32_t kcbRelease = 256;
+        int32_t icre, crep;
+        int32_t lw, dcb;
+        int32_t lwBest = klwMax;
+        int32_t icreBest = ivNil;
+        int32_t crepBest = crepLast;
 
         for (icre = 0; icre < icreMac; icre++)
         {
@@ -720,7 +720,7 @@ bool CRF::_FPurgeCb(long cbPurge, long crepLast)
 /***************************************************************************
     Assert the validity of a CRF (chunky resource file).
 ***************************************************************************/
-void CRF::AssertValid(ulong grf)
+void CRF::AssertValid(uint32_t grf)
 {
     CRF_PAR::AssertValid(fobjAllocated);
     AssertPo(_pglcre, 0);
@@ -736,7 +736,7 @@ void CRF::AssertValid(ulong grf)
 void CRF::MarkMem(void)
 {
     AssertThis(0);
-    long icre;
+    int32_t icre;
     CRE cre;
 
     CRF_PAR::MarkMem();
@@ -760,7 +760,7 @@ void CRF::MarkMem(void)
 CRM::~CRM(void)
 {
     AssertBaseThis(fobjAllocated);
-    long ipcrf;
+    int32_t ipcrf;
     PCRF pcrf;
 
     if (pvNil != _pglpcrf)
@@ -778,7 +778,7 @@ CRM::~CRM(void)
 /***************************************************************************
     Static method to create a new CRM.
 ***************************************************************************/
-PCRM CRM::PcrmNew(long ccrfInit)
+PCRM CRM::PcrmNew(int32_t ccrfInit)
 {
     AssertIn(ccrfInit, 0, kcbMax);
     PCRM pcrm;
@@ -798,14 +798,14 @@ PCRM CRM::PcrmNew(long ccrfInit)
     Prefetch the object if there is room in the cache.  Assigns the fetched
     object the given priority (crep).
 ***************************************************************************/
-tribool CRM::TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc, long crep)
+tribool CRM::TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc, int32_t crep)
 {
     AssertThis(0);
     Assert(pvNil != pfnrpo, "nil object reader");
     PCRF pcrf;
     tribool t;
-    long ipcrf;
-    long cpcrf = _pglpcrf->IvMac();
+    int32_t ipcrf;
+    int32_t cpcrf = _pglpcrf->IvMac();
 
     for (ipcrf = 0; ipcrf < cpcrf; ipcrf++)
     {
@@ -830,10 +830,10 @@ PBACO CRM::PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError, RSC rsc)
     Assert(pvNil != pfnrpo, "nil object reader");
     AssertNilOrVarMem(pfError);
     PCRF pcrf;
-    long ipcrf;
+    int32_t ipcrf;
     bool fError = fFalse;
     PBACO pbaco = pvNil;
-    long cpcrf = _pglpcrf->IvMac();
+    int32_t cpcrf = _pglpcrf->IvMac();
 
     for (ipcrf = 0; ipcrf < cpcrf; ipcrf++)
     {
@@ -870,13 +870,13 @@ PBACO CRM::PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
     If the chunk is cached, set its crep.  Returns true iff the chunk
     was cached.
 ***************************************************************************/
-bool CRM::FSetCrep(long crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
+bool CRM::FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
 {
     AssertThis(0);
     Assert(pvNil != pfnrpo, "nil object reader");
     PCRF pcrf;
-    long ipcrf;
-    long cpcrf = _pglpcrf->IvMac();
+    int32_t ipcrf;
+    int32_t cpcrf = _pglpcrf->IvMac();
 
     for (ipcrf = 0; ipcrf < cpcrf; ipcrf++)
     {
@@ -896,8 +896,8 @@ PCRF CRM::PcrfFindChunk(CTG ctg, CNO cno, RSC rsc)
 {
     AssertThis(0);
     PCRF pcrf;
-    long ipcrf;
-    long cpcrf = _pglpcrf->IvMac();
+    int32_t ipcrf;
+    int32_t cpcrf = _pglpcrf->IvMac();
 
     for (ipcrf = 0; ipcrf < cpcrf; ipcrf++)
     {
@@ -917,7 +917,7 @@ PCRF CRM::PcrfFindChunk(CTG ctg, CNO cno, RSC rsc)
     Add a chunky file to the list of chunky resource files, by
     creating the chunky resource file object and adding it to the GL
 ***************************************************************************/
-bool CRM::FAddCfl(PCFL pcfl, long cbMax, long *piv)
+bool CRM::FAddCfl(PCFL pcfl, int32_t cbMax, int32_t *piv)
 {
     AssertThis(0);
     AssertPo(pcfl, 0);
@@ -942,7 +942,7 @@ bool CRM::FAddCfl(PCFL pcfl, long cbMax, long *piv)
 /***************************************************************************
     Get the icrf'th CRF.
 ***************************************************************************/
-PCRF CRM::PcrfGet(long icrf)
+PCRF CRM::PcrfGet(int32_t icrf)
 {
     AssertThis(0);
     AssertIn(icrf, 0, kcbMax);
@@ -960,7 +960,7 @@ PCRF CRM::PcrfGet(long icrf)
 /***************************************************************************
     Check the sanity of the CRM
 ***************************************************************************/
-void CRM::AssertValid(ulong grfobj)
+void CRM::AssertValid(uint32_t grfobj)
 {
     CRM_PAR::AssertValid(grfobj | fobjAllocated);
     AssertPo(_pglpcrf, 0);
@@ -972,8 +972,8 @@ void CRM::AssertValid(ulong grfobj)
 void CRM::MarkMem(void)
 {
     AssertThis(0);
-    long ipcrf;
-    long cpcrf;
+    int32_t ipcrf;
+    int32_t cpcrf;
     PCRF pcrf;
 
     CRM_PAR::MarkMem();
@@ -991,7 +991,7 @@ void CRM::MarkMem(void)
 /***************************************************************************
     A PFNRPO to read GHQ objects.
 ***************************************************************************/
-bool GHQ::FReadGhq(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool GHQ::FReadGhq(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     AssertPo(pcrf, 0);
     AssertPo(pblck, 0);
@@ -1027,7 +1027,7 @@ bool GHQ::FReadGhq(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long
 /***************************************************************************
     Assert the validity of a GHQ.
 ***************************************************************************/
-void GHQ::AssertValid(ulong grf)
+void GHQ::AssertValid(uint32_t grf)
 {
     GHQ_PAR::AssertValid(grf);
     if (hqNil != hq)
@@ -1048,7 +1048,7 @@ void GHQ::MarkMem(void)
 /***************************************************************************
     Assert the validity of a CABO.
 ***************************************************************************/
-void CABO::AssertValid(ulong grf)
+void CABO::AssertValid(uint32_t grf)
 {
     CABO_PAR::AssertValid(grf);
     AssertNilOrPo(po, 0);

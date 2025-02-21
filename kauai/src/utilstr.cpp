@@ -33,7 +33,7 @@ STN::STN(STN &stnSrc)
 ***************************************************************************/
 STN::STN(const PSZ pszSrc)
 {
-    long cch = LwBound(CchSz(pszSrc), 0, kcchMaxStn + 1);
+    int32_t cch = LwBound(CchSz(pszSrc), 0, kcchMaxStn + 1);
 
     AssertIn(cch, 0, kcchMaxStn + 1);
     CopyPb(pszSrc, _rgch + 1, cch * SIZEOF(achar));
@@ -58,7 +58,7 @@ STN &STN::operator=(STN &stnSrc)
 /***************************************************************************
     Set the string to the given array of characters.
 ***************************************************************************/
-void STN::SetRgch(const achar *prgchSrc, long cch)
+void STN::SetRgch(const achar *prgchSrc, int32_t cch)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -88,7 +88,7 @@ void STN::SetSzs(PSZS pszsSrc)
 #ifdef UNICODE
 #ifdef WIN
     // REVIEW shonk: is this correct?
-    long cch = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pszsSrc, -1, _rgch + 1, kcchMaxStn);
+    int32_t cch = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pszsSrc, -1, _rgch + 1, kcchMaxStn);
 
     AssertIn(cch, 1, kcchMaxStn + 1);
     _rgch[0] = (achar)(cch - 1);
@@ -105,11 +105,11 @@ void STN::SetSzs(PSZS pszsSrc)
 /***************************************************************************
     Delete (at most) cch characters starting at position ich.
 ***************************************************************************/
-void STN::Delete(long ich, long cch)
+void STN::Delete(int32_t ich, int32_t cch)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
-    long cchCur = Cch();
+    int32_t cchCur = Cch();
 
     if (!FIn(ich, 0, cchCur))
     {
@@ -135,13 +135,13 @@ void STN::Delete(long ich, long cch)
 /***************************************************************************
     Append some characters to the end of the string.
 ***************************************************************************/
-bool STN::FAppendRgch(const achar *prgchSrc, long cch)
+bool STN::FAppendRgch(const achar *prgchSrc, int32_t cch)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
     AssertPvCb(prgchSrc, cch * SIZEOF(achar));
     bool fRet = fTrue;
-    long cchCur = Cch();
+    int32_t cchCur = Cch();
 
     if (cch > kcchMaxStn - cchCur)
     {
@@ -163,13 +163,13 @@ bool STN::FAppendRgch(const achar *prgchSrc, long cch)
 /***************************************************************************
     Insert some characters into the middle of a string.
 ***************************************************************************/
-bool STN::FInsertRgch(long ich, const achar *prgchSrc, long cch)
+bool STN::FInsertRgch(int32_t ich, const achar *prgchSrc, int32_t cch)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
     AssertPvCb(prgchSrc, cch * SIZEOF(achar));
     bool fRet = fTrue;
-    long cchCur = Cch();
+    int32_t cchCur = Cch();
 
     ich = LwBound(ich, 0, cchCur + 1);
     if (cch > kcchMaxStn - ich)
@@ -204,7 +204,7 @@ bool STN::FInsertRgch(long ich, const achar *prgchSrc, long cch)
     Test whether the given rgch is equal to this string.  This does bytewise
     compare - not user level comparison.
 ***************************************************************************/
-bool STN::FEqualRgch(const achar *prgch, long cch)
+bool STN::FEqualRgch(const achar *prgch, int32_t cch)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -216,7 +216,7 @@ bool STN::FEqualRgch(const achar *prgch, long cch)
 /***************************************************************************
     Do user level string equality testing with the options given in grfstn.
 ***************************************************************************/
-bool STN::FEqualUserRgch(const achar *prgch, long cch, ulong grfstn)
+bool STN::FEqualUserRgch(const achar *prgch, int32_t cch, uint32_t grfstn)
 {
     AssertThis(0);
     AssertIn(cch, 0, kcbMax);
@@ -229,11 +229,11 @@ bool STN::FEqualUserRgch(const achar *prgch, long cch, ulong grfstn)
     Return the buffer size needed by GetData, or the block size needed
     by STN::FWrite.
 ***************************************************************************/
-long STN::CbData(void)
+int32_t STN::CbData(void)
 {
     AssertThis(0);
 
-    return SIZEOF(short) + (Cch() + 2) * SIZEOF(achar);
+    return SIZEOF(int16_t) + (Cch() + 2) * SIZEOF(achar);
 }
 
 /***************************************************************************
@@ -244,22 +244,22 @@ void STN::GetData(void *pv)
 {
     AssertThis(0);
     AssertPvCb(pv, CbData());
-    short osk = koskCur;
+    int16_t osk = koskCur;
 
-    CopyPb(&osk, pv, SIZEOF(short));
-    CopyPb(_rgch, PvAddBv(pv, SIZEOF(short)), (Cch() + 2) * SIZEOF(achar));
+    CopyPb(&osk, pv, SIZEOF(int16_t));
+    CopyPb(_rgch, PvAddBv(pv, SIZEOF(int16_t)), (Cch() + 2) * SIZEOF(achar));
 }
 
 /***************************************************************************
     Writes the string data to the given block starting at position ib.
 ***************************************************************************/
-bool STN::FWrite(PBLCK pblck, long ib)
+bool STN::FWrite(PBLCK pblck, int32_t ib)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
-    long cbWrite = CbData();
-    long cbTot = pblck->Cb();
-    short osk = koskCur;
+    int32_t cbWrite = CbData();
+    int32_t cbTot = pblck->Cb();
+    int16_t osk = koskCur;
 
     if (!FIn(ib, 0, cbTot - cbWrite + 1))
     {
@@ -269,7 +269,7 @@ bool STN::FWrite(PBLCK pblck, long ib)
 
     if (!pblck->FWriteRgb(&osk, SIZEOF(osk), ib))
         return fFalse;
-    if (!pblck->FWriteRgb(_rgch, cbWrite - SIZEOF(short), ib + SIZEOF(short)))
+    if (!pblck->FWriteRgb(_rgch, cbWrite - SIZEOF(int16_t), ib + SIZEOF(int16_t)))
         return fFalse;
 
     return fTrue;
@@ -278,21 +278,21 @@ bool STN::FWrite(PBLCK pblck, long ib)
 /***************************************************************************
     Set the string from the given data.
 ***************************************************************************/
-bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
+bool STN::FSetData(void *pv, int32_t cbMax, int32_t *pcbRead)
 {
     AssertThis(0);
     AssertIn(cbMax, 0, kcbMax);
     AssertPvCb(pv, cbMax);
     AssertNilOrVarMem(pcbRead);
-    long cch, ich, ibT, cbT;
+    int32_t cch, ich, ibT, cbT;
     wchar chw;
-    short osk;
+    int16_t osk;
 
     ibT = 0;
-    if (cbMax < SIZEOF(short) + ibT)
+    if (cbMax < SIZEOF(int16_t) + ibT)
         goto LFail;
-    CopyPb(pv, &osk, SIZEOF(short));
-    ibT += SIZEOF(short);
+    CopyPb(pv, &osk, SIZEOF(int16_t));
+    ibT += SIZEOF(int16_t);
 
     if (osk == koskCur)
     {
@@ -301,7 +301,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
             goto LFail;
         CopyPb(PvAddBv(pv, ibT), &_rgch[0], SIZEOF(achar));
         ibT += SIZEOF(achar);
-        cch = (long)(uchar)_rgch[0];
+        cch = (int32_t)(uchar)_rgch[0];
         if (!FIn(cch, 0, kcchMaxStn + 1))
             goto LFail;
 
@@ -325,7 +325,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
         if (ibT + 2 > cbMax)
             goto LFail;
 
-        cch = (long)(byte) * (schar *)PvAddBv(pv, ibT++);
+        cch = (int32_t)(uint8_t) * (schar *)PvAddBv(pv, ibT++);
         if (cch > kcchMaxStn || ibT + cch >= cbMax || *(schar *)PvAddBv(pv, ibT + cch) != 0)
         {
             goto LFail;
@@ -333,7 +333,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
         _rgch[0] = (achar)CchTranslateRgb(PvAddBv(pv, ibT), cch, osk, _rgch + 1, kcchMaxStn);
         ibT += cch + 1;
 
-        cch = (long)(uchar)_rgch[0];
+        cch = (int32_t)(uchar)_rgch[0];
         _rgch[cch + 1] = 0;
         goto LCheck;
 
@@ -345,7 +345,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
 
         if (osk == MacWin(koskUniWin, koskUniMac))
             SwapBytesRgsw(&chw, 1);
-        cch = (long)(ushort)chw;
+        cch = (int32_t)(uint16_t)chw;
 
         if (cch > kcchMaxStn || ibT + (cch + 1) * SIZEOF(wchar) > cbMax)
             goto LFail;
@@ -355,7 +355,7 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
         _rgch[0] = (achar)CchTranslateRgb(PvAddBv(pv, ibT), cch * SIZEOF(wchar), osk, _rgch + 1, kcchMaxStn);
         ibT += (cch + 1) * SIZEOF(wchar);
 
-        cch = (long)(uchar)_rgch[0];
+        cch = (int32_t)(uchar)_rgch[0];
         _rgch[cch + 1] = 0;
 
     LCheck:
@@ -385,26 +385,26 @@ bool STN::FSetData(void *pv, long cbMax, long *pcbRead)
 /***************************************************************************
     Read a string from a block.
 ***************************************************************************/
-bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
+bool STN::FRead(PBLCK pblck, int32_t ib, int32_t *pcbRead)
 {
     AssertThis(0);
     AssertPo(pblck, 0);
     AssertNilOrVarMem(pcbRead);
 
-    long cch, ich, ibT, cbT, cbMax;
-    short osk;
+    int32_t cch, ich, ibT, cbT, cbMax;
+    int16_t osk;
     schar chs;
     wchar chw;
-    byte rgb[kcbMaxDataStn];
+    uint8_t rgb[kcbMaxDataStn];
 
     if (!pblck->FUnpackData())
         return fFalse;
     cbMax = pblck->Cb();
 
     ibT = ib;
-    if (cbMax < SIZEOF(short) + ibT || !pblck->FReadRgb(&osk, SIZEOF(short), ibT))
+    if (cbMax < SIZEOF(int16_t) + ibT || !pblck->FReadRgb(&osk, SIZEOF(int16_t), ibT))
         goto LFail;
-    ibT += SIZEOF(short);
+    ibT += SIZEOF(int16_t);
 
     if (osk == koskCur)
     {
@@ -414,7 +414,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
             goto LFail;
         }
         ibT += SIZEOF(achar);
-        cch = (long)(uchar)_rgch[0];
+        cch = (int32_t)(uchar)_rgch[0];
         if (!FIn(cch, 0, kcchMaxStn + 1))
             goto LFail;
 
@@ -436,7 +436,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
     case SIZEOF(schar):
         if (ibT + 2 > cbMax || !pblck->FReadRgb(&chs, 1, ibT++))
             goto LFail;
-        cch = (long)(byte)chs;
+        cch = (int32_t)(uint8_t)chs;
         if (cch > kcchMaxStn || ibT + cch >= cbMax || !pblck->FReadRgb(rgb, cch + 1, ibT) || rgb[cch] != 0)
         {
             goto LFail;
@@ -444,7 +444,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
         ibT += cch + 1;
         _rgch[0] = (achar)CchTranslateRgb(rgb, cch, osk, _rgch + 1, kcchMaxStn);
 
-        cch = (long)(uchar)_rgch[0];
+        cch = (int32_t)(uchar)_rgch[0];
         _rgch[cch + 1] = 0;
         goto LCheck;
 
@@ -457,7 +457,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
 
         if (osk == MacWin(koskUniWin, koskUniMac))
             SwapBytesRgsw(&chw, 1);
-        cch = (long)(ushort)chw;
+        cch = (int32_t)(uint16_t)chw;
 
         if (cch > kcchMaxStn || ibT + (cch + 1) * SIZEOF(wchar) > cbMax ||
             !pblck->FReadRgb(rgb, (cch + 1) * SIZEOF(wchar), ibT) || ((wchar *)rgb)[cch] != 0)
@@ -467,7 +467,7 @@ bool STN::FRead(PBLCK pblck, long ib, long *pcbRead)
         ibT += (cch + 1) * SIZEOF(wchar);
         _rgch[0] = (achar)CchTranslateRgb(rgb, cch * SIZEOF(wchar), osk, _rgch + 1, kcchMaxStn);
 
-        cch = (long)(uchar)_rgch[0];
+        cch = (int32_t)(uchar)_rgch[0];
         _rgch[cch + 1] = 0;
 
     LCheck:
@@ -504,7 +504,7 @@ void STN::GetSzs(PSZS pszs)
 
 #ifdef UNICODE
 #ifdef WIN
-    long cchs = WideCharToMultiByte(CP_ACP, 0, _rgch + 1, -1, pszs, kcchMaxSz, pvNil, pvNil);
+    int32_t cchs = WideCharToMultiByte(CP_ACP, 0, _rgch + 1, -1, pszs, kcchMaxSz, pvNil, pvNil);
 
     pszs[cchs] = 0;
 #endif // WIN
@@ -524,11 +524,11 @@ void STN::GetSzs(PSZS pszs)
     Returns false if the string ended up being too long to fit in an stn.
     The following controls are supported:
 
-    %c (long)achar
+    %c (int32_t)achar
     %s pstn
     %z psz
-    %d signed decimal (long)
-    %u unsigned decimal (long)
+    %d signed decimal (int32_t)
+    %u unsigned decimal (int32_t)
     %x hex
     %f long as a 4 character value: 'xxxx' (ala FTG and CTG values)
     %% a percent sign
@@ -555,7 +555,7 @@ bool STN::FFormat(PSTN pstnFormat, ...)
     AssertThis(0);
     AssertPo(pstnFormat, 0);
 
-    return FFormatRgch(pstnFormat->Prgch(), pstnFormat->Cch(), (ulong *)(&pstnFormat + 1));
+    return FFormatRgch(pstnFormat->Prgch(), pstnFormat->Cch(), (uint32_t *)(&pstnFormat + 1));
 }
 
 /***************************************************************************
@@ -566,13 +566,13 @@ bool STN::FFormatSz(const PSZ pszFormat, ...)
     AssertThis(0);
     AssertSz(pszFormat);
 
-    return FFormatRgch(pszFormat, CchSz(pszFormat), (ulong *)(&pszFormat + 1));
+    return FFormatRgch(pszFormat, CchSz(pszFormat), (uint32_t *)(&pszFormat + 1));
 }
 
 /***************************************************************************
     Core routine for sprintf functionality.
 ***************************************************************************/
-bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData)
+bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uint32_t *prgluData)
 {
     AssertThis(0);
     AssertIn(cchFormat, 0, kcchMaxStn + 1);
@@ -588,16 +588,16 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
     };
     achar *pchOut, *pchOutLim;
     const achar *pchIn, *pchInLim;
-    long cch;
-    long cchMin;
-    long ivArg;
-    ulong lu, luRad;
+    int32_t cch;
+    int32_t cchMin;
+    int32_t ivArg;
+    uint32_t lu, luRad;
     achar ch;
     achar rgchT[kcchMaxStn];
     const achar *prgchTerm;
     achar *prgchTermMut;
     achar chSign, chPad;
-    ulong dwo;
+    uint32_t dwo;
     PSTN pstn;
     bool fRet = fFalse;
 
@@ -685,7 +685,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
 
         // code after the switch assumes that prgchTerm points to the
         // characters to add to the stream and cch is the number of characters
-        AssertPvCb(prgluData, LwMul(ivArg + 1, SIZEOF(ulong)));
+        AssertPvCb(prgluData, LwMul(ivArg + 1, SIZEOF(uint32_t)));
         lu = prgluData[ivArg++];
         prgchTerm = rgchT;
         switch (ch)
@@ -711,7 +711,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
         case ChLit('f'):
             for (cch = 4; cch-- > 0; lu >>= 8)
             {
-                ch = (achar)(byte)lu;
+                ch = (achar)(uint8_t)lu;
                 if (0 == ch)
                     ch = 1;
                 rgchT[cch] = ch;
@@ -727,10 +727,10 @@ bool STN::FFormatRgch(const achar *prgchFormat, long cchFormat, ulong *prgluData
             goto LUnsigned;
 
         case ChLit('d'):
-            if ((long)lu < 0)
+            if ((int32_t)lu < 0)
             {
                 chSign = ChLit('-');
-                lu = -(long)lu;
+                lu = -(int32_t)lu;
             }
             luRad = 10;
             goto LUnsigned;
@@ -810,13 +810,13 @@ LFail:
     spaces, '+' and '-' signs, and trailing spaces.  Doesn't deal with
     overflow.
 ***************************************************************************/
-bool STN::FGetLw(long *plw, long lwBase)
+bool STN::FGetLw(int32_t *plw, int32_t lwBase)
 {
     AssertThis(0);
     AssertVarMem(plw);
     AssertIn(lwBase, 0, 36);
     Assert(lwBase != 1, "base can't be 1");
-    long lwDigit;
+    int32_t lwDigit;
     achar ch;
     bool fNegative = fFalse;
     PSZ psz = Psz();
@@ -907,7 +907,7 @@ bool STN::FExpandControls(void)
     AssertThis(0);
     achar rgch[kcchMaxStn];
     achar *pchSrc, *pchDst, *pchLim, ch;
-    long cch;
+    int32_t cch;
     bool fAny;
     bool fRet = fFalse;
 
@@ -952,12 +952,12 @@ LFail:
 /***************************************************************************
     Assert the validity of a STN.
 ***************************************************************************/
-void STN::AssertValid(ulong grf)
+void STN::AssertValid(uint32_t grf)
 {
     AssertThisMem();
 
     achar *pch;
-    long cch = (long)(uchar)_rgch[0];
+    int32_t cch = (int32_t)(uchar)_rgch[0];
 
     AssertIn(cch, 0, kcchMaxStn + 1);
     Assert(_rgch[cch + 1] == 0, "missing termination byte");
@@ -976,7 +976,7 @@ bool FValidSt(PST pst)
 {
     AssertVarMem(pst);
     achar *pch;
-    long cch = (long)(uchar)pst[0];
+    int32_t cch = (int32_t)(uchar)pst[0];
 
     if (!FIn(cch, 0, kcchMaxSt + 1))
         return fFalse;
@@ -999,7 +999,7 @@ bool FValidStz(PSTZ pstz)
 /***************************************************************************
     Find the length of a zero terminated string.
 ***************************************************************************/
-long CchSz(const PSZ psz)
+int32_t CchSz(const PSZ psz)
 {
     // WARNING: don't call AssertSz, since AssertSz calls CchSz!
     AssertVarMem(psz);
@@ -1016,7 +1016,7 @@ long CchSz(const PSZ psz)
     Do string equality testing.  This does byte-wise comparison for
     internal (non-user) use only!
 ***************************************************************************/
-bool FEqualRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2)
+bool FEqualRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
@@ -1031,13 +1031,13 @@ bool FEqualRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2)
     (non-user) sorting only!  The sorting is byte-order independent.
     fcmpLt means that string 1 is less than string 2.
 ***************************************************************************/
-ulong FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2)
+uint32_t FcmpCompareRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
     AssertIn(cch2, 0, kcbMax);
     AssertPvCb(prgch2, cch2 * SIZEOF(achar));
-    long ich, cbTot, cbMatch;
+    int32_t ich, cbTot, cbMatch;
 
     if (cch1 < cch2)
         return fcmpLt;
@@ -1059,13 +1059,13 @@ ulong FcmpCompareRgch(const achar *prgch1, long cch1, const achar *prgch2, long 
 /***************************************************************************
     User level equality testing of strings.
 ***************************************************************************/
-bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, ulong grfstn)
+bool FEqualUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2, uint32_t grfstn)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
     AssertIn(cch2, 0, kcbMax);
     AssertPvCb(prgch2, cch2 * SIZEOF(achar));
-    long cchBuf;
+    int32_t cchBuf;
     achar rgch1[kcchMaxStn];
     achar rgch2[kcchMaxStn];
 
@@ -1100,7 +1100,7 @@ bool FEqualUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cc
 /***************************************************************************
     Do user level string comparison with the given options.
 ***************************************************************************/
-ulong FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, long cch2, ulong grfstn)
+uint32_t FcmpCompareUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int32_t cch2, uint32_t grfstn)
 {
     AssertIn(cch1, 0, kcbMax);
     AssertPvCb(prgch1, cch1 * SIZEOF(achar));
@@ -1108,7 +1108,7 @@ ulong FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, l
     AssertPvCb(prgch2, cch2 * SIZEOF(achar));
 
 #ifdef WIN
-    long lw;
+    int32_t lw;
 
     lw =
         CompareString(LOCALE_USER_DEFAULT, (grfstn & fstnIgnoreCase) ? NORM_IGNORECASE : 0, prgch1, cch1, prgch2, cch2);
@@ -1134,51 +1134,51 @@ ulong FcmpCompareUserRgch(const achar *prgch1, long cch1, const achar *prgch2, l
 /***************************************************************************
     Map an array of short characters to upper case equivalents.
 ***************************************************************************/
-void UpperRgchs(schar *prgchs, long cchs)
+void UpperRgchs(schar *prgchs, int32_t cchs)
 {
     AssertIn(cchs, 0, kcbMax);
     AssertPvCb(prgchs, cchs);
-    long ichs;
+    int32_t ichs;
     static bool _fInited;
 
     if (!_fInited)
     {
         for (ichs = 0; ichs < 256; ichs++)
-            _mpchschsUpper[ichs] = (byte)ichs;
+            _mpchschsUpper[ichs] = (uint8_t)ichs;
         MacWin(UppercaseText(_mpchschsUpper, 256, smSystemScript), CharUpperBuffA(_mpchschsUpper, 256));
         _fInited = fTrue;
     }
 
     for (; cchs-- != 0; prgchs++)
-        *prgchs = _mpchschsUpper[(byte)*prgchs];
+        *prgchs = _mpchschsUpper[(uint8_t)*prgchs];
 }
 
 /***************************************************************************
     Map an array of characters to lower case equivalents.
 ***************************************************************************/
-void LowerRgchs(schar *prgchs, long cchs)
+void LowerRgchs(schar *prgchs, int32_t cchs)
 {
     AssertIn(cchs, 0, kcbMax);
     AssertPvCb(prgchs, cchs);
-    long ichs;
+    int32_t ichs;
     static bool _fInited;
 
     if (!_fInited)
     {
         for (ichs = 0; ichs < 256; ichs++)
-            _mpchschsLower[ichs] = (byte)ichs;
+            _mpchschsLower[ichs] = (uint8_t)ichs;
         MacWin(LowercaseText(_mpchschsLower, 256, smSystemScript), CharLowerBuffA(_mpchschsLower, 256));
         _fInited = fTrue;
     }
 
     for (; cchs-- != 0; prgchs++)
-        *prgchs = _mpchschsLower[(byte)*prgchs];
+        *prgchs = _mpchschsLower[(uint8_t)*prgchs];
 }
 
 /***************************************************************************
     Map an array of unicode characters to upper case equivalents.
 ***************************************************************************/
-void UpperRgchw(wchar *prgchw, long cchw)
+void UpperRgchw(wchar *prgchw, int32_t cchw)
 {
     AssertIn(cchw, 0, kcbMax);
     AssertPvCb(prgchw, cchw * SIZEOF(wchar));
@@ -1197,7 +1197,7 @@ void UpperRgchw(wchar *prgchw, long cchw)
 /***************************************************************************
     Map an array of unicode characters to lower case equivalents.
 ***************************************************************************/
-void LowerRgchw(wchar *prgchw, long cchw)
+void LowerRgchw(wchar *prgchw, int32_t cchw)
 {
     AssertIn(cchw, 0, kcbMax);
     AssertPvCb(prgchw, cchw * SIZEOF(wchar));
@@ -1219,12 +1219,12 @@ void LowerRgchw(wchar *prgchw, long cchw)
 /***************************************************************************
     Translate text from the indicated source character set to koskCur.
 ***************************************************************************/
-long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDst, long cchMaxDst)
+int32_t CchTranslateRgb(const void *pvSrc, int32_t cbSrc, int16_t oskSrc, achar *prgchDst, int32_t cchMaxDst)
 {
     AssertPvCb(pvSrc, cbSrc);
     AssertOsk(oskSrc);
     AssertPvCb(prgchDst, cchMaxDst * SIZEOF(achar));
-    long cchT;
+    int32_t cchT;
 
 #ifdef WIN
 #ifdef UNICODE
@@ -1272,9 +1272,9 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
         pchSrc = (achar *)pvSrc;
         for (pchDst = prgchDst, cchT = cbSrc; cchT > 0; cchT--)
         {
-            byte bT = (byte)*pchSrc++;
-            if (bT >= (byte)0x80)
-                *pchDst++ = _mpchschsMacToWin[bT - (byte)0x80];
+            uint8_t bT = (uint8_t)*pchSrc++;
+            if (bT >= (uint8_t)0x80)
+                *pchDst++ = _mpchschsMacToWin[bT - (uint8_t)0x80];
             else
                 *pchDst++ = (achar)bT;
         }
@@ -1303,7 +1303,7 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
 #ifdef MAC
 #ifdef UNICODE
 
-    long cchDst;
+    int32_t cchDst;
     schar *pchsSrc;
     achar *pchDst;
 
@@ -1320,7 +1320,7 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
 
         pchsSrc = (schar *)pvSrc;
         for (pchDst = prgch, cchT = cbSrc; cchT > 0; cchT--)
-            *pchDst++ = (achar)(byte)*pchsSrc++;
+            *pchDst++ = (achar)(uint8_t)*pchsSrc++;
         return cbSrc;
 
     case koskSbMac:
@@ -1333,9 +1333,9 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
         for (pchDst = prgch, cchT = cbSrc; cchT > 0; cchT--)
             pchsSrc = (schar *)pvSrc;
         {
-            byte bT = (byte)*pchsSrc++;
-            if (bT >= (byte)0x80)
-                *pchDst++ = (achar)_mpchschsMacToWin[bT - (byte)0x80];
+            uint8_t bT = (uint8_t)*pchsSrc++;
+            if (bT >= (uint8_t)0x80)
+                *pchDst++ = (achar)_mpchschsMacToWin[bT - (uint8_t)0x80];
             else
                 *pchDst++ = (achar)bT;
         }
@@ -1374,9 +1374,9 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
         pchSrc = (achar *)pvSrc;
         for (pchDst = prgchDst, cchT = cbSrc; cchT > 0; cchT--)
         {
-            byte bT = (byte)*pchSrc++;
-            if (bT >= (byte)0x80)
-                *pchDst++ = _mpchschsWinToMac[bT - (byte)0x80];
+            uint8_t bT = (uint8_t)*pchSrc++;
+            if (bT >= (uint8_t)0x80)
+                *pchDst++ = _mpchschsWinToMac[bT - (uint8_t)0x80];
             else
                 *pchDst++ = (achar)bT;
         }
@@ -1397,7 +1397,7 @@ long CchTranslateRgb(const void *pvSrc, long cbSrc, short oskSrc, achar *prgchDs
     is true, the translation is from osk to koskCur, otherwise from koskCur
     to osk.
 ***************************************************************************/
-void TranslateRgch(achar *prgch, long cch, short osk, bool fToCur)
+void TranslateRgch(achar *prgch, int32_t cch, int16_t osk, bool fToCur)
 {
     AssertPvCb(prgch, cch);
     AssertOsk(osk);
@@ -1414,8 +1414,8 @@ void TranslateRgch(achar *prgch, long cch, short osk, bool fToCur)
 
     for (; cch > 0; cch--, prgch++)
     {
-        if ((byte)*prgch >= (byte)0x80)
-            *prgch = pmpchschs[(byte)*prgch - (byte)0x80];
+        if ((uint8_t)*prgch >= (uint8_t)0x80)
+            *prgch = pmpchschs[(uint8_t)*prgch - (uint8_t)0x80];
     }
 #endif //! UNICODE
 }
@@ -1429,7 +1429,7 @@ void TranslateRgch(achar *prgch, long cch, short osk, bool fToCur)
 
     REVIEW shonk: make GrfchFromCh handle all unicode characters.
 ***************************************************************************/
-ulong GrfchFromCh(achar ch)
+uint32_t GrfchFromCh(achar ch)
 {
     switch ((uchar)ch)
     {
@@ -1478,7 +1478,7 @@ ulong GrfchFromCh(achar ch)
 /***************************************************************************
     Validate an osk.
 ***************************************************************************/
-void AssertOsk(short osk)
+void AssertOsk(int16_t osk)
 {
     switch (osk)
     {
@@ -1514,7 +1514,7 @@ void AssertStz(PSTZ pstz)
 void AssertSz(PSZ psz)
 {
     // CchSz does all the asserting we need
-    long cch = CchSz(psz);
+    int32_t cch = CchSz(psz);
 }
 
 /***************************************************************************

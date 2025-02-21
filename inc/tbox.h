@@ -79,8 +79,8 @@ class TBXB : public TBXB_PAR
     PTBOX _ptbox;         // Owning text box.
     bool _fTrackingMouse; // Are we tracking the mouse.
     TBXT _tbxt;           // The anchor point being dragged.
-    long _xpPrev;         // Previous x coord of the mouse.
-    long _ypPrev;         // Previous y coord of the mouse.
+    int32_t _xpPrev;      // Previous x coord of the mouse.
+    int32_t _ypPrev;      // Previous y coord of the mouse.
     RC _rcOrig;           // Original size of the border.
 
     TBXB(PTBOX ptbox, PGCB pgcb) : GOB(pgcb)
@@ -88,7 +88,7 @@ class TBXB : public TBXB_PAR
         _ptbox = ptbox;
     }
 
-    TBXT _TbxtAnchor(long xp, long yp); // Returns the anchor point the mouse is at.
+    TBXT _TbxtAnchor(int32_t xp, int32_t yp); // Returns the anchor point the mouse is at.
 
   public:
     //
@@ -101,7 +101,7 @@ class TBXB : public TBXB_PAR
     //
     void Draw(PGNV pgnv, RC *prcClip);
     void Activate(bool fActive);
-    virtual bool FPtIn(long xp, long yp);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
 
@@ -155,23 +155,23 @@ class TBXG : public TBXG_PAR
     //
     // Scrolling
     //
-    bool FNeedToScroll(void);  // Does this text box need to scroll anything
-    void Scroll(long scaVert); // Scrolls to beginning or a single pixel only.
+    bool FNeedToScroll(void);     // Does this text box need to scroll anything
+    void Scroll(int32_t scaVert); // Scrolls to beginning or a single pixel only.
 
     //
     // Overridden routines
     //
-    virtual bool FPtIn(long xp, long yp);
+    virtual bool FPtIn(int32_t xp, int32_t yp);
     virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
     virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
     virtual bool FCmdClip(PCMD pcmd);
-    virtual bool FEnableDdgCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual long _DxpDoc(void);
+    virtual int32_t _DxpDoc(void);
     virtual void _NewRc(void);
-    virtual void InvalCp(long cp, long ccpIns, long ccpDel);
+    virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel);
     void Activate(bool fActive);
-    virtual void _FetchChp(long cp, PCHP pchp, long *pcpMin = pvNil, long *pcpLim = pvNil);
+    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
 
     //
     // Status
@@ -181,7 +181,7 @@ class TBXG : public TBXG_PAR
     //
     // Only for TBXB
     //
-    bool _FDoClip(long tool); // Actually does a clipboard command.
+    bool _FDoClip(int32_t tool); // Actually does a clipboard command.
 };
 
 enum
@@ -192,7 +192,7 @@ enum
     kfchpBold = 0x04,
     kfchpItalic = 0x08
 };
-const ulong kgrfchpAll = (kfchpOnn | kfchpDypFont | kfchpBold | kfchpItalic);
+const uint32_t kgrfchpAll = (kfchpOnn | kfchpDypFont | kfchpBold | kfchpItalic);
 
 //
 //
@@ -210,13 +210,13 @@ class TBOX : public TBOX_PAR
     MARKMEM
 
   private:
-    PSCEN _pscen;    // The owning scene
-    long _nfrmFirst; // Frame the tbox appears in.
-    long _nfrmMax;   // Frame the tbox disappears in.
-    long _nfrmCur;   // Current frame number.
-    bool _fSel;      // Is this tbox selected?
-    bool _fStory;    // Is this a story text box.
-    RC _rc;          // Size of text box.
+    PSCEN _pscen;       // The owning scene
+    int32_t _nfrmFirst; // Frame the tbox appears in.
+    int32_t _nfrmMax;   // Frame the tbox disappears in.
+    int32_t _nfrmCur;   // Current frame number.
+    bool _fSel;         // Is this tbox selected?
+    bool _fStory;       // Is this a story text box.
+    RC _rc;             // Size of text box.
 
     TBOX(void) : TXRD()
     {
@@ -240,13 +240,13 @@ class TBOX : public TBOX_PAR
     //
     void SetScen(PSCEN pscen);
     bool FIsVisible(void);
-    bool FGotoFrame(long nfrm);
+    bool FGotoFrame(int32_t nfrm);
     void Select(bool fSel);
     bool FSelected(void)
     {
         return _fSel;
     }
-    bool FGetLifetime(long *pnfrmStart, long *pnfrmLast);
+    bool FGetLifetime(int32_t *pnfrmStart, int32_t *pnfrmLast);
     bool FShowCore(void);
     bool FShow(void);
     void HideCore(void);
@@ -266,19 +266,19 @@ class TBOX : public TBOX_PAR
     bool FTextSelected(void);
     bool FSetAcrBack(ACR acr);
     bool FSetAcrText(ACR acr);
-    bool FSetOnnText(long onn);
-    bool FSetDypFontText(long dypFont);
-    bool FSetStyleText(ulong grfont);
-    void SetStartFrame(long nfrm);
-    void SetOnnDef(long onn)
+    bool FSetOnnText(int32_t onn);
+    bool FSetDypFontText(int32_t dypFont);
+    bool FSetStyleText(uint32_t grfont);
+    void SetStartFrame(int32_t nfrm);
+    void SetOnnDef(int32_t onn)
     {
         _onnDef = onn;
     }
-    void SetDypFontDef(long dypFont)
+    void SetDypFontDef(int32_t dypFont)
     {
         _dypFontDef = dypFont;
     }
-    void FetchChpSel(PCHP pchp, ulong *pgrfchp);
+    void FetchChpSel(PCHP pchp, uint32_t *pgrfchp);
     void AttachToMouse(void);
 
     //
@@ -301,16 +301,16 @@ class TBOX : public TBOX_PAR
     }
     void SetRc(RC *prc);
     void CleanDdg(void);
-    long Itbox(void);
+    int32_t Itbox(void);
 
     //
     // Undo access functions, not for use by anyone but tbox.cpp
     //
-    long NfrmFirst(void)
+    int32_t NfrmFirst(void)
     {
         return _nfrmFirst;
     }
-    long nfrmMax(void)
+    int32_t nfrmMax(void)
     {
         return _nfrmMax;
     }

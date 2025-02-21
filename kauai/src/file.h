@@ -20,14 +20,14 @@
     Byte order issues
 ****************************************/
 
-const short kboCur = 0x0001;
-const short kboOther = 0x0100;
+const int16_t kboCur = 0x0001;
+const int16_t kboOther = 0x0100;
 
 /****************************************
     Basic types
 ****************************************/
 
-typedef long FP;
+typedef int32_t FP;
 
 enum
 {
@@ -39,7 +39,7 @@ enum
     ffilTemp = 0x10,
     ffilMark = 0x20
 };
-const ulong kgrffilPerm = ffilWriteEnable | ffilDenyWrite | ffilDenyRead;
+const uint32_t kgrffilPerm = ffilWriteEnable | ffilDenyWrite | ffilDenyRead;
 
 // file error levels - in order of severity
 enum
@@ -74,20 +74,20 @@ class FIL : public FIL_PAR
     bool _fOpen : 1;
     bool _fEverOpen : 1;
     bool _fWrote : 1;
-    ulong _grffil; // permissions, mark and temp flags
-    long _el;
+    uint32_t _grffil; // permissions, mark and temp flags
+    int32_t _el;
 
 #ifdef MAC
-    short _fref;
+    int16_t _fref;
 #elif defined(WIN)
     HANDLE _hfile;
 #endif // WIN
 
     // private methods
-    FIL(FNI *pfni, ulong grffil);
+    FIL(FNI *pfni, uint32_t grffil);
     ~FIL(void);
 
-    bool _FOpen(bool fCreate, ulong grffil);
+    bool _FOpen(bool fCreate, uint32_t grffil);
     void _Close(bool fFinal = fFalse);
     void _SetFpPos(FP fp);
 
@@ -106,8 +106,8 @@ class FIL : public FIL_PAR
     {
         return _pfilFirst;
     }
-    static PFIL PfilOpen(FNI *pfni, ulong grffil = ffilDenyWrite);
-    static PFIL PfilCreate(FNI *pfni, ulong grffil = ffilWriteEnable | ffilDenyWrite);
+    static PFIL PfilOpen(FNI *pfni, uint32_t grffil = ffilDenyWrite);
+    static PFIL PfilCreate(FNI *pfni, uint32_t grffil = ffilWriteEnable | ffilDenyWrite);
     static PFIL PfilCreateTemp(FNI *pfni = pvNil);
     static PFIL PfilFromFni(FNI *pfni);
 
@@ -117,16 +117,16 @@ class FIL : public FIL_PAR
         _grffil |= ffilMark;
     }
 
-    long ElError(void)
+    int32_t ElError(void)
     {
         return _el;
     }
-    void SetEl(long el = elNil)
+    void SetEl(int32_t el = elNil)
     {
         _el = el;
     }
-    bool FSetGrffil(ulong grffil, ulong grffilMask = ~0);
-    ulong GrffilCur(void)
+    bool FSetGrffil(uint32_t grffil, uint32_t grffilMask = ~0);
+    uint32_t GrffilCur(void)
     {
         return _grffil;
     }
@@ -143,8 +143,8 @@ class FIL : public FIL_PAR
 
     bool FSetFpMac(FP fp);
     FP FpMac(void);
-    bool FReadRgb(void *pv, long cb, FP fp);
-    bool FReadRgbSeq(void *pv, long cb, FP *pfp)
+    bool FReadRgb(void *pv, int32_t cb, FP fp);
+    bool FReadRgbSeq(void *pv, int32_t cb, FP *pfp)
     {
         AssertVarMem(pfp);
         if (!FReadRgb(pv, cb, *pfp))
@@ -152,8 +152,8 @@ class FIL : public FIL_PAR
         *pfp += cb;
         return fTrue;
     }
-    bool FWriteRgb(const void *pv, long cb, FP fp);
-    bool FWriteRgbSeq(const void *pv, long cb, FP *pfp)
+    bool FWriteRgb(const void *pv, int32_t cb, FP fp);
+    bool FWriteRgbSeq(const void *pv, int32_t cb, FP *pfp)
     {
         AssertVarMem(pfp);
         if (!FWriteRgb(pv, cb, *pfp))
@@ -182,7 +182,7 @@ struct FLO
 {
     PFIL pfil;
     FP fp;
-    long cb;
+    int32_t cb;
 
     bool FRead(void *pv)
     {
@@ -192,16 +192,16 @@ struct FLO
     {
         return FWriteRgb(pv, cb, 0);
     }
-    bool FReadRgb(void *pv, long cbRead, FP dfp);
-    bool FWriteRgb(const void *pv, long cbWrite, FP dfp);
+    bool FReadRgb(void *pv, int32_t cbRead, FP dfp);
+    bool FWriteRgb(const void *pv, int32_t cbWrite, FP dfp);
     bool FCopy(PFLO pfloDst);
-    bool FReadHq(HQ *phq, long cbRead, FP dfp = 0);
+    bool FReadHq(HQ *phq, int32_t cbRead, FP dfp = 0);
     bool FWriteHq(HQ hq, FP dfp = 0);
     bool FReadHq(HQ *phq)
     {
         return FReadHq(phq, cb, 0);
     }
-    bool FTranslate(short osk);
+    bool FTranslate(int16_t osk);
 
     ASSERT
 };
@@ -237,29 +237,29 @@ class BLCK : public BLCK_PAR
 
     // for memory based blocks
     HQ _hq;
-    long _ibMin;
-    long _ibLim;
+    int32_t _ibMin;
+    int32_t _ibLim;
 
   public:
     BLCK(PFLO pflo, bool fPacked = fFalse);
-    BLCK(PFIL pfil, FP fp, long cb, bool fPacked = fFalse);
+    BLCK(PFIL pfil, FP fp, int32_t cb, bool fPacked = fFalse);
     BLCK(HQ *phq, bool fPacked = fFalse);
     BLCK(void);
     ~BLCK(void);
 
     void Set(PFLO pflo, bool fPacked = fFalse);
-    void Set(PFIL pfil, FP fp, long cb, bool fPacked = fFalse);
+    void Set(PFIL pfil, FP fp, int32_t cb, bool fPacked = fFalse);
     void SetHq(HQ *phq, bool fPacked = fFalse);
     void Free(void);
     HQ HqFree(bool fPackedOk = fFalse);
-    long Cb(bool fPackedOk = fFalse);
+    int32_t Cb(bool fPackedOk = fFalse);
 
     // changing the range of the block
-    bool FMoveMin(long dib);
-    bool FMoveLim(long dib);
+    bool FMoveMin(int32_t dib);
+    bool FMoveLim(int32_t dib);
 
     // create a temp block
-    bool FSetTemp(long cb, bool fForceFile = fFalse);
+    bool FSetTemp(int32_t cb, bool fForceFile = fFalse);
 
     // reading from and writing to
     bool FRead(void *pv, bool fPackedOk = fFalse)
@@ -270,10 +270,10 @@ class BLCK : public BLCK_PAR
     {
         return FWriteRgb(pv, Cb(fPackedOk), 0, fPackedOk);
     }
-    bool FReadRgb(void *pv, long cb, long ib, bool fPackedOk = fFalse);
-    bool FWriteRgb(const void *pv, long cb, long ib, bool fPackedOk = fFalse);
-    bool FReadHq(HQ *phq, long cb, long ib, bool fPackedOk = fFalse);
-    bool FWriteHq(HQ hq, long ib, bool fPackedOk = fFalse);
+    bool FReadRgb(void *pv, int32_t cb, int32_t ib, bool fPackedOk = fFalse);
+    bool FWriteRgb(const void *pv, int32_t cb, int32_t ib, bool fPackedOk = fFalse);
+    bool FReadHq(HQ *phq, int32_t cb, int32_t ib, bool fPackedOk = fFalse);
+    bool FWriteHq(HQ hq, int32_t ib, bool fPackedOk = fFalse);
     bool FReadHq(HQ *phq, bool fPackedOk = fFalse)
     {
         return FReadHq(phq, Cb(fPackedOk), 0, fPackedOk);
@@ -285,12 +285,12 @@ class BLCK : public BLCK_PAR
     bool FGetFlo(PFLO pflo, bool fPackedOk = fFalse);
 
     // packing and unpacking
-    bool FPacked(long *pcfmt = pvNil);
-    bool FPackData(long cfmt = cfmtNil);
+    bool FPacked(int32_t *pcfmt = pvNil);
+    bool FPackData(int32_t cfmt = cfmtNil);
     bool FUnpackData(void);
 
     // Amount of memory being used
-    long CbMem(void);
+    int32_t CbMem(void);
 };
 
 /***************************************************************************

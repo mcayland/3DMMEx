@@ -27,7 +27,7 @@ class DHEX : public DHEX_PAR
   protected:
     BSF _bsf;
 
-    DHEX(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil) : DHEX_PAR(pdocb, grfdoc)
+    DHEX(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil) : DHEX_PAR(pdocb, grfdoc)
     {
     }
 
@@ -72,7 +72,7 @@ PDDG DHEX::PddgNew(PGCB pgcb)
 /***************************************************************************
     Assert the validity of a DHEX.
 ***************************************************************************/
-void DHEX::AssertValid(ulong grf)
+void DHEX::AssertValid(uint32_t grf)
 {
     DHEX_PAR::AssertValid(0);
     AssertPo(&_bsf, 0);
@@ -145,10 +145,10 @@ void DCH::Draw(PGNV pgnv, RC *prcClip)
     AssertPo(pgnv, 0);
     AssertVarMem(prcClip);
     STN stn;
-    byte rgb[kcbMaxLineDch];
+    uint8_t rgb[kcbMaxLineDch];
     RC rc, rcSrc;
-    long xp, yp, cb, ib, cbT, ibT;
-    byte bT;
+    int32_t xp, yp, cb, ib, cbT, ibT;
+    uint8_t bT;
 
     pgnv->ClipRc(prcClip);
     pgnv->GetRcSrc(&rcSrc);
@@ -279,11 +279,11 @@ void DCH::_DrawHeader(PGNV pgnv)
 bool DCH::FCmdKey(PCMD_KEY pcmd)
 {
     AssertThis(0);
-    ulong grfcust;
-    long dibSel, dibDel, ibLim;
-    long cact;
+    uint32_t grfcust;
+    int32_t dibSel, dibDel, ibLim;
+    int32_t cact;
     CMD cmd;
-    byte rgb[64], bT;
+    uint8_t rgb[64], bT;
     bool fRight = fFalse;
 
     // keep fetching characters until we get a cursor key, delete key or
@@ -330,7 +330,7 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
             if (chNil == pcmd->ch)
                 break;
             if (!_fHexSel)
-                bT = (byte)pcmd->ch;
+                bT = (uint8_t)pcmd->ch;
             else
             {
                 // hex typing
@@ -363,9 +363,9 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
         else
         {
             // hex typing
-            byte bT;
-            long ibSrc, ibDst;
-            long ibAnchor = _ibAnchor;
+            uint8_t bT;
+            int32_t ibSrc, ibDst;
+            int32_t ibAnchor = _ibAnchor;
 
             if (_fHalfSel && ibAnchor > 0)
             {
@@ -401,8 +401,8 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
         }
         else
         {
-            long ibOther = _ibOther;
-            long ibAnchor = _ibAnchor;
+            int32_t ibOther = _ibOther;
+            int32_t ibAnchor = _ibAnchor;
 
             if (_fHalfSel)
             {
@@ -441,7 +441,7 @@ bool DCH::FCmdKey(PCMD_KEY pcmd)
 /***************************************************************************
     Replaces the bytes between ib1 and ib2 with the given bytes.
 ***************************************************************************/
-bool DCH::_FReplace(byte *prgb, long cb, long ib1, long ib2, bool fHalfSel)
+bool DCH::_FReplace(uint8_t *prgb, int32_t cb, int32_t ib1, int32_t ib2, bool fHalfSel)
 {
     _SwitchSel(fFalse);
     SortLw(&ib1, &ib2);
@@ -467,10 +467,10 @@ bool DCH::_FReplace(byte *prgb, long cb, long ib1, long ib2, bool fHalfSel)
     Invalidate all DCHs on this byte stream.  Also dirties the document.
     Should be called by any code that edits the document.
 ***************************************************************************/
-void DCH::_InvalAllDch(long ib, long cbIns, long cbDel)
+void DCH::_InvalAllDch(int32_t ib, int32_t cbIns, int32_t cbDel)
 {
     AssertThis(0);
-    long ipddg;
+    int32_t ipddg;
     PDDG pddg;
 
     // mark the document dirty
@@ -488,12 +488,12 @@ void DCH::_InvalAllDch(long ib, long cbIns, long cbDel)
     Invalidate the display from ib to the end of the display.  If we're
     the active DCH, also redraw.
 ***************************************************************************/
-void DCH::_InvalIb(long ib, long cbIns, long cbDel)
+void DCH::_InvalIb(int32_t ib, int32_t cbIns, int32_t cbDel)
 {
     AssertThis(0);
     Assert(!_fSelOn, "why is the sel on during an invalidation?");
     RC rc;
-    long ibAnchor, ibOther;
+    int32_t ibAnchor, ibOther;
 
     // adjust the sel
     ibAnchor = _ibAnchor;
@@ -551,7 +551,7 @@ void DCH::_SwitchSel(bool fOn)
 ***************************************************************************/
 void DCH::_ShowSel(void)
 {
-    long ln, lnHope, cln, dscv;
+    int32_t ln, lnHope, cln, dscv;
     RC rc;
 
     // find the line we definitely need to show
@@ -595,7 +595,7 @@ void DCH::_ShowSel(void)
 void DCH::_InvertSel(PGNV pgnv)
 {
     Assert(!_fFixed || _ibAnchor == _ibOther, "non-ins sel in fixed");
-    long cb;
+    int32_t cb;
     RC rcClip;
     RC rc, rcT;
 
@@ -660,10 +660,10 @@ void DCH::_InvertSel(PGNV pgnv)
 /***************************************************************************
     Inverts a range on screen.  Does not mark insertion bars or half sels.
 ***************************************************************************/
-void DCH::_InvertIbRange(PGNV pgnv, long ib1, long ib2, bool fHex)
+void DCH::_InvertIbRange(PGNV pgnv, int32_t ib1, int32_t ib2, bool fHex)
 {
-    long ibMin, ibMac;
-    long xp2, yp2;
+    int32_t ibMin, ibMac;
+    int32_t xp2, yp2;
     RC rc, rcT, rcClip;
 
     ibMin = _scvVert * _cbLine;
@@ -714,7 +714,7 @@ void DCH::_InvertIbRange(PGNV pgnv, long ib1, long ib2, bool fHex)
 /***************************************************************************
     Select the second half of the byte before ib.
 ***************************************************************************/
-void DCH::_SetHalfSel(long ib)
+void DCH::_SetHalfSel(int32_t ib)
 {
     ib = LwBound(ib, 0, _pbsf->IbMac() + 1);
     if (ib == 0)
@@ -743,9 +743,9 @@ void DCH::_SetHalfSel(long ib)
 /***************************************************************************
     Set the selection.  fRight is ignored for non-insertion bar selections.
 ***************************************************************************/
-void DCH::_SetSel(long ibAnchor, long ibOther, bool fRight)
+void DCH::_SetSel(int32_t ibAnchor, int32_t ibOther, bool fRight)
 {
-    long ibMac = _pbsf->IbMac();
+    int32_t ibMac = _pbsf->IbMac();
     GNV gnv(this);
 
     if (_fFixed && ibMac > 0)
@@ -821,12 +821,12 @@ void DCH::_SetHexSel(bool fHex)
     fHex is false.  If fHex is true, fNoTrailSpace indicates whether a
     trailing space should be included (if the cb is divisible by 4).
 ***************************************************************************/
-long DCH::_IchFromCb(long cb, bool fHex, bool fNoTrailSpace)
+int32_t DCH::_IchFromCb(int32_t cb, bool fHex, bool fNoTrailSpace)
 {
     AssertIn(cb, 0, _cbLine + 1);
 
     // skip over the address
-    long ich = 10;
+    int32_t ich = 10;
 
     if (fHex)
     {
@@ -847,7 +847,7 @@ long DCH::_IchFromCb(long cb, bool fHex, bool fNoTrailSpace)
     Find the xp for the given byte.  fHex indicates whether we want the
     postion in the hex area or the ascii area.
 ***************************************************************************/
-long DCH::_XpFromIb(long ib, bool fHex)
+int32_t DCH::_XpFromIb(int32_t ib, bool fHex)
 {
     return _XpFromIch(_IchFromCb(ib % _cbLine, fHex));
 }
@@ -857,7 +857,7 @@ long DCH::_XpFromIb(long ib, bool fHex)
     of bytes in from the left edge.  fHex indicates whether we want the
     postion in the hex area or the ascii area.
 ***************************************************************************/
-long DCH::_XpFromCb(long cb, bool fHex, bool fNoTrailSpace)
+int32_t DCH::_XpFromCb(int32_t cb, bool fHex, bool fNoTrailSpace)
 {
     return _XpFromIch(_IchFromCb(cb, fHex, fNoTrailSpace));
 }
@@ -865,7 +865,7 @@ long DCH::_XpFromCb(long cb, bool fHex, bool fNoTrailSpace)
 /***************************************************************************
     Find the yp for the given byte.
 ***************************************************************************/
-long DCH::_YpFromIb(long ib)
+int32_t DCH::_YpFromIb(int32_t ib)
 {
     AssertIn(ib, 0, kcbMax);
     return LwMul((ib / _cbLine) - _scvVert, _dypLine) + _dypHeader;
@@ -877,14 +877,14 @@ long DCH::_YpFromIb(long ib)
     output (unless the point is not in the edit area of the DCH).  If *ptHex
     is tYes or tNo on input, the ib is determined using *ptHex.
 ***************************************************************************/
-long DCH::_IbFromPt(long xp, long yp, tribool *ptHex, bool *pfRight)
+int32_t DCH::_IbFromPt(int32_t xp, int32_t yp, tribool *ptHex, bool *pfRight)
 {
     AssertVarMem(ptHex);
     AssertNilOrVarMem(pfRight);
 
     RC rc;
-    long cbMin, cbLim, cb, ib;
-    long xpFind, xpT;
+    int32_t cbMin, cbLim, cb, ib;
+    int32_t xpFind, xpT;
     bool fHex;
 
     _GetContent(&rc);
@@ -935,13 +935,13 @@ long DCH::_IbFromPt(long xp, long yp, tribool *ptHex, bool *pfRight)
 /***************************************************************************
     Handle a mouse down in our content.
 ***************************************************************************/
-void DCH::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DCH::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     AssertThis(0);
     tribool tHex;
     bool fDown, fRight;
     PT pt, ptT;
-    long ib;
+    int32_t ib;
     RC rc;
 
     // doing this before the activate avoids flashing the old selection
@@ -980,7 +980,7 @@ void DCH::MouseDown(long xp, long yp, long cact, ulong grfcust)
 /***************************************************************************
     Return the maximum for the indicated scroll bar.
 ***************************************************************************/
-long DCH::_ScvMax(bool fVert)
+int32_t DCH::_ScvMax(bool fVert)
 {
     RC rc;
 
@@ -995,7 +995,7 @@ long DCH::_ScvMax(bool fVert)
 bool DCH::_FCopySel(PDOCB *ppdocb)
 {
     PDHEX pdhex;
-    long ib1, ib2;
+    int32_t ib1, ib2;
 
     ib1 = _ibOther;
     ib2 = _fFixed ? _pbsf->IbMac() : _ibAnchor;
@@ -1027,11 +1027,11 @@ void DCH::_ClearSel(void)
 /***************************************************************************
     Paste over the selection.
 ***************************************************************************/
-bool DCH::_FPaste(PCLIP pclip, bool fDoIt, long cid)
+bool DCH::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
 {
     AssertThis(0);
     AssertPo(pclip, 0);
-    long ib1, ib2, cb;
+    int32_t ib1, ib2, cb;
     PDOCB pdocb;
     PBSF pbsf;
 
@@ -1091,7 +1091,7 @@ bool DCH::_FPaste(PCLIP pclip, bool fDoIt, long cid)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DCH::AssertValid(ulong grf)
+void DCH::AssertValid(uint32_t grf)
 {
     DCH_PAR::AssertValid(0);
     AssertPo(_pbsf, 0);
@@ -1180,7 +1180,7 @@ PDDG DOCH::PddgNew(PGCB pgcb)
 /***************************************************************************
     Returns the length of the data on file
 ***************************************************************************/
-long DOCH::_CbOnFile(void)
+int32_t DOCH::_CbOnFile(void)
 {
     AssertThis(0);
     return _bsf.IbMac();
@@ -1202,7 +1202,7 @@ bool DOCH::_FWrite(PBLCK pblck, bool fRedirect)
 /***************************************************************************
     Assert the validity of an object.
 ***************************************************************************/
-void DOCH::AssertValid(ulong grf)
+void DOCH::AssertValid(uint32_t grf)
 {
     DOCH_PAR::AssertValid(0);
     AssertPo(&_bsf, 0);

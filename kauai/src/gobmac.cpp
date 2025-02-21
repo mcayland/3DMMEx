@@ -21,7 +21,7 @@ PGOB GOB::_pgobScreen;
     Create the screen gob.  If fgobEnsureHwnd is set, ensures that the
     screen gob has an OS window associated with it.
 ***************************************************************************/
-bool GOB::FInitScreen(ulong grfgob, long ginDef)
+bool GOB::FInitScreen(uint32_t grfgob, int32_t ginDef)
 {
     PGOB pgob;
 
@@ -66,7 +66,7 @@ bool GOB::FAttachHwnd(HWND hwnd)
         _hwnd = hwnd;
         if (_hwnd->windowKind != dialogKind)
             _hwnd->windowKind = kswKindGob;
-        _hwnd->refCon = (long)this;
+        _hwnd->refCon = (int32_t)this;
         SetRcFromHwnd();
     }
     return fTrue;
@@ -111,7 +111,7 @@ HWND GOB::_HwndNewMdi(PSTZ pstzTitle)
 {
     HWND hwnd;
     RCS rcs;
-    static long _cact = 0;
+    static int32_t _cact = 0;
 
     rcs = qd.screenBits.bounds;
     rcs.top += GetMBarHeight() + 25; // menu bar and title
@@ -121,9 +121,9 @@ HWND GOB::_HwndNewMdi(PSTZ pstzTitle)
     OffsetRect(&rcs, _cact * 20, _cact * 20);
     _cact = (_cact + 1) % 5;
 
-    hwnd = (HWND)NewCWindow(pvNil, &rcs, (byte *)pstzTitle, fTrue, documentProc, GrafPtr(-1), fTrue, 0);
+    hwnd = (HWND)NewCWindow(pvNil, &rcs, (uint8_t *)pstzTitle, fTrue, documentProc, GrafPtr(-1), fTrue, 0);
     if (hNil != hwnd && pvNil != vpmubCur)
-        vpmubCur->FAddListCid(cidChooseWnd, (long)hwnd, pstzTitle);
+        vpmubCur->FAddListCid(cidChooseWnd, (int32_t)hwnd, pstzTitle);
     return hwnd;
 }
 
@@ -133,7 +133,7 @@ HWND GOB::_HwndNewMdi(PSTZ pstzTitle)
 void GOB::_DestroyHwnd(HWND hwnd)
 {
     if (pvNil != vpmubCur)
-        vpmubCur->FRemoveListCid(cidChooseWnd, (long)hwnd);
+        vpmubCur->FRemoveListCid(cidChooseWnd, (int32_t)hwnd);
     DisposeWindow((PPRT)hwnd);
 }
 
@@ -145,7 +145,7 @@ void GOB::TrackGrow(PEVT pevt)
     Assert(_hwnd != hNil, "gob has no hwnd");
     Assert(pevt->what == mouseDown, "wrong EVT");
 
-    long lw;
+    int32_t lw;
     RC rc;
     RCS rcs;
 
@@ -168,7 +168,7 @@ void GOB::GetPtMouse(PT *ppt, bool *pfDown)
     if (ppt != pvNil)
     {
         PTS pts;
-        long xp, yp;
+        int32_t xp, yp;
         PGOB pgob;
         PPRT pprtSav, pprt;
 
@@ -241,9 +241,9 @@ void GOB::SetHwndName(PSTZ pstz)
     }
     if (pvNil != vpmubCur)
     {
-        vpmubCur->FChangeListCid(cidChooseWnd, (long)_hwnd, pvNil, (long)_hwnd, pstz);
+        vpmubCur->FChangeListCid(cidChooseWnd, (int32_t)_hwnd, pvNil, (int32_t)_hwnd, pstz);
     }
-    SetWTitle(&_hwnd->port, (byte *)pstz);
+    SetWTitle(&_hwnd->port, (uint8_t *)pstz);
 }
 
 /***************************************************************************
@@ -254,7 +254,7 @@ void GOB::MakeHwndActive(HWND hwnd)
 {
     Assert(hwnd != hNil, "nil hwnd");
     GTE gte;
-    ulong grfgte;
+    uint32_t grfgte;
     PGOB pgob;
 
     gte.Init(_pgobScreen, fgteNil);

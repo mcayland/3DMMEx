@@ -93,7 +93,7 @@ class DOCE : public DOCE_PAR
 
     virtual bool _FSaveToChunk(CTG ctg, CNO cno, bool fRedirect);
     virtual bool _FWrite(PBLCK pblck, bool fRedirect) = 0;
-    virtual long _CbOnFile(void) = 0;
+    virtual int32_t _CbOnFile(void) = 0;
     virtual bool _FRead(PBLCK pblck) = 0;
 
   public:
@@ -101,7 +101,7 @@ class DOCE : public DOCE_PAR
     static void CloseDeletedDoce(PDOCB pdocb);
 
     virtual void GetName(PSTN pstn);
-    virtual bool FSave(long cid);
+    virtual bool FSave(int32_t cid);
 };
 
 /***************************************************************************
@@ -120,7 +120,7 @@ class DOCH : public DOCH_PAR
 
     DOCH(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
     virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual long _CbOnFile(void);
+    virtual int32_t _CbOnFile(void);
     virtual bool _FRead(PBLCK pblck);
 
   public:
@@ -141,22 +141,22 @@ class DOCG : public DOCG_PAR
 
   protected:
     PGRPB _pgrpb;
-    long _cls; // which class the group belongs to
+    int32_t _cls; // which class the group belongs to
     short _bo;
     short _osk;
 
-    DOCG(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, long cls);
+    DOCG(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, int32_t cls);
     ~DOCG(void);
     virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual long _CbOnFile(void);
+    virtual int32_t _CbOnFile(void);
     virtual bool _FRead(PBLCK pblck);
 
   public:
-    static PDOCG PdocgNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, long cls);
+    static PDOCG PdocgNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, int32_t cls);
     virtual PDDG PddgNew(PGCB pgcb);
 
-    PDOCI PdociFromItem(long iv, long dln);
-    void CloseDeletedDoci(long iv, long cvDel);
+    PDOCI PdociFromItem(int32_t iv, int32_t dln);
+    void CloseDeletedDoci(int32_t iv, int32_t cvDel);
     PGRPB Pgrpb(void)
     {
         return _pgrpb;
@@ -177,34 +177,34 @@ class DOCI : public DOCI_PAR
 
   protected:
     PGRPB _pgrpb; // the group the data came from and gets written to.
-    long _cls;
-    long _iv; // which item is being edited
-    long _dln;
+    int32_t _cls;
+    int32_t _iv; // which item is being edited
+    int32_t _dln;
     bool _fFixed; // indicates if the data is fixed length
     BSF _bsf;     // the byte stream we're editing
 
-    DOCI(PDOCB pdocb, PGRPB pgrpb, long cls, long iv, long dln);
+    DOCI(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t iv, int32_t dln);
     bool _FInit(void);
 
-    virtual bool _FSaveToItem(long iv, bool fRedirect);
-    virtual bool _FWrite(long iv);
+    virtual bool _FSaveToItem(int32_t iv, bool fRedirect);
+    virtual bool _FWrite(int32_t iv);
     virtual HQ _HqRead();
 
   public:
-    static PDOCI PdociNew(PDOCB pdocb, PGRPB pgrpb, long cls, long iv, long dln);
+    static PDOCI PdociNew(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t iv, int32_t dln);
     virtual PDDG PddgNew(PGCB pgcb);
 
-    long Iv(void)
+    int32_t Iv(void)
     {
         return _iv;
     }
-    long Dln(void)
+    int32_t Dln(void)
     {
         return _dln;
     }
 
     virtual void GetName(PSTN pstn);
-    virtual bool FSave(long cid);
+    virtual bool FSave(int32_t cid);
 };
 
 /***************************************************************************
@@ -225,7 +225,7 @@ class DOCPIC : public DOCPIC_PAR
     ~DOCPIC(void);
 
     virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual long _CbOnFile(void);
+    virtual int32_t _CbOnFile(void);
     virtual bool _FRead(PBLCK pblck);
 
   public:
@@ -256,7 +256,7 @@ class DOCMBMP : public DOCMBMP_PAR
     ~DOCMBMP(void);
 
     virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual long _CbOnFile(void);
+    virtual int32_t _CbOnFile(void);
     virtual bool _FRead(PBLCK pblck);
 
   public:
@@ -287,25 +287,25 @@ class DCLB : public DCLB_PAR
     ASSERT
 
   protected:
-    long _onn;       // fixed width font to use
-    long _dypHeader; // height of the header
-    long _dypLine;   // height of one line
-    long _dxpChar;   // width of a character
+    int32_t _onn;       // fixed width font to use
+    int32_t _dypHeader; // height of the header
+    int32_t _dypLine;   // height of one line
+    int32_t _dxpChar;   // width of a character
 
     DCLB(PDOCB pdocb, PGCB pgcb);
-    virtual void _Scroll(long scaHorz, long scaVert, long scvHorz = 0, long scvVert = 0);
-    virtual void _ScrollDxpDyp(long dxp, long dyp);
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
+    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp);
     virtual void GetMinMax(RC *prcMinMax);
 
-    long _YpFromLn(long ln)
+    int32_t _YpFromLn(int32_t ln)
     {
         return LwMul(ln - _scvVert, _dypLine) + _dypHeader;
     }
-    long _XpFromIch(long ich)
+    int32_t _XpFromIch(int32_t ich)
     {
         return LwMul(ich - _scvHorz + 1, _dxpChar);
     }
-    long _LnFromYp(long yp);
+    int32_t _LnFromYp(int32_t yp);
 
     void _GetContent(RC *prc);
 };
@@ -330,12 +330,12 @@ class SEL : public SEL_PAR
 
   protected:
     PCFL _pcfl;
-    long _icki;
-    long _ikid;
+    int32_t _icki;
+    int32_t _ikid;
     CKI _cki;
     KID _kid;
-    long _ln;
-    long _lnLim;         // this is lnNil if we haven't yet calculated the lim
+    int32_t _ln;
+    int32_t _lnLim;      // this is lnNil if we haven't yet calculated the lim
     PGL _pglctg;         // the ctgs to filter on
     bool _fHideList : 1; // whether to hide the ctgs in the list or show them
     bool _fHideKids : 1; // whether to hide the kids
@@ -351,25 +351,25 @@ class SEL : public SEL_PAR
 
     void Adjust(bool fExact = fFalse);
 
-    long Icki(void)
+    int32_t Icki(void)
     {
         return _icki;
     }
-    long Ikid(void)
+    int32_t Ikid(void)
     {
         return _ikid;
     }
-    long Ln(void)
+    int32_t Ln(void)
     {
         return _ln;
     }
-    ulong GrfselGetCkiKid(CKI *pcki, KID *pkid);
+    uint32_t GrfselGetCkiKid(CKI *pcki, KID *pkid);
 
-    bool FSetLn(long ln);
+    bool FSetLn(int32_t ln);
     bool FAdvance(void);
     bool FRetreat(void);
     bool FSetCkiKid(CKI *pcki, KID *pkid = pvNil, bool fExact = fTrue);
-    long LnLim(void);
+    int32_t LnLim(void);
     void InvalLim(void)
     {
         _lnLim = lnNil;
@@ -386,7 +386,7 @@ class SEL : public SEL_PAR
         return _fHideList;
     }
     void HideList(bool fHide);
-    bool FGetCtgFilter(long ictg, CTG *pctg);
+    bool FGetCtgFilter(int32_t ictg, CTG *pctg);
     void FreeFilterList(void);
     bool FAddCtgFilter(CTG ctg);
 };
@@ -404,41 +404,41 @@ class DCD : public DCD_PAR
     MARKMEM
 
   protected:
-    long _dypBorder; // height of border (included in _dypLine)
-    PCFL _pcfl;      // the chunky file
-    SEL _sel;        // the current selection
+    int32_t _dypBorder; // height of border (included in _dypLine)
+    PCFL _pcfl;         // the chunky file
+    SEL _sel;           // the current selection
 
     DCD(PDOCB pdocb, PCFL pcfl, PGCB pgcb);
     void _DrawSel(PGNV pgnv);
-    void _HiliteLn(long ln);
-    void _SetSel(long ln, CKI *pcki = pvNil, KID *pkid = pvNil);
+    void _HiliteLn(int32_t ln);
+    void _SetSel(int32_t ln, CKI *pcki = pvNil, KID *pkid = pvNil);
     void _ShowSel(void);
 
     virtual void _Activate(bool fActive);
-    virtual long _ScvMax(bool fVert);
+    virtual int32_t _ScvMax(bool fVert);
     bool _FAddChunk(CTG ctgDef, CKI *pcki, bool *pfCreated);
     bool _FEditChunkInfo(CKI *pckiOld);
     bool _FChangeChid(CKI *pcki, KID *pkid);
 
     bool _FDoAdoptChunkDlg(CKI *pcki, KID *pkid);
-    void _EditCki(CKI *pcki, long cid);
+    void _EditCki(CKI *pcki, int32_t cid);
 
     void _InvalCkiKid(CKI *pcki = pvNil, KID *pkid = pvNil);
 
     // clipboard support
     virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
     virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, long cid);
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
 
   public:
     static PDCD PdcdNew(PDOCB pdocb, PCFL pcfl, PGCB pgcb);
     static void InvalAllDcd(PDOCB pdocb, PCFL pcfl, CKI *pcki = pvNil, KID *pkid = pvNil);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     virtual bool FCmdKey(PCMD_KEY pcmd);
 
-    virtual bool FEnableDcdCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDcdCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdAddChunk(PCMD pcmd);
     virtual bool FCmdDeleteChunk(PCMD pcmd);
     virtual bool FCmdAdoptChunk(PCMD pcmd);
@@ -459,7 +459,7 @@ class DCD : public DCD_PAR
     virtual bool FCmdCloneChunk(PCMD pcmd);
     virtual bool FCmdReopen(PCMD pcmd);
 
-    bool FTestScript(CTG ctg, CNO cno, long cbCache = 0x00300000L);
+    bool FTestScript(CTG ctg, CNO cno, int32_t cbCache = 0x00300000L);
     bool FPlayMidi(CTG ctg, CNO cno);
     bool FPlayWave(CTG ctg, CNO cno);
 };
@@ -477,12 +477,12 @@ class DCH : public DCH_PAR
     MARKMEM
 
   protected:
-    PBSF _pbsf;   // the byte stream
-    long _cbLine; // number of bytes per line
+    PBSF _pbsf;      // the byte stream
+    int32_t _cbLine; // number of bytes per line
 
     // the selection
-    long _ibAnchor;
-    long _ibOther;
+    int32_t _ibAnchor;
+    int32_t _ibOther;
 
     bool _fSelOn : 1;    // selection is showing
     bool _fRightSel : 1; // selection if on a line boundary is at the right edge
@@ -493,38 +493,38 @@ class DCH : public DCH_PAR
     DCH(PDOCB pdocb, PBSF pbsf, bool fFixed, PGCB pgcb);
 
     virtual void _Activate(bool fActive);
-    virtual long _ScvMax(bool fVert);
+    virtual int32_t _ScvMax(bool fVert);
 
-    long _IchFromCb(long cb, bool fHex, bool fNoTrailSpace = fFalse);
-    long _XpFromCb(long cb, bool fHex, bool fNoTrailSpace = fFalse);
-    long _XpFromIb(long ib, bool fHex);
-    long _YpFromIb(long ib);
-    long _IbFromPt(long xp, long yp, tribool *ptHex, bool *pfRight = pvNil);
+    int32_t _IchFromCb(int32_t cb, bool fHex, bool fNoTrailSpace = fFalse);
+    int32_t _XpFromCb(int32_t cb, bool fHex, bool fNoTrailSpace = fFalse);
+    int32_t _XpFromIb(int32_t ib, bool fHex);
+    int32_t _YpFromIb(int32_t ib);
+    int32_t _IbFromPt(int32_t xp, int32_t yp, tribool *ptHex, bool *pfRight = pvNil);
 
-    void _SetSel(long ibAnchor, long ibOther, bool fRight);
-    void _SetHalfSel(long ib);
+    void _SetSel(int32_t ibAnchor, int32_t ibOther, bool fRight);
+    void _SetHalfSel(int32_t ib);
     void _SetHexSel(bool fHex);
     void _SwitchSel(bool fOn);
     void _ShowSel(void);
     void _InvertSel(PGNV pgnv);
-    void _InvertIbRange(PGNV pgnv, long ib1, long ib2, bool fHex);
+    void _InvertIbRange(PGNV pgnv, int32_t ib1, int32_t ib2, bool fHex);
 
-    bool _FReplace(byte *prgb, long cb, long ibMin, long ibLim, bool fHalfSel = fFalse);
-    void _InvalAllDch(long ib, long cbIns, long cbDel);
-    void _InvalIb(long ib, long cbIns, long cbDel);
+    bool _FReplace(uint8_t *prgb, int32_t cb, int32_t ibMin, int32_t ibLim, bool fHalfSel = fFalse);
+    void _InvalAllDch(int32_t ib, int32_t cbIns, int32_t cbDel);
+    void _InvalIb(int32_t ib, int32_t cbIns, int32_t cbDel);
 
     void _DrawHeader(PGNV pgnv);
 
     // clipboard support
     virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
     virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, long cid);
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
 
   public:
     static PDCH PdchNew(PDOCB pdocb, PBSF pbsf, bool fFixed, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     virtual bool FCmdKey(PCMD_KEY pcmd);
 };
 
@@ -542,43 +542,43 @@ class DCGB : public DCGB_PAR
     MARKMEM
 
   protected:
-    long _dypBorder;  // height of border (included in _dypLine)
-    long _clnItem;    // number of lines for each item
-    long _ivCur;      // which item is selected
-    long _dlnCur;     // which line in the item is selected
-    PGRPB _pgrpb;     // the group we're displaying
-    long _cls;        // the class of the group
-    bool _fAllocated; // whether the class is allocated or general
+    int32_t _dypBorder; // height of border (included in _dypLine)
+    int32_t _clnItem;   // number of lines for each item
+    int32_t _ivCur;     // which item is selected
+    int32_t _dlnCur;    // which line in the item is selected
+    PGRPB _pgrpb;       // the group we're displaying
+    int32_t _cls;       // the class of the group
+    bool _fAllocated;   // whether the class is allocated or general
 
-    DCGB(PDOCB pdocb, PGRPB pgrpb, long cls, long clnItem, PGCB pgcb);
+    DCGB(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t clnItem, PGCB pgcb);
 
     virtual void _Activate(bool fActive);
-    virtual long _ScvMax(bool fVert);
-    long _YpFromIvDln(long iv, long dln)
+    virtual int32_t _ScvMax(bool fVert);
+    int32_t _YpFromIvDln(int32_t iv, int32_t dln)
     {
         return _YpFromLn(LwMul(iv, _clnItem) + dln);
     }
-    long _LnFromIvDln(long iv, long dln)
+    int32_t _LnFromIvDln(int32_t iv, int32_t dln)
     {
         return LwMul(iv, _clnItem) + dln;
     }
-    long _LnLim(void)
+    int32_t _LnLim(void)
     {
         return LwMul(_pgrpb->IvMac(), _clnItem);
     }
-    void _SetSel(long ln);
+    void _SetSel(int32_t ln);
     void _ShowSel(void);
     void _DrawSel(PGNV pgnv);
-    void _InvalIv(long iv, long cvIns, long cvDel);
-    void _EditIvDln(long iv, long dln);
-    void _DeleteIv(long iv);
+    void _InvalIv(int32_t iv, int32_t cvIns, int32_t cvDel);
+    void _EditIvDln(int32_t iv, int32_t dln);
+    void _DeleteIv(int32_t iv);
 
   public:
-    static void InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, long iv, long cvIns, long cvDel);
+    static void InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, int32_t iv, int32_t cvIns, int32_t cvDel);
     virtual bool FCmdKey(PCMD_KEY pcmd);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
 
-    virtual bool FEnableDcgbCmd(PCMD pcmd, ulong *pgrfeds);
+    virtual bool FEnableDcgbCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdEditItem(PCMD pcmd);
     virtual bool FCmdDeleteItem(PCMD pcmd);
     virtual bool FCmdAddItem(PCMD pcmd) = 0;
@@ -594,10 +594,10 @@ class DCGL : public DCGL_PAR
     RTCLASS_DEC
 
   protected:
-    DCGL(PDOCB pdocb, PGLB pglb, long cls, PGCB pgcb);
+    DCGL(PDOCB pdocb, PGLB pglb, int32_t cls, PGCB pgcb);
 
   public:
-    static PDCGL PdcglNew(PDOCB pdocb, PGLB pglb, long cls, PGCB pgcb);
+    static PDCGL PdcglNew(PDOCB pdocb, PGLB pglb, int32_t cls, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdAddItem(PCMD pcmd);
@@ -613,10 +613,10 @@ class DCGG : public DCGG_PAR
     RTCLASS_DEC
 
   protected:
-    DCGG(PDOCB pdocb, PGGB pggb, long cls, PGCB pgcb);
+    DCGG(PDOCB pdocb, PGGB pggb, int32_t cls, PGCB pgcb);
 
   public:
-    static PDCGG PdcggNew(PDOCB pdocb, PGGB pggb, long cls, PGCB pgcb);
+    static PDCGG PdcggNew(PDOCB pdocb, PGGB pggb, int32_t cls, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdAddItem(PCMD pcmd);
@@ -632,10 +632,10 @@ class DCST : public DCST_PAR
     RTCLASS_DEC
 
   protected:
-    DCST(PDOCB pdocb, PGSTB pgstb, long cls, PGCB pgcb);
+    DCST(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb);
 
   public:
-    static PDCST PdcstNew(PDOCB pdocb, PGSTB pgstb, long cls, PGCB pgcb);
+    static PDCST PdcstNew(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
     virtual bool FCmdAddItem(PCMD pcmd);
@@ -715,11 +715,11 @@ typedef class CHTXD *PCHTXD;
 class CHTXD : public CHTXD_PAR
 {
   protected:
-    CHTXD(PDOCB pdocb = pvNil, ulong grfdoc = fdocNil);
+    CHTXD(PDOCB pdocb = pvNil, uint32_t grfdoc = fdocNil);
 
   public:
     static PCHTXD PchtxdNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, short osk = koskCur, PDOCB pdocb = pvNil,
-                            ulong grfdoc = fdocNil);
+                            uint32_t grfdoc = fdocNil);
 
     virtual PDDG PddgNew(PGCB pgcb);
 };
@@ -735,10 +735,10 @@ class CHTDD : public CHTDD_PAR
     CMD_MAP_DEC(CHTDD)
 
   protected:
-    CHTDD(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab);
+    CHTDD(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab);
 
   public:
-    static PCHTDD PchtddNew(PTXTB ptxtb, PGCB pgcb, long onn, ulong grfont, long dypFont, long cchTab);
+    static PCHTDD PchtddNew(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab);
 
     virtual bool FCmdCompileChunky(PCMD pcmd);
     virtual bool FCmdCompileScript(PCMD pcmd);

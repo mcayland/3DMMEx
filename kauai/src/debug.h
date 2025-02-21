@@ -24,8 +24,8 @@ inline void Debugger(void)
 #endif // WIN
 
 #ifdef DEBUG
-bool FAssertProc(schar *pszsFile, long lwLine, schar *pszsMsg, void *pv, long cb);
-void WarnProc(schar *pszsFile, long lwLine, schar *pszsMsg);
+bool FAssertProc(schar *pszsFile, int32_t lwLine, schar *pszsMsg, void *pv, int32_t cb);
+void WarnProc(schar *pszsFile, int32_t lwLine, schar *pszsMsg);
 #define ASSERTNAME static schar __szsFile[] = __FILE__;
 
 #define AssertCore(f, szs, pv, cb)                                                                                     \

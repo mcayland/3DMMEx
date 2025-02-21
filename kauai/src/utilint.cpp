@@ -20,7 +20,7 @@ ASSERTNAME
 /***************************************************************************
     Calculates the GCD of two longs.
 ***************************************************************************/
-long LwGcd(long lw1, long lw2)
+int32_t LwGcd(int32_t lw1, int32_t lw2)
 {
     return LuGcd(LwAbs(lw1), LwAbs(lw2));
 }
@@ -28,7 +28,7 @@ long LwGcd(long lw1, long lw2)
 /***************************************************************************
     Calculates the GCD of two unsigned longs.
 ***************************************************************************/
-ulong LuGcd(ulong lu1, ulong lu2)
+uint32_t LuGcd(uint32_t lu1, uint32_t lu2)
 {
     // Euclidean algorithm - keep mod'ing until we hit zero
     if (lu1 == 0)
@@ -51,11 +51,11 @@ ulong LuGcd(ulong lu1, ulong lu2)
 /***************************************************************************
     Sort the two longs so the smaller is in *plw1.
 ***************************************************************************/
-void SortLw(long *plw1, long *plw2)
+void SortLw(int32_t *plw1, int32_t *plw2)
 {
     if (*plw1 > *plw2)
     {
-        long lwT = *plw1;
+        int32_t lwT = *plw1;
         *plw1 = *plw2;
         *plw2 = lwT;
     }
@@ -66,38 +66,38 @@ void SortLw(long *plw1, long *plw2)
 /***************************************************************************
     Multiply lw by lwMul and divide by lwDiv without losing precision.
 ***************************************************************************/
-long LwMulDiv(long lw, long lwMul, long lwDiv)
+int32_t LwMulDiv(int32_t lw, int32_t lwMul, int32_t lwDiv)
 {
     Assert(lwDiv != 0, "divide by zero error");
     double dou;
 
     dou = (double)lw * lwMul / lwDiv;
     Assert(dou <= klwMax && dou >= klwMin, "overflow in LwMulDiv");
-    return (long)dou;
+    return (int32_t)dou;
 }
 
 /***************************************************************************
     Return the quotient and set *plwRem to the remainder when (lw * lwMul)
     is divided by lwDiv.
 ***************************************************************************/
-long LwMulDivMod(long lw, long lwMul, long lwDiv, long *plwRem)
+int32_t LwMulDivMod(int32_t lw, int32_t lwMul, int32_t lwDiv, int32_t *plwRem)
 {
     Assert(lwDiv != 0, "moding by 0");
     AssertVarMem(plwRem);
     double dou;
 
     dou = (double)lw * lwMul;
-    *plwRem = static_cast<long>(std::fmod(dou, lwDiv));
+    *plwRem = static_cast<int32_t>(std::fmod(dou, lwDiv));
     dou /= lwDiv;
     Assert(dou <= klwMax && dou >= klwMin, "overflow in LwMulDiv");
-    return (long)dou;
+    return (int32_t)dou;
 }
 #endif // IN_80386
 
 /***************************************************************************
     Multiply two longs to get a 64 bit (signed) result.
 ***************************************************************************/
-void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow)
+void MulLw(int32_t lw1, int32_t lw2, int32_t *plwHigh, uint32_t *pluLow)
 {
 #ifdef IN_80386
     __asm
@@ -116,7 +116,7 @@ void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow)
     fNeg = 0 > (dou = (double)lw1 * lw2);
     if (fNeg)
         dou = -dou;
-    *plwHigh = (long)(dou / ((double)0x10000 * 0x10000));
+    *plwHigh = (int32_t)(dou / ((double)0x10000 * 0x10000));
     *pluLow = dou - *plwHigh * ((double)0x10000 * 0x10000);
     if (fNeg)
     {
@@ -134,7 +134,7 @@ void MulLw(long lw1, long lw2, long *plwHigh, ulong *pluLow)
 /***************************************************************************
     Multiply lu by luMul and divide by luDiv without losing precision.
 ***************************************************************************/
-ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv)
+uint32_t LuMulDiv(uint32_t lu, uint32_t luMul, uint32_t luDiv)
 {
     Assert(luDiv != 0, "divide by zero error");
 
@@ -153,14 +153,14 @@ ulong LuMulDiv(ulong lu, ulong luMul, ulong luDiv)
 
     dou = (double)lu * luMul / luDiv;
     Assert(dou <= kluMax && dou >= 0, "overflow in LuMulDiv");
-    return (ulong)dou;
+    return (uint32_t)dou;
 #endif //! IN_80386
 }
 
 /***************************************************************************
     Multiply two unsigned longs to get a 64 bit (unsigned) result.
 ***************************************************************************/
-void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow)
+void MulLu(uint32_t lu1, uint32_t lu2, uint32_t *pluHigh, uint32_t *pluLow)
 {
 #ifdef IN_80386
     __asm
@@ -176,7 +176,7 @@ void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow)
     double dou;
 
     dou = (double)lu1 * lu2;
-    *pluHigh = (ulong)(dou / ((double)0x10000 * 0x10000));
+    *pluHigh = (uint32_t)(dou / ((double)0x10000 * 0x10000));
     *pluLow = dou - *pluHigh * ((double)0x10000 * 0x10000);
 #endif //! IN_80386
 }
@@ -186,10 +186,10 @@ void MulLu(ulong lu1, ulong lu2, ulong *pluHigh, ulong *pluLow)
     Does a multiply and divide without losing precision, rounding away from
     zero during the divide.
 ***************************************************************************/
-long LwMulDivAway(long lw, long lwMul, long lwDiv)
+int32_t LwMulDivAway(int32_t lw, int32_t lwMul, int32_t lwDiv)
 {
     Assert(lwDiv != 0, "divide by zero error");
-    long lwT, lwRem;
+    int32_t lwT, lwRem;
 
     lwT = LwMulDivMod(lw, lwMul, lwDiv, &lwRem);
     if (lwRem != 0)
@@ -208,10 +208,10 @@ long LwMulDivAway(long lw, long lwMul, long lwDiv)
     Does a multiply and divide without losing precision, rounding away from
     zero during the divide.
 ***************************************************************************/
-ulong LuMulDivAway(ulong lu, ulong luMul, ulong luDiv)
+uint32_t LuMulDivAway(uint32_t lu, uint32_t luMul, uint32_t luDiv)
 {
     Assert(luDiv != 0, "divide by zero error");
-    ulong luT;
+    uint32_t luT;
 
     // get rid of common factors
     if (1 < (luT = LuGcd(lu, luDiv)))
@@ -231,7 +231,7 @@ ulong LuMulDivAway(ulong lu, ulong luMul, ulong luDiv)
 /***************************************************************************
     Returns lwNum divided by lwDen rounded away from zero.
 ***************************************************************************/
-long LwDivAway(long lwNum, long lwDen)
+int32_t LwDivAway(int32_t lwNum, int32_t lwDen)
 {
     Assert(lwDen != 0, "divide by zero");
 
@@ -251,7 +251,7 @@ long LwDivAway(long lwNum, long lwDen)
 /***************************************************************************
     Returns lwNum divided by lwDen rounded toward the closest integer.
 ***************************************************************************/
-long LwDivClosest(long lwNum, long lwDen)
+int32_t LwDivClosest(int32_t lwNum, int32_t lwDen)
 {
     Assert(lwDen != 0, "divide by zero");
 
@@ -272,7 +272,7 @@ long LwDivClosest(long lwNum, long lwDen)
     Rounds lwSrc to a multiple of lwBase.  The rounding is done away from
     zero.  Equivalent to LwDivAway(lwSrc, lwBase) * lwBase.
 ***************************************************************************/
-long LwRoundAway(long lwSrc, long lwBase)
+int32_t LwRoundAway(int32_t lwSrc, int32_t lwBase)
 {
     Assert(lwBase != 0, "divide by zero");
 
@@ -290,7 +290,7 @@ long LwRoundAway(long lwSrc, long lwBase)
     Rounds lwSrc to a multiple of lwBase.  The rounding is done toward zero.
     Equivalent to (lwSrc / lwBase) * lwBase.
 ***************************************************************************/
-long LwRoundToward(long lwSrc, long lwBase)
+int32_t LwRoundToward(int32_t lwSrc, int32_t lwBase)
 {
     Assert(lwBase != 0, "divide by zero");
 
@@ -304,7 +304,7 @@ long LwRoundToward(long lwSrc, long lwBase)
     Rounds lwSrc to the closest multiple of lwBase.
     Equivalent to LwDivClosest(lwSrc, lwBase) * lwBase.
 ***************************************************************************/
-long LwRoundClosest(long lwSrc, long lwBase)
+int32_t LwRoundClosest(int32_t lwSrc, int32_t lwBase)
 {
     Assert(lwBase != 0, "divide by zero");
 
@@ -322,10 +322,10 @@ long LwRoundClosest(long lwSrc, long lwBase)
     Returns fcmpGt, fcmpEq or fcmpLt according to whether (lwNum1 / lwDen2)
     is greater than, equal to or less than (lwNum2 / lwDen2).
 ***************************************************************************/
-ulong FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2)
+uint32_t FcmpCompareFracs(int32_t lwNum1, int32_t lwDen1, int32_t lwNum2, int32_t lwDen2)
 {
-    long lwHigh1, lwHigh2; // must be signed
-    ulong luLow1, luLow2;  // must be unsigned
+    int32_t lwHigh1, lwHigh2; // must be signed
+    uint32_t luLow1, luLow2;  // must be unsigned
 
     MulLw(lwNum1, lwDen2, &lwHigh1, &luLow1);
     MulLw(lwNum2, lwDen1, &lwHigh2, &luLow2);
@@ -352,7 +352,7 @@ ulong FcmpCompareFracs(long lwNum1, long lwDen1, long lwNum2, long lwDen2)
     (iv, iv + cvDel).  If *piv is in this interval, mins *piv with iv + cvIns
     and returns false.
 ***************************************************************************/
-bool FAdjustIv(long *piv, long iv, long cvIns, long cvDel)
+bool FAdjustIv(int32_t *piv, int32_t iv, int32_t cvIns, int32_t cvDel)
 {
     AssertVarMem(piv);
     AssertIn(iv, 0, kcbMax);
@@ -374,7 +374,7 @@ bool FAdjustIv(long *piv, long iv, long cvIns, long cvDel)
 /***************************************************************************
     Multiplies two longs.  Asserts on overflow.
 ***************************************************************************/
-long LwMul(long lw1, long lw2)
+int32_t LwMul(int32_t lw1, int32_t lw2)
 {
     if (lw1 == 0)
         return 0;
@@ -385,7 +385,7 @@ long LwMul(long lw1, long lw2)
 /***************************************************************************
     Asserts that the lw is >= lwMin and < lwLim.
 ***************************************************************************/
-void AssertIn(long lw, long lwMin, long lwLim)
+void AssertIn(int32_t lw, int32_t lwMin, int32_t lwLim)
 {
     Assert(lw >= lwMin, "long too small");
     Assert(lw < lwLim, "long too big");
@@ -401,10 +401,10 @@ void AssertIn(long lw, long lwMin, long lwLim)
 ***************************************************************************/
 void SwapBytesBom(void *pv, BOM bom)
 {
-    byte b;
-    byte *pb = (byte *)pv;
+    uint8_t b;
+    uint8_t *pb = (uint8_t *)pv;
 
-    Assert(SIZEOF(short) == 2 && SIZEOF(long) == 4, "code broken");
+    Assert(SIZEOF(int32_t) == 4, "code broken");
     while (bom != 0)
     {
         if (bom & 0x80000000L)
@@ -441,15 +441,14 @@ void SwapBytesBom(void *pv, BOM bom)
 /***************************************************************************
     Swap bytes within an array of short words.
 ***************************************************************************/
-void SwapBytesRgsw(void *psw, long csw)
+void SwapBytesRgsw(void *psw, int32_t csw)
 {
     AssertIn(csw, 0, kcbMax);
-    AssertPvCb(psw, LwMul(csw, SIZEOF(short)));
+    AssertPvCb(psw, LwMul(csw, SIZEOF(int16_t)));
 
-    byte b;
-    byte *pb = (byte *)psw;
+    uint8_t b;
+    uint8_t *pb = (uint8_t *)psw;
 
-    Assert(SIZEOF(short) == 2, "code broken");
     for (; csw > 0; csw--, pb += 2)
     {
         b = pb[1];
@@ -461,15 +460,15 @@ void SwapBytesRgsw(void *psw, long csw)
 /***************************************************************************
     Swap bytes within an array of long words.
 ***************************************************************************/
-void SwapBytesRglw(void *plw, long clw)
+void SwapBytesRglw(void *plw, int32_t clw)
 {
     AssertIn(clw, 0, kcbMax);
-    AssertPvCb(plw, LwMul(clw, SIZEOF(long)));
+    AssertPvCb(plw, LwMul(clw, SIZEOF(int32_t)));
 
-    byte b;
-    byte *pb = (byte *)plw;
+    uint8_t b;
+    uint8_t *pb = (uint8_t *)plw;
 
-    Assert(SIZEOF(long) == 4, "code broken");
+    Assert(SIZEOF(int32_t) == 4, "code broken");
     for (; clw > 0; clw--, pb += 4)
     {
         b = pb[3];
@@ -483,34 +482,34 @@ void SwapBytesRglw(void *plw, long clw)
 
 #ifdef DEBUG
 /***************************************************************************
-    Asserts that the given BOM indicates a struct having cb/SIZEOF(long) longs
+    Asserts that the given BOM indicates a struct having cb/SIZEOF(int32_t) longs
     to be swapped (so SwapBytesRglw can legally be used on an array of
     these).
 ***************************************************************************/
-void AssertBomRglw(BOM bom, long cb)
+void AssertBomRglw(BOM bom, int32_t cb)
 {
     BOM bomT;
-    long clw;
+    int32_t clw;
 
-    clw = cb / SIZEOF(long);
-    Assert(cb == clw * SIZEOF(long), "cb is not a multiple of SIZEOF(long)");
+    clw = cb / SIZEOF(int32_t);
+    Assert(cb == clw * SIZEOF(int32_t), "cb is not a multiple of SIZEOF(int32_t)");
     AssertIn(clw, 1, 17);
     bomT = -1L << 2 * (16 - clw);
     Assert(bomT == bom, "wrong bom");
 }
 
 /***************************************************************************
-    Asserts that the given BOM indicates a struct having cb/SIZEOF(short) shorts
+    Asserts that the given BOM indicates a struct having cb/SIZEOF(int16_t) shorts
     to be swapped (so SwapBytesRgsw can legally be used on an array of
     these).
 ***************************************************************************/
-void AssertBomRgsw(BOM bom, long cb)
+void AssertBomRgsw(BOM bom, int32_t cb)
 {
     BOM bomT;
-    long csw;
+    int32_t csw;
 
-    csw = cb / SIZEOF(short);
-    Assert(cb == csw * SIZEOF(short), "cb is not a multiple of SIZEOF(short)");
+    csw = cb / SIZEOF(int16_t);
+    Assert(cb == csw * SIZEOF(int16_t), "cb is not a multiple of SIZEOF(int16_t)");
     AssertIn(csw, 1, 17);
     bomT = 0x55555555 << 2 * (16 - csw);
     Assert(bomT == bom, "wrong bom");
@@ -551,7 +550,7 @@ void PT::Map(RC *prcSrc, RC *prcDst)
     AssertThisMem();
     AssertVarMem(prcSrc);
     AssertVarMem(prcDst);
-    long dzpSrc, dzpDst;
+    int32_t dzpSrc, dzpDst;
 
     if ((dzpDst = prcDst->Dxp()) == (dzpSrc = prcSrc->Dxp()))
     {
@@ -590,10 +589,10 @@ PT PT::PtMap(RC *prcSrc, RC *prcDst)
     Transform the xp and yp values according to grfpt.  Negating comes
     before transposition.
 ***************************************************************************/
-void PT::Transform(ulong grfpt)
+void PT::Transform(uint32_t grfpt)
 {
     AssertThisMem();
-    long zp;
+    int32_t zp;
 
     if (grfpt & fptNegateXp)
         xp = -xp;
@@ -716,7 +715,7 @@ bool RC::FIntersect(RC *prc)
 /***************************************************************************
     Inset a rectangle (into another)
 ***************************************************************************/
-void RC::InsetCopy(RC *prc, long dxp, long dyp)
+void RC::InsetCopy(RC *prc, int32_t dxp, int32_t dyp)
 {
     AssertThisMem();
     AssertVarMem(prc);
@@ -730,7 +729,7 @@ void RC::InsetCopy(RC *prc, long dxp, long dyp)
 /***************************************************************************
     Inset a rectangle (in place)
 ***************************************************************************/
-void RC::Inset(long dxp, long dyp)
+void RC::Inset(int32_t dxp, int32_t dyp)
 {
     AssertThisMem();
 
@@ -750,7 +749,7 @@ void RC::Map(RC *prcSrc, RC *prcDst)
     AssertThisMem();
     AssertVarMem(prcSrc);
     AssertVarMem(prcDst);
-    long dzpSrc, dzpDst;
+    int32_t dzpSrc, dzpDst;
 
     if ((dzpDst = prcDst->Dxp()) == (dzpSrc = prcSrc->Dxp()))
     {
@@ -782,10 +781,10 @@ void RC::Map(RC *prcSrc, RC *prcDst)
     Transform the xp and yp values according to grfpt.  Negating comes
     before transposition.
 ***************************************************************************/
-void RC::Transform(ulong grfpt)
+void RC::Transform(uint32_t grfpt)
 {
     AssertThisMem();
-    long zp;
+    int32_t zp;
 
     if (grfpt & fptNegateXp)
     {
@@ -813,7 +812,7 @@ void RC::Transform(ulong grfpt)
 /***************************************************************************
     Move a rectangle (into another)
 ***************************************************************************/
-void RC::OffsetCopy(RC *prc, long dxp, long dyp)
+void RC::OffsetCopy(RC *prc, int32_t dxp, int32_t dyp)
 {
     AssertThisMem();
     AssertVarMem(prc);
@@ -827,7 +826,7 @@ void RC::OffsetCopy(RC *prc, long dxp, long dyp)
 /***************************************************************************
     Move a rectangle (in place)
 ***************************************************************************/
-void RC::Offset(long dxp, long dyp)
+void RC::Offset(int32_t dxp, int32_t dyp)
 {
     AssertThisMem();
 
@@ -856,8 +855,8 @@ void RC::CenterOnRc(RC *prcBase)
 {
     AssertThisMem();
     AssertVarMem(prcBase);
-    long dxp = Dxp();
-    long dyp = Dyp();
+    int32_t dxp = Dxp();
+    int32_t dyp = Dyp();
 
     xpLeft = (prcBase->xpLeft + prcBase->xpRight - dxp) / 2;
     xpRight = xpLeft + dxp;
@@ -868,11 +867,11 @@ void RC::CenterOnRc(RC *prcBase)
 /***************************************************************************
     Centers this rectangle on (xp, yp).
 ***************************************************************************/
-void RC::CenterOnPt(long xp, long yp)
+void RC::CenterOnPt(int32_t xp, int32_t yp)
 {
     AssertThisMem();
-    long dxp = Dxp();
-    long dyp = Dyp();
+    int32_t dxp = Dxp();
+    int32_t dyp = Dyp();
 
     xpLeft = xp - dxp / 2;
     xpRight = xpLeft + dxp;
@@ -903,10 +902,10 @@ void RC::StretchToRc(RC *prcBase)
 {
     AssertThisMem();
     AssertVarMem(prcBase);
-    long dxp = Dxp();
-    long dyp = Dyp();
-    long dxpBase = prcBase->Dxp();
-    long dypBase = prcBase->Dyp();
+    int32_t dxp = Dxp();
+    int32_t dyp = Dyp();
+    int32_t dxpBase = prcBase->Dxp();
+    int32_t dypBase = prcBase->Dyp();
 
     if (dxp <= 0 || dyp <= 0)
     {
@@ -935,7 +934,7 @@ void RC::StretchToRc(RC *prcBase)
 /***************************************************************************
     Determine if the given point is in the rectangle
 ***************************************************************************/
-bool RC::FPtIn(long xp, long yp)
+bool RC::FPtIn(int32_t xp, int32_t yp)
 {
     AssertThisMem();
 
@@ -961,7 +960,7 @@ void RC::PinToRc(RC *prc)
 {
     AssertThisMem();
     AssertVarMem(prc);
-    long dxp, dyp;
+    int32_t dxp, dyp;
 
     dxp = LwMax(LwMin(0, prc->xpRight - xpRight), prc->xpLeft - xpLeft);
     dyp = LwMax(LwMin(0, prc->ypBottom - ypBottom), prc->ypTop - ypTop);
@@ -976,10 +975,10 @@ RC &RC::operator=(RCS &rcs)
 {
     AssertThisMem();
 
-    xpLeft = (long)rcs.left;
-    xpRight = (long)rcs.right;
-    ypTop = (long)rcs.top;
-    ypBottom = (long)rcs.bottom;
+    xpLeft = (int32_t)rcs.left;
+    xpRight = (int32_t)rcs.right;
+    ypTop = (int32_t)rcs.top;
+    ypBottom = (int32_t)rcs.bottom;
     return *this;
 }
 
@@ -1002,7 +1001,7 @@ RC::operator RCS(void)
 /***************************************************************************
     Return the area of the rectangle.
 ***************************************************************************/
-long RC::LwArea(void)
+int32_t RC::LwArea(void)
 {
     AssertThisMem();
 
@@ -1028,7 +1027,7 @@ bool RC::FContains(RC *prc)
     this rc to the (ircWidth, ircHeight) cell of the grid.  prcSrc cannot
     be equal to this.
 ***************************************************************************/
-void RC::SetToCell(RC *prcSrc, long crcWidth, long crcHeight, long ircWidth, long ircHeight)
+void RC::SetToCell(RC *prcSrc, int32_t crcWidth, int32_t crcHeight, int32_t ircWidth, int32_t ircHeight)
 {
     AssertThisMem();
     AssertVarMem(prcSrc);
@@ -1048,7 +1047,8 @@ void RC::SetToCell(RC *prcSrc, long crcWidth, long crcHeight, long ircWidth, lon
     Determines which cell the given (xp, yp) is in.  This is essentially
     the inverse of SetToCell.
 ***************************************************************************/
-bool RC::FMapToCell(long xp, long yp, long crcWidth, long crcHeight, long *pircWidth, long *pircHeight)
+bool RC::FMapToCell(int32_t xp, int32_t yp, int32_t crcWidth, int32_t crcHeight, int32_t *pircWidth,
+                    int32_t *pircHeight)
 {
     AssertThisMem();
     AssertIn(crcWidth, 1, kcbMax);
@@ -1067,10 +1067,10 @@ bool RC::FMapToCell(long xp, long yp, long crcWidth, long crcHeight, long *pircW
 /***************************************************************************
     Asserts the validity of a fraction.
 ***************************************************************************/
-void RAT::AssertValid(ulong grf)
+void RAT::AssertValid(uint32_t grf)
 {
     AssertIn(_lwDen, 1, klwMax);
-    long lwGcd = LwGcd(_lwNum, _lwDen);
+    int32_t lwGcd = LwGcd(_lwNum, _lwDen);
     Assert(lwGcd == 1, "fraction not in lowest terms");
 }
 #endif // DEBUG
@@ -1089,14 +1089,14 @@ USAC::USAC(void)
 /***************************************************************************
     Return the current application time.
 ***************************************************************************/
-ulong USAC::TsCur(void)
+uint32_t USAC::TsCur(void)
 {
     AssertThisMem();
-    ulong dtsSys = TsCurrentSystem() - _tsBaseSys;
+    uint32_t dtsSys = TsCurrentSystem() - _tsBaseSys;
 
     if (_luScale != kluTimeScaleNormal)
     {
-        ulong luHigh;
+        uint32_t luHigh;
         MulLu(dtsSys, _luScale, &luHigh, &dtsSys);
         dtsSys = LwHighLow(SuLow(luHigh), SuHigh(dtsSys));
     }
@@ -1107,10 +1107,10 @@ ulong USAC::TsCur(void)
 /***************************************************************************
     Scale the time.
 ***************************************************************************/
-void USAC::Scale(ulong luScale)
+void USAC::Scale(uint32_t luScale)
 {
     AssertThisMem();
-    ulong tsSys, dts;
+    uint32_t tsSys, dts;
 
     if (luScale == _luScale)
         return;
@@ -1120,7 +1120,7 @@ void USAC::Scale(ulong luScale)
     dts = tsSys - _tsBaseSys;
     if (_luScale != kluTimeScaleNormal)
     {
-        ulong luHigh;
+        uint32_t luHigh;
         MulLu(dts, _luScale, &luHigh, &dts);
         dts = LwHighLow(SuLow(luHigh), SuHigh(dts));
     }
@@ -1132,7 +1132,7 @@ void USAC::Scale(ulong luScale)
 /***************************************************************************
     Set the DVER structure.
 ***************************************************************************/
-void DVER::Set(short swCur, short swBack)
+void DVER::Set(int16_t swCur, int16_t swBack)
 {
     _swBack = swBack;
     _swCur = swCur;
@@ -1142,7 +1142,7 @@ void DVER::Set(short swCur, short swBack)
     Determines if the DVER structure is compatible with (swCur and swMin).
     Asserts that 0 <= swMin <= swCur.
 ***************************************************************************/
-bool DVER::FReadable(short swCur, short swMin)
+bool DVER::FReadable(int16_t swCur, int16_t swMin)
 {
     AssertIn(_swBack, 0, _swCur + 1);
     AssertIn(_swCur, 0, kswMax);

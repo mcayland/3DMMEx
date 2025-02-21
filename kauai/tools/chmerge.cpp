@@ -22,7 +22,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
     STN stn;
     FNI fniSrc, fniT;
     CKI cki;
-    long icki;
+    int32_t icki;
     CNO cnoDst;
     PCFL pcflSrc;
     bool fPreOrder = fFalse;
@@ -177,7 +177,7 @@ bool _fEnableWarnings = fTrue;
 /***************************************************************************
     Warning proc called by Warn() macro
 ***************************************************************************/
-void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
+void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage)
 {
     if (_fEnableWarnings)
     {
@@ -193,7 +193,7 @@ void WarnProc(PSZS pszsFile, long lwLine, PSZS pszsMessage)
 /***************************************************************************
     Returning true breaks into the debugger.
 ***************************************************************************/
-bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb)
+bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage, void *pv, int32_t cb)
 {
     fprintf(stderr, "An assert occurred: \n");
     if (pszsMessage != pvNil)
@@ -207,10 +207,10 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
             switch (cb)
             {
             default: {
-                byte *pb;
-                byte *pbLim;
+                uint8_t *pb;
+                uint8_t *pbLim;
 
-                for (pb = (byte *)pv, pbLim = pb + cb; pb < pbLim; pb++)
+                for (pb = (uint8_t *)pv, pbLim = pb + cb; pb < pbLim; pb++)
                     fprintf(stderr, "%02x", (int)*pb);
             }
             break;
@@ -220,7 +220,7 @@ bool FAssertProc(PSZS pszsFile, long lwLine, PSZS pszsMessage, void *pv, long cb
                 break;
 
             case 4:
-                fprintf(stderr, "%08lx", *(long *)pv);
+                fprintf(stderr, "%08lx", *(int32_t *)pv);
                 break;
             }
             printf("\n");

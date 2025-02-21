@@ -17,16 +17,16 @@
 #define UTILMEM_H
 
 // used for asserts and limiting memory
-const byte kbGarbage = 0xA3;    // new blocks are filled with this
-const long kcbMax = 0x08000000; // 128 Megabytes
-const short kswMagicMem = (short)0xA253;
-const long klwMagicMem = (long)0xA253A253;
+const uint8_t kbGarbage = 0xA3;    // new blocks are filled with this
+const int32_t kcbMax = 0x08000000; // 128 Megabytes
+const int16_t kswMagicMem = (int16_t)0xA253;
+const int32_t klwMagicMem = (int32_t)0xA253A253;
 
 /***************************************************************************
     When an allocation fails, vpfnlib is called to free some memory (if it's
     not nil).
 ***************************************************************************/
-typedef long (*PFNLIB)(long cb, long mpr);
+typedef int32_t (*PFNLIB)(int32_t cb, int32_t mpr);
 extern PFNLIB vpfnlib;
 extern bool _fInAlloc;
 
@@ -36,7 +36,7 @@ extern bool _fInAlloc;
 #ifdef MAC
 typedef Handle HN;
 // version of SetHandleSize that returns an error code
-inline short ErrSetHandleSize(HN hn, Size cb)
+inline int16_t ErrSetHandleSize(HN hn, Size cb)
 {
     SetHandleSize(hn, cb);
     return MemError();
@@ -46,14 +46,14 @@ inline short ErrSetHandleSize(HN hn, Size cb)
 class ADST
 {
   private:
-    long _lwMaskAddress;
+    int32_t _lwMaskAddress;
 
   public:
     ADST(void);
 
     void *PvStrip(void *pv)
     {
-        return (void *)((long)pv & _lwMaskAddress);
+        return (void *)((int32_t)pv & _lwMaskAddress);
     }
 };
 extern ADST vadst;
@@ -88,9 +88,9 @@ enum
 };
 
 void FreePhq(HQ *phq);
-long CbOfHq(HQ hq);
-bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr);
-bool FResizePhq(HQ *phq, long cb, ulong grfmem, long mpr);
+int32_t CbOfHq(HQ hq);
+bool FCopyHq(HQ hqSrc, HQ *phqDst, int32_t mpr);
+bool FResizePhq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr);
 void *PvLockHq(HQ hq);
 void UnlockHq(HQ hq);
 
@@ -100,19 +100,19 @@ void UnlockHq(HQ hq);
 // enter vmutxMem before modifying these...
 struct DMAGL
 {
-    long cv;    // number of allocations
-    long cvTot; // total number of allocations over all time
-    long cvRun; // running max of cv
-    long cb;    // total size of allocations
-    long cbRun; // running max of cb
+    int32_t cv;    // number of allocations
+    int32_t cvTot; // total number of allocations over all time
+    int32_t cvRun; // running max of cv
+    int32_t cb;    // total size of allocations
+    int32_t cbRun; // running max of cb
 
-    long cactDo;   // number of times to succeed before failing
-    long cactFail; // number of times to fail
+    int32_t cactDo;   // number of times to succeed before failing
+    int32_t cactFail; // number of times to fail
 
     bool FFail(void);
-    void Allocate(long cbT);
-    void Resize(long dcb);
-    void Free(long cbT);
+    void Allocate(int32_t cbT);
+    void Resize(int32_t dcb);
+    void Free(int32_t cbT);
 };
 
 // debug memory globals
@@ -124,11 +124,11 @@ struct DMGLOB
 };
 extern DMGLOB vdmglob;
 
-extern long vcactSuspendCheckPointers;
+extern int32_t vcactSuspendCheckPointers;
 #define SuspendCheckPointers() vcactSuspendCheckPointers++;
 #define ResumeCheckPointers() vcactSuspendCheckPointers--;
 
-bool FAllocHqDebug(HQ *phq, long cb, ulong grfmem, long mpr, schar *pszsFile, long lwLine);
+bool FAllocHqDebug(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr, schar *pszsFile, int32_t lwLine);
 #define FAllocHq(phq, cb, grfmem, mpr) FAllocHqDebug(phq, cb, grfmem, mpr, __szsFile, __LINE__)
 void *QvFromHq(HQ hq);
 
@@ -142,7 +142,7 @@ void _UnmarkAllHqs(void);
 #else //! DEBUG
 
 #define FAllocHqDebug(phq, cb, grfmem, mpr, pszsFile, luLine) FAllocHq(phq, cb, grfmem, mpr)
-bool FAllocHq(HQ *phq, long cb, ulong grfmem, long mpr);
+bool FAllocHq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr);
 #ifdef MAC
 inline void *QvFromHq(HQ hq)
 {
@@ -166,19 +166,20 @@ inline void *QvFromHq(HQ hq)
 #ifdef DEBUG
 
 // allocation routine
-bool FAllocPvDebug(void **ppv, long cb, ulong grfmem, long mpr, schar *pszsFile, long lwLine, DMAGL *pdmagl);
+bool FAllocPvDebug(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr, schar *pszsFile, int32_t lwLine,
+                   DMAGL *pdmagl);
 #define FAllocPv(ppv, cb, grfmem, mpr) FAllocPvDebug(ppv, cb, grfmem, mpr, __szsFile, __LINE__, &vdmglob.dmaglPv)
 
 // resizing routine - WIN only
 #ifdef WIN
-bool _FResizePpvDebug(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr, DMAGL *pdmagl);
+bool _FResizePpvDebug(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int32_t mpr, DMAGL *pdmagl);
 #endif // WIN
 
 // freeing routine
 void FreePpvDebug(void **ppv, DMAGL *pdmagl);
 #define FreePpv(ppv) FreePpvDebug(ppv, &vdmglob.dmaglPv)
 
-void AssertPvAlloced(void *pv, long cb);
+void AssertPvAlloced(void *pv, int32_t cb);
 void AssertUnmarkedMem(void);
 void UnmarkAllMem(void);
 void MarkPv(void *pv);
@@ -190,12 +191,12 @@ void MarkPv(void *pv);
 
 // allocation routine
 #define FAllocPvDebug(ppv, cb, grfmem, mpr, pszsFile, luLine, pdmagl) FAllocPv(ppv, cb, grfmem, mpr)
-bool FAllocPv(void **ppv, long cb, ulong grfmem, long mpr);
+bool FAllocPv(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr);
 
 // resizing routine - WIN only
 #ifdef WIN
 #define _FResizePpvDebug(ppv, cbNew, cbOld, grfmem, mpr, pdmagl) _FResizePpv(ppv, cbNew, cbOld, grfmem, mpr)
-bool _FResizePpv(void **ppv, long cbNew, long cbOld, ulong grfmem, long mpr);
+bool _FResizePpv(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int32_t mpr);
 #endif // WIN
 
 // freeing routine
@@ -246,17 +247,17 @@ void FreePpv(void **ppv);
 /****************************************
     Pointer arithmetic
 ****************************************/
-inline void *PvAddBv(void *pv, long bv)
+inline void *PvAddBv(void *pv, int32_t bv)
 {
-    return (byte *)pv + bv;
+    return (uint8_t *)pv + bv;
 }
-inline void *PvSubBv(void *pv, long bv)
+inline void *PvSubBv(void *pv, int32_t bv)
 {
-    return (byte *)pv - bv;
+    return (uint8_t *)pv - bv;
 }
-inline long BvSubPvs(void *pv1, void *pv2)
+inline int32_t BvSubPvs(void *pv1, void *pv2)
 {
-    return (byte *)pv1 - (byte *)pv2;
+    return (uint8_t *)pv1 - (uint8_t *)pv2;
 }
 
 /****************************************
@@ -295,7 +296,7 @@ extern MUTX vmutxMem;
 /****************************************
     Current thread id
 ****************************************/
-inline long LwThreadCur(void)
+inline int32_t LwThreadCur(void)
 {
     return MacWin(0, GetCurrentThreadId());
 }

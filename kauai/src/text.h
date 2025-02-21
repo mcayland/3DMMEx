@@ -22,25 +22,27 @@ class EDPAR
 {
   public:
     GCB _gcb;
-    long _onn;
-    ulong _grfont;
-    long _dypFont;
-    long _tah;
-    long _tav;
+    int32_t _onn;
+    uint32_t _grfont;
+    int32_t _dypFont;
+    int32_t _tah;
+    int32_t _tav;
     ACR _acrFore;
     ACR _acrBack;
-    long _cmhl;
+    int32_t _cmhl;
 
     EDPAR(void)
     {
     }
-    EDPAR(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont, long dypFont,
-          long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack, ACR acrBack = kacrWhite, long cmhl = 0);
+    EDPAR(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
+          int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack,
+          ACR acrBack = kacrWhite, int32_t cmhl = 0);
 
-    void Set(long hid, PGOB pgob, ulong grfgob, long gin, RC *prcAbs, RC *prcRel, long onn, ulong grfont, long dypFont,
-             long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack, ACR acrBack = kacrWhite, long cmhl = 0);
-    void SetFont(long onn, ulong grfont, long dypFont, long tah = tahLeft, long tav = tavTop, ACR acrFore = kacrBlack,
-                 ACR acrBack = kacrWhite);
+    void Set(int32_t hid, PGOB pgob, uint32_t grfgob, int32_t gin, RC *prcAbs, RC *prcRel, int32_t onn, uint32_t grfont,
+             int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop, ACR acrFore = kacrBlack,
+             ACR acrBack = kacrWhite, int32_t cmhl = 0);
+    void SetFont(int32_t onn, uint32_t grfont, int32_t dypFont, int32_t tah = tahLeft, int32_t tav = tavTop,
+                 ACR acrFore = kacrBlack, ACR acrBack = kacrWhite);
 };
 
 /***************************************************************************
@@ -57,50 +59,50 @@ class EDCB : public EDCB_PAR
 
   protected:
     // handler level
-    long _cmhl;
+    int32_t _cmhl;
 
     // the selection
     PGNV _pgnv;
-    long _ichAnchor;
-    long _ichOther;
+    int32_t _ichAnchor;
+    int32_t _ichOther;
     bool _fSelOn : 1;
     bool _fXpValid : 1;
     bool _fSelByWord : 1;
     bool _fMark : 1;
     bool _fClear : 1;
 
-    ulong _tsSel;
-    long _xpSel; // for avoiding migration when changing selection by lines
+    uint32_t _tsSel;
+    int32_t _xpSel; // for avoiding migration when changing selection by lines
 
     // the origin
-    long _xp;
-    long _yp;
+    int32_t _xp;
+    int32_t _yp;
 
-    EDCB(PGCB pgcb, long cmhl);
+    EDCB(PGCB pgcb, int32_t cmhl);
 
     virtual bool _FInit(void);
 
     // pure virtual functions
-    virtual long _LnFromIch(long ich) = 0;
-    virtual long _IchMinLn(long ln) = 0;
-    virtual long _XpFromIch(long ich) = 0;
-    virtual long _YpFromIch(long ich);
-    virtual long _YpFromLn(long ln) = 0;
-    virtual long _LnFromYp(long yp) = 0;
-    virtual long _IchFromLnXp(long ln, long xp, bool fClosest = fTrue) = 0;
-    virtual long _LnMac(void) = 0;
-    virtual void _DrawLine(PGNV pgnv, long ln) = 0;
+    virtual int32_t _LnFromIch(int32_t ich) = 0;
+    virtual int32_t _IchMinLn(int32_t ln) = 0;
+    virtual int32_t _XpFromIch(int32_t ich) = 0;
+    virtual int32_t _YpFromIch(int32_t ich);
+    virtual int32_t _YpFromLn(int32_t ln) = 0;
+    virtual int32_t _LnFromYp(int32_t yp) = 0;
+    virtual int32_t _IchFromLnXp(int32_t ln, int32_t xp, bool fClosest = fTrue) = 0;
+    virtual int32_t _LnMac(void) = 0;
+    virtual void _DrawLine(PGNV pgnv, int32_t ln) = 0;
     virtual void _HiliteRc(PGNV pgnv, RC *prc) = 0;
     virtual bool _FFilterCh(achar ch) = 0;
 
-    void _SwitchSel(bool fOn, long gin = kginDraw);
-    void _InvertSel(PGNV pgnv, long gin = kginDraw);
-    void _InvertIchRange(PGNV pgnv, long ich1, long ich2, long gin = kginDraw);
-    void _Scroll(long dxp, long dyp, long gin = kginDraw);
-    void _UpdateLn(long ln, long clnIns, long dlnDel, long dypDel, long gin = kginDraw);
-    long _IchPrev(long ich, bool fWord = fFalse);
-    long _IchNext(long ich, bool fWord = fFalse);
-    achar _ChFetch(long ich);
+    void _SwitchSel(bool fOn, int32_t gin = kginDraw);
+    void _InvertSel(PGNV pgnv, int32_t gin = kginDraw);
+    void _InvertIchRange(PGNV pgnv, int32_t ich1, int32_t ich2, int32_t gin = kginDraw);
+    void _Scroll(int32_t dxp, int32_t dyp, int32_t gin = kginDraw);
+    void _UpdateLn(int32_t ln, int32_t clnIns, int32_t dlnDel, int32_t dypDel, int32_t gin = kginDraw);
+    int32_t _IchPrev(int32_t ich, bool fWord = fFalse);
+    int32_t _IchNext(int32_t ich, bool fWord = fFalse);
+    achar _ChFetch(int32_t ich);
 
     virtual void _NewRc(void);
 
@@ -117,20 +119,20 @@ class EDCB : public EDCB_PAR
     virtual bool FCmdActivateSel(PCMD pcmd);
     virtual void Activate(bool fActive);
 
-    long IchAnchor(void)
+    int32_t IchAnchor(void)
     {
         return _ichAnchor;
     }
-    long IchOther(void)
+    int32_t IchOther(void)
     {
         return _ichOther;
     }
-    void SetSel(long ichAnchor, long ichOther, long gin = kginDraw);
-    void ShowSel(bool fForceJustification = fTrue, long gin = kginDraw);
+    void SetSel(int32_t ichAnchor, int32_t ichOther, int32_t gin = kginDraw);
+    void ShowSel(bool fForceJustification = fTrue, int32_t gin = kginDraw);
 
-    virtual long IchMac(void) = 0;
-    virtual bool FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin = kginDraw) = 0;
-    virtual long CchFetch(achar *prgch, long ich, long cchWant) = 0;
+    virtual int32_t IchMac(void) = 0;
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin = kginDraw) = 0;
+    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant) = 0;
 };
 
 /***************************************************************************
@@ -147,35 +149,35 @@ class EDPL : public EDPL_PAR
 
   protected:
     // drawing parameters
-    long _onn;
-    ulong _grfont;
-    long _dypFont;
-    long _tah;
-    long _tav;
+    int32_t _onn;
+    uint32_t _grfont;
+    int32_t _dypFont;
+    int32_t _tah;
+    int32_t _tav;
     ACR _acrFore;
     ACR _acrBack;
-    long _dypLine;
+    int32_t _dypLine;
 
     EDPL(PEDPAR pedpar);
 
     // methods of EDCB
     virtual bool _FInit(void);
-    virtual long _XpFromIch(long ich);
-    virtual long _YpFromLn(long ln);
-    virtual long _LnFromYp(long yp);
-    virtual long _IchFromLnXp(long ln, long xp, bool fClosest = fTrue);
-    virtual void _DrawLine(PGNV pgnv, long ln);
+    virtual int32_t _XpFromIch(int32_t ich);
+    virtual int32_t _YpFromLn(int32_t ln);
+    virtual int32_t _LnFromYp(int32_t yp);
+    virtual int32_t _IchFromLnXp(int32_t ln, int32_t xp, bool fClosest = fTrue);
+    virtual void _DrawLine(PGNV pgnv, int32_t ln);
     virtual void _HiliteRc(PGNV pgnv, RC *prc);
 
-    long _XpOrigin(void);
-    virtual bool _FLockLn(long ln, achar **pprgch, long *pcch) = 0;
-    virtual void _UnlockLn(long ln, achar *prgch) = 0;
+    int32_t _XpOrigin(void);
+    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch) = 0;
+    virtual void _UnlockLn(int32_t ln, achar *prgch) = 0;
 };
 
 /***************************************************************************
     Single line edit control.
 ***************************************************************************/
-const long kcchMaxEdsl = kcchMaxStn;
+const int32_t kcchMaxEdsl = kcchMaxStn;
 
 typedef class EDSL *PEDSL;
 #define EDSL_PAR EDPL
@@ -187,31 +189,31 @@ class EDSL : public EDSL_PAR
 
   protected:
     // the text
-    long _cch;
+    int32_t _cch;
     achar _rgch[kcchMaxEdsl];
 
     EDSL(PEDPAR pedpar);
 
     // methods of EDCB
-    virtual long _LnFromIch(long ich);
-    virtual long _IchMinLn(long ln);
-    virtual long _LnMac(void);
+    virtual int32_t _LnFromIch(int32_t ich);
+    virtual int32_t _IchMinLn(int32_t ln);
+    virtual int32_t _LnMac(void);
     virtual bool _FFilterCh(achar ch);
 
     // methods of EDPL
-    virtual bool _FLockLn(long ln, achar **pprgch, long *pcch);
-    virtual void _UnlockLn(long ln, achar *prgch);
+    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch);
+    virtual void _UnlockLn(int32_t ln, achar *prgch);
 
   public:
     static PEDSL PedslNew(PEDPAR pedpar);
 
-    virtual long IchMac(void);
-    virtual bool FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin = kginDraw);
-    virtual long CchFetch(achar *prgch, long ich, long cchWant);
+    virtual int32_t IchMac(void);
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin = kginDraw);
+    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant);
 
     // additional text APIs
     void GetStn(PSTN pstn);
-    void SetStn(PSTN pstn, long gin = kginDraw);
+    void SetStn(PSTN pstn, int32_t gin = kginDraw);
 };
 
 /***************************************************************************
@@ -235,26 +237,26 @@ class EDML : public EDML_PAR
 
     // methods of EDCB
     virtual bool _FInit(void);
-    virtual long _LnFromIch(long ich);
-    virtual long _IchMinLn(long ln);
-    virtual long _LnMac(void);
+    virtual int32_t _LnFromIch(int32_t ich);
+    virtual int32_t _IchMinLn(int32_t ln);
+    virtual int32_t _LnMac(void);
     virtual bool _FFilterCh(achar ch);
 
     // methods of EDPL
-    virtual bool _FLockLn(long ln, achar **pprgch, long *pcch);
-    virtual void _UnlockLn(long ln, achar *prgch);
+    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch);
+    virtual void _UnlockLn(int32_t ln, achar *prgch);
 
-    virtual long _ClnEstimate(const achar *prgch, long cch);
-    virtual long _LnReformat(long lnMin, long *pclnDel, long *pclnIns);
-    virtual bool _FReplaceCore(const achar *prgch, long cchIns, long ich, long cchDel);
+    virtual int32_t _ClnEstimate(const achar *prgch, int32_t cch);
+    virtual int32_t _LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns);
+    virtual bool _FReplaceCore(const achar *prgch, int32_t cchIns, int32_t ich, int32_t cchDel);
 
   public:
     static PEDML PedmlNew(PEDPAR pedpar);
     ~EDML(void);
 
-    virtual long IchMac(void);
-    virtual bool FReplace(const achar *prgch, long cchIns, long ich1, long ich2, long gin = kginDraw);
-    virtual long CchFetch(achar *prgch, long ich, long cchWant);
+    virtual int32_t IchMac(void);
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin = kginDraw);
+    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant);
 };
 
 /***************************************************************************
@@ -271,10 +273,10 @@ class EDMW : public EDMW_PAR
     EDMW(PEDPAR pedpar);
 
     // methods EDMW
-    virtual long _ClnEstimate(achar *prgch, long cch);
-    virtual long _LnReformat(long lnMin, long *pclnDel, long *pclnIns);
+    virtual int32_t _ClnEstimate(achar *prgch, int32_t cch);
+    virtual int32_t _LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns);
 
-    long _CichGetBreakables(achar *prgch, long ich, long *prgich, long cichMax);
+    int32_t _CichGetBreakables(achar *prgch, int32_t ich, int32_t *prgich, int32_t cichMax);
     virtual void _NewRc(void);
 
   public:

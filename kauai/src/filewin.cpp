@@ -13,17 +13,17 @@
 #include "util.h"
 ASSERTNAME
 
-const ulong kfpError = 0xFFFFFFFF;
-priv HANDLE _HfileOpen(PSZ pszFile, bool fCreate, ulong grffil);
+const uint32_t kfpError = 0xFFFFFFFF;
+priv HANDLE _HfileOpen(PSZ pszFile, bool fCreate, uint32_t grffil);
 
 /***************************************************************************
     Open or create the file by calling CreateFile.  Returns hBadWin on
     failure.
 ***************************************************************************/
-priv HANDLE _HfileOpen(PSZ psz, bool fCreate, ulong grffil)
+priv HANDLE _HfileOpen(PSZ psz, bool fCreate, uint32_t grffil)
 {
-    ulong luAccess = GENERIC_READ;
-    ulong luShare = 0;
+    uint32_t luAccess = GENERIC_READ;
+    uint32_t luShare = 0;
 
     if (grffil & ffilWriteEnable)
         luAccess |= GENERIC_WRITE;
@@ -40,7 +40,7 @@ priv HANDLE _HfileOpen(PSZ psz, bool fCreate, ulong grffil)
     Open or create the file.  If the file is already open, sets the
     permissions according to grffil.
 ***************************************************************************/
-bool FIL::_FOpen(bool fCreate, ulong grffil)
+bool FIL::_FOpen(bool fCreate, uint32_t grffil)
 {
     AssertBaseThis(0);
     bool fRet = fFalse;
@@ -212,14 +212,14 @@ FP FIL::FpMac(void)
 /***************************************************************************
     Read a block from the file.
 ***************************************************************************/
-bool FIL::FReadRgb(void *pv, long cb, FP fp)
+bool FIL::FReadRgb(void *pv, int32_t cb, FP fp)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);
     AssertIn(fp, 0, klwMax);
     AssertPvCb(pv, cb);
 
-    long cbT;
+    DWORD cbT;
     bool fRet = fFalse;
 
     if (cb <= 0)
@@ -237,7 +237,7 @@ bool FIL::FReadRgb(void *pv, long cb, FP fp)
         goto LRet;
 
     Assert(dfp >= cb, "read past EOF");
-    if (!ReadFile(_hfile, pv, cb, (ulong *)&cbT, pvNil) || cb != cbT)
+    if (!ReadFile(_hfile, pv, cb, &cbT, pvNil) || cb != cbT)
     {
         PushErc(ercFileGeneral);
         _el = kelRead;
@@ -254,14 +254,14 @@ LRet:
 /***************************************************************************
     Write a block to the file.
 ***************************************************************************/
-bool FIL::FWriteRgb(const void *pv, long cb, FP fp)
+bool FIL::FWriteRgb(const void *pv, int32_t cb, FP fp)
 {
     AssertThis(0);
     AssertIn(cb, 0, kcbMax);
     AssertIn(fp, 0, klwMax);
     AssertPvCb(pv, cb);
 
-    long cbT;
+    DWORD cbT;
     bool fRet = fFalse;
 
     if (cb <= 0)
@@ -279,7 +279,7 @@ bool FIL::FWriteRgb(const void *pv, long cb, FP fp)
         goto LRet;
 
     _fWrote = fTrue;
-    if (!WriteFile(_hfile, pv, cb, (ulong *)&cbT, pvNil) || cb != cbT)
+    if (!WriteFile(_hfile, pv, cb, &cbT, pvNil) || cb != cbT)
     {
         PushErc(ercFileGeneral);
         _el = kelWrite;

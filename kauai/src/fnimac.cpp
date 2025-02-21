@@ -27,7 +27,7 @@ FTG vftgTemp = kftgTemp;
 ***************************************************************************/
 
 typedef StandardFileReply SFR;
-priv bool _FFssDir(FSS *pfss, long *plwDir);
+priv bool _FFssDir(FSS *pfss, int32_t *plwDir);
 
 RTCLASS(FNI)
 RTCLASS(FNE)
@@ -61,7 +61,7 @@ bool FNI::FGetOpen(FTG *prgftg, short cftg)
 
     SFR sfr;
 
-    StandardGetFile(pvNil, cftg <= 0 ? -1 : cftg, (ulong *)prgftg, &sfr);
+    StandardGetFile(pvNil, cftg <= 0 ? -1 : cftg, (uint32_t *)prgftg, &sfr);
     if (sfr.sfGood)
     {
         _fss = sfr.sfFile;
@@ -86,7 +86,7 @@ bool FNI::FGetSave(FTG ftg, PST pstPrompt, PST pstDefault)
 
     SFR sfr;
 
-    StandardPutFile((byte *)pstPrompt, (byte *)pstDefault, &sfr);
+    StandardPutFile((uint8_t *)pstPrompt, (uint8_t *)pstDefault, &sfr);
     if (sfr.sfGood)
     {
         _fss = sfr.sfFile;
@@ -106,12 +106,12 @@ bool FNI::FGetSave(FTG ftg, PST pstPrompt, PST pstDefault)
 bool FNI::FGetUnique(FTG ftg)
 {
     AssertThis(ffniFile | ffniDir);
-    static long _dlw = 0;
-    long lw;
+    static int32_t _dlw = 0;
+    int32_t lw;
     short cact;
     short err;
     STN stn;
-    long lwDir = _lwDir;
+    int32_t lwDir = _lwDir;
     short swVol = _fss.vRefNum;
 
     Assert(ftg != kftgDir && ftg != ftgNil, "bad ftg");
@@ -140,7 +140,7 @@ bool FNI::FGetTemp(void)
 {
     AssertThis(0);
     static short _swVolTemp = 0;
-    static long _lwDirTemp = -1;
+    static int32_t _lwDirTemp = -1;
 
     // This is so we only call FindFolder once.
     if (_swVolTemp == 0 && _lwDirTemp == -1 &&
@@ -174,10 +174,10 @@ FTG FNI::Ftg(void)
 /***************************************************************************
     Return the volume kind for the given fni.
 ***************************************************************************/
-ulong FNI::Grfvk(void)
+uint32_t FNI::Grfvk(void)
 {
     AssertThis(0);
-    ulong grfvk = fvkNil;
+    uint32_t grfvk = fvkNil;
 
     // REVIEW shonk: Mac Grfvk: implement
     RawRtn();
@@ -196,7 +196,7 @@ bool FNI::FSetLeaf(PSTZ pstz, FTG ftg)
 /***************************************************************************
     Set the leaf for the fni.
 ***************************************************************************/
-bool FNI::FBuild(long lwVol, long lwDir, PSTZ pstz, FTG ftg)
+bool FNI::FBuild(int32_t lwVol, int32_t lwDir, PSTZ pstz, FTG ftg)
 {
     AssertNilOrStz(pstz);
     short err;
@@ -206,7 +206,7 @@ bool FNI::FBuild(long lwVol, long lwDir, PSTZ pstz, FTG ftg)
     if (ftg == kftgDir)
         pstz = pvNil;
 
-    err = FSMakeFSSpec((short)lwVol, lwDir, (byte *)pstz, &fss);
+    err = FSMakeFSSpec((short)lwVol, lwDir, (uint8_t *)pstz, &fss);
     if (ftg == kftgDir)
     {
         // a directory (it had better exist)
@@ -289,7 +289,7 @@ bool FNI::TExists(void)
 
     ClearPb(&iob, size(iob));
     CopySt((achar *)_fss.name, st);
-    iob.hFileInfo.ioNamePtr = (byte *)st;
+    iob.hFileInfo.ioNamePtr = (uint8_t *)st;
     iob.hFileInfo.ioVRefNum = _fss.vRefNum;
     iob.hFileInfo.ioDirID = _fss.parID;
     if ((err = PBGetCatInfo(&iob, fFalse)) != noErr)
@@ -384,16 +384,16 @@ bool FNI::FSameDir(FNI *pfni)
     doesn't exist.  Specify ffniMoveTo to make the fni refer to it.
     If this fails, the fni is untouched.
 ***************************************************************************/
-bool FNI::FDownDir(PSTZ pstz, ulong grffni)
+bool FNI::FDownDir(PSTZ pstz, uint32_t grffni)
 {
     AssertThis(ffniDir);
     AssertStz(pstz);
     FSS fss;
-    long lwDir;
+    int32_t lwDir;
     short err;
 
     // make the fss
-    err = FSMakeFSSpec(_fss.vRefNum, _lwDir, (byte *)pstz, &fss);
+    err = FSMakeFSSpec(_fss.vRefNum, _lwDir, (uint8_t *)pstz, &fss);
     if (noErr == err)
     {
         // exists, make sure it is a directory and get the directory id
@@ -438,7 +438,7 @@ bool FNI::FDownDir(PSTZ pstz, ulong grffni)
     moves the fni up a level (if ffniMoveToDir is specified).  If this
     fails, the fni is untouched.
 ***************************************************************************/
-bool FNI::FUpDir(PSTZ pstz, ulong grffni)
+bool FNI::FUpDir(PSTZ pstz, uint32_t grffni)
 {
     AssertThis(ffniDir);
     AssertNilOrMaxStz(pstz);
@@ -452,7 +452,7 @@ bool FNI::FUpDir(PSTZ pstz, ulong grffni)
 
     ClearPb(&iob, size(iob));
     iob.dirInfo.ioFDirIndex = -1; // ignore name, look at vol/dir
-    iob.dirInfo.ioNamePtr = (byte *)pstz;
+    iob.dirInfo.ioNamePtr = (uint8_t *)pstz;
     iob.dirInfo.ioVRefNum = _fss.vRefNum;
     iob.dirInfo.ioDrDirID = _lwDir;
     if (PBGetCatInfo(&iob, fFalse) != noErr)
@@ -483,7 +483,7 @@ bool FNI::FUpDir(PSTZ pstz, ulong grffni)
 /***************************************************************************
     Assert validity of the FNI.
 ***************************************************************************/
-void FNI::AssertValid(ulong grffni)
+void FNI::AssertValid(uint32_t grffni)
 {
     FNI_PAR::AssertValid(0);
     if (grffni == 0)
@@ -513,7 +513,7 @@ void FNI::AssertValid(ulong grffni)
     directory.  If so and plwDir is not nil, sets *plwDir to the id of
     the directory.
 ***************************************************************************/
-priv bool _FFssDir(FSS *pfss, long *plwDir)
+priv bool _FFssDir(FSS *pfss, int32_t *plwDir)
 {
     CInfoPBRec iob;
 
@@ -580,7 +580,7 @@ void FNE::_Free(void)
 /***************************************************************************
     Initialize the fne to do an enumeration.
 ***************************************************************************/
-bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
+bool FNE::FInit(FNI *pfniDir, FTG *prgftg, int32_t cftg, uint32_t grffne)
 {
     AssertThis(0);
     AssertNilOrVarMem(pfniDir);
@@ -594,7 +594,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
         _cftg = 0;
     else
     {
-        long cb = LwMul(cftg, size(FTG));
+        int32_t cb = LwMul(cftg, size(FTG));
 
         if (cftg > kcftgFneBase && !FAllocPv((void **)&_prgftg, cb, fmemNil, mprNormal))
         {
@@ -611,7 +611,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
         _fesCur.lwVol = 0;
     else
     {
-        _fesCur.lwVol = (long)pfniDir->_fss.vRefNum;
+        _fesCur.lwVol = (int32_t)pfniDir->_fss.vRefNum;
         _fesCur.lwDir = pfniDir->_lwDir;
     }
     _fesCur.iv = 0;
@@ -624,7 +624,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, long cftg, ulong grffne)
 /***************************************************************************
     Get the next FNI in the enumeration.
 ***************************************************************************/
-bool FNE::FNextFni(FNI *pfni, ulong *pgrffneOut, ulong grffneIn)
+bool FNE::FNextFni(FNI *pfni, uint32_t *pgrffneOut, uint32_t grffneIn)
 {
     AssertThis(0);
     AssertVarMem(pfni);
@@ -676,7 +676,7 @@ bool FNE::FNextFni(FNI *pfni, ulong *pgrffneOut, ulong grffneIn)
         achar stz[kcbMaxStz];
 
         ClearPb(&iob, size(iob));
-        iob.hFileInfo.ioNamePtr = (byte *)stz;
+        iob.hFileInfo.ioNamePtr = (uint8_t *)stz;
         iob.hFileInfo.ioVRefNum = (short)_fesCur.lwVol;
         iob.hFileInfo.ioDirID = _fesCur.lwDir;
         iob.hFileInfo.ioFDirIndex = (short)++_fesCur.iv;
@@ -767,7 +767,7 @@ LGotOne:
 /***************************************************************************
     Assert the validity of a FNE.
 ***************************************************************************/
-void FNE::AssertValid(ulong grf)
+void FNE::AssertValid(uint32_t grf)
 {
     FNE_PAR::AssertValid(0);
     if (_fInited)

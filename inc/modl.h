@@ -17,10 +17,10 @@
 // Model on file:
 struct MODLF
 {
-    short bo;
-    short osk;
-    short cver; // count of vertices
-    short cfac; // count of faces
+    int16_t bo;
+    int16_t osk;
+    int16_t cver; // count of vertices
+    int16_t cfac; // count of faces
     BRS rRadius;
     BRB brb; // bounds
     BVEC3 bvec3Pivot;
@@ -50,11 +50,11 @@ class MODL : public MODL_PAR
     {
     }
     bool _FInit(PBLCK pblck);
-    bool _FPrelight(long cblit, BVEC3 *prgbvec3Light);
+    bool _FPrelight(int32_t cblit, BVEC3 *prgbvec3Light);
 
   public:
-    static PMODL PmodlNew(long cbrv, BRV *prgbrv, long cbrf, BRF *prgbrf);
-    static bool FReadModl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static PMODL PmodlNew(int32_t cbrv, BRV *prgbrv, int32_t cbrf, BRF *prgbrf);
+    static bool FReadModl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     static PMODL PmodlReadFromDat(FNI *pfni);
     static PMODL PmodlFromBmdl(PBMDL pbmdl);
     ~MODL(void);

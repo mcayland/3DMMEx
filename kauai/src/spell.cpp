@@ -84,7 +84,7 @@ bool SPLC::_FInit(SC_LID sclid, PSTN pstnCustom)
     wsc.rgParaBreak[0] = kchReturn;
     Win(wsc.rgParaBreak[1] = kchLineFeed;)
 
-        if (secNOERRORS != SpellInit(&_splid, &wsc)) return fFalse;
+        if (secNOERRORS != SpellInit((SC_SPLID *)&_splid, &wsc)) return fFalse;
     _fSplidValid = fTrue;
 
     if (!_FEnsureMainDict(sclid, &fni))
@@ -106,7 +106,7 @@ bool SPLC::_FEnsureDll(SC_LID sclid)
     AssertVar(_hlib == hNil, "why is _hlib not nil?", &_hlib);
 
     HKEY hkey;
-    long cb, lwType;
+    DWORD cb, lwType;
     STN stn;
     SZ sz;
 
@@ -116,9 +116,9 @@ bool SPLC::_FEnsureDll(SC_LID sclid)
         goto LError;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
-        lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, (ulong *)&lwType, (byte *)sz, (ulong *)&cb))
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, pvNil, &cb) || lwType != REG_SZ ||
+        cb >= SIZEOF(sz) ||
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Engine"), pvNil, &lwType, (uint8_t *)sz, &cb))
     {
         RegCloseKey(hkey);
         goto LError;
@@ -166,7 +166,7 @@ bool SPLC::_FEnsureMainDict(SC_LID sclid, PFNI pfni)
 
 #ifdef WIN
     HKEY hkey;
-    long cb, lwType;
+    DWORD cb, lwType;
     STN stn;
     SZ sz;
 
@@ -176,9 +176,9 @@ bool SPLC::_FEnsureMainDict(SC_LID sclid, PFNI pfni)
         goto LError;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
-        lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, (ulong *)&lwType, (byte *)sz, (ulong *)&cb))
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, pvNil, &cb) || lwType != REG_SZ ||
+        cb >= SIZEOF(sz) ||
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("Dictionary"), pvNil, &lwType, (uint8_t *)sz, &cb))
     {
         RegCloseKey(hkey);
         goto LError;
@@ -221,7 +221,7 @@ bool SPLC::_FEnsureUserDict(PSTN pstnCustom, PFNI pfniDef)
 
 #ifdef WIN
     HKEY hkey;
-    long cb, lwType;
+    int32_t cb, lwType;
     SZ sz;
     STN stn;
     FNI fni;
@@ -232,9 +232,9 @@ bool SPLC::_FEnsureUserDict(PSTN pstnCustom, PFNI pfniDef)
         goto LNoKey;
     }
 
-    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, pvNil, (ulong *)&cb) ||
+    if (ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (LPDWORD)&lwType, pvNil, (LPDWORD)&cb) ||
         lwType != REG_SZ || cb >= SIZEOF(sz) ||
-        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (ulong *)&lwType, (byte *)sz, (ulong *)&cb))
+        ERROR_SUCCESS != RegQueryValueEx(hkey, PszLit("PROOF"), pvNil, (LPDWORD)&lwType, (uint8_t *)sz, (LPDWORD)&cb))
     {
         RegCloseKey(hkey);
     LNoKey:
@@ -321,7 +321,7 @@ bool SPLC::_FLoadUserDictionary(PSZ psz, SC_UDR *pudr, bool fCreate)
 /***************************************************************************
     Set spelling options.
 ***************************************************************************/
-bool SPLC::FSetOptions(ulong grfsplc)
+bool SPLC::FSetOptions(uint32_t grfsplc)
 {
     AssertThis(0);
 
@@ -340,7 +340,7 @@ bool SPLC::FSetOptions(ulong grfsplc)
 /***************************************************************************
     Check the spelling of stuff in the given buffer.
 ***************************************************************************/
-bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PSTN pstnReplace, long *pscrs)
+bool SPLC::FCheck(achar *prgch, int32_t cch, int32_t *pichMinBad, int32_t *pichLimBad, PSTN pstnReplace, int32_t *pscrs)
 {
     AssertThis(0);
     AssertIn(cch, 0, ksuMax);
@@ -354,7 +354,7 @@ bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PS
     SC_SRB srb;
     SC_SEC sec;
     SZ sz;
-    byte bRate;
+    uint8_t bRate;
 
     pstnReplace->SetNil();
     *pichMinBad = *pichLimBad = cch;
@@ -365,7 +365,7 @@ bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PS
     }
 
     ClearPb(&sib, SIZEOF(sib));
-    sib.cch = (ushort)cch;
+    sib.cch = (uint16_t)cch;
     sib.lrgch = prgch;
     sib.cMdr = 1;
     sib.lrgMdr = &_mdrs.mdr;
@@ -406,7 +406,7 @@ bool SPLC::FCheck(achar *prgch, long cch, long *pichMinBad, long *pichLimBad, PS
 /***************************************************************************
     Get the istn'th suggestion for the given word.
 ***************************************************************************/
-bool SPLC::FSuggest(achar *prgch, long cch, bool fFirst, PSTN pstn)
+bool SPLC::FSuggest(achar *prgch, int32_t cch, bool fFirst, PSTN pstn)
 {
     AssertThis(0);
     AssertIn(cch, 1, ksuMax);
@@ -434,7 +434,7 @@ bool SPLC::FSuggest(achar *prgch, long cch, bool fFirst, PSTN pstn)
     }
 
     ClearPb(&sib, SIZEOF(sib));
-    sib.cch = (ushort)cch;
+    sib.cch = (uint16_t)cch;
     sib.lrgch = prgch;
     sib.cMdr = 1;
     sib.lrgMdr = &_mdrs.mdr;
@@ -589,7 +589,7 @@ SC_SEC SPLC::SpellInit(SC_SPLID *psplid, SC_WSC *pwsc)
 /***************************************************************************
     Stub for SpellOptions
 ***************************************************************************/
-SC_SEC SPLC::SpellOptions(SC_SPLID splid, long grfso)
+SC_SEC SPLC::SpellOptions(SC_SPLID splid, int32_t grfso)
 {
     AssertThis(0);
 
@@ -753,7 +753,7 @@ SC_SEC SPLC::SpellCloseUdr(SC_SPLID splid, SC_UDR udr, SC_BOOL fForce)
 /***************************************************************************
     Assert the validity of a SPLC.
 ***************************************************************************/
-void SPLC::AssertValid(ulong grf)
+void SPLC::AssertValid(uint32_t grf)
 {
     SPLC_PAR::AssertValid(0);
 }

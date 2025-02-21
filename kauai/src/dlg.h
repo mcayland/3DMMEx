@@ -37,15 +37,15 @@ enum
 // dialog item
 struct DIT
 {
-    long sitMin; // first system item number (for this DIT)
-    long sitLim; // lim of system item numbers (for this DIT)
-    long ditk;   // kind of item
+    int32_t sitMin; // first system item number (for this DIT)
+    int32_t sitLim; // lim of system item numbers (for this DIT)
+    int32_t ditk;   // kind of item
 };
 
 typedef class DLG *PDLG;
 
 // callback to notify of an item change (while the dialog is active)
-typedef bool (*PFNDLG)(PDLG pdlg, long *pidit, void *pv);
+typedef bool (*PFNDLG)(PDLG pdlg, int32_t *pidit, void *pv);
 
 // dialog class - a DLG is a GG of DITs
 #define DLG_PAR GG
@@ -56,7 +56,7 @@ class DLG : public DLG_PAR
 
   private:
     PGOB _pgob;
-    long _rid;
+    int32_t _rid;
     PFNDLG _pfn;
     void *_pv;
 
@@ -64,53 +64,53 @@ class DLG : public DLG_PAR
     friend BOOL CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw);
 #endif // WIN
 
-    DLG(long rid);
+    DLG(int32_t rid);
     bool _FInit(void);
 
-    long _LwGetRadioGroup(long idit);
-    void _SetRadioGroup(long idit, long lw);
-    bool _FGetCheckBox(long idit);
-    void _InvertCheckBox(long idit);
-    void _SetCheckBox(long idit, bool fOn);
-    void _GetEditText(long idit, PSTN pstn);
-    void _SetEditText(long idit, PSTN pstn);
-    bool _FDitChange(long *pidit);
-    bool _FAddToList(long idit, PSTN pstn);
-    void _ClearList(long idit);
+    int32_t _LwGetRadioGroup(int32_t idit);
+    void _SetRadioGroup(int32_t idit, int32_t lw);
+    bool _FGetCheckBox(int32_t idit);
+    void _InvertCheckBox(int32_t idit);
+    void _SetCheckBox(int32_t idit, bool fOn);
+    void _GetEditText(int32_t idit, PSTN pstn);
+    void _SetEditText(int32_t idit, PSTN pstn);
+    bool _FDitChange(int32_t *pidit);
+    bool _FAddToList(int32_t idit, PSTN pstn);
+    void _ClearList(int32_t idit);
 
   public:
-    static PDLG PdlgNew(long rid, PFNDLG pfn = pvNil, void *pv = pvNil);
+    static PDLG PdlgNew(int32_t rid, PFNDLG pfn = pvNil, void *pv = pvNil);
 
-    long IditDo(long iditFocus = ivNil);
+    int32_t IditDo(int32_t iditFocus = ivNil);
 
     // these are only valid while the dialog is up
-    bool FGetValues(long iditMin, long iditLim);
-    void SetValues(long iditMin, long iditLim);
-    void SelectDit(long idit);
+    bool FGetValues(int32_t iditMin, int32_t iditLim);
+    void SetValues(int32_t iditMin, int32_t iditLim);
+    void SelectDit(int32_t idit);
 
     // argument access
-    long IditFromSit(long sit);
-    void GetDit(long idit, DIT *pdit)
+    int32_t IditFromSit(int32_t sit);
+    void GetDit(int32_t idit, DIT *pdit)
     {
         GetFixed(idit, pdit);
     }
-    void PutDit(long idit, DIT *pdit)
+    void PutDit(int32_t idit, DIT *pdit)
     {
         PutFixed(idit, pdit);
     }
 
-    void GetStn(long idit, PSTN pstn);
-    bool FPutStn(long idit, PSTN pstn);
-    long LwGetRadio(long idit);
-    void PutRadio(long idit, long lw);
-    bool FGetCheck(long idit);
-    void PutCheck(long idit, bool fOn);
+    void GetStn(int32_t idit, PSTN pstn);
+    bool FPutStn(int32_t idit, PSTN pstn);
+    int32_t LwGetRadio(int32_t idit);
+    void PutRadio(int32_t idit, int32_t lw);
+    bool FGetCheck(int32_t idit);
+    void PutCheck(int32_t idit, bool fOn);
 
-    bool FGetLwFromEdit(long idit, long *plw, bool *pfEmpty = pvNil);
-    bool FPutLwInEdit(long idit, long lw);
+    bool FGetLwFromEdit(int32_t idit, int32_t *plw, bool *pfEmpty = pvNil);
+    bool FPutLwInEdit(int32_t idit, int32_t lw);
 
-    bool FAddToList(long idit, PSTN pstn);
-    void ClearList(long idit);
+    bool FAddToList(int32_t idit, PSTN pstn);
+    void ClearList(int32_t idit);
 };
 
 #endif //! DLG_H

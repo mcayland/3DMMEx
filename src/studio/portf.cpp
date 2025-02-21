@@ -34,8 +34,9 @@ ASSERTNAME
             FALSE	- User canceled portfolio.
 
 ***************************************************************************/
-bool FPortDisplayWithIds(FNI *pfni, bool fOpen, long lFilterLabel, long lFilterExt, long lTitle, LPCTSTR lpstrDefExt,
-                         PSTN pstnDefFileName, FNI *pfniInitialDir, ulong grfPrevType, CNO cnoWave)
+bool FPortDisplayWithIds(FNI *pfni, bool fOpen, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle,
+                         LPCTSTR lpstrDefExt, PSTN pstnDefFileName, FNI *pfniInitialDir, uint32_t grfPrevType,
+                         CNO cnoWave)
 {
     STN stnTitle;
     STN stnFilterLabel;
@@ -113,7 +114,7 @@ bool FPortDisplayWithIds(FNI *pfni, bool fOpen, long lFilterLabel, long lFilterE
             FALSE	- User canceled portfolio.
 
 ***************************************************************************/
-bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pfniInitialDir, ulong grfPrevType,
+bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pfniInitialDir, uint32_t grfPrevType,
                      CNO cnoWave)
 {
     SZ szFile;
@@ -231,7 +232,7 @@ bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pf
 
 ***************************************************************************/
 bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR lpstrDefExt, PSTN pstnDefFileName,
-                     ulong grfPrevType, CNO cnoWave)
+                     uint32_t grfPrevType, CNO cnoWave)
 {
     DLGINFO diPortfolio;
     OPENFILENAME ofn;
@@ -377,7 +378,7 @@ bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR
 
                 if ((tExists = pfni->TExists()) != tNo)
                 {
-                    long cch;
+                    int32_t cch;
                     achar *pch;
                     // File already exists. Query user for overwrite.
 
@@ -938,7 +939,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
                     FNI fni;
                     STN stnFile, stnErr;
                     bool fHelp, tRet;
-                    long lSelect;
+                    int32_t lSelect;
 
                     // Now does the specified file already exist?
 

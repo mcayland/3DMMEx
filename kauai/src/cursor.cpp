@@ -29,16 +29,16 @@ CURS::~CURS(void)
 /***************************************************************************
     Read a cursor out of a CRF.
 ***************************************************************************/
-bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb)
+bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb)
 {
     PGG pggcurf;
-    long icurf, icurfBest;
+    int32_t icurf, icurfBest;
     CURF curf;
-    short bo;
-    long dxp, dyp, dzpT;
-    long dzpBest;
-    long cbRowDst, cbRowSrc, cbT;
-    byte *prgb, *qrgb;
+    int16_t bo;
+    int32_t dxp, dyp, dzpT;
+    int32_t dzpBest;
+    int32_t cbRowDst, cbRowSrc, cbT;
+    uint8_t *prgb, *qrgb;
     PCURS pcurs = pvNil;
 
     *pcb = SIZEOF(CURS);
@@ -67,7 +67,7 @@ bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
         if (kboOther == bo)
             SwapBytesBom(&curf, kbomCurf);
         if (curf.dxp > dxp || curf.dyp > dyp || curf.curt != curtMonochrome ||
-            pggcurf->Cb(icurf) != (long)curf.dxp * curf.dyp / 4)
+            pggcurf->Cb(icurf) != (int32_t)curf.dxp * curf.dyp / 4)
         {
             continue;
         }
@@ -95,7 +95,7 @@ bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
         goto LFail;
 
     FillPb(prgb, LwMul(cbRowDst, dyp), 0xFF);
-    qrgb = (byte *)pggcurf->QvGet(icurfBest);
+    qrgb = (uint8_t *)pggcurf->QvGet(icurfBest);
     cbT = LwMin(cbRowSrc, cbRowDst);
     for (dzpT = LwMin(dyp, curf.dyp); dzpT-- > 0;)
     {
@@ -110,17 +110,17 @@ bool CURS::FReadCurs(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, lo
 #endif // WIN
 #ifdef MAC
     Assert(dxp == 16, 0);
-    long *plwAnd, *plwXor;
-    long ilw;
+    int32_t *plwAnd, *plwXor;
+    int32_t ilw;
 
-    plwAnd = (long *)prgb;
+    plwAnd = (int32_t *)prgb;
     plwXor = plwAnd + 8;
     pcurs->_crs.hotSpot.h = curf.xp;
     pcurs->_crs.hotSpot.v = curf.yp;
     for (ilw = 0; ilw < 8; ilw++)
     {
-        ((long *)pcurs->_crs.mask)[ilw] = ~*plwAnd;
-        ((long *)pcurs->_crs.data)[ilw] = ~*plwAnd++ ^ *plwXor++;
+        ((int32_t *)pcurs->_crs.mask)[ilw] = ~*plwAnd;
+        ((int32_t *)pcurs->_crs.data)[ilw] = ~*plwAnd++ ^ *plwXor++;
     }
 #endif // MAC
 

@@ -30,7 +30,7 @@ typedef MEV *PMEV;
 // We're using the older headers, so need to define our own.
 struct MH
 {
-    byte *lpData;
+    uint8_t *lpData;
     DWORD dwBufferLength;
     DWORD dwBytesRecorded;
     DWORD dwUser;
@@ -61,22 +61,22 @@ class MDWS : public MDWS_PAR
 
   protected:
     PGL _pglmev;
-    ulong _dts;
+    uint32_t _dts;
 
     MDWS(void);
     bool _FInit(PMIDS pmids);
 
   public:
-    static bool FReadMdws(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadMdws(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     static PMDWS PmdwsRead(PBLCK pblck);
 
     ~MDWS(void);
 
-    ulong Dts(void)
+    uint32_t Dts(void)
     {
         return _dts;
     }
-    void *PvLockData(long *pcb);
+    void *PvLockData(int32_t *pcb);
     void UnlockData(void);
 };
 
@@ -97,8 +97,8 @@ class MSQUE : public MSQUE_PAR
     MARKMEM
 
   protected:
-    MUTX _mutx;     // restricts access to member variables
-    ulong _tsStart; // when we started the current sound
+    MUTX _mutx;        // restricts access to member variables
+    uint32_t _tsStart; // when we started the current sound
     PMSMIX _pmsmix;
 
     MSQUE(void);
@@ -108,9 +108,9 @@ class MSQUE : public MSQUE_PAR
 
     virtual bool _FInit(PMSMIX pmsmix);
     virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno);
-    virtual void _Queue(long isndinMin);
-    virtual void _PauseQueue(long isndinMin);
-    virtual void _ResumeQueue(long isndinMin);
+    virtual void _Queue(int32_t isndinMin);
+    virtual void _PauseQueue(int32_t isndinMin);
+    virtual void _ResumeQueue(int32_t isndinMin);
 
   public:
     static PMSQUE PmsqueNew(PMSMIX pmsmix);
@@ -135,15 +135,15 @@ class MSMIX : public MSMIX_PAR
   protected:
     struct MSOS
     {
-        PMSQUE pmsque;  // the "channel" or queue that the sound is on
-        PMDWS pmdws;    // the sound
-        long sii;       // its sound id (for a priority tie breaker)
-        long spr;       // its priority
-        long cactPlay;  // how many times to play the sound
-        ulong dts;      // length of this sound
-        ulong dtsStart; // position to start at
-        long vlm;       // volume to play at
-        ulong tsStart;  // when we "started" the sound (minus dtsStart)
+        PMSQUE pmsque;     // the "channel" or queue that the sound is on
+        PMDWS pmdws;       // the sound
+        int32_t sii;       // its sound id (for a priority tie breaker)
+        int32_t spr;       // its priority
+        int32_t cactPlay;  // how many times to play the sound
+        uint32_t dts;      // length of this sound
+        uint32_t dtsStart; // position to start at
+        int32_t vlm;       // volume to play at
+        uint32_t tsStart;  // when we "started" the sound (minus dtsStart)
     };
 
     // Mutex to protect our member variables
@@ -151,42 +151,42 @@ class MSMIX : public MSMIX_PAR
     HN _hevt; // to notify the thread that the sound list changed
     HN _hth;  // thread to terminate non-playing sounds
 
-    PMISI _pmisi; // the midi stream interface
-    PGL _pglmsos; // the list of current sounds, in priority order
-    long _cpvOut; // number of buffers submitted (0, 1, or 2)
+    PMISI _pmisi;    // the midi stream interface
+    PGL _pglmsos;    // the list of current sounds, in priority order
+    int32_t _cpvOut; // number of buffers submitted (0, 1, or 2)
 
     PGL _pglmevKey;     // to accumulate state events for seeking
     bool _fPlaying : 1; // whether we're currently playing the first stream
     bool _fWaiting : 1; // we're waiting for our buffers to get returned
     bool _fDone : 1;    // tells the aux thread to terminate
 
-    long _vlmBase;  // the base device volume
-    long _vlmSound; // the volume for the current sound
+    int32_t _vlmBase;  // the base device volume
+    int32_t _vlmSound; // the volume for the current sound
 
     MSMIX(void);
     bool _FInit(void);
     void _StopStream(void);
-    bool _FGetKeyEvents(PMDWS pmdws, ulong dtsSeek, long *pcbSkip);
+    bool _FGetKeyEvents(PMDWS pmdws, uint32_t dtsSeek, int32_t *pcbSkip);
     void _Restart(bool fNew = fFalse);
     void _WaitForBuffers(void);
-    void _SubmitBuffers(ulong tsCur);
+    void _SubmitBuffers(uint32_t tsCur);
 
-    static void _MidiProc(ulong luUser, void *pvData, ulong luData);
+    static void _MidiProc(uint32_t luUser, void *pvData, uint32_t luData);
     void _Notify(void *pvData, PMDWS pmdws);
 
-    static ulong __stdcall _ThreadProc(void *pv);
-    ulong _LuThread(void);
+    static DWORD __stdcall _ThreadProc(void *pv);
+    DWORD _LuThread(void);
 
   public:
     static PMSMIX PmsmixNew(void);
     ~MSMIX(void);
 
-    bool FPlay(PMSQUE pmsque, PMDWS pmdws = pvNil, long sii = siiNil, long spr = 0, long cactPlay = 1,
-               ulong dtsStart = 0, long vlm = kvlmFull);
+    bool FPlay(PMSQUE pmsque, PMDWS pmdws = pvNil, int32_t sii = siiNil, int32_t spr = 0, int32_t cactPlay = 1,
+               uint32_t dtsStart = 0, int32_t vlm = kvlmFull);
 
     void Suspend(bool fSuspend);
-    void SetVlm(long vlm);
-    long VlmCur(void);
+    void SetVlm(int32_t vlm);
+    int32_t VlmCur(void);
 };
 
 // Define these so we can use old (msvc 2.1) header files
@@ -202,7 +202,7 @@ class MSMIX : public MSMIX_PAR
 /***************************************************************************
     The midi stream interface.
 ***************************************************************************/
-typedef void (*PFNMIDI)(ulong luUser, void *pvData, ulong luData);
+typedef void (*PFNMIDI)(uint32_t luUser, void *pvData, uint32_t luData);
 
 typedef class MISI *PMISI;
 #define MISI_PAR BASE
@@ -214,32 +214,32 @@ class MISI : public MISI_PAR
   protected:
     HMS _hms;         // the midi stream handle
     PFNMIDI _pfnCall; // call back function
-    ulong _luUser;    // user data to send back
+    uint32_t _luUser; // user data to send back
 
     // system volume level - to be saved and restored. The volume we set
     // is always relative to this
     tribool _tBogusDriver; // to indicate whether midiOutGetVolume really works
-    ulong _luVolSys;
-    long _vlmBase; // our current volume relative to _luVolSys.
+    DWORD _luVolSys;
+    int32_t _vlmBase; // our current volume relative to _luVolSys.
 
-    MISI(PFNMIDI pfn, ulong luUser);
+    MISI(PFNMIDI pfn, uint32_t luUser);
 
     virtual bool _FOpen(void) = 0;
     virtual bool _FClose(void) = 0;
 
     void _Reset(void);
     void _GetSysVol(void);
-    void _SetSysVol(ulong luVol);
+    void _SetSysVol(uint32_t luVol);
     void _SetSysVlm(void);
 
   public:
-    virtual void SetVlm(long vlm);
-    virtual long VlmCur(void);
+    virtual void SetVlm(int32_t vlm);
+    virtual int32_t VlmCur(void);
 
     virtual bool FActive(void);
     virtual bool FActivate(bool fActivate);
 
-    virtual bool FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong luData) = 0;
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData) = 0;
     virtual void StopPlaying(void) = 0;
 };
 
@@ -271,21 +271,21 @@ class WMS : public WMS_PAR
     struct MSIR
     {
         void *pvData;
-        long cb;
-        long cactPlay;
-        ulong luData;
-        long ibNext;
+        int32_t cb;
+        int32_t cactPlay;
+        uint32_t luData;
+        int32_t ibNext;
 
         MH rgmh[kcmhMsir];
-        long rgibLim[kcmhMsir];
+        int32_t rgibLim[kcmhMsir];
     };
     typedef MSIR *PMSIR;
 
     MUTX _mutx;
     HINSTANCE _hlib;
     PGL _pglpmsir;
-    long _ipmsirCur;
-    long _cmhOut;
+    int32_t _ipmsirCur;
+    int32_t _cmhOut;
 
     HN _hevt; // event to wake up the thread
     HN _hth;  // thread to do callbacks and cleanup after a notify
@@ -305,7 +305,7 @@ class WMS : public WMS_PAR
     MMRESULT(WINAPI *_pfnRestart)(HMS hms);
     MMRESULT(WINAPI *_pfnStop)(HMS hms);
 
-    WMS(PFNMIDI pfn, ulong luUser);
+    WMS(PFNMIDI pfn, uint32_t luUser);
     bool _FInit(void);
 
     virtual bool _FOpen(void);
@@ -313,17 +313,17 @@ class WMS : public WMS_PAR
 
     bool _FSubmit(PMH pmh);
     void _DoCallBacks(void);
-    long _CmhSubmitBuffers(void);
+    int32_t _CmhSubmitBuffers(void);
     void _ResetStream(void);
 
-    static void __stdcall _MidiProc(HMS hms, ulong msg, ulong luUser, ulong lu1, ulong lu2);
+    static void __stdcall _MidiProc(HMS hms, uint32_t msg, uint32_t luUser, uint32_t lu1, uint32_t lu2);
     void _Notify(HMS hms, PMH pmh);
 
-    static ulong __stdcall _ThreadProc(void *pv);
-    ulong _LuThread(void);
+    static DWORD __stdcall _ThreadProc(void *pv);
+    DWORD _LuThread(void);
 
   public:
-    static PWMS PwmsNew(PFNMIDI pfn, ulong luUser);
+    static PWMS PwmsNew(PFNMIDI pfn, uint32_t luUser);
     ~WMS(void);
 
 #ifdef STREAM_BUG
@@ -331,7 +331,7 @@ class WMS : public WMS_PAR
     virtual bool FActivate(bool fActivate);
 #endif // STREAM_BUG
 
-    virtual bool FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong luData);
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData);
     virtual void StopPlaying(void);
 };
 
@@ -351,11 +351,11 @@ class OMS : public OMS_PAR
     struct MSB
     {
         void *pvData;
-        long cb;
-        long ibStart;
-        long cactPlay;
+        int32_t cb;
+        int32_t ibStart;
+        int32_t cactPlay;
 
-        ulong luData;
+        uint32_t luData;
     };
 
     MUTX _mutx;
@@ -366,27 +366,27 @@ class OMS : public OMS_PAR
     bool _fStop : 1;    // tells the aux thread to stop all buffers
     bool _fDone : 1;    // tells the aux thread to return
 
-    long _imsbCur;
+    int32_t _imsbCur;
     PGL _pglmsb;
     PMEV _pmev;
     PMEV _pmevLim;
-    ulong _tsCur;
+    uint32_t _tsCur;
 
-    OMS(PFNMIDI pfn, ulong luUser);
+    OMS(PFNMIDI pfn, uint32_t luUser);
     bool _FInit(void);
 
     virtual bool _FOpen(void);
     virtual bool _FClose(void);
 
-    static ulong __stdcall _ThreadProc(void *pv);
-    ulong _LuThread(void);
+    static DWORD __stdcall _ThreadProc(void *pv);
+    DWORD _LuThread(void);
     void _ReleaseBuffers(void);
 
   public:
-    static POMS PomsNew(PFNMIDI pfn, ulong luUser);
+    static POMS PomsNew(PFNMIDI pfn, uint32_t luUser);
     ~OMS(void);
 
-    virtual bool FQueueBuffer(void *pvData, long cb, long ibStart, long cactPlay, ulong luData);
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData);
     virtual void StopPlaying(void);
 };
 

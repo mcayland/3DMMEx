@@ -21,7 +21,7 @@ void CheckForLostMem(BASE *po);
 #endif //! DEBUG
 
 void TestUtil(void);
-long _LwSqrt(long lw);
+int32_t _LwSqrt(int32_t lw);
 
 #define APP_PAR APPB
 #define kclsAPP 'APP'
@@ -31,7 +31,7 @@ class APP : public APP_PAR
     CMD_MAP_DEC(APP)
 
   protected:
-    virtual bool _FInit(ulong grfapp, ulong grfgob, long ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
 
   public:
     virtual void GetStnAppName(PSTN pstn);
@@ -51,9 +51,9 @@ class APP : public APP_PAR
 #endif // WIN
 #ifdef MAC
     bool FCmdSetScreen(PCMD pcmd);
-    bool FEnableScreen(PCMD pcmd, ulong *pgrfeds);
+    bool FEnableScreen(PCMD pcmd, uint32_t *pgrfeds);
 #endif // MAC
-    bool FEnableMacro(PCMD pcmd, ulong *pgrfeds);
+    bool FEnableMacro(PCMD pcmd, uint32_t *pgrfeds);
 };
 
 BEGIN_CMD_MAP(APP, APPB)
@@ -91,7 +91,7 @@ ACR _rgacr[] = {kacrBlack,   kacrBlue,   kacrGreen, kacrCyan,  kacrRed,
                 kacrMagenta, kacrYellow, kacrWhite, kacrClear, kacrInvert};
 achar *_rgszColors[] = {PszLit("bla"), PszLit("blu"), PszLit("gre"), PszLit("cya"), PszLit("red"),
                         PszLit("mag"), PszLit("yel"), PszLit("whi"), PszLit("cle"), PszLit("inv")};
-const long _cacr = SIZEOF(_rgacr) / SIZEOF(_rgacr[0]);
+const int32_t _cacr = SIZEOF(_rgacr) / SIZEOF(_rgacr[0]);
 
 RTCLASS(APP)
 
@@ -114,7 +114,7 @@ void APP::GetStnAppName(PSTN pstn)
 /***************************************************************************
     Initialize the app.
 ***************************************************************************/
-bool APP::_FInit(ulong grfapp, ulong grfgob, long ginDef)
+bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 {
     if (!APP_PAR::_FInit(grfapp, grfgob, ginDef))
         return fFalse;
@@ -191,7 +191,7 @@ class GFRC : public GFRC_PAR
     GFRC(PGCB pgcb, ACR acr, bool fOval);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
 };
 
 RTCLASS(GPRC)
@@ -391,7 +391,7 @@ void GFRC::Draw(PGNV pgnv, RC *prcClip)
 /***************************************************************************
     The mouse hit us - so die.
 ***************************************************************************/
-void GFRC::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void GFRC::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     if (Hid() != 99)
     {
@@ -433,7 +433,7 @@ void TDC::_NewRc(void)
 {
     // set the scroll bar ranges and values
     PSCB pscb;
-    long dxp, dyp;
+    int32_t dxp, dyp;
     RC rc, rcPar;
 
     PgobPar()->GetRc(&rcPar, cooLocal);
@@ -475,7 +475,7 @@ class DWN : public DWN_PAR
     CMD_MAP_DEC(DWN)
 
   protected:
-    static long _cdwn;
+    static int32_t _cdwn;
 
     DWN(PGCB pgcb) : GOB(pgcb)
     {
@@ -492,7 +492,7 @@ ON_CID_ME(cidDoScroll, &DWN::FCmdScroll, pvNil)
 ON_CID_ME(cidEndScroll, &DWN::FCmdScroll, pvNil)
 END_CMD_MAP_NIL()
 
-long DWN::_cdwn = 0;
+int32_t DWN::_cdwn = 0;
 
 RTCLASS(DWN)
 
@@ -598,7 +598,7 @@ DWN *DWN::PdwnNew(void)
 ***************************************************************************/
 bool DWN::FCmdScroll(PCMD pcmd)
 {
-    long hid, val, dval;
+    int32_t hid, val, dval;
     PSCB pscb;
     PGOB pgob;
     RC rc;
@@ -663,14 +663,14 @@ class TTW : public TTW_PAR
     RTCLASS_DEC
 
   private:
-    long _cact;
+    int32_t _cact;
 
   public:
     TTW(PGCB pgcb) : DWN(pgcb)
     {
     }
     static TTW *PttwNew(void);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     void Draw(PGNV pgnv, RC *prcClip);
 };
 
@@ -714,13 +714,13 @@ TTW *TTW::PttwNew(void)
 void TTW::Draw(PGNV pgnv, RC *prcClip)
 {
     RC rc;
-    long dxp, dyp, idxp, idyp;
-    long irc;
-    const long cdxp = 8;
-    const long cdyp = 10;
+    int32_t dxp, dyp, idxp, idyp;
+    int32_t irc;
+    const int32_t cdxp = 8;
+    const int32_t cdyp = 10;
     struct TNM // Text alignment NaMe
     {
-        long lw;
+        int32_t lw;
         achar ch;
     };
     static TNM _rgtnmVert[] = {{tavTop, 'T'}, {tavCenter, 'C'}, {tavBaseline, 'S'}, {tavBottom, 'B'}};
@@ -742,8 +742,8 @@ void TTW::Draw(PGNV pgnv, RC *prcClip)
         {
             STN stn;
             RC rc;
-            long itnm;
-            long tah, tav;
+            int32_t itnm;
+            int32_t tah, tav;
             achar chH, chV;
 
             rc.xpLeft = idxp * dxp;
@@ -751,7 +751,7 @@ void TTW::Draw(PGNV pgnv, RC *prcClip)
             rc.xpRight = rc.xpLeft + dxp;
             rc.ypBottom = rc.ypTop + dyp;
             pgnv->ClipRc(&rc);
-            pgnv->FrameRc(&rc, ACR(byte(3 * irc)));
+            pgnv->FrameRc(&rc, ACR(uint8_t(3 * irc)));
             itnm = irc % CvFromRgv(_rgtnmHorz);
             chH = _rgtnmHorz[itnm].ch;
             tah = _rgtnmHorz[itnm].lw;
@@ -769,7 +769,7 @@ void TTW::Draw(PGNV pgnv, RC *prcClip)
     pgnv->ClipRc(pvNil);
 }
 
-void TTW::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void TTW::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     RC rc;
     GNV gnv(this);
@@ -787,14 +787,14 @@ class RTW : public RTW_PAR
     RTCLASS_DEC
 
   private:
-    long _cact;
+    int32_t _cact;
 
   public:
     RTW(PGCB pgcb) : DWN(pgcb)
     {
         _cact = 0;
     }
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
     virtual void Draw(PGNV pgnv, RC *prcClip);
     static RTW *PrtwNew(void);
 };
@@ -836,8 +836,8 @@ class DOC : public DOCB
 ******************************************************************************/
 bool APP::FCmdNewTestWnd(PCMD pcmd)
 {
-    long idit;
-    long lw;
+    int32_t idit;
+    int32_t lw;
 
     if (pcmd->pgg == pvNil)
     {
@@ -853,7 +853,7 @@ bool APP::FCmdNewTestWnd(PCMD pcmd)
             goto LFail;
     }
 
-    pcmd->pgg->GetRgb(2, 0, SIZEOF(long), &lw);
+    pcmd->pgg->GetRgb(2, 0, SIZEOF(int32_t), &lw);
     switch (lw)
     {
     case 0: // new graphics window
@@ -907,16 +907,16 @@ bool APP::FCmdTimeTestRc(PCMD pcmd)
 /******************************************************************************
     Perform the test.
 ******************************************************************************/
-void RTW::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void RTW::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     GNV gnv(this);
-    long iact;
+    int32_t iact;
     RC rc;
     PT *qrgpt;
     POGN pogn;
-    long xp1, xp2, xp3, yp1, yp2, yp3;
+    int32_t xp1, xp2, xp3, yp1, yp2, yp3;
     APT apt = {0xFF, 0x01, 0x7D, 0x45, 0x5D, 0x41, 0x7F, 0x00};
-    ulong ts;
+    uint32_t ts;
     STN stn;
 
     if (pvNil == (pogn = OGN::PognNew(8)))
@@ -1002,10 +1002,10 @@ void RTW::Draw(PGNV pgnv, RC *prcClip)
     pgnv->DrawStn(&stn, rc.XpCenter(), rc.YpCenter(), kacrBlack, kacrClear);
 }
 
-long _LwSqrt(long lw)
+int32_t _LwSqrt(int32_t lw)
 {
-    ushort wHi, wLo, wMid;
-    long lwT;
+    uint16_t wHi, wLo, wMid;
+    int32_t lwT;
 
     AssertVar(lw >= 0, "sqrt of negative", &lw);
     for (lwT = wHi = 1; lwT < lw;)
@@ -1022,7 +1022,7 @@ long _LwSqrt(long lw)
     while (wLo < wHi)
     {
         wMid = (wLo + wHi) >> 1;
-        lwT = (long)wMid * wMid;
+        lwT = (int32_t)wMid * wMid;
 
         if (lwT < lw)
             wLo = wMid + 1;
@@ -1033,9 +1033,9 @@ long _LwSqrt(long lw)
     }
 
     wLo = wHi - 1;
-    Assert((long)wHi * wHi > lw && (long)wLo * wLo <= lw, "bad logic");
+    Assert((int32_t)wHi * wHi > lw && (int32_t)wLo * wLo <= lw, "bad logic");
 
-    return (long)(((long)wHi * wHi - lw < lw - (long)wLo * wLo) ? wHi : wLo);
+    return (int32_t)(((int32_t)wHi * wHi - lw < lw - (int32_t)wLo * wLo) ? wHi : wLo);
 }
 
 /***************************************************************************
@@ -1081,7 +1081,7 @@ bool APP::FCmdMacro(PCMD pcmd)
 /***************************************************************************
     Handles enabling of macro recording and playback commands.
 ***************************************************************************/
-bool APP::FEnableMacro(PCMD pcmd, ulong *pgrfeds)
+bool APP::FEnableMacro(PCMD pcmd, uint32_t *pgrfeds)
 {
     if (vpcex->FRecording() || vpcex->FPlaying())
         *pgrfeds = fedsDisable;
@@ -1096,7 +1096,7 @@ bool APP::FEnableMacro(PCMD pcmd, ulong *pgrfeds)
 ******************************************************************************/
 bool APP::FCmdTestFni(PCMD pcmd)
 {
-    long idit;
+    int32_t idit;
     STN stn, stnT;
     FNI fni;
     PDLG pdlg;
@@ -1125,24 +1125,24 @@ LFail:
 // point in R3
 struct PTT
 {
-    long xt, yt, zt;
+    int32_t xt, yt, zt;
 };
 
 // world of perspective
 struct WOP
 {
     PTT pttEye;
-    long ztScreen;
-    long ztMax;
+    int32_t ztScreen;
+    int32_t ztMax;
 
-    PT PtMap(long xt, long yt, long zt);
-    // PTT PttUnmap(long xp, long yp, long yt);
+    PT PtMap(int32_t xt, int32_t yt, int32_t zt);
+    // PTT PttUnmap(int32_t xp, int32_t yp, int32_t yt);
 };
 
 /***************************************************************************
     Map an R3 point to a screen point.
 ***************************************************************************/
-PT WOP::PtMap(long xt, long yt, long zt)
+PT WOP::PtMap(int32_t xt, int32_t yt, int32_t zt)
 {
     PT pt;
     pt.xp = pttEye.xt + LwMulDiv(xt - pttEye.xt, ztScreen - pttEye.zt, zt - pttEye.zt);
@@ -1154,10 +1154,10 @@ PT WOP::PtMap(long xt, long yt, long zt)
 /***************************************************************************
     Map a screen point to an R3 point.  yt stays fixed.
 ***************************************************************************/
-PTT WOP::PttUnmap(long xp, long yp, long yt)
+PTT WOP::PttUnmap(int32_t xp, int32_t yp, int32_t yt)
 {
     PTT ptt;
-    long ypBound;
+    int32_t ypBound;
 
     if (((yp - pttEye.yt) > 0) != ((yt - pttEye.yt) > 0))
         yp = pttEye.yt;
@@ -1171,7 +1171,7 @@ class DOCP : public DOCB
   public:
     WOP _wop;
     PTT _pttSquare;
-    long _dxt, _dyt;
+    int32_t _dxt, _dyt;
 
     DOCP(void);
 
@@ -1189,7 +1189,7 @@ class DDP : public DDG
     static DDP *PddpNew(DOCP *pdocp, PGCB pgcb);
 
     virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(long xp, long yp, long cact, ulong grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
 
     void DrawRc(PGNV pgnv);
     void DrawNumbers(PGNV pgnv);
@@ -1319,7 +1319,7 @@ void DDP::DrawNumbers(PGNV pgnv)
 /***************************************************************************
     Track the mouse and drag the square.
 ***************************************************************************/
-void DDP::MouseDown(long xp, long yp, long cact, ulong grfcust)
+void DDP::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 {
     DOCP *pdocp = (DOCP *)_pdocb;
     PT pt(xp, yp);
@@ -1459,12 +1459,12 @@ void DOCPIC::MarkMem(void)
 ***************************************************************************/
 DOCPIC *DOCPIC::PdocpicNew(void)
 {
-    static long _cact = 0;
+    static int32_t _cact = 0;
     PGPT pgpt;
     PGNV pgnv;
     PPIC ppic;
     DOCPIC *pdocpic;
-    long i, j;
+    int32_t i, j;
     CLR clr;
     PGL pglclr;
     RC rc(0, 0, 16, 16);
@@ -1477,13 +1477,13 @@ DOCPIC *DOCPIC::PdocpicNew(void)
         switch (_cact)
         {
         default:
-            clr.bRed = byte(255 - i);
+            clr.bRed = uint8_t(255 - i);
             break;
         case 1:
-            clr.bGreen = byte(255 - i);
+            clr.bGreen = uint8_t(255 - i);
             break;
         case 2:
-            clr.bBlue = byte(255 - i);
+            clr.bBlue = uint8_t(255 - i);
             break;
         }
         pglclr->FPush(&clr);
@@ -1504,9 +1504,9 @@ DOCPIC *DOCPIC::PdocpicNew(void)
             {
                 rc.Set(i, j, i + 1, j + 1);
                 if ((i + j) & 1)
-                    pgnv->FillRc(&rc, ACR(byte(i * 16 + j)));
+                    pgnv->FillRc(&rc, ACR(uint8_t(i * 16 + j)));
                 else
-                    pgnv->FillOval(&rc, ACR(byte(i * 16 + j)));
+                    pgnv->FillOval(&rc, ACR(uint8_t(i * 16 + j)));
             }
         }
         ReleasePpo(&pgnv);
@@ -1583,7 +1583,7 @@ DDPIC *DDPIC::PddpicNew(DOCPIC *pdocpic, PGCB pgcb)
 void DDPIC::Draw(PGNV pgnv, RC *prcClip)
 {
     DOCPIC *pdocpic = (DOCPIC *)_pdocb;
-    long i, j;
+    int32_t i, j;
     RC rc(0, 0, 33, 16);
 
     // draw the picture and draw directly
@@ -1600,9 +1600,9 @@ void DDPIC::Draw(PGNV pgnv, RC *prcClip)
         {
             rc.Set(i, j, i + 1, j + 1);
             if ((i + j) & 1)
-                pgnv->FillRc(&rc, ACR(byte(i * 16 + j)));
+                pgnv->FillRc(&rc, ACR(uint8_t(i * 16 + j)));
             else
-                pgnv->FillOval(&rc, ACR(byte(i * 16 + j)));
+                pgnv->FillOval(&rc, ACR(uint8_t(i * 16 + j)));
         }
     }
 }
@@ -1694,13 +1694,13 @@ DOCGPT *DOCGPT::PdocgptNew(void)
     PGPT pgpt;
     PGNV pgnv;
     PMBMP pmbmp;
-    long i;
+    int32_t i;
     RC rc(0, 0, 256, 256);
     RC rcT;
     ACR acr;
     CLR clr;
     PGL pglclr;
-    static long _cact = 0;
+    static int32_t _cact = 0;
     PT pt(0, 0);
     ACR acr63(63), acr127(127), acr191(191);
 
@@ -1712,20 +1712,20 @@ DOCGPT *DOCGPT::PdocgptNew(void)
         switch (_cact)
         {
         default:
-            clr.bRed = byte(255 - i);
+            clr.bRed = uint8_t(255 - i);
             break;
         case 1:
-            clr.bGreen = byte(255 - i);
+            clr.bGreen = uint8_t(255 - i);
             break;
         case 2:
-            clr.bBlue = byte(255 - i);
+            clr.bBlue = uint8_t(255 - i);
             break;
         }
         if (i == 100) // make 100 always the same	- yellow
         {
-            clr.bRed = byte(kbMax);
-            clr.bGreen = byte(kbMax);
-            clr.bBlue = byte(0);
+            clr.bRed = uint8_t(kbMax);
+            clr.bGreen = uint8_t(kbMax);
+            clr.bBlue = uint8_t(0);
         }
         pglclr->FPush(&clr);
         _cact = (_cact + 1) % 3;
@@ -1797,14 +1797,14 @@ DOCGPT *DOCGPT::PdocgptNew(void)
     for (i = 0; i < 128; i++)
     {
         ClearPb(&clr, SIZEOF(clr));
-        clr.bGreen = byte(i * 2);
+        clr.bGreen = uint8_t(i * 2);
         pglclr->FPush(&clr);
     }
     for (; i < 256; i++)
     {
         ClearPb(&clr, SIZEOF(clr));
         clr.bGreen = 255;
-        clr.bRed = clr.bBlue = (byte)((i - 128) * 2);
+        clr.bRed = clr.bBlue = (uint8_t)((i - 128) * 2);
         pglclr->FPush(&clr);
     }
 
@@ -1895,7 +1895,7 @@ bool APP::FCmdTestMbmps(PCMD pcmd)
 bool APP::FCmdSetScreen(PCMD pcmd)
 {
     bool tColor = tMaybe;
-    long cbit = 0;
+    int32_t cbit = 0;
 
     switch (pcmd->cid)
     {
@@ -1934,13 +1934,13 @@ bool APP::FCmdSetScreen(PCMD pcmd)
 /***************************************************************************
     Set the menu stuff for the screen resolutions.
 ***************************************************************************/
-bool APP::FEnableScreen(PCMD pcmd, ulong *pgrfeds)
+bool APP::FEnableScreen(PCMD pcmd, uint32_t *pgrfeds)
 {
-    long cbitPixel;
+    int32_t cbitPixel;
     bool fColor;
     bool fCheck;
     bool fEnable;
-    long cbit;
+    int32_t cbit;
 
     GPT::GetScreenState(&cbitPixel, &fColor);
     switch (pcmd->cid)
@@ -1992,9 +1992,9 @@ class TAN : public TAN_PAR
     CMD_MAP_DEC(TAN)
 
   protected:
-    static long _cact;
+    static int32_t _cact;
     APT _apt;
-    ulong _dtim;
+    uint32_t _dtim;
 
     TAN(PGCB pgcb);
 
@@ -2009,7 +2009,7 @@ BEGIN_CMD_MAP(TAN, GOB)
 ON_CID_ME(cidAlarm, &TAN::FCmdAlarm, pvNil)
 END_CMD_MAP_NIL()
 
-long TAN::_cact = 0;
+int32_t TAN::_cact = 0;
 
 /***************************************************************************
     Create a new picture doc and window.
@@ -2070,7 +2070,7 @@ bool TAN::FCmdAlarm(PCMD pcmd)
     RC rcPar, rc;
     RC rcT;
     PGOB pgob;
-    long cact;
+    int32_t cact;
 
     GetRc(&rcPar, cooLocal);
     for (cact = 0, pgob = PgobFirstChild(); pvNil != pgob; pgob = pgob->PgobNextSib(), cact++)
@@ -2139,10 +2139,10 @@ PTED TED::PtedNew(void)
     EDPAR edpar;
     PTED pted;
     STN stn;
-    long i, j;
-    long hid;
-    long rgtah[3] = {tahLeft, tahCenter, tahRight};
-    long rgtav[3] = {tavTop, tavCenter, tavBottom};
+    int32_t i, j;
+    int32_t hid;
+    int32_t rgtah[3] = {tahLeft, tahCenter, tahRight};
+    int32_t rgtav[3] = {tavTop, tavCenter, tavBottom};
 
     if (pvNil == (pted = NewObj TED))
         return pvNil;
@@ -2196,7 +2196,7 @@ PTED TED::PtedNew(void)
 ***************************************************************************/
 bool TED::FCmdBadKey(PCMD_BADKEY pcmd)
 {
-    long hid;
+    int32_t hid;
 
     switch (pcmd->ch)
     {

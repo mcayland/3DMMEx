@@ -40,14 +40,14 @@ class MUB : public MUB_PAR
     // Menu Item
     struct MNI
     {
-        long cid;
-        long lw0;
+        int32_t cid;
+        int32_t lw0;
     };
 
     // Menu
     struct MNU
     {
-        long mid;
+        int32_t mid;
         SMU **hnsmu;
         PGL pglmni;
     };
@@ -55,10 +55,10 @@ class MUB : public MUB_PAR
     // menu list
     struct MLST
     {
-        long imnu;
-        long imniBase;
-        long cmni;
-        long cid;
+        int32_t imnu;
+        int32_t imniBase;
+        int32_t cmni;
+        int32_t cid;
         bool fSeparator;
     };
 
@@ -66,12 +66,12 @@ class MUB : public MUB_PAR
     PGL _pglmnu;
     PGL _pglmlst; // menu lists
 
-    bool _FInsertMni(long imnu, long imni, long cid, long lw0, PSTN pstn);
-    void _DeleteMni(long imnu, long imni);
-    bool _FFindMlst(long imnu, long imni, MLST *pmlst = pvNil, long *pimlst = pvNil);
-    bool _FGetCmdFromCode(long lwCode, CMD *pcmd);
+    bool _FInsertMni(int32_t imnu, int32_t imni, int32_t cid, int32_t lw0, PSTN pstn);
+    void _DeleteMni(int32_t imnu, int32_t imni);
+    bool _FFindMlst(int32_t imnu, int32_t imni, MLST *pmlst = pvNil, int32_t *pimlst = pvNil);
+    bool _FGetCmdFromCode(int32_t lwCode, CMD *pcmd);
     void _Free(void);
-    bool _FFetchRes(ulong ridMenuBar);
+    bool _FFetchRes(uint32_t ridMenuBar);
 #endif // MAC
 
 #ifdef WIN
@@ -79,20 +79,20 @@ class MUB : public MUB_PAR
     struct MLST
     {
         HMENU hmenu;
-        long imniBase;
-        long wcidList;
-        long cid;
+        int32_t imniBase;
+        int32_t wcidList;
+        int32_t cid;
         bool fSeparator;
         PGL pgllw;
     };
 
-    HMENU _hmenu; // the menu bar
-    long _cmnu;   // number of menus on the menu bar
-    PGL _pglmlst; // menu lists
+    HMENU _hmenu;  // the menu bar
+    int32_t _cmnu; // number of menus on the menu bar
+    PGL _pglmlst;  // menu lists
 
     bool _FInitLists(void);
-    bool _FFindMlst(long wcid, MLST *pmlst, long *pimlst = pvNil);
-    bool _FGetCmdForWcid(long wcid, PCMD pcmd);
+    bool _FFindMlst(int32_t wcid, MLST *pmlst, int32_t *pimlst = pvNil);
+    bool _FGetCmdForWcid(int32_t wcid, PCMD pcmd);
 #endif // WIN
 
   protected:
@@ -103,7 +103,7 @@ class MUB : public MUB_PAR
   public:
     ~MUB(void);
 
-    static PMUB PmubNew(ulong ridMenuBar);
+    static PMUB PmubNew(uint32_t ridMenuBar);
 
     virtual void Set(void);
     virtual void Clean(void);
@@ -113,13 +113,13 @@ class MUB : public MUB_PAR
     virtual bool FDoKey(EVT *pevt);
 #endif // MAC
 #ifdef WIN
-    virtual void EnqueueWcid(long wcid);
+    virtual void EnqueueWcid(int32_t wcid);
 #endif // WIN
 
-    virtual bool FAddListCid(long cid, long lw0, PSTN pstn);
-    virtual bool FRemoveListCid(long cid, long lw0, PSTN pstn = pvNil);
-    virtual bool FChangeListCid(long cid, long lwOld, PSTN pstnOld, long lwNew, PSTN pstnNew);
-    virtual bool FRemoveAllListCid(long cid);
+    virtual bool FAddListCid(int32_t cid, int32_t lw0, PSTN pstn);
+    virtual bool FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn = pvNil);
+    virtual bool FChangeListCid(int32_t cid, int32_t lwOld, PSTN pstnOld, int32_t lwNew, PSTN pstnNew);
+    virtual bool FRemoveAllListCid(int32_t cid);
 };
 
 extern PMUB vpmubCur;

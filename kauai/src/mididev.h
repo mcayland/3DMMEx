@@ -36,8 +36,8 @@ class MIDP : public MIDP_PAR
     ~MIDP(void);
 
     // inherited methods
-    virtual void SetVlm(long vlm);
-    virtual long VlmCur(void);
+    virtual void SetVlm(int32_t vlm);
+    virtual int32_t VlmCur(void);
 };
 
 #endif //! MIDIDEV_H

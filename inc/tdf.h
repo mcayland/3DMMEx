@@ -27,7 +27,7 @@ class TDF : public TDF_PAR
     MARKMEM
 
   protected:
-    long _cch;    // count of chars
+    int32_t _cch; // count of chars
     BRS _dyrMax;  // max character height
     BRS *_prgdxr; // character widths
     BRS *_prgdyr; // character heights
@@ -39,15 +39,15 @@ class TDF : public TDF_PAR
     bool _FInit(PBLCK pblck);
 
   public:
-    static bool FReadTdf(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, long *pcb);
+    static bool FReadTdf(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);
     ~TDF(void);
 
     // This authoring-only API creates a new TDF based on a set of models
     static bool FCreate(PCRF pcrf, PGL pglkid, STN *pstn, CKI *pckiTdf = pvNil);
 
     PMODL PmodlFetch(CHID chid);
-    BRS DxrChar(long ich);
-    BRS DyrChar(long ich);
+    BRS DxrChar(int32_t ich);
+    BRS DyrChar(int32_t ich);
     BRS DyrMax(void)
     {
         return _dyrMax;

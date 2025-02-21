@@ -35,7 +35,7 @@ void TestCrf(void);
 void TestUtil(void)
 {
     Bug("Assert Test");
-    long lw = 0x12345678;
+    int32_t lw = 0x12345678;
     BugVar("AssertVar test", &lw);
 
     TestInt();
@@ -135,7 +135,7 @@ void TestMem(void)
 #define kchq 18
     static HQ rghq[kchq]; // static so it's initially zeros
     HQ hqT, hq;
-    long cb, ihq;
+    int32_t cb, ihq;
 
     for (ihq = 0; ihq < kchq; ihq++)
     {
@@ -148,11 +148,11 @@ void TestMem(void)
         rghq[ihq] = hq;
         AssertDo(CbOfHq(hq) == cb, 0);
 
-        FillPb(QvFromHq(hq), cb, (byte)cb);
+        FillPb(QvFromHq(hq), cb, (uint8_t)cb);
         if (cb > 0)
         {
-            AssertDo(*(byte *)QvFromHq(hq) == (byte)cb, 0);
-            AssertDo(*(byte *)PvAddBv(QvFromHq(hq), cb - 1) == (byte)cb, 0);
+            AssertDo(*(uint8_t *)QvFromHq(hq) == (uint8_t)cb, 0);
+            AssertDo(*(uint8_t *)PvAddBv(QvFromHq(hq), cb - 1) == (uint8_t)cb, 0);
         }
 
         AssertDo(PvLockHq(hq) == QvFromHq(hq), 0);
@@ -163,8 +163,8 @@ void TestMem(void)
             AssertDo(CbOfHq(hqT) == cb, 0);
             if (cb > 0)
             {
-                AssertDo(*(byte *)QvFromHq(hqT) == (byte)cb, 0);
-                AssertDo(*(byte *)PvAddBv(QvFromHq(hqT), cb - 1) == (byte)cb, 0);
+                AssertDo(*(uint8_t *)QvFromHq(hqT) == (uint8_t)cb, 0);
+                AssertDo(*(uint8_t *)PvAddBv(QvFromHq(hqT), cb - 1) == (uint8_t)cb, 0);
             }
             FreePhq(&hqT);
         }
@@ -188,10 +188,10 @@ void TestMem(void)
         hq = rghq[ihq];
         if (cb > 0)
         {
-            AssertDo(*(byte *)QvFromHq(hq) == (byte)cb, 0);
-            AssertDo(*(byte *)PvAddBv(QvFromHq(hq), cb - 1) == (byte)cb, 0);
-            AssertDo(*(byte *)PvAddBv(QvFromHq(hq), cb) == 0, 0);
-            AssertDo(*(byte *)PvAddBv(QvFromHq(hq), 2 * cb - 1) == 0, 0);
+            AssertDo(*(uint8_t *)QvFromHq(hq) == (uint8_t)cb, 0);
+            AssertDo(*(uint8_t *)PvAddBv(QvFromHq(hq), cb - 1) == (uint8_t)cb, 0);
+            AssertDo(*(uint8_t *)PvAddBv(QvFromHq(hq), cb) == 0, 0);
+            AssertDo(*(uint8_t *)PvAddBv(QvFromHq(hq), 2 * cb - 1) == 0, 0);
         }
     }
 
@@ -212,11 +212,11 @@ void TestMem(void)
 void TestGl(void)
 {
     short sw;
-    long isw;
+    int32_t isw;
     short *qsw;
     PGL pglsw;
 
-    pglsw = GL::PglNew(SIZEOF(short));
+    pglsw = GL::PglNew(SIZEOF(int16_t));
     if (pvNil == pglsw)
     {
         Bug("PglNew failed");
@@ -349,9 +349,9 @@ void TestFil(void)
 void TestGg(void)
 {
     PGG pgg;
-    ulong grf;
-    long cb, iv;
-    byte *qb;
+    uint32_t grf;
+    int32_t cb, iv;
+    uint8_t *qb;
     PSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
 
@@ -368,7 +368,7 @@ void TestGg(void)
     for (iv = pgg->IvMac(); iv--;)
     {
         cb = pgg->Cb(iv);
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         AssertDo(FEqualRgb(psz, qb, cb), 0);
         grf |= 1L << cb;
         if (cb & 1)
@@ -382,7 +382,7 @@ void TestGg(void)
         cb = pgg->Cb(iv);
         AssertDo(!(cb & 1), 0);
         pgg->Get(iv, rgch);
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         AssertDo(FEqualRgb(rgch, qb, cb), 0);
         AssertDo(FEqualRgb(rgch, psz, cb), 0);
         grf |= 1L << cb;
@@ -400,7 +400,7 @@ void TestGg(void)
         grf |= 1L << cb;
         pgg->DeleteRgb(iv, LwMin(cb, iv), cb);
 
-        qb = (byte *)pgg->QvGet(iv);
+        qb = (uint8_t *)pgg->QvGet(iv);
         AssertDo(FEqualRgb(psz, qb, cb), 0);
     }
     AssertDo(grf == 0x00010554, 0);
@@ -456,7 +456,7 @@ void TestCfl(void)
     PCFL pcfl, pcflDst;
     BLCK blck;
     short rel;
-    long icki;
+    int32_t icki;
     CNO cno;
     CKI cki;
     EREL *perel, *perelPar;
@@ -586,8 +586,8 @@ void TestCfl(void)
 ******************************************************************************/
 void TestErs(void)
 {
-    const long cercTest = 30;
-    long erc, ercT;
+    const int32_t cercTest = 30;
+    int32_t erc, ercT;
 
     vpers->Clear();
     Assert(vpers->Cerc() == 0, "bad count of error codes on stack");

@@ -43,8 +43,8 @@ class MDPS : public MDPS_PAR
     ~MDPS(void);
 
     // inherited methods
-    virtual void SetVlm(long vlm);
-    virtual long VlmCur(void);
+    virtual void SetVlm(int32_t vlm);
+    virtual int32_t VlmCur(void);
 };
 
 #endif //! MIDIDEV2_H
