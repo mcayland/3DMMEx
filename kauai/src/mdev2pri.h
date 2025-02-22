@@ -33,12 +33,12 @@ struct MH
     uint8_t *lpData;
     DWORD dwBufferLength;
     DWORD dwBytesRecorded;
-    DWORD dwUser;
+    DWORD_PTR dwUser;
     DWORD dwFlags;
     MH *lpNext;
-    DWORD reserved;
+    DWORD_PTR reserved;
     DWORD dwOffset;
-    DWORD dwReserved[8];
+    DWORD_PTR dwReserved[8];
 };
 typedef MH *PMH;
 
@@ -171,7 +171,7 @@ class MSMIX : public MSMIX_PAR
     void _WaitForBuffers(void);
     void _SubmitBuffers(uint32_t tsCur);
 
-    static void _MidiProc(uint32_t luUser, void *pvData, uint32_t luData);
+    static void _MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData);
     void _Notify(void *pvData, PMDWS pmdws);
 
     static DWORD __stdcall _ThreadProc(void *pv);
@@ -202,7 +202,7 @@ class MSMIX : public MSMIX_PAR
 /***************************************************************************
     The midi stream interface.
 ***************************************************************************/
-typedef void (*PFNMIDI)(uint32_t luUser, void *pvData, uint32_t luData);
+typedef void (*PFNMIDI)(uintptr_t luUser, void *pvData, uintptr_t luData);
 
 typedef class MISI *PMISI;
 #define MISI_PAR BASE
@@ -212,9 +212,9 @@ class MISI : public MISI_PAR
     RTCLASS_DEC
 
   protected:
-    HMS _hms;         // the midi stream handle
-    PFNMIDI _pfnCall; // call back function
-    uint32_t _luUser; // user data to send back
+    HMS _hms;          // the midi stream handle
+    PFNMIDI _pfnCall;  // call back function
+    uintptr_t _luUser; // user data to send back
 
     // system volume level - to be saved and restored. The volume we set
     // is always relative to this
@@ -222,7 +222,7 @@ class MISI : public MISI_PAR
     DWORD _luVolSys;
     int32_t _vlmBase; // our current volume relative to _luVolSys.
 
-    MISI(PFNMIDI pfn, uint32_t luUser);
+    MISI(PFNMIDI pfn, uintptr_t luUser);
 
     virtual bool _FOpen(void) = 0;
     virtual bool _FClose(void) = 0;
@@ -273,7 +273,7 @@ class WMS : public WMS_PAR
         void *pvData;
         int32_t cb;
         int32_t cactPlay;
-        uint32_t luData;
+        uintptr_t luData;
         int32_t ibNext;
 
         MH rgmh[kcmhMsir];
@@ -296,7 +296,7 @@ class WMS : public WMS_PAR
     bool _fDone : 1; // tells the aux thread to terminate
 
     MMRESULT(WINAPI *_pfnOpen)
-    (HMS *phms, LPUINT puDeviceID, DWORD cMidi, DWORD dwCallback, DWORD dwInstance, DWORD fdwOpen);
+    (HMS *phms, LPUINT puDeviceID, DWORD cMidi, DWORD_PTR dwCallback, DWORD_PTR dwInstance, DWORD fdwOpen);
     MMRESULT(WINAPI *_pfnClose)(HMS hms);
     MMRESULT(WINAPI *_pfnProperty)(HMS hms, LPBYTE lpb, DWORD dwProperty);
     MMRESULT(WINAPI *_pfnPosition)(HMS hms, LPMMTIME lpmmt, UINT cbmmt);
@@ -305,7 +305,7 @@ class WMS : public WMS_PAR
     MMRESULT(WINAPI *_pfnRestart)(HMS hms);
     MMRESULT(WINAPI *_pfnStop)(HMS hms);
 
-    WMS(PFNMIDI pfn, uint32_t luUser);
+    WMS(PFNMIDI pfn, uintptr_t luUser);
     bool _FInit(void);
 
     virtual bool _FOpen(void);
@@ -316,14 +316,15 @@ class WMS : public WMS_PAR
     int32_t _CmhSubmitBuffers(void);
     void _ResetStream(void);
 
-    static void __stdcall _MidiProc(HMS hms, uint32_t msg, uint32_t luUser, uint32_t lu1, uint32_t lu2);
+    // MidiOutProc callback function
+    static void __stdcall _MidiProc(HMS hms, UINT msg, DWORD_PTR luUser, DWORD_PTR lu1, DWORD_PTR lu2);
     void _Notify(HMS hms, PMH pmh);
 
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
 
   public:
-    static PWMS PwmsNew(PFNMIDI pfn, uint32_t luUser);
+    static PWMS PwmsNew(PFNMIDI pfn, uintptr_t luUser);
     ~WMS(void);
 
 #ifdef STREAM_BUG
@@ -372,7 +373,7 @@ class OMS : public OMS_PAR
     PMEV _pmevLim;
     uint32_t _tsCur;
 
-    OMS(PFNMIDI pfn, uint32_t luUser);
+    OMS(PFNMIDI pfn, uintptr_t luUser);
     bool _FInit(void);
 
     virtual bool _FOpen(void);
@@ -383,7 +384,7 @@ class OMS : public OMS_PAR
     void _ReleaseBuffers(void);
 
   public:
-    static POMS PomsNew(PFNMIDI pfn, uint32_t luUser);
+    static POMS PomsNew(PFNMIDI pfn, uintptr_t luUser);
     ~OMS(void);
 
     virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData);

@@ -580,8 +580,8 @@ bool MSMIX::_FInit(void)
         return fFalse;
     _pglmsos->SetMinGrow(1);
 
-    if (pvNil == (_pmisi = WMS::PwmsNew(_MidiProc, (uint32_t)this)) &&
-        pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (uint32_t)this)))
+    if (pvNil == (_pmisi = WMS::PwmsNew(_MidiProc, (uintptr_t)this)) &&
+        pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (uintptr_t)this)))
     {
         return fFalse;
     }
@@ -868,7 +868,7 @@ void MSMIX::_SubmitBuffers(uint32_t tsCur)
 
         _cpvOut++;
         pvData = msos.pmdws->PvLockData(&cb);
-        if (_pmisi->FQueueBuffer(pvData, cb, cbSkip, msos.cactPlay, (uint32_t)msos.pmdws))
+        if (_pmisi->FQueueBuffer(pvData, cb, cbSkip, msos.cactPlay, (uintptr_t)msos.pmdws))
         {
             // it worked!
             _fPlaying = fTrue;
@@ -1067,7 +1067,7 @@ bool MSMIX::_FGetKeyEvents(PMDWS pmdws, uint32_t dtsSeek, int32_t *pcbSkip)
 /***************************************************************************
     Call back from the midi stream stuff.
 ***************************************************************************/
-void MSMIX::_MidiProc(uint32_t luUser, void *pvData, uint32_t luData)
+void MSMIX::_MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData)
 {
     PMSMIX pmsmix;
     PMDWS pmdws;
@@ -1223,7 +1223,7 @@ DWORD MSMIX::_LuThread(void)
 /***************************************************************************
     Constructor for the MIDI stream interface.
 ***************************************************************************/
-MISI::MISI(PFNMIDI pfn, uint32_t luUser)
+MISI::MISI(PFNMIDI pfn, uintptr_t luUser)
 {
     AssertBaseThis(0);
     Assert(pvNil != pfn, 0);
@@ -1376,7 +1376,7 @@ bool MISI::FActivate(bool fActivate)
 /***************************************************************************
     Constructor for the Win95 Midi stream class.
 ***************************************************************************/
-WMS::WMS(PFNMIDI pfn, uint32_t luUser) : MISI(pfn, luUser)
+WMS::WMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 {
 }
 
@@ -1411,7 +1411,7 @@ WMS::~WMS(void)
 /***************************************************************************
     Create a new WMS.
 ***************************************************************************/
-PWMS WMS::PwmsNew(PFNMIDI pfn, uint32_t luUser)
+PWMS WMS::PwmsNew(PFNMIDI pfn, uintptr_t luUser)
 {
     PWMS pwms;
 
@@ -1554,7 +1554,7 @@ bool WMS::_FOpen(void)
     if (hNil != _hms)
         goto LDone;
 
-    if (MMSYSERR_NOERROR != (*_pfnOpen)(&_hms, &uT, 1, (uint32_t)_MidiProc, (uint32_t)this, CALLBACK_FUNCTION))
+    if (MMSYSERR_NOERROR != (*_pfnOpen)(&_hms, &uT, 1, (uintptr_t)_MidiProc, (uintptr_t)this, CALLBACK_FUNCTION))
     {
         goto LFail;
     }
@@ -1767,7 +1767,7 @@ int32_t WMS::_CmhSubmitBuffers(void)
         cbMh = LwMin(pmsir->cb - pmsir->ibNext, kcbMaxWmsBuffer);
         pmh->dwBufferLength = cbMh;
         pmh->dwBytesRecorded = cbMh;
-        pmh->dwUser = (uint32_t)pmsir;
+        pmh->dwUser = (uintptr_t)pmsir;
         pmsir->ibNext += cbMh;
         pmsir->rgibLim[imh] = pmsir->ibNext;
 
@@ -1836,7 +1836,7 @@ void WMS::StopPlaying(void)
     to 0, this stops the midi stream. If the indicated sound is done,
     we notify the client.
 ***************************************************************************/
-void __stdcall WMS::_MidiProc(HMS hms, uint32_t msg, uint32_t luUser, uint32_t lu1, uint32_t lu2)
+void __stdcall WMS::_MidiProc(HMS hms, UINT msg, DWORD_PTR luUser, DWORD_PTR lu1, DWORD_PTR lu2)
 {
     PWMS pwms;
     PMH pmh;
@@ -1992,7 +1992,7 @@ void WMS::_DoCallBacks()
 /***************************************************************************
     Constructor for our own midi stream api implementation.
 ***************************************************************************/
-OMS::OMS(PFNMIDI pfn, uint32_t luUser) : MISI(pfn, luUser)
+OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 {
 }
 
@@ -2024,7 +2024,7 @@ OMS::~OMS(void)
 /***************************************************************************
     Create a new OMS.
 ***************************************************************************/
-POMS OMS::PomsNew(PFNMIDI pfn, uint32_t luUser)
+POMS OMS::PomsNew(PFNMIDI pfn, uintptr_t luUser)
 {
     POMS poms;
 
