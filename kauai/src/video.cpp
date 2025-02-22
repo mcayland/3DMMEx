@@ -372,7 +372,7 @@ GVDW::~GVDW(void)
         MCI_GENERIC_PARMS mci;
         PSNDV psndv;
 
-        mciSendCommand(_lwDevice, MCI_CLOSE, MCI_WAIT, (int32_t)&mci);
+        mciSendCommand(_lwDevice, MCI_CLOSE, MCI_WAIT, (DWORD_PTR)&mci);
         if (pvNil != vpsndm && pvNil != (psndv = vpsndm->PsndvFromCtg(kctgWave)))
         {
             psndv->Suspend(fFalse);
@@ -406,7 +406,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     mciOpen.dwStyle = WS_CHILD | WS_CLIPSIBLINGS | WS_DISABLED;
     mciOpen.hWndParent = _pgobBase->HwndContainer();
     if (0 != mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_ANIM_OPEN_PARENT | MCI_ANIM_OPEN_WS,
-                            (int32_t)&mciOpen))
+                            (DWORD_PTR)&mciOpen))
     {
         goto LFail;
     }
@@ -422,7 +422,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     // REVIEW shonk: mmsystem.h defines MCI_ANIM_STATUS_HWND as 0x00004003,
     // which doesn't give us the hwnd. 4001 does!
     mciStatus.dwItem = 0x00004001;
-    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus))
+    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatus))
     {
         goto LFail;
     }
@@ -432,14 +432,14 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     ClearPb(&mciStatus, SIZEOF(mciStatus));
     mciStatus.dwItem = MCI_STATUS_LENGTH;
     mciStatus.dwTrack = 1;
-    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus))
+    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatus))
     {
         goto LFail;
     }
     _nfrMac = mciStatus.dwReturn;
 
     // get the rectangle
-    if (0 != mciSendCommand(_lwDevice, MCI_WHERE, MCI_ANIM_WHERE_SOURCE, (int32_t)&mciRect))
+    if (0 != mciSendCommand(_lwDevice, MCI_WHERE, MCI_ANIM_WHERE_SOURCE, (DWORD_PTR)&mciRect))
     {
         goto LFail;
     }
@@ -487,7 +487,7 @@ int32_t GVDW::NfrCur(void)
     ClearPb(&mciStatus, SIZEOF(mciStatus));
     mciStatus.dwItem = MCI_STATUS_POSITION;
     mciStatus.dwTrack = 1;
-    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus))
+    if (0 != mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatus))
     {
         Warn("getting position failed");
         return 0;
@@ -515,7 +515,7 @@ void GVDW::GotoNfr(int32_t nfr)
 
     ClearPb(&mciSeek, SIZEOF(mciSeek));
     mciSeek.dwTo = nfr;
-    if (0 != mciSendCommand(_lwDevice, MCI_SEEK, MCI_TO, (int32_t)&mciSeek))
+    if (0 != mciSendCommand(_lwDevice, MCI_SEEK, MCI_TO, (DWORD_PTR)&mciSeek))
     {
         Warn("seeking failed");
     }
@@ -543,7 +543,7 @@ bool GVDW::FPlaying(void)
     ClearPb(&mciStatus, SIZEOF(mciStatus));
     mciStatus.dwItem = MCI_STATUS_MODE;
     mciStatus.dwTrack = 1;
-    if (0 == mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (int32_t)&mciStatus) &&
+    if (0 == mciSendCommand(_lwDevice, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatus) &&
         (MCI_MODE_STOP == mciStatus.dwReturn || MCI_MODE_PAUSE == mciStatus.dwReturn))
     {
         _fPlaying = fFalse;
@@ -580,7 +580,7 @@ bool GVDW::FPlay(RC *prc)
 
     // start the movie playing
     ClearPb(&mciPlay, SIZEOF(mciPlay));
-    if (0 != mciSendCommand(_lwDevice, MCI_PLAY, MCI_MCIAVI_PLAY_WINDOW, (int32_t)&mciPlay))
+    if (0 != mciSendCommand(_lwDevice, MCI_PLAY, MCI_MCIAVI_PLAY_WINDOW, (DWORD_PTR)&mciPlay))
     {
         return fFalse;
     }
@@ -623,7 +623,7 @@ void GVDW::Stop(void)
     MCI_GENERIC_PARMS mciPause;
 
     ClearPb(&mciPause, SIZEOF(mciPause));
-    mciSendCommand(_lwDevice, MCI_PAUSE, 0, (int32_t)&mciPause);
+    mciSendCommand(_lwDevice, MCI_PAUSE, 0, (DWORD_PTR)&mciPause);
 #endif // WIN
 
 #ifdef MAC
@@ -666,7 +666,7 @@ void GVDW::_SetRc(void)
             // show the playback window
             ClearPb(&mciWindow, SIZEOF(mciWindow));
             mciWindow.nCmdShow = SW_SHOW;
-            mciSendCommand(_lwDevice, MCI_WINDOW, MCI_ANIM_WINDOW_STATE, (int32_t)&mciWindow);
+            mciSendCommand(_lwDevice, MCI_WINDOW, MCI_ANIM_WINDOW_STATE, (DWORD_PTR)&mciWindow);
             _fVisible = fTrue;
         }
 #endif // WIN
