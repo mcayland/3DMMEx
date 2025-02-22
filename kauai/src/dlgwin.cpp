@@ -238,7 +238,7 @@ LFail:
 /***************************************************************************
     Windows dialog proc.
 ***************************************************************************/
-BOOL CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
+INT_PTR CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
 {
     PDLG pdlg;
     DIT dit;
@@ -384,7 +384,7 @@ int32_t DLG::IditDo(int32_t iditFocus)
 
     dlgi.pdlg = this;
     dlgi.iditFocus = iditFocus;
-    idit = DialogBoxParam(vwig.hinst, MIR(_rid), vwig.hwndApp, &_FDlgCore, (int32_t)&dlgi);
+    idit = DialogBoxParam(vwig.hinst, MIR(_rid), vwig.hwndApp, &_FDlgCore, (LPARAM)&dlgi);
 
     return idit;
 }

@@ -804,7 +804,7 @@ STN *_rgpstn[3];
 /***************************************************************************
     Dialog proc for assert.
 ***************************************************************************/
-BOOL CALLBACK _FDlgAssert(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
+INT_PTR CALLBACK _FDlgAssert(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
 {
     switch (msg)
     {
