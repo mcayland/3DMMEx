@@ -447,7 +447,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t 
             pmmi->ptMaxPosition.y = -dypFrame - dypExtra;
             pmmi->ptMaxSize.y = pmmi->ptMaxTrackSize.y = dypScreen + 2 * dypFrame + dypExtra;
             *plwRet = lwT;
-            _FCommonWndProc(hwnd, wm, wParam, (int32_t)pmmi, plwRet);
+            _FCommonWndProc(hwnd, wm, wParam, (LPARAM)pmmi, plwRet);
         }
         return fTrue;
 
