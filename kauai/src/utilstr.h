@@ -481,7 +481,7 @@ class STN
 
     bool FFormat(PSTN pstnFormat, ...);
     bool FFormatSz(const PSZ pszFormat, ...);
-    bool FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uint32_t *prgluData);
+    bool FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *prgluData);
     bool FGetLw(int32_t *plw, int32_t lwBase = 0);
     bool FExpandControls(void);
 };

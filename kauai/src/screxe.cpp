@@ -786,7 +786,7 @@ void SCEB::_WarnSz(PSZ psz, ...)
     STN stn1, stn2;
     SZS szs;
 
-    stn1.FFormatRgch(psz, CchSz(psz), (uint32_t *)(&psz + 1));
+    stn1.FFormatRgch(psz, CchSz(psz), (uintptr_t *)(&psz + 1));
     stn2.FFormatSz(PszLit("Script ('%f', 0x%x, %d): %s"), _pscpt->Ctg(), _pscpt->Cno(), _ilwCur, &stn1);
     stn2.GetSzs(szs);
     Warn(szs);
