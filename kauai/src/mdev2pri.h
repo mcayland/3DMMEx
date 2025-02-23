@@ -239,7 +239,7 @@ class MISI : public MISI_PAR
     virtual bool FActive(void);
     virtual bool FActivate(bool fActivate);
 
-    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData) = 0;
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData) = 0;
     virtual void StopPlaying(void) = 0;
 };
 
@@ -332,7 +332,7 @@ class WMS : public WMS_PAR
     virtual bool FActivate(bool fActivate);
 #endif // STREAM_BUG
 
-    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData);
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData);
     virtual void StopPlaying(void);
 };
 
@@ -356,7 +356,7 @@ class OMS : public OMS_PAR
         int32_t ibStart;
         int32_t cactPlay;
 
-        uint32_t luData;
+        uintptr_t luData;
     };
 
     MUTX _mutx;
@@ -387,7 +387,7 @@ class OMS : public OMS_PAR
     static POMS PomsNew(PFNMIDI pfn, uintptr_t luUser);
     ~OMS(void);
 
-    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uint32_t luData);
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData);
     virtual void StopPlaying(void);
 };
 
