@@ -1,8 +1,8 @@
 name: build
 on: push
 jobs:
-  compile:
-    name: Windows Win32 x86
+  compile-msvc-x86:
+    name: Windows MSVC Win32 x86
     runs-on: windows-latest
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
