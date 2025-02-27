@@ -1,8 +1,8 @@
 name: build
 on: push
 jobs:
-  compile:
-    name: Windows Win32 x86
+  compile-msvc-x86:
+    name: Windows MSVC Win32 x86
     runs-on: windows-latest
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
@@ -47,3 +47,41 @@ jobs:
           path: |
             build/x86-msvc-relwithdebinfo/*.zip
           compression-level: 0 # already compressed
+
+  compile-clang-x86:
+    name: Windows Clang Win32 x86
+    runs-on: windows-latest
+    env:
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      - name: Export GitHub Actions cache environment variables
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          vcpkg version
+          vcpkg install --triplet x86-windows
+      - name: Use Visual Studio clang
+        # Move the separate Github Action LLVM install out of the way to prevent it from being
+        # detected by cmake: this causes us to fall back to the version provided by VS instead
+        run: |
+          Rename-Item -path "C:\Program Files\LLVM" -NewName "LLVM.ignore"
+      - name: CMake Generate
+        shell: cmd
+        run: |
+          call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x86
+          cmake --preset x86-clangcl-debug -D3DMM_PACKAGE_WIX=OFF
+      - name: CMake Build
+        shell: cmd
+        run: |
+          call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x86
+          cmake --build build/x86-clangcl-debug --target tools studio KauaiTest
+      - name: Run tests
+        shell: cmd
+        run: |
+          cd build/x86-clangcl-debug && ctest --output-on-failure --timeout 60
