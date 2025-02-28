@@ -49,7 +49,7 @@ extern "C"
     WORD wHaveACM();
     WORD wHaveACMCodec(DWORD dwReqCodec);
     WORD wHaveICMCodec(DWORD dwReqCodec);
-    WORD wHaveMCI(LPSTR dwDeviceType);
+    WORD wHaveMCI(PSZ dwDeviceType);
 
 #ifdef __cplusplus
 }
