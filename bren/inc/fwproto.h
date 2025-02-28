@@ -205,7 +205,7 @@ extern "C"
 
     void BR_PUBLIC_ENTRY BrMaterialUpdate(br_material *material, br_uint_16 flags);
 
-    br_material *BR_PUBLIC_ENTRY BrMaterialAllocate(char *name);
+    br_material *BR_PUBLIC_ENTRY BrMaterialAllocate(const char *name);
     void BR_PUBLIC_ENTRY BrMaterialFree(br_material *m);
 
     /*
