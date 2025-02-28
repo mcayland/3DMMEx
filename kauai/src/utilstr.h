@@ -16,6 +16,7 @@
     not to, all code should use stn's.
 
     sz - zero terminated (standard C) string.
+    csz - constant zero terminated (standard C) string.
     st - length byte prefixed (standard Pascal) string.
     stz - zero terminated and length prefixed string.
     stn - string class.
@@ -105,6 +106,7 @@ enum
     String types
 ***************************************************************************/
 typedef achar *PSZ;
+typedef const achar *PCSZ;
 typedef achar *PST;
 typedef achar *PSTZ;
 typedef achar SZ[kcchTotSz];
