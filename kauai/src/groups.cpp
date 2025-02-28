@@ -2008,7 +2008,7 @@ bool GG::FCopyEntries(PGG pggSrc, int32_t ivSrc, int32_t ivDst, int32_t cv)
 /***************************************************************************
     Append an element to the group.
 ***************************************************************************/
-bool GG::FAdd(int32_t cb, int32_t *piv, void *pv, void *pvFixed)
+bool GG::FAdd(int32_t cb, int32_t *piv, const void *pv, void *pvFixed)
 {
     AssertThis(0);
     AssertNilOrVarMem(piv);
@@ -2163,7 +2163,7 @@ PAG AG::PagDup(void)
 /***************************************************************************
     Add an element to the allocated group.
 ***************************************************************************/
-bool AG::FAdd(int32_t cb, int32_t *piv, void *pv, void *pvFixed)
+bool AG::FAdd(int32_t cb, int32_t *piv, const void *pv, void *pvFixed)
 {
     AssertThis(fobjAssertFull);
     AssertIn(cb, 0, kcbMax);
