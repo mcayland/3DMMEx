@@ -1141,7 +1141,7 @@ bool APP::_FGenericError(FNI *path)
 /***************************************************************************
     Report that 3DMM ran into a generic error
 ***************************************************************************/
-bool APP::_FGenericError(PSTZ message)
+bool APP::_FGenericError(PSZ message)
 {
     STN stn;
     stn.SetSz(message);
