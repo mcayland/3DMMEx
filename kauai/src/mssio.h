@@ -29,8 +29,8 @@ class MSSIO : public MSSIO_PAR
 
   public:
     MSSIO(FILE *pfile);
-    virtual void ReportLine(const PSZ psz);
-    virtual void Report(const PSZ psz);
+    virtual void ReportLine(const PCSZ psz);
+    virtual void Report(const PCSZ psz);
     virtual bool FError(void);
 };
 

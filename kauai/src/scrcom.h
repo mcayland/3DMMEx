@@ -125,14 +125,14 @@ enum
 struct SZOP
 {
     int32_t op;
-    PSZ psz;
+    PCSZ psz;
 };
 
 // structure to map a string to an opcode and argument information (in-fix)
 struct AROP
 {
     int32_t op;
-    PSZ psz;
+    PCSZ psz;
     int32_t clwFixed;   // number of fixed arguments
     int32_t clwVar;     // number of arguments per variable group
     int32_t cactMinVar; // minimum number of variable groups
@@ -215,7 +215,7 @@ class SCCB : public SCCB_PAR
     void _AddLabelLw(int32_t lw);
     void _PushLabelRequestLw(int32_t lw);
 
-    virtual void _ReportError(PSZ psz);
+    virtual void _ReportError(PCSZ psz);
     virtual int16_t _SwCur(void);
     virtual int16_t _SwBack(void);
     virtual int16_t _SwMin(void);

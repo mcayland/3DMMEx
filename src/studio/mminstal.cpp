@@ -312,7 +312,7 @@ WORD wHaveICMCodec(DWORD dwReqCodec)
 
 ******************************************************************************/
 
-WORD wHaveMCI(PSZ dwDeviceType)
+WORD wHaveMCI(PCSZ dwDeviceType)
 {
     MCI_OPEN_PARMS mciOpen;
     MCIERROR mciErr;

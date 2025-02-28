@@ -73,7 +73,7 @@ bool APPB::_FInitOS(void)
 {
     AssertThis(0);
     STN stnApp;
-    PSZ pszAppWndCls = PszLit("APP");
+    PCSZ pszAppWndCls = PszLit("APP");
 
     // get the app name
     GetStnAppName(&stnApp);
@@ -841,7 +841,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv,
     const int32_t kclwChain = 10;
     STN stn0, stn1, stn2;
     int tmc;
-    PSZ psz;
+    PCSZ psz;
     int32_t cact;
     int32_t *plw;
     int32_t ilw;
@@ -1009,7 +1009,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv,
     Put an alert up. Return which button was hit. Returns tYes for yes
     or ok; tNo for no; tMaybe for cancel.
 ***************************************************************************/
-tribool APPB::TGiveAlertSz(const PSZ psz, int32_t bk, int32_t cok)
+tribool APPB::TGiveAlertSz(const PCSZ psz, int32_t bk, int32_t cok)
 {
     AssertThis(0);
     AssertSz(psz);

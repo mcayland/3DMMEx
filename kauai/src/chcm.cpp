@@ -16,7 +16,7 @@ RTCLASS(CHCM)
 RTCLASS(CHLX)
 RTCLASS(CHDC)
 
-PSZ _mpertpsz[] = {
+PCSZ _mpertpsz[] = {
     PszLit("no error"),
     PszLit("Internal allocation error"),                      // ertOom
     PszLit("Can't open the given file"),                      // ertOpenFile
@@ -133,7 +133,7 @@ void CHCM::MarkMem(void)
     Registers an error, prints error message with filename and line number.
     pszMessage may be nil.
 ***************************************************************************/
-void CHCM::_Error(int32_t ert, const PSZ pszMessage)
+void CHCM::_Error(int32_t ert, const PCSZ pszMessage)
 {
     AssertThis(0);
     AssertIn(ert, ertNil, ertLim);
@@ -209,7 +209,7 @@ void CHCM::_GetRgbFromLw(int32_t lw, uint8_t *prgb)
     Checks if data is already in the buffer (and issues an error) for a
     non-buffer command such as metafile import.
 ***************************************************************************/
-void CHCM::_ErrorOnData(PSZ pszPreceed)
+void CHCM::_ErrorOnData(PCSZ pszPreceed)
 {
     AssertThis(0);
     AssertSz(pszPreceed);

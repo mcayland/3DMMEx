@@ -168,7 +168,7 @@ class SCEB : public SCEB_PAR
     virtual int16_t _SwMin(void);
 
 #ifdef DEBUG
-    void _WarnSz(PSZ psz, ...);
+    void _WarnSz(PCSZ psz, ...);
 #endif // DEBUG
 
   public:

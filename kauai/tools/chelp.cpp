@@ -83,7 +83,7 @@ bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
 
     struct LANG
     {
-        PSZ psz;
+        PCSZ psz;
         int32_t sclid;
     };
     static LANG _rglang[] = {

@@ -779,7 +779,7 @@ void SCEB::_Error(bool fAssert)
 /***************************************************************************
     Emits a warning with the given format string and optional parameters.
 ***************************************************************************/
-void SCEB::_WarnSz(PSZ psz, ...)
+void SCEB::_WarnSz(PCSZ psz, ...)
 {
     AssertThis(0);
     AssertSz(psz);

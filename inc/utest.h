@@ -172,7 +172,7 @@ class APP : public APP_PAR
     bool _FFindMsKidsDir(void);
     bool _FFindMsKidsDirAt(FNI *path);
     bool _FCantFindFileDialog(PSTN pstn);
-    bool _FGenericError(PSZ message);
+    bool _FGenericError(PCSZ message);
     bool _FGenericError(PSTN message);
     bool _FGenericError(FNI *path);
     bool _FGetUserName(void);
@@ -364,7 +364,7 @@ class APP : public APP_PAR
     void EnableAccel(void);
 
     // Registry access function
-    bool FGetSetRegKey(PSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg = fregSetDefault,
+    bool FGetSetRegKey(PCSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg = fregSetDefault,
                        bool *pfNoValue = pvNil);
 
     // Movie handoff routines

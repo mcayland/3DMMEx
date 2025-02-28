@@ -313,7 +313,7 @@ TEST(KauaiTests, TestGg)
     uint32_t grf;
     int32_t cb, iv;
     uint8_t *qb;
-    PSZ psz = PszLit("0123456789ABCDEFG");
+    PCSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
 
     EXPECT_TRUE((pgg = GG::PggNew(0)) != pvNil);
@@ -393,7 +393,7 @@ TEST(KauaiTests, TestCfl)
     {
         CTG ctg;
         CNO cno;
-        PSZ psz;
+        PCSZ psz;
         int16_t relPar1, relPar2;
     };
 

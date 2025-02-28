@@ -304,8 +304,8 @@ class MSNK : public MSNK_PAR
     RTCLASS_INLINE(MSNK)
 
   public:
-    virtual void ReportLine(const PSZ psz) = 0;
-    virtual void Report(const PSZ psz) = 0;
+    virtual void ReportLine(const PCSZ psz) = 0;
+    virtual void Report(const PCSZ psz) = 0;
     virtual bool FError(void) = 0;
 };
 
@@ -330,8 +330,8 @@ class MSFIL : public MSFIL_PAR
     MSFIL(PFIL pfil = pvNil);
     ~MSFIL(void);
 
-    virtual void ReportLine(const PSZ psz);
-    virtual void Report(const PSZ psz);
+    virtual void ReportLine(const PCSZ psz);
+    virtual void Report(const PCSZ psz);
     virtual bool FError(void);
 
     void SetFile(PFIL pfil);

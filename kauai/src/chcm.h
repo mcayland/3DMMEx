@@ -70,7 +70,7 @@ enum
 // lookup table for keywords
 struct KEYTT
 {
-    const PSZ pszKeyword;
+    const PCSZ pszKeyword;
     int32_t tt;
 };
 
@@ -210,9 +210,9 @@ class CHCM : public CHCM_PAR
         PSTN pstn;
     };
 
-    void _Error(int32_t ert, PSZ pszMessage = pvNil);
+    void _Error(int32_t ert, PCSZ pszMessage = pvNil);
     void _GetRgbFromLw(int32_t lw, uint8_t *prgb);
-    void _ErrorOnData(PSZ pszPreceed);
+    void _ErrorOnData(PCSZ pszPreceed);
     bool _FParseParenHeader(PHP *prgphp, int32_t cphpMax, int32_t *pcphp);
     bool _FGetCleanTok(TOK *ptok, bool fEofOk = fFalse);
     void _SkipPastTok(int32_t tt);
