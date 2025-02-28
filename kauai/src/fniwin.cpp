@@ -52,7 +52,7 @@ FNI::FNI(void)
 /***************************************************************************
     Get an fni (for opening) from the user.
 ***************************************************************************/
-bool FNI::FGetOpen(achar *prgchFilter, HWND hwndOwner)
+bool FNI::FGetOpen(const achar *prgchFilter, HWND hwndOwner)
 {
     AssertThis(0);
     AssertNilOrVarMem(prgchFilter);
@@ -89,7 +89,7 @@ bool FNI::FGetOpen(achar *prgchFilter, HWND hwndOwner)
 /***************************************************************************
     Get an fni (for saving) from the user.
 ***************************************************************************/
-bool FNI::FGetSave(achar *prgchFilter, HWND hwndOwner)
+bool FNI::FGetSave(const achar *prgchFilter, HWND hwndOwner)
 {
     AssertThis(0);
     AssertNilOrVarMem(prgchFilter);
