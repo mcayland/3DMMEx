@@ -17,7 +17,7 @@ foreach (name IN ITEMS BRFMMXR BRFWMXR BRZBMXR)
     endif()
     find_library(${variable}
       NAMES ${name}
-      PATHS "${PROJECT_SOURCE_DIR}/elib/win${suffix}"
+      PATHS "${PROJECT_SOURCE_DIR}/elib/brender/win${suffix}"
       NO_DEFAULT_PATH
       NO_PACKAGE_ROOT_PATH
       NO_CMAKE_PATH
