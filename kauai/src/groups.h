@@ -280,7 +280,7 @@ class GGB : public GGB_PAR
     bool FEnsureSpace(int32_t cvAdd, int32_t cbAdd, uint32_t grfgrp = fgrpNil);
     void SetMinGrow(int32_t cvAdd, int32_t cbAdd);
 
-    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil) = 0;
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil) = 0;
 
     // access to the fixed portion
     int32_t CbFixed(void)
@@ -332,7 +332,7 @@ class GG : public GG_PAR
     PGG PggDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil);
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil);
     virtual void Delete(int32_t iv);
 
     // new methods
@@ -367,7 +367,7 @@ class AG : public AG_PAR
     PAG PagDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, void *pv = pvNil, void *pvFixed = pvNil);
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil);
     virtual void Delete(int32_t iv);
 };
 

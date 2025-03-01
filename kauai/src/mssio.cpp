@@ -26,7 +26,7 @@ MSSIO::MSSIO(FILE *pfile)
 /***************************************************************************
     Prints a message to stderr.
 ***************************************************************************/
-void MSSIO::ReportLine(const PSZ psz)
+void MSSIO::ReportLine(const PCSZ psz)
 {
     AssertThis(0);
     AssertSz(psz);
@@ -41,7 +41,7 @@ void MSSIO::ReportLine(const PSZ psz)
 /***************************************************************************
     Dump a line to stdout.
 ***************************************************************************/
-void MSSIO::Report(const PSZ psz)
+void MSSIO::Report(const PCSZ psz)
 {
     AssertThis(0);
     AssertSz(psz);

@@ -352,7 +352,7 @@ void TestGg(void)
     uint32_t grf;
     int32_t cb, iv;
     uint8_t *qb;
-    PSZ psz = PszLit("0123456789ABCDEFG");
+    PCSZ psz = PszLit("0123456789ABCDEFG");
     achar rgch[100];
 
     AssertDo((pgg = GG::PggNew(0)) != pvNil, 0);
@@ -435,7 +435,7 @@ void TestCfl(void)
     {
         CTG ctg;
         CNO cno;
-        PSZ psz;
+        PCSZ psz;
         short relPar1, relPar2;
     };
 

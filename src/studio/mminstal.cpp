@@ -312,7 +312,7 @@ WORD wHaveICMCodec(DWORD dwReqCodec)
 
 ******************************************************************************/
 
-WORD wHaveMCI(LPSTR dwDeviceType)
+WORD wHaveMCI(PCSZ dwDeviceType)
 {
     MCI_OPEN_PARMS mciOpen;
     MCIERROR mciErr;
@@ -483,7 +483,7 @@ int WINAPI
 {
   if(HWD_SUCCESS == wHaveWaveDevice(WAVE_FORMAT_2M08)) // 22kHz, Mono, 8bit
   {
-    if(wHaveMCI("WAVEAUDIO"))
+    if(wHaveMCI(PszLit("WAVEAUDIO")))
         // MCI for audio is not installed
       wInstallComp(IC_MCI_SOUND);
 
@@ -498,7 +498,7 @@ int WINAPI
   } // have wave device
 
 
-  if(wHaveMCI("AVIVIDEO"))
+  if(wHaveMCI(PszLit("AVIVIDEO")))
       // MCI for video is not installed
     wInstallComp(IC_MCI_VFW);
 

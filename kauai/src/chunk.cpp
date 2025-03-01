@@ -2360,7 +2360,7 @@ bool CFL::FAdd(int32_t cb, CTG ctg, CNO *pcno, PBLCK pblck)
 /***************************************************************************
     Add a new chunk and write the pv to it.
 ***************************************************************************/
-bool CFL::FAddPv(void *pv, int32_t cb, CTG ctg, CNO *pcno)
+bool CFL::FAddPv(const void *pv, int32_t cb, CTG ctg, CNO *pcno)
 {
     AssertThis(0);
     AssertVarMem(pcno);

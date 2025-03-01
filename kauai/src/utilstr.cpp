@@ -561,7 +561,7 @@ bool STN::FFormat(PSTN pstnFormat, ...)
 /***************************************************************************
     See comments for STN::FFormat
 ***************************************************************************/
-bool STN::FFormatSz(const PSZ pszFormat, ...)
+bool STN::FFormatSz(const PCSZ pszFormat, ...)
 {
     AssertThis(0);
     AssertSz(pszFormat);
@@ -999,11 +999,11 @@ bool FValidStz(PSTZ pstz)
 /***************************************************************************
     Find the length of a zero terminated string.
 ***************************************************************************/
-int32_t CchSz(const PSZ psz)
+int32_t CchSz(const PCSZ psz)
 {
     // WARNING: don't call AssertSz, since AssertSz calls CchSz!
     AssertVarMem(psz);
-    achar *pch;
+    const achar *pch;
 
     for (pch = psz; *pch != 0; pch++)
         ;
@@ -1511,7 +1511,7 @@ void AssertStz(PSTZ pstz)
 /***************************************************************************
     Make sure the sz isn't too long.
 ***************************************************************************/
-void AssertSz(PSZ psz)
+void AssertSz(PCSZ psz)
 {
     // CchSz does all the asserting we need
     int32_t cch = CchSz(psz);

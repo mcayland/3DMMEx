@@ -91,8 +91,8 @@ class FNI : public FNI_PAR
     bool FGetSave(FTG ftg, PST pstPrompt, PST pstDefault);
     bool FBuild(int32_t lwVol, int32_t lwDir, PSTN pstn, FTG ftg);
 #elif defined(WIN)
-    bool FGetOpen(achar *prgchFilter, HWND hwndOwner);
-    bool FGetSave(achar *prgchFilter, HWND hwndOwner);
+    bool FGetOpen(const achar *prgchFilter, HWND hwndOwner);
+    bool FGetSave(const achar *prgchFilter, HWND hwndOwner);
     bool FSearchInPath(PSTN pstn, PSTN pstnEnv = pvNil);
 #endif                                                   // WIN
     bool FBuildFromPath(PSTN pstn, FTG ftgDef = ftgNil); // REVIEW shonk: Mac: implement

@@ -207,7 +207,7 @@ class CFL : public CFL_PAR
 
     // creating and replacing chunks
     bool FAdd(int32_t cb, CTG ctg, CNO *pcno, PBLCK pblck = pvNil);
-    bool FAddPv(void *pv, int32_t cb, CTG ctg, CNO *pcno);
+    bool FAddPv(const void *pv, int32_t cb, CTG ctg, CNO *pcno);
     bool FAddHq(HQ hq, CTG ctg, CNO *pcno);
     bool FAddBlck(PBLCK pblckSrc, CTG ctg, CNO *pcno);
     bool FPut(int32_t cb, CTG ctg, CNO cno, PBLCK pblck = pvNil);

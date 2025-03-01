@@ -65,12 +65,12 @@ class CHSE : public CHSE_PAR
     bool FDumpScript(PSCPT pscpt, PSCCB psccb);
 
     // General sz emitting routines
-    void DumpSz(PSZ psz)
+    void DumpSz(PCSZ psz)
     {
         AssertThis(fchseDump);
         _pmsnkDump->ReportLine(psz);
     }
-    void Error(PSZ psz)
+    void Error(PCSZ psz)
     {
         AssertThis(fchseNil);
         _fError = fTrue;

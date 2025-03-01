@@ -16,6 +16,7 @@
     not to, all code should use stn's.
 
     sz - zero terminated (standard C) string.
+    csz - constant zero terminated (standard C) string.
     st - length byte prefixed (standard Pascal) string.
     stz - zero terminated and length prefixed string.
     stn - string class.
@@ -105,6 +106,7 @@ enum
     String types
 ***************************************************************************/
 typedef achar *PSZ;
+typedef const achar *PCSZ;
 typedef achar *PST;
 typedef achar *PSTZ;
 typedef achar SZ[kcchTotSz];
@@ -120,7 +122,7 @@ typedef schar SZS[kcchTotSz];
 void AssertRgch(achar *prgch, int32_t cch);
 void AssertStz(PSTZ pstz);
 void AssertSt(PST pst);
-void AssertSz(PSZ psz);
+void AssertSz(PCSZ psz);
 void AssertNilOrSz(PSZ psz);
 #else
 #define AssertRgch(prgch, cch)
@@ -141,7 +143,7 @@ bool FValidSt(PST pst);
     bytes) and CchTot means the total number of characters including
     overhead.
 ***************************************************************************/
-int32_t CchSz(const PSZ psz);
+int32_t CchSz(const PCSZ psz);
 inline int32_t CchTotSz(const PSZ psz)
 {
     return CchSz(psz) + kcchExtraSz;
@@ -372,7 +374,7 @@ class STN
         _rgch[0] = _rgch[1] = 0;
     }
     void SetRgch(const achar *prgchSrc, int32_t cch);
-    void SetSz(const PSZ pszSrc)
+    void SetSz(const PCSZ pszSrc)
     {
         SetRgch(pszSrc, CchSz(pszSrc));
     }
@@ -388,7 +390,7 @@ class STN
 
     // assignment operators
     STN &operator=(STN &stnSrc);
-    STN &operator=(PSZ pszSrc)
+    STN &operator=(PCSZ pszSrc)
     {
         SetSz(pszSrc);
         return *this;
@@ -444,7 +446,7 @@ class STN
 
     // for testing equality
     bool FEqualRgch(const achar *prgch, int32_t cch);
-    bool FEqualSz(const PSZ psz)
+    bool FEqualSz(const PCSZ psz)
     {
         return FEqualRgch(psz, CchSz(psz));
     }
@@ -480,7 +482,7 @@ class STN
     bool FRead(PBLCK pblck, int32_t ib, int32_t *pcbRead = pvNil);
 
     bool FFormat(PSTN pstnFormat, ...);
-    bool FFormatSz(const PSZ pszFormat, ...);
+    bool FFormatSz(const PCSZ pszFormat, ...);
     bool FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *prgluData);
     bool FGetLw(int32_t *plw, int32_t lwBase = 0);
     bool FExpandControls(void);

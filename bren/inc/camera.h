@@ -31,7 +31,7 @@ extern "C"
         /*
          * Optional identifier
          */
-        char *identifier;
+        const char *identifier;
 
         /*
          * Type of camera

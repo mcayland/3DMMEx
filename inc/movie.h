@@ -453,7 +453,7 @@ class MCC : public MCC_PAR
     virtual void StartListenerEasel(void)
     {
     } // Tells the client to start up the listener easel.
-    virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPTSTR lpstrDefExt,
+    virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, PCSZ lpstrDefExt,
                             PSTN pstnDefFileName)
     {
         return fFalse;

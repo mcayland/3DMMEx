@@ -99,8 +99,8 @@ ASSERTNAME
 RTCLASS(SCCB)
 
 // common error messages
-PSZ _pszOom = PszLit("Out of memory");
-PSZ _pszSyntax = PszLit("Syntax error");
+PCSZ _pszOom = PszLit("Out of memory");
+PCSZ _pszSyntax = PszLit("Syntax error");
 
 // name to op lookup table for post-fix compilation
 SZOP _rgszop[] = {
@@ -196,7 +196,7 @@ AROP _rgarop[] = {
     {opNil, pvNil, 0, 0, 0, fTrue},
 };
 
-PSZ _rgpszKey[] = {
+PCSZ _rgpszKey[] = {
     PszLit("If"), PszLit("Elif"), PszLit("Else"), PszLit("End"), PszLit("While"), PszLit("Break"), PszLit("Continue"),
 };
 
@@ -556,7 +556,7 @@ int16_t SCCB::_SwMin(void)
 /***************************************************************************
     An error occured.  Report it to the message sink.
 ***************************************************************************/
-void SCCB::_ReportError(PSZ psz)
+void SCCB::_ReportError(PCSZ psz)
 {
     AssertThis(0);
     AssertPo(_plexb, 0);
@@ -2568,7 +2568,7 @@ bool SCCB::FDisassemble(PSCPT pscpt, PMSNK pmsnk, PMSNK pmsnkError)
     STN stn;
     DVER dver;
     PGL pgllw = pscpt->_pgllw;
-    PSZ pszError = pvNil;
+    PCSZ pszError = pvNil;
     AssertPo(pgllw, 0);
     Assert(pgllw->CbEntry() == SIZEOF(int32_t), "bad script");
 

@@ -49,8 +49,8 @@ const uint32_t kdtsMaxResSwitchDlg = 15 * kdtsSecond;
 // 2MB cache per source for TAGM
 const uint32_t kcbCacheTagm = 2048 * 1024;
 
-static PSZ kpszAppWndCls = PszLit("3DMOVIE");
-const PSZ kpszOpenFile = PszLit("3DMMOpen.tmp");
+static PCSZ kpszAppWndCls = PszLit("3DMOVIE");
+const PCSZ kpszOpenFile = PszLit("3DMMOpen.tmp");
 
 const int32_t klwOpenDoc = 0x12123434; // arbitrary wParam for WM_USER
 
@@ -1141,7 +1141,7 @@ bool APP::_FGenericError(FNI *path)
 /***************************************************************************
     Report that 3DMM ran into a generic error
 ***************************************************************************/
-bool APP::_FGenericError(PSTZ message)
+bool APP::_FGenericError(PCSZ message)
 {
     STN stn;
     stn.SetSz(message);
@@ -1407,7 +1407,7 @@ bool APP::_FWriteUserData(void)
     Returns:  fTrue if all actions necessary could be performed
 
 ************************************************************ PETED ***********/
-bool APP::FGetSetRegKey(PSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg, bool *pfNoValue)
+bool APP::FGetSetRegKey(PCSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg, bool *pfNoValue)
 {
     AssertBaseThis(0);
     AssertSz(pszValueName);
@@ -3494,7 +3494,7 @@ typedef LONG(WINAPI *PFNCHDS)(LPDEVMODEW lpDevMode, DWORD dwFlags);
 const PSZ kpszChds = PszLit("ChangeDisplaySettingsW");
 #else
 typedef LONG(WINAPI *PFNCHDS)(LPDEVMODEA lpDevMode, DWORD dwFlags);
-const PSZ kpszChds = PszLit("ChangeDisplaySettingsA");
+const PCSZ kpszChds = PszLit("ChangeDisplaySettingsA");
 #endif // !UNICODE
 
 #ifdef BUG1920

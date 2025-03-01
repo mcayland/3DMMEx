@@ -1397,7 +1397,7 @@ PFIL MSFIL::PfilRelease(void)
 /***************************************************************************
     Dump a line to the file.
 ***************************************************************************/
-void MSFIL::ReportLine(PSZ psz)
+void MSFIL::ReportLine(const PCSZ psz)
 {
     AssertThis(0);
     AssertNilOrPo(_pfil, 0);
@@ -1413,7 +1413,7 @@ void MSFIL::ReportLine(PSZ psz)
 /***************************************************************************
     Dump some text to the file.
 ***************************************************************************/
-void MSFIL::Report(PSZ psz)
+void MSFIL::Report(PCSZ psz)
 {
     AssertThis(0);
     AssertNilOrPo(_pfil, 0);

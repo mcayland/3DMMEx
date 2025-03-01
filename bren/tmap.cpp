@@ -336,7 +336,7 @@ bool TMAP::FWriteTmapChkFile(PFNI pfniDst, bool fCompress, PMSNK pmsnkErr)
 
     bool fRet = fFalse;
     int32_t lwSig;
-    PSZ pszErr = pvNil;
+    PCSZ pszErr = pvNil;
     FLO flo;
 
     if (pvNil == (flo.pfil = FIL::PfilCreate(pfniDst)))
