@@ -10,7 +10,7 @@ target_sources(bren
     "${PROJECT_SOURCE_DIR}/bren/tmap.cpp"
     "${PROJECT_SOURCE_DIR}/bren/zbmp.cpp"
 )
-target_include_directories(bren PUBLIC "${PROJECT_SOURCE_DIR}/BREN/INC")
+target_include_directories(bren PUBLIC "${PROJECT_SOURCE_DIR}/bren/inc")
 target_link_libraries(bren
     PUBLIC
     KauaiBase
