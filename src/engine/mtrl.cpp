@@ -56,18 +56,18 @@ PMTRL MTRL::PmtrlNew(int32_t iclrBase, int32_t cclr)
     if (pvNil == pmtrl)
         return pvNil;
 
-    // An arbitrary 4-character string is passed to BrMaterialAllocate (to
+    // An arbitrary 8-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
     STN stnMaterialName;
-    stnMaterialName = PszLit("1234");
+    stnMaterialName = PszLit("12345678");
     pmtrl->_pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
     if (pvNil == pmtrl->_pbmtl)
     {
         ReleasePpo(&pmtrl);
         return pvNil;
     }
-    CopyPb(&pmtrl, pmtrl->_pbmtl->identifier, SIZEOF(int32_t));
+    CopyPb(&pmtrl, pmtrl->_pbmtl->identifier, SIZEOF(PMTRL));
 
     pmtrl->_pbmtl->ka = kbrufKaDefault;
     pmtrl->_pbmtl->kd = kbrufKdDefault;
@@ -142,15 +142,15 @@ bool MTRL::_FInit(PCRF pcrf, CTG ctg, CNO cno)
         SwapBytesBom(&mtrlf, kbomMtrlf);
     Assert(kboCur == mtrlf.bo, "bad MTRLF");
 
-    // An arbitrary 4-character string is passed to BrMaterialAllocate (to
+    // An arbitrary 8-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
     STN stnMaterialName;
-    stnMaterialName = PszLit("1234");
+    stnMaterialName = PszLit("12345678");
     _pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
     if (pvNil == _pbmtl)
         return fFalse;
-    CopyPb(&pmtrlThis, _pbmtl->identifier, SIZEOF(int32_t));
+    CopyPb(&pmtrlThis, _pbmtl->identifier, SIZEOF(PMTRL));
     _pbmtl->colour = mtrlf.brc;
     _pbmtl->ka = mtrlf.brufKa;
     _pbmtl->kd = mtrlf.brufKd;
@@ -229,15 +229,15 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     if (pvNil == pmtrl)
         goto LFail;
 
-    // An arbitrary 4-character string is passed to BrMaterialAllocate (to
+    // An arbitrary 8-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    stnMaterialName = PszLit("1234");
+    stnMaterialName = PszLit("12345678");
     pmtrl->_pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
     if (pvNil == pmtrl->_pbmtl)
         goto LFail;
     pbmtl = pmtrl->_pbmtl;
-    CopyPb(&pmtrl, pbmtl->identifier, SIZEOF(int32_t));
+    CopyPb(&pmtrl, pbmtl->identifier, SIZEOF(PMTRL));
     pbmtl->colour = 0; // this field is ignored
     pbmtl->ka = kbrufKaDefault;
     pbmtl->kd = kbrufKdDefault;
