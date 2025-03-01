@@ -1,7 +1,7 @@
 # 3D Movie Maker
 
-add_library(brender)
-target_sources(brender
+add_library(bren)
+target_sources(bren
     PRIVATE
     "${PROJECT_SOURCE_DIR}/bren/bwld.cpp"
     "${PROJECT_SOURCE_DIR}/bren/stderr.c"
@@ -10,8 +10,8 @@ target_sources(brender
     "${PROJECT_SOURCE_DIR}/bren/tmap.cpp"
     "${PROJECT_SOURCE_DIR}/bren/zbmp.cpp"
 )
-target_include_directories(brender PUBLIC "${PROJECT_SOURCE_DIR}/BREN/INC")
-target_link_libraries(brender
+target_include_directories(bren PUBLIC "${PROJECT_SOURCE_DIR}/BREN/INC")
+target_link_libraries(bren
     PUBLIC
     KauaiBase
     KauaiGroup
@@ -48,7 +48,7 @@ target_link_libraries(engine
     KauaiGui
     KauaiDoc
     KauaiRichText
-    brender
+    bren
 )
 
 # On non-windows WIN32 is a no-op
