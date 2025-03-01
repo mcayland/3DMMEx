@@ -59,7 +59,9 @@ PMTRL MTRL::PmtrlNew(int32_t iclrBase, int32_t cclr)
     // An arbitrary 4-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    pmtrl->_pbmtl = BrMaterialAllocate("1234");
+    STN stnMaterialName;
+    stnMaterialName = PszLit("1234");
+    pmtrl->_pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
     if (pvNil == pmtrl->_pbmtl)
     {
         ReleasePpo(&pmtrl);
@@ -143,7 +145,9 @@ bool MTRL::_FInit(PCRF pcrf, CTG ctg, CNO cno)
     // An arbitrary 4-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    _pbmtl = BrMaterialAllocate("1234");
+    STN stnMaterialName;
+    stnMaterialName = PszLit("1234");
+    _pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
     if (pvNil == _pbmtl)
         return fFalse;
     CopyPb(&pmtrlThis, _pbmtl->identifier, SIZEOF(int32_t));
@@ -216,6 +220,7 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     AssertPo(pfni, ffniFile);
 
     STN stn;
+    STN stnMaterialName;
     PMTRL pmtrl;
     PBMTL pbmtl;
     PTMAP ptmap;
@@ -227,7 +232,8 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     // An arbitrary 4-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    pmtrl->_pbmtl = BrMaterialAllocate("1234");
+    stnMaterialName = PszLit("1234");
+    pmtrl->_pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
     if (pvNil == pmtrl->_pbmtl)
         goto LFail;
     pbmtl = pmtrl->_pbmtl;
