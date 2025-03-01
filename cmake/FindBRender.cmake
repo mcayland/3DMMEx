@@ -34,7 +34,10 @@ find_package_handle_standard_args(${CMAKE_FIND_PACKAGE_NAME}
 
 if (${CMAKE_FIND_PACKAGE_NAME}_FOUND AND NOT TARGET BRender::Libraries)
   add_library(BRender::Libraries INTERFACE IMPORTED)
-
+  target_include_directories(BRender::Libraries
+    INTERFACE
+    "${PROJECT_SOURCE_DIR}/elib/brender/inc"
+  )
   foreach (library IN ITEMS BRFMMXR BRFWMXR BRZBMXR)
     add_library(BRender::${library} STATIC IMPORTED)
     set_target_properties(BRender::${library}
