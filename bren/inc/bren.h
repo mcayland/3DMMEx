@@ -101,6 +101,7 @@ const BOM kbomBrf = 0x555c15c0; // br_face
 const BOM kbomBmat34 = 0xffffff00;
 
 // Check sizes of BRender structures used in the file format
+#if BASED_FIXED
 VERIFY_STRUCT_SIZE(BRA, 2);
 VERIFY_STRUCT_SIZE(BRB, 24);
 VERIFY_STRUCT_SIZE(BRF, 32);
@@ -110,6 +111,9 @@ VERIFY_STRUCT_SIZE(BRV, 32);
 VERIFY_STRUCT_SIZE(BVEC3, 12);
 VERIFY_STRUCT_SIZE(br_colour, 4);
 VERIFY_STRUCT_SIZE(br_ufraction, 2);
+#else // !BASED_FIXED
+#error BRender must be configured for fixed-point math
+#endif // BASED_FIXED
 
 #if BASED_FIXED
 inline BRS BrsHalf(BRS r)
