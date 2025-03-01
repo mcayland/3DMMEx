@@ -148,7 +148,7 @@ BODY *BODY::PbodyNew(PGL pglibactPar, PGL pglibset)
 
     if (pvNil == _pbmtlHilite)
     {
-        _pbmtlHilite = BrMaterialAllocate("Hilite");
+        _pbmtlHilite = BrMaterialAllocate(pvNil);
         if (pvNil == _pbmtlHilite)
             return pvNil;
         _pbmtlHilite->colour = kbrcHilite;

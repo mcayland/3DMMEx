@@ -343,7 +343,7 @@ bool MODL::_FPrelight(int32_t cblit, BVEC3 *prgbvec3Light)
     BLIT blit;
     PBMTL pbmtl;
     int32_t iblit;
-    BCAM bcam = {"bah",
+    BCAM bcam = {pvNil,
                  BR_CAMERA_PERSPECTIVE,
                  BR_ANGLE_DEG(60.0), // REVIEW *****
                  BR_SCALAR(1.0),
@@ -387,7 +387,7 @@ bool MODL::_FPrelight(int32_t cblit, BVEC3 *prgbvec3Light)
     pbpmpRGB = BrPixelmapAllocate(BR_PMT_INDEX_8, 544, 306, 0, 0);
     pbpmpZ = BrPixelmapAllocate(BR_PMT_DEPTH_16, 544, 306, 0, 0);
 
-    pbmtl = BrMaterialAllocate("Prelighting material");
+    pbmtl = BrMaterialAllocate(pvNil);
     if (pvNil == pbmtl)
         goto LFail;
     pbmtl->colour = kbrcHilite;
