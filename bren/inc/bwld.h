@@ -75,8 +75,12 @@ class BWLD : public BWLD_PAR
     void _CleanWorkingBuffers(void);
     static int BR_CALLBACK _FFilter(BACT *pbact, PBMDL pbmdl, PBMTL pbmtl, BVEC3 *pbvec3RayPos, BVEC3 *pbvec3RayDir,
                                     BRS dzpNear, BRS dzpFar, void *pbwld);
+
     static void BR_CALLBACK _ActorRendered(PBACT pbact, PBMDL pbmdl, PBMTL pbmtl, br_uint_8 bStyle,
                                            br_matrix4 *pbmat4ModelToScreen, br_int_32 bounds[4]);
+    // Adapter for new function signature for the br_renderbounds_cbfn callback in BRender v1.3.2
+    static void BR_CALLBACK _ActorRenderedNew(PBACT pbact, PBMDL pbmdl, PBMTL pbmtl, void *render_data,
+                                              br_uint_8 bStyle, br_matrix4 *pbmat4ModelToScreen, br_int_32 bounds[4]);
 
   public:
     // Constructors and destructors

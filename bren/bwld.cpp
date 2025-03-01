@@ -101,7 +101,11 @@ bool BWLD::_FInit(int32_t dxp, int32_t dyp, bool fHalfX, bool fHalfY)
     if (pvNil == _pregnDirtyScreen)
         return fFalse;
 
+#ifdef BRENDER_ORIGINAL
     BrZbSetRenderBoundsCallback(_ActorRendered);
+#else  // !BRENDER_ORIGINAL
+    BrZbSetRenderBoundsCallback(_ActorRenderedNew);
+#endif // BRENDER_ORIGINAL
 
     return fTrue;
 }
@@ -610,6 +614,16 @@ void BWLD::_CleanWorkingBuffers(void)
     }
     _pgptWorking->Unlock();
     _pgptBackground->Unlock();
+}
+
+/***************************************************************************
+    Adapter for new function signature for the br_renderbounds_cbfn
+    callback in BRender v1.3.2
+***************************************************************************/
+void BWLD::_ActorRenderedNew(PBACT pbact, PBMDL pbmdl, PBMTL pbmtl, void *render_data, br_uint_8 bStyle,
+                             br_matrix4 *pbmat4ModelToScreen, br_int_32 bounds[4])
+{
+    _ActorRendered(pbact, pbmdl, pbmtl, bStyle, pbmat4ModelToScreen, bounds);
 }
 
 /***************************************************************************

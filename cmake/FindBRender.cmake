@@ -38,6 +38,11 @@ if (${CMAKE_FIND_PACKAGE_NAME}_FOUND AND NOT TARGET BRender::Libraries)
     INTERFACE
     "${PROJECT_SOURCE_DIR}/elib/brender/inc"
   )
+  target_compile_definitions(
+      BRender::Libraries
+      INTERFACE
+      BRENDER_ORIGINAL
+  )
   foreach (library IN ITEMS BRFMMXR BRFWMXR BRZBMXR)
     add_library(BRender::${library} STATIC IMPORTED)
     set_target_properties(BRender::${library}
