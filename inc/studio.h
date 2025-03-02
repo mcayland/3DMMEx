@@ -342,7 +342,7 @@ class SMCC : public SMCC_PAR
     {
         _pstdio->StartListenerEasel();
     }
-    virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, LPTSTR lpstrDefExt,
+    virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, PCSZ lpstrDefExt,
                             PSTN pstnDefFileName)
     {
         return (FPortDisplayWithIds(pfni, fFalse, lFilterLabel, lFilterExt, lTitle, lpstrDefExt, pstnDefFileName, pvNil,
