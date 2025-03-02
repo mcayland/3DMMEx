@@ -227,15 +227,15 @@ class SMCC : public SMCC_PAR
     }
     SMCC(int32_t dxp, int32_t dyp, int32_t cbCache, PSSCB psscb, PSTDIO pstdio);
 
-    virtual int32_t Dxp(void)
+    virtual int32_t Dxp(void) override
     {
         return _dxp;
     }
-    virtual int32_t Dyp(void)
+    virtual int32_t Dyp(void) override
     {
         return _dyp;
     }
-    virtual int32_t CbCache(void)
+    virtual int32_t CbCache(void) override
     {
         return _cbCache;
     }
@@ -243,7 +243,7 @@ class SMCC : public SMCC_PAR
     {
         return _psscb;
     }
-    virtual void SetCurs(int32_t tool)
+    virtual void SetCurs(int32_t tool) override
     {
         _pstdio->SetCurs(tool);
     }
@@ -252,11 +252,11 @@ class SMCC : public SMCC_PAR
         _pstdio->SetAridSelected(arid);
         UpdateRollCall();
     }
-    virtual void UpdateAction(void)
+    virtual void UpdateAction(void) override
     {
     } // Update selected action
-    virtual void UpdateRollCall(void);
-    virtual void UpdateScrollbars(void)
+    virtual void UpdateRollCall(void) override;
+    virtual void UpdateScrollbars(void) override
     {
         if (pvNil != _psscb)
             _psscb->Update();
@@ -270,118 +270,118 @@ class SMCC : public SMCC_PAR
             _psscb->AddRef();
     }
 
-    virtual void PlayStopped(void)
+    virtual void PlayStopped(void) override
     {
         _pstdio->PlayStopped();
     }
-    virtual void ChangeTool(int32_t tool)
+    virtual void ChangeTool(int32_t tool) override
     {
         _pstdio->ChangeTool(tool);
     }
-    virtual void SceneNuked(void)
+    virtual void SceneNuked(void) override
     {
         _pstdio->SceneNuked();
     }
-    virtual void SceneUnnuked(void)
+    virtual void SceneUnnuked(void) override
     {
         _pstdio->SceneUnnuked();
     }
-    virtual void ActorNuked(void)
+    virtual void ActorNuked(void) override
     {
         _pstdio->ActorNuked();
     }
-    virtual void EnableActorTools(void)
+    virtual void EnableActorTools(void) override
     {
         _pstdio->EnableActorTools();
     }
-    virtual void EnableTboxTools(void)
+    virtual void EnableTboxTools(void) override
     {
         _pstdio->EnableTboxTools();
     }
-    virtual void TboxSelected(void)
+    virtual void TboxSelected(void) override
     {
         _pstdio->TboxSelected();
     }
-    virtual void ActorEasel(bool *pfActrChanged)
+    virtual void ActorEasel(bool *pfActrChanged) override
     {
         _pstdio->ActorEasel(pfActrChanged);
     }
-    virtual void SetUndo(int32_t undo)
+    virtual void SetUndo(int32_t undo) override
     {
         _pstdio->SetUndo(undo);
     }
-    virtual void SceneChange(void)
+    virtual void SceneChange(void) override
     {
         _pstdio->SceneChange();
     }
-    virtual void PauseType(WIT wit)
+    virtual void PauseType(WIT wit) override
     {
         _pstdio->PauseType(wit);
     }
-    virtual void Recording(bool fRecording, bool fRecord)
+    virtual void Recording(bool fRecording, bool fRecord) override
     {
         _pstdio->Recording(fRecording, fRecord);
     }
-    virtual void StartSoonerLater(void)
+    virtual void StartSoonerLater(void) override
     {
         _pstdio->StartSoonerLater();
     }
-    virtual void EndSoonerLater(void)
+    virtual void EndSoonerLater(void) override
     {
         _pstdio->EndSoonerLater();
     }
-    virtual void NewActor(void)
+    virtual void NewActor(void) override
     {
         _pstdio->NewActor();
     }
-    virtual void StartActionBrowser(void)
+    virtual void StartActionBrowser(void) override
     {
         _pstdio->StartActionBrowser();
     }
-    virtual void StartListenerEasel(void)
+    virtual void StartListenerEasel(void) override
     {
         _pstdio->StartListenerEasel();
     }
     virtual bool GetFniSave(FNI *pfni, int32_t lFilterLabel, int32_t lFilterExt, int32_t lTitle, PCSZ lpstrDefExt,
-                            PSTN pstnDefFileName)
+                            PSTN pstnDefFileName) override
     {
         return (FPortDisplayWithIds(pfni, fFalse, lFilterLabel, lFilterExt, lTitle, lpstrDefExt, pstnDefFileName, pvNil,
                                     fpfPortPrevMovie, kwavPortSaveMovie));
     }
-    virtual void PlayUISound(int32_t tool, int32_t grfcust)
+    virtual void PlayUISound(int32_t tool, int32_t grfcust) override
     {
         _pstdio->PlayUISound(tool, grfcust);
     }
-    virtual void StopUISound(void)
+    virtual void StopUISound(void) override
     {
         _pstdio->StopUISound();
     }
-    virtual void UpdateTitle(PSTN pstnTitle)
+    virtual void UpdateTitle(PSTN pstnTitle) override
     {
         _pstdio->UpdateTitle(pstnTitle);
     }
-    virtual void EnableAccel(void)
+    virtual void EnableAccel(void) override
     {
         vpapp->EnableAccel();
     }
-    virtual void DisableAccel(void)
+    virtual void DisableAccel(void) override
     {
         vpapp->DisableAccel();
     }
-    virtual void GetStn(int32_t ids, PSTN pstn)
+    virtual void GetStn(int32_t ids, PSTN pstn) override
     {
         vpapp->FGetStnApp(ids, pstn);
     }
-    virtual int32_t DypTboxDef(void);
-    virtual void SetSndFrame(bool fSoundInFrame)
+    virtual int32_t DypTboxDef(void) override;
+    virtual void SetSndFrame(bool fSoundInFrame) override
     {
         _psscb->SetSndFrame(fSoundInFrame);
     }
-    virtual bool FMinimized(void)
+    virtual bool FMinimized(void) override
     {
         return (vpapp->FMinimized());
     }
-    virtual bool FQueryPurgeSounds(void);
+    virtual bool FQueryPurgeSounds(void) override;
 };
 
 #endif // STUDIO_H
