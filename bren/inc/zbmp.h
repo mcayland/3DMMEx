@@ -32,7 +32,7 @@ const uint32_t kbomZbmpf = 0x55500000;
 ****************************************/
 typedef class ZBMP *PZBMP;
 #define ZBMP_PAR BACO
-#define kclsZBMP 'ZBMP'
+#define kclsZBMP KLCONST4('Z', 'B', 'M', 'P')
 class ZBMP : public ZBMP_PAR
 {
     RTCLASS_DEC
