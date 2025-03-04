@@ -28,7 +28,7 @@ typedef FNGETRECT *PFNGETRECT;
 ****************************************/
 typedef class BWLD *PBWLD;
 #define BWLD_PAR BASE
-#define kclsBWLD 'BWLD'
+#define kclsBWLD KLCONST4('B', 'W', 'L', 'D')
 class BWLD : public BWLD_PAR
 {
     RTCLASS_DEC
