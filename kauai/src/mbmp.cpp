@@ -567,7 +567,7 @@ bool FReadBitmap(FNI *pfni, uint8_t **pprgb, PGL *ppglclr, int32_t *pdxp, int32_
 
     fRle = (bmh.bmih.biCompression == BI_RLE8);
     cbSrc = bmh.bmih.biSizeImage;
-    if (((int32_t)bmh.bmfh.bfSize != fpMac) || bmh.bmfh.bfType != 'MB' ||
+    if (((int32_t)bmh.bmfh.bfSize != fpMac) || bmh.bmfh.bfType != KLCONST2('M', 'B') ||
         !FIn(bmh.bmfh.bfOffBits, SIZEOF(BMH), fpMac) || bmh.bmfh.bfReserved1 != 0 || bmh.bmfh.bfReserved2 != 0 ||
         bmh.bmih.biSize != SIZEOF(bmh.bmih) || bmh.bmih.biPlanes != 1)
     {
@@ -807,7 +807,7 @@ bool FWriteBitmap(FNI *pfni, uint8_t *prgb, PGL pglclr, int32_t dxp, int32_t dyp
     cbSrc = CbRoundToLong(dxp) * dyp;
 
     /* Fill in the header */
-    bmh.bmfh.bfType = 'MB';
+    bmh.bmfh.bfType = KLCONST2('M', 'B');
     bmh.bmfh.bfSize = SIZEOF(bmh) + LwMul(SIZEOF(RGBQUAD), 256) + cbSrc;
     bmh.bmfh.bfOffBits = SIZEOF(bmh) + LwMul(SIZEOF(RGBQUAD), 256);
     bmh.bmfh.bfReserved1 = bmh.bmfh.bfReserved2 = 0;
