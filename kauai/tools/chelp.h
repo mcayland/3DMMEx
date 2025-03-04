@@ -27,7 +27,7 @@ enum
 };
 
 // creator type for the help editor
-#define kctgChelp 'CHLP'
+#define kctgChelp KLCONST4('C', 'H', 'L', 'P')
 
 typedef class LID *PLID;
 typedef class LIG *PLIG;
