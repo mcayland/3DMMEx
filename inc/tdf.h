@@ -19,7 +19,7 @@
 ****************************************/
 typedef class TDF *PTDF;
 #define TDF_PAR BACO
-#define kclsTDF 'TDF'
+#define kclsTDF KLCONST3('T', 'D', 'F')
 class TDF : public TDF_PAR
 {
     RTCLASS_DEC

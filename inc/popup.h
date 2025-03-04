@@ -21,7 +21,7 @@
     MP - Generic popup menu class
 *************************************/
 #define MP_PAR BRWL
-#define kclsMP 'MP'
+#define kclsMP KLCONST2('M', 'P')
 typedef class MP *PMP;
 class MP : public MP_PAR
 {
@@ -53,7 +53,7 @@ class MP : public MP_PAR
     MPFNT - Font popup menu class
 *************************************/
 #define MPFNT_PAR BRWT
-#define kclsMPFNT 'mpft'
+#define kclsMPFNT KLCONST4('m', 'p', 'f', 't')
 typedef class MPFNT *PMPFNT;
 class MPFNT : public MPFNT_PAR
 {

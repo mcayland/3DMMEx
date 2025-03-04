@@ -19,7 +19,7 @@
 // Tgob class
 //
 #define TGOB_PAR GOB
-#define kclsTGOB 'tgob'
+#define kclsTGOB KLCONST4('t', 'g', 'o', 'b')
 typedef class TGOB *PTGOB;
 class TGOB : public TGOB_PAR
 {

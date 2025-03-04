@@ -138,7 +138,7 @@ typedef struct _s2btk
 } S2BTK, *PS2BTK;
 
 typedef class S2BLX *PS2BLX;
-#define kclsS2BLX 's2bl'
+#define kclsS2BLX KLCONST4('s', '2', 'b', 'l')
 #define S2BLX_PAR LEXB
 class S2BLX : public S2BLX_PAR
 {
@@ -260,7 +260,7 @@ enum
 };
 
 typedef class S2B *PS2B;
-#define kclsS2B 'S2B'
+#define kclsS2B KLCONST3('S', '2', 'B')
 #define S2B_PAR BASE
 class S2B : public S2B_PAR
 {

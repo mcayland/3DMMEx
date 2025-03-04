@@ -49,7 +49,7 @@ const auto kBrwsScript = (kstDefault << 16) | kchidBrowserDismiss;
 
 *************************************/
 #define BRCN_PAR BASE
-#define kclsBRCN 'BRCN'
+#define kclsBRCN KLCONST4('B', 'R', 'C', 'N')
 typedef class BRCN *PBRCN;
 class BRCN : public BRCN_PAR
 {
@@ -101,7 +101,7 @@ const BOM kbomTfc = 0x5f000000;
 
 *************************************/
 #define BRWD_PAR GOK
-#define kclsBRWD 'BRWD'
+#define kclsBRWD KLCONST4('B', 'R', 'W', 'D')
 #define brwdidNil ivNil
 typedef class BRWD *PBRWD;
 class BRWD : public BRWD_PAR
@@ -241,7 +241,7 @@ class BRWD : public BRWD_PAR
 
 *************************************/
 #define BRCNL_PAR BRCN
-#define kclsBRCNL 'brcl'
+#define kclsBRCNL KLCONST4('b', 'r', 'c', 'l')
 typedef class BRCNL *PBRCNL;
 class BRCNL : public BRCNL_PAR
 {
@@ -295,7 +295,7 @@ struct THD
     specific kind of content and you don't care about the names. */
 #define BCL_PAR BASE
 typedef class BCL *PBCL;
-#define kclsBCL 'BCL'
+#define kclsBCL KLCONST3('B', 'C', 'L')
 class BCL : public BCL_PAR
 {
     RTCLASS_DEC
@@ -347,7 +347,7 @@ class BCL : public BCL_PAR
     browse content by name */
 #define BCLS_PAR BCL
 typedef class BCLS *PBCLS;
-#define kclsBCLS 'BCLS'
+#define kclsBCLS KLCONST4('B', 'C', 'L', 'S')
 class BCLS : public BCLS_PAR
 {
     RTCLASS_DEC
@@ -389,7 +389,7 @@ class BCLS : public BCLS_PAR
 
 *************************************/
 #define BRWL_PAR BRWD
-#define kclsBRWL 'BRWL'
+#define kclsBRWL KLCONST4('B', 'R', 'W', 'L')
 typedef class BRWL *PBRWL;
 
 // Browser Selection Flags
@@ -467,7 +467,7 @@ class BRWL : public BRWL_PAR
 
 *************************************/
 #define BRWT_PAR BRWD
-#define kclsBRWT 'BRWT'
+#define kclsBRWT KLCONST4('B', 'R', 'W', 'T')
 typedef class BRWT *PBRWT;
 class BRWT : public BRWT_PAR
 {
@@ -512,7 +512,7 @@ class BRWT : public BRWT_PAR
 
 *************************************/
 #define BRWN_PAR BRWL
-#define kclsBRWN 'BRWN'
+#define kclsBRWN KLCONST4('B', 'R', 'W', 'N')
 typedef class BRWN *PBRWN;
 class BRWN : public BRWN_PAR
 {
@@ -555,7 +555,7 @@ class BRWN : public BRWN_PAR
 
 *************************************/
 #define BRWA_PAR BRWT
-#define kclsBRWA 'BRWA'
+#define kclsBRWA KLCONST4('B', 'R', 'W', 'A')
 typedef class BRWA *PBRWA;
 class BRWA : public BRWA_PAR
 {
@@ -595,7 +595,7 @@ class BRWA : public BRWA_PAR
 
 *************************************/
 #define BRWP_PAR BRWL
-#define kclsBRWP 'BRWP'
+#define kclsBRWP KLCONST4('B', 'R', 'W', 'P')
 typedef class BRWP *PBRWP;
 class BRWP : public BRWP_PAR
 {
@@ -623,7 +623,7 @@ class BRWP : public BRWP_PAR
 
 *************************************/
 #define BRWB_PAR BRWL
-#define kclsBRWB 'BRWB'
+#define kclsBRWB KLCONST4('B', 'R', 'W', 'B')
 typedef class BRWB *PBRWB;
 class BRWB : public BRWB_PAR
 {
@@ -652,7 +652,7 @@ class BRWB : public BRWB_PAR
 
 *************************************/
 #define BRWC_PAR BRWL
-#define kclsBRWC 'BRWC'
+#define kclsBRWC KLCONST4('B', 'R', 'W', 'C')
 typedef class BRWC *PBRWC;
 class BRWC : public BRWC_PAR
 {
@@ -685,7 +685,7 @@ class BRWC : public BRWC_PAR
 
 *************************************/
 #define BRWM_PAR BRWN
-#define kclsBRWM 'brwm'
+#define kclsBRWM KLCONST4('b', 'r', 'w', 'm')
 typedef class BRWM *PBRWM;
 class BRWM : public BRWM_PAR
 {
@@ -724,7 +724,7 @@ class BRWM : public BRWM_PAR
 
 *************************************/
 #define BRWI_PAR BRWM
-#define kclsBRWI 'BRWI'
+#define kclsBRWI KLCONST4('B', 'R', 'W', 'I')
 typedef class BRWI *PBRWI;
 class BRWI : public BRWI_PAR
 {
@@ -758,7 +758,7 @@ class BRWI : public BRWI_PAR
 
 *************************************/
 #define BRWR_PAR BRWD
-#define kclsBRWR 'BRWR'
+#define kclsBRWR KLCONST4('B', 'R', 'W', 'R')
 typedef class BRWR *PBRWR;
 class BRWR : public BRWR_PAR
 {
@@ -818,7 +818,7 @@ struct CMG // Gokd Cno Map
 
 *************************************/
 #define FNET_PAR BASE
-#define kclsFNET 'FNET'
+#define kclsFNET KLCONST4('F', 'N', 'E', 'T')
 typedef class FNET *PFNET;
 class FNET : public FNET_PAR
 {

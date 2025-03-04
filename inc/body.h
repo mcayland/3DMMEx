@@ -19,7 +19,7 @@
 ****************************************/
 typedef class BODY *PBODY;
 #define BODY_PAR BASE
-#define kclsBODY 'BODY'
+#define kclsBODY KLCONST4('B', 'O', 'D', 'Y')
 class BODY : public BODY_PAR
 {
     RTCLASS_DEC
@@ -128,7 +128,7 @@ class BODY : public BODY_PAR
 ****************************************/
 typedef class COST *PCOST;
 #define COST_PAR BASE
-#define kclsCOST 'COST'
+#define kclsCOST KLCONST4('C', 'O', 'S', 'T')
 class COST : public COST_PAR
 {
     RTCLASS_DEC
