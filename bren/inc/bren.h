@@ -77,7 +77,7 @@ const BRFR frNil = BR_FRACTION(0.0);
 const BRA aNil = BR_ANGLE_DEG(0);
 const BRA aZero = BR_ANGLE_DEG(0);
 
-#define kctgZbmp 'ZBMP'
+#define kctgZbmp KLCONST4('Z', 'B', 'M', 'P')
 
 struct BCB // bounding cuboid...same shape as br_bounds
 {
