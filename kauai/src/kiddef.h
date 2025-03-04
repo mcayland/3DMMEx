@@ -42,13 +42,7 @@
 /***************************************************************************
     Chunky file constants.
 ***************************************************************************/
-#define kctgGokd 'GOKD'
-#define kctgAnimation 'GLSC'
-#define kctgHelpTopic 'HTOP'
-#define kctgTile 'TILE'
-#define kctgEditControl 'EDIT' // help balloon edit control tag
-#define kctgFill 'FILL'
-#define kctgVideo 'VIDE'
+#include "kidchk.h"
 
 /***************************************************************************
     GOK defines
