@@ -223,7 +223,7 @@ OBJECT( "Biopage 38 mask",  kgobStdo1m1, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 38 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 38 );
@@ -238,7 +238,7 @@ OBJECT( "Biopage 14 mask",  kgobStdo4m1, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 14 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 14 );
@@ -251,7 +251,7 @@ OBJECT( "Biopage 15 mask",  kgobStdo4m2, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 15 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 15 );
@@ -264,7 +264,7 @@ OBJECT( "Biopage 16 mask",  kgobStdo4m3, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 16 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 16 );
@@ -277,7 +277,7 @@ OBJECT( "Biopage 17 mask",  kgobStdo4m4, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 17 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 17 );
@@ -290,7 +290,7 @@ OBJECT( "Biopage 18 mask",  kgobStdo3m1, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 18 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 18 );
@@ -303,7 +303,7 @@ OBJECT( "Biopage 19 mask",  kgobStdo3m2, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 19 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 19 );
@@ -316,7 +316,7 @@ OBJECT( "Biopage 20 mask",  kgobStdo3m3, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 20 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 20 );
@@ -329,7 +329,7 @@ OBJECT( "Biopage 21 mask",  kgobStdo2m1, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 21 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 21 );
@@ -342,7 +342,7 @@ OBJECT( "Biopage 22 mask",  kgobStdo2m2, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 22 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 22 );
@@ -355,7 +355,7 @@ OBJECT( "Biopage 23 mask",  kgobStdo2m3, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 23 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 23 );

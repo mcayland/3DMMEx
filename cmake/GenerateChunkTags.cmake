@@ -1,7 +1,7 @@
 file(WRITE "${OUTPUT_FILE}" "// Automatically generated from ${INPUT_FILE}\n")
 file(STRINGS "${INPUT_FILE}" CHUNKTYPES)
 foreach(CHUNKTYPE IN ITEMS ${CHUNKTYPES})
-    string(REGEX REPLACE "^([^ ]+) '([A-z ]+)'.*" "#define kctg\\1 '\\2'" CHUNKTYPE_STR "${CHUNKTYPE}")
+    string(REGEX REPLACE "^([^ ]+) '([A-z ]+)'.*" "#define kctgS\\1 '\\2'" CHUNKTYPE_STR "${CHUNKTYPE}")
     file(APPEND "${OUTPUT_FILE}" "${CHUNKTYPE_STR}\n")
     string(REGEX REPLACE "^([^ ]+) '([A-z ])([A-z ])([A-z ])([A-z ])'.*" "#define kctgL\\1 KLCONST4('\\2', '\\3', '\\4', '\\5')" CHUNKTYPE_STR "${CHUNKTYPE}")
     file(APPEND "${OUTPUT_FILE}" "${CHUNKTYPE_STR}\n")
