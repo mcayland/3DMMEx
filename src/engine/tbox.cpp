@@ -1911,7 +1911,7 @@ PTBOX TBOX::PtboxRead(PCRF pcrf, CNO cno, PSCEN pscen)
         Assert(tboxh.bo == kboCur, "Bad Chunky file");
     }
 
-    if (!pcfl->FGetKidChidCtg(kctgTbox, cno, tboxh.chid, kctgRichText, &kid))
+    if (!pcfl->FGetKidChidCtg(kctgTbox, cno, tboxh.chid, kctgLRichText, &kid))
     {
         return (pvNil);
     }
@@ -1975,7 +1975,7 @@ bool TBOX::FWrite(PCFL pcfl, CNO cno)
         return (fFalse);
     }
 
-    Assert(cki.ctg == kctgRichText, "bad ctg");
+    Assert(cki.ctg == kctgLRichText, "bad ctg");
 
     if (!pcfl->FAdoptChild(kctgTbox, cno, cki.ctg, cki.cno, 0))
     {
