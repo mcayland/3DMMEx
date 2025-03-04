@@ -316,7 +316,7 @@ void CEX::Record(PCFL pcfl)
 
     if ((_pglcmdf = GL::PglNew(SIZEOF(CMDF), 100)) == pvNil)
         _rec = recMemError;
-    else if (!_pcfl->FAdd(0, kctgMacro, &_cno))
+    else if (!_pcfl->FAdd(0, kctgLMacro, &_cno))
     {
         _rec = recFileError;
         _cno = cnoNil;
@@ -353,7 +353,7 @@ void CEX::StopRecording(void)
             _pglcmdf->Put(_icmdf, &cmdf);
         }
         cb = _pglcmdf->CbOnFile();
-        if (!_pcfl->FPut(cb, kctgMacro, _cno, &blck) || !_pglcmdf->FWrite(&blck))
+        if (!_pcfl->FPut(cb, kctgLMacro, _cno, &blck) || !_pglcmdf->FWrite(&blck))
         {
             _rec = recFileError;
         }
@@ -361,13 +361,13 @@ void CEX::StopRecording(void)
 
     if (_rec != recNil && _cno != cnoNil)
     {
-        _pcfl->Delete(kctgMacro, _cno);
+        _pcfl->Delete(kctgLMacro, _cno);
         _cno = cnoNil;
     }
 
     if (_cno != cnoNil)
     {
-        if (_pcfl->FSave(kctgFramework))
+        if (_pcfl->FSave(kctgLFramework))
             _pcfl->SetTemp(fFalse);
         else
         {
@@ -441,13 +441,13 @@ void CEX::RecordCmd(PCMD pcmd)
         CNO cno;
 
         cb = pcmd->pgg->CbOnFile();
-        if (!_pcfl->FAddChild(kctgMacro, _cno, cmdf.chidGg, cb, kctgGg, &cno, &blck))
+        if (!_pcfl->FAddChild(kctgLMacro, _cno, cmdf.chidGg, cb, kctgLGg, &cno, &blck))
         {
             goto LFileError;
         }
         if (!pcmd->pgg->FWrite(&blck))
         {
-            _pcfl->DeleteChild(kctgMacro, _cno, kctgGg, cno, cmdf.chidGg);
+            _pcfl->DeleteChild(kctgLMacro, _cno, kctgLGg, cno, cmdf.chidGg);
         LFileError:
             _pglcmdf->Delete(_icmdf);
             _rec = recFileError;
@@ -484,7 +484,7 @@ void CEX::Play(PCFL pcfl, CNO cno)
     _cact = 0;
     Assert(_pglcmdf == pvNil, "why isn't _pglcmdf nil?");
 
-    if (!_pcfl->FFind(kctgMacro, _cno, &blck) || (_pglcmdf = GL::PglRead(&blck, &bo, &osk)) == pvNil)
+    if (!_pcfl->FFind(kctgLMacro, _cno, &blck) || (_pglcmdf = GL::PglRead(&blck, &bo, &osk)) == pvNil)
     {
         _rec = recFileError;
         StopPlaying();
@@ -556,7 +556,7 @@ bool CEX::_FReadCmd(PCMD pcmd)
         Assert(cmdf.cact <= 1, 0);
 
         // read the gg
-        if (!_pcfl->FGetKidChidCtg(kctgMacro, _cno, cmdf.chidGg, kctgGg, &kid) ||
+        if (!_pcfl->FGetKidChidCtg(kctgLMacro, _cno, cmdf.chidGg, kctgLGg, &kid) ||
             !_pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || pvNil == (pcmd->pgg = GG::PggRead(&blck, &bo, &osk)))
         {
             _rec = recFileError;

@@ -139,7 +139,7 @@ bool GOK::_FInit(PWOKS pwoks, CNO cno, PRCA prca)
     PGOKD pgokd;
     bool fRet;
 
-    if (pvNil == (pgokd = pwoks->PgokdFetch(kctgGokd, cno, prca)))
+    if (pvNil == (pgokd = pwoks->PgokdFetch(kctgLGokd, cno, prca)))
         return fFalse;
 
     fRet = _FInit(pwoks, pgokd, prca);
@@ -555,7 +555,7 @@ bool GOK::_FSetGmsCore(int32_t gms, uint32_t grfact, bool *pfStable)
     }
 
     // change the representation
-    ctg = (_mpgmsgmseEnd[gms].gmsDst == gms) ? ctgNil : kctgAnimation;
+    ctg = (_mpgmsgmseEnd[gms].gmsDst == gms) ? ctgNil : kctgLAnimation;
     chid = _ChidMouse();
     if (chidNil != chid)
     {
@@ -597,7 +597,7 @@ bool GOK::_FSetRep(CHID chid, uint32_t grfgok, CTG ctg, int32_t dxp, int32_t dyp
     if (chidNil == chid)
         goto LAdjust;
 
-    if (!(grfgok & fgokNoAnim) && (ctgNil == ctg || kctgAnimation == ctg))
+    if (!(grfgok & fgokNoAnim) && (ctgNil == ctg || kctgLAnimation == ctg))
     {
         // animations are allowed - try to start one
         if (_chidAnim == chid && !(grfgok & fgokReset))
@@ -607,7 +607,7 @@ bool GOK::_FSetRep(CHID chid, uint32_t grfgok, CTG ctg, int32_t dxp, int32_t dyp
             goto LAdjust;
         }
 
-        if (pcfl->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgAnimation, &kid))
+        if (pcfl->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgLAnimation, &kid))
         {
             PSCPT pscpt;
             PSCEG psceg = pvNil;
@@ -637,13 +637,13 @@ bool GOK::_FSetRep(CHID chid, uint32_t grfgok, CTG ctg, int32_t dxp, int32_t dyp
         }
     }
 
-    if (kctgAnimation == ctg)
+    if (kctgLAnimation == ctg)
         goto LAdjust;
 
     for (pcfl->FGetIkid(_pgokd->Ctg(), _pgokd->Cno(), 0, 0, chid, &ikid);
          pcfl->FGetKid(_pgokd->Ctg(), _pgokd->Cno(), ikid, &kid) && kid.chid == chid; ikid++)
     {
-        if (ctgNil != ctg && ctg != kid.cki.ctg || kctgAnimation == kid.cki.ctg)
+        if (ctgNil != ctg && ctg != kid.cki.ctg || kctgLAnimation == kid.cki.ctg)
         {
             continue;
         }
@@ -1025,7 +1025,7 @@ bool GOK::FFilterCidHid(int32_t cid, int32_t hid, CHID chidScript)
     KID kid;
 
     if (chidNil == chidScript ||
-        !_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chidScript, kctgScript, &kid))
+        !_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chidScript, kctgLScript, &kid))
     {
         // turn off filtering
         if (chidNil != chidScript)
@@ -1383,7 +1383,7 @@ bool GOK::FRunScript(CHID chid, int32_t *prglw, int32_t clw, int32_t *plwReturn,
     AssertNilOrVarMem(plwReturn);
     KID kid;
 
-    if (!_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgScript, &kid))
+    if (!_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgLScript, &kid))
     {
         if (pvNil != ptSuccess)
             *ptSuccess = tNo;
@@ -1409,7 +1409,7 @@ bool GOK::FRunScriptCno(CNO cno, int32_t *prglw, int32_t clw, int32_t *plwReturn
     tribool tRet;
 
     fExists = fTrue;
-    pscpt = (PSCPT)_pcrf->PbacoFetch(kctgScript, cno, SCPT::FReadScript, &fError);
+    pscpt = (PSCPT)_pcrf->PbacoFetch(kctgLScript, cno, SCPT::FReadScript, &fError);
     if (pvNil != pscpt)
     {
         AssertPo(pscpt, 0);
@@ -1544,20 +1544,20 @@ PGORP GOK::_PgorpNew(PCRF pcrf, CTG ctg, CNO cno)
     default:
         return pvNil;
 
-    case kctgMbmp:
-    case kctgMask:
+    case kctgLMbmp:
+    case kctgLMask:
         pfngorp = (PFNGORP)GORB::PgorbNew;
         break;
 
-    case kctgFill:
+    case kctgLFill:
         pfngorp = (PFNGORP)GORF::PgorfNew;
         break;
 
-    case kctgTile:
+    case kctgLTile:
         pfngorp = (PFNGORP)GORT::PgortNew;
         break;
 
-    case kctgVideo:
+    case kctgLVideo:
         pfngorp = (PFNGORP)GORV::PgorvNew;
         break;
     }
@@ -1788,8 +1788,8 @@ void GOK::_PlayMouseSound(CHID chid)
     if (pvNil == vpsndm)
         return;
 
-    if (!_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgWave, &kid) &&
-        !_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgMidi, &kid))
+    if (!_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgLWave, &kid) &&
+        !_pcrf->Pcfl()->FGetKidChidCtg(_pgokd->Ctg(), _pgokd->Cno(), chid, kctgLMidi, &kid))
     {
         return;
     }
@@ -2114,7 +2114,7 @@ void GORB::Draw(PGNV pgnv, RC *prcClip)
     PMBMP pmbmp;
     RC rc;
 
-    if (kctgMbmp != _ctg)
+    if (kctgLMbmp != _ctg)
         return;
 
     if (pvNil != (pmbmp = (PMBMP)_pcrf->PbacoFetch(_ctg, _cno, MBMP::FReadMbmp)))
@@ -2259,7 +2259,7 @@ PGORT GORT::PgortNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno)
         return pvNil;
     }
 #pragma warning(pop)
-    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgMbmp, &kid))
+    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLMbmp, &kid))
     {
         Warn("no child MBMP of TILE chunk");
         return pvNil;

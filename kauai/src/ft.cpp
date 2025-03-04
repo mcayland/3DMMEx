@@ -1542,7 +1542,7 @@ bool DOCPIC::FSaveToFni(FNI *pfni, bool fSetFni)
 
     if (pvNil == (pcfl = CFL::PcflCreate(pfni, fcflNil)))
         return fFalse;
-    fT = _ppic->FAddToCfl(pcfl, kctgGraphic, &cno) && pcfl->FSave('FT  ');
+    fT = _ppic->FAddToCfl(pcfl, kctgLGraphic, &cno) && pcfl->FSave('FT  ');
     ReleasePpo(&pcfl);
     if (!fT)
         pfni->FDelete();

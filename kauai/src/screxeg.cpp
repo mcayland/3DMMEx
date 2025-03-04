@@ -378,7 +378,7 @@ bool SCEG::_FExecOp(int32_t op)
         else
         {
             GobMayDie();
-            ((PGOK)pgob)->FSetRep(lw1, fgokNil, kctgAnimation);
+            ((PGOK)pgob)->FSetRep(lw1, fgokNil, kctgLAnimation);
         }
         break;
 
@@ -394,7 +394,7 @@ bool SCEG::_FExecOp(int32_t op)
         else
         {
             GobMayDie();
-            ((PGOK)pgob)->FSetRep(lw1, fgokKillAnim, kctgMbmp);
+            ((PGOK)pgob)->FSetRep(lw1, fgokKillAnim, kctgLMbmp);
         }
         break;
 
@@ -1196,7 +1196,7 @@ PGL SCEG::_PglclrGet(CNO cno)
     if (cnoNil == cno)
         return pvNil;
 
-    pcabo = (PCABO)_prca->PbacoFetch(kctgColorTable, cno, FReadColorTable);
+    pcabo = (PCABO)_prca->PbacoFetch(kctgLColorTable, cno, FReadColorTable);
     if (pvNil == pcabo)
         return pvNil;
 

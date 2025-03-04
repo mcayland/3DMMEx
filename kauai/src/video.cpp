@@ -373,7 +373,7 @@ GVDW::~GVDW(void)
         PSNDV psndv;
 
         mciSendCommand(_lwDevice, MCI_CLOSE, MCI_WAIT, (DWORD_PTR)&mci);
-        if (pvNil != vpsndm && pvNil != (psndv = vpsndm->PsndvFromCtg(kctgWave)))
+        if (pvNil != vpsndm && pvNil != (psndv = vpsndm->PsndvFromCtg(kctgLWave)))
         {
             psndv->Suspend(fFalse);
         }
@@ -412,7 +412,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     }
     _lwDevice = mciOpen.wDeviceID;
     _fDeviceOpen = fTrue;
-    if (pvNil != vpsndm && pvNil != (psndv = vpsndm->PsndvFromCtg(kctgWave)))
+    if (pvNil != vpsndm && pvNil != (psndv = vpsndm->PsndvFromCtg(kctgLWave)))
     {
         psndv->Suspend(fTrue);
     }
