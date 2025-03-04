@@ -62,7 +62,7 @@ bool BKGD::FAddTagsToTagl(PTAG ptagBkgd, PTAGL ptagl)
         return fFalse;
     if (!ptagl->FInsertChild(ptagBkgd, kchidGllt, kctgGllt))
         return fFalse;
-    if (!ptagl->FInsertChild(ptagBkgd, kchidGlcr, kctgColorTable))
+    if (!ptagl->FInsertChild(ptagBkgd, kchidGlcr, kctgLColorTable))
         return fFalse;
 
     // Have to cache first camera view since scene switches to it
@@ -89,7 +89,7 @@ bool BKGD::FCacheToHD(PTAG ptagBkgd)
         return fFalse;
     if (!vptagm->FBuildChildTag(ptagBkgd, kchidGllt, kctgGllt, &tagGllt))
         return fFalse;
-    if (!vptagm->FBuildChildTag(ptagBkgd, kchidGlcr, kctgColorTable, &tagGlcr))
+    if (!vptagm->FBuildChildTag(ptagBkgd, kchidGlcr, kctgLColorTable, &tagGlcr))
         return fFalse;
     if (!vptagm->FBuildChildTag(ptagBkgd, 0, kctgCam, &tagCam))
         return fFalse;
@@ -196,7 +196,7 @@ bool BKGD::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     }
 
     // If there is a GLCR child, get it
-    if (pcfl->FGetKidChidCtg(ctg, cno, kchidGlcr, kctgColorTable, &kid))
+    if (pcfl->FGetKidChidCtg(ctg, cno, kchidGlcr, kctgLColorTable, &kid))
     {
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
             goto LFail;
@@ -471,7 +471,7 @@ bool BKGD::FSetCamera(PBWLD pbwld, int32_t icam)
     Assert(kboCur == cam.bo, "bad cam");
 
     // find RGB pict
-    if (!pcfl->FGetKidChidCtg(kidCam.cki.ctg, kidCam.cki.cno, 0, kctgMbmp, &kidRGB))
+    if (!pcfl->FGetKidChidCtg(kidCam.cki.ctg, kidCam.cki.cno, 0, kctgLMbmp, &kidRGB))
     {
         return fFalse;
     }

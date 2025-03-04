@@ -370,7 +370,7 @@ PMVIE MVIE::PmvieNew(bool fHalfMode, PMCC pmcc, FNI *pfni, CNO cno)
     //
     // Merge this document's source title list
     //
-    if (pcfl->FGetKidChidCtg(kctgMvie, cno, kchidGstSource, kctgGst, &kid) &&
+    if (pcfl->FGetKidChidCtg(kctgMvie, cno, kchidGstSource, kctgLGst, &kid) &&
         pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
     {
         pgstSource = GST::PgstRead(&blck, &bo, &osk);
@@ -466,7 +466,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
     BLCK blck;
     MACTR mactr;
 
-    if (!pcfl->FGetKidChidCtg(kctgMvie, cno, 0, kctgGst, &kid) || !pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
+    if (!pcfl->FGetKidChidCtg(kctgMvie, cno, 0, kctgLGst, &kid) || !pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
     {
         PushErc(ercSocBadFile);
         goto LFail;
@@ -2558,19 +2558,19 @@ LRetry:
     //
     // Get old roll call if it exists.
     //
-    if (!pcfl->FGetKidChidCtg(kctgMvie, _cno, 0, kctgGst, &kidGstRollCall))
+    if (!pcfl->FGetKidChidCtg(kctgMvie, _cno, 0, kctgLGst, &kidGstRollCall))
     {
         kidGstRollCall.cki.cno = cnoNil;
     }
 
-    if (!pcfl->FAdd(_pgstmactr->CbOnFile(), kctgGst, &cno, &blck))
+    if (!pcfl->FAdd(_pgstmactr->CbOnFile(), kctgLGst, &cno, &blck))
     {
         goto LFail1;
     }
 
-    if (!_pgstmactr->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgGst, cno, 0))
+    if (!_pgstmactr->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgLGst, cno, 0))
     {
-        pcfl->Delete(kctgGst, cno);
+        pcfl->Delete(kctgLGst, cno);
         goto LFail1;
     }
 
@@ -2581,7 +2581,7 @@ LRetry:
     //
     // Get old sources list if it exists.
     //
-    if (!pcfl->FGetKidChidCtg(kctgMvie, _cno, kchidGstSource, kctgGst, &kidGstSource))
+    if (!pcfl->FGetKidChidCtg(kctgMvie, _cno, kchidGstSource, kctgLGst, &kidGstSource))
     {
         kidGstSource.cki.cno = cnoNil;
     }
@@ -2590,14 +2590,14 @@ LRetry:
     if (pgstSource == pvNil)
         goto LFail2;
 
-    if (!pcfl->FAdd(pgstSource->CbOnFile(), kctgGst, &cnoSource, &blck))
+    if (!pcfl->FAdd(pgstSource->CbOnFile(), kctgLGst, &cnoSource, &blck))
     {
         goto LFail2;
     }
 
-    if (!pgstSource->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgGst, cnoSource, kchidGstSource))
+    if (!pgstSource->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgLGst, cnoSource, kchidGstSource))
     {
-        pcfl->Delete(kctgGst, cnoSource);
+        pcfl->Delete(kctgLGst, cnoSource);
         goto LFail2;
     }
 
@@ -2619,7 +2619,7 @@ LRetry:
     //
     if (kidGstRollCall.cki.cno != cnoNil)
     {
-        pcfl->DeleteChild(kctgMvie, _cno, kctgGst, kidGstRollCall.cki.cno, 0);
+        pcfl->DeleteChild(kctgMvie, _cno, kctgLGst, kidGstRollCall.cki.cno, 0);
     }
 
     //
@@ -2627,7 +2627,7 @@ LRetry:
     //
     if (kidGstSource.cki.cno != cnoNil)
     {
-        pcfl->DeleteChild(kctgMvie, _cno, kctgGst, kidGstSource.cki.cno, kchidGstSource);
+        pcfl->DeleteChild(kctgMvie, _cno, kctgLGst, kidGstSource.cki.cno, kchidGstSource);
     }
 
     //
@@ -2693,10 +2693,10 @@ LRetry:
     return (fTrue);
 
 LFail3:
-    pcfl->DeleteChild(kctgMvie, _cno, kctgGst, cnoSource, kchidGstSource);
+    pcfl->DeleteChild(kctgMvie, _cno, kctgLGst, cnoSource, kchidGstSource);
 
 LFail2:
-    pcfl->DeleteChild(kctgMvie, _cno, kctgGst, cno, 0);
+    pcfl->DeleteChild(kctgMvie, _cno, kctgLGst, cno, 0);
 
 LFail1:
     if (Pscen() != pvNil)
