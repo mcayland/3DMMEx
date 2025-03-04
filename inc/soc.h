@@ -33,58 +33,58 @@
 #include "bkgd.h"
 #include "tbox.h"
 
-#define kctgActn 'ACTN'
-#define kctgActr 'ACTR'
-#define kctgBds 'BDS '
-#define kctgBkgd 'BKGD'
-#define kctgBmdl 'BMDL'
-#define kctgBpmp 'BPMP'
-#define kctgCam 'CAM '
-#define kctgGgae 'GGAE'
-#define kctgGldc 'GLDC' // REVIEW *****: obsolete
-#define kctgGgcm 'GGCM'
-#define kctgGllt 'GLLT'
-#define kctgGlms 'GLMS' // motion-match sounds (under ACTN)
-#define kctgGgcl 'GGCL'
-#define kctgGlxf 'GLXF'
-#define kctgMsnd 'MSND'
-#define kctgMtrl 'MTRL'
-#define kctgCmtl 'CMTL'
-#define kctgMvie 'MVIE'
-#define kctgPath 'PATH'
-#define kctgPict 'PICT'
-#define kctgScen 'SCEN'
-#define kctgSnd 'SND '
-#define kctgSoc 'SOC '
-#define kctgTbox 'TBOX'
-#define kctgTdf 'TDF '
-#define kctgTdt 'TDT '
-#define kctgTmpl 'TMPL'
-#define kctgGlpi 'GLPI'
-#define kctgGlbs 'GLBS'
-#define kctgInfo 'INFO'
-#define kctgFrmGg 'GGFR'
-#define kctgStartGg 'GGST'
-#define kctgThumbMbmp 'THUM'
-#define kctgGltm 'GLTM'
-#define kctgGlbk 'GLBK'
-#define kctgGlcg 'GLCG'
-#define kctgBkth 'BKTH' // Background thumbnail
-#define kctgCath 'CATH' // Camera thumbnail
-#define kctgTmth 'TMTH' // Template thumbnail (non-prop)
-#define kctgPrth 'PRTH' // Prop thumbnail
-#define kctgAnth 'ANTH' // Action thumbnail
-#define kctgSvth 'SVTH' // Sounds (voice) thumbnail
-#define kctgSfth 'SFTH' // Sounds (FX) thumbnail
-#define kctgSmth 'SMTH' // Sounds (midi) thumbnail
-#define kctgMtth 'MTTH' // Materials thumbnail
-#define kctgCmth 'CMTH' // Custom materials thumbnail
-#define kctgTsth 'TSTH' // 3d shape thumbnail
-#define kctgTfth 'TFTH' // 3d font thumbnail
-#define kctgTcth 'TCTH' // Text color thumbnail
-#define kctgTbth 'TBTH' // Text background thumbnail
-#define kctgTzth 'TZTH' // Text size thumbnail
-#define kctgTyth 'TYTH' // Text style thumbnail
+#define kctgActn KLCONST4('A', 'C', 'T', 'N')
+#define kctgActr KLCONST4('A', 'C', 'T', 'R')
+#define kctgBds KLCONST4('B', 'D', 'S', ' ')
+#define kctgBkgd KLCONST4('B', 'K', 'G', 'D')
+#define kctgBmdl KLCONST4('B', 'M', 'D', 'L')
+#define kctgBpmp KLCONST4('B', 'P', 'M', 'P')
+#define kctgCam KLCONST4('C', 'A', 'M', ' ')
+#define kctgGgae KLCONST4('G', 'G', 'A', 'E')
+#define kctgGldc KLCONST4('G', 'L', 'D', 'C') // REVIEW *****: obsolete
+#define kctgGgcm KLCONST4('G', 'G', 'C', 'M')
+#define kctgGllt KLCONST4('G', 'L', 'L', 'T')
+#define kctgGlms KLCONST4('G', 'L', 'M', 'S') // motion-match sounds (under ACTN)
+#define kctgGgcl KLCONST4('G', 'G', 'C', 'L')
+#define kctgGlxf KLCONST4('G', 'L', 'X', 'F')
+#define kctgMsnd KLCONST4('M', 'S', 'N', 'D')
+#define kctgMtrl KLCONST4('M', 'T', 'R', 'L')
+#define kctgCmtl KLCONST4('C', 'M', 'T', 'L')
+#define kctgMvie KLCONST4('M', 'V', 'I', 'E')
+#define kctgPath KLCONST4('P', 'A', 'T', 'H')
+#define kctgPict KLCONST4('P', 'I', 'C', 'T')
+#define kctgScen KLCONST4('S', 'C', 'E', 'N')
+#define kctgSnd KLCONST4('S', 'N', 'D', ' ')
+#define kctgSoc KLCONST4('S', 'O', 'C', ' ')
+#define kctgTbox KLCONST4('T', 'B', 'O', 'X')
+#define kctgTdf KLCONST4('T', 'D', 'F', ' ')
+#define kctgTdt KLCONST4('T', 'D', 'T', ' ')
+#define kctgTmpl KLCONST4('T', 'M', 'P', 'L')
+#define kctgGlpi KLCONST4('G', 'L', 'P', 'I')
+#define kctgGlbs KLCONST4('G', 'L', 'B', 'S')
+#define kctgInfo KLCONST4('I', 'N', 'F', 'O')
+#define kctgFrmGg KLCONST4('G', 'G', 'F', 'R')
+#define kctgStartGg KLCONST4('G', 'G', 'S', 'T')
+#define kctgThumbMbmp KLCONST4('T', 'H', 'U', 'M')
+#define kctgGltm KLCONST4('G', 'L', 'T', 'M')
+#define kctgGlbk KLCONST4('G', 'L', 'B', 'K')
+#define kctgGlcg KLCONST4('G', 'L', 'C', 'G')
+#define kctgBkth KLCONST4('B', 'K', 'T', 'H') // Background thumbnail
+#define kctgCath KLCONST4('C', 'A', 'T', 'H') // Camera thumbnail
+#define kctgTmth KLCONST4('T', 'M', 'T', 'H') // Template thumbnail (non-prop)
+#define kctgPrth KLCONST4('P', 'R', 'T', 'H') // Prop thumbnail
+#define kctgAnth KLCONST4('A', 'N', 'T', 'H') // Action thumbnail
+#define kctgSvth KLCONST4('S', 'V', 'T', 'H') // Sounds (voice) thumbnail
+#define kctgSfth KLCONST4('S', 'F', 'T', 'H') // Sounds (FX) thumbnail
+#define kctgSmth KLCONST4('S', 'M', 'T', 'H') // Sounds (midi) thumbnail
+#define kctgMtth KLCONST4('M', 'T', 'T', 'H') // Materials thumbnail
+#define kctgCmth KLCONST4('C', 'M', 'T', 'H') // Custom materials thumbnail
+#define kctgTsth KLCONST4('T', 'S', 'T', 'H') // 3d shape thumbnail
+#define kctgTfth KLCONST4('T', 'F', 'T', 'H') // 3d font thumbnail
+#define kctgTcth KLCONST4('T', 'C', 'T', 'H') // Text color thumbnail
+#define kctgTbth KLCONST4('T', 'B', 'T', 'H') // Text background thumbnail
+#define kctgTzth KLCONST4('T', 'Z', 'T', 'H') // Text size thumbnail
+#define kctgTyth KLCONST4('T', 'Y', 'T', 'H') // Text style thumbnail
 
 #define khidMscb khidLimKidFrame
 #define khidMvieClock khidLimKidFrame + 1
@@ -93,11 +93,11 @@
 #define khidMsqClock khidLimKidFrame + 4
 // khidStudio 				khidLimKidFrame + 5  Defined in stdiodef.h
 
-#define kftgChunky MacWin('chnk', 'CHK')
-#define kftgContent MacWin('3con', '3CN')
-#define kftgThumbDesc MacWin('3thd', '3TH')
-#define kftg3mm MacWin('3mm', '3MM')
-#define kftgSocTemp MacWin('3tmp', '3TP')
+#define kftgChunky MacWin(KLCONST4('c', 'h', 'n', 'k'), KLCONST3('C', 'H', 'K'))
+#define kftgContent MacWin(KLCONST4('3', 'c', 'o', 'n'), KLCONST3('3', 'C', 'N'))
+#define kftgThumbDesc MacWin(KLCONST4('3', 't', 'h', 'd'), KLCONST3('3', 'T', 'H'))
+#define kftg3mm MacWin(KLCONST3('3', 'm', 'm'), KLCONST3('3', 'M', 'M'))
+#define kftgSocTemp MacWin(KLCONST4('3', 't', 'm', 'p'), KLCONST3('3', 'T', 'P'))
 
 #define ksz3mm PszLit("3mm")
 
