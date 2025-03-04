@@ -1282,7 +1282,7 @@ bool DCD::FEnableDcdCmd(PCMD pcmd, uint32_t *pgrfeds)
     case cidPlaySound:
         if (fselCki != _sel.GrfselGetCkiKid(&cki, pvNil))
             goto LDisable;
-        if (cki.ctg != kctgWave && cki.ctg != kctgMidi)
+        if (cki.ctg != kctgLWave && cki.ctg != kctgLMidi)
             goto LDisable;
         break;
 
@@ -1447,7 +1447,7 @@ bool DCD::FCmdAddPicChunk(PCMD pcmd)
     }
 
     // add the chunk and write the data
-    if (!_FAddChunk(kctgPictNative, &cki, &fCreated))
+    if (!_FAddChunk(kctgLPictNative, &cki, &fCreated))
         goto LCancel;
     cb = ppic->CbOnFile();
     if (!_pcfl->FPut(cb, cki.ctg, cki.cno, &blck) || !ppic->FWrite(&blck))
@@ -1590,7 +1590,7 @@ bool DCD::FCmdAddBitmapChunk(PCMD pcmd)
         vpappb->TGiveAlertSz(PszLit("Reading bitmap file failed"), bkOk, cokExclamation);
         goto LCancel;
     }
-    ctg = fMask ? kctgMask : kctgMbmp;
+    ctg = fMask ? kctgLMask : kctgLMbmp;
 
     // add the chunk and write the data
     if (!_FAddChunk(ctg, &cki, &fCreated))
@@ -2275,13 +2275,13 @@ void DCD::_EditCki(CKI *pcki, int32_t cid)
         // handle 4 character ctg's
         switch (ctg)
         {
-        case kctgPictNative:
+        case kctgLPictNative:
             goto LPic;
-        case kctgMbmp:
-        case kctgMask:
+        case kctgLMbmp:
+        case kctgLMask:
             goto LMbmp;
-        case kctgWave:
-        case kctgMidi:
+        case kctgLWave:
+        case kctgLMidi:
             goto LSound;
         default:
             break;
@@ -2291,10 +2291,10 @@ void DCD::_EditCki(CKI *pcki, int32_t cid)
         ctg = ctg & 0xFFFFFF00L | 0x00000020L;
         switch (ctg)
         {
-        case kctgGst:
+        case kctgLGst:
             cls = kclsGST;
             goto LDocg;
-        case kctgAst:
+        case kctgLAst:
             cls = kclsAST;
             goto LDocg;
         default:
@@ -2305,16 +2305,16 @@ void DCD::_EditCki(CKI *pcki, int32_t cid)
         ctg = ctg & 0xFFFF0000L | 0x00002020L;
         switch (ctg)
         {
-        case kctgGl:
+        case kctgLGl:
             cls = kclsGL;
             goto LDocg;
-        case kctgAl:
+        case kctgLAl:
             cls = kclsAL;
             goto LDocg;
-        case kctgGg:
+        case kctgLGg:
             cls = kclsGG;
             goto LDocg;
-        case kctgAg:
+        case kctgLAg:
             cls = kclsAG;
             goto LDocg;
         default:
@@ -2359,7 +2359,7 @@ void DCD::_EditCki(CKI *pcki, int32_t cid)
 
     case cidPlaySound:
     LSound:
-        if ((pcki->ctg == kctgMidi || pcki->ctg == kctgWave) && pvNil != vpsndm)
+        if ((pcki->ctg == kctgLMidi || pcki->ctg == kctgLWave) && pvNil != vpsndm)
         {
             // play once
             PCRF pcrf;
@@ -2435,7 +2435,7 @@ bool DCD::FCmdImportScript(PCMD pcmd)
     }
 
     // add the chunk and write the data
-    if (!_FAddChunk(kctgScript, &cki, &fCreated))
+    if (!_FAddChunk(kctgLScript, &cki, &fCreated))
         goto LCancel;
     if (!pscpt->FSaveToChunk(_pcfl, cki.ctg, cki.cno))
     {

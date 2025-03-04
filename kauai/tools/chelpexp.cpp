@@ -70,10 +70,10 @@ bool FExportHelpText(PCFL pcfl, PMSNK pmsnk)
     chse.DumpSz(PszLit("#endif"));
 
     pgst = pvNil;
-    for (icki = 0; pcfl->FGetCkiCtg(kctgHelpTopic, icki, &cki); icki++)
+    for (icki = 0; pcfl->FGetCkiCtg(kctgLHelpTopic, icki, &cki); icki++)
     {
         // read the string table if it's there
-        if (pcfl->FGetKidChidCtg(cki.ctg, cki.cno, 0, kctgGst, &kid) &&
+        if (pcfl->FGetKidChidCtg(cki.ctg, cki.cno, 0, kctgLGst, &kid) &&
             (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || pvNil == (pgst = GST::PgstRead(&blck)) ||
              pgst->IvMac() != 6 && (pgst->IvMac() != 5 || !pgst->FAddRgch(PszLit(""), 0))))
         {
@@ -137,7 +137,7 @@ bool FExportHelpText(PCFL pcfl, PMSNK pmsnk)
                 continue;
 
             chse.DumpSz(PszLit(""));
-            if (kid.cki.ctg == kctgTxtPropArgs)
+            if (kid.cki.ctg == kctgLTxtPropArgs)
             {
                 // special handling of argument AG
                 if (!_FWriteHelpPropAg(pcfl, &chse, &kid, &ckiPar))
@@ -145,14 +145,14 @@ bool FExportHelpText(PCFL pcfl, PMSNK pmsnk)
             }
             else
             {
-                if (kid.cki.ctg == kctgGst)
+                if (kid.cki.ctg == kctgLGst)
                 {
                     // put "#ifndef NO_HELP_SYMBOLS" before it
                     chse.DumpSz(PszLit("#ifndef NO_HELP_SYMBOLS"));
                 }
                 if (!_FWriteHelpChunk(pcfl, &chse, &kid, &ckiPar))
                     goto LFail;
-                if (kid.cki.ctg == kctgGst)
+                if (kid.cki.ctg == kctgLGst)
                 {
                     // put "#endif //!NO_HELP_SYMBOLS" after it
                     chse.DumpSz(PszLit("#endif //!NO_HELP_SYMBOLS"));
@@ -206,7 +206,7 @@ bool _FWriteHelpChunk(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
     stn.FFormatSz(PszLit("PARENT('%f', _help_%x_%x, 0x%x)"), pckiPar->ctg, pckiPar->ctg, pckiPar->cno, pkid->chid);
     pchse->DumpSz(stn.Psz());
 
-    if (pkid->cki.ctg == kctgGst)
+    if (pkid->cki.ctg == kctgLGst)
     {
         PGST pgst;
         short bo, osk;
@@ -338,7 +338,7 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
             default:
                 goto LWriteCore;
 
-            case kctgMbmp:
+            case kctgLMbmp:
                 ib = SIZEOF(CKI);
                 if (ib >= cb)
                     goto LWriteCore;
@@ -360,7 +360,7 @@ bool _FWriteHelpPropAg(PCFL pcfl, PCHSE pchse, KID *pkid, CKI *pckiPar)
                 pchse->DumpSz(stn.Psz());
                 break;
 
-            case kctgGokd:
+            case kctgLGokd:
                 ib = SIZEOF(CKI) + SIZEOF(int32_t);
                 if (ib >= cb)
                     goto LWriteCore;

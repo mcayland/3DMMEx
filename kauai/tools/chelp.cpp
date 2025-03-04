@@ -352,12 +352,12 @@ bool APP::FOpenDocFile(PFNI pfni, int32_t cid)
     default:
         if (pvNil == _pcrm && pvNil == (_pcrm = CRM::PcrmNew(1)))
             return fFalse;
-        if (pvNil == _plidPicture && pvNil == (_plidPicture = LID::PlidNew(_pcrm, kctgMbmp)))
+        if (pvNil == _plidPicture && pvNil == (_plidPicture = LID::PlidNew(_pcrm, kctgLMbmp)))
         {
             return fFalse;
         }
         if (pvNil == _plidButton &&
-            pvNil == (_plidButton = LID::PlidNew(_pcrm, kctgGokd, ChidFromSnoDchid(ksnoInit, 0))))
+            pvNil == (_plidButton = LID::PlidNew(_pcrm, kctgLGokd, ChidFromSnoDchid(ksnoInit, 0))))
         {
             return fFalse;
         }
@@ -429,7 +429,7 @@ bool APP::FLoadResFile(PFNI pfni)
         return fFalse;
     }
 
-    if (pcfl->FGetCkiCtg(kctgColorTable, 0, pvNil, pvNil, &blck))
+    if (pcfl->FGetCkiCtg(kctgLColorTable, 0, pvNil, pvNil, &blck))
     {
         PGL pglclr;
 
@@ -626,9 +626,9 @@ bool LID::FRefresh(void)
         {
             cach.pcrf = pcrf;
             cach.cno = cach.cnoMbmp = cki.cno;
-            if (kctgMbmp != _ctg)
+            if (kctgLMbmp != _ctg)
             {
-                if (!pcfl->FGetKidChidCtg(_ctg, cki.cno, _chid, kctgMbmp, &kid))
+                if (!pcfl->FGetKidChidCtg(_ctg, cki.cno, _chid, kctgLMbmp, &kid))
                     continue;
                 cach.cnoMbmp = kid.cki.cno;
             }
@@ -703,7 +703,7 @@ PMBMP LID::PmbmpGet(int32_t icki)
     CACH cach;
 
     _pglcach->Get(icki, &cach);
-    return (PMBMP)cach.pcrf->PbacoFetch(kctgMbmp, cach.cnoMbmp, MBMP::FReadMbmp);
+    return (PMBMP)cach.pcrf->PbacoFetch(kctgLMbmp, cach.cnoMbmp, MBMP::FReadMbmp);
 }
 
 /***************************************************************************
@@ -944,11 +944,11 @@ void LIG::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 
     switch (cki.ctg)
     {
-    case kctgMbmp:
+    case kctgLMbmp:
         phetg->FInsertPicture(pcrf, cki.ctg, cki.cno);
         break;
 
-    case kctgGokd:
+    case kctgLGokd:
         phetg->FInsertButton(pcrf, cki.ctg, cki.cno);
         break;
     }
