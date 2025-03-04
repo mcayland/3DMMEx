@@ -102,7 +102,7 @@ bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
             {
                 continue;
             }
-            ((PDCD)pddg)->FTestScript(kctgScript, lw);
+            ((PDCD)pddg)->FTestScript(kctgLScript, lw);
             continue;
         }
 

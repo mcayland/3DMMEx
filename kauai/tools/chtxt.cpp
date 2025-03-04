@@ -152,7 +152,7 @@ bool CHTDD::FCmdCompileScript(PCMD pcmd)
     if (pvNil == (pdoc = DOC::PdocNew(pvNil)))
         goto LFail;
 
-    if (!pscpt->FSaveToChunk(pdoc->Pcfl(), kctgScript, 0))
+    if (!pscpt->FSaveToChunk(pdoc->Pcfl(), kctgLScript, 0))
     {
     LFail:
         vpappb->TGiveAlertSz(PszLit("Can't create new chunky file"), bkOk, cokExclamation);

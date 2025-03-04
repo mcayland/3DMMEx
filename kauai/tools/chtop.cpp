@@ -325,18 +325,18 @@ PHETD HEDO::PhetdOpenNext(PHETD phetd)
     if (pvNil == phetd)
     {
         // start the search
-        _pcfl->FGetIcki(kctgHelpTopic, 0, &icki);
+        _pcfl->FGetIcki(kctgLHelpTopic, 0, &icki);
     }
     else if (cnoNil != (cki.cno = phetd->Cno()))
     {
-        _pcfl->FGetIcki(kctgHelpTopic, cki.cno + 1, &icki);
+        _pcfl->FGetIcki(kctgLHelpTopic, cki.cno + 1, &icki);
         phetd = pvNil;
     }
 
     if (pvNil == (pdocb = phetd))
     {
         // icki is valid
-        if (_pcfl->FGetCki(icki, &cki) && cki.ctg == kctgHelpTopic)
+        if (_pcfl->FGetCki(icki, &cki) && cki.ctg == kctgLHelpTopic)
         {
             if (pvNil != (phetd = HETD::PhetdFromChunk(this, cki.cno)))
             {
@@ -403,12 +403,12 @@ PHETD HEDO::PhetdOpenPrev(PHETD phetd)
             return phetdNew;
         }
 
-        _pcfl->FGetIcki(kctgHelpTopic + 1, 0, &icki);
+        _pcfl->FGetIcki(kctgLHelpTopic + 1, 0, &icki);
     }
     else
-        _pcfl->FGetIcki(kctgHelpTopic, cki.cno, &icki);
+        _pcfl->FGetIcki(kctgLHelpTopic, cki.cno, &icki);
 
-    if (icki > 0 && _pcfl->FGetCki(icki - 1, &cki) && cki.ctg == kctgHelpTopic)
+    if (icki > 0 && _pcfl->FGetCki(icki - 1, &cki) && cki.ctg == kctgLHelpTopic)
     {
         if (pvNil != (phetdNew = HETD::PhetdFromChunk(this, cki.cno)))
         {
@@ -462,7 +462,7 @@ bool TSEL::FSetIcki(int32_t icki)
     AssertThis(0);
     CKI cki;
 
-    if (icki == ivNil || !_pcfl->FGetCkiCtg(kctgHelpTopic, icki, &cki))
+    if (icki == ivNil || !_pcfl->FGetCkiCtg(kctgLHelpTopic, icki, &cki))
     {
         _SetNil();
         return fFalse;
@@ -498,9 +498,9 @@ void TSEL::Adjust(void)
     AssertPo(_pcfl, 0);
     int32_t dicki;
 
-    if (ivNil == _icki || !_pcfl->FGetIcki(kctgHelpTopic, _cno, &_icki))
+    if (ivNil == _icki || !_pcfl->FGetIcki(kctgLHelpTopic, _cno, &_icki))
         _SetNil();
-    _pcfl->FGetIcki(kctgHelpTopic, 0, &dicki);
+    _pcfl->FGetIcki(kctgLHelpTopic, 0, &dicki);
     _icki -= dicki;
     AssertThis(0);
 }
@@ -582,8 +582,8 @@ void HEDG::InvalCno(CNO cno)
     RC rc;
 
     // we need to recalculate the lnLim
-    _pcfl->FGetIcki(kctgHelpTopic, cno, &icki);
-    _pcfl->FGetIcki(kctgHelpTopic, 0, &ickiT);
+    _pcfl->FGetIcki(kctgLHelpTopic, cno, &icki);
+    _pcfl->FGetIcki(kctgLHelpTopic, 0, &ickiT);
     icki -= ickiT;
 
     // correct the sel
@@ -634,7 +634,7 @@ void HEDG::Draw(PGNV pgnv, RC *prcClip)
 
     // use the sel to find the first icki to draw
     icki = _IckiFromYp(LwMax(prcClip->ypTop, _dypHeader));
-    for (yp = _YpFromIcki(icki); yp < prcClip->ypBottom && _pcfl->FGetCkiCtg(kctgHelpTopic, icki, &cki); icki++)
+    for (yp = _YpFromIcki(icki); yp < prcClip->ypBottom && _pcfl->FGetCkiCtg(kctgLHelpTopic, icki, &cki); icki++)
     {
         // draw the cki description
         _pcfl->FGetName(cki.ctg, cki.cno, &stnT);
@@ -758,7 +758,7 @@ bool HEDG::FCmdKey(PCMD_KEY pcmd)
     RC rc;
 
     icki = _tsel.Icki();
-    ccki = _pcfl->CckiCtg(kctgHelpTopic);
+    ccki = _pcfl->CckiCtg(kctgLHelpTopic);
     switch (pcmd->vk)
     {
     case kvkDown:
@@ -830,7 +830,7 @@ int32_t HEDG::_ScvMax(bool fVert)
         RC rc;
 
         _GetContent(&rc);
-        return LwMax(0, _pcfl->CckiCtg(kctgHelpTopic) - rc.Dyp() / _dypLine + 1);
+        return LwMax(0, _pcfl->CckiCtg(kctgLHelpTopic) - rc.Dyp() / _dypLine + 1);
     }
     return 320;
 }
@@ -862,7 +862,7 @@ bool HEDG::FEnableHedgCmd(PCMD pcmd, uint32_t *pgrfeds)
     case cidPrint:
     case cidSpellCheck:
     case cidDumpText:
-        if (!_pcfl->FGetCkiCtg(kctgHelpTopic, 0, &cki) && pvNil == Phedo()->PdocbChd())
+        if (!_pcfl->FGetCkiCtg(kctgLHelpTopic, 0, &cki) && pvNil == Phedo()->PdocbChd())
         {
             *pgrfeds = fedsDisable;
         }
@@ -962,7 +962,7 @@ bool HEDG::_FCopySel(PDOCB *ppdocb)
         return fTrue;
 
     if (pvNil != (phedo = HEDO::PhedoNew(pvNil, Phedo()->Prca())) &&
-        !_pcfl->FCopy(kctgHelpTopic, _tsel.Cno(), phedo->Pcfl(), &cno))
+        !_pcfl->FCopy(kctgLHelpTopic, _tsel.Cno(), phedo->Pcfl(), &cno))
     {
         ReleasePpo(&phedo);
     }
@@ -983,7 +983,7 @@ void HEDG::_ClearSel(void)
         return;
 
     cno = _tsel.Cno();
-    _pcfl->Delete(kctgHelpTopic, cno);
+    _pcfl->Delete(kctgLHelpTopic, cno);
     Phedo()->InvalAllDdg(cno);
     HETD::CloseDeletedHetd(_pdocb);
 }
@@ -1011,14 +1011,14 @@ bool HEDG::_FPaste(PCLIP pclip, bool fDoIt, int32_t cid)
     if (!pclip->FGetFormat(kclsHEDO, (PDOCB *)&phedo))
         return fFalse;
 
-    if (pvNil == (pcfl = phedo->Pcfl()) || pcfl->CckiCtg(kctgHelpTopic) <= 0)
+    if (pvNil == (pcfl = phedo->Pcfl()) || pcfl->CckiCtg(kctgLHelpTopic) <= 0)
     {
         ReleasePpo(&phedo);
         return fTrue;
     }
 
     _SetSel(ivNil);
-    for (icki = 0; pcfl->FGetCkiCtg(kctgHelpTopic, icki, &cki); icki++)
+    for (icki = 0; pcfl->FGetCkiCtg(kctgLHelpTopic, icki, &cki); icki++)
         fFailed |= !pcfl->FClone(cki.ctg, cki.cno, _pcfl, &cnoSel);
 
     Phedo()->InvalAllDdg(0);
@@ -1249,7 +1249,7 @@ bool HEDG::FCmdPrint(PCMD pcmd)
     // print the topics
     for (icki = 0, pdocb = pvNil;;)
     {
-        if (ivNil != icki && _pcfl->FGetCkiCtg(kctgHelpTopic, icki++, &cki))
+        if (ivNil != icki && _pcfl->FGetCkiCtg(kctgLHelpTopic, icki++, &cki))
         {
             // get a saved topic
             if (pvNil != (phetd = HETD::PhetdFromChunk(phedo, cki.cno)))
@@ -1557,7 +1557,7 @@ bool HEDG::FCmdDump(PCMD pcmd)
     // dump the topics
     for (icki = 0, pdocb = pvNil, fFirst = fTrue;;)
     {
-        if (ivNil != icki && _pcfl->FGetCkiCtg(kctgHelpTopic, icki++, &cki))
+        if (ivNil != icki && _pcfl->FGetCkiCtg(kctgLHelpTopic, icki++, &cki))
         {
             // get a saved topic
             if (pvNil != (phetd = HETD::PhetdFromChunk(phedo, cki.cno)))
@@ -1644,7 +1644,7 @@ void HETD::CloseDeletedHetd(PDOCB pdocb)
         // AssertPo(phetd, 0);
         AssertBasePo(phetd, 0);
         AssertNilOrPo(phetd->_pcfl, 0);
-        if (phetd->_cno != cnoNil && pvNil != phetd->_pcfl && !phetd->_pcfl->FFind(kctgHelpTopic, phetd->_cno))
+        if (phetd->_cno != cnoNil && pvNil != phetd->_pcfl && !phetd->_pcfl->FFind(kctgLHelpTopic, phetd->_cno))
         {
             phetd->CloseAllDdg();
         }
@@ -1708,7 +1708,7 @@ PHETD HETD::PhetdNew(PDOCB pdocb, PRCA prca, PCFL pcfl, CNO cno)
     if (pvNil == (phetd = NewObj HETD(pdocb, prca, pcfl, cno)))
         return pvNil;
 
-    if ((cnoNil == cno) ? !phetd->_FInit() : !phetd->_FReadChunk(pcfl, kctgHelpTopic, cno, fTrue))
+    if ((cnoNil == cno) ? !phetd->_FInit() : !phetd->_FReadChunk(pcfl, kctgLHelpTopic, cno, fTrue))
     {
         PushErc(ercHelpReadFailed);
         ReleasePpo(&phetd);
@@ -1744,7 +1744,7 @@ bool HETD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
         return fFalse;
     }
 
-    if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgGst, &kid))
+    if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLGst, &kid))
     {
         // read the string table
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || pvNil == (_pgst = GST::PgstRead(&blck)) ||
@@ -1815,11 +1815,11 @@ bool HETD::FSave(int32_t cid)
         return fFalse;
     }
 
-    Assert(cki.ctg == kctgHelpTopic, "wrong ctg");
+    Assert(cki.ctg == kctgLHelpTopic, "wrong ctg");
     if (cnoNil != _cno)
     {
-        _pcfl->Delete(kctgHelpTopic, _cno);
-        _pcfl->Move(cki.ctg, cki.cno, kctgHelpTopic, _cno);
+        _pcfl->Delete(kctgLHelpTopic, _cno);
+        _pcfl->Move(cki.ctg, cki.cno, kctgLHelpTopic, _cno);
     }
     else
         _cno = cki.cno;
@@ -1851,7 +1851,7 @@ bool HETD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     if (pvNil != _pgst)
     {
         // add the string table chunk and write it
-        if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, _pgst->CbOnFile(), kctgGst, &cno, &blck) || !_pgst->FWrite(&blck))
+        if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, _pgst->CbOnFile(), kctgLGst, &cno, &blck) || !_pgst->FWrite(&blck))
         {
             pcfl->Delete(pcki->ctg, pcki->cno);
             PushErc(ercHelpSaveFailed);
@@ -2039,7 +2039,7 @@ void HETD::EditHtop(void)
     if (!pdlg->FGetLwFromEdit(kiditCnoSoundTopic, (int32_t *)&_htop.ckiSnd.cno))
     {
         _htop.ckiSnd.cno = cnoNil;
-        _htop.ckiSnd.ctg = kctgWave;
+        _htop.ckiSnd.ctg = kctgLWave;
     }
     else
     {
@@ -2047,7 +2047,7 @@ void HETD::EditHtop(void)
         if (!FIn(stn.Cch(), 1, 5))
         {
             _htop.ckiSnd.cno = cnoNil;
-            _htop.ckiSnd.ctg = kctgWave;
+            _htop.ckiSnd.ctg = kctgLWave;
         }
         else
         {
@@ -2149,7 +2149,7 @@ void HETD::AssertValid(uint32_t grf)
 {
     HETD_PAR::AssertValid(0);
     AssertNilOrPo(_pcfl, 0);
-    Assert(cnoNil == _cno || pvNil != _pcfl && _pcfl->FFind(kctgHelpTopic, _cno), "bad _cno");
+    Assert(cnoNil == _cno || pvNil != _pcfl && _pcfl->FFind(kctgLHelpTopic, _cno), "bad _cno");
     AssertNilOrPo(_pgst, 0);
 }
 
@@ -2232,7 +2232,7 @@ bool HETG::FInsertPicture(PCRF pcrf, CTG ctg, CNO cno)
 {
     AssertThis(0);
     AssertPo(pcrf, 0);
-    Assert(ctg == kctgMbmp, "bad mbmp chunk");
+    Assert(ctg == kctgLMbmp, "bad mbmp chunk");
     int32_t cpMin, cpLim;
     PDLG pdlg;
     STN stn;
@@ -2332,7 +2332,7 @@ bool HETG::FInsertButton(PCRF pcrf, CTG ctg, CNO cno)
 {
     AssertThis(0);
     AssertPo(pcrf, 0);
-    Assert(ctg == kctgGokd, "bad button chunk");
+    Assert(ctg == kctgLGokd, "bad button chunk");
     int32_t cpMin, cpLim;
     int32_t lw;
     PDLG pdlg;
@@ -2725,15 +2725,15 @@ bool HETG::FEnableHetgCmd(PCMD pcmd, uint32_t *pgrfeds)
         {
             switch (*(CTG *)pv)
             {
-            case kctgMbmp:
+            case kctgLMbmp:
                 if (pcmd->cid == cidFormatPicture)
                     *pgrfeds = fedsEnable;
                 break;
-            case kctgGokd:
+            case kctgLGokd:
                 if (pcmd->cid == cidFormatButton)
                     *pgrfeds = fedsEnable;
                 break;
-            case kctgEditControl:
+            case kctgLEditControl:
                 if (pcmd->cid == cidFormatEdit)
                     *pgrfeds = fedsEnable;
                 break;
@@ -2774,7 +2774,7 @@ bool HETG::FCmdFormatPicture(PCMD pcmd)
     if (!Phetd()->FFetchObject(cp, &cpT, &pv, &cb))
         return fTrue;
 
-    if (cp != cpT || !FIn(cb, SIZEOF(CKI), SIZEOF(rgb) + 1) || ((CKI *)pv)->ctg != kctgMbmp)
+    if (cp != cpT || !FIn(cb, SIZEOF(CKI), SIZEOF(rgb) + 1) || ((CKI *)pv)->ctg != kctgLMbmp)
     {
         FreePpv(&pv);
         return fFalse;
@@ -2840,7 +2840,7 @@ bool HETG::FCmdFormatButton(PCMD pcmd)
     if (!Phetd()->FFetchObject(cp, &cpT, &pv, &cb))
         return fTrue;
 
-    if (cp != cpT || !FIn(cb, SIZEOF(CKI) + SIZEOF(int32_t), SIZEOF(rgb) + 1) || ((CKI *)pv)->ctg != kctgGokd)
+    if (cp != cpT || !FIn(cb, SIZEOF(CKI) + SIZEOF(int32_t), SIZEOF(rgb) + 1) || ((CKI *)pv)->ctg != kctgLGokd)
     {
         FreePpv(&pv);
         return fFalse;
@@ -2915,7 +2915,7 @@ bool HETG::FCmdFormatEdit(PCMD pcmd)
     if (!Phetd()->FFetchObject(cp, &cpT, &pv, &cb))
         return fTrue;
 
-    if (cp != cpT || cb != SIZEOF(ecos) || *(CTG *)pv != kctgEditControl)
+    if (cp != cpT || cb != SIZEOF(ecos) || *(CTG *)pv != kctgLEditControl)
     {
         FreePpv(&pv);
         return fFalse;
