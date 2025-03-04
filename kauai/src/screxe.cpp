@@ -1113,7 +1113,7 @@ void SCEB::_MergeStrings(CNO cno, RSC rsc)
         return;
     }
 
-    if (pvNil == (pcabo = (PCABO)_prca->PbacoFetch(kctgStringReg, cno, &_FReadStringReg, pvNil, rsc)))
+    if (pvNil == (pcabo = (PCABO)_prca->PbacoFetch(kctgLStringReg, cno, &_FReadStringReg, pvNil, rsc)))
     {
         Debug(_WarnSz(PszLit("Reading string table failed (cno = 0x%x)"), cno));
         return;
@@ -1403,7 +1403,7 @@ PSCPT SCPT::PscptRead(PCFL pcfl, CTG ctg, CNO cno)
     {
         goto LFail;
     }
-    if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgScriptStrs, &kid))
+    if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLScriptStrs, &kid))
     {
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || pvNil == (pgst = GST::PgstRead(&blck)))
         {
@@ -1490,11 +1490,11 @@ bool SCPT::FSaveToChunk(PCFL pcfl, CTG ctg, CNO cno, bool fPack)
         if (fPack)
             blck.FPackData();
 
-        if (!pcfl->FAddBlck(&blck, kctgScriptStrs, &cnoStrs))
+        if (!pcfl->FAddBlck(&blck, kctgLScriptStrs, &cnoStrs))
             goto LFail;
-        if (!pcfl->FAdoptChild(ctg, cnoT, kctgScriptStrs, cnoStrs))
+        if (!pcfl->FAdoptChild(ctg, cnoT, kctgLScriptStrs, cnoStrs))
         {
-            pcfl->Delete(kctgScriptStrs, cnoStrs);
+            pcfl->Delete(kctgLScriptStrs, cnoStrs);
         LFail:
             pcfl->Delete(ctg, cnoT);
             return fFalse;

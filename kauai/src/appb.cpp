@@ -126,7 +126,7 @@ void APPB::SetCursCno(PRCA prca, CNO cno, bool fLongOp)
 
     PCURS pcurs;
 
-    if (pvNil == (pcurs = (PCURS)prca->PbacoFetch(kctgCursor, cno, CURS::FReadCurs)))
+    if (pvNil == (pcurs = (PCURS)prca->PbacoFetch(kctgLCursor, cno, CURS::FReadCurs)))
     {
         Warn("cursor not found");
         return;
@@ -627,14 +627,14 @@ bool APPB::_FInitSound(int32_t wav)
 
     if (pvNil != (psndv = SDAM::PsdamNew(wav)))
     {
-        vpsndm->FAddDevice(kctgWave, psndv);
+        vpsndm->FAddDevice(kctgLWave, psndv);
         ReleasePpo(&psndv);
     }
 
     // create the midi playback device - use the stream one
     if (pvNil != (psndv = MDPS::PmdpsNew()))
     {
-        vpsndm->FAddDevice(kctgMidi, psndv);
+        vpsndm->FAddDevice(kctgLMidi, psndv);
         ReleasePpo(&psndv);
     }
 

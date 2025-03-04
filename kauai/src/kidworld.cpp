@@ -289,7 +289,7 @@ PGOK WOKS::PgokNew(PGOB pgobPar, int32_t hid, CNO cnoGokd, PRCA prca)
         return pvNil;
     }
 
-    if (pvNil == (pgokd = PgokdFetch(kctgGokd, cnoGokd, prca)))
+    if (pvNil == (pgokd = PgokdFetch(kctgLGokd, cnoGokd, prca)))
         return pvNil;
 
     pgok = GOK::PgokNew(this, pgobPar, hid, pgokd, prca);

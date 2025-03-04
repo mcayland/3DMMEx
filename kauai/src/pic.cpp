@@ -60,7 +60,7 @@ bool PIC::FAddToCfl(PCFL pcfl, CTG ctg, CNO *pcno, CHID chid)
     if (!pcfl->FAdd(0, ctg, pcno))
         return fFalse;
     cb = CbOnFile();
-    if (!pcfl->FAddChild(ctg, *pcno, chid, cb, kctgPictNative, &cnoKid, &blck) || !FWrite(&blck))
+    if (!pcfl->FAddChild(ctg, *pcno, chid, cb, kctgLPictNative, &cnoKid, &blck) || !FWrite(&blck))
     {
         pcfl->Delete(ctg, *pcno);
         TrashVar(pcno);
@@ -89,12 +89,12 @@ bool PIC::FPutInCfl(PCFL pcfl, CTG ctg, CNO cno, CHID chid)
     if (!pcfl->FPut(0, ctg, cno))
         goto LFail;
     cb = CbOnFile();
-    if (!pcfl->FAddChild(ctg, cno, chid, cb, kctgPictNative, &cnoKid, &blck))
+    if (!pcfl->FAddChild(ctg, cno, chid, cb, kctgLPictNative, &cnoKid, &blck))
         goto LFail;
     if (!FWrite(&blck))
     {
         if (!fDelOnFail)
-            pcfl->DeleteChild(ctg, cno, kctgPictNative, cnoKid, chid);
+            pcfl->DeleteChild(ctg, cno, kctgLPictNative, cnoKid, chid);
     LFail:
         if (fDelOnFail)
             pcfl->Delete(ctg, cno);
@@ -105,7 +105,7 @@ bool PIC::FPutInCfl(PCFL pcfl, CTG ctg, CNO cno, CHID chid)
     for (ikid = pcfl->Ckid(ctg, cno); ikid-- > 0;)
     {
         AssertDo(pcfl->FGetKid(ctg, cno, ikid, &kid), 0);
-        if (kid.cki.ctg == kctgPictNative && kid.chid == chid && kid.cki.cno != cnoKid)
+        if (kid.cki.ctg == kctgLPictNative && kid.chid == chid && kid.cki.cno != cnoKid)
             pcfl->DeleteChild(ctg, cno, kid.cki.ctg, kid.cki.cno, kid.chid);
     }
     return fTrue;

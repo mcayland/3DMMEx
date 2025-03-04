@@ -264,7 +264,7 @@ tribool CRF::TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc, int32_t crep)
     BLCK blck;
 
     // see if this CRF contains this resource type
-    if (rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
+    if (rscNil != rsc && !_pcfl->FFind(kctgLRsc, rsc))
         return tNo;
 
     // see if it's in the cache
@@ -348,7 +348,7 @@ PBACO CRF::PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError, RSC rsc)
         *pfError = fFalse;
 
     // see if this CRF contains this resource type
-    if (rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
+    if (rscNil != rsc && !_pcfl->FFind(kctgLRsc, rsc))
         return pvNil;
 
     // see if it's in the cache
@@ -422,7 +422,7 @@ PBACO CRF::PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
     int32_t icre;
 
     // see if it's in the cache
-    if (!_FFindCre(ctg, cno, pfnrpo, &icre) || rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
+    if (!_FFindCre(ctg, cno, pfnrpo, &icre) || rscNil != rsc && !_pcfl->FFind(kctgLRsc, rsc))
     {
         return pvNil;
     }
@@ -446,7 +446,7 @@ bool CRF::FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc)
     int32_t icre;
 
     // see if it's in the cache
-    if (!_FFindCre(ctg, cno, pfnrpo, &icre) || rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
+    if (!_FFindCre(ctg, cno, pfnrpo, &icre) || rscNil != rsc && !_pcfl->FFind(kctgLRsc, rsc))
     {
         return fFalse;
     }
@@ -465,7 +465,7 @@ PCRF CRF::PcrfFindChunk(CTG ctg, CNO cno, RSC rsc)
 {
     AssertThis(0);
 
-    if (!_pcfl->FFind(ctg, cno) || rscNil != rsc && !_pcfl->FFind(kctgRsc, rsc))
+    if (!_pcfl->FFind(ctg, cno) || rscNil != rsc && !_pcfl->FFind(kctgLRsc, rsc))
     {
         return pvNil;
     }
@@ -904,7 +904,7 @@ PCRF CRM::PcrfFindChunk(CTG ctg, CNO cno, RSC rsc)
         _pglpcrf->Get(ipcrf, &pcrf);
         AssertPo(pcrf, 0);
 
-        if (pcrf->Pcfl()->FFind(ctg, cno) && (rscNil == rsc || pcrf->Pcfl()->FFind(kctgRsc, rsc)))
+        if (pcrf->Pcfl()->FFind(ctg, cno) && (rscNil == rsc || pcrf->Pcfl()->FFind(kctgLRsc, rsc)))
         {
             return pcrf;
         }

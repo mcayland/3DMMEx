@@ -1202,7 +1202,7 @@ bool TXRD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText)
     }
 
     // get the text property arguments
-    if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgTxtPropArgs, &kid))
+    if (pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLTxtPropArgs, &kid))
     {
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || pvNil == (_pagcact = AG::PagRead(&blck, &bo, &osk)) ||
             SIZEOF(int32_t) != _pagcact->CbFixed())
@@ -1329,7 +1329,7 @@ bool TXRD::FSaveToFni(FNI *pfni, bool fSetFni)
     if (pvNil == (pcfl = CFL::PcflCreateTemp(pfni)))
         goto LFail;
 
-    if (!FSaveToChunk(pcfl, &cki, fSetFni) || !pcfl->FSave(kctgFramework, pvNil))
+    if (!FSaveToChunk(pcfl, &cki, fSetFni) || !pcfl->FSave(kctgLFramework, pvNil))
         goto LFail;
 
     if (!pcfl->FSetFni(pfni))
@@ -1368,7 +1368,7 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     int32_t cb;
     int16_t osk = koskCur;
 
-    pcki->ctg = kctgRichText;
+    pcki->ctg = kctgLRichText;
     rdop.bo = kboCur;
     rdop.oskFont = _oskFont;
     rdop.dxpDef = _dxpDef;
@@ -1397,7 +1397,7 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
         goto LFail;
 
     cb = _pglmpe->CbOnFile();
-    if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, cb, kctgTxtProps, &cno, &blck) || !_pglmpe->FWrite(&blck))
+    if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, cb, kctgLTxtProps, &cno, &blck) || !_pglmpe->FWrite(&blck))
     {
         goto LFail;
     }
@@ -1405,7 +1405,7 @@ bool TXRD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     if (pvNil != _pagcact && 0 < _pagcact->IvMac())
     {
         cb = _pagcact->CbOnFile();
-        if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, cb, kctgTxtPropArgs, &cno, &blck) || !_pagcact->FWrite(&blck))
+        if (!pcfl->FAddChild(pcki->ctg, pcki->cno, 0, cb, kctgLTxtPropArgs, &cno, &blck) || !_pagcact->FWrite(&blck))
         {
             goto LFail;
         }

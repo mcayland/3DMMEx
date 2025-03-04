@@ -131,7 +131,7 @@ bool TXHD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, uint32_t grftxh
     else if (htopf.bo != kboCur)
         goto LFail;
 
-    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgRichText, &kid))
+    if (!pcfl->FGetKidChidCtg(ctg, cno, 0, kctgLRichText, &kid))
         goto LFail;
 
     if (!TXHD_PAR::_FReadChunk(pcfl, kid.cki.ctg, kid.cki.cno, FPure(grftxhd & ftxhdCopyText)))
@@ -218,12 +218,12 @@ bool TXHD::_FOpenArg(int32_t icact, uint8_t sprm, int16_t bo, int16_t osk)
 
         switch (ctg)
         {
-        case kctgMbmp:
-        case kctgEditControl:
+        case kctgLMbmp:
+        case kctgLEditControl:
             clw = 1;
             goto LSwapBytes;
 
-        case kctgGokd:
+        case kctgLGokd:
             clw = 2;
         LSwapBytes:
             AssertIn(clw, 1, CvFromRgv(rglw) + 1);
@@ -263,7 +263,7 @@ bool TXHD::FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText)
     CKI cki;
     HTOPF htopf;
 
-    pcki->ctg = kctgHelpTopic;
+    pcki->ctg = kctgLHelpTopic;
     htopf.bo = kboCur;
     htopf.osk = koskCur;
     htopf.htop = _htop;
@@ -318,15 +318,15 @@ bool TXHD::_FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *
     _pagcact->GetRgb(icact, 0, SIZEOF(rglw), rglw);
     switch ((CTG)rglw[0])
     {
-    case kctgMbmp:
+    case kctgLMbmp:
         pmbmp = (PMBMP)_prca->PbacoFetch(rglw[0], rglw[1], MBMP::FReadMbmp);
         goto LHaveMbmp;
 
-    case kctgGokd:
+    case kctgLGokd:
         pcrf = _prca->PcrfFindChunk(rglw[0], rglw[1]);
         if (pvNil == pcrf)
             return fFalse;
-        if (!pcrf->Pcfl()->FGetKidChidCtg(rglw[0], rglw[1], 0x10000, kctgMbmp, &kid))
+        if (!pcrf->Pcfl()->FGetKidChidCtg(rglw[0], rglw[1], 0x10000, kctgLMbmp, &kid))
         {
             return fFalse;
         }
@@ -339,7 +339,7 @@ bool TXHD::_FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *
         prc->Offset(-prc->xpLeft, -prc->ypBottom);
         return fTrue;
 
-    case kctgEditControl:
+    case kctgLEditControl:
         pgnv->SetFont(pchp->onn, pchp->grfont, pchp->dypFont, tahLeft, tavBaseline);
         pgnv->GetRcFromRgch(prc, pvNil, 0);
         prc->Inset(0, -1);
@@ -381,16 +381,16 @@ bool TXHD::_FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, in
     _pagcact->GetRgb(icact, 0, SIZEOF(rglw), rglw);
     switch ((CTG)rglw[0])
     {
-    case kctgMbmp:
+    case kctgLMbmp:
         pmbmp = (PMBMP)_prca->PbacoFetch(rglw[0], rglw[1], MBMP::FReadMbmp);
         goto LHaveMbmp;
 
-    case kctgGokd:
+    case kctgLGokd:
         fDrawMbmp = !_fHideButtons;
         pcrf = _prca->PcrfFindChunk(rglw[0], rglw[1]);
         if (pvNil == pcrf)
             return fFalse;
-        if (!pcrf->Pcfl()->FGetKidChidCtg(rglw[0], rglw[1], ChidFromSnoDchid(ksnoInit, 0), kctgMbmp, &kid))
+        if (!pcrf->Pcfl()->FGetKidChidCtg(rglw[0], rglw[1], ChidFromSnoDchid(ksnoInit, 0), kctgLMbmp, &kid))
         {
             return fFalse;
         }
@@ -413,7 +413,7 @@ bool TXHD::_FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, in
         *pxp += rc.Dxp();
         return fTrue;
 
-    case kctgEditControl:
+    case kctgLEditControl:
         pgnv->SetFont(pchp->onn, pchp->grfont, pchp->dypFont, tahLeft, tavBaseline);
         pgnv->GetRcFromRgch(&rc, pvNil, 0, 0, yp);
         rc.Inset(0, -1);
@@ -447,7 +447,7 @@ bool TXHD::FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, i
     void *pv = &cki;
     bool fRet = fFalse;
 
-    cki.ctg = kctgMbmp;
+    cki.ctg = kctgLMbmp;
     cki.cno = cno;
     if (cbExtra > 0)
     {
@@ -482,7 +482,7 @@ bool TXHD::FInsertButton(CNO cno, CNO cnoTopic, void *pvExtra, int32_t cbExtra, 
     void *pv = rgb;
     bool fRet = fFalse;
 
-    pcki->ctg = kctgGokd;
+    pcki->ctg = kctgLGokd;
     pcki->cno = cno;
     *pcnoTopic = cnoTopic;
     if (cbExtra > 0)
@@ -921,7 +921,7 @@ bool TXHG::_FRunScript(uint8_t bGroup, uint32_t grfcust, int32_t hidHit, achar c
     if (cnoNil == htop.cnoScript)
         return fTrue;
 
-    pscpt = (PSCPT)prca->PbacoFetch(kctgScript, htop.cnoScript, SCPT::FReadScript);
+    pscpt = (PSCPT)prca->PbacoFetch(kctgLScript, htop.cnoScript, SCPT::FReadScript);
     if (pvNil != pscpt && pvNil != (psceg = _pwoks->PscegNew(prca, this)))
     {
         AssertPo(pscpt, 0);
@@ -1003,11 +1003,11 @@ PHBAL HBAL::PhbalCreate(PWOKS pwoks, PGOB pgobPar, PRCA prca, CNO cnoTopic, PHTO
     PTXHD ptxhd;
     PHBAL phbal;
 
-    pcrf = prca->PcrfFindChunk(kctgHelpTopic, cnoTopic);
+    pcrf = prca->PcrfFindChunk(kctgLHelpTopic, cnoTopic);
     if (pvNil == pcrf)
         return pvNil;
 
-    ptxhd = TXHD::PtxhdReadChunk(prca, pcrf->Pcfl(), kctgHelpTopic, cnoTopic, pwoks->Pstrg());
+    ptxhd = TXHD::PtxhdReadChunk(prca, pcrf->Pcfl(), kctgLHelpTopic, cnoTopic, pwoks->Pstrg());
     if (pvNil == ptxhd)
         return pvNil;
 

@@ -1762,7 +1762,7 @@ void GOB::SetCursCno(PRCA prca, CNO cno)
     AssertPo(prca, 0);
     PCURS pcurs;
 
-    if (pvNil == (pcurs = (PCURS)prca->PbacoFetch(kctgCursor, cno, CURS::FReadCurs)))
+    if (pvNil == (pcurs = (PCURS)prca->PbacoFetch(kctgLCursor, cno, CURS::FReadCurs)))
     {
         Warn("cursor not found");
         return;

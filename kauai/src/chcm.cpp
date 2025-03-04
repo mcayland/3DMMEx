@@ -2133,7 +2133,7 @@ PCFL CHCM::PcflCompile(PBSF pbsfSrc, PSTN pstnFile, PFNI pfniDst, PMSNK pmsnk)
         }
     }
 
-    if (!FError() && !_pcfl->FSave(kctgChkCmp, pvNil))
+    if (!FError() && !_pcfl->FSave(kctgLChkCmp, pvNil))
         _Error(ertOom);
 
     if (FError())
@@ -2524,7 +2524,7 @@ bool CHDC::FDecompile(PCFL pcflSrc, PMSNK pmsnk, PMSNK pmsnkError)
         STN stnName;
 
         // don't dump these, because they're embedded in the script
-        if (cki.ctg == kctgScriptStrs)
+        if (cki.ctg == kctgLScriptStrs)
             continue;
 
         _pcfl->FGetName(cki.ctg, cki.cno, &stnName);
@@ -2536,7 +2536,7 @@ bool CHDC::FDecompile(PCFL pcflSrc, PMSNK pmsnk, PMSNK pmsnkError)
         // handle 4 character ctg's
         switch (ctg)
         {
-        case kctgScript:
+        case kctgLScript:
             if (_FDumpScript(&cki))
                 goto LEndChunk;
             _pcfl->FGetCki(icki, &cki, pvNil, &blck);
@@ -2547,9 +2547,9 @@ bool CHDC::FDecompile(PCFL pcflSrc, PMSNK pmsnk, PMSNK pmsnkError)
         ctg = ctg & 0xFFFFFF00L | 0x00000020L;
         switch (ctg)
         {
-        case kctgGst:
-        case kctgAst:
-            if (_FDumpStringTable(&blck, kctgAst == ctg))
+        case kctgLGst:
+        case kctgLAst:
+            if (_FDumpStringTable(&blck, kctgLAst == ctg))
                 goto LEndChunk;
             _pcfl->FGetCki(icki, &cki, pvNil, &blck);
             break;
@@ -2559,15 +2559,15 @@ bool CHDC::FDecompile(PCFL pcflSrc, PMSNK pmsnk, PMSNK pmsnkError)
         ctg = ctg & 0xFFFF0000L | 0x00002020L;
         switch (ctg)
         {
-        case kctgGl:
-        case kctgAl:
-            if (_FDumpList(&blck, kctgAl == ctg))
+        case kctgLGl:
+        case kctgLAl:
+            if (_FDumpList(&blck, kctgLAl == ctg))
                 goto LEndChunk;
             _pcfl->FGetCki(icki, &cki, pvNil, &blck);
             break;
-        case kctgGg:
-        case kctgAg:
-            if (_FDumpGroup(&blck, kctgAg == ctg))
+        case kctgLGg:
+        case kctgLAg:
+            if (_FDumpGroup(&blck, kctgLAg == ctg))
                 goto LEndChunk;
             _pcfl->FGetCki(icki, &cki, pvNil, &blck);
             break;
@@ -2586,7 +2586,7 @@ bool CHDC::FDecompile(PCFL pcflSrc, PMSNK pmsnk, PMSNK pmsnkError)
         for (ikid = 0; ikid < ckid;)
         {
             AssertDo(_pcfl->FGetKid(cki.ctg, cki.cno, ikid++, &kid), 0);
-            if (kid.cki.ctg == kctgScriptStrs && cki.ctg == kctgScript)
+            if (kid.cki.ctg == kctgLScriptStrs && cki.ctg == kctgLScript)
                 continue;
             _chse.DumpAdoptCmd(&cki, &kid);
         }
