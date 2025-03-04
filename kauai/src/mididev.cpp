@@ -32,7 +32,7 @@ enum
 
 typedef class MIDO *PMIDO;
 #define MIDO_PAR BASE
-#define kclsMIDO 'MIDO'
+#define kclsMIDO KLCONST4('M', 'I', 'D', 'O')
 class MIDO : public MIDO_PAR
 {
     RTCLASS_DEC
@@ -350,7 +350,7 @@ void MIDO::Close(int32_t sii)
 ***************************************************************************/
 typedef class MPQUE *PMPQUE;
 #define MPQUE_PAR SNQUE
-#define kclsMPQUE 'mpqu'
+#define kclsMPQUE KLCONST4('m', 'p', 'q', 'u')
 class MPQUE : public MPQUE_PAR
 {
     RTCLASS_DEC

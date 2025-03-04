@@ -58,7 +58,7 @@ extern FTG vftgTemp; // the ftg to use for temp files
 ****************************************/
 typedef class FNI *PFNI;
 #define FNI_PAR BASE
-#define kclsFNI 'FNI'
+#define kclsFNI KLCONST3('F', 'N', 'I')
 class FNI : public FNI_PAR
 {
     RTCLASS_DEC
@@ -145,7 +145,7 @@ enum
 };
 
 #define FNE_PAR BASE
-#define kclsFNE 'FNE'
+#define kclsFNE KLCONST3('F', 'N', 'E')
 class FNE : public FNE_PAR
 {
     RTCLASS_DEC

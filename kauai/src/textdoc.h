@@ -23,7 +23,7 @@
 ***************************************************************************/
 typedef class TXDC *PTXDC;
 #define TXDC_PAR DOCB
-#define kclsTXDC 'TXDC'
+#define kclsTXDC KLCONST4('T', 'X', 'D', 'C')
 class TXDC : public TXDC_PAR
 {
     RTCLASS_DEC
@@ -59,7 +59,7 @@ const int32_t kdxpIndentTxdd = 5;
 
 typedef class TXDD *PTXDD;
 #define TXDD_PAR DDG
-#define kclsTXDD 'TXDD'
+#define kclsTXDD KLCONST4('T', 'X', 'D', 'D')
 class TXDD : public TXDD_PAR
 {
     RTCLASS_DEC

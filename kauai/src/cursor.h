@@ -37,7 +37,7 @@ const BOM kbomCurf = 0xC0000000;
 
 typedef class CURS *PCURS;
 #define CURS_PAR BACO
-#define kclsCURS 'CURS'
+#define kclsCURS KLCONST4('C', 'U', 'R', 'S')
 class CURS : public CURS_PAR
 {
     RTCLASS_DEC

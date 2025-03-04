@@ -50,7 +50,7 @@ enum
 
 typedef class SPLC *PSPLC;
 #define SPLC_PAR BASE
-#define kclsSPLC 'SPLC'
+#define kclsSPLC KLCONST4('S', 'P', 'L', 'C')
 class SPLC : public SPLC_PAR
 {
     RTCLASS_DEC

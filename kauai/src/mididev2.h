@@ -22,7 +22,7 @@ typedef class MSMIX *PMSMIX;
 ***************************************************************************/
 typedef class MDPS *PMDPS;
 #define MDPS_PAR SNDMQ
-#define kclsMDPS 'MDPS'
+#define kclsMDPS KLCONST4('M', 'D', 'P', 'S')
 class MDPS : public MDPS_PAR
 {
     RTCLASS_DEC

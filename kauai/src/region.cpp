@@ -24,7 +24,7 @@ int32_t const kcdxpBlock = 100;
 ***************************************************************************/
 typedef class REGBL *PREGBL;
 #define REGBL_PAR BASE
-#define kclsREGBL 'rgbl'
+#define kclsREGBL KLCONST4('r', 'g', 'b', 'l')
 class REGBL : public REGBL_PAR
 {
   protected:

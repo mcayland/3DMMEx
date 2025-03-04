@@ -88,7 +88,7 @@ const achar kchObject = 1;
 const int32_t kcchMaxTxtbCache = 512;
 typedef class TXTB *PTXTB;
 #define TXTB_PAR DOCB
-#define kclsTXTB 'TXTB'
+#define kclsTXTB KLCONST4('T', 'X', 'T', 'B')
 class TXTB : public TXTB_PAR
 {
     RTCLASS_DEC
@@ -179,7 +179,7 @@ class TXTB : public TXTB_PAR
 ***************************************************************************/
 typedef class TXPD *PTXPD;
 #define TXPD_PAR TXTB
-#define kclsTXPD 'TXPD'
+#define kclsTXPD KLCONST4('T', 'X', 'P', 'D')
 class TXPD : public TXPD_PAR
 {
     RTCLASS_DEC
@@ -203,7 +203,7 @@ typedef class RTUN *PRTUN;
 
 typedef class TXRD *PTXRD;
 #define TXRD_PAR TXTB
-#define kclsTXRD 'TXRD'
+#define kclsTXRD KLCONST4('T', 'X', 'R', 'D')
 class TXRD : public TXRD_PAR
 {
     RTCLASS_DEC
@@ -399,7 +399,7 @@ class TXRD : public TXRD_PAR
 ***************************************************************************/
 typedef class RTUN *PRTUN;
 #define RTUN_PAR UNDB
-#define kclsRTUN 'RTUN'
+#define kclsRTUN KLCONST4('R', 'T', 'U', 'N')
 class RTUN : public RTUN_PAR
 {
     RTCLASS_DEC
@@ -437,7 +437,7 @@ enum
 
 typedef class TXTG *PTXTG;
 #define TXTG_PAR DDG
-#define kclsTXTG 'TXTG'
+#define kclsTXTG KLCONST4('T', 'X', 'T', 'G')
 class TXTG : public TXTG_PAR
 {
     RTCLASS_DEC
@@ -544,7 +544,7 @@ class TXTG : public TXTG_PAR
 ***************************************************************************/
 typedef class TXLG *PTXLG;
 #define TXLG_PAR TXTG
-#define kclsTXLG 'TXLG'
+#define kclsTXLG KLCONST4('T', 'X', 'L', 'G')
 class TXLG : public TXLG_PAR
 {
     RTCLASS_DEC
@@ -580,7 +580,7 @@ class TXLG : public TXLG_PAR
 ***************************************************************************/
 typedef class TXRG *PTXRG;
 #define TXRG_PAR TXTG
-#define kclsTXRG 'TXRG'
+#define kclsTXRG KLCONST4('T', 'X', 'R', 'G')
 class TXRG : public TXRG_PAR
 {
     RTCLASS_DEC
@@ -627,7 +627,7 @@ class TXRG : public TXRG_PAR
 ***************************************************************************/
 typedef class TRUL *PTRUL;
 #define TRUL_PAR GOB
-#define kclsTRUL 'TRUL'
+#define kclsTRUL KLCONST4('T', 'R', 'U', 'L')
 class TRUL : public TRUL_PAR
 {
     RTCLASS_DEC

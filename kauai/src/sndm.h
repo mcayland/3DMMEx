@@ -25,7 +25,7 @@ const FTG kftgWave = MacWin('WAVE', 'WAV'); // REVIEW shonk: Mac: file type
 ***************************************************************************/
 typedef class SNDV *PSNDV;
 #define SNDV_PAR BASE
-#define kclsSNDV 'SNDV'
+#define kclsSNDV KLCONST4('S', 'N', 'D', 'V')
 class SNDV : public SNDV_PAR
 {
     RTCLASS_DEC
@@ -70,7 +70,7 @@ class SNDV : public SNDV_PAR
 ****************************************/
 typedef class SNDM *PSNDM;
 #define SNDM_PAR SNDV
-#define kclsSNDM 'SNDM'
+#define kclsSNDM KLCONST4('S', 'N', 'D', 'M')
 class SNDM : public SNDM_PAR
 {
     RTCLASS_DEC
@@ -137,7 +137,7 @@ typedef class SNQUE *PSNQUE;
 
 typedef class SNDMQ *PSNDMQ;
 #define SNDMQ_PAR SNDV
-#define kclsSNDMQ 'snmq'
+#define kclsSNDMQ KLCONST4('s', 'n', 'm', 'q')
 class SNDMQ : public SNDMQ_PAR
 {
     RTCLASS_DEC
@@ -210,7 +210,7 @@ struct SNDIN
     Sound queue for a SNDMQ
 ***************************************************************************/
 #define SNQUE_PAR BASE
-#define kclsSNQUE 'snqu'
+#define kclsSNQUE KLCONST4('s', 'n', 'q', 'u')
 class SNQUE : public SNQUE_PAR
 {
     RTCLASS_DEC

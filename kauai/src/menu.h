@@ -19,7 +19,7 @@
 // Menu Bar class
 typedef class MUB *PMUB;
 #define MUB_PAR BASE
-#define kclsMUB 'MUB'
+#define kclsMUB KLCONST3('M', 'U', 'B')
 class MUB : public MUB_PAR
 {
     RTCLASS_DEC

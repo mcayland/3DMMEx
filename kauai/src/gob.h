@@ -114,7 +114,7 @@ typedef GCB *PGCB;
     Graphics object
 ****************************************/
 #define GOB_PAR CMH
-#define kclsGOB 'GOB'
+#define kclsGOB KLCONST3('G', 'O', 'B')
 class GOB : public GOB_PAR
 {
     RTCLASS_DEC
@@ -334,7 +334,7 @@ enum
 };
 
 #define GTE_PAR BASE
-#define kclsGTE 'GTE'
+#define kclsGTE KLCONST3('G', 'T', 'E')
 class GTE : public GTE_PAR
 {
     RTCLASS_DEC

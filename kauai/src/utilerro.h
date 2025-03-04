@@ -22,7 +22,7 @@ const int32_t kcerdMax = 20;
     Error stack class
 ***************************************************************************/
 #define ERS_PAR BASE
-#define kclsERS 'ERS'
+#define kclsERS KLCONST3('E', 'R', 'S')
 class ERS : public ERS_PAR
 {
     RTCLASS_DEC

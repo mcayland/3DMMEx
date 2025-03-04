@@ -135,7 +135,7 @@ const uint32_t kgrfcmmAll = fcmmThis | fcmmNobody | fcmmOthers;
     Command handler class
 ***************************************************************************/
 #define CMH_PAR BASE
-#define kclsCMH 'CMH'
+#define kclsCMH KLCONST3('C', 'M', 'H')
 class CMH : public CMH_PAR
 {
     RTCLASS_DEC
@@ -205,7 +205,7 @@ enum
 
 typedef class CEX *PCEX;
 #define CEX_PAR BASE
-#define kclsCEX 'CEX'
+#define kclsCEX KLCONST3('C', 'E', 'X')
 class CEX : public CEX_PAR
 {
     RTCLASS_DEC

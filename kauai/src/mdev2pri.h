@@ -52,7 +52,7 @@ typedef HMIDIOUT HMS;
 ***************************************************************************/
 typedef class MDWS *PMDWS;
 #define MDWS_PAR BACO
-#define kclsMDWS 'MDWS'
+#define kclsMDWS KLCONST4('M', 'D', 'W', 'S')
 class MDWS : public MDWS_PAR
 {
     RTCLASS_DEC
@@ -89,7 +89,7 @@ typedef class MISI *PMISI;
 ***************************************************************************/
 typedef class MSQUE *PMSQUE;
 #define MSQUE_PAR SNQUE
-#define kclsMSQUE 'msqu'
+#define kclsMSQUE KLCONST4('m', 's', 'q', 'u')
 class MSQUE : public MSQUE_PAR
 {
     RTCLASS_DEC
@@ -125,7 +125,7 @@ class MSQUE : public MSQUE_PAR
 ***************************************************************************/
 typedef class MSMIX *PMSMIX;
 #define MSMIX_PAR BASE
-#define kclsMSMIX 'msmx'
+#define kclsMSMIX KLCONST4('m', 's', 'm', 'x')
 class MSMIX : public MSMIX_PAR
 {
     RTCLASS_DEC
@@ -206,7 +206,7 @@ typedef void (*PFNMIDI)(uintptr_t luUser, void *pvData, uintptr_t luData);
 
 typedef class MISI *PMISI;
 #define MISI_PAR BASE
-#define kclsMISI 'MISI'
+#define kclsMISI KLCONST4('M', 'I', 'S', 'I')
 class MISI : public MISI_PAR
 {
     RTCLASS_DEC
@@ -259,7 +259,7 @@ class MISI : public MISI_PAR
 ***************************************************************************/
 typedef class WMS *PWMS;
 #define WMS_PAR MISI
-#define kclsWMS 'WMS'
+#define kclsWMS KLCONST3('W', 'M', 'S')
 class WMS : public WMS_PAR
 {
     RTCLASS_DEC
@@ -341,7 +341,7 @@ class WMS : public WMS_PAR
 ***************************************************************************/
 typedef class OMS *POMS;
 #define OMS_PAR MISI
-#define kclsOMS 'OMS'
+#define kclsOMS KLCONST3('O', 'M', 'S')
 class OMS : public OMS_PAR
 {
     RTCLASS_DEC

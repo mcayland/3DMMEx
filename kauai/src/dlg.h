@@ -49,7 +49,7 @@ typedef bool (*PFNDLG)(PDLG pdlg, int32_t *pidit, void *pv);
 
 // dialog class - a DLG is a GG of DITs
 #define DLG_PAR GG
-#define kclsDLG 'DLG'
+#define kclsDLG KLCONST3('D', 'L', 'G')
 class DLG : public DLG_PAR
 {
     RTCLASS_DEC
