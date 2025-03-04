@@ -17,7 +17,7 @@ ASSERTNAME
 ***************************************************************************/
 typedef class DHEX *PDHEX;
 #define DHEX_PAR DOCB
-#define kclsDHEX 'DHEX'
+#define kclsDHEX KLCONST4('D', 'H', 'E', 'X')
 class DHEX : public DHEX_PAR
 {
     RTCLASS_DEC

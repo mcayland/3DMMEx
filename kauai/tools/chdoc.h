@@ -46,7 +46,7 @@ bool FGetCtgFromStn(CTG *pctg, PSTN pstn);
     chunky file doc
 ***************************************************************************/
 #define DOC_PAR DOCB
-#define kclsDOC 'DOC'
+#define kclsDOC KLCONST3('D', 'O', 'C')
 class DOC : public DOC_PAR
 {
     RTCLASS_DEC
@@ -77,7 +77,7 @@ class DOC : public DOC_PAR
     document classes below are all derived from this.
 ***************************************************************************/
 #define DOCE_PAR DOCB
-#define kclsDOCE 'DOCE'
+#define kclsDOCE KLCONST4('D', 'O', 'C', 'E')
 class DOCE : public DOCE_PAR
 {
     RTCLASS_DEC
@@ -108,7 +108,7 @@ class DOCE : public DOCE_PAR
     Hex editor document - for editing any chunk as a hex stream.
 ***************************************************************************/
 #define DOCH_PAR DOCE
-#define kclsDOCH 'DOCH'
+#define kclsDOCH KLCONST4('D', 'O', 'C', 'H')
 class DOCH : public DOCH_PAR
 {
     RTCLASS_DEC
@@ -132,7 +132,7 @@ class DOCH : public DOCH_PAR
     Group editor document - for editing GL, AL, GG, AG, GST, and AST.
 ***************************************************************************/
 #define DOCG_PAR DOCE
-#define kclsDOCG 'DOCG'
+#define kclsDOCG KLCONST4('D', 'O', 'C', 'G')
 class DOCG : public DOCG_PAR
 {
     RTCLASS_DEC
@@ -168,7 +168,7 @@ class DOCG : public DOCG_PAR
     of this class is normally a child doc of a DOCG (but doesn't have to be).
 ***************************************************************************/
 #define DOCI_PAR DOCB
-#define kclsDOCI 'DOCI'
+#define kclsDOCI KLCONST4('D', 'O', 'C', 'I')
 class DOCI : public DOCI_PAR
 {
     RTCLASS_DEC
@@ -211,7 +211,7 @@ class DOCI : public DOCI_PAR
     Picture display document.
 ***************************************************************************/
 #define DOCPIC_PAR DOCE
-#define kclsDOCPIC 'dcpc'
+#define kclsDOCPIC KLCONST4('d', 'c', 'p', 'c')
 class DOCPIC : public DOCPIC_PAR
 {
     RTCLASS_DEC
@@ -242,7 +242,7 @@ class DOCPIC : public DOCPIC_PAR
     MBMP display document.
 ***************************************************************************/
 #define DOCMBMP_PAR DOCE
-#define kclsDOCMBMP 'docm'
+#define kclsDOCMBMP KLCONST4('d', 'o', 'c', 'm')
 class DOCMBMP : public DOCMBMP_PAR
 {
     RTCLASS_DEC
@@ -280,7 +280,7 @@ class DOCMBMP : public DOCMBMP_PAR
     abstract class for line based document windows
 ***************************************************************************/
 #define DCLB_PAR DDG
-#define kclsDCLB 'DCLB'
+#define kclsDCLB KLCONST4('D', 'C', 'L', 'B')
 class DCLB : public DCLB_PAR
 {
     RTCLASS_DEC
@@ -321,7 +321,7 @@ enum
 };
 
 #define SEL_PAR BASE
-#define kclsSEL 'SEL'
+#define kclsSEL KLCONST3 ('S', 'E', 'L')
 class SEL : public SEL_PAR
 {
     RTCLASS_DEC
@@ -395,7 +395,7 @@ class SEL : public SEL_PAR
     Display for chunky document - displays a DOC.
 ***************************************************************************/
 #define DCD_PAR DCLB
-#define kclsDCD 'DCD'
+#define kclsDCD KLCONST3('D', 'C', 'D')
 class DCD : public DCD_PAR
 {
     RTCLASS_DEC
@@ -469,7 +469,7 @@ class DCD : public DCD_PAR
     doesn't necessarily display a DOCH.
 ***************************************************************************/
 #define DCH_PAR DCLB
-#define kclsDCH 'DCH'
+#define kclsDCH KLCONST3('D', 'C', 'H')
 class DCH : public DCH_PAR
 {
     RTCLASS_DEC
@@ -533,7 +533,7 @@ class DCH : public DCH_PAR
     Usually displays a DOCG, but doesn't have to.
 ***************************************************************************/
 #define DCGB_PAR DCLB
-#define kclsDCGB 'DCGB'
+#define kclsDCGB KLCONST4('D', 'C', 'G', 'B')
 class DCGB : public DCGB_PAR
 {
     RTCLASS_DEC
@@ -588,7 +588,7 @@ class DCGB : public DCGB_PAR
     Display GL or AL chunk.
 ***************************************************************************/
 #define DCGL_PAR DCGB
-#define kclsDCGL 'DCGL'
+#define kclsDCGL KLCONST4('D', 'C', 'G', 'L')
 class DCGL : public DCGL_PAR
 {
     RTCLASS_DEC
@@ -607,7 +607,7 @@ class DCGL : public DCGL_PAR
     Display GG or AG chunk.
 ***************************************************************************/
 #define DCGG_PAR DCGB
-#define kclsDCGG 'DCGG'
+#define kclsDCGG KLCONST4('D', 'C', 'G', 'G')
 class DCGG : public DCGG_PAR
 {
     RTCLASS_DEC
@@ -626,7 +626,7 @@ class DCGG : public DCGG_PAR
     Display GST or AST chunk.
 ***************************************************************************/
 #define DCST_PAR DCGB
-#define kclsDCST 'DCST'
+#define kclsDCST KLCONST4('D', 'C', 'S', 'T')
 class DCST : public DCST_PAR
 {
     RTCLASS_DEC
@@ -645,7 +645,7 @@ class DCST : public DCST_PAR
     Display a picture chunk.
 ***************************************************************************/
 #define DCPIC_PAR DDG
-#define kclsDCPIC 'dpic'
+#define kclsDCPIC KLCONST4('d', 'p', 'i', 'c')
 class DCPIC : public DCPIC_PAR
 {
     RTCLASS_DEC
@@ -668,7 +668,7 @@ class DCPIC : public DCPIC_PAR
     Display a MBMP chunk.
 ***************************************************************************/
 #define DCMBMP_PAR DDG
-#define kclsDCMBMP 'dmbp'
+#define kclsDCMBMP KLCONST4('d', 'm', 'b', 'p')
 class DCMBMP : public DCMBMP_PAR
 {
     RTCLASS_DEC
@@ -692,7 +692,7 @@ class DCMBMP : public DCMBMP_PAR
 ***************************************************************************/
 typedef class TSCG *PTSCG;
 #define TSCG_PAR WOKS
-#define kclsTSCG 'TSCG'
+#define kclsTSCG KLCONST4('T', 'S', 'C', 'G')
 class TSCG : public TSCG_PAR
 {
     RTCLASS_DEC
@@ -711,7 +711,7 @@ class TSCG : public TSCG_PAR
 ***************************************************************************/
 typedef class CHTXD *PCHTXD;
 #define CHTXD_PAR TXPD
-#define kclsCHTXD 'chtx'
+#define kclsCHTXD KLCONST4('c', 'h', 't', 'x')
 class CHTXD : public CHTXD_PAR
 {
   protected:
@@ -729,7 +729,7 @@ class CHTXD : public CHTXD_PAR
 ***************************************************************************/
 typedef class CHTDD *PCHTDD;
 #define CHTDD_PAR TXLG
-#define kclsCHTDD 'chtd'
+#define kclsCHTDD KLCONST4('c', 'h', 't', 'd')
 class CHTDD : public CHTDD_PAR
 {
     CMD_MAP_DEC(CHTDD)
