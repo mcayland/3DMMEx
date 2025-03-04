@@ -1,0 +1,6 @@
+file(WRITE "${OUTPUT_FILE}" "// Automatically generated from ${INPUT_FILE}\n")
+file(STRINGS "${INPUT_FILE}" CHUNKTYPES)
+foreach(CHUNKTYPE IN ITEMS ${CHUNKTYPES})
+    string(REGEX REPLACE "^([^ ]+) '([A-z ]+)'.*" "#define kctg\\1 '\\2'" CHUNKTYPE_STR "${CHUNKTYPE}")
+    file(APPEND "${OUTPUT_FILE}" "${CHUNKTYPE_STR}\n")
+endforeach()
