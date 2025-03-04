@@ -45,7 +45,7 @@ struct APET
 ****************************************/
 typedef class APE *PAPE;
 #define APE_PAR GOB
-#define kclsAPE 'APE'
+#define kclsAPE KLCONST3('A', 'P', 'E')
 class APE : public APE_PAR
 {
     RTCLASS_DEC

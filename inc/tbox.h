@@ -68,7 +68,7 @@ enum TBXT
 #define TBXB_PAR GOB
 
 typedef class TBXB *PTBXB;
-#define kclsTBXB 'TBXB'
+#define kclsTBXB KLCONST4('T', 'B', 'X', 'B')
 class TBXB : public TBXB_PAR
 {
     RTCLASS_DEC
@@ -117,7 +117,7 @@ class TBXB : public TBXB_PAR
 #define TBXG_PAR TXRG
 
 typedef class TBXG *PTBXG;
-#define kclsTBXG 'TBXG'
+#define kclsTBXG KLCONST4('T', 'B', 'X', 'G')
 class TBXG : public TBXG_PAR
 {
     RTCLASS_DEC
@@ -202,7 +202,7 @@ const uint32_t kgrfchpAll = (kfchpOnn | kfchpDypFont | kfchpBold | kfchpItalic);
 typedef class TBOX *PTBOX;
 
 #define TBOX_PAR TXRD
-#define kclsTBOX 'TBOX'
+#define kclsTBOX KLCONST4('T', 'B', 'O', 'X')
 class TBOX : public TBOX_PAR
 {
     RTCLASS_DEC
@@ -324,7 +324,7 @@ class TBOX : public TBOX_PAR
 typedef class TCLP *PTCLP;
 
 #define TCLP_PAR DOCB
-#define kclsTCLP 'TCLP'
+#define kclsTCLP KLCONST4('T', 'C', 'L', 'P')
 class TCLP : public TCLP_PAR
 {
     RTCLASS_DEC

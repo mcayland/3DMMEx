@@ -84,7 +84,7 @@ class RIFF
 ****************************************/
 typedef class SREC *PSREC;
 #define SREC_PAR BASE
-#define kclsSREC 'SREC'
+#define kclsSREC KLCONST4('S', 'R', 'E', 'C')
 class SREC : public SREC_PAR
 {
     RTCLASS_DEC

@@ -17,7 +17,7 @@
 ****************************************/
 typedef class KWA *PKWA;
 #define KWA_PAR WOKS
-#define kclsKWA 'KWA'
+#define kclsKWA KLCONST3('K', 'W', 'A')
 class KWA : public KWA_PAR
 {
     RTCLASS_DEC
@@ -90,7 +90,7 @@ enum
 ****************************************/
 typedef class APP *PAPP;
 #define APP_PAR APPB
-#define kclsAPP 'APP'
+#define kclsAPP KLCONST3('A', 'P', 'P')
 class APP : public APP_PAR
 {
     RTCLASS_DEC

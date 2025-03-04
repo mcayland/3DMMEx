@@ -45,7 +45,7 @@ extern APP vapp;
 // Studio class
 //
 #define STDIO_PAR GOB
-#define kclsSTDIO 'stio'
+#define kclsSTDIO KLCONST4('s', 't', 'i', 'o')
 class STDIO : public STDIO_PAR
 {
     RTCLASS_DEC
@@ -208,7 +208,7 @@ class STDIO : public STDIO_PAR
 };
 
 #define SMCC_PAR MCC
-#define kclsSMCC 'SMCC'
+#define kclsSMCC KLCONST4('S', 'M', 'C', 'C')
 class SMCC : public SMCC_PAR
 {
     RTCLASS_DEC

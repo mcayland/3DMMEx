@@ -101,7 +101,7 @@ inline void StopAllMovieSounds(void)
 ****************************************/
 typedef class MSND *PMSND;
 #define MSND_PAR BACO
-#define kclsMSND 'MSND'
+#define kclsMSND KLCONST4('M', 'S', 'N', 'D')
 class MSND : public MSND_PAR
 {
     RTCLASS_DEC
@@ -191,7 +191,7 @@ class MSND : public MSND_PAR
 ****************************************/
 typedef class MSQ *PMSQ;
 #define MSQ_PAR CMH
-#define kclsMSQ 'MSQ'
+#define kclsMSQ KLCONST3('M', 'S', 'Q')
 
 const int32_t kcsqeGrow = 10; // quantum growth for sqe
 

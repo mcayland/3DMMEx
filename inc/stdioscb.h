@@ -23,7 +23,7 @@ const int32_t kctsFps = 20;
 
 #define SSCB_PAR BASE
 typedef class SSCB *PSSCB;
-#define kclsSSCB 'SSCB'
+#define kclsSSCB KLCONST4('S', 'S', 'C', 'B')
 class SSCB : public SSCB_PAR
 {
     RTCLASS_DEC

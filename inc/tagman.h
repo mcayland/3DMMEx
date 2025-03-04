@@ -80,7 +80,7 @@ enum
 ****************************************/
 typedef class TAGM *PTAGM;
 #define TAGM_PAR BASE
-#define kclsTAGM 'TAGM'
+#define kclsTAGM KLCONST4('T', 'A', 'G', 'M')
 class TAGM : public TAGM_PAR
 {
     RTCLASS_DEC

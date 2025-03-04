@@ -33,7 +33,7 @@ void SetGokState(int32_t kid, int32_t st);
 *****************************/
 typedef class ESL *PESL;
 #define ESL_PAR GOK
-#define kclsESL 'ESL'
+#define kclsESL KLCONST3('E', 'S', 'L')
 class ESL : public ESL_PAR
 {
     RTCLASS_DEC
@@ -66,7 +66,7 @@ typedef class ESLT *PESLT; // SNE needs this
 ****************************************/
 typedef class SNE *PSNE;
 #define SNE_PAR EDSL
-#define kclsSNE 'SNE'
+#define kclsSNE KLCONST3('S', 'N', 'E')
 class SNE : public SNE_PAR
 {
     RTCLASS_DEC
@@ -91,7 +91,7 @@ class SNE : public SNE_PAR
 ****************************************/
 typedef class ESLT *PESLT;
 #define ESLT_PAR ESL
-#define kclsESLT 'ESLT'
+#define kclsESLT KLCONST4('E', 'S', 'L', 'T')
 class ESLT : public ESLT_PAR
 {
     RTCLASS_DEC
@@ -138,7 +138,7 @@ class ESLT : public ESLT_PAR
 ********************************************/
 typedef class ESLA *PESLA;
 #define ESLA_PAR ESL
-#define kclsESLA 'ESLA'
+#define kclsESLA KLCONST4('E', 'S', 'L', 'A')
 class ESLA : public ESLA_PAR
 {
     RTCLASS_DEC
@@ -172,7 +172,7 @@ class ESLA : public ESLA_PAR
 ****************************************/
 typedef class LSND *PLSND;
 #define LSND_PAR BASE
-#define kclsLSND 'LSND'
+#define kclsLSND KLCONST4('L', 'S', 'N', 'D')
 class LSND : public LSND_PAR
 {
     RTCLASS_DEC
@@ -214,7 +214,7 @@ class LSND : public LSND_PAR
 ****************************************/
 typedef class ESLL *PESLL;
 #define ESLL_PAR ESL
-#define kclsESLL 'ESLL'
+#define kclsESLL KLCONST4('E', 'S', 'L', 'L')
 class ESLL : public ESLL_PAR
 {
     RTCLASS_DEC
@@ -253,7 +253,7 @@ class ESLL : public ESLL_PAR
 ****************************************/
 typedef class ESLR *PESLR;
 #define ESLR_PAR ESL
-#define kclsESLR 'ESLR'
+#define kclsESLR KLCONST4('E', 'S', 'L', 'R')
 class ESLR : public ESLR_PAR
 {
     RTCLASS_DEC

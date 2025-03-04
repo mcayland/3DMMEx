@@ -19,7 +19,7 @@
 ****************************************/
 typedef class TAGL *PTAGL;
 #define TAGL_PAR BASE
-#define kclsTAGL 'TAGL'
+#define kclsTAGL KLCONST4('T', 'A', 'G', 'L')
 class TAGL : public TAGL_PAR
 {
     RTCLASS_DEC

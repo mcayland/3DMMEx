@@ -329,7 +329,7 @@ struct SMM
 ***********************************************/
 typedef class ACTR *PACTR;
 #define ACTR_PAR BASE
-#define kclsACTR 'ACTR'
+#define kclsACTR KLCONST4('A', 'C', 'T', 'R')
 class ACTR : public ACTR_PAR
 {
     RTCLASS_DEC
@@ -688,7 +688,7 @@ class ACTR : public ACTR_PAR
 //
 typedef class ACLP *PACLP;
 #define ACLP_PAR DOCB
-#define kclsACLP 'ACLP'
+#define kclsACLP KLCONST4('A', 'C', 'L', 'P')
 class ACLP : public ACLP_PAR
 {
     RTCLASS_DEC

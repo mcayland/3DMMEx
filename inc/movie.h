@@ -119,7 +119,7 @@ enum
 #define MVU_PAR DDG
 
 typedef class MVU *PMVU;
-#define kclsMVU 'MVU'
+#define kclsMVU KLCONST3('M', 'V', 'U')
 class MVU : public MVU_PAR
 {
     RTCLASS_DEC
@@ -357,7 +357,7 @@ class MVU : public MVU_PAR
 class MCC;
 
 typedef MCC *PMCC;
-#define kclsMCC 'MCC'
+#define kclsMCC KLCONST3('M', 'C', 'C')
 class MCC : public MCC_PAR
 {
   protected:
@@ -542,7 +542,7 @@ const int32_t kccamMax = 9;
 typedef class MVIE *PMVIE;
 
 #define MVIE_PAR DOCB
-#define kclsMVIE 'MVIE'
+#define kclsMVIE KLCONST4('M', 'V', 'I', 'E')
 class MVIE : public MVIE_PAR
 {
     RTCLASS_DEC

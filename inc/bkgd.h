@@ -101,7 +101,7 @@ const BOM kbomBds = 0x5f000000 | kbomTag >> 8;
 ****************************************/
 typedef class BKGD *PBKGD;
 #define BKGD_PAR BACO
-#define kclsBKGD 'BKGD'
+#define kclsBKGD KLCONST4('B', 'K', 'G', 'D')
 class BKGD : public BKGD_PAR
 {
     RTCLASS_DEC

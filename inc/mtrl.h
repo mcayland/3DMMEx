@@ -50,7 +50,7 @@ const BOM kbomMtrlf = 0x5D530000;
 ****************************************/
 typedef class MTRL *PMTRL;
 #define MTRL_PAR BACO
-#define kclsMTRL 'MTRL'
+#define kclsMTRL KLCONST4('M', 'T', 'R', 'L')
 class MTRL : public MTRL_PAR
 {
     RTCLASS_DEC
@@ -94,7 +94,7 @@ class MTRL : public MTRL_PAR
 ****************************************/
 typedef class CMTL *PCMTL;
 #define CMTL_PAR BACO
-#define kclsCMTL 'CMTL'
+#define kclsCMTL KLCONST4('C', 'M', 'T', 'L')
 class CMTL : public CMTL_PAR
 {
     RTCLASS_DEC

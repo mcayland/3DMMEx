@@ -34,7 +34,7 @@ enum
     utRep,
 };
 
-#define kclsSUNA 'SUNA'
+#define kclsSUNA KLCONST4('S', 'U', 'N', 'A')
 class SUNA : public SUNA_PAR
 {
     RTCLASS_DEC
@@ -110,7 +110,7 @@ typedef class SCEN *PSCEN;
 //
 
 #define SCEN_PAR BASE
-#define kclsSCEN 'SCEN'
+#define kclsSCEN KLCONST4('S', 'C', 'E', 'N')
 class SCEN : public SCEN_PAR
 {
     RTCLASS_DEC
