@@ -61,7 +61,7 @@ enum
 
 typedef class APPB *PAPPB;
 #define APPB_PAR CMH
-#define kclsAPPB 'APPB'
+#define kclsAPPB KLCONST4('A', 'P', 'P', 'B')
 class APPB : public APPB_PAR
 {
     RTCLASS_DEC

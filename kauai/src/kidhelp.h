@@ -60,7 +60,7 @@ enum
 
 typedef class TXHD *PTXHD;
 #define TXHD_PAR TXRD
-#define kclsTXHD 'TXHD'
+#define kclsTXHD KLCONST4('T', 'X', 'H', 'D')
 class TXHD : public TXHD_PAR
 {
     RTCLASS_DEC
@@ -116,7 +116,7 @@ class TXHD : public TXHD_PAR
 ***************************************************************************/
 typedef class TXHG *PTXHG;
 #define TXHG_PAR TXRG
-#define kclsTXHG 'TXHG'
+#define kclsTXHG KLCONST4('T', 'X', 'H', 'G')
 class TXHG : public TXHG_PAR
 {
     RTCLASS_DEC
@@ -155,7 +155,7 @@ class TXHG : public TXHG_PAR
 ***************************************************************************/
 typedef class HBAL *PHBAL;
 #define HBAL_PAR GOK
-#define kclsHBAL 'HBAL'
+#define kclsHBAL KLCONST4('H', 'B', 'A', 'L')
 class HBAL : public HBAL_PAR
 {
     RTCLASS_DEC
@@ -180,7 +180,7 @@ class HBAL : public HBAL_PAR
 ***************************************************************************/
 typedef class HBTN *PHBTN;
 #define HBTN_PAR GOK
-#define kclsHBTN 'HBTN'
+#define kclsHBTN KLCONST4('H', 'B', 'T', 'N')
 class HBTN : public HBTN_PAR
 {
     RTCLASS_DEC

@@ -21,7 +21,7 @@
 ***************************************************************************/
 typedef class CLIP *PCLIP;
 #define CLIP_PAR BASE
-#define kclsCLIP 'CLIP'
+#define kclsCLIP KLCONST4('C', 'L', 'I', 'P')
 class CLIP : public CLIP_PAR
 {
     RTCLASS_DEC

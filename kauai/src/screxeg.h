@@ -21,7 +21,7 @@
 ****************************************/
 typedef class SCEG *PSCEG;
 #define SCEG_PAR SCEB
-#define kclsSCEG 'SCEG'
+#define kclsSCEG KLCONST4('S', 'C', 'E', 'G')
 class SCEG : public SCEG_PAR
 {
     RTCLASS_DEC

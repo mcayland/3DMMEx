@@ -111,7 +111,7 @@ typedef TOK *PTOK;
 
 typedef class LEXB *PLEXB;
 #define LEXB_PAR BASE
-#define kclsLEXB 'LEXB'
+#define kclsLEXB KLCONST4('L', 'E', 'X', 'B')
 class LEXB : public LEXB_PAR
 {
     RTCLASS_DEC

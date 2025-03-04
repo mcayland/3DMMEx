@@ -103,7 +103,7 @@ class STBL : public STBL_PAR
 ***************************************************************************/
 typedef class CAMS *PCAMS;
 #define CAMS_PAR BACO
-#define kclsCAMS 'CAMS'
+#define kclsCAMS KLCONST4('C', 'A', 'M', 'S')
 class CAMS : public CAMS_PAR
 {
     RTCLASS_DEC
@@ -170,7 +170,7 @@ class AMNOT : public AMNOT_PAR
     Audioman queue.
 ***************************************************************************/
 #define AMQUE_PAR SNQUE
-#define kclsAMQUE 'amqu'
+#define kclsAMQUE KLCONST4('a', 'm', 'q', 'u')
 class AMQUE : public AMQUE_PAR
 {
     RTCLASS_DEC

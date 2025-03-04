@@ -68,7 +68,7 @@ const BOM kbomKid = 0xFC000000;
 ***************************************************************************/
 typedef class CFL *PCFL;
 #define CFL_PAR BLL
-#define kclsCFL 'CFL'
+#define kclsCFL KLCONST3('C', 'F', 'L')
 class CFL : public CFL_PAR
 {
     RTCLASS_DEC
@@ -284,7 +284,7 @@ enum
 };
 
 #define CGE_PAR BASE
-#define kclsCGE 'CGE'
+#define kclsCGE KLCONST3('C', 'G', 'E')
 class CGE : public CGE_PAR
 {
     RTCLASS_DEC

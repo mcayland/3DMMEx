@@ -20,7 +20,7 @@
 ***************************************************************************/
 typedef class CODC *PCODC;
 #define CODC_PAR BASE
-#define kclsCODC 'CODC'
+#define kclsCODC KLCONST4('C', 'O', 'D', 'C')
 class CODC : public CODC_PAR
 {
     RTCLASS_DEC
@@ -40,7 +40,7 @@ class CODC : public CODC_PAR
 ***************************************************************************/
 typedef class CODM *PCODM;
 #define CODM_PAR BASE
-#define kclsCODM 'CODM'
+#define kclsCODM KLCONST4('C', 'O', 'D', 'M')
 class CODM : public CODM_PAR
 {
     RTCLASS_DEC
@@ -100,7 +100,7 @@ class CODM : public CODM_PAR
 ***************************************************************************/
 typedef class KCDC *PKCDC;
 #define KCDC_PAR CODC
-#define kclsKCDC 'KCDC'
+#define kclsKCDC KLCONST4('K', 'C', 'D', 'C')
 class KCDC : public KCDC_PAR
 {
     RTCLASS_DEC

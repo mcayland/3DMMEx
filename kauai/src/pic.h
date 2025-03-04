@@ -26,7 +26,7 @@ const FTG kftgEnhMeta = 'EMF';
 ***************************************************************************/
 typedef class PIC *PPIC;
 #define PIC_PAR BACO
-#define kclsPIC 'PIC'
+#define kclsPIC KLCONST3('P', 'I', 'C')
 class PIC : public PIC_PAR
 {
     RTCLASS_DEC

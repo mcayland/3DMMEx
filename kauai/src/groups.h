@@ -39,7 +39,7 @@ enum
     all group classes
 ****************************************/
 #define GRPB_PAR BASE
-#define kclsGRPB 'GRPB'
+#define kclsGRPB KLCONST4('G', 'R', 'P', 'B')
 class GRPB : public GRPB_PAR
 {
     RTCLASS_DEC
@@ -115,7 +115,7 @@ class GRPB : public GRPB_PAR
     GL and AL
 ****************************************/
 #define GLB_PAR GRPB
-#define kclsGLB 'GLB'
+#define kclsGLB KLCONST3('G', 'L', 'B')
 class GLB : public GLB_PAR
 {
     RTCLASS_DEC
@@ -144,7 +144,7 @@ class GLB : public GLB_PAR
     GL is the basic dynamic array
 ****************************************/
 #define GL_PAR GLB
-#define kclsGL 'GL'
+#define kclsGL KLCONST2('G', 'L')
 class GL : public GL_PAR
 {
     RTCLASS_DEC
@@ -194,7 +194,7 @@ class GL : public GL_PAR
     Allocated (fixed index) list class
 ****************************************/
 #define AL_PAR GLB
-#define kclsAL 'AL'
+#define kclsAL KLCONST2('A', 'L')
 class AL : public AL_PAR
 {
     RTCLASS_DEC
@@ -241,7 +241,7 @@ class AL : public AL_PAR
 ****************************************/
 const BOM kbomLoc = 0xF0000000;
 #define GGB_PAR GRPB
-#define kclsGGB 'GGB'
+#define kclsGGB KLCONST3('G', 'G', 'B')
 class GGB : public GGB_PAR
 {
     RTCLASS_DEC
@@ -311,7 +311,7 @@ class GGB : public GGB_PAR
     General Group - based on GGB
 ****************************************/
 #define GG_PAR GGB
-#define kclsGG 'GG'
+#define kclsGG KLCONST2('G', 'G')
 class GG : public GG_PAR
 {
     RTCLASS_DEC
@@ -346,7 +346,7 @@ class GG : public GG_PAR
     Allocated Group - based on GGB
 ****************************************/
 #define AG_PAR GGB
-#define kclsAG 'AG'
+#define kclsAG KLCONST2('A', 'G')
 class AG : public AG_PAR
 {
     RTCLASS_DEC
@@ -389,7 +389,7 @@ const int32_t kcchMaxGst = kcchMaxStn;
     GST and AST.
 ****************************************/
 #define GSTB_PAR GRPB
-#define kclsGSTB 'GSTB'
+#define kclsGSTB KLCONST4('G', 'S', 'T', 'B')
 class GSTB : public GSTB_PAR
 {
     RTCLASS_DEC
@@ -458,7 +458,7 @@ class GSTB : public GSTB_PAR
     String table
 ****************************************/
 #define GST_PAR GSTB
-#define kclsGST 'GST'
+#define kclsGST KLCONST3('G', 'S', 'T')
 class GST : public GST_PAR
 {
     RTCLASS_DEC
@@ -493,7 +493,7 @@ class GST : public GST_PAR
     Allocated string table
 ****************************************/
 #define AST_PAR GSTB
-#define kclsAST 'AST'
+#define kclsAST KLCONST3('A', 'S', 'T')
 class AST : public AST_PAR
 {
     RTCLASS_DEC
