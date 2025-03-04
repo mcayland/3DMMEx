@@ -37,7 +37,7 @@ RTCLASS(TCLP)
 typedef class TUNT *PTUNT;
 
 #define TUNT_PAR MUNB
-#define kclsTUNT 'TUNT'
+#define kclsTUNT KLCONST4('T', 'U', 'N', 'T')
 class TUNT : public TUNT_PAR
 {
     RTCLASS_DEC
@@ -76,7 +76,7 @@ RTCLASS(TUNT)
 typedef class TUNS *PTUNS;
 
 #define TUNS_PAR MUNB
-#define kclsTUNS 'TUNS'
+#define kclsTUNS KLCONST4('T', 'U', 'N', 'S')
 class TUNS : public TUNS_PAR
 {
     RTCLASS_DEC
@@ -115,7 +115,7 @@ RTCLASS(TUNS)
 typedef class TUNH *PTUNH;
 
 #define TUNH_PAR MUNB
-#define kclsTUNH 'TUNH'
+#define kclsTUNH KLCONST4('T', 'U', 'N', 'H')
 class TUNH : public TUNH_PAR
 {
     RTCLASS_DEC
@@ -160,7 +160,7 @@ RTCLASS(TUNH)
 typedef class TUND *PTUND;
 
 #define TUND_PAR MUNB
-#define kclsTUND 'TUND'
+#define kclsTUND KLCONST4('T', 'U', 'N', 'D')
 class TUND : public TUND_PAR
 {
     RTCLASS_DEC
@@ -195,7 +195,7 @@ RTCLASS(TUND)
 typedef class TUNC *PTUNC;
 
 #define TUNC_PAR MUNB
-#define kclsTUNC 'TUNC'
+#define kclsTUNC KLCONST4('T', 'U', 'N', 'C')
 class TUNC : public TUNC_PAR
 {
     RTCLASS_DEC
