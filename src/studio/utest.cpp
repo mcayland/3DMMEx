@@ -1515,7 +1515,7 @@ bool APP::_FDisplayHomeLogo(void)
     int16_t bo;
     int16_t osk;
 
-    if (!_pcfl->FFind(kctgColorTable, kcnoGlcrInit, &blck))
+    if (!_pcfl->FFind(kctgLColorTable, kcnoGlcrInit, &blck))
         return fFalse;
     pglclr = GL::PglRead(&blck, &bo, &osk);
     if (pvNil == pglclr)
@@ -1523,7 +1523,7 @@ bool APP::_FDisplayHomeLogo(void)
     GPT::SetActiveColors(pglclr, fpalIdentity);
     ReleasePpo(&pglclr);
 
-    if (!_pcfl->FFind(kctgMbmp, kcnoMbmpHomeLogo, &blck))
+    if (!_pcfl->FFind(kctgLMbmp, kcnoMbmpHomeLogo, &blck))
         return fFalse;
     pmbmp = MBMP::PmbmpRead(&blck);
     if (pvNil == pmbmp)
@@ -1698,7 +1698,7 @@ PGST APP::_PgstRead(CNO cno)
     int32_t istn;
     int32_t lwExtra;
 
-    if (!_pcfl->FFind(kctgGst, cno, &blck))
+    if (!_pcfl->FFind(kctgLGst, cno, &blck))
         return pvNil;
     pgst = GST::PgstRead(&blck, &bo, &osk);
     if (pvNil == pgst)
@@ -1774,7 +1774,7 @@ bool APP::_FShowSplashScreen(void)
     BLCK blck;
     PMBMP pmbmp;
 
-    if (!_pcfl->FFind(kctgMbmp, kcnoMbmpSplash, &blck))
+    if (!_pcfl->FFind(kctgLMbmp, kcnoMbmpSplash, &blck))
         return fFalse;
     pmbmp = MBMP::PmbmpRead(&blck);
     if (pvNil == pmbmp)
@@ -1797,7 +1797,7 @@ bool APP::_FPlaySplashSound(void)
     pcrf = CRF::PcrfNew(_pcfl, 0);
     if (pvNil == pcrf)
         return fFalse;
-    vpsndm->SiiPlay(pcrf, kctgMidi, kcnoMidiSplash);
+    vpsndm->SiiPlay(pcrf, kctgLMidi, kcnoMidiSplash);
     ReleasePpo(&pcrf);
 
     return fTrue;
@@ -1845,7 +1845,7 @@ bool APP::_FInitCrm(void)
     if (pvNil == psceg)
         goto LFail;
 
-    pscpt = (PSCPT)_pcrmAll->PbacoFetch(kctgScript, kcnoInitShared, SCPT::FReadScript);
+    pscpt = (PSCPT)_pcrmAll->PbacoFetch(kctgLScript, kcnoInitShared, SCPT::FReadScript);
     if (pvNil == pscpt)
         goto LFail;
 
@@ -1958,7 +1958,7 @@ bool APP::_FInitBuilding(void)
     if (pvNil == psceg)
         goto LFail;
 
-    pscpt = (PSCPT)_pcrmAll->PbacoFetch(kctgScript, kcnoStartApp, SCPT::FReadScript);
+    pscpt = (PSCPT)_pcrmAll->PbacoFetch(kctgLScript, kcnoStartApp, SCPT::FReadScript);
     if (pvNil == pscpt)
         goto LFail;
 

@@ -621,7 +621,7 @@ OBJECTREG( "theater - volume slidepath", kgobTheaterVolume, 9, 110, 451, kcrsHan
 	ENDCHUNK
 	REP_ANIM( CHID1( krepMouseDnOn), "slider")	
 		// repeat up to 30000 times.
-		.siiLoop = PlaySoundThis(kctgWave, kwavDing, 2, 0x00010000, 30000, 1,
+		.siiLoop = PlaySoundThis(kctgSWave, kwavDing, 2, 0x00010000, 30000, 1,
 				ksclBldgSound);	
 		While( 1 );
 			y = YMouseThis();
@@ -843,7 +843,7 @@ OBJECT( "Biopage 31 mask",  kgobTheater2m1, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 31 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 31 );
@@ -856,7 +856,7 @@ OBJECT( "Biopage 32 mask",  kgobTheater2m2, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 32 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 32 );
@@ -869,7 +869,7 @@ OBJECT( "Biopage 33 mask",  kgobTheater2m3, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 33 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kctgSWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 33 );

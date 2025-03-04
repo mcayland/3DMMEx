@@ -18,28 +18,28 @@ PALETTECHUNK ("Initial Palette", kcnoGlcrInit, "studio\bmp\homelogo.bmp")
 //
 // Home Logo
 //
-CHUNK (kctgMbmp kcnoMbmpHomeLogo "Home Logo")
+CHUNK (kctgSMbmp kcnoMbmpHomeLogo "Home Logo")
 	PACK BITMAP (0 0 0) "studio\bmp\homelogo.bmp"
 ENDCHUNK
 
 //
 // Splash Screen
 //
-CHUNK (kctgMbmp kcnoMbmpSplash "Splash Screen")
+CHUNK (kctgSMbmp kcnoMbmpSplash "Splash Screen")
 	PACK BITMAP (0 0 0) "studio\bmp\splash.bmp"
 ENDCHUNK
 
 //
 // Splash Sound
 //
-CHUNK (kctgMidi kcnoMidiSplash "Splash Sound")
+CHUNK (kctgSMidi kcnoMidiSplash "Splash Sound")
 	MIDI "studio\bmp\splash.mid"
 ENDCHUNK
 
 //
 // Studio filenames
 //
-CHUNK (kctgGst kcnoGstStudioFiles "Studio Filenames")
+CHUNK (kctgSGst kcnoGstStudioFiles "Studio Filenames")
 	LONG
 	GST(4)
 	ITEM "studio"			1048576 // 1MB cache
@@ -49,7 +49,7 @@ ENDCHUNK
 //
 // Building filenames
 //
-CHUNK (kctgGst kcnoGstBuildingFiles "Building Filenames")
+CHUNK (kctgSGst kcnoGstBuildingFiles "Building Filenames")
 	LONG
 	GST(4)					 
 	ITEM "building"			1572864 	// 1.5MB cache
@@ -60,7 +60,7 @@ ENDCHUNK
 //
 // Shared filenames
 //
-CHUNK (kctgGst kcnoGstSharedFiles "Shared Filenames")
+CHUNK (kctgSGst kcnoGstSharedFiles "Shared Filenames")
 	LONG
 	GST(4)
 	ITEM "shared"			524288 	// 512K cache

@@ -204,7 +204,7 @@ bool STDIO::_FOpenStudio(bool fPaletteFade)
     for (icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
     {
         pcrf = _pcrm->PcrfGet(icrf);
-        if (pcrf->Pcfl()->FFind(kctgGst, kcnoGstMisc, &blck))
+        if (pcrf->Pcfl()->FFind(kctgLGst, kcnoGstMisc, &blck))
         {
             _pgstMisc = GST::PgstRead(&blck);
             break;
@@ -224,7 +224,7 @@ bool STDIO::_FOpenStudio(bool fPaletteFade)
     for (icrf = 0; icrf < _pcrm->Ccrf(); icrf++)
     {
         pcrf = _pcrm->PcrfGet(icrf);
-        if (pcrf->Pcfl()->FFind(kctgColorTable, kidPalette, &blck))
+        if (pcrf->Pcfl()->FFind(kctgLColorTable, kidPalette, &blck))
         {
             _pglclr = GL::PglRead(&blck);
             if (_pglclr != pvNil)
@@ -237,7 +237,7 @@ bool STDIO::_FOpenStudio(bool fPaletteFade)
     // kidStudio should be kcnoStudio according to Hungarian, but the "kid"
     // prefix is entrenched into the script/help stuff and can't be easily
     // all changed to kcno.
-    if (pvNil == (pscpt = (PSCPT)_pcrm->PbacoFetch(kctgScript, kidStudio, SCPT::FReadScript)))
+    if (pvNil == (pscpt = (PSCPT)_pcrm->PbacoFetch(kctgLScript, kidStudio, SCPT::FReadScript)))
     {
         goto LFail;
     }
@@ -2468,9 +2468,9 @@ void STDIO::PlayUISound(int32_t tool, int32_t grfcust)
     //
     // Find the sound and play it
     //
-    if ((pcrf = _pcrm->PcrfFindChunk(kctgWave, cno)) != pvNil)
+    if ((pcrf = _pcrm->PcrfFindChunk(kctgLWave, cno)) != pvNil)
     {
-        vpsndm->SiiPlay(pcrf, kctgWave, cno, ksqnNone, kvlmFull, cactRepeat, 0, 0, ksclUISound);
+        vpsndm->SiiPlay(pcrf, kctgLWave, cno, ksqnNone, kvlmFull, cactRepeat, 0, 0, ksclUISound);
     }
 }
 

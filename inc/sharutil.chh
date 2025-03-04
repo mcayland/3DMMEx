@@ -220,7 +220,7 @@
 	If( ::siiVoice );\
 		StopSound( ::siiVoice );\
 	End;\
-	::siiVoice = PlaySoundThis(kctgWave, w, 0, 0x00010000, 1, 0, ksclBldgSound)
+	::siiVoice = PlaySoundThis(kctgSWave, w, 0, 0x00010000, 1, 0, ksclBldgSound)
 
 //	CreateHelpGob( GET_CURRENTPLACE(), t )	Was used for putting up hearing impaired balloon
 

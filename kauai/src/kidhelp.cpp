@@ -738,7 +738,7 @@ bool TXHG::_FInit(void)
 
         switch (*(CTG *)pv)
         {
-        case kctgEditControl:
+        case kctgLEditControl:
             if (cb < SIZEOF(ECOS))
                 goto LContinue;
             dxp = ((ECOS *)pv)->dxp;
@@ -766,7 +766,7 @@ bool TXHG::_FInit(void)
                 return fFalse;
             break;
 
-        case kctgGokd:
+        case kctgLGokd:
             if (cb < SIZEOF(CKI) + SIZEOF(CNO))
                 goto LContinue;
             pcki = (CKI *)pv;

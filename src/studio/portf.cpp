@@ -719,7 +719,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
         {
             // Select the appropriate bitmap to display.
 
-            if ((pmbmp = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, cnoDisplay, MBMP::FReadMbmp)))
+            if ((pmbmp = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgLMbmp, cnoDisplay, MBMP::FReadMbmp)))
             {
                 PGPT pgpt;
                 HPEN hpen, hpenold;
@@ -826,7 +826,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
             MapWindowPoints(hwndPreview, hwndCustom, (POINT *)&ptBtn, 1);
 
             // First the home button.
-            if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, kcnoMbmpPortBtnHome, MBMP::FReadMbmp)))
+            if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgLMbmp, kcnoMbmpPortBtnHome, MBMP::FReadMbmp)))
             {
                 pmbmpBtn->GetRc(&rcBmp);
 
@@ -840,7 +840,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
             }
 
             // Now the cancel button.
-            if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, kcnoMbmpPortBtnCancel, MBMP::FReadMbmp)))
+            if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgLMbmp, kcnoMbmpPortBtnCancel, MBMP::FReadMbmp)))
             {
                 pmbmpBtn->GetRc(&rcBmp);
 
@@ -854,7 +854,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
             }
 
             // Now the ok button.
-            if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, kcnoMbmpPortBtnOk, MBMP::FReadMbmp)))
+            if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgLMbmp, kcnoMbmpPortBtnOk, MBMP::FReadMbmp)))
             {
                 pmbmpBtn->GetRc(&rcBmp);
 
@@ -903,9 +903,9 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
             if (pdiPortfolio->cnoWave != cnoNil)
             {
                 // There is a sound for the portfolio, so find it.
-                if ((pcrf = ((APP *)vpappb)->PcrmAll()->PcrfFindChunk(kctgWave, pdiPortfolio->cnoWave)) != pvNil)
+                if ((pcrf = ((APP *)vpappb)->PcrmAll()->PcrfFindChunk(kctgLWave, pdiPortfolio->cnoWave)) != pvNil)
                 {
-                    vpsndm->SiiPlay(pcrf, kctgWave, pdiPortfolio->cnoWave);
+                    vpsndm->SiiPlay(pcrf, kctgLWave, pdiPortfolio->cnoWave);
                 }
             }
 
@@ -1033,7 +1033,7 @@ void RepaintPortfolio(HWND hwndCustom)
     }
 
     // Get the background bitmap first.
-    if ((pmbmp = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, cnoBack, MBMP::FReadMbmp)))
+    if ((pmbmp = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgLMbmp, cnoBack, MBMP::FReadMbmp)))
     {
         PGPT pgpt;
         HPEN hpen, hpenold;
@@ -1151,7 +1151,7 @@ void RepaintPortfolio(HWND hwndCustom)
                             continue;
                         }
 
-                        if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, cnoBtn, MBMP::FReadMbmp)))
+                        if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgLMbmp, cnoBtn, MBMP::FReadMbmp)))
                         {
                             HWND hwndBtn = GetDlgItem(hwndCustom, iBtnId);
                             RCS rcsBtn;
