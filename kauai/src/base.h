@@ -33,6 +33,17 @@
     static bool FWouldBe(int32_t cls);                                                                                 \
                                                                                                                        \
   public:                                                                                                              \
+    virtual bool FIs(int32_t cls) override;                                                                            \
+                                                                                                                       \
+  public:                                                                                                              \
+    virtual int32_t Cls(void) override;
+
+// RTCLASS_DEC for the top-level BASE class
+#define RTCLASS_DEC_BASE                                                                                               \
+  public:                                                                                                              \
+    static bool FWouldBe(int32_t cls);                                                                                 \
+                                                                                                                       \
+  public:                                                                                                              \
     virtual bool FIs(int32_t cls);                                                                                     \
                                                                                                                        \
   public:                                                                                                              \
@@ -48,13 +59,13 @@
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
-    virtual bool FIs(int32_t cls)                                                                                      \
+    virtual bool FIs(int32_t cls) override                                                                             \
     {                                                                                                                  \
         return FWouldBe(cls);                                                                                          \
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
-    virtual int32_t Cls(void)                                                                                          \
+    virtual int32_t Cls(void) override                                                                                 \
     {                                                                                                                  \
         return kcls##foo;                                                                                              \
     }
@@ -169,7 +180,12 @@ inline void ResumeAssertValid(void)
 
 #define MARKMEM                                                                                                        \
   public:                                                                                                              \
+    virtual void MarkMem(void) override;
+
+#define MARKMEM_BASE                                                                                                   \
+  public:                                                                                                              \
     virtual void MarkMem(void);
+
 #define ASSERT                                                                                                         \
   public:                                                                                                              \
     void AssertValid(uint32_t grf);
@@ -197,6 +213,7 @@ void MarkUtilMem(void);
 #define AssertThis(grf)
 #define AssertBaseThis(grf)
 #define MARKMEM
+#define MARKMEM_BASE
 #define ASSERT
 #define NOCOPY(cls)
 #define MarkUtilMem()
@@ -223,8 +240,8 @@ void MarkUtilMem(void);
 #define kclsBASE 'BASE'
 class BASE
 {
-    RTCLASS_DEC
-    MARKMEM
+    RTCLASS_DEC_BASE
+    MARKMEM_BASE
     ASSERT
 
   private:
