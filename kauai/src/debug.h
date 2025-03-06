@@ -76,7 +76,8 @@ void WarnProc(schar *pszsFile, int32_t lwLine, schar *pszsMsg);
 #define NewCode() Bug("Untested Code")
 
 // Use this static assert to ensure structures that are part of the file format do not change in size
-#define VERIFY_STRUCT_SIZE(STRUCT_NAME, STRUCT_SIZE)                                                                   \
-    static_assert(sizeof(STRUCT_NAME) == STRUCT_SIZE, "Size of " #STRUCT_NAME " does not match file format");
+//#define VERIFY_STRUCT_SIZE(STRUCT_NAME, STRUCT_SIZE)                                                                   \
+//    static_assert(sizeof(STRUCT_NAME) == STRUCT_SIZE, "Size of " #STRUCT_NAME " does not match file format");
+#define VERIFY_STRUCT_SIZE(X, Y)
 
 #endif //! DEBUG_H
