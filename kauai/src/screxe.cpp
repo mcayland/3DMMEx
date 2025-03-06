@@ -123,7 +123,7 @@ void SCEB::MarkMem(void)
     Run the given script.  (prglw, clw) is the list of parameters for the
     script.
 ***************************************************************************/
-bool SCEB::FRunScript(PSCPT pscpt, int32_t *prglw, int32_t clw, int32_t *plwReturn, bool *pfPaused)
+bool SCEB::FRunScript(PSCPT pscpt, uintptr_t *prglw, int32_t clw, int32_t *plwReturn, bool *pfPaused)
 {
     AssertThis(0);
     return FAttachScript(pscpt, prglw, clw) && FResume(plwReturn, pfPaused);
@@ -132,7 +132,7 @@ bool SCEB::FRunScript(PSCPT pscpt, int32_t *prglw, int32_t clw, int32_t *plwRetu
 /***************************************************************************
     Attach a script to this SCEB and pause the script.
 ***************************************************************************/
-bool SCEB::FAttachScript(PSCPT pscpt, int32_t *prglw, int32_t clw)
+bool SCEB::FAttachScript(PSCPT pscpt, uintptr_t *prglw, int32_t clw)
 {
     AssertThis(0);
     AssertPo(pscpt, 0);
@@ -312,7 +312,7 @@ bool SCEB::FResume(int32_t *plwReturn, bool *pfPaused)
 /***************************************************************************
     Put the parameters in the local variable list.
 ***************************************************************************/
-void SCEB::_AddParameters(int32_t *prglw, int32_t clw)
+void SCEB::_AddParameters(uintptr_t *prglw, int32_t clw)
 {
     AssertThis(0);
     AssertIn(clw, 1, kcbMax);

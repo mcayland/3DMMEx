@@ -196,7 +196,7 @@ bool STDIO::_FOpenStudio(bool fPaletteFade)
     bool fRet = fFalse;
     int32_t icrf;
     PCRF pcrf;
-    int32_t lwParm;
+    uintptr_t lwParm;
 
     vapp.BeginLongOp();
 
@@ -1901,7 +1901,7 @@ void STDIO::PauseType(WIT wit)
     AssertThis(0);
 
     PGOK pgok;
-    int32_t fFlag;
+    uintptr_t fFlag;
 
     fFlag = FPure(wit == witUntilSnd);
 

@@ -151,7 +151,7 @@ class SCEB : public SCEB_PAR
     void _ConcatStrs(int32_t stidSrc1, int32_t stidSrc2, int32_t stidDst);
     void _LenStr(int32_t stid);
 
-    virtual void _AddParameters(int32_t *prglw, int32_t clw);
+    virtual void _AddParameters(uintptr_t *prglw, int32_t clw);
     virtual void _AddStrings(PGST pgst);
     virtual bool _FExecVarOp(int32_t op, RTVN *prtvn);
     virtual bool _FExecOp(int32_t op);
@@ -175,10 +175,10 @@ class SCEB : public SCEB_PAR
     SCEB(PRCA prca = pvNil, PSTRG pstrg = pvNil);
     ~SCEB(void);
 
-    virtual bool FRunScript(PSCPT pscpt, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
+    virtual bool FRunScript(PSCPT pscpt, uintptr_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                             bool *pfPaused = pvNil);
     virtual bool FResume(int32_t *plwReturn = pvNil, bool *pfPaused = pvNil);
-    virtual bool FAttachScript(PSCPT pscpt, int32_t *prglw = pvNil, int32_t clw = 0);
+    virtual bool FAttachScript(PSCPT pscpt, uintptr_t *prglw = pvNil, int32_t clw = 0);
     virtual void Free(void);
 };
 

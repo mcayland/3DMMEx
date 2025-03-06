@@ -131,7 +131,7 @@ HWND GOB::_HwndNewMdi(PSTN pstnTitle)
     hwnd = CreateMDIWindow(PszLit("MDI"), pstnTitle->Psz(), lwStyle, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                            CW_USEDEFAULT, vwig.hwndClient, vwig.hinst, 0L);
     if (hNil != hwnd && pvNil != vpmubCur)
-        vpmubCur->FAddListCid(cidChooseWnd, (int32_t)hwnd, pstnTitle);
+        vpmubCur->FAddListCid(cidChooseWnd, (uintptr_t)hwnd, pstnTitle);
     return hwnd;
 }
 
@@ -148,7 +148,7 @@ void GOB::_DestroyHwnd(HWND hwnd)
     if (GetParent(hwnd) == vwig.hwndClient && vwig.hwndClient != hNil)
     {
         if (pvNil != vpmubCur)
-            vpmubCur->FRemoveListCid(cidChooseWnd, (int32_t)hwnd);
+            vpmubCur->FRemoveListCid(cidChooseWnd, (uintptr_t)hwnd);
         SendMessage(vwig.hwndClient, WM_MDIDESTROY, (WPARAM)hwnd, 0);
     }
     else
@@ -218,7 +218,7 @@ void GOB::SetHwndName(PSTN pstn)
     }
     if (pvNil != vpmubCur)
     {
-        vpmubCur->FChangeListCid(cidChooseWnd, (int32_t)_hwnd, pvNil, (int32_t)_hwnd, pstn);
+        vpmubCur->FChangeListCid(cidChooseWnd, (uintptr_t)_hwnd, pvNil, (uintptr_t)_hwnd, pstn);
     }
     SetWindowText(_hwnd, pstn->Psz());
 }

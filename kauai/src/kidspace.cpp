@@ -994,7 +994,7 @@ bool GOK::_FFilterCmd(PCMD pcmd, CHID chidScript, bool *pfFilter)
     AssertThis(0);
     AssertVarMem(pcmd);
     AssertVarMem(pfFilter);
-    int32_t rglw[6];
+    uintptr_t rglw[6];
     int32_t lw;
     bool fGokExists;
     tribool tRet;
@@ -1377,7 +1377,7 @@ void GOK::SetNoSlip(bool fNoSlip)
     succeeded.
     CAUTION: this GOK may not exist on return.
 ***************************************************************************/
-bool GOK::FRunScript(CHID chid, int32_t *prglw, int32_t clw, int32_t *plwReturn, tribool *ptSuccess)
+bool GOK::FRunScript(CHID chid, uintptr_t *prglw, int32_t clw, int32_t *plwReturn, tribool *ptSuccess)
 {
     AssertThis(0);
     AssertNilOrVarMem(plwReturn);
@@ -1400,7 +1400,7 @@ bool GOK::FRunScript(CHID chid, int32_t *prglw, int32_t clw, int32_t *plwReturn,
     was a failure, tYes if the script exists and running it succeeded.
     CAUTION: this GOK may not exist on return.
 ***************************************************************************/
-bool GOK::FRunScriptCno(CNO cno, int32_t *prglw, int32_t clw, int32_t *plwReturn, tribool *ptSuccess)
+bool GOK::FRunScriptCno(CNO cno, uintptr_t *prglw, int32_t clw, int32_t *plwReturn, tribool *ptSuccess)
 {
     AssertThis(0);
     AssertNilOrVarMem(plwReturn);
@@ -1479,7 +1479,7 @@ bool GOK::FCmdClicked(PCMD_MOUSE pcmd)
     AssertThis(0);
     PGOK pgok;
     PGOB pgob;
-    int32_t rglw[3];
+    uintptr_t rglw[3];
     int32_t lw;
     tribool tRet;
     CUME cume;

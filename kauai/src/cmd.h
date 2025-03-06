@@ -46,7 +46,7 @@ struct CMD
     PCMH pcmh;             // the target of the command - may be nil
     int32_t cid;           // the command id
     PGG pgg;               // additional parameters for the command
-    int32_t rglw[kclwCmd]; // standard parameters
+    uintptr_t rglw[kclwCmd]; // standard parameters
 };
 typedef CMD *PCMD;
 

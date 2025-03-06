@@ -335,9 +335,9 @@ bool SCEG::_FExecOp(int32_t op)
 
             GobMayDie();
             if (kopRunScriptCnoGob == op || kopRunScriptCnoThis == op)
-                ((PGOK)pgob)->FRunScriptCno(lw1, (int32_t *)pv, clw, &lw2, &tRet);
+                ((PGOK)pgob)->FRunScriptCno(lw1, (uintptr_t *)pv, clw, &lw2, &tRet);
             else
-                ((PGOK)pgob)->FRunScript(lw1, (int32_t *)pv, clw, &lw2, &tRet);
+                ((PGOK)pgob)->FRunScript(lw1, (uintptr_t *)pv, clw, &lw2, &tRet);
             if (tYes != tRet)
             {
                 Debug(_WarnSz(PszLit("Running script failed (chid = 0x%x, gid = %d)"), lw1, hid));

@@ -416,9 +416,9 @@ class GOK : public GOK_PAR
     virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse);
     virtual int32_t LwState(void);
 
-    virtual bool FRunScript(CHID chid, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
+    virtual bool FRunScript(CHID chid, uintptr_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                             tribool *ptSuccess = pvNil);
-    virtual bool FRunScriptCno(CNO cno, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
+    virtual bool FRunScriptCno(CNO cno, uintptr_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                                tribool *ptSuccess = pvNil);
     virtual bool FChangeState(int32_t sno);
     virtual bool FSetRep(CHID chid, uint32_t grfgok = fgokKillAnim, CTG ctg = ctgNil, int32_t dxp = 0, int32_t dyp = 0,

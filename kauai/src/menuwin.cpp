@@ -145,7 +145,7 @@ void MUB::EnqueueWcid(int32_t wcid)
     Adds an item identified by the given list cid, long parameter
     and string.
 ***************************************************************************/
-bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
+bool MUB::FAddListCid(int32_t cid, uintptr_t lw0, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -242,7 +242,7 @@ bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
     or string.  If pstn is non-nil, it is used to find the item.
     If pstn is nil, lw0 is used to identify the item.
 ***************************************************************************/
-bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn)
+bool MUB::FRemoveListCid(int32_t cid, uintptr_t lw0, PSTN pstn)
 {
     AssertThis(0);
     AssertNilOrPo(pstn, 0);
@@ -435,7 +435,7 @@ bool MUB::FRemoveAllListCid(int32_t cid)
     lwNew is set as the new long parameter and if pstnNew is non-nil,
     it is used as the new menu item text.
 ***************************************************************************/
-bool MUB::FChangeListCid(int32_t cid, int32_t lwOld, PSTN pstnOld, int32_t lwNew, PSTN pstnNew)
+bool MUB::FChangeListCid(int32_t cid, uintptr_t lwOld, PSTN pstnOld, uintptr_t lwNew, PSTN pstnNew)
 {
     AssertThis(0);
     AssertNilOrPo(pstnOld, 0);

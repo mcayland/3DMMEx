@@ -929,12 +929,12 @@ bool TXHG::_FRunScript(uint8_t bGroup, uint32_t grfcust, int32_t hidHit, achar c
 
         PWOKS pwoks = _pwoks;
         int32_t grid = Grid();
-        int32_t rglw[5];
+        uintptr_t rglw[5];
 
-        rglw[0] = (int32_t)bGroup;
+        rglw[0] = (uintptr_t)bGroup;
         rglw[1] = grfcust;
         rglw[2] = hidHit;
-        rglw[3] = (int32_t)(uint8_t)ch;
+        rglw[3] = (uintptr_t)(uint8_t)ch;
         rglw[4] = cnoTopic;
 
         // be careful not to use TXHG variables here in case the TXHG is
