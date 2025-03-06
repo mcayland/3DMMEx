@@ -168,7 +168,7 @@ class CFL : public CFL_PAR
     static void DumpStn(PSTN pstn, PFIL pfil = pvNil);
 #endif // CHUNK_STATS
 
-    virtual void Release(void);
+    virtual void Release(void) override;
     bool FSetGrfcfl(uint32_t grfcfl, uint32_t grfcflMask = (uint32_t)~0);
     void Mark(void)
     {

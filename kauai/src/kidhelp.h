@@ -81,15 +81,16 @@ class TXHD : public TXHD_PAR
     ~TXHD(void);
 
     virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil, uint32_t grftxhd = ftxhdNil);
-    virtual bool _FOpenArg(int32_t icact, uint8_t sprm, int16_t bo, int16_t osk);
-    virtual bool _FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc);
-    virtual bool _FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip);
+    virtual bool _FOpenArg(int32_t icact, uint8_t sprm, int16_t bo, int16_t osk) override;
+    virtual bool _FGetObjectRc(int32_t icact, uint8_t sprm, PGNV pgnv, PCHP pchp, RC *prc) override;
+    virtual bool _FDrawObject(int32_t icact, uint8_t sprm, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp,
+                              RC *prcClip) override;
 
   public:
     static PTXHD PtxhdReadChunk(PRCA prca, PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg = pvNil,
                                 uint32_t grftxhd = ftxhdExpandStrings);
 
-    virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse);
+    virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse) override;
 
     bool FInsertPicture(CNO cno, void *pvExtra, int32_t cbExtra, int32_t cp, int32_t ccpDel, PCHP pchp = pvNil,
                         uint32_t grfdoc = fdocUpdate);
@@ -130,7 +131,7 @@ class TXHG : public TXHG_PAR
     PWOKS _pwoks;
 
     TXHG(PWOKS pwoks, PTXHD ptxhd, PGCB pgcb);
-    virtual bool _FInit(void);
+    virtual bool _FInit(void) override;
     virtual bool _FRunScript(uint8_t bGroup, uint32_t grfcust, int32_t hidHit, achar ch, CNO cnoTopic = cnoNil,
                              int32_t *plwRet = pvNil);
 
@@ -141,10 +142,10 @@ class TXHG : public TXHG_PAR
     {
         return (PTXHD)_ptxtb;
     }
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
-    virtual bool FCmdBadKey(PCMD_BADKEY pcmd);
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdBadKey(PCMD_BADKEY pcmd) override;
     virtual bool FGroupFromPt(int32_t xp, int32_t yp, uint8_t *pbGroup = pvNil, CNO *pcnoTopic = pvNil);
     virtual void DoHit(uint8_t bGroup, CNO cnoTopic, uint32_t grfcust, int32_t hidHit);
     virtual void SetCursor(uint32_t grfcust);
@@ -164,7 +165,7 @@ class HBAL : public HBAL_PAR
     PTXHG _ptxhg;
 
     HBAL(GCB *pgcb);
-    virtual void _SetGorp(PGORP pgorp, int32_t dxp, int32_t dyp);
+    virtual void _SetGorp(PGORP pgorp, int32_t dxp, int32_t dyp) override;
     virtual bool _FInit(PWOKS pwoks, PTXHD ptxhd, HTOP *phtop, PRCA prca);
     virtual bool _FSetTopic(PTXHD ptxhd, PHTOP phtop, PRCA prca);
 
@@ -195,8 +196,8 @@ class HBTN : public HBTN_PAR
     static PHBTN PhbtnNew(PWOKS pwoks, PGOB pgobPar, int32_t hid, CNO cno, PRCA prca, uint8_t bGroup, CNO cnoTopic,
                           int32_t xpLeft, int32_t ypBottom);
 
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual bool FCmdClicked(PCMD_MOUSE pcmd);
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual bool FCmdClicked(PCMD_MOUSE pcmd) override;
 };
 
 #endif //! KIDHELP_H

@@ -35,8 +35,8 @@ class MP : public MP_PAR
     PCMH _pcmh;   // command handler to enqueue command to
 
   protected:
-    virtual void _ApplySelection(int32_t ithumSelect, int32_t sid);
-    virtual int32_t _IthumFromThum(int32_t thumSelect, int32_t sidSelect);
+    virtual void _ApplySelection(int32_t ithumSelect, int32_t sid) override;
+    virtual int32_t _IthumFromThum(int32_t thumSelect, int32_t sidSelect) override;
     MP(PGCB pgcb) : MP_PAR(pgcb)
     {
     }
@@ -46,7 +46,7 @@ class MP : public MP_PAR
     static PMP PmpNew(int32_t kidParent, int32_t kidMenu, PRCA prca, PCMD pcmd, BWS bws, int32_t ithumSelect,
                       int32_t sidSelect, CKI ckiRoot, CTG ctg, PCMH pcmh, int32_t cid, bool fMoveTop);
 
-    virtual bool FCmdSelIdle(PCMD pcmd);
+    virtual bool FCmdSelIdle(PCMD pcmd) override;
 };
 
 /************************************
@@ -65,8 +65,8 @@ class MPFNT : public MPFNT_PAR
   protected:
     void _AdjustRc(int32_t cthum, int32_t cfrm);
 
-    virtual void _ApplySelection(int32_t ithumSelect, int32_t sid);
-    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar);
+    virtual void _ApplySelection(int32_t ithumSelect, int32_t sid) override;
+    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar) override;
     MPFNT(PGCB pgcb) : MPFNT_PAR(pgcb)
     {
     }
@@ -74,7 +74,7 @@ class MPFNT : public MPFNT_PAR
   public:
     static PMPFNT PmpfntNew(PRCA prca, int32_t kidParent, int32_t kidMenu, PCMD pcmd, int32_t ithumSelect, PGST pgst);
 
-    virtual bool FCmdSelIdle(PCMD pcmd);
+    virtual bool FCmdSelIdle(PCMD pcmd) override;
 };
 
 #endif // POPUP_H

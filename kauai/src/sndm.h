@@ -104,30 +104,31 @@ class SNDM : public SNDM_PAR
     virtual void RemoveSndv(CTG ctg);
 
     // inherited methods
-    virtual bool FActive(void);
-    virtual void Activate(bool fActive);
-    virtual void Suspend(bool fSuspend);
-    virtual void SetVlm(int32_t vlm);
-    virtual int32_t VlmCur(void);
+    virtual bool FActive(void) override;
+    virtual void Activate(bool fActive) override;
+    virtual void Suspend(bool fSuspend) override;
+    virtual void SetVlm(int32_t vlm) override;
+    virtual int32_t VlmCur(void) override;
 
     virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull,
-                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil);
+                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0,
+                            int32_t scl = sclNil) override;
 
-    virtual void Stop(int32_t sii);
-    virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual void Stop(int32_t sii) override;
+    virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual void Pause(int32_t sii);
-    virtual void PauseAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual void Pause(int32_t sii) override;
+    virtual void PauseAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual void Resume(int32_t sii);
-    virtual void ResumeAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual void Resume(int32_t sii) override;
+    virtual void ResumeAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual bool FPlaying(int32_t sii);
-    virtual bool FPlayingAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual bool FPlaying(int32_t sii) override;
+    virtual bool FPlayingAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual void Flush(void);
-    virtual void BeginSynch(void);
-    virtual void EndSynch(void);
+    virtual void Flush(void) override;
+    virtual void BeginSynch(void) override;
+    virtual void EndSynch(void) override;
 };
 
 /***************************************************************************
@@ -167,26 +168,27 @@ class SNDMQ : public SNDMQ_PAR
     ~SNDMQ(void);
 
     // inherited methods
-    virtual bool FActive(void);
-    virtual void Activate(bool fActive);
-    virtual void Suspend(bool fSuspend);
+    virtual bool FActive(void) override;
+    virtual void Activate(bool fActive) override;
+    virtual void Suspend(bool fSuspend) override;
 
     virtual int32_t SiiPlay(PRCA prca, CTG ctg, CNO cno, int32_t sqn = ksqnNone, int32_t vlm = kvlmFull,
-                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0, int32_t scl = sclNil);
+                            int32_t cactPlay = 1, uint32_t dtsStart = 0, int32_t spr = 0,
+                            int32_t scl = sclNil) override;
 
-    virtual void Stop(int32_t sii);
-    virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual void Stop(int32_t sii) override;
+    virtual void StopAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual void Pause(int32_t sii);
-    virtual void PauseAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual void Pause(int32_t sii) override;
+    virtual void PauseAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual void Resume(int32_t sii);
-    virtual void ResumeAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual void Resume(int32_t sii) override;
+    virtual void ResumeAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual bool FPlaying(int32_t sii);
-    virtual bool FPlayingAll(int32_t sqn = sqnNil, int32_t scl = sclNil);
+    virtual bool FPlaying(int32_t sii) override;
+    virtual bool FPlayingAll(int32_t sqn = sqnNil, int32_t scl = sclNil) override;
 
-    virtual void Flush(void);
+    virtual void Flush(void) override;
 };
 
 /***************************************************************************

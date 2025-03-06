@@ -99,11 +99,11 @@ class TBXB : public TBXB_PAR
     //
     // Overridden routines
     //
-    void Draw(PGNV pgnv, RC *prcClip);
-    void Activate(bool fActive);
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
+    void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void Activate(bool fActive);
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
 
     void AttachToMouse(void);
 };
@@ -161,17 +161,17 @@ class TBXG : public TBXG_PAR
     //
     // Overridden routines
     //
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
-    virtual bool FCmdClip(PCMD pcmd);
-    virtual bool FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual int32_t _DxpDoc(void);
-    virtual void _NewRc(void);
-    virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel);
-    void Activate(bool fActive);
-    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdClip(PCMD pcmd) override;
+    virtual bool FEnableDdgCmd(PCMD pcmd, uint32_t *pgrfeds) override;
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual int32_t _DxpDoc(void) override;
+    virtual void _NewRc(void) override;
+    virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel) override;
+    virtual void Activate(bool fActive) override;
+    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) override;
 
     //
     // Status
@@ -227,7 +227,7 @@ class TBOX : public TBOX_PAR
     // Creation routines
     //
     static PTBOX PtboxNew(PSCEN pscen = pvNil, RC *prcRel = pvNil, bool fStory = fTrue);
-    PDDG PddgNew(PGCB pgcb)
+    PDDG PddgNew(PGCB pgcb) override
     {
         return TBXG::PtbxgNew(this, pgcb);
     }
@@ -284,9 +284,9 @@ class TBOX : public TBOX_PAR
     //
     // Overridden functions
     //
-    void SetDirty(bool fDirty = fTrue);
-    virtual bool FAddUndo(PUNDB pundb);
-    virtual void ClearUndo(void);
+    void SetDirty(bool fDirty = fTrue) override;
+    virtual bool FAddUndo(PUNDB pundb) override;
+    virtual void ClearUndo(void) override;
     void ParClearUndo(void)
     {
         TBOX_PAR::ClearUndo();

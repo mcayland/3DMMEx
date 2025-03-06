@@ -111,16 +111,16 @@ class GOMP : public GOMP_PAR
     bool FSetMbmp(PMBMP pmbmp);
 
     /* Makes the GOMP invisible to mouse actions */
-    virtual bool FPtIn(int32_t xp, int32_t yp)
+    virtual bool FPtIn(int32_t xp, int32_t yp) override
     {
         return fFalse;
     }
-    virtual bool FPtInBounds(int32_t xp, int32_t yp)
+    virtual bool FPtInBounds(int32_t xp, int32_t yp) override
     {
         return fFalse;
     }
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 #endif /* SCNSORT_H */

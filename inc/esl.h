@@ -83,7 +83,7 @@ class SNE : public SNE_PAR
 
   public:
     static PSNE PsneNew(PEDPAR pedpar, PESLT peslt, PSTN pstnInit);
-    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin);
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin) override;
 };
 
 /****************************************
@@ -116,7 +116,7 @@ class ESLT : public ESLT_PAR
     {
     }
     bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr, PSTN pstnNew, int32_t tdtsNew, PTAG ptagTdfNew);
-    virtual bool _FAcceptChanges(bool *pfDismissEasel);
+    virtual bool _FAcceptChanges(bool *pfDismissEasel) override;
 
   public:
     static PESLT PesltNew(PRCA prca, PMVIE pmvie, PACTR pactr, PSTN pstnNew = pvNil, int32_t tdtsNew = tdtsNil,
@@ -157,7 +157,7 @@ class ESLA : public ESLA_PAR
     {
     }
     bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr);
-    virtual bool _FAcceptChanges(bool *pfDismissEasel);
+    virtual bool _FAcceptChanges(bool *pfDismissEasel) override;
 
   public:
     static PESLA PeslaNew(PRCA prca, PMVIE pmvie, PACTR pactr);
@@ -238,7 +238,7 @@ class ESLL : public ESLL_PAR
     }
 
     bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, PACTR pactr);
-    virtual bool _FAcceptChanges(bool *pfDismissEasel);
+    virtual bool _FAcceptChanges(bool *pfDismissEasel) override;
 
   public:
     static PESLL PesllNew(PRCA prca, PMVIE pmvie, PACTR pactr);
@@ -276,7 +276,7 @@ class ESLR : public ESLR_PAR
     {
     }
     bool _FInit(PRCA prca, int32_t kidEasel, PMVIE pmvie, bool fSpeech, PSTN pstnNew);
-    virtual bool _FAcceptChanges(bool *pfDismissEasel);
+    virtual bool _FAcceptChanges(bool *pfDismissEasel) override;
     void _UpdateMeter(void);
 
   public:

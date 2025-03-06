@@ -95,9 +95,9 @@ class APE : public APE_PAR
 
     void SetCustomView(BRA xa, BRA ya, BRA za);
     void ChangeView(void);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
 
     bool FChangeTdt(PSTN pstn, int32_t tdts, PTAG ptagTdf);
     bool FSetTdtMtrl(PTAG ptagMtrl);

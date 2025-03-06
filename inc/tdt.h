@@ -76,16 +76,16 @@ class TDT : public TDT_PAR
     int32_t _tdaCache;   // Action in pactnCache
 
   protected:
-    virtual bool _FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl);
+    virtual bool _FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl) override;
     bool _FInitLists(void);
     PGL _PglibactParBuild(void);
     PGL _PglibsetBuild(void);
     PGG _PggcmidBuild(void);
     PGL _Pglbmat34Build(int32_t tda);
     PGG _PggcelBuild(int32_t tda);
-    virtual PACTN _PactnFetch(int32_t tda);
+    virtual PACTN _PactnFetch(int32_t tda) override;
     PACTN _PactnBuild(int32_t tda);
-    virtual PMODL _PmodlFetch(CHID chidModl);
+    virtual PMODL _PmodlFetch(CHID chidModl) override;
     int32_t _CcelOfTda(int32_t tda);
     void _ApplyAction(BMAT34 *pbmat34, int32_t tda, int32_t ich, int32_t ccel, int32_t icel, BRS xrChar, BRS pdxrText);
     void _ApplyShape(BMAT34 *pbmat34, int32_t tdts, int32_t cch, int32_t ich, BRS xrChar, BRS dxrText, BRS yrChar,
@@ -106,9 +106,9 @@ class TDT : public TDT_PAR
     bool FChange(PSTN pstn, int32_t tdts = tdtsNil, PTAG ptagTdf = pvNil);
     bool FWrite(PCFL pcfl, CTG ctg, CNO *pcno);
     bool FAdjustBody(PBODY pbody);
-    virtual bool FSetDefaultCost(PBODY pbody);
-    virtual PCMTL PcmtlFetch(int32_t cmid);
-    virtual bool FGetActnName(int32_t anid, PSTN pstn);
+    virtual bool FSetDefaultCost(PBODY pbody) override;
+    virtual PCMTL PcmtlFetch(int32_t cmid) override;
+    virtual bool FGetActnName(int32_t anid, PSTN pstn) override;
 };
 
 #endif // TDT_H

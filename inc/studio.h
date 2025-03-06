@@ -247,7 +247,7 @@ class SMCC : public SMCC_PAR
     {
         _pstdio->SetCurs(tool);
     }
-    virtual void ActorSelected(int32_t arid)
+    virtual void ActorSelected(int32_t arid) override
     {
         _pstdio->SetAridSelected(arid);
         UpdateRollCall();

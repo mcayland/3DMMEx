@@ -96,7 +96,7 @@ class TGOB : public TGOB_PAR
     void GetAlign(int32_t *ptah = pvNil, int32_t *ptav = pvNil);
     static PTGOB PtgobCreate(int32_t kidFrm, int32_t idsFont, int32_t tav = tavTop, int32_t hid = hidNil);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 #endif

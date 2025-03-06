@@ -64,8 +64,8 @@ class TUNT : public TUNT_PAR
         _itbox = itbox;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 RTCLASS(TUNT)
@@ -103,8 +103,8 @@ class TUNS : public TUNS_PAR
         _itbox = itbox;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 RTCLASS(TUNS)
@@ -148,8 +148,8 @@ class TUNH : public TUNH_PAR
         _itbox = itbox;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 RTCLASS(TUNH)
@@ -183,8 +183,8 @@ class TUND : public TUND_PAR
         _itbox = itbox;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 RTCLASS(TUND)
@@ -222,8 +222,8 @@ class TUNC : public TUNC_PAR
         _acr = acr;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 RTCLASS(TUNC)

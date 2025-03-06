@@ -151,7 +151,7 @@ class S2BLX : public S2BLX_PAR
     double _fl;
 
   protected:
-    virtual void _ReadNumTok(PTOK ptok, achar ch, long lwBase, long cchMax);
+    virtual void _ReadNumTok(PTOK ptok, achar ch, long lwBase, long cchMax) override;
 
   public:
     S2BLX(PFIL pfil, bool fUnionStrings = fTrue) : S2BLX_PAR(pfil, fUnionStrings)
@@ -161,7 +161,7 @@ class S2BLX : public S2BLX_PAR
     {
     }
 
-    virtual bool FGetTok(PTOK ptok);
+    virtual bool FGetTok(PTOK ptok) override;
     bool FGetS2btk(PS2BTK ps2btk);
     void GetFni(PFNI pfni)
     {
@@ -171,7 +171,7 @@ class S2BLX : public S2BLX_PAR
     {
         return FPure(_GrfctCh(ch) & fctDec);
     }
-    virtual bool FTextFromTt(long tt, PSTN pstn);
+    virtual bool FTextFromTt(long tt, PSTN pstn) override;
     bool FTextFromS2btk(PS2BTK ps2btk, PSTN pstn);
 };
 

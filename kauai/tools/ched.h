@@ -28,12 +28,12 @@ class APP : public APP_PAR
     CMD_MAP_DEC(APP)
 
   protected:
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
-    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef) override;
+    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil) override;
 
   public:
-    virtual void GetStnAppName(PSTN pstn);
-    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
+    virtual void GetStnAppName(PSTN pstn) override;
+    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil) override;
 
     virtual bool FCmdOpen(PCMD pcmd);
 };

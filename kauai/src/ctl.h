@@ -37,7 +37,7 @@ class CTL : public CTL_PAR
     CTL(PGCB pgcb);
     ~CTL(void);
 
-    virtual void _NewRc(void);
+    virtual void _NewRc(void) override;
     HCTL _Hctl(void)
     {
         return _hctl;
@@ -48,7 +48,7 @@ class CTL : public CTL_PAR
     static PCTL PctlFromHctl(HCTL hctl);
 
 #ifdef MAC
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 #endif // MAC
 };
 
@@ -106,7 +106,7 @@ class SCB : public SCB_PAR
     bool _FCreate(int32_t val, int32_t valMin, int32_t valMax, uint32_t grfscb);
 
 #ifdef MAC
-    virtual void _ActivateHwnd(bool fActive);
+    virtual void _ActivateHwnd(bool fActive) override;
 #endif // MAC
 
   public:
@@ -133,7 +133,7 @@ class SCB : public SCB_PAR
     }
 
 #ifdef MAC
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
 #endif // MAC
 #ifdef WIN
     virtual void TrackScroll(int32_t sb, int32_t lwVal);
@@ -154,14 +154,14 @@ class WSB : public WSB_PAR
     }
 
 #ifdef MAC
-    virtual void _ActivateHwnd(bool fActive);
+    virtual void _ActivateHwnd(bool fActive) override;
 #endif // MAC
 
   public:
     static PWSB PwsbNew(PGOB pgob, uint32_t grfgob);
 
 #ifdef MAC
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 #endif // MAC
 };
 

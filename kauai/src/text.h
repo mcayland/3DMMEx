@@ -104,7 +104,7 @@ class EDCB : public EDCB_PAR
     int32_t _IchNext(int32_t ich, bool fWord = fFalse);
     achar _ChFetch(int32_t ich);
 
-    virtual void _NewRc(void);
+    virtual void _NewRc(void) override;
 
     virtual void _GetRcContent(RC *prc);
     virtual void _InitGnv(PGNV pgnv);
@@ -112,11 +112,11 @@ class EDCB : public EDCB_PAR
   public:
     ~EDCB(void);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
-    virtual bool FCmdSelIdle(PCMD pcmd);
-    virtual bool FCmdActivateSel(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
+    virtual bool FCmdSelIdle(PCMD pcmd) override;
+    virtual bool FCmdActivateSel(PCMD pcmd) override;
     virtual void Activate(bool fActive);
 
     int32_t IchAnchor(void)
@@ -161,13 +161,13 @@ class EDPL : public EDPL_PAR
     EDPL(PEDPAR pedpar);
 
     // methods of EDCB
-    virtual bool _FInit(void);
-    virtual int32_t _XpFromIch(int32_t ich);
-    virtual int32_t _YpFromLn(int32_t ln);
-    virtual int32_t _LnFromYp(int32_t yp);
-    virtual int32_t _IchFromLnXp(int32_t ln, int32_t xp, bool fClosest = fTrue);
-    virtual void _DrawLine(PGNV pgnv, int32_t ln);
-    virtual void _HiliteRc(PGNV pgnv, RC *prc);
+    virtual bool _FInit(void) override;
+    virtual int32_t _XpFromIch(int32_t ich) override;
+    virtual int32_t _YpFromLn(int32_t ln) override;
+    virtual int32_t _LnFromYp(int32_t yp) override;
+    virtual int32_t _IchFromLnXp(int32_t ln, int32_t xp, bool fClosest = fTrue) override;
+    virtual void _DrawLine(PGNV pgnv, int32_t ln) override;
+    virtual void _HiliteRc(PGNV pgnv, RC *prc) override;
 
     int32_t _XpOrigin(void);
     virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch) = 0;
@@ -195,21 +195,22 @@ class EDSL : public EDSL_PAR
     EDSL(PEDPAR pedpar);
 
     // methods of EDCB
-    virtual int32_t _LnFromIch(int32_t ich);
-    virtual int32_t _IchMinLn(int32_t ln);
-    virtual int32_t _LnMac(void);
-    virtual bool _FFilterCh(achar ch);
+    virtual int32_t _LnFromIch(int32_t ich) override;
+    virtual int32_t _IchMinLn(int32_t ln) override;
+    virtual int32_t _LnMac(void) override;
+    virtual bool _FFilterCh(achar ch) override;
 
     // methods of EDPL
-    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch);
-    virtual void _UnlockLn(int32_t ln, achar *prgch);
+    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch) override;
+    virtual void _UnlockLn(int32_t ln, achar *prgch) override;
 
   public:
     static PEDSL PedslNew(PEDPAR pedpar);
 
-    virtual int32_t IchMac(void);
-    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin = kginDraw);
-    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant);
+    virtual int32_t IchMac(void) override;
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2,
+                          int32_t gin = kginDraw) override;
+    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant) override;
 
     // additional text APIs
     void GetStn(PSTN pstn);
@@ -236,15 +237,15 @@ class EDML : public EDML_PAR
     EDML(PEDPAR pedpar);
 
     // methods of EDCB
-    virtual bool _FInit(void);
-    virtual int32_t _LnFromIch(int32_t ich);
-    virtual int32_t _IchMinLn(int32_t ln);
-    virtual int32_t _LnMac(void);
-    virtual bool _FFilterCh(achar ch);
+    virtual bool _FInit(void) override;
+    virtual int32_t _LnFromIch(int32_t ich) override;
+    virtual int32_t _IchMinLn(int32_t ln) override;
+    virtual int32_t _LnMac(void) override;
+    virtual bool _FFilterCh(achar ch) override;
 
     // methods of EDPL
-    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch);
-    virtual void _UnlockLn(int32_t ln, achar *prgch);
+    virtual bool _FLockLn(int32_t ln, achar **pprgch, int32_t *pcch) override;
+    virtual void _UnlockLn(int32_t ln, achar *prgch) override;
 
     virtual int32_t _ClnEstimate(const achar *prgch, int32_t cch);
     virtual int32_t _LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns);
@@ -254,9 +255,10 @@ class EDML : public EDML_PAR
     static PEDML PedmlNew(PEDPAR pedpar);
     ~EDML(void);
 
-    virtual int32_t IchMac(void);
-    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2, int32_t gin = kginDraw);
-    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant);
+    virtual int32_t IchMac(void) override;
+    virtual bool FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ich2,
+                          int32_t gin = kginDraw) override;
+    virtual int32_t CchFetch(achar *prgch, int32_t ich, int32_t cchWant) override;
 };
 
 /***************************************************************************
@@ -274,10 +276,10 @@ class EDMW : public EDMW_PAR
 
     // methods EDMW
     virtual int32_t _ClnEstimate(achar *prgch, int32_t cch);
-    virtual int32_t _LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns);
+    virtual int32_t _LnReformat(int32_t lnMin, int32_t *pclnDel, int32_t *pclnIns) override;
 
     int32_t _CichGetBreakables(achar *prgch, int32_t ich, int32_t *prgich, int32_t cichMax);
-    virtual void _NewRc(void);
+    virtual void _NewRc(void) override;
 
   public:
     static PEDMW PedmwNew(PEDPAR pedpar);

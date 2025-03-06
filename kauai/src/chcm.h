@@ -98,7 +98,7 @@ class CHLX : public CHLX_PAR
 
     // override the LEXB FGetTok to resolve variables, hande SET
     // and recognize our additional key words
-    virtual bool FGetTok(PTOK ptok);
+    virtual bool FGetTok(PTOK ptok) override;
     virtual bool FGetTokSkipSemi(PTOK ptok); // also skip ';' & ','
     virtual bool FGetPath(FNI *pfni);        // read a path
 };

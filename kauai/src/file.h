@@ -111,7 +111,7 @@ class FIL : public FIL_PAR
     static PFIL PfilCreateTemp(FNI *pfni = pvNil);
     static PFIL PfilFromFni(FNI *pfni);
 
-    virtual void Release(void);
+    virtual void Release(void) override;
     void Mark(void)
     {
         _grffil |= ffilMark;
@@ -330,9 +330,9 @@ class MSFIL : public MSFIL_PAR
     MSFIL(PFIL pfil = pvNil);
     ~MSFIL(void);
 
-    virtual void ReportLine(const PCSZ psz);
-    virtual void Report(const PCSZ psz);
-    virtual bool FError(void);
+    virtual void ReportLine(const PCSZ psz) override;
+    virtual void Report(const PCSZ psz) override;
+    virtual bool FError(void) override;
 
     void SetFile(PFIL pfil);
     PFIL PfilRelease(void);

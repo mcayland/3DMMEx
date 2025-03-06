@@ -72,11 +72,11 @@ class GORF : public GORF_PAR
   public:
     static PGORF PgorfNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
-    virtual void GetRc(RC *prc);
-    virtual void GetRcContent(RC *prc);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref) override;
+    virtual void GetRc(RC *prc) override;
+    virtual void GetRcContent(RC *prc) override;
 };
 
 /***************************************************************************
@@ -100,12 +100,12 @@ class GORB : public GORB_PAR
   public:
     static PGORB PgorbNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
-    virtual void GetRc(RC *prc);
-    virtual void GetRcContent(RC *prc);
-    virtual void Stream(bool fStream);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref) override;
+    virtual void GetRc(RC *prc) override;
+    virtual void GetRcContent(RC *prc) override;
+    virtual void Stream(bool fStream) override;
 };
 
 /***************************************************************************
@@ -166,12 +166,12 @@ class GORT : public GORT_PAR
   public:
     static PGORT PgortNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
-    virtual void GetRc(RC *prc);
-    virtual void GetRcContent(RC *prc);
-    virtual void Stream(bool fStream);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref) override;
+    virtual void GetRc(RC *prc) override;
+    virtual void GetRcContent(RC *prc) override;
+    virtual void Stream(bool fStream) override;
 };
 
 /***************************************************************************
@@ -201,20 +201,20 @@ class GORV : public GORV_PAR
   public:
     static PGORV PgorvNew(PGOK pgok, PCRF pcrf, CTG ctg, CNO cno);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref);
-    virtual void GetRc(RC *prc);
-    virtual void GetRcContent(RC *prc);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual void SetDxpDyp(int32_t dxpPref, int32_t dypPref) override;
+    virtual void GetRc(RC *prc) override;
+    virtual void GetRcContent(RC *prc) override;
 
-    virtual int32_t NfrMac(void);
-    virtual int32_t NfrCur(void);
-    virtual void GotoNfr(int32_t nfr);
-    virtual bool FPlaying(void);
-    virtual bool FPlay(void);
-    virtual void Stop(void);
-    virtual void Suspend(void);
-    virtual void Resume(void);
+    virtual int32_t NfrMac(void) override;
+    virtual int32_t NfrCur(void) override;
+    virtual void GotoNfr(int32_t nfr) override;
+    virtual bool FPlaying(void) override;
+    virtual bool FPlay(void) override;
+    virtual void Stop(void) override;
+    virtual void Suspend(void) override;
+    virtual void Resume(void) override;
 };
 
 /***************************************************************************
@@ -399,12 +399,12 @@ class GOK : public GOK_PAR
     void SetHidToolTip(int32_t hidSrc);
 
     virtual void SetCursor(uint32_t grfcust);
-    virtual bool FPtIn(int32_t xp, int32_t yp);
-    virtual bool FPtInBounds(int32_t xp, int32_t yp);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
+    virtual bool FPtIn(int32_t xp, int32_t yp) override;
+    virtual bool FPtInBounds(int32_t xp, int32_t yp) override;
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
     virtual bool FCmdAlarm(PCMD pcmd);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
     virtual bool FCmdClicked(PCMD_MOUSE pcmd);
     bool FCmdClickedCore(PCMD pcmd)
     {
@@ -413,8 +413,8 @@ class GOK : public GOK_PAR
     virtual bool FCmdAll(PCMD pcmd);
     virtual bool FFilterCidHid(int32_t cid, int32_t hid, CHID chidScript);
 
-    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse);
-    virtual int32_t LwState(void);
+    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse) override;
+    virtual int32_t LwState(void) override;
 
     virtual bool FRunScript(CHID chid, int32_t *prglw = pvNil, int32_t clw = 0, int32_t *plwReturn = pvNil,
                             tribool *ptSuccess = pvNil);

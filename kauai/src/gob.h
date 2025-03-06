@@ -192,7 +192,7 @@ class GOB : public GOB_PAR
 
     GOB(GCB *pgcb);
     GOB(int32_t hid);
-    virtual void Release(void);
+    virtual void Release(void) override;
 
     // hwnd stuff
     bool FAttachHwnd(HWND hwnd);

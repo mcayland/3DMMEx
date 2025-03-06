@@ -39,13 +39,13 @@ class SCEG : public SCEG_PAR
     virtual PGOB _PgobThis(void);
     virtual PGOB _PgobFromHid(int32_t hid);
 
-    virtual bool _FExecOp(int32_t op);
-    virtual PGL *_PpglrtvmThis(void);
-    virtual PGL *_PpglrtvmGlobal(void);
-    virtual PGL *_PpglrtvmRemote(int32_t lw);
+    virtual bool _FExecOp(int32_t op) override;
+    virtual PGL *_PpglrtvmThis(void) override;
+    virtual PGL *_PpglrtvmGlobal(void) override;
+    virtual PGL *_PpglrtvmRemote(int32_t lw) override;
 
-    virtual int16_t _SwCur(void);
-    virtual int16_t _SwMin(void);
+    virtual int16_t _SwCur(void) override;
+    virtual int16_t _SwMin(void) override;
 
     void _DoAlert(int32_t op);
     void _SetColorTable(CHID chid);
@@ -60,7 +60,7 @@ class SCEG : public SCEG_PAR
     {
         _pgob = pvNil;
     }
-    virtual bool FResume(int32_t *plwReturn = pvNil, bool *pfPaused = pvNil);
+    virtual bool FResume(int32_t *plwReturn = pvNil, bool *pfPaused = pvNil) override;
 };
 
 // a Chunky resource reader for a color table

@@ -58,7 +58,7 @@ class BACO : public BACO_PAR
     ~BACO(void);
 
   public:
-    virtual void Release(void);
+    virtual void Release(void) override;
 
     virtual void SetCrep(int32_t crep);
     virtual void Detach(void);
@@ -147,11 +147,11 @@ class CRF : public CRF_PAR
     ~CRF(void);
     static PCRF PcrfNew(PCFL pcfl, int32_t cbMax);
 
-    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal);
-    virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil);
-    virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
-    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
-    virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil);
+    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal) override;
+    virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil) override;
+    virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) override;
+    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) override;
+    virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil) override;
 
     int32_t CbMax(void)
     {
@@ -192,11 +192,11 @@ class CRM : public CRM_PAR
     ~CRM(void);
     static PCRM PcrmNew(int32_t ccrfInit);
 
-    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal);
-    virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil);
-    virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
-    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil);
-    virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil);
+    virtual tribool TLoad(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil, int32_t crep = crepNormal) override;
+    virtual PBACO PbacoFetch(CTG ctg, CNO cno, PFNRPO pfnrpo, bool *pfError = pvNil, RSC rsc = rscNil) override;
+    virtual PBACO PbacoFind(CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) override;
+    virtual bool FSetCrep(int32_t crep, CTG ctg, CNO cno, PFNRPO pfnrpo, RSC rsc = rscNil) override;
+    virtual PCRF PcrfFindChunk(CTG ctg, CNO cno, RSC rsc = rscNil) override;
 
     bool FAddCfl(PCFL pcfl, int32_t cbMax, int32_t *piv = pvNil);
     int32_t Ccrf(void)

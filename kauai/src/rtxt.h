@@ -155,7 +155,7 @@ class TXTB : public TXTB_PAR
     virtual bool FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc);
     virtual bool FDrawObject(int32_t cp, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip);
 
-    virtual bool FGetFni(FNI *pfni);
+    virtual bool FGetFni(FNI *pfni) override;
 
     virtual void HideSel(void);
     virtual void SetSel(int32_t cp1, int32_t cp2, int32_t gin = kginDraw);
@@ -171,7 +171,7 @@ class TXTB : public TXTB_PAR
     virtual bool FFind(const achar *prgch, int32_t cch, int32_t cpStart, int32_t *pcpMin, int32_t *pcpLim,
                        bool fCaseSensitive = fFalse);
 
-    virtual void ExportFormats(PCLIP pclip);
+    virtual void ExportFormats(PCLIP pclip) override;
 };
 
 /***************************************************************************
@@ -191,8 +191,8 @@ class TXPD : public TXPD_PAR
     static PTXPD PtxpdNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, int16_t osk = koskCur, PDOCB pdocb = pvNil,
                           uint32_t grfdoc = fdocNil);
 
-    virtual PDDG PddgNew(PGCB pgcb);
-    virtual bool FSaveToFni(FNI *pfni, bool fSetFni);
+    virtual PDDG PddgNew(PGCB pgcb) override;
+    virtual bool FSaveToFni(FNI *pfni, bool fSetFni) override;
 };
 
 /***************************************************************************
@@ -349,7 +349,7 @@ class TXRD : public TXRD_PAR
     static PTXRD PtxrdNew(PFNI pfni = pvNil);
     static PTXRD PtxrdReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText = fTrue);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
 
     void FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
     void FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
@@ -360,11 +360,11 @@ class TXRD : public TXRD_PAR
 
     virtual bool FReplaceRgch(void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, uint32_t grfdoc = fdocUpdate);
     virtual bool FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, int16_t osk = koskCur,
-                             uint32_t grfdoc = fdocUpdate);
+                             uint32_t grfdoc = fdocUpdate) override;
     virtual bool FReplaceBsf(PBSF pbsfSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel,
-                             uint32_t grfdoc = fdocUpdate);
+                             uint32_t grfdoc = fdocUpdate) override;
     virtual bool FReplaceTxtb(PTXTB ptxtbSrc, int32_t cpSrc, int32_t ccpSrc, int32_t cpDst, int32_t ccpDel,
-                              uint32_t grfdoc = fdocUpdate);
+                              uint32_t grfdoc = fdocUpdate) override;
     bool FReplaceRgch(void *prgch, int32_t ccpIns, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil,
                       uint32_t grfdoc = fdocUpdate);
     bool FReplaceFlo(PFLO pflo, bool fCopy, int32_t cp, int32_t ccpDel, PCHP pchp, PPAP ppap = pvNil,
@@ -381,17 +381,17 @@ class TXRD : public TXRD_PAR
                                uint32_t grfdoc = fdocUpdate);
     virtual bool FApplyObjectProps(void *pv, int32_t cb, int32_t cp, uint32_t grfdoc = fdocUpdate);
 
-    virtual bool FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc);
-    virtual bool FDrawObject(int32_t cp, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip);
+    virtual bool FGetObjectRc(int32_t cp, PGNV pgnv, PCHP pchp, RC *prc) override;
+    virtual bool FDrawObject(int32_t cp, PGNV pgnv, int32_t *pxp, int32_t yp, PCHP pchp, RC *prcClip) override;
 
-    virtual bool FGetFni(FNI *pfni);
-    virtual bool FGetFniSave(FNI *pfni);
-    virtual bool FSaveToFni(FNI *pfni, bool fSetFni);
+    virtual bool FGetFni(FNI *pfni) override;
+    virtual bool FGetFniSave(FNI *pfni) override;
+    virtual bool FSaveToFni(FNI *pfni, bool fSetFni) override;
     virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse);
 
-    virtual bool FSetUndo(int32_t cp1, int32_t cp2, int32_t ccpIns);
-    virtual void CancelUndo(void);
-    virtual void CommitUndo(void);
+    virtual bool FSetUndo(int32_t cp1, int32_t cp2, int32_t ccpIns) override;
+    virtual void CancelUndo(void) override;
+    virtual void CommitUndo(void) override;
 };
 
 /***************************************************************************
@@ -416,8 +416,8 @@ class RTUN : public RTUN_PAR
     static PRTUN PrtunNew(int32_t cactCombine, PTXRD ptxrd, int32_t cp1, int32_t cp2, int32_t ccpIns);
     ~RTUN(void);
 
-    virtual bool FUndo(PDOCB pdocb);
-    virtual bool FDo(PDOCB pdocb);
+    virtual bool FUndo(PDOCB pdocb) override;
+    virtual bool FDo(PDOCB pdocb) override;
 
     bool FCombine(PRTUN prtun);
 };
@@ -481,8 +481,8 @@ class TXTG : public TXTG_PAR
     TXTG(PTXTB ptxtb, PGCB pgcb);
     ~TXTG(void);
 
-    virtual bool _FInit(void);
-    virtual void _Activate(bool fActive);
+    virtual bool _FInit(void) override;
+    virtual void _Activate(bool fActive) override;
 
     virtual int32_t _DxpDoc(void);
     virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) = 0;
@@ -506,9 +506,9 @@ class TXTG : public TXTG_PAR
     void _InvertSel(PGNV pgnv, int32_t gin = kginDraw);
     void _InvertCpRange(PGNV pgnv, int32_t cp1, int32_t cp2, int32_t gin = kginDraw);
 
-    virtual int32_t _ScvMax(bool fVert);
-    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
-    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp);
+    virtual int32_t _ScvMax(bool fVert) override;
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0) override;
+    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp) override;
     virtual int32_t _DypTrul(void);
     virtual PTRUL _PtrulNew(PGCB pgcb);
     virtual void _DrawLinExtra(PGNV pgnv, RC *prcClip, LIN *plin, int32_t dxp, int32_t yp, uint32_t grftxtg);
@@ -517,10 +517,10 @@ class TXTG : public TXTG_PAR
     virtual void DrawLines(PGNV pgnv, RC *prcClip, int32_t dxp, int32_t dyp, int32_t ilinMin, int32_t ilinLim = klwMax,
                            uint32_t grftxtg = ftxtgNil);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
-    virtual bool FCmdSelIdle(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
+    virtual bool FCmdSelIdle(PCMD pcmd) override;
     virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel);
 
     virtual void HideSel(void);
@@ -559,20 +559,20 @@ class TXLG : public TXLG_PAR
 
     TXLG(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab);
 
-    virtual int32_t _DxpDoc(void);
-    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
-    virtual void _FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
+    virtual int32_t _DxpDoc(void) override;
+    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) override;
+    virtual void _FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) override;
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
-    virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
+    virtual void _ClearSel(void) override;
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid) override;
 
   public:
     static PTXLG PtxlgNew(PTXTB ptxtb, PGCB pgcb, int32_t onn, uint32_t grfont, int32_t dypFont, int32_t cchTab);
 
-    virtual void SetDxpTab(int32_t dxp);
-    virtual void SetDxpDoc(int32_t dxp);
+    virtual void SetDxpTab(int32_t dxp) override;
+    virtual void SetDxpDoc(int32_t dxp) override;
 };
 
 /***************************************************************************
@@ -593,16 +593,16 @@ class TXRG : public TXRG_PAR
     CHP _chpIns;
     bool _fValidChp;
 
-    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
-    virtual void _FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil);
+    virtual void _FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) override;
+    virtual void _FetchPap(int32_t cp, PPAP ppap, int32_t *pcpMin = pvNil, int32_t *pcpLim = pvNil) override;
 
     virtual bool _FGetOtherSize(int32_t *pdypFont);
     virtual bool _FGetOtherSubSuper(int32_t *pdypOffset);
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
-    virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
+    virtual void _ClearSel(void) override;
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid) override;
 
     void _FetchChpSel(int32_t cp1, int32_t cp2, PCHP pchp);
     void _EnsureChpIns(void);
@@ -610,8 +610,8 @@ class TXRG : public TXRG_PAR
   public:
     static PTXRG PtxrgNew(PTXRD ptxrd, PGCB pgcb);
 
-    virtual void SetSel(int32_t cpAnchor, int32_t cpOther, int32_t gin = kginDraw);
-    virtual bool FReplace(achar *prgch, int32_t cch, int32_t cp1, int32_t cp2);
+    virtual void SetSel(int32_t cpAnchor, int32_t cpOther, int32_t gin = kginDraw) override;
+    virtual bool FReplace(achar *prgch, int32_t cch, int32_t cp1, int32_t cp2) override;
     virtual bool FApplyChp(PCHP pchp, PCHP pchpDiff = pvNil);
     virtual bool FApplyPap(PPAP ppap, PPAP ppapDiff = pvNil, bool fExpand = fTrue);
 
@@ -619,7 +619,7 @@ class TXRG : public TXRG_PAR
     virtual bool FEnablePropCmd(PCMD pcmd, uint32_t *pgrfeds);
     bool FSetColor(ACR *pacrFore, ACR *pacrBack);
 
-    virtual void SetDxpTab(int32_t dxp);
+    virtual void SetDxpTab(int32_t dxp) override;
 };
 
 /***************************************************************************

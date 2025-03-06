@@ -89,17 +89,17 @@ class GVDS : public GVDS_PAR
   public:
     static PGVDS PgvdsNew(PFNI pfni, PGOB pgobBase, int32_t hid = hidNil);
 
-    virtual int32_t NfrMac(void);
-    virtual int32_t NfrCur(void);
-    virtual void GotoNfr(int32_t nfr);
+    virtual int32_t NfrMac(void) override;
+    virtual int32_t NfrCur(void) override;
+    virtual void GotoNfr(int32_t nfr) override;
 
-    virtual bool FPlaying(void);
-    virtual bool FPlay(RC *prc = pvNil);
-    virtual void Stop(void);
+    virtual bool FPlaying(void) override;
+    virtual bool FPlay(RC *prc = pvNil) override;
+    virtual void Stop(void) override;
 
-    virtual void Draw(PGNV pgnv, RC *prc);
-    virtual void GetRc(RC *prc);
-    virtual void SetRcPlay(RC *prc);
+    virtual void Draw(PGNV pgnv, RC *prc) override;
+    virtual void GetRc(RC *prc) override;
+    virtual void SetRcPlay(RC *prc) override;
 
     virtual bool FCmdAll(PCMD pcmd);
 };
@@ -139,17 +139,17 @@ class GVDW : public GVDW_PAR
   public:
     static PGVDW PgvdwNew(PFNI pfni, PGOB pgobBase, int32_t hid = hidNil);
 
-    virtual int32_t NfrMac(void);
-    virtual int32_t NfrCur(void);
-    virtual void GotoNfr(int32_t nfr);
+    virtual int32_t NfrMac(void) override;
+    virtual int32_t NfrCur(void) override;
+    virtual void GotoNfr(int32_t nfr) override;
 
-    virtual bool FPlaying(void);
-    virtual bool FPlay(RC *prc = pvNil);
-    virtual void Stop(void);
+    virtual bool FPlaying(void) override;
+    virtual bool FPlay(RC *prc = pvNil) override;
+    virtual void Stop(void) override;
 
-    virtual void Draw(PGNV pgnv, RC *prc);
-    virtual void GetRc(RC *prc);
-    virtual void SetRcPlay(RC *prc);
+    virtual void Draw(PGNV pgnv, RC *prc) override;
+    virtual void GetRc(RC *prc) override;
+    virtual void SetRcPlay(RC *prc) override;
 };
 
 #endif //! VIDEO_H

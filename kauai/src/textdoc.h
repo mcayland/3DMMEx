@@ -46,9 +46,9 @@ class TXDC : public TXDC_PAR
         return _pbsf;
     }
 
-    virtual PDDG PddgNew(PGCB pgcb);
-    virtual bool FGetFni(FNI *pfni);
-    virtual bool FSaveToFni(FNI *pfni, bool fSetFni);
+    virtual PDDG PddgNew(PGCB pgcb) override;
+    virtual bool FGetFni(FNI *pfni) override;
+    virtual bool FSaveToFni(FNI *pfni, bool fSetFni) override;
 };
 
 /***************************************************************************
@@ -94,9 +94,9 @@ class TXDD : public TXDD_PAR
 
     TXDD(PDOCB pdocb, PGCB pgcb, PBSF pbsf, int32_t onn, uint32_t grfont, int32_t dypFont);
     ~TXDD(void);
-    virtual bool _FInit(void);
-    virtual void _NewRc(void);
-    virtual void _Activate(bool fActive);
+    virtual bool _FInit(void) override;
+    virtual void _NewRc(void) override;
+    virtual void _Activate(bool fActive) override;
 
     void _Reformat(int32_t lnMin, int32_t *pclnIns = pvNil, int32_t *pclnDel = pvNil);
     void _ReformatEdit(int32_t ichMinEdit, int32_t cchIns, int32_t cchDel, int32_t *pln, int32_t *pclnIns = pvNil,
@@ -130,21 +130,21 @@ class TXDD : public TXDD_PAR
     void _InvalIch(int32_t ich, int32_t cchIns, int32_t cchDel);
 
     // scrolling support
-    virtual int32_t _ScvMax(bool fVert);
-    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
+    virtual int32_t _ScvMax(bool fVert) override;
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0) override;
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
-    virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
+    virtual void _ClearSel(void) override;
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid) override;
 
   public:
     static PTXDD PtxddNew(PDOCB pdocb, PGCB pgcb, PBSF pbsf, int32_t onn, uint32_t grfont, int32_t dypFont);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
-    virtual bool FCmdSelIdle(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
+    virtual bool FCmdSelIdle(PCMD pcmd) override;
 
     void SetSel(int32_t ichAnchor, int32_t ichOther, bool fDraw);
     void ShowSel(bool fDraw);

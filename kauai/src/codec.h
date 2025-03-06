@@ -112,12 +112,12 @@ class KCDC : public KCDC_PAR
     bool _FDecode2(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int32_t *pcbDst);
 
   public:
-    virtual bool FCanDo(bool fEncode, int32_t cfmt)
+    virtual bool FCanDo(bool fEncode, int32_t cfmt) override
     {
         return kcfmtKauai2 == cfmt || kcfmtKauai == cfmt;
     }
     virtual bool FConvert(bool fEncode, int32_t cfmt, void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst,
-                          int32_t *pcbDst);
+                          int32_t *pcbDst) override;
 };
 
 #endif //! CODEC_H

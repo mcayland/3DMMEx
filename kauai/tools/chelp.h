@@ -50,12 +50,12 @@ class APP : public APP_PAR
     PLID _plidPicture;
     PLID _plidButton;
 
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
-    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef) override;
+    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil) override;
 
   public:
-    virtual void GetStnAppName(PSTN pstn);
-    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
+    virtual void GetStnAppName(PSTN pstn) override;
+    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil) override;
 
     virtual bool FCmdOpen(PCMD pcmd);
     virtual bool FCmdLoadResFile(PCMD pcmd);
@@ -135,9 +135,9 @@ class LIG : public LIG_PAR
 
     PLID Plid(void);
     void Refresh(void);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdScroll(PCMD pcmd);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdScroll(PCMD pcmd) override;
 };
 
 /***************************************************************************
@@ -165,11 +165,11 @@ class CCG : public CCG_PAR
   public:
     CCG(GCB *pgcb, PTXHD ptxhd, bool fForeColor, int32_t cacrRow = kcacrCcg);
 
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
 
-    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse);
+    virtual bool FEnsureToolTip(PGOB *ppgobCurTip, int32_t xpMouse, int32_t ypMouse) override;
 };
 
 /***************************************************************************
@@ -195,7 +195,7 @@ class CCGT : public CCGT_PAR
         return _acr;
     }
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 /***************************************************************************
@@ -228,10 +228,10 @@ class HEDO : public HEDO_PAR
     {
         return _prca;
     }
-    virtual PDDG PddgNew(PGCB pgcb);
-    virtual bool FGetFni(FNI *pfni);
-    virtual bool FGetFniSave(FNI *pfni);
-    virtual bool FSaveToFni(FNI *pfni, bool fSetFni);
+    virtual PDDG PddgNew(PGCB pgcb) override;
+    virtual bool FGetFni(FNI *pfni) override;
+    virtual bool FGetFniSave(FNI *pfni) override;
+    virtual bool FSaveToFni(FNI *pfni, bool fSetFni) override;
 
     virtual void InvalAllDdg(CNO cno);
     virtual bool FExportText(void);
@@ -298,8 +298,8 @@ class HEDG : public HEDG_PAR
     TSEL _tsel;         // the selection
 
     HEDG(PHEDO phedo, PCFL pcfl, PGCB pgcb);
-    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
-    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp);
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0) override;
+    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp) override;
 
     int32_t _YpFromIcki(int32_t icki)
     {
@@ -317,13 +317,13 @@ class HEDG : public HEDG_PAR
     void _ShowSel(void);
     void _EditTopic(CNO cno);
 
-    virtual void _Activate(bool fActive);
-    virtual int32_t _ScvMax(bool fVert);
+    virtual void _Activate(bool fActive) override;
+    virtual int32_t _ScvMax(bool fVert) override;
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
-    virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
+    virtual void _ClearSel(void) override;
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid) override;
 
 #ifdef WIN
     void _StartPage(PGNV pgnv, PSTN pstnDoc, int32_t lwPage, RC *prcPage, int32_t onn);
@@ -332,9 +332,9 @@ class HEDG : public HEDG_PAR
   public:
     static PHEDG PhedgNew(PHEDO phedo, PCFL pcfl, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
 
     virtual void InvalCno(CNO cno);
     virtual bool FEnableHedgCmd(PCMD pcmd, uint32_t *pgrfeds);
@@ -374,19 +374,19 @@ class HETD : public HETD_PAR
     HETD(PDOCB pdocb, PRCA prca, PCFL pcfl, CNO cno);
     ~HETD(void);
 
-    virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText);
+    virtual bool _FReadChunk(PCFL pcfl, CTG ctg, CNO cno, bool fCopyText) override;
 
   public:
     static PHETD PhetdNew(PDOCB pdocb, PRCA prca, PCFL pcfl, CNO cno);
     static PHETD PhetdFromChunk(PDOCB pdocb, CNO cno);
     static void CloseDeletedHetd(PDOCB pdocb);
 
-    virtual PDMD PdmdNew(void);
-    virtual PDDG PddgNew(PGCB pgcb);
-    virtual void GetName(PSTN pstn);
-    virtual bool FSave(int32_t cid);
+    virtual PDMD PdmdNew(void) override;
+    virtual PDDG PddgNew(PGCB pgcb) override;
+    virtual void GetName(PSTN pstn) override;
+    virtual bool FSave(int32_t cid) override;
 
-    virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse);
+    virtual bool FSaveToChunk(PCFL pcfl, CKI *pcki, bool fRedirectText = fFalse) override;
 
     void EditHtop(void);
     bool FDoFind(int32_t cpMin, int32_t *pcpMin, int32_t *pcpLim);
@@ -419,25 +419,25 @@ class HETG : public HETG_PAR
     HETG(PHETD phetd, PGCB pgcb);
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
 
     // override these so we can put up our dialogs
-    virtual bool _FGetOtherSize(int32_t *pdypFont);
-    virtual bool _FGetOtherSubSuper(int32_t *pdypOffset);
+    virtual bool _FGetOtherSize(int32_t *pdypFont) override;
+    virtual bool _FGetOtherSubSuper(int32_t *pdypOffset) override;
 
     // we have our own ruler
-    virtual int32_t _DypTrul(void);
-    virtual PTRUL _PtrulNew(PGCB pgcb);
+    virtual int32_t _DypTrul(void) override;
+    virtual PTRUL _PtrulNew(PGCB pgcb) override;
 
     // override _DrawLinExtra so we can put boxes around grouped text.
-    virtual void _DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, int32_t dxp, int32_t yp, uint32_t grftxtg);
+    virtual void _DrawLinExtra(PGNV pgnv, PRC prcClip, LIN *plin, int32_t dxp, int32_t yp, uint32_t grftxtg) override;
 
   public:
     static PHETG PhetgNew(PHETD phetd, PGCB pgcb);
 
-    virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel);
+    virtual void InvalCp(int32_t cp, int32_t ccpIns, int32_t ccpDel) override;
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
     virtual bool FInsertPicture(PCRF pcrf, CTG ctg, CNO cno);
     virtual bool FInsertButton(PCRF pcrf, CTG ctg, CNO cno);
 
@@ -505,12 +505,12 @@ class HTRU : public HTRU_PAR
     static PHTRU PhtruNew(GCB *pgcb, PTXTG ptxtg, int32_t dxpTab, int32_t dxpDoc, int32_t dypDoc, int32_t xpLeft,
                           int32_t onn, int32_t dypFont, uint32_t grfont);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
 
-    virtual void SetDxpTab(int32_t dxpTab);
-    virtual void SetDxpDoc(int32_t dxpDoc);
-    virtual void SetXpLeft(int32_t xpLeft);
+    virtual void SetDxpTab(int32_t dxpTab) override;
+    virtual void SetDxpDoc(int32_t dxpDoc) override;
+    virtual void SetXpLeft(int32_t xpLeft) override;
 
     virtual void SetDypHeight(int32_t dyp);
 };

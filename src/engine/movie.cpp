@@ -116,8 +116,8 @@ class MUNS : public MUNS_PAR
         _tag = *ptag;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //

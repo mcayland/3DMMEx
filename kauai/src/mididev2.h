@@ -34,17 +34,17 @@ class MDPS : public MDPS_PAR
 
     MDPS(void);
 
-    virtual bool _FInit(void);
-    virtual PSNQUE _PsnqueNew(void);
-    virtual void _Suspend(bool fSuspend);
+    virtual bool _FInit(void) override;
+    virtual PSNQUE _PsnqueNew(void) override;
+    virtual void _Suspend(bool fSuspend) override;
 
   public:
     static PMDPS PmdpsNew(void);
     ~MDPS(void);
 
     // inherited methods
-    virtual void SetVlm(int32_t vlm);
-    virtual int32_t VlmCur(void);
+    virtual void SetVlm(int32_t vlm) override;
+    virtual int32_t VlmCur(void) override;
 };
 
 #endif //! MIDIDEV2_H

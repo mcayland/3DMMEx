@@ -100,6 +100,17 @@ const uint32_t kgrfcmmAll = fcmmThis | fcmmNobody | fcmmOthers;
                                                                                                                        \
   protected:                                                                                                           \
     static CMM _cmm##cls;                                                                                              \
+    virtual CMM *Pcmm(void) override                                                                                   \
+    {                                                                                                                  \
+        return &_cmm##cls;                                                                                             \
+    }
+
+#define CMD_MAP_DEC_BASE(cls)                                                                                          \
+  private:                                                                                                             \
+    static CMME _rgcmme##cls[];                                                                                        \
+                                                                                                                       \
+  protected:                                                                                                           \
+    static CMM _cmm##cls;                                                                                              \
     virtual CMM *Pcmm(void)                                                                                            \
     {                                                                                                                  \
         return &_cmm##cls;                                                                                             \
@@ -168,7 +179,7 @@ class CMH : public CMH_PAR
         CMME *prgcmme;
     };
 
-    CMD_MAP_DEC(CMH)
+    CMD_MAP_DEC_BASE(CMH)
 
   protected:
     virtual bool _FGetCmme(int32_t cid, uint32_t grfcmmWanted, CMME *pcmme);

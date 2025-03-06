@@ -377,14 +377,14 @@ class MPQUE : public MPQUE_PAR
 
     MPQUE(void);
 
-    virtual void _Enter(void);
-    virtual void _Leave(void);
+    virtual void _Enter(void) override;
+    virtual void _Leave(void) override;
 
-    virtual bool _FInit(void);
-    virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno);
-    virtual void _Queue(int32_t isndinMin);
-    virtual void _PauseQueue(int32_t isndinMin);
-    virtual void _ResumeQueue(int32_t isndinMin);
+    virtual bool _FInit(void) override;
+    virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno) override;
+    virtual void _Queue(int32_t isndinMin) override;
+    virtual void _PauseQueue(int32_t isndinMin) override;
+    virtual void _ResumeQueue(int32_t isndinMin) override;
 
     static DWORD __stdcall _ThreadProc(LPVOID pv);
 

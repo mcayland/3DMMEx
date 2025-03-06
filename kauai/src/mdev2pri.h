@@ -103,14 +103,14 @@ class MSQUE : public MSQUE_PAR
 
     MSQUE(void);
 
-    virtual void _Enter(void);
-    virtual void _Leave(void);
+    virtual void _Enter(void) override;
+    virtual void _Leave(void) override;
 
     virtual bool _FInit(PMSMIX pmsmix);
-    virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno);
-    virtual void _Queue(int32_t isndinMin);
-    virtual void _PauseQueue(int32_t isndinMin);
-    virtual void _ResumeQueue(int32_t isndinMin);
+    virtual PBACO _PbacoFetch(PRCA prca, CTG ctg, CNO cno) override;
+    virtual void _Queue(int32_t isndinMin) override;
+    virtual void _PauseQueue(int32_t isndinMin) override;
+    virtual void _ResumeQueue(int32_t isndinMin) override;
 
   public:
     static PMSQUE PmsqueNew(PMSMIX pmsmix);
@@ -308,8 +308,8 @@ class WMS : public WMS_PAR
     WMS(PFNMIDI pfn, uintptr_t luUser);
     bool _FInit(void);
 
-    virtual bool _FOpen(void);
-    virtual bool _FClose(void);
+    virtual bool _FOpen(void) override;
+    virtual bool _FClose(void) override;
 
     bool _FSubmit(PMH pmh);
     void _DoCallBacks(void);
@@ -328,12 +328,12 @@ class WMS : public WMS_PAR
     ~WMS(void);
 
 #ifdef STREAM_BUG
-    virtual bool FActive(void);
-    virtual bool FActivate(bool fActivate);
+    virtual bool FActive(void) override;
+    virtual bool FActivate(bool fActivate) override;
 #endif // STREAM_BUG
 
-    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData);
-    virtual void StopPlaying(void);
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData) override;
+    virtual void StopPlaying(void) override;
 };
 
 /***************************************************************************
@@ -376,8 +376,8 @@ class OMS : public OMS_PAR
     OMS(PFNMIDI pfn, uintptr_t luUser);
     bool _FInit(void);
 
-    virtual bool _FOpen(void);
-    virtual bool _FClose(void);
+    virtual bool _FOpen(void) override;
+    virtual bool _FClose(void) override;
 
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
@@ -387,8 +387,8 @@ class OMS : public OMS_PAR
     static POMS PomsNew(PFNMIDI pfn, uintptr_t luUser);
     ~OMS(void);
 
-    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData);
-    virtual void StopPlaying(void);
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData) override;
+    virtual void StopPlaying(void) override;
 };
 
 #endif //! MDEV2PRI_H

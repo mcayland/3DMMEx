@@ -189,7 +189,7 @@ class MVU : public MVU_PAR
     // Clipboard support
     //
     bool _FCopySel(PDOCB *ppdocb, bool fRteOnly);
-    void _ClearSel(void);
+    void _ClearSel(void) override;
     bool _FPaste(PCLIP pclip);
 
     void _PositionActr(BRS dxrWld, BRS dyrWld, BRS dzrWld);
@@ -220,12 +220,12 @@ class MVU : public MVU_PAR
     //
     // Command handlers
     //
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
-    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd);
-    virtual bool FCmdClip(CMD *pcmd);
-    virtual bool FCmdUndo(PCMD pcmd);
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdMouseMove(PCMD_MOUSE pcmd) override;
+    virtual bool FCmdClip(CMD *pcmd) override;
+    virtual bool FCmdUndo(PCMD pcmd) override;
     virtual bool FCloseDoc(bool fAssumeYes, bool fSaveDDG = fFalse);
-    virtual bool FCmdSave(PCMD pcmd);
+    virtual bool FCmdSave(PCMD pcmd) override;
     bool FDoClip(int32_t tool);
     bool FCmdIdle(CMD *pcmd); // Called whenever an idle loop is seen.
     bool FCmdRollOff(CMD *pcmd);
@@ -341,7 +341,7 @@ class MVU : public MVU_PAR
     //
     // Routines for communicating with the framework
     //
-    void Draw(PGNV pgnv, RC *prcClip);
+    void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 //
@@ -676,7 +676,7 @@ class MVIE : public MVIE_PAR
     //
     // Title stuff
     //
-    void GetName(PSTN pstnTitle); // Gets the title of the movie.
+    void GetName(PSTN pstnTitle) override; // Gets the title of the movie.
     PSTN PstnTitle(void)
     {
         return &_stnTitle;
@@ -784,11 +784,11 @@ class MVIE : public MVIE_PAR
     //
     // Overridden DOCB functions
     //
-    bool FGetFni(FNI *pfni);                  // For saving to a file
-    bool FSave(int32_t cid);                  // For saving to a file, (calls FGetFni and FSaveToFni)
-    bool FSaveToFni(FNI *pfni, bool fSetFni); // For doing a Save As or Save
-    PDMD PdmdNew(void);                       // Do not use!
-    bool FGetFniSave(FNI *pfni);              // For saving via the portfolio.
+    bool FGetFni(FNI *pfni) override;                  // For saving to a file
+    bool FSave(int32_t cid) override;                  // For saving to a file, (calls FGetFni and FSaveToFni)
+    bool FSaveToFni(FNI *pfni, bool fSetFni) override; // For doing a Save As or Save
+    PDMD PdmdNew(void) override;                       // Do not use!
+    bool FGetFniSave(FNI *pfni) override;              // For saving via the portfolio.
 
     //
     // Drawing stuff
@@ -879,11 +879,11 @@ class MVIE : public MVIE_PAR
     //
     // Marking (overridden DOCB methods)
     //
-    virtual bool FDirty(void) // Has the movie changed since last saved?
+    virtual bool FDirty(void) override // Has the movie changed since last saved?
     {
         return _fAutosaveDirty || _fDirty;
     }
-    virtual void SetDirty(bool fDirty = fTrue) // Mark the movie as changed.
+    virtual void SetDirty(bool fDirty = fTrue) override // Mark the movie as changed.
     {
         _fAutosaveDirty = fDirty;
     }
@@ -898,9 +898,9 @@ class MVIE : public MVIE_PAR
     //
     // Overridden DOCB functions
     //
-    PDDG PddgNew(PGCB pgcb);    // For creating a view on a movie.
-    bool FAddUndo(PMUNB pmunb); // Add an item to the undo list
-    void ClearUndo(void);
+    PDDG PddgNew(PGCB pgcb) override;   // For creating a view on a movie.
+    virtual bool FAddUndo(PMUNB pmunb); // Add an item to the undo list
+    void ClearUndo(void) override;
 
     //
     // Accessors for MVUs only.

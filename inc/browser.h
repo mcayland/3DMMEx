@@ -215,7 +215,7 @@ class BRWD : public BRWD_PAR
     bool FCmdBack(PCMD pcmd); // Page back
     bool FCmdSelect(PCMD pcmd);
     bool FCmdSelectThum(PCMD pcmd); // Set viewing page
-    virtual void Release(void);
+    virtual void Release(void) override;
     virtual bool FCmdCancel(PCMD pcmd); // See brwb
     virtual bool FCmdDel(PCMD pcmd)
     {
@@ -370,7 +370,7 @@ class BCLS : public BCLS_PAR
     bool _FInit(PCRM pcrm, CKI *pckiRoot, CTG ctgContent, PGST pgst, PGL pglthd);
     bool _FSetNameGst(PCFL pcfl, CTG ctg, CNO cno);
 
-    virtual bool _FAddGokdToThd(PCFL pcfl, int32_t sid, KID *pkid);
+    virtual bool _FAddGokdToThd(PCFL pcfl, int32_t sid, KID *pkid) override;
 
   public:
     static PBCLS PbclsNew(PCRM pcrm, CKI *pckiRoot, CTG ctgContent, PGL pglthd = pvNil, PGST pgst = pvNil,
@@ -427,24 +427,24 @@ class BRWL : public BRWL_PAR
     bool _FInitNew(PCMD pcmd, BWS bws, int32_t ThumSelect, CKI ckiRoot, CTG ctgContent);
     bool _FCreateBuildThd(CKI ckiRoot, CTG ctgContent, bool fBuildGl = fTrue);
     virtual bool _FGetContent(PCRM pcrm, CKI *pcki, CTG ctg, bool fBuildGl);
-    virtual int32_t _Cthum(void)
+    virtual int32_t _Cthum(void) override
     {
         AssertThis(0);
         return _pglthd->IvMac();
     }
-    virtual bool _FSetThumFrame(int32_t ithd, PGOB pgobPar);
-    virtual bool _FUpdateLists()
+    virtual bool _FSetThumFrame(int32_t ithd, PGOB pgobPar) override;
+    virtual bool _FUpdateLists() override
     {
         return fTrue;
     } // Eg, to include user sounds
 
     // BRWL util
     void _SortThd(void);
-    virtual void _GetThumFromIthum(int32_t ithum, void *pThumSelect, int32_t *psid);
-    virtual void _ReleaseThumFrame(int32_t ifrm);
-    virtual int32_t _IthumFromThum(int32_t thum, int32_t sid);
-    virtual void _CacheContext(void);
-    virtual void _SetCbPcrmMin(void);
+    virtual void _GetThumFromIthum(int32_t ithum, void *pThumSelect, int32_t *psid) override;
+    virtual void _ReleaseThumFrame(int32_t ifrm) override;
+    virtual int32_t _IthumFromThum(int32_t thum, int32_t sid) override;
+    virtual void _CacheContext(void) override;
+    virtual void _SetCbPcrmMin(void) override;
 
   public:
     //
@@ -479,13 +479,13 @@ class BRWT : public BRWT_PAR
     PGST _pgst;
     bool _fEnableAccel;
 
-    virtual int32_t _Cthum(void)
+    virtual int32_t _Cthum(void) override
     {
         AssertThis(0);
         return _pgst->IvMac();
     }
-    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar);
-    virtual void _ReleaseThumFrame(int32_t ifrm)
+    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar) override;
+    virtual void _ReleaseThumFrame(int32_t ifrm) override
     {
     } // No gob to release
 
@@ -519,13 +519,13 @@ class BRWN : public BRWN_PAR
     RTCLASS_DEC
 
   protected:
-    virtual bool _FGetContent(PCRM pcrm, CKI *pcki, CTG ctg, bool fBuildGl);
-    virtual int32_t _Cthum(void)
+    virtual bool _FGetContent(PCRM pcrm, CKI *pcki, CTG ctg, bool fBuildGl) override;
+    virtual int32_t _Cthum(void) override
     {
         return _pglthd->IvMac();
     }
-    virtual bool _FSetThumFrame(int32_t ithd, PGOB pgobPar);
-    virtual void _ReleaseThumFrame(int32_t ifrm);
+    virtual bool _FSetThumFrame(int32_t ithd, PGOB pgobPar) override;
+    virtual void _ReleaseThumFrame(int32_t ifrm) override;
 
   public:
     //
@@ -536,9 +536,10 @@ class BRWN : public BRWN_PAR
     }
     ~BRWN(void){};
     virtual bool FInit(PCMD pcmd, BWS bws, int32_t ThumSelect, int32_t sidSelect, CKI ckiRoot, CTG ctgContent,
-                       PSTDIO pstdio, PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue, int32_t cthumScroll = ivNil);
+                       PSTDIO pstdio, PBRCNL pbrcnl = pvNil, bool fWrapScroll = fTrue,
+                       int32_t cthumScroll = ivNil) override;
 
-    virtual bool FCmdOk(PCMD pcmd);
+    virtual bool FCmdOk(PCMD pcmd) override;
 };
 
 /************************************
@@ -564,10 +565,10 @@ class BRWA : public BRWA_PAR
     MARKMEM
 
   protected:
-    int32_t _celnStart;           // Starting cel number
-    PAPE _pape;                   // Actor Preview Entity
-    void _ProcessSelection(void); // Action Preview
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
+    int32_t _celnStart;                    // Starting cel number
+    PAPE _pape;                            // Actor Preview Entity
+    void _ProcessSelection(void) override; // Action Preview
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
 
   public:
     //
@@ -585,7 +586,7 @@ class BRWA : public BRWA_PAR
     static PBRWA PbrwaNew(PRCA prca);
     bool FBuildApe(PACTR pactr);
     bool FBuildGst(PSCEN pscen);
-    virtual bool FCmdChangeCel(PCMD pcmd);
+    virtual bool FCmdChangeCel(PCMD pcmd) override;
 };
 
 /************************************
@@ -602,7 +603,7 @@ class BRWP : public BRWP_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
 
   public:
     //
@@ -630,7 +631,7 @@ class BRWB : public BRWB_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
 
   public:
     //
@@ -642,7 +643,7 @@ class BRWB : public BRWB_PAR
     ~BRWB(void){};
 
     static PBRWB PbrwbNew(PRCA prca);
-    virtual bool FCmdCancel(PCMD pcmd);
+    virtual bool FCmdCancel(PCMD pcmd) override;
 };
 
 /************************************
@@ -659,8 +660,8 @@ class BRWC : public BRWC_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
-    virtual void _SetCbPcrmMin(void)
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
+    virtual void _SetCbPcrmMin(void) override
     {
     }
 
@@ -675,7 +676,7 @@ class BRWC : public BRWC_PAR
 
     static PBRWC PbrwcNew(PRCA prca);
 
-    virtual bool FCmdCancel(PCMD pcmd);
+    virtual bool FCmdCancel(PCMD pcmd) override;
 };
 
 /************************************
@@ -695,9 +696,9 @@ class BRWM : public BRWM_PAR
     int32_t _sty; // Identifies type of sound
     PCRF _pcrf;   // NOT created here (autosave or BRWI file)
 
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
-    virtual bool _FUpdateLists(); // By all entries in pcrf of correct type
-    void _ProcessSelection(void); // Sound Preview
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
+    virtual bool _FUpdateLists() override; // By all entries in pcrf of correct type
+    void _ProcessSelection(void) override; // Sound Preview
     bool _FAddThd(STN *pstn, CKI *pcki);
     bool _FSndListed(CNO cno, int32_t *pithd = pvNil);
 
@@ -712,8 +713,8 @@ class BRWM : public BRWM_PAR
     ~BRWM(void){};
 
     static PBRWM PbrwmNew(PRCA prca, int32_t kidGlass, int32_t sty, PSTDIO pstdio);
-    virtual bool FCmdFile(PCMD pcmd); // Upon portfolio completion
-    virtual bool FCmdDel(PCMD pcmd);  // Delete user sound
+    virtual bool FCmdFile(PCMD pcmd) override; // Upon portfolio completion
+    virtual bool FCmdDel(PCMD pcmd) override;  // Delete user sound
 };
 
 /************************************
@@ -734,8 +735,8 @@ class BRWI : public BRWI_PAR
 
   protected:
     // The following are already handled by BRWM
-    // virtual void _ProcessSelection(void);
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
+    // virtual void _ProcessSelection(void) override;
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
 
   public:
     //
@@ -772,12 +773,12 @@ class BRWR : public BRWR_PAR
     bool _fApplyingSel;
 
   protected:
-    virtual int32_t _Cthum(void);
-    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar);
-    virtual void _ReleaseThumFrame(int32_t ifrm);
-    virtual void _ApplySelection(int32_t thumSelect, int32_t sid);
-    virtual void _ProcessSelection(void);
-    virtual bool _FClearHelp(int32_t ifrm);
+    virtual int32_t _Cthum(void) override;
+    virtual bool _FSetThumFrame(int32_t istn, PGOB pgobPar) override;
+    virtual void _ReleaseThumFrame(int32_t ifrm) override;
+    virtual void _ApplySelection(int32_t thumSelect, int32_t sid) override;
+    virtual void _ProcessSelection(void) override;
+    virtual bool _FClearHelp(int32_t ifrm) override;
     int32_t _IaridFromIthum(int32_t ithum, int32_t iaridFirst = 0);
     int32_t _IthumFromArid(int32_t arid);
 

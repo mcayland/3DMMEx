@@ -100,11 +100,11 @@ class TMAP : public TMAP_PAR
     static PTMAP PtmapNew(uint8_t *prgbPixels, int32_t dxWidth, int32_t dxHeight);
 
     // Some useful file methods
-    int32_t CbOnFile(void)
+    int32_t CbOnFile(void) override
     {
         return (SIZEOF(TMAPF) + LwMul(_bpmp.row_bytes, _bpmp.height));
     }
-    bool FWrite(PBLCK pblck);
+    bool FWrite(PBLCK pblck) override;
 
 #ifdef NOT_YET_REVIEWED
     // Useful shade-table type method

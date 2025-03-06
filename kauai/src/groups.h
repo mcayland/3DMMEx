@@ -163,11 +163,11 @@ class GL : public GL_PAR
     PGL PglDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(void *pv, int32_t *piv = pvNil);
-    virtual void Delete(int32_t iv);
-    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual int32_t CbOnFile(void);
-    virtual bool FFree(int32_t iv);
+    virtual bool FAdd(void *pv, int32_t *piv = pvNil) override;
+    virtual void Delete(int32_t iv) override;
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur) override;
+    virtual int32_t CbOnFile(void) override;
+    virtual bool FFree(int32_t iv) override;
 
     // new methods
     void Delete(int32_t iv, int32_t cv);
@@ -224,11 +224,11 @@ class AL : public AL_PAR
     PAL PalDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(void *pv, int32_t *piv = pvNil);
-    virtual void Delete(int32_t iv);
-    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual int32_t CbOnFile(void);
-    virtual bool FFree(int32_t iv);
+    virtual bool FAdd(void *pv, int32_t *piv = pvNil) override;
+    virtual void Delete(int32_t iv) override;
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur) override;
+    virtual int32_t CbOnFile(void) override;
+    virtual bool FFree(int32_t iv) override;
 
     // new methods
     bool FEnsureSpace(int32_t cvAdd, uint32_t grfgrp = fgrpNil);
@@ -273,9 +273,9 @@ class GGB : public GGB_PAR
 
   public:
     // methods required by parent class
-    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual int32_t CbOnFile(void);
-    virtual bool FFree(int32_t iv);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur) override;
+    virtual int32_t CbOnFile(void) override;
+    virtual bool FFree(int32_t iv) override;
 
     bool FEnsureSpace(int32_t cvAdd, int32_t cbAdd, uint32_t grfgrp = fgrpNil);
     void SetMinGrow(int32_t cvAdd, int32_t cbAdd);
@@ -332,8 +332,8 @@ class GG : public GG_PAR
     PGG PggDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil);
-    virtual void Delete(int32_t iv);
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil) override;
+    virtual void Delete(int32_t iv) override;
 
     // new methods
     bool FInsert(int32_t iv, int32_t cb, const void *pv = pvNil, const void *pvFixed = pvNil);
@@ -367,8 +367,8 @@ class AG : public AG_PAR
     PAG PagDup(void);
 
     // methods required by parent class
-    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil);
-    virtual void Delete(int32_t iv);
+    virtual bool FAdd(int32_t cb, int32_t *piv = pvNil, const void *pv = pvNil, void *pvFixed = pvNil) override;
+    virtual void Delete(int32_t iv) override;
 };
 
 /****************************************
@@ -423,9 +423,9 @@ class GSTB : public GSTB_PAR
 
   public:
     // methods required by parent class
-    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur);
-    virtual int32_t CbOnFile(void);
-    virtual bool FFree(int32_t istn);
+    virtual bool FWrite(PBLCK pblck, int16_t bo = kboCur, int16_t osk = koskCur) override;
+    virtual int32_t CbOnFile(void) override;
+    virtual bool FFree(int32_t istn) override;
 
     bool FEnsureSpace(int32_t cstnAdd, int32_t cchAdd, uint32_t grfgrp = fgrpNil);
     void SetMinGrow(int32_t cstnAdd, int32_t cchAdd);
@@ -479,9 +479,10 @@ class GST : public GST_PAR
     PGST PgstDup(void);
 
     // methods required by parent class
-    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil, int32_t *pistn = pvNil);
-    virtual bool FFindRgch(const achar *prgch, int32_t cch, int32_t *pistn, uint32_t grfgst = fgstNil);
-    virtual void Delete(int32_t istn);
+    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil,
+                          int32_t *pistn = pvNil) override;
+    virtual bool FFindRgch(const achar *prgch, int32_t cch, int32_t *pistn, uint32_t grfgst = fgstNil) override;
+    virtual void Delete(int32_t istn) override;
 
     // new methods
     bool FInsertRgch(int32_t istn, const achar *prgch, int32_t cch, const void *pvExtra = pvNil);
@@ -514,8 +515,9 @@ class AST : public AST_PAR
     PAST PastDup(void);
 
     // methods required by parent class
-    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil, int32_t *pistn = pvNil);
-    virtual void Delete(int32_t istn);
+    virtual bool FAddRgch(const achar *prgch, int32_t cch, const void *pvExtra = pvNil,
+                          int32_t *pistn = pvNil) override;
+    virtual void Delete(int32_t istn) override;
 };
 
 #endif //! GROUPS_H

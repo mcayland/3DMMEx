@@ -28,16 +28,16 @@ class MIDP : public MIDP_PAR
   protected:
     MIDP(void);
 
-    virtual PSNQUE _PsnqueNew(void);
-    virtual void _Suspend(bool fSuspend);
+    virtual PSNQUE _PsnqueNew(void) override;
+    virtual void _Suspend(bool fSuspend) override;
 
   public:
     static PMIDP PmidpNew(void);
     ~MIDP(void);
 
     // inherited methods
-    virtual void SetVlm(int32_t vlm);
-    virtual int32_t VlmCur(void);
+    virtual void SetVlm(int32_t vlm) override;
+    virtual int32_t VlmCur(void) override;
 };
 
 #endif //! MIDIDEV_H

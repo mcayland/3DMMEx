@@ -101,9 +101,9 @@ class GKDS : public GKDS_PAR
     static bool FReadGkds(PCRF pcrf, CTG ctg, CNO cno, BLCK *pblck, PBACO *ppbaco, int32_t *pcb);
     ~GKDS(void);
 
-    virtual int32_t Gokk(void);
-    virtual bool FGetCume(uint32_t grfcust, int32_t sno, CUME *pcume);
-    virtual void GetLop(int32_t hidPar, LOP *plop);
+    virtual int32_t Gokk(void) override;
+    virtual bool FGetCume(uint32_t grfcust, int32_t sno, CUME *pcume) override;
+    virtual void GetLop(int32_t hidPar, LOP *plop) override;
 };
 
 /***************************************************************************

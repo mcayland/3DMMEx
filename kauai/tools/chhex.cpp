@@ -39,7 +39,7 @@ class DHEX : public DHEX_PAR
         return &_bsf;
     }
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
 };
 
 RTCLASS(DCH)

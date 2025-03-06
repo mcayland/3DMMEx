@@ -101,8 +101,8 @@ class MBMP : public MBMP_PAR
     void DrawMask(uint8_t *prgbPixels, int32_t cbRow, int32_t dyp, int32_t xpRef, int32_t ypRef, RC *prcClip = pvNil);
     bool FPtIn(int32_t xp, int32_t yp);
 
-    virtual bool FWrite(PBLCK pblck);
-    virtual int32_t CbOnFile(void);
+    virtual bool FWrite(PBLCK pblck) override;
+    virtual int32_t CbOnFile(void) override;
 
     // a chunky resource reader for an MBMP
     static bool FReadMbmp(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, int32_t *pcb);

@@ -90,8 +90,8 @@ class MIDS : public MIDS_PAR
     static PMIDS PmidsReadNative(FNI *pfni);
     ~MIDS(void);
 
-    virtual bool FWrite(PBLCK pblck);
-    virtual int32_t CbOnFile(void);
+    virtual bool FWrite(PBLCK pblck) override;
+    virtual int32_t CbOnFile(void) override;
 };
 
 #endif //! MIDI_H

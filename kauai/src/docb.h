@@ -107,7 +107,7 @@ class DOCB : public DOCB_PAR
         return _pdocbChd;
     }
 
-    virtual void Release(void);
+    virtual void Release(void) override;
 
     // high level call to create a new MDI window based on the doc.
     virtual PDMD PdmdNew(void);
@@ -235,7 +235,7 @@ class DDG : public DDG_PAR
 
     virtual bool _FInit(void);
     virtual void _Activate(bool fActive);
-    virtual void _NewRc(void);
+    virtual void _NewRc(void) override;
 
     // scrolling support
     virtual int32_t _ScvMax(bool fVert);
@@ -265,8 +265,8 @@ class DDG : public DDG_PAR
     }
 
     // members of GOB
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdActivateSel(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdActivateSel(PCMD pcmd) override;
 
     virtual bool FCmdScroll(PCMD pcmd);
     virtual bool FCmdCloseDoc(PCMD pcmd);
@@ -290,7 +290,7 @@ class DMD : public DMD_PAR
     PDOCB _pdocb;
 
     DMD(PDOCB pdocb, PGCB pgcb);
-    virtual void _ActivateHwnd(bool fActive);
+    virtual void _ActivateHwnd(bool fActive) override;
 
   public:
     static PDMD PdmdNew(PDOCB pdocb);
@@ -301,7 +301,7 @@ class DMD : public DMD_PAR
         return _pdocb;
     }
     virtual void ActivateNext(PDDG pddg);
-    virtual bool FCmdCloseWnd(PCMD pcmd);
+    virtual bool FCmdCloseWnd(PCMD pcmd) override;
 };
 
 /***************************************************************************
@@ -337,7 +337,7 @@ class DMW : public DMW_PAR
     DMW(PDOCB pdocb, PGCB pgcb);
 
     virtual bool _FInit(void);
-    virtual void _NewRc(void);
+    virtual void _NewRc(void) override;
 
     void _Layout(int32_t idsedStart);
     int32_t _IdsedNext(int32_t idsed, int32_t idsedRoot);
@@ -365,7 +365,7 @@ class DMW : public DMW_PAR
     void MoveSplit(PDSG pdsg, int32_t relNew);
     tribool TVert(PDSG pdsg);
 
-    virtual void Release(void);
+    virtual void Release(void) override;
 };
 
 /***************************************************************************
@@ -395,7 +395,7 @@ class DSG : public DSG_PAR
 
   public:
     static PDSG PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel);
-    virtual void GetMinMax(RC *prcMinMax);
+    virtual void GetMinMax(RC *prcMinMax) override;
 
     PDMW Pdmw(void)
     {
@@ -438,8 +438,8 @@ class DSSP : public DSSP_PAR
     }
     static PDSSP PdsspNew(PDSG pdsg, uint32_t grfdssp);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
 };
 
 enum
@@ -470,8 +470,8 @@ class DSSM : public DSSM_PAR
   public:
     static PDSSM PdssmNew(PDSG pdsg);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
     tribool TVert(void);
 };
 

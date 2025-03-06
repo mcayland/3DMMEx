@@ -197,8 +197,8 @@ class SUNC : public SUNC_PAR
 
     bool FSave(PSCEN pscen);
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //
@@ -239,8 +239,8 @@ class SUNK : public SUNK_PAR
         _fSetBkgd = fSetBkgd;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //
@@ -271,8 +271,8 @@ class SUNR : public SUNR_PAR
         _trans = trans;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //
@@ -313,8 +313,8 @@ class SUNP : public SUNP_PAR
         _fAdd = fAdd;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //
@@ -365,8 +365,8 @@ class SUNX : public SUNX_PAR
         _fAdd = fAdd;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //
@@ -409,8 +409,8 @@ class SUNS : public SUNS_PAR
         _sty = sty;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 //
@@ -442,8 +442,8 @@ class SUNT : public SUNT_PAR
         _stn = *pstn;
     }
 
-    virtual bool FDo(PDOCB pdocb);
-    virtual bool FUndo(PDOCB pdocb);
+    virtual bool FDo(PDOCB pdocb) override;
+    virtual bool FUndo(PDOCB pdocb) override;
 };
 
 RTCLASS(SCEN)

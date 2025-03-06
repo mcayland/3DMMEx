@@ -34,9 +34,9 @@ class KWA : public KWA_PAR
         _fAskForCD = fTrue;
     }
     ~KWA(void);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FFindFile(PSTN pstnSrc, PFNI pfni); // for finding AVIs
-    virtual bool FModalTopic(PRCA prca, CNO cnoTopic, int32_t *plwRet);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FFindFile(PSTN pstnSrc, PFNI pfni) override; // for finding AVIs
+    virtual bool FModalTopic(PRCA prca, CNO cnoTopic, int32_t *plwRet) override;
     void SetMbmp(PMBMP pmbmp);
     void SetCDPrompt(bool fAskForCD)
     {
@@ -207,19 +207,19 @@ class APP : public APP_PAR
 #endif // WIN
 
     // APPB methods that we override
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
-    virtual bool _FInitOS(void);
-    virtual bool _FInitMenu(void)
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef) override;
+    virtual bool _FInitOS(void) override;
+    virtual bool _FInitMenu(void) override
     {
         return fTrue;
     } // no menubar
-    virtual void _CopyPixels(PGNV pgvnSrc, RC *prcSrc, PGNV pgnvDst, RC *prcDst);
-    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil);
-    virtual void _CleanUp(void);
-    virtual void _Activate(bool fActive);
-    virtual bool _FGetNextEvt(PEVT pevt);
+    virtual void _CopyPixels(PGNV pgvnSrc, RC *prcSrc, PGNV pgnvDst, RC *prcDst) override;
+    virtual void _FastUpdate(PGOB pgob, PREGN pregnClip, uint32_t grfapp = fappNil, PGPT pgpt = pvNil) override;
+    virtual void _CleanUp(void) override;
+    virtual void _Activate(bool fActive) override;
+    virtual bool _FGetNextEvt(PEVT pevt) override;
 #ifdef WIN
-    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet);
+    virtual bool _FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t *plwRet) override;
 #endif // WIN
 
   public:
@@ -229,16 +229,16 @@ class APP : public APP_PAR
     }
 
     // Overridden APPB functions
-    virtual void GetStnAppName(PSTN pstn);
-    virtual int32_t OnnDefVariable(void);
-    virtual int32_t DypTextDef(void);
-    virtual tribool TQuerySaveDoc(PDOCB pdocb, bool fForce);
-    virtual void Quit(bool fForce);
-    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil);
-    virtual void Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
+    virtual void GetStnAppName(PSTN pstn) override;
+    virtual int32_t OnnDefVariable(void) override;
+    virtual int32_t DypTextDef(void) override;
+    virtual tribool TQuerySaveDoc(PDOCB pdocb, bool fForce) override;
+    virtual void Quit(bool fForce) override;
+    virtual void UpdateHwnd(HWND hwnd, RC *prc, uint32_t grfapp = fappNil) override;
+    virtual void Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef) override;
 #ifdef BUG1085
-    virtual void HideCurs(void);
-    virtual void ShowCurs(void);
+    virtual void HideCurs(void) override;
+    virtual void ShowCurs(void) override;
 
     // New cursor methods
     void PushCurs(void);
@@ -250,7 +250,7 @@ class APP : public APP_PAR
     bool FCmdLoadBuilding(PCMD pcmd);
     bool FCmdTheaterOpen(PCMD pcmd);
     bool FCmdTheaterClose(PCMD pcmd);
-    bool FCmdIdle(PCMD pcmd);
+    virtual bool FCmdIdle(PCMD pcmd) override;
     bool FCmdInfo(PCMD pcmd);
     bool FCmdPortfolioClear(PCMD pcmd);
     bool FCmdPortfolioOpen(PCMD pcmd);
@@ -372,7 +372,7 @@ class APP : public APP_PAR
     PMVIE PmvieRetrieve(void);
 
     // Determines whether screen savers should be blocked.
-    virtual bool FAllowScreenSaver(void);
+    virtual bool FAllowScreenSaver(void) override;
 };
 
 #define vpapp ((APP *)vpappb)

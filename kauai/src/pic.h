@@ -62,8 +62,8 @@ class PIC : public PIC_PAR
     }
     bool FAddToCfl(PCFL pcfl, CTG ctg, CNO *pcno, CHID chid = 0);
     bool FPutInCfl(PCFL pcfl, CTG ctg, CNO cno, CHID chid = 0);
-    virtual int32_t CbOnFile(void);
-    virtual bool FWrite(PBLCK pblck);
+    virtual int32_t CbOnFile(void) override;
+    virtual bool FWrite(PBLCK pblck) override;
 };
 
 // a chunky resource reader to read picture 0 from a GRAF chunk

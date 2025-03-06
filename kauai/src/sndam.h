@@ -55,8 +55,8 @@ class SDAM : public SDAM_PAR
     virtual bool _FInit(int32_t wav);
 
     // inherited methods
-    virtual PSNQUE _PsnqueNew(void);
-    virtual void _Suspend(bool fSuspend);
+    virtual PSNQUE _PsnqueNew(void) override;
+    virtual void _Suspend(bool fSuspend) override;
 
   public:
     static int32_t vcbMaxMemWave;
@@ -64,10 +64,10 @@ class SDAM : public SDAM_PAR
     static PSDAM PsdamNew(int32_t wav);
     ~SDAM(void);
 
-    virtual void SetVlm(int32_t vlm);
-    virtual int32_t VlmCur(void);
-    virtual void BeginSynch(void);
-    virtual void EndSynch(void);
+    virtual void SetVlm(int32_t vlm) override;
+    virtual int32_t VlmCur(void) override;
+    virtual void BeginSynch(void) override;
+    virtual void EndSynch(void) override;
 };
 
 #endif //! SNDAM_H

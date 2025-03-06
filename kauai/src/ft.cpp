@@ -31,10 +31,10 @@ class APP : public APP_PAR
     CMD_MAP_DEC(APP)
 
   protected:
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef) override;
 
   public:
-    virtual void GetStnAppName(PSTN pstn);
+    virtual void GetStnAppName(PSTN pstn) override;
     bool FCmdTestSuite(PCMD pcmd);
     bool FCmdNewTestWnd(PCMD pcmd);
     bool FCmdTextTestWnd(PCMD pcmd);
@@ -171,8 +171,8 @@ class GPRC : public GPRC_PAR
     GPRC(PGCB pgcb, APT *papt, ACR acrFore, ACR acrBack, bool fTrackMouse);
     ~GPRC(void);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
 };
 
 // graphic fill rectangle
@@ -190,8 +190,8 @@ class GFRC : public GFRC_PAR
   public:
     GFRC(PGCB pgcb, ACR acr, bool fOval);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
 };
 
 RTCLASS(GPRC)
@@ -413,7 +413,7 @@ class TDC : public TDC_PAR
     RTCLASS_DEC
 
   protected:
-    virtual void _NewRc(void);
+    virtual void _NewRc(void) override;
 
   public:
     TDC(PGCB pgcb) : GOB(pgcb)
@@ -421,7 +421,7 @@ class TDC : public TDC_PAR
         _NewRc();
     }
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 RTCLASS(TDC)
@@ -670,8 +670,8 @@ class TTW : public TTW_PAR
     {
     }
     static TTW *PttwNew(void);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    void Draw(PGNV pgnv, RC *prcClip);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 RTCLASS(TTW)
@@ -794,8 +794,8 @@ class RTW : public RTW_PAR
     {
         _cact = 0;
     }
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
     static RTW *PrtwNew(void);
 };
 
@@ -1175,7 +1175,7 @@ class DOCP : public DOCB
 
     DOCP(void);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
     void GetRcPic(RC *prc);
 };
 
@@ -1188,8 +1188,8 @@ class DDP : public DDG
   public:
     static DDP *PddpNew(DOCP *pdocp, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
 
     void DrawRc(PGNV pgnv);
     void DrawNumbers(PGNV pgnv);
@@ -1405,12 +1405,12 @@ class DOCPIC : public DOCPIC_PAR
 
     static DOCPIC *PdocpicNew(void);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
     PPIC Ppic(void)
     {
         return _ppic;
     }
-    virtual bool FSaveToFni(FNI *pfni, bool fSetFni);
+    virtual bool FSaveToFni(FNI *pfni, bool fSetFni) override;
 };
 
 // picture document display
@@ -1423,7 +1423,7 @@ class DDPIC : public DDPIC_PAR
   public:
     static DDPIC *PddpicNew(DOCPIC *pdocpic, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 /***************************************************************************
@@ -1637,7 +1637,7 @@ class DOCGPT : public DOCGPT_PAR
 
     static DOCGPT *PdocgptNew(void);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
     PGPT Pgpt(void)
     {
         return _pgpt;
@@ -1654,7 +1654,7 @@ class DDGPT : public DDGPT_PAR
   public:
     static DDGPT *PddgptNew(DOCGPT *pdocgpt, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 /***************************************************************************
@@ -2001,7 +2001,7 @@ class TAN : public TAN_PAR
   public:
     static PTAN PtanNew(void);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
     virtual bool FCmdAlarm(PCMD pcmd);
 };
 
@@ -2117,8 +2117,8 @@ class TED : public TED_PAR
   public:
     static PTED PtedNew(void);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdBadKey(PCMD_BADKEY pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdBadKey(PCMD_BADKEY pcmd) override;
 };
 
 /***************************************************************************

@@ -157,14 +157,14 @@ class SCCG : public SCCG_PAR
     RTCLASS_DEC
 
   protected:
-    virtual int16_t _SwCur(void);
-    virtual int16_t _SwBack(void);
-    virtual int16_t _SwMin(void);
+    virtual int16_t _SwCur(void) override;
+    virtual int16_t _SwBack(void) override;
+    virtual int16_t _SwMin(void) override;
 
-    virtual int32_t _OpFromStn(PSTN pstn);
+    virtual int32_t _OpFromStn(PSTN pstn) override;
     virtual bool _FGetOpFromName(PSTN pstn, int32_t *pop, int32_t *pclwFixed, int32_t *pclwVar, int32_t *pcactMinVar,
-                                 bool *pfVoid);
-    virtual bool _FGetStnFromOp(int32_t op, PSTN pstn);
+                                 bool *pfVoid) override;
+    virtual bool _FGetStnFromOp(int32_t op, PSTN pstn) override;
 };
 
 #endif //! SCRCOMG_H

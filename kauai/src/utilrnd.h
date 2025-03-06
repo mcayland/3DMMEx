@@ -64,7 +64,7 @@ class SFL : public SFL_PAR
     void Shuffle(int32_t lwLim);
     void ShuffleRglw(int32_t clw, int32_t *prglw);
 
-    virtual int32_t LwNext(int32_t lwLim = 0);
+    virtual int32_t LwNext(int32_t lwLim = 0) override;
 };
 
 #endif // UTILRND_H

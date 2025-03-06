@@ -65,10 +65,10 @@ class DOC : public DOC_PAR
     {
         return _pcfl;
     }
-    virtual PDDG PddgNew(PGCB pgcb);
-    virtual bool FGetFni(FNI *pfni);
-    virtual bool FGetFniSave(FNI *pfni);
-    virtual bool FSaveToFni(FNI *pfni, bool fSetFni);
+    virtual PDDG PddgNew(PGCB pgcb) override;
+    virtual bool FGetFni(FNI *pfni) override;
+    virtual bool FGetFniSave(FNI *pfni) override;
+    virtual bool FSaveToFni(FNI *pfni, bool fSetFni) override;
 };
 
 /***************************************************************************
@@ -100,8 +100,8 @@ class DOCE : public DOCE_PAR
     static PDOCE PdoceFromChunk(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
     static void CloseDeletedDoce(PDOCB pdocb);
 
-    virtual void GetName(PSTN pstn);
-    virtual bool FSave(int32_t cid);
+    virtual void GetName(PSTN pstn) override;
+    virtual bool FSave(int32_t cid) override;
 };
 
 /***************************************************************************
@@ -119,13 +119,13 @@ class DOCH : public DOCH_PAR
     BSF _bsf; // the byte stream
 
     DOCH(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
-    virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual int32_t _CbOnFile(void);
-    virtual bool _FRead(PBLCK pblck);
+    virtual bool _FWrite(PBLCK pblck, bool fRedirect) override;
+    virtual int32_t _CbOnFile(void) override;
+    virtual bool _FRead(PBLCK pblck) override;
 
   public:
     static PDOCH PdochNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
 };
 
 /***************************************************************************
@@ -147,13 +147,13 @@ class DOCG : public DOCG_PAR
 
     DOCG(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, int32_t cls);
     ~DOCG(void);
-    virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual int32_t _CbOnFile(void);
-    virtual bool _FRead(PBLCK pblck);
+    virtual bool _FWrite(PBLCK pblck, bool fRedirect) override;
+    virtual int32_t _CbOnFile(void) override;
+    virtual bool _FRead(PBLCK pblck) override;
 
   public:
     static PDOCG PdocgNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno, int32_t cls);
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
 
     PDOCI PdociFromItem(int32_t iv, int32_t dln);
     void CloseDeletedDoci(int32_t iv, int32_t cvDel);
@@ -192,7 +192,7 @@ class DOCI : public DOCI_PAR
 
   public:
     static PDOCI PdociNew(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t iv, int32_t dln);
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
 
     int32_t Iv(void)
     {
@@ -203,8 +203,8 @@ class DOCI : public DOCI_PAR
         return _dln;
     }
 
-    virtual void GetName(PSTN pstn);
-    virtual bool FSave(int32_t cid);
+    virtual void GetName(PSTN pstn) override;
+    virtual bool FSave(int32_t cid) override;
 };
 
 /***************************************************************************
@@ -224,14 +224,14 @@ class DOCPIC : public DOCPIC_PAR
     DOCPIC(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
     ~DOCPIC(void);
 
-    virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual int32_t _CbOnFile(void);
-    virtual bool _FRead(PBLCK pblck);
+    virtual bool _FWrite(PBLCK pblck, bool fRedirect) override;
+    virtual int32_t _CbOnFile(void) override;
+    virtual bool _FRead(PBLCK pblck) override;
 
   public:
     static PDOCPIC PdocpicNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
     PPIC Ppic(void)
     {
         return _ppic;
@@ -255,14 +255,14 @@ class DOCMBMP : public DOCMBMP_PAR
     DOCMBMP(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
     ~DOCMBMP(void);
 
-    virtual bool _FWrite(PBLCK pblck, bool fRedirect);
-    virtual int32_t _CbOnFile(void);
-    virtual bool _FRead(PBLCK pblck);
+    virtual bool _FWrite(PBLCK pblck, bool fRedirect) override;
+    virtual int32_t _CbOnFile(void) override;
+    virtual bool _FRead(PBLCK pblck) override;
 
   public:
     static PDOCMBMP PdocmbmpNew(PDOCB pdocb, PCFL pcfl, CTG ctg, CNO cno);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
     PMBMP Pmbmp(void)
     {
         return _pmbmp;
@@ -293,9 +293,9 @@ class DCLB : public DCLB_PAR
     int32_t _dxpChar;   // width of a character
 
     DCLB(PDOCB pdocb, PGCB pgcb);
-    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0);
-    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp);
-    virtual void GetMinMax(RC *prcMinMax);
+    virtual void _Scroll(int32_t scaHorz, int32_t scaVert, int32_t scvHorz = 0, int32_t scvVert = 0) override;
+    virtual void _ScrollDxpDyp(int32_t dxp, int32_t dyp) override;
+    virtual void GetMinMax(RC *prcMinMax) override;
 
     int32_t _YpFromLn(int32_t ln)
     {
@@ -414,8 +414,8 @@ class DCD : public DCD_PAR
     void _SetSel(int32_t ln, CKI *pcki = pvNil, KID *pkid = pvNil);
     void _ShowSel(void);
 
-    virtual void _Activate(bool fActive);
-    virtual int32_t _ScvMax(bool fVert);
+    virtual void _Activate(bool fActive) override;
+    virtual int32_t _ScvMax(bool fVert) override;
     bool _FAddChunk(CTG ctgDef, CKI *pcki, bool *pfCreated);
     bool _FEditChunkInfo(CKI *pckiOld);
     bool _FChangeChid(CKI *pcki, KID *pkid);
@@ -426,17 +426,17 @@ class DCD : public DCD_PAR
     void _InvalCkiKid(CKI *pcki = pvNil, KID *pkid = pvNil);
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
-    virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
+    virtual void _ClearSel(void) override;
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid) override;
 
   public:
     static PDCD PdcdNew(PDOCB pdocb, PCFL pcfl, PGCB pgcb);
     static void InvalAllDcd(PDOCB pdocb, PCFL pcfl, CKI *pcki = pvNil, KID *pkid = pvNil);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
 
     virtual bool FEnableDcdCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdAddChunk(PCMD pcmd);
@@ -492,8 +492,8 @@ class DCH : public DCH_PAR
 
     DCH(PDOCB pdocb, PBSF pbsf, bool fFixed, PGCB pgcb);
 
-    virtual void _Activate(bool fActive);
-    virtual int32_t _ScvMax(bool fVert);
+    virtual void _Activate(bool fActive) override;
+    virtual int32_t _ScvMax(bool fVert) override;
 
     int32_t _IchFromCb(int32_t cb, bool fHex, bool fNoTrailSpace = fFalse);
     int32_t _XpFromCb(int32_t cb, bool fHex, bool fNoTrailSpace = fFalse);
@@ -516,16 +516,16 @@ class DCH : public DCH_PAR
     void _DrawHeader(PGNV pgnv);
 
     // clipboard support
-    virtual bool _FCopySel(PDOCB *ppdocb = pvNil);
-    virtual void _ClearSel(void);
-    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid);
+    virtual bool _FCopySel(PDOCB *ppdocb = pvNil) override;
+    virtual void _ClearSel(void) override;
+    virtual bool _FPaste(PCLIP pclip, bool fDoIt, int32_t cid) override;
 
   public:
     static PDCH PdchNew(PDOCB pdocb, PBSF pbsf, bool fFixed, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
 };
 
 /***************************************************************************
@@ -552,8 +552,8 @@ class DCGB : public DCGB_PAR
 
     DCGB(PDOCB pdocb, PGRPB pgrpb, int32_t cls, int32_t clnItem, PGCB pgcb);
 
-    virtual void _Activate(bool fActive);
-    virtual int32_t _ScvMax(bool fVert);
+    virtual void _Activate(bool fActive) override;
+    virtual int32_t _ScvMax(bool fVert) override;
     int32_t _YpFromIvDln(int32_t iv, int32_t dln)
     {
         return _YpFromLn(LwMul(iv, _clnItem) + dln);
@@ -575,8 +575,8 @@ class DCGB : public DCGB_PAR
 
   public:
     static void InvalAllDcgb(PDOCB pdocb, PGRPB pgrpb, int32_t iv, int32_t cvIns, int32_t cvDel);
-    virtual bool FCmdKey(PCMD_KEY pcmd);
-    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust);
+    virtual bool FCmdKey(PCMD_KEY pcmd) override;
+    virtual void MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust) override;
 
     virtual bool FEnableDcgbCmd(PCMD pcmd, uint32_t *pgrfeds);
     virtual bool FCmdEditItem(PCMD pcmd);
@@ -599,8 +599,8 @@ class DCGL : public DCGL_PAR
   public:
     static PDCGL PdcglNew(PDOCB pdocb, PGLB pglb, int32_t cls, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdAddItem(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdAddItem(PCMD pcmd) override;
 };
 
 /***************************************************************************
@@ -618,8 +618,8 @@ class DCGG : public DCGG_PAR
   public:
     static PDCGG PdcggNew(PDOCB pdocb, PGGB pggb, int32_t cls, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdAddItem(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdAddItem(PCMD pcmd) override;
 };
 
 /***************************************************************************
@@ -637,8 +637,8 @@ class DCST : public DCST_PAR
   public:
     static PDCST PdcstNew(PDOCB pdocb, PGSTB pgstb, int32_t cls, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
-    virtual bool FCmdAddItem(PCMD pcmd);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
+    virtual bool FCmdAddItem(PCMD pcmd) override;
 };
 
 /***************************************************************************
@@ -656,12 +656,12 @@ class DCPIC : public DCPIC_PAR
     PPIC _ppic;
 
     DCPIC(PDOCB pdocb, PPIC ppic, PGCB pgcb);
-    virtual void GetMinMax(RC *prcMinMax);
+    virtual void GetMinMax(RC *prcMinMax) override;
 
   public:
     static PDCPIC PdcpicNew(PDOCB pdocb, PPIC ppic, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 /***************************************************************************
@@ -679,12 +679,12 @@ class DCMBMP : public DCMBMP_PAR
     PMBMP _pmbmp;
 
     DCMBMP(PDOCB pdocb, PMBMP pmbmp, PGCB pgcb);
-    virtual void GetMinMax(RC *prcMinMax);
+    virtual void GetMinMax(RC *prcMinMax) override;
 
   public:
     static PDCMBMP PdcmbmpNew(PDOCB pdocb, PMBMP pmbmp, PGCB pgcb);
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 /***************************************************************************
@@ -703,7 +703,7 @@ class TSCG : public TSCG_PAR
     {
     }
 
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 };
 
 /***************************************************************************
@@ -721,7 +721,7 @@ class CHTXD : public CHTXD_PAR
     static PCHTXD PchtxdNew(PFNI pfni = pvNil, PBSF pbsf = pvNil, short osk = koskCur, PDOCB pdocb = pvNil,
                             uint32_t grfdoc = fdocNil);
 
-    virtual PDDG PddgNew(PGCB pgcb);
+    virtual PDDG PddgNew(PGCB pgcb) override;
 };
 
 /***************************************************************************
