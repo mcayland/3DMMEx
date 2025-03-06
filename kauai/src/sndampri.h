@@ -24,7 +24,7 @@ typedef class STBL *PSTBL;
 class STBL : public STBL_PAR
 {
     ASSERT
-    MARKMEM
+    MARKMEM_BASE
 
   protected:
     int32_t _cactRef;
