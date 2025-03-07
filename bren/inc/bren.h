@@ -112,7 +112,7 @@ VERIFY_STRUCT_SIZE(BVEC3, 12);
 VERIFY_STRUCT_SIZE(br_colour, 4);
 VERIFY_STRUCT_SIZE(br_ufraction, 2);
 #else // !BASED_FIXED
-#error BRender must be configured for fixed-point math
+//#error BRender must be configured for fixed-point math
 #endif // BASED_FIXED
 
 #if BASED_FIXED
