@@ -37,9 +37,20 @@ add_custom_command(
     COMMENT "Generating frame chunk headers"
 )
 
+# Build kid chunk headers
+add_custom_command(
+    OUTPUT ${PROJECT_BINARY_DIR}/generated/kauai/src/kidchk.h
+    DEPENDS ${PROJECT_SOURCE_DIR}/kauai/src/kidchk.in
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/generated/kauai/src"
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -DINPUT_FILE=${PROJECT_SOURCE_DIR}/kauai/src/kidchk.in -DOUTPUT_FILE=${PROJECT_BINARY_DIR}/generated/kauai/src/kidchk.h -P ${PROJECT_SOURCE_DIR}/cmake/GenerateChunkTags.cmake
+    COMMENT "Generating kid chunk headers"
+)
+
 add_custom_target(
     GenerateChunkTags DEPENDS
     "${PROJECT_BINARY_DIR}/generated/kauai/src/framechk.h"
+    "${PROJECT_BINARY_DIR}/generated/kauai/src/kidchk.h"
 )
 
 add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4430>)
