@@ -257,7 +257,7 @@ bool FAssertProc(PSZ pszFile, long lwLine, PSZ pszMessage, void *pv, long cb)
         fprintf(stderr, "   Message: %s\n", pszMessage);
     if (pv != pvNil)
     {
-        fprintf(stderr, "   Address %x\n", pv);
+        fprintf(stderr, "   Address %p\n", pv);
         if (cb != 0)
         {
             fprintf(stderr, "   Value: ");

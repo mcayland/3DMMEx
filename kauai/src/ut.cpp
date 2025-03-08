@@ -114,7 +114,7 @@ bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t 
         printf("   Msg: %s\n\r", pszsMsg);
     if (pv != pvNil)
     {
-        printf("   Address %x\n\r", pv);
+        printf("   Address %p\n\r", pv);
         if (cb != 0)
         {
             printf("   Value: ");
