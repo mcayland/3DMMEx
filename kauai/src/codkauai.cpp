@@ -498,7 +498,7 @@ bool KCDC::_FDecode(void *pvSrc, int32_t cbSrc, void *pvDst, int32_t cbDst, int3
             if (pbDst >= pbLimDst)
                 goto LFail;
 #endif // SAFETY
-            *pbDst++ = (uint8_t)(luCur >> ibit + 1);
+            *pbDst++ = (uint8_t)(luCur >> (ibit + 1));
             ibit += 9;
         }
         else
