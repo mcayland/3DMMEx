@@ -16,12 +16,12 @@
 #include "chedres.h"
 
 // creator type for the chunky editor
-#define kctgChed 'CHED'
+#define kctgChed KLCONST4('C', 'H', 'E', 'D')
 
 #include "chdoc.h"
 
 #define APP_PAR APPB
-#define kclsAPP 'APP'
+#define kclsAPP KLCONST3('A', 'P', 'P')
 class APP : public APP_PAR
 {
     RTCLASS_DEC
