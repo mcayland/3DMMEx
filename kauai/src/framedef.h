@@ -33,8 +33,8 @@
     Miscellaneous defines
 ***************************************************************************/
 #define kdzpInch 72
-#define klwSigPackedFile 'kapa'
-#define klwSigUnpackedFile 'kaup'
+#define klwSigPackedFile KLCONST4('k', 'a', 'p', 'a')
+#define klwSigUnpackedFile KLCONST4('k', 'a', 'u', 'p')
 #define stidNil 0xFFFFFFFF // nil string id
 #define kdtimSecond 60
 
@@ -42,8 +42,8 @@
     Compression formats.
 ***************************************************************************/
 #define cfmtNil 0
-#define kcfmtKauai 'KCDC'
-#define kcfmtKauai2 'KCD2'
+#define kcfmtKauai KLCONST4('K', 'C', 'D', 'C')
+#define kcfmtKauai2 KLCONST4('K', 'C', 'D', '2')
 
 /***************************************************************************
     For flushing events.
