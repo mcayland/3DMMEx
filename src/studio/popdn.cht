@@ -156,7 +156,7 @@ REP_MBMPREG(CHID(kstBrowserEnabled, krepMouseDnOn), "studio\bmp\d1frmh.bmp",
 ADOPT_MBMP(LAST_MBMP, CHID(kstBrowserSelected, krepDefault))
 REP_RECT(CHID(kstBrowserDisabled, krepDefault), "hidden", 0, 0, 0, 0)
 CLICK_SCRIPT("Frame clicked")
-	PlaySoundGob(kidBackground, kctgWave, kcnoPSelectWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoPSelectWav, 0, 0x10000, 1, 0, 1);
 	EnqueueCid(cidBrowserSelect, kidSpltsColor, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidSpltsColor, 0, 0, 0, 0);
 ENDCHUNK
@@ -312,7 +312,7 @@ REP_MBMPREG(CHID(kstBrowserEnabled, krepMouseDnOn), "studio\bmp\d2frmh.bmp",
 ADOPT_MBMP(LAST_MBMP, CHID(kstBrowserSelected, krepDefault))
 REP_RECT(CHID(kstBrowserDisabled, krepDefault), "hidden", 0, 0, 0, 0)
 CLICK_SCRIPT("Frame clicked")
-	PlaySoundGob(kidBackground, kctgWave, kcnoPSelectWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoPSelectWav, 0, 0x10000, 1, 0, 1);
 	EnqueueCid(cidBrowserSelect,kidSpltsShape, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidSpltsShape, 0, 0, 0, 0);
 ENDCHUNK
@@ -455,7 +455,7 @@ REP_MBMPREG(CHID(kstBrowserEnabled, krepMouseDnOn), "studio\bmp\d3frmh.bmp",
 ADOPT_MBMP(LAST_MBMP, CHID(kstBrowserSelected, krepDefault))
 REP_RECT(CHID(kstBrowserDisabled, krepDefault), "hidden", 0, 0, 0, 0)
 CLICK_SCRIPT("Frame clicked")
-	PlaySoundGob(kidBackground, kctgWave, kcnoPSelectWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoPSelectWav, 0, 0x10000, 1, 0, 1);
 	EnqueueCid(cidBrowserSelect, kidSpltsFont, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidSpltsFont, 0, 0, 0, 0);
 ENDCHUNK

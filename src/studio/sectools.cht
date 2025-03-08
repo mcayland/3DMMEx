@@ -525,7 +525,7 @@ CREATE_ANIMST("XZ", kstClosed)
 ENDCHUNK
 CHILD_SCRIPT("XZ", CHID(kstClosed, kchidClick))
 	ChangeStateThis(kstOpen);
-	PlaySoundThis(kctgWave, kcnoStateOnWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundThis(kcctgWave, kcnoStateOnWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 CREATE_ANIMST("XY", kstOpen)
 	EnqueueCid(cidXYAxis, khidStudio, 0, 0, 0, 0);
@@ -533,7 +533,7 @@ CREATE_ANIMST("XY", kstOpen)
 ENDCHUNK
 CHILD_SCRIPT("XY", CHID(kstOpen, kchidClick))
 	ChangeStateThis(kstClosed);
-	PlaySoundThis(kctgWave, kcnoStateOffWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundThis(kcctgWave, kcnoStateOffWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //
@@ -609,7 +609,7 @@ REP_ANIM(CHID(kstOpen, krepMouseDnOn), "Pressed")
 	//
 	lwDelay = klwSLDelayMax;
 	While();
-		PlaySoundThis(kctgWave, kcnoSyStepFWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundThis(kcctgWave, kcnoSyStepFWav, 0, 0x10000, 1, 0, 1);
 		EnqueueCid(cidSooner, 0, 0, 0, 0, 0);
 		Cell(CHID(kstOpen, krepMouseDnOn), 0, 0, lwDelay);
 	    If(lwDelay > lwSLDelayMin);
@@ -669,7 +669,7 @@ REP_ANIM(CHID(kstOpen, krepMouseDnOn), "Pressed")
 	//
 	lwDelay = klwSLDelayMax;
 	While();
-		PlaySoundThis(kctgWave, kcnoSyStepFWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundThis(kcctgWave, kcnoSyStepFWav, 0, 0x10000, 1, 0, 1);
 		EnqueueCid(cidLater, 0, 0, 0, 0, 0);
 		Cell(CHID(kstOpen, krepMouseDnOn), 0, 0, lwDelay);
 	    If(lwDelay > lwSLDelayMin);

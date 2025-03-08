@@ -122,7 +122,7 @@ GOBCHUNK("Generic browser pane of glass", kidGenericGlass, kgokkRectHit)
 ENDCHUNK
 REP_RECT(CHID(kstDefault, krepDefault ), "Max", 0, 0, kdxpBackground, kdypBackground)
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 GOBCHUNK("Generic disable pane of glass", kidGenericDisableGlass, kgokkRectHit)
@@ -133,7 +133,7 @@ REP_FILL( CHID(kstDefault, krepDefault ), "Max", 0,0, kdxpBackground, kdypBackgr
 	PATTERN_50
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -156,7 +156,7 @@ CREATE_SCRIPT("Settings background")
 	CreateChildThis(kidBrwsBackground, kidBrwsBackground);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //
@@ -246,7 +246,7 @@ CLICK_SCRIPT("Browser frame clicked")
 	ChangeStateThis(kstBrowserSelected);
 	EnqueueCid(cidBrowserSelect, kidSettingsGlass, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidSettingsGlass, GidThis(), 0, 0, 0);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -265,7 +265,7 @@ CREATE_SCRIPT("Camera background")
 	CreateChildThis(kidBrwsCamera, kidBrwsCamera);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -357,7 +357,7 @@ CLICK_SCRIPT("Browser frame clicked")
 	ChangeStateThis(kstBrowserSelected);
 	EnqueueCid(cidBrowserSelect, kidCameraGlass, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidCameraGlass, GidThis(), 0, 0, 0);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -377,7 +377,7 @@ CREATE_SCRIPT("Actor background")
 	CreateChildThis(kidBrwsActor, kidBrwsActor);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //
@@ -468,7 +468,7 @@ CLICK_SCRIPT("Browser frame clicked")
 	ChangeStateThis(kstBrowserSelected);
 	EnqueueCid(cidBrowserSelect, kidActorGlass, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidActorGlass, GidThis(), 0, 0, 0);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -488,7 +488,7 @@ CREATE_SCRIPT("Prop background")
 	CreateChildThis(kidBrwsProp, kidBrwsProp);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //
@@ -580,7 +580,7 @@ CLICK_SCRIPT("Browser frame clicked")
 	ChangeStateThis(kstBrowserSelected);
 	EnqueueCid(cidBrowserSelect, kidPropGlass, GidThis(), 0, 0, 0);
 	EnqueueCid(cidBrowserOk, kidPropGlass, GidThis(), 0, 0, 0);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -602,7 +602,7 @@ CREATE_SCRIPT("Action background")
 	End;
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -709,7 +709,7 @@ REP_RECT(CHID(kstBrowserDisabled, krepDefault), "hidden", 0, 0, 0, 0)
 CLICK_SCRIPT("Browser frame clicked")
 	ChangeStateThis(kstBrowserSelected);
 	EnqueueCid(cidBrowserSelect, kidActionGlass, GidThis(), 0, 0, 0);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -843,7 +843,7 @@ CHILD_SCRIPT("Click, create story", CHID(kstDefault, kchidClick))
 	EnqueueCid(cidBrowserOk, 0, 0, 0, 0, 0);
 	DestroyGob(kidGenericDisableGlass);
 	DestroyGob(kidBrwsTextCreate);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 GOBCHUNK("Textbox create - scroll", kidCTextsScroll, kgokkRectHit)
@@ -875,7 +875,7 @@ CHILD_SCRIPT("Click, create Scroll", CHID(kstDefault, kchidClick))
 	EnqueueCid(cidBrowserOk, 0, 0, 0, 0, 0);
 	DestroyGob(kidGenericDisableGlass);
 	DestroyGob(kidBrwsTextCreate);
-	PlaySoundGob(kidBackground, kctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kcnoBrwzPicWav, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -897,7 +897,7 @@ CREATE_SCRIPT("Sound FX background")
 	End;
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 GOBCHUNK("Sound MIDI browser pane of glass", kidMidiGlass, kgokkRectHit)
@@ -915,7 +915,7 @@ CREATE_SCRIPT("Sound Midi background")
 	End;
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 GOBCHUNK("Sound Speech browser pane of glass", kidSpeechGlass, kgokkRectHit)
@@ -933,7 +933,7 @@ CREATE_SCRIPT("Sound Speech background")
 	End;
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 GOBCHUNK("Sound browser background", kidBrwsSoundsBackground, kgokkRectHit)
@@ -1183,7 +1183,7 @@ CREATE_SCRIPT("Sound import background")
 	CreateChildThis(kidBrwsSoundsImportBackground, kidBrwsSoundsImportBackground);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 GOBCHUNK("Sound import browser background", kidBrwsSoundsImportBackground, kgokkRectHit)

@@ -34,7 +34,7 @@ CREATE_SCRIPT("Costume changer")
 	CreateChildThis(kidSpltBackground, kidSpltBackground);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -240,7 +240,7 @@ CREATE_SCRIPT("Costume changer")
 	CreateChildThis(kidCostBackground, kidCostBackground);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 
@@ -555,7 +555,7 @@ REP_ANIM(CHID(kstBrowserDragging, kchidUpOff), "Scene sorter, d&d mouse tracking
 
 		dtimCur = 0;
 
-		PlaySoundThis(kctgWave, kcnoGrabSnWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundThis(kcctgWave, kcnoGrabSnWav, 0, 0x10000, 1, 0, 1);
 
 		While(GetModifierState() & fcustMouse);
 			Cell(chidNil, 0, 0, kdtimDrag);
@@ -607,7 +607,7 @@ REP_ANIM(CHID(kstBrowserDragging, kchidUpOff), "Scene sorter, d&d mouse tracking
 
 		ChangeStateGob(kidSSorterBar, kstDefault);
 
-		PlaySoundThis(kctgWave, kcnoDropSnWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundThis(kcctgWave, kcnoDropSnWav, 0, 0x10000, 1, 0, 1);
 
 		/* Find the target frame */
 		xpNew = XGob(idSelFrame);
@@ -656,7 +656,7 @@ REP_ANIM(CHID(kstBrowserEnabled, krepMouseDnOn), "Pressed")
 	cgokScroll = GidParThis()->nxFrame * -1;
 
 	/* Send first scroll command */
-	PlaySoundThis(kctgWave, kcnoPageUpWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundThis(kcctgWave, kcnoPageUpWav, 0, 0x10000, 1, 0, 1);
 	EnqueueCid(cidSceneSortScroll, kidSSorterBackground, cgokScroll, 0, 0, 0);
 	Cell(CHID(kstBrowserEnabled, krepMouseDnOn), 0, 0, lwDelay);
 
@@ -666,7 +666,7 @@ REP_ANIM(CHID(kstBrowserEnabled, krepMouseDnOn), "Pressed")
 	    If(lwDelay > lwSSorterDelayMin);
 			lwDelay -= kdlwSSorterDelay;
 		End;
-		PlaySoundThis(kctgWave, kcnoPageUpWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundThis(kcctgWave, kcnoPageUpWav, 0, 0x10000, 1, 0, 1);
 		EnqueueCid(cidSceneSortScroll, kidSSorterBackground, cgokScroll, 0, 0, 0);
 		Cell(chidNil, 0, 0, lwDelay);
 	End;
@@ -692,7 +692,7 @@ REP_ANIM(CHID(kstBrowserEnabled, krepMouseDnOn), "Pressed")
 	cgokScroll = GidParThis()->nxFrame;
 
 	/* Send first scroll command */
-	PlaySoundThis(kctgWave, kcnoPageDnWav, 0, 0x10000, 1, 0, 1);
+	PlaySoundThis(kcctgWave, kcnoPageDnWav, 0, 0x10000, 1, 0, 1);
 	EnqueueCid(cidSceneSortScroll, kidSSorterBackground, cgokScroll, 0, 0, 0);
 	Cell(CHID(kstBrowserEnabled, krepMouseDnOn), 0, 0, lwDelay);
 
@@ -702,7 +702,7 @@ REP_ANIM(CHID(kstBrowserEnabled, krepMouseDnOn), "Pressed")
 	    If(lwDelay > lwSSorterDelayMin);
 			lwDelay -= kdlwSSorterDelay;
 		End;
-		PlaySoundThis(kctgWave, kcnoPageDnWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundThis(kcctgWave, kcnoPageDnWav, 0, 0x10000, 1, 0, 1);
 		EnqueueCid(cidSceneSortScroll, kidSSorterBackground, cgokScroll, 0, 0, 0);
 		Cell(chidNil, 0, 0, lwDelay);
 	End;
@@ -921,7 +921,7 @@ ENDCHUNK
 /* Handles mouse up after tracking, "no insert" or "nuke" */
 REP_ANIM(CHID(kstBrowserSelected, kchidDownUpOn), "Scene sorter, frame, mouse up on")
 	If(GetModifierState() & fcustNuke);
-		PlaySoundGob(kidSSorterBackground, kctgWave, kcnoNukeSnWav, 0, 0x10000, 1, 0, 1);
+		PlaySoundGob(kidSSorterBackground, kcctgWave, kcnoNukeSnWav, 0, 0x10000, 1, 0, 1);
 		EnqueueCid(cidSceneSortNuke, kidSSorterBackground, 0, 0, 0, 0);
 	End;
 ENDCHUNK
@@ -1028,7 +1028,7 @@ CREATE_SCRIPT("Listener easel for actor - create")
 	CreateChildThis(kidListenBackgroundActor, kidListenBackgroundActor);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //
@@ -1045,7 +1045,7 @@ CREATE_SCRIPT("Listener easel for background - create")
 	CreateChildThis(kidListenBackgroundBkgd, kidListenBackgroundBkgd);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //
@@ -1769,7 +1769,7 @@ CREATE_SCRIPT("Recorder easel - create")
 	CreateChildThis(kidRecordBackground, kidRecordBackground);
 ENDCHUNK
 CHILD_SCRIPT("Glass clicked", CHID(kstDefault, kchidClick))
-	PlaySoundGob(kidBackground, kctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
+	PlaySoundGob(kidBackground, kcctgWave, kwavSplot, 0, 0x10000, 1, 0, 1);
 ENDCHUNK
 
 //

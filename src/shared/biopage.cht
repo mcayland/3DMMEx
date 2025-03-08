@@ -97,7 +97,7 @@ CHILD_SCRIPT( "update bio page", kchidScript1 )
 	// play the sound as appropriate..
 	If( .snd != cnoNil );
 		// page by itself-- play the intro audio
-		PlaySoundThis(kctgWave, .snd, 1, 0x00010000, 1, 1, ksclBldgSound);
+		PlaySoundThis(kcctgWave, .snd, 1, 0x00010000, 1, 1, ksclBldgSound);
 		.snd = cnoNil;
 	End;
 
@@ -138,7 +138,7 @@ REP_PPMBMP(CHID1(krepMouseDnOn), "shared\pbm\cancelc.pbm" )
 CLICK_SCRIPT("Bio cancel clicked")
 	// This is the only way out of the biobook -- re-enable keyboard
 	// accelerators here.
-	PlaySoundThis(kctgWave, kwavBioCancel, 1, 0x00010000, 1, 4, ksclBldgSound);
+	PlaySoundThis(kcctgWave, kwavBioCancel, 1, 0x00010000, 1, 4, ksclBldgSound);
 	If (FGobExists(kidActorsCompose));
 		EnqueueCid(cidClicked, kidActorsCompose, 0, 0, 0, 0);
 	End;
@@ -163,7 +163,7 @@ CLICK_SCRIPT("Bio forward clicked")
 		End;
 		If( fBIO_AVAIL( ::nBioPage ));	// do we have it?
 			wav = Rnd(2) + kwavBio3;	// play a random sound
-			PlaySoundThis(kctgWave, wav, 1, 0x00010000, 1, 4, ksclBldgSound);
+			PlaySoundThis(kcctgWave, wav, 1, 0x00010000, 1, 4, ksclBldgSound);
 			Break;				// yep, all done.
 		End;
 	End;
@@ -188,7 +188,7 @@ CLICK_SCRIPT("Bio back clicked")
 
 		If( fBIO_AVAIL( ::nBioPage ));	// do we have it?
 			wav = Rnd(2) + kwavBio1;	// play a random sound
-			PlaySoundThis(kctgWave, wav, 1, 0x00010000, 1, 4, ksclBldgSound);
+			PlaySoundThis(kcctgWave, wav, 1, 0x00010000, 1, 4, ksclBldgSound);
 			Break;				// yep, all done.
 		End;
 	End;
@@ -244,7 +244,7 @@ CREATE_ANIM("Filtering messages for help tools balloon")
 	// get all mouse downs
 	FilterCmdsThis(cidMouseDown, kidNil, kchidScript1);
 	FilterCmdsThis(cidKey, kidNil, kchidScript1);
-	PlaySoundThis(kctgWave, kwavBioPopup , 1, 0x00010000, 1, 1, ksclBldgSound);
+	PlaySoundThis(kcctgWave, kwavBioPopup , 1, 0x00010000, 1, 1, ksclBldgSound);
 	
 ENDCHUNK
 // Handle mouse clicks

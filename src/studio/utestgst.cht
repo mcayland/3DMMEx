@@ -5,7 +5,7 @@
 // TDT action names
 //
 // REVIEW: hardcoded numerical constants
-CHUNK (kctgGst kcnoGstAction "TDT Action Names")
+CHUNK (kcctgGst kcnoGstAction "TDT Action Names")
 	LONG
 	GST(4)
 	ITEM "At Rest"				0
@@ -29,7 +29,7 @@ ENDCHUNK
 //
 // Misc app global strings
 //
-CHUNK (kctgGst kcnoGstApp "Misc. App global strings")
+CHUNK (kcctgGst kcnoGstApp "Misc. App global strings")
 	LONG
 	GST(4)
 	ITEM "Microsoft 3D Movie Maker" idsWindowTitle

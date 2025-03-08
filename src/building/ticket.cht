@@ -330,7 +330,7 @@ OBJECT( "Biopage 24 mask",  kgobTic1m1, 0, kcrsHand1 )
 	CLICK_SCRIPT( "mask clicked" ) 
 		If(fBIO_AVAIL( 24 ) );
 			// Bio Page already found
-			PlaySoundThis(kctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
+			PlaySoundThis(kcctgWave, kwavBioAlreadyFound, 0, 0x00010000, 1, 0,
 					ksclBldgSound);
 		Else;
 			BIO_MARKFOUND( 24 );
