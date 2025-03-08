@@ -252,7 +252,7 @@ void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage)
 {
     if (_fEnableWarnings)
     {
-        fprintf(stderr, "%s(%ld) : warning", pszsFile, lwLine);
+        fprintf(stderr, "%s(%d) : warning", pszsFile, lwLine);
         if (pszsMessage != pvNil)
         {
             fprintf(stderr, ": %s", pszsMessage);
@@ -291,14 +291,14 @@ bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMessage, void *pv, int3
                 break;
 
             case 4:
-                fprintf(stderr, "%08lx", *(int32_t *)pv);
+                fprintf(stderr, "%08x", *(int32_t *)pv);
                 break;
             }
             printf("\n");
         }
     }
     fprintf(stderr, "   File: %s\n", pszsFile);
-    fprintf(stderr, "   Line: %ld\n", lwLine);
+    fprintf(stderr, "   Line: %d\n", lwLine);
 
     return fFalse;
 }

@@ -93,7 +93,7 @@ int __cdecl main(int cpszs, char **prgpszs)
     }
 
     if (FFindPrime(lwPrime, lwRoot, &lwPrime, &lwRoot))
-        printf("prime = %ld, primitive root = %ld\n", lwPrime, lwRoot);
+        printf("prime = %d, primitive root = %d\n", lwPrime, lwRoot);
 #endif // REVIEW
 
 #ifdef REVIEW // shonk: general testing stuff
@@ -141,7 +141,7 @@ bool FAssertProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv, int32_t 
         }
     }
     printf("   File: %s\n\r", pszsFile);
-    printf("   Line: %ld\n\r", lwLine);
+    printf("   Line: %d\n\r", lwLine);
 
     return fFalse;
 }
@@ -155,7 +155,7 @@ void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
     if (pszsMsg != pvNil)
         printf("   Msg: %s\n\r", pszsMsg);
     printf("   File: %s\n\r", pszsFile);
-    printf("   Line: %ld\n\r", lwLine);
+    printf("   Line: %d\n\r", lwLine);
 }
 #endif // DEBUG
 
