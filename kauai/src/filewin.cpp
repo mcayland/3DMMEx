@@ -384,7 +384,8 @@ bool FIL::FRename(FNI *pfni)
     Assert(_fni.FSameDir(pfni), "trying to change directories with FRename");
 
     _Close();
-    if (fRet = _fni.FRename(pfni))
+    fRet = _fni.FRename(pfni);
+    if (fRet)
         _fni = *pfni;
 
     // reopen the file
