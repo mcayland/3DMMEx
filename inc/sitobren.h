@@ -201,14 +201,14 @@ long LwcrngNearestBrclr(BRCLR brclr, PGL pglclr, PGL pglcrng);
 #define kszBmp "%s-view.1-%d.bmp"
 #define kszZpic "%s-view.1-%d.Zpic"
 #define kszZbmp "%s-view.1-%d.Zbmp"
-#define kftgALite 'SAL'
-#define kftgACam 'SAC'
-#define kftgS2b 'S2B'
-#define kftgCht 'CHT'
+#define kftgALite KLCONST3('S', 'A', 'L')
+#define kftgACam KLCONST3('S', 'A', 'C')
+#define kftgS2b KLCONST3('S', '2', 'B')
+#define kftgCht KLCONST3('C', 'H', 'T')'
 #define kftgInc 'H'
-#define kftgTmapChkFile 'CPF'
-#define kftgZpic 'ZPIC'
-#define kftgZbmp 'ZBMP'
+#define kftgTmapChkFile KLCONST3('C', 'P', 'F')
+#define kftgZpic KLCONST4('Z', 'P', 'I', 'C')
+#define kftgZbmp KLCONST4('Z', 'B', 'M', 'P')
 
 // Script parameter types
 enum
