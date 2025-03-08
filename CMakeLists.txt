@@ -13,8 +13,6 @@ if(MSVC)
 
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # Compiling with ClangCL
-    # Disable warnings about string literals
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /clang:-Wno-multichar")
 
     # FUTURE: Fix dangling-else warnings
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /clang:-Wno-dangling-else")
