@@ -17,6 +17,13 @@
 #ifndef BASE_H
 #define BASE_H
 
+/* Character-based constants */
+#define KLCONST2(a, b) ((a << 8) | b)
+
+#define KLCONST3(a, b, c) ((a << 16) | (b << 8) | c)
+
+#define KLCONST4(a, b, c, d) ((a << 24) | (b << 16) | (c << 8) | d)
+
 /***************************************************************************
     Run-time class determination support.  Each class, FOO, that uses this
     needs a constant, kclsFOO, defined somewhere (preferably with the class
