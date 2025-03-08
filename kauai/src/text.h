@@ -50,7 +50,7 @@ class EDPAR
 ***************************************************************************/
 typedef class EDCB *PEDCB;
 #define EDCB_PAR GOB
-#define kclsEDCB 'EDCB'
+#define kclsEDCB KLCONST4('E', 'D', 'C', 'B')
 class EDCB : public EDCB_PAR
 {
     RTCLASS_DEC
@@ -141,7 +141,7 @@ class EDCB : public EDCB_PAR
 ***************************************************************************/
 typedef class EDPL *PEDPL;
 #define EDPL_PAR EDCB
-#define kclsEDPL 'EDPL'
+#define kclsEDPL KLCONST4('E', 'D', 'P', 'L')
 class EDPL : public EDPL_PAR
 {
     RTCLASS_DEC
@@ -181,7 +181,7 @@ const int32_t kcchMaxEdsl = kcchMaxStn;
 
 typedef class EDSL *PEDSL;
 #define EDSL_PAR EDPL
-#define kclsEDSL 'EDSL'
+#define kclsEDSL KLCONST4('E', 'D', 'S', 'L')
 class EDSL : public EDSL_PAR
 {
     RTCLASS_DEC
@@ -222,7 +222,7 @@ class EDSL : public EDSL_PAR
 ***************************************************************************/
 typedef class EDML *PEDML;
 #define EDML_PAR EDPL
-#define kclsEDML 'EDML'
+#define kclsEDML KLCONST4('E', 'D', 'M', 'L')
 class EDML : public EDML_PAR
 {
     RTCLASS_DEC
@@ -266,7 +266,7 @@ class EDML : public EDML_PAR
 ***************************************************************************/
 typedef class EDMW *PEDMW;
 #define EDMW_PAR EDML
-#define kclsEDMW 'EDMW'
+#define kclsEDMW KLCONST4('E', 'D', 'M', 'W')
 class EDMW : public EDMW_PAR
 {
     RTCLASS_DEC

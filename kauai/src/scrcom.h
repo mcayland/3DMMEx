@@ -168,7 +168,7 @@ struct RTVN
 ***************************************************************************/
 typedef class SCCB *PSCCB;
 #define SCCB_PAR BASE
-#define kclsSCCB 'SCCB'
+#define kclsSCCB KLCONST4('S', 'C', 'C', 'B')
 class SCCB : public SCCB_PAR
 {
     RTCLASS_DEC

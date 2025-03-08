@@ -23,7 +23,7 @@ typedef class REGSC *PREGSC;
 ***************************************************************************/
 typedef class REGN *PREGN;
 #define REGN_PAR BASE
-#define kclsREGN 'REGN'
+#define kclsREGN KLCONST4('R', 'E', 'G', 'N')
 class REGN : public REGN_PAR
 {
     RTCLASS_DEC
@@ -78,7 +78,7 @@ class REGN : public REGN_PAR
     Region scanner class.
 ***************************************************************************/
 #define REGSC_PAR BASE
-#define kclsREGSC 'rgsc'
+#define kclsREGSC KLCONST4('r', 'g', 's', 'c')
 class REGSC : public REGSC_PAR
 {
     RTCLASS_DEC

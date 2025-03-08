@@ -244,7 +244,7 @@ void MarkUtilMem(void);
     on the stack) are guaranteed to be zero'ed out. Also provides reference
     counting and debug lost memory checks.
 ***************************************************************************/
-#define kclsBASE 'BASE'
+#define kclsBASE KLCONST4('B', 'A', 'S', 'E')
 class BASE
 {
     RTCLASS_DEC_BASE
@@ -294,7 +294,7 @@ class BASE
 
 typedef class BLL *PBLL;
 #define BLL_PAR BASE
-#define kclsBLL 'BLL'
+#define kclsBLL KLCONST3('B', 'L', 'L')
 class BLL : public BLL_PAR
 {
     RTCLASS_DEC

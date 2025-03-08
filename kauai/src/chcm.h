@@ -79,7 +79,7 @@ struct KEYTT
 ***************************************************************************/
 typedef class CHLX *PCHLX;
 #define CHLX_PAR LEXB
-#define kclsCHLX 'CHLX'
+#define kclsCHLX KLCONST4('C', 'H', 'L', 'X')
 class CHLX : public CHLX_PAR
 {
     RTCLASS_DEC
@@ -171,7 +171,7 @@ enum
 ***************************************************************************/
 typedef class CHCM *PCHCM;
 #define CHCM_PAR BASE
-#define kclsCHCM 'CHCM'
+#define kclsCHCM KLCONST4('C', 'H', 'C', 'M')
 class CHCM : public CHCM_PAR
 {
     RTCLASS_DEC
@@ -263,7 +263,7 @@ class CHCM : public CHCM_PAR
 ***************************************************************************/
 typedef class CHDC *PCHDC;
 #define CHDC_PAR BASE
-#define kclsCHDC 'CHDC'
+#define kclsCHDC KLCONST4('C', 'H', 'D', 'C')
 class CHDC : public CHDC_PAR
 {
     RTCLASS_DEC

@@ -70,7 +70,7 @@ int CALLBACK _FEnumFont(const LOGFONT *plgf, const TEXTMETRIC *ptxm, UINT luType
 #endif // WIN
 
 #define NTL_PAR BASE
-#define kclsNTL 'NTL'
+#define kclsNTL KLCONST3('N', 'T', 'L')
 class NTL : public NTL_PAR
 {
     RTCLASS_DEC
@@ -339,7 +339,7 @@ enum
 
 typedef class OGN *POGN;
 #define OGN_PAR GL
-#define kclsOGN 'OGN'
+#define kclsOGN KLCONST3('O', 'G', 'N')
 class OGN : public OGN_PAR
 {
     RTCLASS_DEC
@@ -408,7 +408,7 @@ struct GDD
     Graphics environment
 ****************************************/
 #define GNV_PAR BASE
-#define kclsGNV 'GNV'
+#define kclsGNV KLCONST3('G', 'N', 'V')
 class GNV : public GNV_PAR
 {
     RTCLASS_DEC
@@ -574,7 +574,7 @@ enum
     Graphics port
 ****************************************/
 #define GPT_PAR BASE
-#define kclsGPT 'GPT'
+#define kclsGPT KLCONST3('G', 'P', 'T')
 class GPT : public GPT_PAR
 {
     RTCLASS_DEC

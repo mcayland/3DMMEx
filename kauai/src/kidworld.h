@@ -45,7 +45,7 @@ VERIFY_STRUCT_SIZE(CUME, 28);
 
 typedef class GOKD *PGOKD;
 #define GOKD_PAR BACO
-#define kclsGOKD 'GOKD'
+#define kclsGOKD KLCONST4('G', 'O', 'K', 'D')
 class GOKD : public GOKD_PAR
 {
     RTCLASS_DEC
@@ -79,7 +79,7 @@ const BOM kbomGokdf = 0x0C000000;
 
 typedef class GKDS *PGKDS;
 #define GKDS_PAR GOKD
-#define kclsGKDS 'GKDS'
+#define kclsGKDS KLCONST4('G', 'K', 'D', 'S')
 class GKDS : public GKDS_PAR
 {
     RTCLASS_DEC
@@ -111,7 +111,7 @@ class GKDS : public GKDS_PAR
 ***************************************************************************/
 typedef class WOKS *PWOKS;
 #define WOKS_PAR GOB
-#define kclsWOKS 'WOKS'
+#define kclsWOKS KLCONST4('W', 'O', 'K', 'S')
 class WOKS : public WOKS_PAR
 {
     RTCLASS_DEC
