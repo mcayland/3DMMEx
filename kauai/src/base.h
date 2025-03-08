@@ -251,12 +251,12 @@ class BASE
 
   public:
 #ifdef DEBUG
-    void *operator new(size_t cb, schar *pszsFile, int32_t lwLine);
+    void *operator new(size_t cb, schar *pszsFile, int32_t lwLine) noexcept;
     void operator delete(void *pv, schar *pszsFile, int32_t lwLine); // To prevent warning C4291
     void operator delete(void *pv);
     void MarkMemStub(void);
 #else //! DEBUG
-    void *operator new(size_t cb);
+    void *operator new(size_t cb) noexcept;
 #ifdef WIN
     void operator delete(void *pv);
 #endif // WIN

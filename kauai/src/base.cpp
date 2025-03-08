@@ -177,9 +177,9 @@ void BASE::Release(void)
     of allocated objects for object leakage tracking.
 ***************************************************************************/
 #ifdef DEBUG
-void *BASE::operator new(size_t cb, PSZS pszsFile, int32_t lwLine)
+void *BASE::operator new(size_t cb, PSZS pszsFile, int32_t lwLine) noexcept
 #else  //! DEBUG
-void *BASE::operator new(size_t cb)
+void *BASE::operator new(size_t cb) noexcept
 #endif //! DEBUG
 {
     AssertVarMem(pszsFile);
