@@ -89,7 +89,7 @@ enum
 ****************************************/
 typedef class ACTN *PACTN;
 #define ACTN_PAR BACO
-#define kclsACTN 'ACTN'
+#define kclsACTN KLCONST4('A', 'C', 'T', 'N')
 class ACTN : public ACTN_PAR
 {
     RTCLASS_DEC
@@ -144,7 +144,7 @@ enum
 ****************************************/
 typedef class TMPL *PTMPL;
 #define TMPL_PAR BACO
-#define kclsTMPL 'TMPL'
+#define kclsTMPL KLCONST4('T', 'M', 'P', 'L')
 class TMPL : public TMPL_PAR
 {
     RTCLASS_DEC

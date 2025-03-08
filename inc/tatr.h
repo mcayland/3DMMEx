@@ -27,7 +27,7 @@ enum
 ****************************************/
 typedef class TATR *PTATR;
 #define TATR_PAR CMH
-#define kclsTATR 'TATR'
+#define kclsTATR KLCONST4('T', 'A', 'T', 'R')
 class TATR : public TATR_PAR
 {
     RTCLASS_DEC
