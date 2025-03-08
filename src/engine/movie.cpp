@@ -78,7 +78,7 @@ enum MUNST
     munstSetBkgd
 };
 
-#define kclsMUNS 'MUNS'
+#define kclsMUNS KLCONST4('M', 'U', 'N', 'S')
 class MUNS : public MUNS_PAR
 {
     RTCLASS_DEC
