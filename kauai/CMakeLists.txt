@@ -149,6 +149,12 @@ target_link_libraries(
 add_library(KauaiScrExe
     "${PROJECT_SOURCE_DIR}/kauai/src/screxe.cpp"
 )
+target_link_libraries(
+    KauaiScrExe
+    PUBLIC
+    KauaiFile
+    KauaiGroup
+)
 
 # MbmpIO: Masked bitmap IO support
 add_library(KauaiMbmpIO
