@@ -150,34 +150,9 @@
 #define ctgNil 0
 #define chidNil 0xFFFFFFFF
 
-#define kctgFramework 'FRAM' // for chunky file creator
+#include "framechk.h"
 
-#define kctgMacro 'GLCM'
-#define kctgGl 'GL  '
-#define kctgAl 'AL  '
-#define kctgGg 'GG  '
-#define kctgAg 'AG  '
-#define kctgGst 'GST '
-#define kctgAst 'AST '
-#define kctgRsc 'RSC '
-#define kctgMeta 'META'
-#define kctgMacPict 'MPIC'
 #define kctgPictNative MacWin(kctgMacPict, kctgMeta)
-#define kctgGraphic 'GRAF'
-#define kctgScript 'GLOP'
-#define kctgMask 'MASK'
-#define kctgMbmp 'MBMP'
-#define kctgMidi 'MIDS'
-#define kctgWave 'WAVE'
-#define kctgChkCmp 'CHMP'
-#define kctgColorTable 'GLCR'
-#define kctgCursor 'GGCR'
-#define kctgText 'TEXT'
-#define kctgTxtProps 'GLMP'
-#define kctgTxtPropArgs 'AGPA'
-#define kctgRichText 'RTXT'
-#define kctgScriptStrs 'GSTX'
-#define kctgStringReg 'GSTR'
 
 /***************************************************************************
     Command IDs
