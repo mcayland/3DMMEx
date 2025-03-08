@@ -203,7 +203,7 @@ bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
         dimni++;
 
     LAdjustSeparator:
-        fSeparator = mlst.imniBase > FPure(mlst.fSeparator) && pvNil != mlst.pgllw && mlst.pgllw->IvMac() > 0;
+        fSeparator = mlst.imniBase > (FPure(mlst.fSeparator) ? 1 : 0) && pvNil != mlst.pgllw && mlst.pgllw->IvMac() > 0;
         if (fSeparator && !mlst.fSeparator)
         {
             // add a separator
@@ -266,7 +266,7 @@ bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn)
         if (mlst.hmenu == hmenuPrev)
         {
             mlst.imniBase += dimni;
-            Assert(mlst.imniBase >= FPure(mlst.fSeparator), "bad imniBase");
+            Assert(mlst.imniBase >= (FPure(mlst.fSeparator) ? 1 : 0), "bad imniBase");
             _pglmlst->Put(imlst, &mlst);
         }
         else
@@ -314,7 +314,7 @@ bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn)
         }
 
     LAdjustSeparator:
-        fSeparator = mlst.imniBase > FPure(mlst.fSeparator) && pvNil != mlst.pgllw && mlst.pgllw->IvMac() > 0;
+        fSeparator = mlst.imniBase > (FPure(mlst.fSeparator) ? 1 : 0) && pvNil != mlst.pgllw && mlst.pgllw->IvMac() > 0;
         if (fSeparator && !mlst.fSeparator)
         {
             // add a separator
@@ -372,7 +372,7 @@ bool MUB::FRemoveAllListCid(int32_t cid)
         if (mlst.hmenu == hmenuPrev)
         {
             mlst.imniBase += dimni;
-            Assert(mlst.imniBase >= FPure(mlst.fSeparator), "bad imniBase");
+            Assert(mlst.imniBase >= (FPure(mlst.fSeparator) ? 1 : 0), "bad imniBase");
             _pglmlst->Put(imlst, &mlst);
         }
         else
@@ -394,7 +394,7 @@ bool MUB::FRemoveAllListCid(int32_t cid)
             }
         }
 
-        fSeparator = mlst.imniBase > FPure(mlst.fSeparator) && pvNil != mlst.pgllw && mlst.pgllw->IvMac() > 0;
+        fSeparator = mlst.imniBase > (FPure(mlst.fSeparator) ? 1 : 0) && pvNil != mlst.pgllw && mlst.pgllw->IvMac() > 0;
         if (fSeparator && !mlst.fSeparator)
         {
             // add a separator

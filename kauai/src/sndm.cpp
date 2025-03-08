@@ -273,7 +273,7 @@ void SNDM::Suspend(bool fSuspend)
     else
         _cactSuspend--;
 
-    Assert(_cactSuspend >= FPure(fSuspend), "bad _cactSuspend");
+    Assert(_cactSuspend >= (FPure(fSuspend) ? 1 : 0), "bad _cactSuspend");
     for (isndmpe = 0; isndmpe < _pglsndmpe->IvMac(); isndmpe++)
     {
         _pglsndmpe->Get(isndmpe, &sndmpe);
@@ -677,7 +677,7 @@ void SNDMQ::Suspend(bool fSuspend)
     else
         _cactSuspend--;
 
-    Assert(_cactSuspend >= FPure(fSuspend), "bad _cactSuspend");
+    Assert(_cactSuspend >= (FPure(fSuspend) ? 1 : 0), "bad _cactSuspend");
     _Suspend(_cactSuspend > 0 || !_fActive);
 }
 
