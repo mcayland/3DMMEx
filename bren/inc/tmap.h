@@ -48,7 +48,7 @@ const BOM kbomTxxff = 0x5FFF0000;
 ****************************************/
 typedef class TMAP *PTMAP;
 #define TMAP_PAR BACO
-#define kclsTMAP 'TMAP'
+#define kclsTMAP KLCONST4('T', 'M', 'A', 'P')
 class TMAP : public TMAP_PAR
 {
     RTCLASS_DEC
