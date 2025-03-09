@@ -338,7 +338,7 @@ class STN
         AssertThis(0);
     }
     STN(STN &stnSrc);
-    STN(const PSZ pszSrc);
+    STN(PCSZ pszSrc);
 
     // pointers to the data - these should be considered readonly!
     const achar *Prgch(void)

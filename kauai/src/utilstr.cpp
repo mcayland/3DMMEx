@@ -31,7 +31,7 @@ STN::STN(STN &stnSrc)
 /***************************************************************************
     Constructor for a string based on an sz.
 ***************************************************************************/
-STN::STN(const PSZ pszSrc)
+STN::STN(PCSZ pszSrc)
 {
     int32_t cch = LwBound(CchSz(pszSrc), 0, kcchMaxStn + 1);
 
