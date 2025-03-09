@@ -556,25 +556,10 @@ bool APP::_FEnsureOS(void)
 {
     AssertBaseThis(0);
 #ifdef WIN
-    DWORD dwVersion;
-    uint8_t bVersionMajor;
-    uint8_t bVersionMinor;
-    PDLG pdlg;
 
-    dwVersion = GetVersion();
-    bVersionMinor = (uint8_t)((dwVersion & 0x0000ff00) >> 8);
-    bVersionMajor = (uint8_t)(dwVersion & 0x000000ff);
+    // We can no longer compile for Windows pre-95 or NT 3.51
+    return fTrue;
 
-    if (bVersionMajor >= 4 || (bVersionMajor == 3 && bVersionMinor >= 51))
-        return fTrue;
-
-    // Put up an alert: OS too old
-    pdlg = DLG::PdlgNew(dlidBadOS, pvNil, pvNil);
-    if (pvNil == pdlg)
-        return fFalse;
-    pdlg->IditDo();
-    ReleasePpo(&pdlg);
-    _fDontReportInitFailure = fTrue;
 #endif // WIN
 #ifdef MAC
     RawRtn();
@@ -3530,14 +3515,10 @@ bool APP::_FDisplaySwitchSupported(void)
     AssertBaseThis(0);
 
 #ifdef WIN
-    DWORD dwVersion;
-    uint8_t bVersionMajor;
 
-    dwVersion = GetVersion();
-    bVersionMajor = (uint8_t)(dwVersion & 0x000000ff);
-    // FOONE: We don't care if it's NT or not, major version 4.0 means win95 and up or NT4.0 and up.
-    if (bVersionMajor >= 4)
-        return fTrue;
+    // We can no longer compile for Windows platforms that do not support screen resolution changes.
+    return fTrue;
+
 #endif // WIN
 #ifdef MAC
     RawRtn();
