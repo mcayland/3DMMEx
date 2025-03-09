@@ -15,10 +15,6 @@ jobs:
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          vcpkg version
-          vcpkg install --triplet x86-windows
       - name: CMake Generate
         shell: cmd
         run: |
@@ -62,10 +58,6 @@ jobs:
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          vcpkg version
-          vcpkg install --triplet x86-windows
       - name: Use Visual Studio clang
         # Move the separate Github Action LLVM install out of the way to prevent it from being
         # detected by cmake: this causes us to fall back to the version provided by VS instead
