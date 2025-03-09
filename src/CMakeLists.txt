@@ -107,6 +107,7 @@ target_link_libraries(studio
     engine
 
     $<$<PLATFORM_ID:Windows>:mpr> # Required for WNetGetUser()
+    $<$<PLATFORM_ID:Windows>:vfw32> # Required for ICInfo in _wHaveICMCodec
 )
 
 set_property(TARGET studio PROPERTY OUTPUT_NAME 3dmovie)
