@@ -252,7 +252,7 @@ CREATE_SCRIPT("Create sliderpath")
 ENDCHUNK
 REP_ANIM(CHID1(krepMouseDnOn), "slider")	
 	// repeat up to 30000 times.
-	.siiLoop = PlaySoundThis( kctgWave, kwavDing, 2, 0x00010000, 30000, 1, 4 );	
+	.siiLoop = PlaySoundThis( kcctgWave, kwavDing, 2, 0x00010000, 30000, 1, 4 );
 	While(1);
 		y = YMouseThis();
 		If( y < 0 );

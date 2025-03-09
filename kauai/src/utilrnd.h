@@ -22,7 +22,7 @@
 ***************************************************************************/
 typedef class RND *PRND;
 #define RND_PAR BASE
-#define kclsRND 'RND'
+#define kclsRND KLCONST3('R', 'N', 'D')
 class RND : public RND_PAR
 {
     RTCLASS_DEC
@@ -41,7 +41,7 @@ class RND : public RND_PAR
 ***************************************************************************/
 typedef class SFL *PSFL;
 #define SFL_PAR RND
-#define kclsSFL 'SFL'
+#define kclsSFL KLCONST3('S', 'F', 'L')
 class SFL : public SFL_PAR
 {
     RTCLASS_DEC

@@ -17,6 +17,13 @@
 #ifndef BASE_H
 #define BASE_H
 
+/* Character-based constants */
+#define KLCONST2(a, b) ((a << 8) | b)
+
+#define KLCONST3(a, b, c) ((a << 16) | (b << 8) | c)
+
+#define KLCONST4(a, b, c, d) ((a << 24) | (b << 16) | (c << 8) | d)
+
 /***************************************************************************
     Run-time class determination support.  Each class, FOO, that uses this
     needs a constant, kclsFOO, defined somewhere (preferably with the class
@@ -237,7 +244,7 @@ void MarkUtilMem(void);
     on the stack) are guaranteed to be zero'ed out. Also provides reference
     counting and debug lost memory checks.
 ***************************************************************************/
-#define kclsBASE 'BASE'
+#define kclsBASE KLCONST4('B', 'A', 'S', 'E')
 class BASE
 {
     RTCLASS_DEC_BASE
@@ -287,7 +294,7 @@ class BASE
 
 typedef class BLL *PBLL;
 #define BLL_PAR BASE
-#define kclsBLL 'BLL'
+#define kclsBLL KLCONST3('B', 'L', 'L')
 class BLL : public BLL_PAR
 {
     RTCLASS_DEC

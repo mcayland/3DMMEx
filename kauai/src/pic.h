@@ -16,9 +16,9 @@
 #ifndef PIC_H
 #define PIC_H
 
-const FTG kftgPict = 'PICT';
-const FTG kftgMeta = 'WMF';
-const FTG kftgEnhMeta = 'EMF';
+const FTG kftgPict = KLCONST4('P', 'I', 'C', 'T');
+const FTG kftgMeta = KLCONST3('W', 'M', 'F');
+const FTG kftgEnhMeta = KLCONST3('E', 'M', 'F');
 
 /***************************************************************************
     Picture class.  This is a wrapper around a system picture (Mac Pict or
@@ -26,7 +26,7 @@ const FTG kftgEnhMeta = 'EMF';
 ***************************************************************************/
 typedef class PIC *PPIC;
 #define PIC_PAR BACO
-#define kclsPIC 'PIC'
+#define kclsPIC KLCONST3('P', 'I', 'C')
 class PIC : public PIC_PAR
 {
     RTCLASS_DEC

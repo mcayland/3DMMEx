@@ -21,7 +21,7 @@
 ***************************************************************************/
 typedef class UNDB *PUNDB;
 #define UNDB_PAR BASE
-#define kclsUNDB 'UNDB'
+#define kclsUNDB KLCONST4('U', 'N', 'D', 'B')
 class UNDB : public UNDB_PAR
 {
     RTCLASS_DEC
@@ -53,7 +53,7 @@ enum
 };
 
 #define DOCB_PAR CMH
-#define kclsDOCB 'DOCB'
+#define kclsDOCB KLCONST4('D', 'O', 'C', 'B')
 class DOCB : public DOCB_PAR
 {
     RTCLASS_DEC
@@ -185,7 +185,7 @@ enum
 };
 
 #define DTE_PAR BASE
-#define kclsDTE 'DTE'
+#define kclsDTE KLCONST3('D', 'T', 'E')
 class DTE : public DTE_PAR
 {
     RTCLASS_DEC
@@ -216,7 +216,7 @@ class DTE : public DTE_PAR
     of any gob (for doc previewing, etc)
 ***************************************************************************/
 #define DDG_PAR GOB
-#define kclsDDG 'DDG'
+#define kclsDDG KLCONST3('D', 'D', 'G')
 class DDG : public DDG_PAR
 {
     RTCLASS_DEC
@@ -281,7 +281,7 @@ class DDG : public DDG_PAR
     closing and querying the user about saving
 ***************************************************************************/
 #define DMD_PAR GOB
-#define kclsDMD 'DMD'
+#define kclsDMD KLCONST3('D', 'M', 'D')
 class DMD : public DMD_PAR
 {
     RTCLASS_DEC
@@ -309,7 +309,7 @@ class DMD : public DMD_PAR
     provides basic pane management - including splitting, etc
 ***************************************************************************/
 #define DMW_PAR GOB
-#define kclsDMW 'DMW'
+#define kclsDMW KLCONST3('D', 'M', 'W')
 class DMW : public DMW_PAR
 {
     RTCLASS_DEC
@@ -374,7 +374,7 @@ class DMW : public DMW_PAR
     dialogs tightly with DMW and DDG
 ***************************************************************************/
 #define DSG_PAR GOB
-#define kclsDSG 'DSG'
+#define kclsDSG KLCONST3('D', 'S', 'G')
 class DSG : public DSG_PAR
 {
     RTCLASS_DEC
@@ -419,7 +419,7 @@ enum
 ***************************************************************************/
 typedef class DSSP *PDSSP;
 #define DSSP_PAR GOB
-#define kclsDSSP 'DSSP'
+#define kclsDSSP KLCONST4('D', 'S', 'S', 'P')
 class DSSP : public DSSP_PAR
 {
     RTCLASS_DEC
@@ -454,7 +454,7 @@ enum
 ***************************************************************************/
 typedef class DSSM *PDSSM;
 #define DSSM_PAR GOB
-#define kclsDSSM 'DSSM'
+#define kclsDSSM KLCONST4('D', 'S', 'S', 'M')
 class DSSM : public DSSM_PAR
 {
     RTCLASS_DEC

@@ -16,7 +16,7 @@
 #ifndef MBMP_H
 #define MBMP_H
 
-const FTG kftgBmp = 'BMP';
+const FTG kftgBmp = KLCONST3('B', 'M', 'P');
 
 enum
 {
@@ -27,7 +27,7 @@ enum
 
 typedef class MBMP *PMBMP;
 #define MBMP_PAR BACO
-#define kclsMBMP 'MBMP'
+#define kclsMBMP KLCONST4('M', 'B', 'M', 'P')
 class MBMP : public MBMP_PAR
 {
     RTCLASS_DEC

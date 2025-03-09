@@ -23,7 +23,7 @@
 ***************************************************************************/
 typedef class GORP *PGORP;
 #define GORP_PAR BASE
-#define kclsGORP 'GORP'
+#define kclsGORP KLCONST4('G', 'O', 'R', 'P')
 class GORP : public GORP_PAR
 {
     RTCLASS_DEC
@@ -56,7 +56,7 @@ class GORP : public GORP_PAR
 ***************************************************************************/
 typedef class GORF *PGORF;
 #define GORF_PAR GORP
-#define kclsGORF 'GORF'
+#define kclsGORF KLCONST4('G', 'O', 'R', 'F')
 class GORF : public GORF_PAR
 {
     RTCLASS_DEC
@@ -84,7 +84,7 @@ class GORF : public GORF_PAR
 ***************************************************************************/
 typedef class GORB *PGORB;
 #define GORB_PAR GORP
-#define kclsGORB 'GORB'
+#define kclsGORB KLCONST4('G', 'O', 'R', 'B')
 class GORB : public GORB_PAR
 {
     RTCLASS_DEC
@@ -127,7 +127,7 @@ enum
 
 typedef class GORT *PGORT;
 #define GORT_PAR GORP
-#define kclsGORT 'GORT'
+#define kclsGORT KLCONST4('G', 'O', 'R', 'T')
 class GORT : public GORT_PAR
 {
     RTCLASS_DEC
@@ -179,7 +179,7 @@ class GORT : public GORT_PAR
 ***************************************************************************/
 typedef class GORV *PGORV;
 #define GORV_PAR GORP
-#define kclsGORV 'GORV'
+#define kclsGORV KLCONST4('G', 'O', 'R', 'V')
 class GORV : public GORV_PAR
 {
     RTCLASS_DEC
@@ -290,7 +290,7 @@ enum
 
 typedef class GOK *PGOK;
 #define GOK_PAR GOB
-#define kclsGOK 'GOK'
+#define kclsGOK KLCONST3('G', 'O', 'K')
 class GOK : public GOK_PAR
 {
     RTCLASS_DEC

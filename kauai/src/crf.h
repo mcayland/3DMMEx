@@ -36,7 +36,7 @@ enum
 ***************************************************************************/
 typedef class BACO *PBACO;
 #define BACO_PAR BASE
-#define kclsBACO 'BACO'
+#define kclsBACO KLCONST4('B', 'A', 'C', 'O')
 class BACO : public BACO_PAR
 {
     RTCLASS_DEC
@@ -99,7 +99,7 @@ typedef FNRPO *PFNRPO;
 
 typedef class RCA *PRCA;
 #define RCA_PAR BASE
-#define kclsRCA 'RCA'
+#define kclsRCA KLCONST3('R', 'C', 'A')
 class RCA : public RCA_PAR
 {
     RTCLASS_DEC
@@ -116,7 +116,7 @@ class RCA : public RCA_PAR
     Chunky resource file.
 ***************************************************************************/
 #define CRF_PAR RCA
-#define kclsCRF 'CRF'
+#define kclsCRF KLCONST3('C', 'R', 'F')
 class CRF : public CRF_PAR
 {
     RTCLASS_DEC
@@ -174,7 +174,7 @@ class CRF : public CRF_PAR
 ***************************************************************************/
 typedef class CRM *PCRM;
 #define CRM_PAR RCA
-#define kclsCRM 'CRM'
+#define kclsCRM KLCONST3('C', 'R', 'M')
 class CRM : public CRM_PAR
 {
     RTCLASS_DEC
@@ -212,7 +212,7 @@ class CRM : public CRM_PAR
 ***************************************************************************/
 #define GHQ_PAR BACO
 typedef class GHQ *PGHQ;
-#define kclsGHQ 'GHQ'
+#define kclsGHQ KLCONST3('G', 'H', 'Q')
 class GHQ : public GHQ_PAR
 {
     RTCLASS_DEC
@@ -240,7 +240,7 @@ class GHQ : public GHQ_PAR
 ***************************************************************************/
 #define CABO_PAR BACO
 typedef class CABO *PCABO;
-#define kclsCABO 'CABO'
+#define kclsCABO KLCONST4('C', 'A', 'B', 'O')
 class CABO : public CABO_PAR
 {
     RTCLASS_DEC

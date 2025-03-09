@@ -37,7 +37,7 @@ typedef class STDIO *PSTDIO;
 typedef class MUNB *PMUNB;
 
 #define MUNB_PAR UNDB
-#define kclsMUNB 'MUNB'
+#define kclsMUNB KLCONST4('M', 'U', 'N', 'B')
 class MUNB : public MUNB_PAR
 {
     RTCLASS_DEC
@@ -87,7 +87,7 @@ class MUNB : public MUNB_PAR
 typedef class AUND *PAUND;
 
 #define AUND_PAR MUNB
-#define kclsAUND 'AUND'
+#define kclsAUND KLCONST4('A', 'U', 'N', 'D')
 class AUND : public AUND_PAR
 {
     RTCLASS_DEC

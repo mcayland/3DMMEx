@@ -12,7 +12,7 @@
 
 #define SPLOT_PAR GOK
 typedef class SPLOT *PSPLOT;
-#define kclsSPLOT 'splt'
+#define kclsSPLOT KLCONST4('s', 'p', 'l', 't')
 class SPLOT : public SPLOT_PAR
 {
     RTCLASS_DEC

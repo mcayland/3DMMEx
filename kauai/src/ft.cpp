@@ -24,7 +24,7 @@ void TestUtil(void);
 int32_t _LwSqrt(int32_t lw);
 
 #define APP_PAR APPB
-#define kclsAPP 'APP'
+#define kclsAPP KLCONST3('A', 'P', 'P')
 class APP : public APP_PAR
 {
     RTCLASS_DEC
@@ -153,7 +153,7 @@ bool APP::FCmdTestSuite(PCMD pcmd)
 
 // graphic pattern rectangle
 #define GPRC_PAR GOB
-#define kclsGPRC 'GPRC'
+#define kclsGPRC KLCONST4('G', 'P', 'R', 'C')
 class GPRC : public GPRC_PAR
 {
     RTCLASS_DEC
@@ -177,7 +177,7 @@ class GPRC : public GPRC_PAR
 
 // graphic fill rectangle
 #define GFRC_PAR GOB
-#define kclsGFRC 'GFRC'
+#define kclsGFRC KLCONST4('G', 'F', 'R', 'C')
 class GFRC : public GFRC_PAR
 {
     RTCLASS_DEC
@@ -407,7 +407,7 @@ void GFRC::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 
 // test document
 #define TDC_PAR GOB
-#define kclsTDC 'TDC'
+#define kclsTDC KLCONST3('T', 'D', 'C')
 class TDC : public TDC_PAR
 {
     RTCLASS_DEC
@@ -468,7 +468,7 @@ void TDC::Draw(PGNV pgnv, RC *prcClip)
 
 // graphic test doc window
 #define DWN_PAR GOB
-#define kclsDWN 'DWN'
+#define kclsDWN KLCONST3('D', 'W', 'N')
 class DWN : public DWN_PAR
 {
     RTCLASS_DEC
@@ -657,7 +657,7 @@ bool DWN::FCmdScroll(PCMD pcmd)
 
 // text test window
 #define TTW_PAR DWN
-#define kclsTTW 'TTW'
+#define kclsTTW KLCONST3('T', 'T', 'W')
 class TTW : public TTW_PAR
 {
     RTCLASS_DEC
@@ -781,7 +781,7 @@ void TTW::MouseDown(int32_t xp, int32_t yp, int32_t cact, uint32_t grfcust)
 
 // Frame rectangle test window
 #define RTW_PAR DWN
-#define kclsRTW 'RTW'
+#define kclsRTW KLCONST3('R', 'T', 'W')
 class RTW : public RTW_PAR
 {
     RTCLASS_DEC

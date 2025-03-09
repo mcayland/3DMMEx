@@ -214,7 +214,7 @@ ENDCHUNK
 			End;
 			If( _parm[0] != cnoNil );
 			    cnt = ( _parm[1] ) ? 0x00010000 : 1;
-				.siiMidi = PlaySoundGob( kgobUtil, kctgMidi, _parm[0], 1, 0x00010000, cnt, 4, ksclBldgSound );
+				.siiMidi = PlaySoundGob( kgobUtil, kcctgMidi, _parm[0], 1, 0x00010000, cnt, 4, ksclBldgSound );
 			End;
 			.cnoMidi = _parm[0];
 		End;
@@ -406,7 +406,7 @@ OBJECT( "glass#0", kgobGlass0, 975, kcrsArrow1 )
 		PATTERN_0
 	ENDCHUNK
 	CLICK_SCRIPT( "glass#0 clicked!" )
-		PlaySoundThis( kctgWave, kwavSplot, 1, 0x00010000, 1, 0, 789 );
+		PlaySoundThis( kcctgWave, kwavSplot, 1, 0x00010000, 1, 0, 789 );
 	ENDCHUNK
 
 

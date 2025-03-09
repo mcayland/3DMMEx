@@ -35,7 +35,7 @@ typedef MIDEV *PMIDEV;
 ***************************************************************************/
 typedef class MSTP *PMSTP;
 #define MSTP_PAR BASE
-#define kclsMSTP 'MSTP'
+#define kclsMSTP KLCONST4('M', 'S', 'T', 'P')
 class MSTP : public MSTP_PAR
 {
     RTCLASS_DEC
@@ -68,7 +68,7 @@ class MSTP : public MSTP_PAR
     with timing in milliseconds.
 ***************************************************************************/
 #define MIDS_PAR BACO
-#define kclsMIDS 'MIDS'
+#define kclsMIDS KLCONST4('M', 'I', 'D', 'S')
 class MIDS : public MIDS_PAR
 {
     RTCLASS_DEC

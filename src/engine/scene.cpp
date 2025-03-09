@@ -177,7 +177,7 @@ void ReleasePpsse(PSSE *ppsse);
 typedef class SUNC *PSUNC;
 
 #define SUNC_PAR MUNB
-#define kclsSUNC 'SUNC'
+#define kclsSUNC KLCONST4('S', 'U', 'N', 'C')
 class SUNC : public SUNC_PAR
 {
     RTCLASS_DEC
@@ -207,7 +207,7 @@ class SUNC : public SUNC_PAR
 typedef class SUNK *PSUNK;
 
 #define SUNK_PAR MUNB
-#define kclsSUNK 'SUNK'
+#define kclsSUNK KLCONST4('S', 'U', 'N', 'K')
 class SUNK : public SUNK_PAR
 {
     RTCLASS_DEC
@@ -249,7 +249,7 @@ class SUNK : public SUNK_PAR
 typedef class SUNR *PSUNR;
 
 #define SUNR_PAR MUNB
-#define kclsSUNR 'SUNR'
+#define kclsSUNR KLCONST4('S', 'U', 'N', 'R')
 class SUNR : public SUNR_PAR
 {
     RTCLASS_DEC
@@ -281,7 +281,7 @@ class SUNR : public SUNR_PAR
 typedef class SUNP *PSUNP;
 
 #define SUNP_PAR MUNB
-#define kclsSUNP 'SUNP'
+#define kclsSUNP KLCONST4('S', 'U', 'N', 'P')
 class SUNP : public SUNP_PAR
 {
     RTCLASS_DEC
@@ -323,7 +323,7 @@ class SUNP : public SUNP_PAR
 typedef class SUNX *PSUNX;
 
 #define SUNX_PAR MUNB
-#define kclsSUNX 'SUNX'
+#define kclsSUNX KLCONST4('S', 'U', 'N', 'X')
 class SUNX : public SUNX_PAR
 {
     RTCLASS_DEC
@@ -375,7 +375,7 @@ class SUNX : public SUNX_PAR
 typedef class SUNS *PSUNS;
 
 #define SUNS_PAR MUNB
-#define kclsSUNS 'SUNS'
+#define kclsSUNS KLCONST4('S', 'U', 'N', 'S')
 class SUNS : public SUNS_PAR
 {
     RTCLASS_DEC
@@ -419,7 +419,7 @@ class SUNS : public SUNS_PAR
 typedef class SUNT *PSUNT;
 
 #define SUNT_PAR MUNB
-#define kclsSUNT 'SUNT'
+#define kclsSUNT KLCONST4('S', 'U', 'N', 'T')
 class SUNT : public SUNT_PAR
 {
     RTCLASS_DEC

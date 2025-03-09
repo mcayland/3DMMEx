@@ -59,7 +59,7 @@ enum
 ****************************************/
 typedef class TDT *PTDT;
 #define TDT_PAR TMPL
-#define kclsTDT 'TDT'
+#define kclsTDT KLCONST3('T', 'D', 'T')
 class TDT : public TDT_PAR
 {
     RTCLASS_DEC

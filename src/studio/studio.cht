@@ -846,7 +846,7 @@ REP_ANIM(CHID1(krepDefault), "Default Rep VolumeSlider")
 ENDCHUNK
 REP_ANIM(CHID1(krepMouseDnOn), "MouseDnOn VolumeSlider")
 	// repeat up to 30000 times.
-	.siiLoop = PlaySoundThis(kctgWave, kwavDing, 2, 0x00010000, 30000, 1, 4);
+	.siiLoop = PlaySoundThis(kcctgWave, kwavDing, 2, 0x00010000, 30000, 1, 4);
 	While (fTrue);
 		y = YMouseThis();
 		If (y < 0);
@@ -1173,7 +1173,7 @@ ENDCHUNK
 //
 // Miscellaneous studio strings
 //
-CHUNK (kctgGst kcnoGstMisc "Miscellaneous strings")
+CHUNK (kcctgGst kcnoGstMisc "Miscellaneous strings")
 	LONG
 	GST(4)
 	ITEM "%d / %d" idsBrowserPage

@@ -198,23 +198,23 @@
 // not dependent or adopted to the previous GOKD
 // ---------------------------------------------------------
 #define SCRIPTCHUNK( _szName,  _cno )   \
-	CHUNK( kctgScript,  _cno, __NAME(_szName ) ) \
+	CHUNK( kcctgScript,  _cno, __NAME(_szName ) ) \
 		SCRIPT
 
 #define MBMPCHUNK(  _szFilename,  _cno,  _iTrans,  _xpReg,  _ypReg ) \
-    CHUNK( kctgMbmp,  _cno,  __NAME(_szFilename ) ) \
+    CHUNK( kcctgMbmp,  _cno,  __NAME(_szFilename ) ) \
 		__PACK \
 		BITMAP( _iTrans,  _xpReg, _ypReg ) _szFilename \
 	ENDCHUNK
 
 #define PALETTECHUNK( _szName,  _cno,  _szFilename ) \
-    CHUNK( kctgColorTable,  _cno,  __NAME( _szName ) ) \
+    CHUNK( kcctgColorTable,  _cno,  __NAME( _szName ) ) \
 		__PACK \
 		PALETTE _szFilename \
     ENDCHUNK
 
 #define TILECHUNK( _szName,  _cno ) \
-	CHUNK( kctgTile,  _cno,  __NAME( _szName ))  \
+	CHUNK( kcctgTile,  _cno,  __NAME( _szName ))  \
 		__PACK \
 		SHORT BO OSK
 
@@ -224,14 +224,14 @@
 		  _dzpMid _dzpRightFlex _dzpRightInc _dzpRight
 
 #define CURSORCHUNK( _szFilename,  _cno) \
-	 CHUNK( kctgCursor,  _cno,  __NAME( _szFilename )) \
+	 CHUNK( kcctgCursor,  _cno,  __NAME( _szFilename )) \
 		__PACK \
 		CURSOR _szFilename \
 	 ENDCHUNK
 
 #define FILLCHUNK( _szName, _chid, _xpLeft, _ypTop, _xpRight, _ypBottom, _kacrFore, _kacrBack )  \
 	SET _dffill++ \
-	CHUNK( kctgFill,  _dffill,  __NAME( _szName )) \
+	CHUNK( kcctgFill,  _dffill,  __NAME( _szName )) \
 		__PACK \
 		LONG BO OSK _xpLeft _ypTop _xpRight _ypBottom \
 		LONG _kacrFore _kacrBack
@@ -253,7 +253,7 @@
 #define PATTERN_0               PATTERN(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
 #define HELP_SCRIPT( _cno ) \
-	CHUNK( kctgScript,  _cno,  __NAME( #_cno ))\
+	CHUNK( kcctgScript,  _cno,  __NAME( #_cno ))\
 		SCRIPT
 
 
@@ -267,7 +267,7 @@
 // ---------------------------------------------------------
 #define GOBCHUNK( _szName,  _cno,  _kgokk ) \
 	SET _curgok = _cno \
-	CHUNK( kctgGokd,  _cno, __NAME( _szName ))  \
+	CHUNK( kcctgGokd,  _cno, __NAME( _szName ))  \
 		__PACK \
 		SHORT BO OSK LONG _kgokk
 
@@ -330,8 +330,8 @@
 // ---------------------------------------------------------
 #define CHILD_SCRIPT( _szName,  _kchid )\
 	SET _dfscr++ \
-    CHUNK( kctgScript,  _dfscr,  __NAME( _szName ) ) \
-		PARENT( kctgGokd,  _curgok,  _kchid )\
+    CHUNK( kcctgScript,  _dfscr,  __NAME( _szName ) ) \
+		PARENT( kcctgGokd,  _curgok,  _kchid )\
 		SCRIPT
 
 // ---------------------------------------------------------
@@ -339,9 +339,9 @@
 // ---------------------------------------------------------
 #define REP_RECT( _chid, _szName, _xpLeft,  _ypTop,  _xpRight,  _ypBottom )  \
 	SET _dffill++ \
-	CHUNK( kctgFill,  _dffill,  __NAME( _szName) ) \
+	CHUNK( kcctgFill,  _dffill,  __NAME( _szName) ) \
 	__PACK \
-	PARENT( kctgGokd,  _curgok,  _chid ) \
+	PARENT( kcctgGokd,  _curgok,  _chid ) \
 	LONG BO OSK _xpLeft _ypTop _xpRight _ypBottom \
 	LONG Transparent Transparent \
 	PATTERN_BLANK \
@@ -353,9 +353,9 @@
 // ---------------------------------------------------------
 #define REP_FILL( _chid, _szName, _xpLeft,  _ypTop,  _xpRight,  _ypBottom,  _fore,  _back )  \
 	SET _dffill++ \
-	CHUNK( kctgFill,  _dffill,  __NAME( _szName ) ) \
+	CHUNK( kcctgFill,  _dffill,  __NAME( _szName ) ) \
 		__PACK \
-		PARENT( kctgGokd  _curgok  _chid ) \
+		PARENT( kcctgGokd  _curgok  _chid ) \
 		LONG BO OSK _xpLeft _ypTop _xpRight _ypBottom \
 		LONG _fore _back
 
@@ -364,24 +364,24 @@
 // ---------------------------------------------------------
 #define REP_MBMPREG( _chid, _szFilename, _xpReg, _ypReg ) \
 	SET _dfmbmp++ \
-	CHUNK( kctgMbmp,  _dfmbmp,  __NAME( _szFilename ) ) \
+	CHUNK( kcctgMbmp,  _dfmbmp,  __NAME( _szFilename ) ) \
 	__PACK \
-	PARENT( kctgGokd,  _curgok,  _chid ) \
+	PARENT( kcctgGokd,  _curgok,  _chid ) \
 	BITMAP( kiTrans,  _xpReg,  _ypReg ) _szFilename\
 	ENDCHUNK
 
 #define REP_MBMP( _chid, _szFilename ) \
 	SET _dfmbmp++ \
-	CHUNK( kctgMbmp,  _dfmbmp,  __NAME( _szFilename ) ) \
+	CHUNK( kcctgMbmp,  _dfmbmp,  __NAME( _szFilename ) ) \
 	__PACK \
-	PARENT( kctgGokd,  _curgok,  _chid ) \
+	PARENT( kcctgGokd,  _curgok,  _chid ) \
 	BITMAP( kiTrans,  0, 0 ) _szFilename\
 	ENDCHUNK
 
 #define REP_PPMBMP( _chid, _szFilename ) \
 	SET _dfmbmp++ \
-	CHUNK( kctgMbmp,  _dfmbmp,  __NAME( _szFilename ) ) \
-	PARENT( kctgGokd,  _curgok,  _chid ) \
+	CHUNK( kcctgMbmp,  _dfmbmp,  __NAME( _szFilename ) ) \
+	PARENT( kcctgGokd,  _curgok,  _chid ) \
 	 PACKEDFILE _szFilename \
 	ENDCHUNK
 
@@ -392,25 +392,25 @@
 // ---------------------------------------------------------
 #define REP_MASK( _chid, _szFilename, _xpReg, _ypReg ) \
 	SET _dfmask++ \
-	CHUNK( kctgMask,  _dfmask,  __NAME( _szFilename ) ) \
+	CHUNK( kcctgMask,  _dfmask,  __NAME( _szFilename ) ) \
 	__PACK \
-	PARENT( kctgGokd,  _curgok,  _chid ) \
+	PARENT( kcctgGokd,  _curgok,  _chid ) \
 	MASK( kiTrans,  _xpReg,  _ypReg ) _szFilename\
 	ENDCHUNK
 			
 #define REP_WAVE( _chid, _szFilename ) \
 	SET _dfwave++ \
-	CHUNK( kctgWave,  _dfwave, __NAME( _szFilename ) )  \
+	CHUNK( kcctgWave,  _dfwave, __NAME( _szFilename ) )  \
 		__PACK \
-		PARENT( kctgGokd,  _curgok,  _chid ) \
+		PARENT( kcctgGokd,  _curgok,  _chid ) \
 		FILE _szFilename \
 	ENDCHUNK
 
 #define REP_MIDI( _chid, _szFilename ) \
 	SET _dfmidi++ \
-	CHUNK( kctgMidi,  _dfmidi, __NAME( _szFilename ) ) \
+	CHUNK( kcctgMidi,  _dfmidi, __NAME( _szFilename ) ) \
 		__PACK \
-		PARENT( kctgGokd,  _curgok,  _chid ) \
+		PARENT( kcctgGokd,  _curgok,  _chid ) \
 		MIDI _szFilename \
 	ENDCHUNK
 
@@ -420,12 +420,12 @@
 // ---------------------------------------------------------
 #define REP_ANIM( _chid, _szName ) \
 	SET _dfanm++ \
-	CHUNK( kctgAnimation,  _dfanm,  __NAME( _szName ) ) \
-		PARENT( kctgGokd,  _curgok,  _chid ) \
+	CHUNK( kcctgAnimation,  _dfanm,  __NAME( _szName ) ) \
+		PARENT( kcctgGokd,  _curgok,  _chid ) \
 		SCRIPT
 
 #define ANIMATION( _cno, _szName ) \
-	CHUNK( kctgAnimation,  _cno,  __NAME( _szName ) ) \
+	CHUNK( kcctgAnimation,  _cno,  __NAME( _szName ) ) \
 		SCRIPT
 
 // ---------------------------------------------------------
@@ -438,21 +438,21 @@
 #define REP_TILE( _chid, _szName, _mbmp,  _xpReg,  _ypReg ) \
 	SET _dftile++ \
 	SET _dfmbmp++ \
-	CHUNK( kctgMbmp,  _dfmbmp,  __NAME( _mbmp ) ) \
+	CHUNK( kcctgMbmp,  _dfmbmp,  __NAME( _mbmp ) ) \
 		__PACK \
 		BITMAP( kiTrans,  _xpReg,  _ypReg ) _mbmp \
 	ENDCHUNK \
-	CHUNK( kctgTile,  _dftile,  __NAME( _szName ) ) \
+	CHUNK( kcctgTile,  _dftile,  __NAME( _szName ) ) \
 		__PACK \
-		PARENT( kctgGokd,  _curgok,  _chid ) \
-		CHILD( kctgMbmp,  _dfmbmp,  0 ) \
+		PARENT( kcctgGokd,  _curgok,  _chid ) \
+		CHILD( kcctgMbmp,  _dfmbmp,  0 ) \
 		SHORT BO OSK
 
 #define REP_VIDEO( _chid, _szFilename, _fWindowed ) \
 	SET _dfvid++ \
-	CHUNK( kctgVideo, _dfvid, __NAME( _szFilename ) ) \
+	CHUNK( kcctgVideo, _dfvid, __NAME( _szFilename ) ) \
 		__PACK \
-		PARENT( kctgGokd,  _curgok,  _chid ) \
+		PARENT( kcctgGokd,  _curgok,  _chid ) \
 		BYTE _fWindowed \
 		STN _szFilename \
 	ENDCHUNK
@@ -462,28 +462,28 @@
 // most recent GOKD using the appropriate CHID.
 // ---------------------------------------------------------
 #define ADOPT_MASK( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgMask,  _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgMask,  _cno,  _chid )
 
 #define ADOPT_MBMP( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgMbmp,  _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgMbmp,  _cno,  _chid )
 
 #define ADOPT_TILE( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgTile,  _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgTile,  _cno,  _chid )
 
 #define ADOPT_FILL( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgFill,  _cno, _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgFill,  _cno, _chid )
 
 #define ADOPT_ANIM( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgAnimation, _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgAnimation, _cno,  _chid )
 
 #define ADOPT_SCRIPT( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgScript,  _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgScript,  _cno,  _chid )
 
 #define ADOPT_WAVE( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgWave,  _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgWave,  _cno,  _chid )
 
 #define ADOPT_MIDI( _cno,  _chid ) \
-	ADOPT( kctgGokd,  _curgok,  kctgMidi,  _cno,  _chid )
+	ADOPT( kcctgGokd,  _curgok,  kcctgMidi,  _cno,  _chid )
 
 
 
@@ -523,7 +523,7 @@
 // ---------------------------------------------------------
 #define OBJECT( _szName, _cnoGokd, _zp, _cnoCursor ) \
 	SET _curgok = _cnoGokd \
-	CHUNK( kctgGokd,  _cnoGokd, __NAME( _szName) )  \
+	CHUNK( kcctgGokd,  _cnoGokd, __NAME( _szName) )  \
 		__PACK \
 		SHORT BO OSK LONG gokkNil \
 		DEFAULT_POSITION( 0, 0, _zp ) \
@@ -532,7 +532,7 @@
 
 #define OBJECTREG( _szName, _cnoGokd, _xp, _yp, _zp, _cnoCursor ) \
 	SET _curgok = _cnoGokd \
-	CHUNK( kctgGokd,  _cnoGokd, __NAME( _szName ) )  \
+	CHUNK( kcctgGokd,  _cnoGokd, __NAME( _szName ) )  \
 		__PACK \
 		SHORT BO OSK LONG gokkNil \
 		DEFAULT_POSITION( _xp, _yp, _zp ) \
@@ -541,7 +541,7 @@
 
 #define OBJECTTT( _szName, _cnoGokd, _zp, _cnoCursor, _cnoToolTip ) \
 	SET _curgok = _cnoGokd \
-	CHUNK( kctgGokd,  _cnoGokd, __NAME( _szName ) )  \
+	CHUNK( kcctgGokd,  _cnoGokd, __NAME( _szName ) )  \
 		__PACK \
 		SHORT BO OSK LONG gokkNil \
 		DEFAULT_POSITION( 0, 0, _zp ) \
@@ -550,7 +550,7 @@
 
 #define OBJECTTTREG( _szName, _cnoGokd, _zp, _cnoCursor, _cnoToolTip, _regx, _regy ) \
 	SET _curgok = _cnoGokd \
-	CHUNK( kctgGokd,  _cnoGokd, __NAME( _szName ) )  \
+	CHUNK( kcctgGokd,  _cnoGokd, __NAME( _szName ) )  \
 		__PACK \
 		SHORT BO OSK LONG gokkNil \
 		DEFAULT_POSITION( _regx, _regy, _zp ) \
@@ -559,7 +559,7 @@
 
 #define OBJECTCID( _szName, _cnoGokd, _zp, _cnoCursor, _cnoToolTip, _cid ) \
 	SET _curgok = _cnoGokd \
-	CHUNK( kctgGokd,  _cnoGokd, __NAME( _szName ) )  \
+	CHUNK( kcctgGokd,  _cnoGokd, __NAME( _szName ) )  \
 		__PACK \
 		SHORT BO OSK LONG gokkNil \
 		DEFAULT_POSITION( 0, 0, _zp ) \
@@ -568,7 +568,7 @@
 
 #define OBJECTTY( _szName, _cnoGokd, _zp, _cnoCursor, _gokkType ) \
 	SET _curgok = _cnoGokd \
-	CHUNK( kctgGokd,  _cnoGokd, __NAME( _szName ) )  \
+	CHUNK( kcctgGokd,  _cnoGokd, __NAME( _szName ) )  \
 		__PACK \
 		SHORT BO OSK LONG _gokkType \
 		DEFAULT_POSITION( 0, 0, _zp ) \
@@ -577,12 +577,12 @@
 
 // hmm... let's not pack the WAVE files for now.
 #define WAVE_CHUNK( _szFilename, _cnoWave ) \
-	CHUNK( kctgWave,  _cnoWave, __NAME( _szFilename  ))  \
+	CHUNK( kcctgWave,  _cnoWave, __NAME( _szFilename  ))  \
 		FILE _szFilename \
 	ENDCHUNK
 
 #define MIDI_CHUNK( _szFilename, _cnoMidi ) \
-	CHUNK( kctgMidi,  _cnoMidi, __NAME( _szFilename ))  \
+	CHUNK( kcctgMidi,  _cnoMidi, __NAME( _szFilename ))  \
 		__PACK \
 		MIDI _szFilename \
 	ENDCHUNK

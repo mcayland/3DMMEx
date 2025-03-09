@@ -56,7 +56,7 @@ enum
 ****************************************/
 typedef class FIL *PFIL;
 #define FIL_PAR BLL
-#define kclsFIL 'FIL'
+#define kclsFIL KLCONST3('F', 'I', 'L')
 class FIL : public FIL_PAR
 {
     RTCLASS_DEC
@@ -221,7 +221,7 @@ enum
 
 typedef class BLCK *PBLCK;
 #define BLCK_PAR BASE
-#define kclsBLCK 'BLCK'
+#define kclsBLCK KLCONST4('B', 'L', 'C', 'K')
 class BLCK : public BLCK_PAR
 {
     RTCLASS_DEC
@@ -298,7 +298,7 @@ class BLCK : public BLCK_PAR
 ***************************************************************************/
 typedef class MSNK *PMSNK;
 #define MSNK_PAR BASE
-#define kclsMSNK 'MSNK'
+#define kclsMSNK KLCONST4('M', 'S', 'N', 'K')
 class MSNK : public MSNK_PAR
 {
     RTCLASS_INLINE(MSNK)
@@ -314,7 +314,7 @@ class MSNK : public MSNK_PAR
 ***************************************************************************/
 typedef class MSFIL *PMSFIL;
 #define MSFIL_PAR MSNK
-#define kclsMSFIL 'msfl'
+#define kclsMSFIL KLCONST4('m', 's', 'f', 'l')
 class MSFIL : public MSFIL_PAR
 {
     ASSERT

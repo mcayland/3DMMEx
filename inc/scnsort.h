@@ -14,7 +14,7 @@
 #define SCNSORT_H
 
 #define SCRT_PAR GOK
-#define kclsSCRT 'SCRT'
+#define kclsSCRT KLCONST4('S', 'C', 'R', 'T')
 typedef class SCRT *PSCRT;
 class SCRT : public SCRT_PAR
 {
@@ -86,7 +86,7 @@ class SCRT : public SCRT_PAR
 ************************************************************ PETED ***********/
 
 #define GOMP_PAR GOB
-#define kclsGOMP 'GOMP'
+#define kclsGOMP KLCONST4('G', 'O', 'M', 'P')
 typedef class GOMP *PGOMP;
 class GOMP : public GOMP_PAR
 {

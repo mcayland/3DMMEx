@@ -36,7 +36,7 @@ const BOM kbomModlf = 0x55fffff0;
 ****************************************/
 typedef class MODL *PMODL;
 #define MODL_PAR BACO
-#define kclsMODL 'MODL'
+#define kclsMODL KLCONST4('M', 'O', 'D', 'L')
 class MODL : public MODL_PAR
 {
     RTCLASS_DEC

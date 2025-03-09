@@ -40,7 +40,7 @@ enum
 ***************************************************************************/
 typedef class SDAM *PSDAM;
 #define SDAM_PAR SNDMQ
-#define kclsSDAM 'SDAM'
+#define kclsSDAM KLCONST4('S', 'D', 'A', 'M')
 class SDAM : public SDAM_PAR
 {
     RTCLASS_DEC

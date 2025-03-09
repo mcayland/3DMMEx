@@ -53,7 +53,7 @@ WAVE_CHUNK( "shared\sound\mapopen.wav", kwavMapOpen )
 OBJECT( "Map main parent", kgobMapMain, 900, kcrsArrow1)
 REP_PPMBMP( kcell1, "shared\pbm\map\mapback.pbm" )
 CREATE_SCRIPT( "main map startup" )
-	PlaySoundGob(kgobUtil, kctgWave, kwavMapOpen, 1, 0x00010000, 1, 1,ksclBldgSound);
+	PlaySoundGob(kgobUtil, kcctgWave, kwavMapOpen, 1, 0x00010000, 1, 1,ksclBldgSound);
 
 
 	// Then disable accelerator keys while map is up.
@@ -107,7 +107,7 @@ CHILD_SCRIPT( "takedown map and switch", kchidScript1 )
 	fTools	= _parm[2];
 	  
 	// Play the map clicked sound.
-	PlaySoundGob(kgobUtil, kctgWave, kwavMapObject, 1, 0x00010000, 1, 1,
+	PlaySoundGob(kgobUtil, kcctgWave, kwavMapObject, 1, 0x00010000, 1, 1,
 			ksclBldgSound);
 
 	// Note: When the map goes away, be sure to reenable accelerators
@@ -386,7 +386,7 @@ CREATE_SCRIPT( "create slidepath")
 ENDCHUNK
 REP_ANIM( CHID1( krepMouseDnOn), "slider")	
 	// repeat up to 30000 times.
-	.siiLoop = PlaySoundThis(kctgWave, kwavDing, 2, 0x00010000, 30000, 1, ksclBldgSound);	
+	.siiLoop = PlaySoundThis(kcctgWave, kwavDing, 2, 0x00010000, 30000, 1, ksclBldgSound);
 	While( 1 );
 		y = YMouseThis();
 		If( y < 0 );

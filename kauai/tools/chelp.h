@@ -27,7 +27,7 @@ enum
 };
 
 // creator type for the help editor
-#define kctgChelp 'CHLP'
+#define kctgChelp KLCONST4('C', 'H', 'L', 'P')
 
 typedef class LID *PLID;
 typedef class LIG *PLIG;
@@ -37,7 +37,7 @@ typedef class HETD *PHETD;
     App class
 ***************************************************************************/
 #define APP_PAR APPB
-#define kclsAPP 'APP'
+#define kclsAPP KLCONST3('A', 'P', 'P')
 class APP : public APP_PAR
 {
     RTCLASS_DEC
@@ -72,7 +72,7 @@ extern APP vapp;
     List document
 ***************************************************************************/
 #define LID_PAR DOCB
-#define kclsLID 'LID'
+#define kclsLID KLCONST3('L', 'I', 'D')
 class LID : public LID_PAR
 {
     RTCLASS_DEC
@@ -114,7 +114,7 @@ const int32_t kdypCellLig = kdzpInch;
 
 typedef class LIG *PLIG;
 #define LIG_PAR DDG
-#define kclsLIG 'LIG'
+#define kclsLIG KLCONST3('L', 'I', 'G')
 class LIG : public LIG_PAR
 {
     RTCLASS_DEC
@@ -149,7 +149,7 @@ const int32_t kdxpFrameCcg = 2;
 
 typedef class CCG *PCCG;
 #define CCG_PAR GOB
-#define kclsCCG 'CCG'
+#define kclsCCG KLCONST3('C', 'C', 'G')
 class CCG : public CCG_PAR
 {
     RTCLASS_DEC
@@ -177,7 +177,7 @@ class CCG : public CCG_PAR
 ***************************************************************************/
 typedef class CCGT *PCCGT;
 #define CCGT_PAR GOB
-#define kclsCCGT 'CCGT'
+#define kclsCCGT KLCONST4('C', 'C', 'G', 'T')
 class CCGT : public CCGT_PAR
 {
     RTCLASS_DEC
@@ -204,7 +204,7 @@ class CCGT : public CCGT_PAR
 ***************************************************************************/
 typedef class HEDO *PHEDO;
 #define HEDO_PAR DOCB
-#define kclsHEDO 'HEDO'
+#define kclsHEDO KLCONST4('H', 'E', 'D', 'O')
 class HEDO : public HEDO_PAR
 {
     RTCLASS_DEC
@@ -245,7 +245,7 @@ class HEDO : public HEDO_PAR
     TSEL: used to track a selection in a chunky file doc
 ***************************************************************************/
 #define TSEL_PAR BASE
-#define kclsTSEL 'TSEL'
+#define kclsTSEL KLCONST4('T', 'S', 'E', 'L')
 class TSEL : public TSEL_PAR
 {
     RTCLASS_DEC
@@ -281,7 +281,7 @@ class TSEL : public TSEL_PAR
 ***************************************************************************/
 typedef class HEDG *PHEDG;
 #define HEDG_PAR DDG
-#define kclsHEDG 'HEDG'
+#define kclsHEDG KLCONST4('H', 'E', 'D', 'G')
 class HEDG : public HEDG_PAR
 {
     RTCLASS_DEC
@@ -358,7 +358,7 @@ class HEDG : public HEDG_PAR
     An instance of this class is a child doc of a HEDO.
 ***************************************************************************/
 #define HETD_PAR TXHD
-#define kclsHETD 'HETD'
+#define kclsHETD KLCONST4('H', 'E', 'T', 'D')
 class HETD : public HETD_PAR
 {
     RTCLASS_DEC
@@ -409,7 +409,7 @@ class HETD : public HETD_PAR
 ***************************************************************************/
 typedef class HETG *PHETG;
 #define HETG_PAR TXRG
-#define kclsHETG 'HETG'
+#define kclsHETG KLCONST4('H', 'E', 'T', 'G')
 class HETG : public HETG_PAR
 {
     RTCLASS_DEC
@@ -473,7 +473,7 @@ const int32_t kstidReplace = 2;
 ***************************************************************************/
 typedef class HTRU *PHTRU;
 #define HTRU_PAR TRUL
-#define kclsHTRU 'HTRU'
+#define kclsHTRU KLCONST4('H', 'T', 'R', 'U')
 class HTRU : public HTRU_PAR
 {
     RTCLASS_DEC

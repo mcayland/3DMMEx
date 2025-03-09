@@ -35,7 +35,7 @@ bool FAssignRtvm(PGL *ppglrtvm, RTVN *prtvn, int32_t lw);
 ***************************************************************************/
 typedef class SCPT *PSCPT;
 #define SCPT_PAR BACO
-#define kclsSCPT 'SCPT'
+#define kclsSCPT KLCONST4('S', 'C', 'P', 'T')
 class SCPT : public SCPT_PAR
 {
     RTCLASS_DEC
@@ -72,7 +72,7 @@ class SCPT : public SCPT_PAR
 ***************************************************************************/
 typedef class STRG *PSTRG;
 #define STRG_PAR BASE
-#define kclsSTRG 'STRG'
+#define kclsSTRG KLCONST4('S', 'T', 'R', 'G')
 class STRG : public STRG_PAR
 {
     RTCLASS_DEC
@@ -109,7 +109,7 @@ enum
 
 typedef class SCEB *PSCEB;
 #define SCEB_PAR BASE
-#define kclsSCEB 'SCEB'
+#define kclsSCEB KLCONST4('S', 'C', 'E', 'B')
 class SCEB : public SCEB_PAR
 {
     RTCLASS_DEC
