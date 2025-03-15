@@ -1,10 +1,14 @@
 include_guard(GLOBAL)
 
+set(CHOMP_PATH CACHE PATH "Path to external Chomp compiler executable")
+if (CHOMP_PATH)
+  message("Using external Chomp: ${CHOMP_PATH}")
+endif()
+
 # any values after ${target} are treated as sources
 function(target_chomp_sources target)
   # We cannot use $<CXX_COMPILER_ID:...> because we are not generating binary
   # targets 😢
-
 
   set(is-msvc 0)
   set(is-clangcl 0)
@@ -13,6 +17,11 @@ function(target_chomp_sources target)
   elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND "${CMAKE_CXX_COMPILER_FRONTEND_VARIANT}" STREQUAL "MSVC")
     set(is-msvc 1)
     set(is-clangcl 1)
+  endif()
+
+  set(external-chomp 0)
+  if (CHOMP_PATH)
+    set(external-chomp 1)
   endif()
 
   set(include-directories $<TARGET_PROPERTY:${target},INCLUDE_DIRECTORIES>)
@@ -57,7 +66,7 @@ function(target_chomp_sources target)
       VERBATIM)
     add_custom_command(
       OUTPUT "${output}"
-      COMMAND chomp /c  "${processed}" "${output}"
+      COMMAND $<IF:${external-chomp},${CHOMP_PATH},$<TARGET_FILE:chomp>> /c  "${processed}" "${output}"
       COMMENT "Chompin' ${processed}"
       MAIN_DEPENDENCY "${processed}"
       WORKING_DIRECTORY "${parent}"
