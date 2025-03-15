@@ -69,7 +69,7 @@ bool GRPB::_FEnsureSizes(int32_t cbMin1, int32_t cbMin2, uint32_t grfgrp)
         }
         else if (cbMin1 < _cb1)
         {
-            FResizePhq(&_hqData1, cbMin1, fmemNil, mprNormal);
+            FResizePhq(&_hqData1, cbMin1, fmemClear, mprNormal);
             _cb1 = cbMin1;
         }
 
@@ -80,7 +80,7 @@ bool GRPB::_FEnsureSizes(int32_t cbMin1, int32_t cbMin2, uint32_t grfgrp)
         }
         else if (cbMin2 < _cb2)
         {
-            FResizePhq(&_hqData2, cbMin2, fmemNil, mprNormal);
+            FResizePhq(&_hqData2, cbMin2, fmemClear, mprNormal);
             _cb2 = cbMin2;
         }
     }
@@ -114,12 +114,12 @@ bool GRPB::_FEnsureHqCb(HQ *phq, int32_t cb, int32_t cbMinGrow, int32_t *pcb)
         // resize an existing hq
         AssertHq(*phq);
 
-        if ((cbMinGrow += *pcb) > cb && FResizePhq(phq, cbMinGrow, fmemNil, mprForSpeed))
+        if ((cbMinGrow += *pcb) > cb && FResizePhq(phq, cbMinGrow, fmemClear, mprForSpeed))
         {
             *pcb = cbMinGrow;
             return fTrue;
         }
-        else if (FResizePhq(phq, cb, fmemNil, mprNormal))
+        else if (FResizePhq(phq, cb, fmemClear, mprNormal))
         {
             *pcb = cb;
             return fTrue;
@@ -129,12 +129,12 @@ bool GRPB::_FEnsureHqCb(HQ *phq, int32_t cb, int32_t cbMinGrow, int32_t *pcb)
 
     // just allocate the thing
     Assert(*pcb == 0, "bad cb");
-    if (cbMinGrow > cb && FAllocHq(phq, cbMinGrow, fmemNil, mprForSpeed))
+    if (cbMinGrow > cb && FAllocHq(phq, cbMinGrow, fmemClear, mprForSpeed))
     {
         *pcb = cbMinGrow;
         return fTrue;
     }
-    else if (FAllocHq(phq, cb, fmemNil, mprNormal))
+    else if (FAllocHq(phq, cb, fmemClear, mprNormal))
     {
         *pcb = cb;
         return fTrue;
