@@ -21,6 +21,10 @@ if(MSVC)
     # TODO: fix FindBRender to set this correctly when compiling with ClangCL
     set(CMAKE_EXE_LINKER_FLAGS "/SAFESEH:NO")
   endif()
+
+  # Generate debug information for Edit and Continue / Hot Reload
+  string(REPLACE "/Zi" "/ZI" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+  string(REPLACE "/Zi" "/ZI" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
 endif()
 
 include(CMakeDependentOption)
