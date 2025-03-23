@@ -269,7 +269,7 @@ bool APPB::FGetNextKeyFromOsQueue(PCMD_KEY pcmd)
             break;
         }
 
-        if (hNil != vwig.hwndClient && TranslateMDISysAccel(vwig.hwndClient, &evt) ||
+        if (kwndNil != vwig.hwndClient && TranslateMDISysAccel(vwig.hwndClient, &evt) ||
             hNil != vwig.haccel && TranslateAccelerator(vwig.hwndApp, vwig.haccel, &evt))
         {
             break;
@@ -314,9 +314,9 @@ void APPB::FlushUserEvents(uint32_t grfevt)
 ***************************************************************************/
 void APPB::_ShutDownViewer(void)
 {
-    if (vwig.hwndApp != hNil)
+    if (vwig.hwndApp != kwndNil)
         ChangeClipboardChain(vwig.hwndApp, vwig.hwndNextViewer);
-    vwig.hwndNextViewer = hNil;
+    vwig.hwndNextViewer = kwndNil;
 }
 
 /***************************************************************************
@@ -358,7 +358,7 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t 
         return _FCommonWndProc(hwnd, wm, wParam, lw, plwRet);
 
     case WM_CREATE:
-        Assert(vwig.hwndApp == hNil, 0);
+        Assert(vwig.hwndApp == kwndNil, 0);
         vwig.hwndNextViewer = SetClipboardViewer(hwnd);
         vwig.hwndApp = hwnd;
         return fTrue;
@@ -371,15 +371,15 @@ bool APPB::_FFrameWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lw, int32_t 
         return fTrue;
 
     case WM_DRAWCLIPBOARD:
-        if (hNil != vwig.hwndNextViewer)
+        if (kwndNil != vwig.hwndNextViewer)
             SendMessage(vwig.hwndNextViewer, wm, wParam, lw);
-        if (vwig.hwndApp != hNil && GetClipboardOwner() != vwig.hwndApp)
+        if (vwig.hwndApp != kwndNil && GetClipboardOwner() != vwig.hwndApp)
             vpclip->Import();
         return fTrue;
 
     case WM_DESTROY:
         _ShutDownViewer();
-        vwig.hwndApp = hNil;
+        vwig.hwndApp = kwndNil;
         PostQuitMessage(0);
         return fTrue;
 

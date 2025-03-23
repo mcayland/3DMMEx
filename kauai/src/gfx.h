@@ -694,9 +694,9 @@ class GPT : public GPT_PAR
   public:
 #ifdef WIN
     static PGPT PgptNew(HDC hdc);
-    static PGPT PgptNewHwnd(HWND hwnd);
+    static PGPT PgptNewHwnd(KWND hwnd);
 
-    static int32_t CclrSetPalette(HWND hwnd, bool fInval);
+    static int32_t CclrSetPalette(KWND hwnd, bool fInval);
 
     // this gross API is for AVI playback
     void DrawDib(HDRAWDIB hdd, BITMAPINFOHEADER *pbi, RCS *prcs, GDD *pgdd);
