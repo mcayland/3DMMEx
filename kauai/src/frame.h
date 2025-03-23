@@ -44,6 +44,7 @@ typedef class DSG *PDSG;
 typedef class DDG *PDDG;
 typedef class SNDM *PSNDM;
 
+#include "kwnd.h"
 #include "region.h"
 #include "pic.h"
 #include "mbmp.h"
