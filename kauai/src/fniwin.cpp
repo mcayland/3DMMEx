@@ -201,18 +201,16 @@ bool FNI::FBuildFromPath(PSTN pstn, FTG ftgDef)
 
     Returns: fTrue if it could find the file
 ******************************************************************************/
-bool FNI::FSearchInPath(PSTN pstn, PSTN pstnEnv)
+bool FNI::FSearchInPath(PSTN pstn, PCSZ pcszEnv)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    AssertNilOrPo(pstnEnv, 0);
 
     int32_t cch;
     SZ sz;
     achar *pchT;
-    PSZ psz = (pstnEnv == pvNil) ? pvNil : pstnEnv->Psz();
 
-    if ((cch = SearchPath(psz, pstn->Psz(), pvNil, kcchMaxSz, sz, &pchT)) == 0 || cch > kcchMaxSz)
+    if ((cch = SearchPath(pcszEnv, pstn->Psz(), pvNil, kcchMaxSz, sz, &pchT)) == 0 || cch > kcchMaxSz)
     {
         SetNil();
         PushErc(ercFniGeneral);

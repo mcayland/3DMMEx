@@ -93,7 +93,7 @@ class FNI : public FNI_PAR
 #elif defined(WIN)
     bool FGetOpen(const achar *prgchFilter, HWND hwndOwner);
     bool FGetSave(const achar *prgchFilter, HWND hwndOwner);
-    bool FSearchInPath(PSTN pstn, PSTN pstnEnv = pvNil);
+    bool FSearchInPath(PSTN pstn, PCSZ pcszEnv = pvNil);
 #endif                                                   // WIN
     bool FBuildFromPath(PSTN pstn, FTG ftgDef = ftgNil); // REVIEW shonk: Mac: implement
     bool FGetUnique(FTG ftg);
