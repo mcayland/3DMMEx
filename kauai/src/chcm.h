@@ -151,6 +151,7 @@ enum
     ertBadPackFmt,
     ertLonerInSub,
     ertNoEndSubFile,
+    ertMetafileNotSupported,
     ertLim
 };
 

@@ -506,7 +506,6 @@ target_link_libraries(
     KauaiBase
     KauaiChcm
     KauaiSound
-    KauaiPic
 )
 add_dependencies(tools chomp)
 

@@ -62,6 +62,7 @@ PCSZ _mpertpsz[] = {
     PszLit("Bad pack format"),                                // ertBadPackFmt
     PszLit("Illegal LONER primitive in SUBFILE"),             // ertLonerInSub
     PszLit("Unterminated SUBFILE"),                           // ertNoEndSubFile
+    PszLit("Metafiles not supported"),                        // ertMetafileNotSupported
 };
 
 /***************************************************************************
@@ -726,6 +727,9 @@ void CHCM::_ParseBodyMeta(bool fPack, CTG ctg, CNO cno)
         return;
     }
 
+    // Metafile support has been disabled as it is not required for 3DMM
+#ifdef CHCM_METAFILE_SUPPORT
+
     if (pvNil == (ppic = PIC::PpicReadNative(&fni)))
     {
         _Error(ertReadMeta);
@@ -741,6 +745,10 @@ void CHCM::_ParseBodyMeta(bool fPack, CTG ctg, CNO cno)
         }
     }
     ReleasePpo(&ppic);
+
+#else  // !CHCM_METAFILE_SUPPORT
+    _Error(ertMetafileNotSupported);
+#endif // CHCM_METAFILE_SUPPORT
 
     if (_FGetCleanTok(&tok) && ttEndChunk != tok.tt)
     {
