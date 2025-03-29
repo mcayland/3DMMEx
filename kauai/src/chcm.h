@@ -89,11 +89,12 @@ class CHLX : public CHLX_PAR
 
   protected:
     PGST _pgstVariables;
+    PCSZ _pszSearchPath;
 
     bool _FDoSet(PTOK ptok);
 
   public:
-    CHLX(PBSF pbsf, PSTN pstnFile);
+    CHLX(PBSF pbsf, PSTN pstnFile, PCSZ pszSearchPath);
     ~CHLX(void);
 
     // override the LEXB FGetTok to resolve variables, hande SET
@@ -203,6 +204,7 @@ class CHCM : public CHCM_PAR
     int16_t _osk;
     PMSNK _pmsnkError;  // error message sink
     int32_t _cactError; // how many errors we've encountered
+    PSZ _pszSearchPath; // Search path for locating subfiles
 
   protected:
     struct PHP // parenthesized header parameter
@@ -257,6 +259,8 @@ class CHCM : public CHCM_PAR
 
     PCFL PcflCompile(PFNI pfniSrc, PFNI pfniDst, PMSNK pmsnk);
     PCFL PcflCompile(PBSF pbsfSrc, PSTN pstnFile, PFNI pfniDst, PMSNK pmsnk);
+
+    bool FSetSearchPath(PCSZ pszSearchPath);
 };
 
 /***************************************************************************

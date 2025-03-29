@@ -76,6 +76,7 @@ CHCM::CHCM(void)
     _pglckiLoner = pvNil;
     _pmsnkError = pvNil;
     _cactError = 0;
+    _pszSearchPath = pvNil;
     AssertThis(0);
 }
 
@@ -98,6 +99,7 @@ CHCM::~CHCM(void)
     ReleasePpo(&_pcfl);
     ReleasePpo(&_pchlx);
     ReleasePpo(&_pglckiLoner);
+    FreePpv((void **)&_pszSearchPath);
 }
 
 #ifdef DEBUG
@@ -127,6 +129,7 @@ void CHCM::MarkMem(void)
     MarkMemObj(&_bsf);
     MarkMemObj(_pchlx);
     MarkMemObj(_pglckiLoner);
+    MarkPv(_pszSearchPath);
 }
 #endif // DEBUG
 
@@ -2051,7 +2054,7 @@ PCFL CHCM::PcflCompile(PBSF pbsfSrc, PSTN pstnFile, PFNI pfniDst, PMSNK pmsnk)
     PCFL pcfl;
     bool fReportBadTok;
 
-    if (pvNil == (_pchlx = NewObj CHLX(pbsfSrc, pstnFile)))
+    if (pvNil == (_pchlx = NewObj CHLX(pbsfSrc, pstnFile, _pszSearchPath)))
     {
         pmsnk->ReportLine(PszLit("Memory failure"));
         return pvNil;
@@ -2159,6 +2162,46 @@ PCFL CHCM::PcflCompile(PBSF pbsfSrc, PSTN pstnFile, PFNI pfniDst, PMSNK pmsnk)
 }
 
 /***************************************************************************
+    Set search path for locating subfiles.
+***************************************************************************/
+bool CHCM::FSetSearchPath(PCSZ pszSearchPath)
+{
+    int32_t cchSearchPath;
+    int32_t cbSearchPath;
+
+    // Free existing search path if set
+    if (_pszSearchPath != pvNil)
+    {
+        FreePpv((void **)&_pszSearchPath);
+    }
+
+    if (pszSearchPath == pvNil)
+    {
+        // No search path given
+        return fTrue;
+    }
+
+    cchSearchPath = CchSz(pszSearchPath);
+    cbSearchPath = (cchSearchPath + 1) * SIZEOF(achar);
+    if (cbSearchPath <= 0)
+    {
+        Bug("Search path overflow");
+        return fFalse;
+    }
+
+    // Allocate buffer to hold search path
+    if (!FAllocPv((void **)&_pszSearchPath, cbSearchPath, fmemClear, mprNormal))
+    {
+        Bug("Could not allocate search path");
+        return fFalse;
+    }
+
+    CopyPb(pszSearchPath, _pszSearchPath, cbSearchPath);
+
+    return fTrue;
+}
+
+/***************************************************************************
     Keyword-tokentype mappings
 ***************************************************************************/
 static KEYTT _rgkeytt[] = {
@@ -2184,9 +2227,10 @@ static KEYTT _rgkeytt[] = {
 /***************************************************************************
     Constructor for the chunky compiler lexer.
 ***************************************************************************/
-CHLX::CHLX(PBSF pbsf, PSTN pstnFile) : CHLX_PAR(pbsf, pstnFile)
+CHLX::CHLX(PBSF pbsf, PSTN pstnFile, PCSZ pszSearchPath) : CHLX_PAR(pbsf, pstnFile)
 {
     _pgstVariables = pvNil;
+    _pszSearchPath = pszSearchPath;
     AssertThis(0);
 }
 
@@ -2301,17 +2345,14 @@ bool CHLX::FGetPath(FNI *pfni)
     }
 
 #ifdef WIN
-    static achar _szInclude[1024];
-    SZ szT;
-
-    if (_szInclude[0] == 0)
+    if (pfni->FSearchInPath(&stn, _pszSearchPath))
     {
-        GetEnvironmentVariable(PszLit("include"), _szInclude, CvFromRgv(_szInclude) - 1);
+        return fTrue;
     }
-
-    if (0 != SearchPath(_szInclude, stn.Psz(), pvNil, kcchMaxSz, szT, pvNil))
-        stn = szT;
-    return pfni->FBuildFromPath(&stn);
+    else
+    {
+        return pfni->FBuildFromPath(&stn);
+    }
 #endif // WIN
 #ifdef MAC
     return pfni->FBuild(0, 0, &stn, kftgText);
@@ -2459,6 +2500,7 @@ void CHLX::MarkMem(void)
 {
     AssertValid(0);
     CHLX_PAR::MarkMem();
+    MarkPv((void *)_pszSearchPath);
     MarkMemObj(_pgstVariables);
 }
 #endif
