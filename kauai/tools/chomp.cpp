@@ -22,6 +22,8 @@ int __cdecl main(int cpszs, char *prgpszs[])
     char *pszs;
     MSSIO mssioError(stderr);
     bool fCompile = fTrue;
+    bool fSearchPath = fFalse;
+    PCSZ pszSearchPath = pvNil;
 
 #ifdef UNICODE
     fprintf(stderr, "\nMicrosoft (R) Chunky File Compiler (Unicode; " Debug("Debug; ") __DATE__ "; " __TIME__ ")\n");
@@ -48,6 +50,11 @@ int __cdecl main(int cpszs, char *prgpszs[])
                 fCompile = fFalse;
                 break;
 
+            case 's':
+            case 'S':
+                fSearchPath = fTrue;
+                break;
+
             default:
                 fprintf(stderr, "Bad command line option\n\n");
                 goto LUsage;
@@ -58,6 +65,24 @@ int __cdecl main(int cpszs, char *prgpszs[])
                 fprintf(stderr, "Bad command line option\n\n");
                 goto LUsage;
             }
+            continue;
+        }
+
+        if (fSearchPath)
+        {
+            if (!fCompile)
+            {
+                fprintf(stderr, "Search path only valid when compiling\n\n");
+                goto LUsage;
+            }
+            if (pszSearchPath != pvNil)
+            {
+                fprintf(stderr, "More than one search path specified\n\n");
+                goto LUsage;
+            }
+
+            pszSearchPath = *prgpszs;
+            fSearchPath = fFalse;
             continue;
         }
 
@@ -94,6 +119,13 @@ int __cdecl main(int cpszs, char *prgpszs[])
             fprintf(stderr, "Missing destination file name\n\n");
             goto LUsage;
         }
+
+        if (!chcm.FSetSearchPath(pszSearchPath))
+        {
+            fprintf(stderr, "Could not set search path\n\n");
+            goto LUsage;
+        }
+
         pcfl = chcm.PcflCompile(&fniSrc, &fniDst, &mssioError);
         FIL::ShutDown();
         return pvNil == pcfl;
@@ -134,7 +166,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
 LUsage:
     fprintf(stderr, "%s",
             "Usage:\n"
-            "   chomp [/c] <srcTextFile> <dstChunkFile>  - compile chunky file\n"
+            "   chomp [/c] [/s <search-path>] <srcTextFile> <dstChunkFile>  - compile chunky file\n"
             "   chomp /d <srcChunkFile> [<dstTextFile>]  - decompile chunky file\n\n");
 
     FIL::ShutDown();
