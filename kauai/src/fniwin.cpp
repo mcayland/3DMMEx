@@ -213,7 +213,6 @@ bool FNI::FSearchInPath(PSTN pstn, PCSZ pcszEnv)
     if ((cch = SearchPath(pcszEnv, pstn->Psz(), pvNil, kcchMaxSz, sz, &pchT)) == 0 || cch > kcchMaxSz)
     {
         SetNil();
-        PushErc(ercFniGeneral);
         return fFalse;
     }
 
