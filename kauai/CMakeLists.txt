@@ -402,6 +402,30 @@ target_link_libraries(
 )
 
 # Unit tests
+add_library(
+    KauaiTestLib
+    STATIC
+    "${PROJECT_SOURCE_DIR}/kauai/test/assert.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/test/resources.cpp"
+)
+target_include_directories(
+    KauaiTestLib
+    PUBLIC
+    "${PROJECT_SOURCE_DIR}/kauai/test"
+)
+target_link_libraries(
+    KauaiTestLib
+    PUBLIC
+    KauaiBase
+    KauaiFile
+    GTest::gtest
+)
+target_compile_definitions(
+    KauaiTestLib
+    PRIVATE
+    KAUAI_TEST_RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test/res"
+)
+
 add_executable(KauaiTest
     "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
@@ -409,8 +433,7 @@ add_executable(KauaiTest
 target_link_libraries(
     KauaiTest
     PUBLIC
-    KauaiBase
-    KauaiFile
+    KauaiTestLib
     KauaiGroup
     GTest::gtest_main
 )
