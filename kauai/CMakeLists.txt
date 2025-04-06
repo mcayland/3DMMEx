@@ -429,12 +429,15 @@ target_compile_definitions(
 add_executable(KauaiTest
     "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
+    "${PROJECT_SOURCE_DIR}/kauai/test/compiler_test.cpp"
 )
 target_link_libraries(
     KauaiTest
     PUBLIC
     KauaiTestLib
     KauaiGroup
+    KauaiChcm
+    KauaiSound
     GTest::gtest_main
 )
 gtest_discover_tests(KauaiTest)
