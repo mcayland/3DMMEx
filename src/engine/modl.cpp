@@ -308,7 +308,7 @@ LFail:
 PMODL MODL::PmodlFromBmdl(PBMDL pbmdl)
 {
     AssertVarMem(pbmdl);
-    PMODL pmodl = (PMODL) * (int32_t *)pbmdl->identifier;
+    PMODL pmodl = (PMODL) * (uintptr_t *)pbmdl->identifier;
     AssertPo(pmodl, 0);
     return pmodl;
 }
@@ -495,7 +495,7 @@ void MODL::AssertValid(uint32_t grf)
 {
     MODL_PAR::AssertValid(fobjAllocated);
     AssertVarMem(_pbmdl);
-    Assert((PMODL) * (int32_t *)_pbmdl->identifier == this, "Bad MODL identifier");
+    Assert((PMODL) * (uintptr_t *)_pbmdl->identifier == this, "Bad MODL identifier");
 }
 
 /***************************************************************************
