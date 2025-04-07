@@ -131,7 +131,7 @@ bool SREC::_FOpenRecord(void)
         }
 
         // prepare header on block of data
-        _wavehdr.dwUser = (DWORD)this;
+        _wavehdr.dwUser = (DWORD_PTR)this;
         if (waveInPrepareHeader(_hwavein, &_wavehdr, sizeof(WAVEHDR)))
         {
             waveInClose(_hwavein);
