@@ -145,7 +145,7 @@ void MUB::EnqueueWcid(int32_t wcid)
     Adds an item identified by the given list cid, long parameter
     and string.
 ***************************************************************************/
-bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
+bool MUB::FAddListCid(int32_t cid, uintptr_t lw0, PSTN pstn)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
@@ -179,7 +179,7 @@ bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
 
         if (pvNil == mlst.pgllw)
         {
-            if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(int32_t))))
+            if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(uintptr_t))))
             {
                 fRet = fFalse;
                 goto LAdjustSeparator;
@@ -242,7 +242,7 @@ bool MUB::FAddListCid(int32_t cid, int32_t lw0, PSTN pstn)
     or string.  If pstn is non-nil, it is used to find the item.
     If pstn is nil, lw0 is used to identify the item.
 ***************************************************************************/
-bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn)
+bool MUB::FRemoveListCid(int32_t cid, uintptr_t lw0, PSTN pstn)
 {
     AssertThis(0);
     AssertNilOrPo(pstn, 0);
@@ -251,7 +251,7 @@ bool MUB::FRemoveListCid(int32_t cid, int32_t lw0, PSTN pstn)
     SZ sz;
     HMENU hmenuPrev;
     int32_t dimni;
-    int32_t lw;
+    uintptr_t lw;
     bool fSeparator, fSetWcid;
     bool fRet = fTrue;
 
@@ -435,12 +435,13 @@ bool MUB::FRemoveAllListCid(int32_t cid)
     lwNew is set as the new long parameter and if pstnNew is non-nil,
     it is used as the new menu item text.
 ***************************************************************************/
-bool MUB::FChangeListCid(int32_t cid, int32_t lwOld, PSTN pstnOld, int32_t lwNew, PSTN pstnNew)
+bool MUB::FChangeListCid(int32_t cid, uintptr_t lwOld, PSTN pstnOld, uintptr_t lwNew, PSTN pstnNew)
 {
     AssertThis(0);
     AssertNilOrPo(pstnOld, 0);
     AssertNilOrPo(pstnNew, 0);
-    int32_t imlst, ilw, cch, lw;
+    int32_t imlst, ilw, cch;
+    uintptr_t lw;
     MLST mlst;
     SZ sz;
     bool fRet = fTrue;
@@ -493,7 +494,8 @@ bool MUB::_FGetCmdForWcid(int32_t wcid, PCMD pcmd)
     ClearPb(pcmd, SIZEOF(*pcmd));
     if (wcid >= wcidListBase && _FFindMlst(wcid, &mlst))
     {
-        int32_t lw, cch;
+        uintptr_t lw;
+        int32_t cch;
         SZ sz;
         STN stn;
 
@@ -599,7 +601,7 @@ bool MUB::_FInitLists(void)
                 mlst.wcidList = wcidList;
                 wcidList += dwcidList;
                 mlst.cid = cid;
-                if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(int32_t), vntl.OnnMac())))
+                if (pvNil == (mlst.pgllw = GL::PglNew(SIZEOF(uintptr_t), vntl.OnnMac())))
                     return fFalse;
 
                 for (onn = 0; onn < vntl.OnnMac(); onn++)
