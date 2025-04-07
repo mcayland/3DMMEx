@@ -257,7 +257,7 @@ void SREC::_UpdateStatus(void)
 /***************************************************************************
     Figure out if we're recording or not
 ***************************************************************************/
-void SREC::_WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
+void SREC::_WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
 {
     // the psrec pointer is a pointer to the class which generated the event and owns the device
     SREC *psrec = (SREC *)dwInstance;
