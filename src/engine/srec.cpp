@@ -124,7 +124,7 @@ bool SREC::_FOpenRecord(void)
     if (pvNil == _hwavein)
     {
         // open a wavein device
-        if (waveInOpen(&_hwavein, WAVE_MAPPER, _priff->PwfxGet(), (DWORD)_WaveInProc, (DWORD)this, CALLBACK_FUNCTION))
+        if (waveInOpen(&_hwavein, WAVE_MAPPER, _priff->PwfxGet(), (DWORD_PTR)_WaveInProc, (DWORD_PTR)this, CALLBACK_FUNCTION))
         {
             // it doesn't support this format
             return fFalse;
