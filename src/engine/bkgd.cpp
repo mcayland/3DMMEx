@@ -149,10 +149,17 @@ bool BKGD::FReadBkgd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, in
 ***************************************************************************/
 bool DeserializeBDS(int16_t bo, BDS *pbds)
 {
-    if (bo != pbds->bo)
-        SwapBytesBom(pbds, kbomBds);
+    BDSF bdsf;
 
-    Assert(kboCur == pbds->bo, "bad BDS");
+    CopyPb(pbds, &bdsf, SIZEOF(BDSF));
+    if (bo != bdsf.bo)
+        SwapBytesBom(&bdsf, kbomBds);
+
+    Assert(kboCur == bdsf.bo, "bad BDS");
+
+    pbds->vlm = bdsf.vlm;
+    pbds->fLoop = bdsf.fLoop;
+    DeserializeTagfToTag(&bdsf.tagSnd, &pbds->tagSnd);
 
     return fTrue;
 }
@@ -195,9 +202,9 @@ bool BKGD::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     {
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || !blck.FUnpackData())
             goto LFail;
-        if (blck.Cb() != SIZEOF(BDS))
+        if (blck.Cb() != SIZEOF(BDSF))
             goto LFail;
-        if (!blck.FReadRgb(&_bds, SIZEOF(BDS), 0))
+        if (!blck.FReadRgb(&_bds, SIZEOF(BDSF), 0))
             goto LFail;
         if (!DeserializeBDS(kboCur, &_bds))
             goto LFail;

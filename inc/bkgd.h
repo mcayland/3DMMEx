@@ -96,17 +96,14 @@ struct BDSF
     TAGF tagSnd;
 };
 VERIFY_STRUCT_SIZE(BDSF, 28);
+const BOM kbomBds = 0x5f000000 | kbomTag >> 8;
 
 struct BDS
 {
-    int16_t bo;
-    int16_t osk;
     int32_t vlm;
     bool fLoop;
     TAG tagSnd;
 };
-VERIFY_STRUCT_SIZE(BDS, 28);
-const BOM kbomBds = 0x5f000000 | kbomTag >> 8;
 
 /****************************************
     The background class
