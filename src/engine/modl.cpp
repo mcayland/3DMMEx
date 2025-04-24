@@ -81,6 +81,40 @@ bool MODL::FReadModl(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, in
 }
 
 /***************************************************************************
+    Deserialize BMDL from on-disk format
+***************************************************************************/
+bool DeserializeBMDL(int16_t bo, PBMDL pbmdl)
+{
+    int32_t ibrv, ibrf;
+    BRV *pbrv;
+    BRF *pbrf;
+
+    if (pbmdl->nprepared_vertices)
+    {
+        if (kboOther == bo)
+        {
+            for (ibrv = 0, pbrv = pbmdl->prepared_vertices; ibrv < pbmdl->nprepared_vertices; ibrv++, pbrv++)
+            {
+                SwapBytesBom(pbrv, kbomBrv);
+            }
+        }
+    }
+
+    if (pbmdl->nprepared_faces)
+    {
+        if (kboOther == bo)
+        {
+            for (ibrf = 0, pbrf = pbmdl->prepared_faces; ibrf < pbmdl->nprepared_faces; ibrf++, pbrf++)
+            {
+                SwapBytesBom(pbrf, kbomBrf);
+            }
+        }
+    }
+
+    return fTrue;
+}
+
+/***************************************************************************
     Reads a MODL from a BLCK
 ***************************************************************************/
 bool MODL::_FInit(PBLCK pblck)
@@ -126,6 +160,9 @@ bool MODL::_FInit(PBLCK pblck)
         if (!pblck->FReadRgb(_pbmdl->faces, cbrgbrf, SIZEOF(MODLF) + cbrgbrv))
             return fFalse;
 
+        if (!DeserializeBMDL(modlf.bo, _pbmdl))
+            return fFalse;
+
         BrModelAdd(_pbmdl);
 
         // REVIEW *****: uncomment and expand the following code to prelight models
@@ -153,28 +190,18 @@ bool MODL::_FInit(PBLCK pblck)
         {
             return fFalse;
         }
-        if (kboOther == modlf.bo)
-        {
-            for (ibrv = 0, pbrv = _pbmdl->prepared_vertices; ibrv < modlf.cver; ibrv++, pbrv++)
-            {
-                SwapBytesBom(pbrv, kbomBrv);
-            }
-        }
+
         if (!pblck->FReadRgb(_pbmdl->prepared_faces, cbrgbrf, SIZEOF(MODLF) + cbrgbrv))
         {
             return fFalse;
-        }
-        if (kboOther == modlf.bo)
-        {
-            for (ibrf = 0, pbrf = _pbmdl->prepared_faces; ibrf < modlf.cfac; ibrf++, pbrf++)
-            {
-                SwapBytesBom(pbrf, kbomBrf);
-            }
         }
 
         _pbmdl->flags = BR_MODF_PREPREPARED;
         _pbmdl->nprepared_vertices = (uint16_t)modlf.cver;
         _pbmdl->nprepared_faces = (uint16_t)modlf.cfac;
+
+        if (!DeserializeBMDL(modlf.bo, _pbmdl))
+            return fFalse;
 
         // The following code assumes that there is no material data
         // in the models.  If there is material data, the code will have
