@@ -32,8 +32,9 @@ struct ACTF // Actor chunk on file
     int32_t arid;      // Unique id assigned to this actor.
     int32_t nfrmFirst; // First frame in this actor's stage life
     int32_t nfrmLast;  // Last frame in this actor's stage life
-    TAG tagTmpl;       // Tag to actor's template
+    TAGF tagTmpl;      // Tag to actor's template
 };
+VERIFY_STRUCT_SIZE(ACTF, 44)
 const BOM kbomActf = 0x5ffc0000 | kbomTag;
 
 /***************************************************************************
@@ -98,7 +99,7 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
     actf.arid = _arid;
     actf.nfrmFirst = _nfrmFirst;
     actf.nfrmLast = _nfrmLast;
-    actf.tagTmpl = _tagTmpl;
+    SerializeTagToTagf(&_tagTmpl, &actf.tagTmpl);
     if (!pcfl->FPutPv(&actf, SIZEOF(ACTF), kctgActr, cnoActr))
         return fFalse;
 
@@ -262,7 +263,7 @@ bool ACTR::_FReadActor(PCFL pcfl, CNO cno)
     _arid = actf.arid;
     _nfrmFirst = actf.nfrmFirst;
     _nfrmLast = actf.nfrmLast;
-    _tagTmpl = actf.tagTmpl;
+    DeserializeTagfToTag(&actf.tagTmpl, &_tagTmpl);
     _fLifeDirty = (knfrmInvalid == _nfrmFirst) || (knfrmInvalid == _nfrmLast);
 
     if (_tagTmpl.sid == ksidUseCrf)
@@ -486,6 +487,7 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     ACTF actf;
     BLCK blck;
     int16_t bo;
+    TAG tag;
     PTAG ptag;
     PGL pgltag;
     PGG pggaev = pvNil;
@@ -524,7 +526,6 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         if (pvNil != pgltagTmpl)
         {
             int32_t itag;
-            TAG tag;
 
             for (itag = 0; itag < pgltagTmpl->IvMac(); itag++)
             {
@@ -539,7 +540,8 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         }
     }
 
-    if (!pgltag->FInsert(0, &actf.tagTmpl))
+    DeserializeTagfToTag(&actf.tagTmpl, &tag);
+    if (!pgltag->FInsert(0, &tag))
         goto LFail;
 
     // Pull all tags out of the event list:
