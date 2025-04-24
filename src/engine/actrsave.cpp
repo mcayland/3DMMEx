@@ -164,6 +164,82 @@ PGG DeserializeAEVs(int16_t bo, PGG pggaevf)
 }
 
 /***************************************************************************
+    Serialize all events in pggaev
+***************************************************************************/
+PGG SerializeAEVs(PGG pggaev)
+{
+    AssertPo(pggaev, 0);
+
+    PGG pggaevf;
+    int32_t iaev;
+    AEVCOSTF aevcostf;
+    AEVCOST *paevcost;
+    AEVSNDF aevsndf;
+    AEVSND *paevsnd;
+
+    pggaevf = pggaev->PggDup();
+    if (pggaevf == pvNil)
+        return pvNil;
+
+    for (iaev = 0; iaev < pggaevf->IvMac(); iaev++)
+    {
+        switch (((AEV *)pggaevf->QvFixedGet(iaev))->aet)
+        {
+        case aetCost:
+            paevcost = (AEVCOST *)pggaevf->QvGet(iaev);
+
+            aevcostf.ibset = paevcost->ibset;
+            aevcostf.cmid = paevcost->cmid;
+            aevcostf.fCmtl = paevcost->fCmtl;
+            SerializeTagToTagf(&paevcost->tag, &aevcostf.tag);
+
+            if (!pggaevf->FPut(iaev, SIZEOF(AEVCOSTF), &aevcostf))
+                goto LFail;
+
+            break;
+        case aetSnd:
+            paevsnd = (AEVSND *)pggaevf->QvGet(iaev);
+
+            aevsndf.fLoop = paevsnd->fLoop;
+            aevsndf.fQueue = paevsnd->fQueue;
+            aevsndf.vlm = paevsnd->vlm;
+            aevsndf.celn = paevsnd->celn;
+            aevsndf.sty = paevsnd->sty;
+            aevsndf.fNoSound = paevsnd->fNoSound;
+            aevsndf.chid = paevsnd->chid;
+            SerializeTagToTagf(&paevsnd->tag, &aevsndf.tag);
+
+            if (!pggaevf->FPut(iaev, SIZEOF(AEVSNDF), &aevsndf))
+                goto LFail;
+
+            break;
+        case aetSize:
+        case aetPull:
+        case aetRotF:
+        case aetRotH:
+        case aetActn:
+        case aetAdd:
+        case aetFreeze:
+        case aetMove:
+        case aetTweak:
+        case aetStep:
+        case aetRem:
+            // no var data
+            break;
+        default:
+            Bug("Unknown AET");
+            break;
+        }
+    }
+
+    return pggaevf;
+
+LFail:
+    ReleasePpo(&pggaevf);
+    return pvNil;
+}
+
+/***************************************************************************
     Write the actor out to disk.  Store the root chunk in the given CNO.
     If this function returns false, it is the client's responsibility to
     delete the actor chunks.
@@ -184,6 +260,7 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
     AEVSND aevsnd;
     int32_t nfrmFirst;
     int32_t nfrmLast;
+    PGG pggaev = pvNil;
 
     // Validate the actor's lifetime if not done already
     if (knfrmInvalid != _nfrmFirst)
@@ -238,12 +315,22 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
         return fFalse;
 
     // Now write the GGAE chunk:
-    if (!pcfl->FAddChild(kctgActr, cnoActr, kchidGgae, _pggaev->CbOnFile(), kctgGgae, &cnoGgae, &blck))
+    pggaev = SerializeAEVs(_pggaev);
+    if (pggaev == pvNil)
+        return fFalse;
+
+    if (!pcfl->FAddChild(kctgActr, cnoActr, kchidGgae, pggaev->CbOnFile(), kctgGgae, &cnoGgae, &blck))
     {
+        ReleasePpo(&pggaev);
         return fFalse;
     }
-    if (!_pggaev->FWrite(&blck))
+    if (!pggaev->FWrite(&blck))
+    {
+        ReleasePpo(&pggaev);
         return fFalse;
+    }
+
+    ReleasePpo(&pggaev);
 
     // Adopt actor sounds into the scene
     for (iaev = 0; iaev < _pggaev->IvMac(); iaev++)
