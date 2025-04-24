@@ -450,22 +450,38 @@ LFail:
 /******************************************************************************
     Deserialize rollcall from on-disk format
 ******************************************************************************/
-bool DeserializeRollCall(int16_t bo, PGST pgst)
+PGST DeserializeRollCall(int16_t bo, PGST pgst)
 {
     AssertPo(pgst, 0);
 
     int32_t imactr, imactrMac;
     MACTR mactr;
+    MACTRF mactrf;
+    PGST _pgst;
+    STN stn;
+
+    /* We need to return a new GST since cbExtra is different */
+    _pgst = GST::PgstNew(SIZEOF(MACTR));
+    if (_pgst == pvNil)
+        return pvNil;
 
     imactrMac = pgst->IvMac();
     for (imactr = 0; imactr < imactrMac; imactr++)
     {
-        pgst->GetExtra(imactr, &mactr);
+        pgst->GetExtra(imactr, &mactrf);
         if (bo == kboOther)
-            SwapBytesBom(&mactr, kbomMactr);
+            SwapBytesBom(&mactrf, kbomMactr);
+
+        mactr.arid = mactrf.arid;
+        mactr.cactRef = mactrf.cactRef;
+        mactr.grfbrws = mactrf.grfbrws;
+        DeserializeTagfToTag(&mactrf.tagTmpl, &mactr.tagTmpl);
+
+        pgst->GetStn(imactr, &stn);
+        _pgst->FAddStn(&stn, &mactr);
     }
 
-    return true;
+    return _pgst;
 }
 
 /******************************************************************************
@@ -497,6 +513,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
     KID kid;
     BLCK blck;
     MACTR mactr;
+    PGST pgst;
 
     if (!pcfl->FGetKidChidCtg(kctgMvie, cno, 0, kctgGst, &kid) || !pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
     {
@@ -504,12 +521,14 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
         goto LFail;
     }
 
-    *ppgst = GST::PgstRead(&blck, &bo);
-    if (*ppgst == pvNil)
+    pgst = GST::PgstRead(&blck, &bo);
+    if (pgst == pvNil)
         goto LFail;
 
-    if (!DeserializeRollCall(bo, *ppgst))
+    *ppgst = DeserializeRollCall(bo, pgst);
+    if (!*ppgst)
     {
+        ReleasePpo(&pgst);
         goto LFail;
     }
 
@@ -526,6 +545,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
 
         (*ppgst)->PutExtra(imactr, &mactr);
     }
+    ReleasePpo(&pgst);
 
     return fTrue;
 LFail:
