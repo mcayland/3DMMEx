@@ -3950,6 +3950,69 @@ LFail:
     return pvNil;
 }
 
+/***************************************************************************
+    Serialize frame events to on-disk format
+***************************************************************************/
+PGG SerializeFrameEVs(PGG pggsevFrm)
+{
+    AssertPo(pggsevFrm, 0);
+
+    int32_t isevFrm;
+    SEV sev;
+    PGG _pggsevFrm;
+    PSSE psseOld;
+    PSSE psseNew;
+    int32_t ctagc;
+    int32_t itagc;
+    TAGCF *tagcf;
+    int32_t cb;
+
+    _pggsevFrm = pggsevFrm->PggDup();
+    if (_pggsevFrm == pvNil)
+        return pvNil;
+
+    for (isevFrm = 0; isevFrm < _pggsevFrm->IvMac(); isevFrm++)
+    {
+        sev = *(SEV *)_pggsevFrm->QvFixedGet(isevFrm);
+
+        switch (sev.sevt)
+        {
+        case sevtPlaySnd:
+            // Serialize GG using TAGC to SSE with TAGCF
+            if (!FAllocPv((void **)&psseOld, pggsevFrm->Cb(isevFrm), fmemClear, mprNormal))
+                return pvNil;
+            _pggsevFrm->Get(isevFrm, psseOld);
+            ctagc = psseOld->ctagc;
+
+            if (!FAllocPv((void **)&psseNew, pggsevFrm->Cb(isevFrm), fmemClear, mprNormal))
+            {
+                FreePpv((void **)&psseOld);
+                return pvNil;
+            }
+            CopyPb(psseOld, psseNew, SIZEOF(SSE));
+
+            tagcf = (TAGCF *)PvAddBv(psseNew, SIZEOF(SSE));
+            for (itagc = 0; itagc < ctagc; itagc++)
+            {
+                TAG tag;
+
+                tagcf[itagc].chid = *(psseOld->Pchid(itagc));
+                tag = *(psseOld->Ptag(itagc));
+                SerializeTagToTagf(&tag, &tagcf[itagc].tagf);
+            }
+
+            cb = SIZEOF(SSE) + LwMul(SIZEOF(TAGCF), ctagc);
+            _pggsevFrm->FPut(isevFrm, cb, psseNew);
+
+            FreePpv((void **)&psseNew);
+            FreePpv((void **)&psseOld);
+            break;
+        }
+    }
+
+    return _pggsevFrm;
+}
+
 /****************************************************
  *
  * This routine reads in a scene from a chunky file.
@@ -4383,6 +4446,7 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
     AssertPo(pcrf, 0);
 
     PGG pggFrmTemp = pvNil;
+    PGG pggFrm = pvNil;
     PGG pggStartTemp = pvNil;
     PGG pggStart = pvNil;
     SEV sev;
@@ -4585,17 +4649,24 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
     //
     // Save info into scene chunk
     //
-    cb = pggFrmTemp->CbOnFile();
+    pggFrm = SerializeFrameEVs(pggFrmTemp);
+    if (pggFrm == pvNil)
+    {
+        goto LFail;
+    }
+
+    cb = pggFrm->CbOnFile();
     if (!pcfl->FAdd(cb, kctgFrmGg, &cnoFrmEvent, &blck))
     {
         goto LFail;
     }
 
-    if (!pggFrmTemp->FWrite(&blck))
+    if (!pggFrm->FWrite(&blck))
     {
         pcfl->Delete(kctgFrmGg, cnoFrmEvent);
         goto LFail;
     }
+    ReleasePpo(&pggFrm);
 
     if (!pcfl->FAdoptChild(kctgScen, *pcno, kctgFrmGg, cnoFrmEvent, 0))
     {
