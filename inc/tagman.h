@@ -72,6 +72,10 @@ struct TAG
 VERIFY_STRUCT_SIZE(TAG, 16);
 const BOM kbomTag = 0xFF000000;
 
+// Functions for serializing and deserializing tags
+void DeserializeTagfToTag(PTAGF ptagf, PTAG ptag);
+void SerializeTagToTagf(PTAG ptag, PTAGF ptagf);
+
 // FNINSCD is a client-supplied callback function to alert the user to
 // insert the given CD.  The name of the source is passed to the callback.
 // The function should return fTrue if the user wants to retry searching
