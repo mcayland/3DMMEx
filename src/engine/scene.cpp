@@ -3814,6 +3814,51 @@ PGG DeserializeStartEVs(int16_t bo, PGG pggsevStart)
     return _pggsevStart;
 }
 
+/***************************************************************************
+    Deserialize frame events from on-disk format
+***************************************************************************/
+PGG DeserializeFrameEVs(int16_t bo, PGG pggsevFrm)
+{
+    AssertPo(pggsevFrm, 0);
+
+    int32_t isevFrm;
+    SEV sev;
+    PGG _pggsevFrm;
+    CHID chid;
+
+    _pggsevFrm = pggsevFrm->PggDup();
+    if (_pggsevFrm == pvNil)
+        return pvNil;
+
+    for (isevFrm = 0; isevFrm < _pggsevFrm->IvMac(); isevFrm++)
+    {
+        sev = *(SEV *)_pggsevFrm->QvFixedGet(isevFrm);
+
+        //
+        // Swap byte ordering of entry
+        //
+        if (bo == kboOther)
+        {
+            SwapBytesBom((void *)&sev, kbomSev);
+            _pggsevFrm->PutFixed(isevFrm, &sev);
+        }
+
+        switch (sev.sevt)
+        {
+        case sevtChngCamera:
+            _pggsevFrm->Get(isevFrm, &chid);
+            if (bo == kboOther)
+            {
+                SwapBytesBom((void *)&chid, kbomLong);
+            }
+            _pggsevFrm->Put(isevFrm, &chid);
+            break;
+        }
+    }
+
+    return _pggsevFrm;
+}
+
 /****************************************************
  *
  * This routine reads in a scene from a chunky file.
@@ -3845,6 +3890,7 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
     SCENH scenh;
     PCFL pcfl;
     PGG pggsevStart;
+    PGG pggsevFrm;
 
     pcfl = pcrf->Pcfl();
 
@@ -3923,13 +3969,20 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
         goto LFail0;
     }
 
-    pscen->_pggsevFrm = GG::PggRead(&blck, &bo);
-    if (pscen->_pggsevFrm == pvNil)
+    pggsevFrm = GG::PggRead(&blck, &bo);
+    if (pggsevFrm == pvNil)
     {
         goto LFail0;
     }
 
-    Assert(pscen->_pggsevFrm->CbFixed() == SIZEOF(SEV), "Bad GG read for event");
+    Assert(pggsevFrm->CbFixed() == SIZEOF(SEV), "Bad GG read for event");
+
+    pscen->_pggsevFrm = DeserializeFrameEVs(bo, pggsevFrm);
+    ReleasePpo(&pggsevFrm);
+    if (pscen->_pggsevFrm == pvNil)
+    {
+        goto LFail1;
+    }
 
     //
     // Convert all open tags to pointers.
@@ -3937,14 +3990,6 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
     for (; isevFrm < pscen->_pggsevFrm->IvMac(); isevFrm++)
     {
         qsev = (PSEV)pscen->_pggsevFrm->QvFixedGet(isevFrm);
-
-        //
-        // Swap byte ordering of entry
-        //
-        if (bo == kboOther)
-        {
-            SwapBytesBom((void *)qsev, kbomSev);
-        }
 
         //
         // Open all tags
@@ -5131,6 +5176,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
     int16_t bo;
     PGG pggsev;
     PGG pggsevStart;
+    PGG pggsevFrm;
     TAG tag;
     TAG tagBkgd;
     PGL pgltagSrc;
@@ -5269,20 +5315,19 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
 
     Assert(pggsev->CbFixed() == SIZEOF(SEV), "Bad GG read for event");
 
+    pggsevFrm = DeserializeFrameEVs(bo, pggsev);
+    ReleasePpo(&pggsev);
+    if (pggsevFrm == pvNil)
+    {
+        return fFalse;
+    }
+
     //
     // Look in all events for tags
     //
-    for (isev = 0; isev < pggsev->IvMac(); isev++)
+    for (isev = 0; isev < pggsevFrm->IvMac(); isev++)
     {
-        qsev = (PSEV)pggsev->QvFixedGet(isev);
-
-        //
-        // Swap byte ordering of entry
-        //
-        if (bo == kboOther)
-        {
-            SwapBytesBom((void *)qsev, kbomSev);
-        }
+        qsev = (PSEV)pggsevFrm->QvFixedGet(isev);
 
         //
         // Find appropriate event types
@@ -5290,20 +5335,16 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
         switch (qsev->sevt)
         {
         case sevtChngCamera:
-            pggsev->Get(isev, &chid);
-            if (bo == kboOther)
-            {
-                SwapBytesBom((void *)&chid, kbomLong);
-            }
+            pggsevFrm->Get(isev, &chid);
             if (tagBkgd.sid == ksidInvalid)
             {
                 Bug("no background event!?");
-                ReleasePpo(&pggsev);
+                ReleasePpo(&pggsevFrm);
                 return fFalse;
             }
             if (!ptagl->FInsertChild(&tagBkgd, chid, kctgCam))
             {
-                ReleasePpo(&pggsev);
+                ReleasePpo(&pggsevFrm);
                 return fFalse;
             }
             break;
@@ -5316,10 +5357,10 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
             PSSE psse;
             int32_t itag;
 
-            psse = SSE::PsseDupFromGg(pggsev, isev, fFalse);
+            psse = SSE::PsseDupFromGg(pggsevFrm, isev, fFalse);
             if (pvNil == psse)
             {
-                ReleasePpo(&pggsev);
+                ReleasePpo(&pggsevFrm);
                 return fFalse;
             }
             if (bo == kboOther)
@@ -5335,7 +5376,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
                 if (!ptagl->FInsertTag(psse->Ptag(itag)))
                 {
                     ReleasePpsse(&psse);
-                    ReleasePpo(&pggsev);
+                    ReleasePpo(&pggsevFrm);
                     return fFalse;
                 }
             }
@@ -5351,7 +5392,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
         }
     }
 
-    ReleasePpo(&pggsev);
+    ReleasePpo(&pggsevFrm);
 
     return fTrue;
 }
