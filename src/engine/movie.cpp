@@ -171,6 +171,17 @@ const BOM kbomMfp = 0x55000000;
 //
 // Used to keep track of the roll call list of the movie
 //
+
+// On-disk representation of MACTR
+struct MACTRF
+{
+    int32_t arid;
+    int32_t cactRef;
+    uint32_t grfbrws; // browser properties
+    TAGF tagTmpl;
+};
+VERIFY_STRUCT_SIZE(MACTRF, 28)
+
 struct MACTR
 {
     int32_t arid;
