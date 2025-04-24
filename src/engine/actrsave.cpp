@@ -40,11 +40,20 @@ const BOM kbomActf = 0x5ffc0000 | kbomTag;
 /***************************************************************************
     Deserialize all events in pggaev
 ***************************************************************************/
-bool DeserializeAEVs(int16_t bo, PGG pggaev)
+PGG DeserializeAEVs(int16_t bo, PGG pggaevf)
 {
-    AssertPo(pggaev, 0);
+    AssertPo(pggaevf, 0);
 
+    PGG pggaev;
     int32_t iaev;
+    AEVCOSTF *paevcostf;
+    AEVCOST aevcost;
+    AEVSNDF *paevsndf;
+    AEVSND aevsnd;
+
+    pggaev = pggaevf->PggDup();
+    if (pggaev == pvNil)
+        return pvNil;
 
     for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
     {
@@ -60,12 +69,32 @@ bool DeserializeAEVs(int16_t bo, PGG pggaev)
             {
                 SwapBytesBom(pggaev->QvGet(iaev), kbomAevcost);
             }
+            paevcostf = (AEVCOSTF *)pggaev->QvGet(iaev);
+
+            aevcost.ibset = paevcostf->ibset;
+            aevcost.cmid = paevcostf->cmid;
+            aevcost.fCmtl = paevcostf->fCmtl;
+            DeserializeTagfToTag(&paevcostf->tag, &aevcost.tag);
+
+            pggaev->FPut(iaev, SIZEOF(AEVCOST), &aevcost);
             break;
         case aetSnd:
             if (kboOther == bo)
             {
                 SwapBytesBom(pggaev->QvGet(iaev), kbomAevsnd);
             }
+            paevsndf = (AEVSNDF *)pggaev->QvGet(iaev);
+
+            aevsnd.fLoop = paevsndf->fLoop;
+            aevsnd.fQueue = paevsndf->fQueue;
+            aevsnd.vlm = paevsndf->vlm;
+            aevsnd.celn = paevsndf->celn;
+            aevsnd.sty = paevsndf->sty;
+            aevsnd.fNoSound = paevsndf->fNoSound;
+            aevsnd.chid = paevsndf->chid;
+            DeserializeTagfToTag(&paevsndf->tag, &aevsnd.tag);
+
+            pggaev->FPut(iaev, SIZEOF(AEVSND), &aevsnd);
             break;
         case aetSize:
             if (kboOther == bo)
@@ -131,7 +160,7 @@ bool DeserializeAEVs(int16_t bo, PGG pggaev)
         }
     }
 
-    return fTrue;
+    return pggaev;
 }
 
 /***************************************************************************
@@ -443,13 +472,15 @@ bool ACTR::_FReadEvents(PCFL pcfl, CNO cno)
 
     BLCK blck;
     int16_t bo;
+    PGG pggaevf;
 
     if (!pcfl->FFind(kctgGgae, cno, &blck))
         return fFalse;
-    _pggaev = GG::PggRead(&blck, &bo);
-    if (pvNil == _pggaev)
+    pggaevf = GG::PggRead(&blck, &bo);
+    if (pvNil == pggaevf)
         return fFalse;
-    DeserializeAEVs(bo, _pggaev);
+    _pggaev = DeserializeAEVs(bo, pggaevf);
+    ReleasePpo(&pggaevf);
     return fTrue;
 }
 
@@ -529,6 +560,7 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     PTAG ptag;
     PGL pgltag;
     PGG pggaev = pvNil;
+    PGG pggaevf = pvNil;
     int32_t iaev;
     KID kid;
 
@@ -587,10 +619,10 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         goto LFail;
     if (!pcfl->FFind(kctgGgae, kid.cki.cno, &blck))
         goto LFail;
-    pggaev = GG::PggRead(&blck, &bo);
-    if (pvNil == pggaev)
+    pggaevf = GG::PggRead(&blck, &bo);
+    if (pvNil == pggaevf)
         goto LFail;
-    DeserializeAEVs(bo, pggaev);
+    pggaev = DeserializeAEVs(bo, pggaevf);
     pggaev->Lock();
     for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
     {
@@ -606,11 +638,13 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     pggaev->Unlock();
     *pfError = fFalse;
     ReleasePpo(&pggaev);
+    ReleasePpo(&pggaevf);
     return pgltag;
 LFail:
     *pfError = fTrue;
     ReleasePpo(&pgltag);
     ReleasePpo(&pggaev);
+    ReleasePpo(&pggaevf);
     return pvNil;
 }
 
