@@ -490,7 +490,6 @@ class ACTR : public ACTR_PAR
     bool _FReadActor(PCFL pcfl, CNO cno);
     bool _FReadRoute(PCFL pcfl, CNO cno);
     bool _FReadEvents(PCFL pcfl, CNO cno);
-    static void _SwapBytesPggaev(PGG pggaev);
     bool _FOpenTags(PCRF pcrf);
     static bool _FIsIaevTag(PGG pggaev, int32_t iaev, PTAG *pptag, PAEV *pqaev = pvNil);
     void _CloseTags(void);

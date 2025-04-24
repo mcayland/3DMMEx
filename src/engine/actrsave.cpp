@@ -38,6 +38,103 @@ VERIFY_STRUCT_SIZE(ACTF, 44)
 const BOM kbomActf = 0x5ffc0000 | kbomTag;
 
 /***************************************************************************
+    Deserialize all events in pggaev
+***************************************************************************/
+bool DeserializeAEVs(int16_t bo, PGG pggaev)
+{
+    AssertPo(pggaev, 0);
+
+    int32_t iaev;
+
+    for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
+    {
+        if (kboOther == bo)
+        {
+            SwapBytesBom(pggaev->QvFixedGet(iaev), kbomAev);
+        }
+
+        switch (((AEV *)pggaev->QvFixedGet(iaev))->aet)
+        {
+        case aetCost:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevcost);
+            }
+            break;
+        case aetSnd:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevsnd);
+            }
+            break;
+        case aetSize:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevsize);
+            }
+            break;
+        case aetPull:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevpull);
+            }
+            break;
+        case aetRotF:
+        case aetRotH:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevrot);
+            }
+            break;
+        case aetActn:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevactn);
+            }
+            break;
+        case aetAdd:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevadd);
+            }
+            break;
+        case aetFreeze:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevfreeze);
+            }
+            break;
+        case aetMove:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevmove);
+            }
+            break;
+        case aetTweak:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevtweak);
+            }
+            break;
+        case aetStep:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevstep);
+            }
+            break;
+        case aetRem:
+            // no var data
+            break;
+        default:
+            Bug("Unknown AET");
+            break;
+        }
+    }
+
+    return fTrue;
+}
+
+/***************************************************************************
     Write the actor out to disk.  Store the root chunk in the given CNO.
     If this function returns false, it is the client's responsibility to
     delete the actor chunks.
@@ -352,67 +449,8 @@ bool ACTR::_FReadEvents(PCFL pcfl, CNO cno)
     _pggaev = GG::PggRead(&blck, &bo);
     if (pvNil == _pggaev)
         return fFalse;
-    if (kboOther == bo)
-        _SwapBytesPggaev(_pggaev);
+    DeserializeAEVs(bo, _pggaev);
     return fTrue;
-}
-
-/***************************************************************************
-    SwapBytes all events in pggaev
-***************************************************************************/
-void ACTR::_SwapBytesPggaev(PGG pggaev)
-{
-    AssertPo(pggaev, 0);
-
-    int32_t iaev;
-
-    for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
-    {
-        SwapBytesBom(pggaev->QvFixedGet(iaev), kbomAev);
-        switch (((AEV *)pggaev->QvFixedGet(iaev))->aet)
-        {
-        case aetCost:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevcost);
-            break;
-        case aetSnd:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevsnd);
-            break;
-        case aetSize:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevsize);
-            break;
-        case aetPull:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevpull);
-            break;
-        case aetRotF:
-        case aetRotH:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevrot);
-            break;
-        case aetActn:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevactn);
-            break;
-        case aetAdd:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevadd);
-            break;
-        case aetFreeze:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevfreeze);
-            break;
-        case aetMove:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevmove);
-            break;
-        case aetTweak:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevtweak);
-            break;
-        case aetStep:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevstep);
-            break;
-        case aetRem:
-            // no var data
-            break;
-        default:
-            Bug("Unknown AET");
-            break;
-        }
-    }
 }
 
 /***************************************************************************
@@ -552,8 +590,7 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     pggaev = GG::PggRead(&blck, &bo);
     if (pvNil == pggaev)
         goto LFail;
-    if (kboOther == bo)
-        _SwapBytesPggaev(pggaev);
+    DeserializeAEVs(bo, pggaev);
     pggaev->Lock();
     for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
     {
