@@ -44,6 +44,17 @@ const int32_t ksidInvalid = -1; // negative SIDs imply an invalid TAG
 const int32_t sidNil = 0;
 const int32_t ksidUseCrf = 0; // chunk is in ptag->pcrf
 
+/* On-disk representation of TAG */
+typedef struct TAGF *PTAGF;
+struct TAGF
+{
+    int32_t sid;
+    int32_t _pcrf;
+    CTG ctg;
+    CNO cno;
+};
+VERIFY_STRUCT_SIZE(TAGF, 16);
+
 typedef struct TAG *PTAG;
 struct TAG
 {
