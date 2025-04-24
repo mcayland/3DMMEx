@@ -485,6 +485,40 @@ PGST DeserializeRollCall(int16_t bo, PGST pgst)
 }
 
 /******************************************************************************
+    Serialize rollcall to on-disk format
+******************************************************************************/
+PGST SerializeRollCall(PGST pgst)
+{
+    AssertPo(pgst, 0);
+
+    int32_t imactr, imactrMac;
+    PGST _pgst;
+    MACTR mactr;
+    MACTRF mactrf;
+    STN stn;
+
+    _pgst = GST::PgstNew(SIZEOF(MACTRF));
+    if (_pgst == pvNil)
+        return pvNil;
+
+    imactrMac = pgst->IvMac();
+    for (imactr = 0; imactr < imactrMac; imactr++)
+    {
+        pgst->GetExtra(imactr, &mactr);
+
+        mactrf.arid = mactr.arid;
+        mactrf.cactRef = mactr.cactRef;
+        mactrf.grfbrws = mactr.grfbrws;
+        SerializeTagToTagf(&mactr.tagTmpl, &mactrf.tagTmpl);
+
+        pgst->GetStn(imactr, &stn);
+        _pgst->FAddStn(&stn, &mactrf);
+    }
+
+    return _pgst;
+}
+
+/******************************************************************************
     FReadRollCall
         Reads the roll call off file for a given movie.  Will swapbytes the
         extra data in the GST if necessary, and will report back on the
@@ -2509,6 +2543,7 @@ bool MVIE::FAutoSave(PFNI pfni, bool fCleanRollCall)
     KID kidScen, kidGstRollCall, kidGstSource;
     PCFL pcfl;
     PGST pgstSource = pvNil;
+    PGST pgstmactr = pvNil;
 
     if (_pcrfAutoSave == pvNil)
     {
@@ -2618,16 +2653,26 @@ LRetry:
         kidGstRollCall.cki.cno = cnoNil;
     }
 
-    if (!pcfl->FAdd(_pgstmactr->CbOnFile(), kctgGst, &cno, &blck))
+    pgstmactr = SerializeRollCall(_pgstmactr);
+    if (pgstmactr == pvNil)
     {
         goto LFail1;
     }
 
-    if (!_pgstmactr->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgGst, cno, 0))
+    if (!pcfl->FAdd(pgstmactr->CbOnFile(), kctgGst, &cno, &blck))
     {
-        pcfl->Delete(kctgGst, cno);
+        ReleasePpo(&pgstmactr);
         goto LFail1;
     }
+
+    if (!pgstmactr->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgGst, cno, 0))
+    {
+        pcfl->Delete(kctgGst, cno);
+        ReleasePpo(&pgstmactr);
+        goto LFail1;
+    }
+
+    ReleasePpo(&pgstmactr);
 
     //
     // Save the known sources list
