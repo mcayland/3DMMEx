@@ -3824,6 +3824,40 @@ PGG DeserializeStartEVs(int16_t bo, PGG pggsevStart)
 }
 
 /***************************************************************************
+    Serialize start events to on-disk format
+***************************************************************************/
+PGG SerializeStartEVs(PGG pggsevStart)
+{
+    AssertPo(pggsevStart, 0);
+
+    int32_t isevStart;
+    SEV sev;
+    PGG _pggsevStart;
+    TAG tag;
+    TAGF tagf;
+
+    _pggsevStart = pggsevStart->PggDup();
+    if (_pggsevStart == pvNil)
+        return pvNil;
+
+    for (isevStart = 0; isevStart < _pggsevStart->IvMac(); isevStart++)
+    {
+        sev = *(SEV *)_pggsevStart->QvFixedGet(isevStart);
+
+        switch (sev.sevt)
+        {
+        case sevtSetBkgd:
+            _pggsevStart->Get(isevStart, &tag);
+            SerializeTagToTagf(&tag, &tagf);
+            _pggsevStart->FPut(isevStart, SIZEOF(TAGF), &tagf);
+            break;
+        }
+    }
+
+    return _pggsevStart;
+}
+
+/***************************************************************************
     Deserialize frame events from on-disk format
 ***************************************************************************/
 PGG DeserializeFrameEVs(int16_t bo, PGG pggsevFrm)
@@ -4350,6 +4384,7 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
 
     PGG pggFrmTemp = pvNil;
     PGG pggStartTemp = pvNil;
+    PGG pggStart = pvNil;
     SEV sev;
     CHID chidActr, chidTbox;
     CNO cnoChild, cnoFrmEvent, cnoStartEvent;
@@ -4569,17 +4604,26 @@ bool SCEN::FWrite(PCRF pcrf, CNO *pcno)
     }
     pcfl->SetLoner(kctgFrmGg, cnoFrmEvent, fFalse);
 
-    cb = pggStartTemp->CbOnFile();
-    if (!pcfl->FAdd(cb, kctgStartGg, &cnoStartEvent, &blck))
+    pggStart = SerializeStartEVs(pggStartTemp);
+    if (pggStart == pvNil)
     {
         goto LFail;
     }
 
-    if (!pggStartTemp->FWrite(&blck))
+    cb = pggStart->CbOnFile();
+    if (!pcfl->FAdd(cb, kctgStartGg, &cnoStartEvent, &blck))
     {
-        pcfl->Delete(kctgStartGg, cnoStartEvent);
+        ReleasePpo(&pggStart);
         goto LFail;
     }
+
+    if (!pggStart->FWrite(&blck))
+    {
+        pcfl->Delete(kctgStartGg, cnoStartEvent);
+        ReleasePpo(&pggStart);
+        goto LFail;
+    }
+    ReleasePpo(&pggStart);
 
     if (!pcfl->FAdoptChild(kctgScen, *pcno, kctgStartGg, cnoStartEvent, 1))
     {
