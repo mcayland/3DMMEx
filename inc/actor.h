@@ -240,6 +240,20 @@ struct AEVCOST
 VERIFY_STRUCT_SIZE(AEVCOST, 28);
 const BOM kbomAevcost = 0xfc000000 | (kbomTag >> 6);
 
+// On-disk representation of AEVSND
+struct AEVSNDF
+{
+    tribool fLoop;    // loop count
+    tribool fQueue;   // queued sound
+    int32_t vlm;      // volume
+    int32_t celn;     // motion match	: ivNil if not
+    int32_t sty;      // sound type
+    tribool fNoSound; // no sound
+    CHID chid;        // user sound requires chid
+    TAGF tag;
+};
+VERIFY_STRUCT_SIZE(AEVSNDF, 44);
+
 struct AEVSND
 {
     tribool fLoop;    // loop count
