@@ -3745,6 +3745,75 @@ bool SCEN::FChangeCam(int32_t icam)
     return (fTrue);
 }
 
+/***************************************************************************
+    Deserialize start events from on-disk format
+***************************************************************************/
+PGG DeserializeStartEVs(int16_t bo, PGG pggsevStart)
+{
+    AssertPo(pggsevStart, 0);
+
+    int32_t isevStart;
+    SEV sev;
+    PGG _pggsevStart;
+    CHID chid;
+    TAGF tagf;
+    TAG tag;
+
+    _pggsevStart = pggsevStart->PggDup();
+    if (_pggsevStart == pvNil)
+        return pvNil;
+
+    for (isevStart = 0; isevStart < _pggsevStart->IvMac(); isevStart++)
+    {
+        sev = *(SEV *)_pggsevStart->QvFixedGet(isevStart);
+
+        //
+        // Swap byte ordering of entry
+        //
+        if (bo == kboOther)
+        {
+            SwapBytesBom((void *)&sev, kbomSev);
+            _pggsevStart->PutFixed(isevStart, &sev);
+        }
+
+        switch (sev.sevt)
+        {
+        case sevtAddActr:
+            _pggsevStart->Get(isevStart, &chid);
+            if (bo == kboOther)
+            {
+                SwapBytesBom((void *)&chid, kbomLong);
+            }
+            _pggsevStart->Put(isevStart, &chid);
+            break;
+
+        case sevtAddTbox:
+            _pggsevStart->Get(isevStart, &chid);
+            if (bo == kboOther)
+            {
+                SwapBytesBom((void *)&chid, kbomLong);
+            }
+            _pggsevStart->Put(isevStart, &chid);
+            break;
+
+        case sevtSetBkgd:
+            _pggsevStart->Get(isevStart, &tagf);
+            DeserializeTagfToTag(&tagf, &tag);
+            _pggsevStart->FPut(isevStart, SIZEOF(TAG), &tag);
+            break;
+
+        case sevtChngCamera:
+        case sevtPause:
+        case sevtPlaySnd:
+        default:
+            Bug("Bad event in start event list");
+            break;
+        }
+    }
+
+    return _pggsevStart;
+}
+
 /****************************************************
  *
  * This routine reads in a scene from a chunky file.
@@ -3775,6 +3844,7 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
     CHID chid;
     SCENH scenh;
     PCFL pcfl;
+    PGG pggsevStart;
 
     pcfl = pcrf->Pcfl();
 
@@ -3933,14 +4003,21 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
         goto LFail1;
     }
 
-    pscen->_pggsevStart = GG::PggRead(&blck, &bo);
+    pggsevStart = GG::PggRead(&blck, &bo);
 
-    if (pscen->_pggsevStart == pvNil)
+    if (pggsevStart == pvNil)
     {
         goto LFail1;
     }
 
-    Assert(pscen->_pggsevStart->CbFixed() == SIZEOF(SEV), "Bad GG read for event");
+    Assert(pggsevStart->CbFixed() == SIZEOF(SEV), "Bad GG read for event");
+
+    pscen->_pggsevStart = DeserializeStartEVs(bo, pggsevStart);
+    ReleasePpo(&pggsevStart);
+    if (pscen->_pggsevStart == pvNil)
+    {
+        goto LFail1;
+    }
 
     //
     // Convert all open tags to pointers.
@@ -3950,14 +4027,6 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
         qsev = (PSEV)pscen->_pggsevStart->QvFixedGet(isevStart);
 
         //
-        // Swap byte ordering of entry
-        //
-        if (bo == kboOther)
-        {
-            SwapBytesBom((void *)qsev, kbomSev);
-        }
-
-        //
         // Convert CHIDs to pointers
         //
         switch (qsev->sevt)
@@ -3965,10 +4034,6 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
         case sevtAddActr:
 
             pscen->_pggsevStart->Get(isevStart, &chid);
-            if (bo == kboOther)
-            {
-                SwapBytesBom((void *)&chid, kbomLong);
-            }
 
             if (!pcfl->FGetKidChidCtg(kctgScen, cno, chid, kctgActr, &kid))
             {
@@ -3989,10 +4054,6 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
         case sevtAddTbox:
 
             pscen->_pggsevStart->Get(isevStart, &chid);
-            if (bo == kboOther)
-            {
-                SwapBytesBom((void *)&chid, kbomLong);
-            }
 
             if (!pcfl->FGetKidChidCtg(kctgScen, cno, chid, kctgTbox, &kid))
             {
@@ -5069,6 +5130,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
     PSEV qsev;
     int16_t bo;
     PGG pggsev;
+    PGG pggsevStart;
     TAG tag;
     TAG tagBkgd;
     PGL pgltagSrc;
@@ -5100,20 +5162,19 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
 
     Assert(pggsev->CbFixed() == SIZEOF(SEV), "Bad GG read for event");
 
+    pggsevStart = DeserializeStartEVs(bo, pggsev);
+    ReleasePpo(&pggsev);
+    if (pggsevStart == pvNil)
+    {
+        return fFalse;
+    }
+
     //
     // Find all tags in starting events
     //
-    for (isev = 0; isev < pggsev->IvMac(); isev++)
+    for (isev = 0; isev < pggsevStart->IvMac(); isev++)
     {
-        qsev = (PSEV)pggsev->QvFixedGet(isev);
-
-        //
-        // Swap byte ordering of entry
-        //
-        if (bo == kboOther)
-        {
-            SwapBytesBom((void *)qsev, kbomSev);
-        }
+        qsev = (PSEV)pggsevStart->QvFixedGet(isev);
 
         //
         // Find appropriate event types
@@ -5122,15 +5183,11 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
         {
         case sevtAddActr:
 
-            pggsev->Get(isev, &chid);
-            if (bo == kboOther)
-            {
-                SwapBytesBom((void *)&chid, kbomLong);
-            }
+            pggsevStart->Get(isev, &chid);
 
             if (!pcfl->FGetKidChidCtg(kctgScen, cno, chid, kctgActr, &kid))
             {
-                ReleasePpo(&pggsev);
+                ReleasePpo(&pggsevStart);
                 return fFalse;
             }
             else
@@ -5141,7 +5198,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
                 if (fError)
                 {
                     ReleasePpo(&pgltagSrc);
-                    ReleasePpo(&pggsev);
+                    ReleasePpo(&pggsevStart);
                     return fFalse;
                 }
 
@@ -5154,7 +5211,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
                         if (!ptagl->FInsertTag(&tagSrc))
                         {
                             ReleasePpo(&pgltagSrc);
-                            ReleasePpo(&pggsev);
+                            ReleasePpo(&pggsevStart);
                             return fFalse;
                         }
                     }
@@ -5165,15 +5222,11 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
             break;
 
         case sevtSetBkgd:
-            pggsev->Get(isev, &tag);
-            if (bo == kboOther)
-            {
-                SwapBytesBom((void *)&tag, kbomTag);
-            }
+            pggsevStart->Get(isev, &tag);
 
             if (!BKGD::FAddTagsToTagl(&tag, ptagl))
             {
-                ReleasePpo(&pggsev);
+                ReleasePpo(&pggsevStart);
                 return fFalse;
             }
             tagBkgd = tag;
@@ -5192,7 +5245,7 @@ bool SCEN::FAddTagsToTagl(PCFL pcfl, CNO cno, PTAGL ptagl)
         }
     }
 
-    ReleasePpo(&pggsev);
+    ReleasePpo(&pggsevStart);
 
     //
     // Read in GG of Frame events
