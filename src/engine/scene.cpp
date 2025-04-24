@@ -3834,6 +3834,11 @@ PGG DeserializeFrameEVs(int16_t bo, PGG pggsevFrm)
     SEV sev;
     PGG _pggsevFrm;
     CHID chid;
+    PSSE psseOld;
+    PSSE psseNew;
+    int32_t ctagc;
+    int32_t itagc;
+    TAGCF *tagcf;
 
     _pggsevFrm = pggsevFrm->PggDup();
     if (_pggsevFrm == pvNil)
@@ -3854,6 +3859,45 @@ PGG DeserializeFrameEVs(int16_t bo, PGG pggsevFrm)
 
         switch (sev.sevt)
         {
+        case sevtPlaySnd:
+            // Deserialize GG using TAGCF to SSE with TAGC
+            if (!FAllocPv((void **)&psseOld, pggsevFrm->Cb(isevFrm), fmemClear, mprNormal))
+                goto LFail;
+            _pggsevFrm->Get(isevFrm, psseOld);
+            ctagc = psseOld->ctagc;
+
+            psseNew = SSE::PsseNew(ctagc);
+            if (psseNew == pvNil)
+            {
+                FreePpv((void **)&psseOld);
+                goto LFail;
+            }
+            CopyPb(psseOld, psseNew, SIZEOF(SSE));
+
+            tagcf = (TAGCF *)PvAddBv(psseOld, SIZEOF(SSE));
+            for (itagc = 0; itagc < ctagc; itagc++)
+            {
+                TAG tag;
+
+                *(psseNew->Pchid(itagc)) = tagcf[itagc].chid;
+                DeserializeTagfToTag(&tagcf[itagc].tagf, &tag);
+                *(psseNew->Ptag(itagc)) = tag;
+            }
+            FreePpv((void **)&psseOld);
+
+            if (bo == kboOther)
+            {
+                psseNew->SwapBytes();
+            }
+
+            if (!_pggsevFrm->FPut(isevFrm, psseNew->Cb(), psseNew))
+            {
+                ReleasePpsse(&psseNew);
+                goto LFail;
+            }
+            ReleasePpsse(&psseNew);
+            break;
+
         case sevtChngCamera:
             _pggsevFrm->Get(isevFrm, &chid);
             if (bo == kboOther)
@@ -3866,6 +3910,10 @@ PGG DeserializeFrameEVs(int16_t bo, PGG pggsevFrm)
     }
 
     return _pggsevFrm;
+
+LFail:
+    ReleasePpo(&_pggsevFrm);
+    return pvNil;
 }
 
 /****************************************************
