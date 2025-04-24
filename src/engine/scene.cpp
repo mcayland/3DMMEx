@@ -101,6 +101,15 @@ const auto kbomScenh = 0x5FC00000;
 /****************************************
     TAGC - Tag,Chid combo
 ****************************************/
+
+/* On-disk representation of TAGC */
+struct TAGCF
+{
+    CHID chid;
+    TAGF tagf;
+};
+VERIFY_STRUCT_SIZE(TAGCF, 20)
+
 const BOM kbomChid = 0xC0000000;
 const BOM kbomTagc = kbomChid | (kbomTag >> 2);
 typedef struct TAGC *PTAGC;
