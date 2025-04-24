@@ -88,6 +88,7 @@ bool DeserializeBMDL(int16_t bo, PBMDL pbmdl)
     int32_t ibrv, ibrf;
     BRV *pbrv;
     BRF *pbrf;
+    BRFF *pfaces, *pbrff;
 
     if (pbmdl->nprepared_vertices)
     {
@@ -102,13 +103,58 @@ bool DeserializeBMDL(int16_t bo, PBMDL pbmdl)
 
     if (pbmdl->nprepared_faces)
     {
+        if (!FAllocPv((void **)&pfaces, pbmdl->nprepared_faces * SIZEOF(BRFF), fmemClear, mprNormal))
+            return fFalse;
+        CopyPb(pbmdl->prepared_faces, pfaces, pbmdl->nprepared_faces * SIZEOF(BRFF));
+
         if (kboOther == bo)
         {
-            for (ibrf = 0, pbrf = pbmdl->prepared_faces; ibrf < pbmdl->nprepared_faces; ibrf++, pbrf++)
+            for (ibrf = 0, pbrff = pfaces; ibrf < pbmdl->nprepared_faces; ibrf++, pbrff++)
             {
-                SwapBytesBom(pbrf, kbomBrf);
+                SwapBytesBom(pbrff, kbomBrf);
             }
         }
+
+        for (ibrf = 0, pbrff = pfaces, pbrf = pbmdl->prepared_faces; ibrf < pbmdl->nprepared_faces;
+             ibrf++, pbrff++, pbrf++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                pbrf->vertices[i] = pbrff->vertices[i];
+                pbrf->edges[i] = pbrff->edges[i];
+            }
+
+            pbrf->material = pvNil;
+            pbrf->smoothing = pbrff->smoothing;
+            pbrf->flags = pbrff->flags;
+            pbrf->n = pbrff->n;
+            pbrf->d = pbrff->d;
+        }
+
+        FreePpv((void **)&pfaces);
+    }
+    else
+    {
+        if (!FAllocPv((void **)&pfaces, pbmdl->nfaces * SIZEOF(BRFF), fmemClear, mprNormal))
+            return fFalse;
+        CopyPb(pbmdl->faces, pfaces, pbmdl->nfaces * SIZEOF(BRFF));
+
+        for (ibrf = 0, pbrff = pfaces, pbrf = pbmdl->faces; ibrf < pbmdl->nfaces; ibrf++, pbrff++, pbrf++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                pbrf->vertices[i] = pbrff->vertices[i];
+                pbrf->edges[i] = pbrff->edges[i];
+            }
+
+            pbrf->material = pvNil;
+            pbrf->smoothing = pbrff->smoothing;
+            pbrf->flags = pbrff->flags;
+            pbrf->n = pbrff->n;
+            pbrf->d = pbrff->d;
+        }
+
+        FreePpv((void **)&pfaces);
     }
 
     return fTrue;
@@ -145,7 +191,7 @@ bool MODL::_FInit(PBLCK pblck)
 
     // Allocate space for the BMDL, array of vertices, and array of faces
     cbrgbrv = LwMul(modlf.cver, SIZEOF(BRV));
-    cbrgbrf = LwMul(modlf.cfac, SIZEOF(BRF));
+    cbrgbrf = LwMul(modlf.cfac, SIZEOF(BRFF));
 
     if (modlf.rRadius == rZero)
     {
