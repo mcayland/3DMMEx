@@ -237,7 +237,6 @@ struct AEVCOST
     tribool fCmtl; // vs fMtrl
     TAG tag;
 };
-VERIFY_STRUCT_SIZE(AEVCOST, 28);
 const BOM kbomAevcost = 0xfc000000 | (kbomTag >> 6);
 
 // On-disk representation of AEVSND
@@ -265,7 +264,6 @@ struct AEVSND
     CHID chid;        // user sound requires chid
     TAG tag;
 };
-VERIFY_STRUCT_SIZE(AEVSND, 44);
 const BOM kbomAevsnd = 0xfff00000 | (kbomTag >> 12);
 
 const BOM kbomAevsize = 0xc0000000;

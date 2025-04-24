@@ -64,12 +64,12 @@ struct TAG
     void MarkMem(void);
 #endif // DEBUG
 
-    int32_t sid; // Source ID (or ksidUseCrf)
-    PCRF pcrf;   // File to look in for this chunk if sid is ksidUseCrf
-    CTG ctg;     // CTG of chunk
-    CNO cno;     // CNO of chunk
+    int32_t sid;   // Source ID (or ksidUseCrf)
+    int32_t _pcrf; // was: pcrf
+    CTG ctg;       // CTG of chunk
+    CNO cno;       // CNO of chunk
+    PCRF pcrf;     // File to look in for this chunk if sid is ksidUseCrf
 };
-VERIFY_STRUCT_SIZE(TAG, 16);
 const BOM kbomTag = 0xFF000000;
 
 // Functions for serializing and deserializing tags

@@ -72,13 +72,15 @@ struct SFS
 void DeserializeTagfToTag(PTAGF ptagf, PTAG ptag)
 {
     ptag->sid = ptagf->sid;
-    ptag->pcrf = pvNil;
+    ptag->_pcrf = pvNil;
     ptag->ctg = ptagf->ctg;
     ptag->cno = ptagf->cno;
+    ptag->pcrf = pvNil;
 }
 
 void SerializeTagToTagf(PTAG ptag, PTAGF ptagf)
 {
+    Assert(ptag->sid != ksidUseCrf, "Attempt to serialize open tag");
     ptagf->sid = ptag->sid;
     ptagf->_pcrf = 0;
     ptagf->ctg = ptag->ctg;
