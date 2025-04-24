@@ -437,6 +437,27 @@ LFail:
 }
 
 /******************************************************************************
+    Deserialize rollcall from on-disk format
+******************************************************************************/
+bool DeserializeRollCall(int16_t bo, PGST pgst)
+{
+    AssertPo(pgst, 0);
+
+    int32_t imactr, imactrMac;
+    MACTR mactr;
+
+    imactrMac = pgst->IvMac();
+    for (imactr = 0; imactr < imactrMac; imactr++)
+    {
+        pgst->GetExtra(imactr, &mactr);
+        if (bo == kboOther)
+            SwapBytesBom(&mactr, kbomMactr);
+    }
+
+    return true;
+}
+
+/******************************************************************************
     FReadRollCall
         Reads the roll call off file for a given movie.  Will swapbytes the
         extra data in the GST if necessary, and will report back on the
@@ -476,12 +497,15 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
     if (*ppgst == pvNil)
         goto LFail;
 
+    if (!DeserializeRollCall(bo, *ppgst))
+    {
+        goto LFail;
+    }
+
     imactrMac = (*ppgst)->IvMac();
     for (imactr = 0; imactr < imactrMac; imactr++)
     {
         (*ppgst)->GetExtra(imactr, &mactr);
-        if (bo == kboOther)
-            SwapBytesBom(&mactr, kbomMactr);
 
         if (paridLim != pvNil && mactr.arid >= *paridLim)
             *paridLim = mactr.arid + 1;
