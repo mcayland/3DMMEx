@@ -85,6 +85,18 @@ const BOM kbomCam = BomField(
 /****************************************
     Background Default Sound
 ****************************************/
+
+// On-disk representation of BDS
+struct BDSF
+{
+    int16_t bo;
+    int16_t osk;
+    int32_t vlm;
+    bool fLoop;
+    TAGF tagSnd;
+};
+VERIFY_STRUCT_SIZE(BDSF, 28);
+
 struct BDS
 {
     int16_t bo;
