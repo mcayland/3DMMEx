@@ -220,6 +220,16 @@ struct AEVACTN
 VERIFY_STRUCT_SIZE(AEVACTN, 8);
 const BOM kbomAevactn = 0xf0000000;
 
+// On-disk representation of AEVCOST
+struct AEVCOSTF
+{
+    int32_t ibset; // body part set
+    int32_t cmid;  // costume ID (for custom costumes)
+    tribool fCmtl; // vs fMtrl
+    TAGF tag;
+};
+VERIFY_STRUCT_SIZE(AEVCOSTF, 28);
+
 struct AEVCOST
 {
     int32_t ibset; // body part set
