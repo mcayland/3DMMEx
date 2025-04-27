@@ -22,6 +22,22 @@ typedef br_matrix34 BMAT34;
 typedef br_bounds BRB;
 typedef br_vertex BRV;
 typedef br_face BRFC;
+
+/* On-disk representation of BRF */
+struct br_face_file
+{
+    br_uint_16 vertices[3]; /* Vertices around face 				*/
+    br_uint_16 edges[3];    /* Edges around face					*/
+    br_uint_32 material;    /* was: Face material (or NULL) 		*/
+    br_uint_16 smoothing;   /* Controls if shared edges are smooth	*/
+    br_uint_8 flags;        /* Bits 0,1 and 2 denote internal edges	*/
+    br_uint_8 _pad0;
+    br_fvector3 n; /* Plane equation of face				*/
+    br_scalar d;
+};
+VERIFY_STRUCT_SIZE(br_face_file, 32)
+
+typedef br_face_file BRFF;
 typedef br_face BRF;
 typedef br_colour BRCLR;
 typedef br_transform BRXFM;
@@ -104,7 +120,6 @@ const BOM kbomBmat34 = 0xffffff00;
 #if BASED_FIXED
 VERIFY_STRUCT_SIZE(BRA, 2);
 VERIFY_STRUCT_SIZE(BRB, 24);
-VERIFY_STRUCT_SIZE(BRF, 32);
 VERIFY_STRUCT_SIZE(BMAT34, 48);
 VERIFY_STRUCT_SIZE(BRS, 4);
 VERIFY_STRUCT_SIZE(BRV, 32);

@@ -18,12 +18,12 @@ ASSERTNAME
 RTCLASS(TAGL)
 
 /****************************************
-    TAGF, or "tag-flag" struct, stores
+    TAGFL, or "tag-flag" struct, stores
     the tag that you want to cache and
     whether to cache its children
     automatically or not.
 ****************************************/
-struct TAGF
+struct TAGFL
 {
     TAG tag;
     bool fCacheChildren;
@@ -67,7 +67,7 @@ bool TAGL::_FInit(void)
 {
     AssertBaseThis(0);
 
-    _pggtagf = GG::PggNew(SIZEOF(TAGF));
+    _pggtagf = GG::PggNew(SIZEOF(TAGFL));
     if (pvNil == _pggtagf)
         return fFalse;
     return fTrue;
@@ -101,7 +101,7 @@ void TAGL::GetTag(int32_t itag, PTAG ptag)
     AssertIn(itag, 0, Ctag());
     AssertVarMem(ptag);
 
-    TAGF tagf;
+    TAGFL tagf;
 
     _pggtagf->GetFixed(itag, &tagf);
     *ptag = tagf.tag;
@@ -120,7 +120,7 @@ bool TAGL::_FFindTag(PTAG ptag, int32_t *pitag)
     AssertVarMem(ptag);
     AssertVarMem(pitag);
 
-    TAGF *qtagf;
+    TAGFL *qtagf;
     int32_t itagfMin, itagfLim, itagf;
     int32_t sid = ptag->sid;
     CTG ctg = ptag->ctg;
@@ -136,7 +136,7 @@ bool TAGL::_FFindTag(PTAG ptag, int32_t *pitag)
     for (itagfMin = 0, itagfLim = _pggtagf->IvMac(); itagfMin < itagfLim;)
     {
         itagf = (itagfMin + itagfLim) / 2;
-        qtagf = (TAGF *)_pggtagf->QvFixedGet(itagf);
+        qtagf = (TAGFL *)_pggtagf->QvFixedGet(itagf);
         if (sid < qtagf->tag.sid)
             itagfLim = itagf;
         else if (sid > qtagf->tag.sid)
@@ -170,7 +170,7 @@ bool TAGL::FInsertTag(PTAG ptag, bool fCacheChildren)
     AssertVarMem(ptag);
 
     int32_t itag;
-    TAGF tagf;
+    TAGFL tagf;
 
     if (!_FFindTag(ptag, &itag))
     {
@@ -213,7 +213,7 @@ bool TAGL::FInsertChild(PTAG ptag, CHID chid, CTG ctg)
         return fFalse;
     }
 #ifdef DEBUG
-    TAGF tagf;
+    TAGFL tagf;
     _pggtagf->GetFixed(itagf, &tagf);
     if (tagf.tag.ctg != ptag->ctg || tagf.tag.cno != ptag->cno)
         Bug("_FFindTag has a bug");
@@ -250,7 +250,7 @@ bool TAGL::FCacheTags(void)
     AssertThis(0);
 
     int32_t itagf;
-    TAGF tagf;
+    TAGFL tagf;
     int32_t ccc; // count of CCs
     int32_t icc;
     CC cc;

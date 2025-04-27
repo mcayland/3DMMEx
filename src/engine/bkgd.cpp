@@ -145,6 +145,26 @@ bool BKGD::FReadBkgd(PCRF pcrf, CTG ctg, CNO cno, PBLCK pblck, PBACO *ppbaco, in
 }
 
 /***************************************************************************
+    Deserialize BDS from on-disk format
+***************************************************************************/
+bool DeserializeBDS(int16_t bo, BDS *pbds)
+{
+    BDSF bdsf;
+
+    CopyPb(pbds, &bdsf, SIZEOF(BDSF));
+    if (bo != bdsf.bo)
+        SwapBytesBom(&bdsf, kbomBds);
+
+    Assert(kboCur == bdsf.bo, "bad BDS");
+
+    pbds->vlm = bdsf.vlm;
+    pbds->fLoop = bdsf.fLoop;
+    DeserializeTagfToTag(&bdsf.tagSnd, &pbds->tagSnd);
+
+    return fTrue;
+}
+
+/***************************************************************************
     Read a BKGD from the given chunk of the given CFL.
     Note: Although we read the data for the lights here, we don't turn
     them on yet because we don't have a BWLD to add them to.  The lights
@@ -182,13 +202,12 @@ bool BKGD::_FInit(PCFL pcfl, CTG ctg, CNO cno)
     {
         if (!pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck) || !blck.FUnpackData())
             goto LFail;
-        if (blck.Cb() != SIZEOF(BDS))
+        if (blck.Cb() != SIZEOF(BDSF))
             goto LFail;
-        if (!blck.FReadRgb(&_bds, SIZEOF(BDS), 0))
+        if (!blck.FReadRgb(&_bds, SIZEOF(BDSF), 0))
             goto LFail;
-        if (kboCur != _bds.bo)
-            SwapBytesBom(&_bds, kbomBds);
-        Assert(kboCur == _bds.bo, "bad BDS");
+        if (!DeserializeBDS(kboCur, &_bds))
+            goto LFail;
     }
     else
     {

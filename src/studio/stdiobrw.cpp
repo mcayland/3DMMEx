@@ -420,20 +420,20 @@ void BRWB::_ApplySelection(int32_t thumSelect, int32_t sid)
 {
     AssertThis(0);
 
-    TAG tag;
+    TAGF tagf;
     CMD cmd;
     PMVU pmvu;
 
-    tag.sid = sid;
-    tag.pcrf = pvNil;
-    tag.ctg = kctgBkgd;
-    tag.cno = (CNO)thumSelect;
+    tagf.sid = sid;
+    tagf._pcrf = pvNil;
+    tagf.ctg = kctgBkgd;
+    tagf.cno = (CNO)thumSelect;
 
     ClearPb(&cmd, SIZEOF(cmd));
     cmd.cid = cidNewScene;
     cmd.pcmh = _pstdio;
-    Assert(SIZEOF(TAG) <= SIZEOF(cmd.rglw), "Insufficient space in rglw");
-    *((PTAG)&cmd.rglw) = tag;
+    Assert(SIZEOF(TAGF) <= SIZEOF(cmd.rglw), "Insufficient space in rglw");
+    *((TAGF *)&cmd.rglw) = tagf;
 
     vpcex->EnqueueCmd(&cmd);
 

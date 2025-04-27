@@ -171,6 +171,17 @@ const BOM kbomMfp = 0x55000000;
 //
 // Used to keep track of the roll call list of the movie
 //
+
+// On-disk representation of MACTR
+struct MACTRF
+{
+    int32_t arid;
+    int32_t cactRef;
+    uint32_t grfbrws; // browser properties
+    TAGF tagTmpl;
+};
+VERIFY_STRUCT_SIZE(MACTRF, 28)
+
 struct MACTR
 {
     int32_t arid;
@@ -437,6 +448,77 @@ LFail:
 }
 
 /******************************************************************************
+    Deserialize rollcall from on-disk format
+******************************************************************************/
+PGST DeserializeRollCall(int16_t bo, PGST pgst)
+{
+    AssertPo(pgst, 0);
+
+    int32_t imactr, imactrMac;
+    MACTR mactr;
+    MACTRF mactrf;
+    PGST _pgst;
+    STN stn;
+
+    /* We need to return a new GST since cbExtra is different */
+    _pgst = GST::PgstNew(SIZEOF(MACTR));
+    if (_pgst == pvNil)
+        return pvNil;
+
+    imactrMac = pgst->IvMac();
+    for (imactr = 0; imactr < imactrMac; imactr++)
+    {
+        pgst->GetExtra(imactr, &mactrf);
+        if (bo == kboOther)
+            SwapBytesBom(&mactrf, kbomMactr);
+
+        mactr.arid = mactrf.arid;
+        mactr.cactRef = mactrf.cactRef;
+        mactr.grfbrws = mactrf.grfbrws;
+        DeserializeTagfToTag(&mactrf.tagTmpl, &mactr.tagTmpl);
+
+        pgst->GetStn(imactr, &stn);
+        _pgst->FAddStn(&stn, &mactr);
+    }
+
+    return _pgst;
+}
+
+/******************************************************************************
+    Serialize rollcall to on-disk format
+******************************************************************************/
+PGST SerializeRollCall(PGST pgst)
+{
+    AssertPo(pgst, 0);
+
+    int32_t imactr, imactrMac;
+    PGST _pgst;
+    MACTR mactr;
+    MACTRF mactrf;
+    STN stn;
+
+    _pgst = GST::PgstNew(SIZEOF(MACTRF));
+    if (_pgst == pvNil)
+        return pvNil;
+
+    imactrMac = pgst->IvMac();
+    for (imactr = 0; imactr < imactrMac; imactr++)
+    {
+        pgst->GetExtra(imactr, &mactr);
+
+        mactrf.arid = mactr.arid;
+        mactrf.cactRef = mactr.cactRef;
+        mactrf.grfbrws = mactr.grfbrws;
+        SerializeTagToTagf(&mactr.tagTmpl, &mactrf.tagTmpl);
+
+        pgst->GetStn(imactr, &stn);
+        _pgst->FAddStn(&stn, &mactrf);
+    }
+
+    return _pgst;
+}
+
+/******************************************************************************
     FReadRollCall
         Reads the roll call off file for a given movie.  Will swapbytes the
         extra data in the GST if necessary, and will report back on the
@@ -465,6 +547,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
     KID kid;
     BLCK blck;
     MACTR mactr;
+    PGST pgst;
 
     if (!pcfl->FGetKidChidCtg(kctgMvie, cno, 0, kctgGst, &kid) || !pcfl->FFind(kid.cki.ctg, kid.cki.cno, &blck))
     {
@@ -472,16 +555,21 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
         goto LFail;
     }
 
-    *ppgst = GST::PgstRead(&blck, &bo);
-    if (*ppgst == pvNil)
+    pgst = GST::PgstRead(&blck, &bo);
+    if (pgst == pvNil)
         goto LFail;
+
+    *ppgst = DeserializeRollCall(bo, pgst);
+    if (!*ppgst)
+    {
+        ReleasePpo(&pgst);
+        goto LFail;
+    }
 
     imactrMac = (*ppgst)->IvMac();
     for (imactr = 0; imactr < imactrMac; imactr++)
     {
         (*ppgst)->GetExtra(imactr, &mactr);
-        if (bo == kboOther)
-            SwapBytesBom(&mactr, kbomMactr);
 
         if (paridLim != pvNil && mactr.arid >= *paridLim)
             *paridLim = mactr.arid + 1;
@@ -491,6 +579,7 @@ bool MVIE::FReadRollCall(PCRF pcrf, CNO cno, PGST *ppgst, int32_t *paridLim)
 
         (*ppgst)->PutExtra(imactr, &mactr);
     }
+    ReleasePpo(&pgst);
 
     return fTrue;
 LFail:
@@ -2454,6 +2543,7 @@ bool MVIE::FAutoSave(PFNI pfni, bool fCleanRollCall)
     KID kidScen, kidGstRollCall, kidGstSource;
     PCFL pcfl;
     PGST pgstSource = pvNil;
+    PGST pgstmactr = pvNil;
 
     if (_pcrfAutoSave == pvNil)
     {
@@ -2563,16 +2653,26 @@ LRetry:
         kidGstRollCall.cki.cno = cnoNil;
     }
 
-    if (!pcfl->FAdd(_pgstmactr->CbOnFile(), kctgGst, &cno, &blck))
+    pgstmactr = SerializeRollCall(_pgstmactr);
+    if (pgstmactr == pvNil)
     {
         goto LFail1;
     }
 
-    if (!_pgstmactr->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgGst, cno, 0))
+    if (!pcfl->FAdd(pgstmactr->CbOnFile(), kctgGst, &cno, &blck))
     {
-        pcfl->Delete(kctgGst, cno);
+        ReleasePpo(&pgstmactr);
         goto LFail1;
     }
+
+    if (!pgstmactr->FWrite(&blck) || !pcfl->FAdoptChild(kctgMvie, _cno, kctgGst, cno, 0))
+    {
+        pcfl->Delete(kctgGst, cno);
+        ReleasePpo(&pgstmactr);
+        goto LFail1;
+    }
+
+    ReleasePpo(&pgstmactr);
 
     //
     // Save the known sources list

@@ -72,7 +72,7 @@ struct TDTF
     int16_t bo;
     int16_t osk;
     int32_t tdts;
-    TAG tagTdf;
+    TAGF tagTdf;
 };
 VERIFY_STRUCT_SIZE(TDTF, 24);
 const BOM kbomTdtf = (0x5C000000 | kbomTag >> 6);
@@ -95,6 +95,7 @@ PGL TDT::PgltagFetch(PCFL pcfl, CTG ctg, CNO cno, bool *pfError)
     KID kid;
     BLCK blck;
     TDTF tdtf;
+    TAG tdt;
 
     *pfError = fFalse;
     pgltag = GL::PglNew(SIZEOF(TAG));
@@ -113,7 +114,8 @@ PGL TDT::PgltagFetch(PCFL pcfl, CTG ctg, CNO cno, bool *pfError)
     if (kboCur != tdtf.bo)
         SwapBytesBom(&tdtf, kbomTdtf);
     Assert(kboCur == tdtf.bo, "bad TDTF");
-    if (!pgltag->FAdd(&tdtf.tagTdf))
+    DeserializeTagfToTag(&tdtf.tagTdf, &tdt);
+    if (!pgltag->FAdd(&tdt))
         goto LFail;
     return pgltag;
 LFail:
@@ -172,6 +174,7 @@ bool TDT::_FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl)
     KID kid;
     BLCK blck;
     TDTF tdtf;
+    TAG tdt;
 
     if (!_FReadTmplf(pcfl, ctgTmpl, cnoTmpl))
         return fFalse;
@@ -188,7 +191,8 @@ bool TDT::_FInit(PCFL pcfl, CTG ctgTmpl, CNO cnoTmpl)
     if (kboCur != tdtf.bo)
         SwapBytesBom(&tdtf, kbomTdtf);
     Assert(kboCur == tdtf.bo, "bad TDTF");
-    _tagTdf = tdtf.tagTdf;
+    DeserializeTagfToTag(&tdtf.tagTdf, &tdt);
+    _tagTdf = tdt;
     _tdts = tdtf.tdts;
 
     if (!_FInitLists())
@@ -730,7 +734,7 @@ bool TDT::FWrite(PCFL pcfl, CTG ctg, CNO *pcno)
     tdtf.bo = kboCur;
     tdtf.osk = koskCur;
     tdtf.tdts = _tdts;
-    tdtf.tagTdf = _tagTdf;
+    SerializeTagToTagf(&_tagTdf, &tdtf.tagTdf);
 
     if (!pcfl->FAddChild(ctg, *pcno, kchidTdt, SIZEOF(TDTF), kctgTdt, &cnoTdt, &blck))
     {

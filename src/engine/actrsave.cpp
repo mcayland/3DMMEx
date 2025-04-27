@@ -32,9 +32,212 @@ struct ACTF // Actor chunk on file
     int32_t arid;      // Unique id assigned to this actor.
     int32_t nfrmFirst; // First frame in this actor's stage life
     int32_t nfrmLast;  // Last frame in this actor's stage life
-    TAG tagTmpl;       // Tag to actor's template
+    TAGF tagTmpl;      // Tag to actor's template
 };
+VERIFY_STRUCT_SIZE(ACTF, 44)
 const BOM kbomActf = 0x5ffc0000 | kbomTag;
+
+/***************************************************************************
+    Deserialize all events in pggaev
+***************************************************************************/
+PGG DeserializeAEVs(int16_t bo, PGG pggaevf)
+{
+    AssertPo(pggaevf, 0);
+
+    PGG pggaev;
+    int32_t iaev;
+    AEVCOSTF *paevcostf;
+    AEVCOST aevcost;
+    AEVSNDF *paevsndf;
+    AEVSND aevsnd;
+
+    pggaev = pggaevf->PggDup();
+    if (pggaev == pvNil)
+        return pvNil;
+
+    for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
+    {
+        if (kboOther == bo)
+        {
+            SwapBytesBom(pggaev->QvFixedGet(iaev), kbomAev);
+        }
+
+        switch (((AEV *)pggaev->QvFixedGet(iaev))->aet)
+        {
+        case aetCost:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevcost);
+            }
+            paevcostf = (AEVCOSTF *)pggaev->QvGet(iaev);
+
+            aevcost.ibset = paevcostf->ibset;
+            aevcost.cmid = paevcostf->cmid;
+            aevcost.fCmtl = paevcostf->fCmtl;
+            DeserializeTagfToTag(&paevcostf->tag, &aevcost.tag);
+
+            pggaev->FPut(iaev, SIZEOF(AEVCOST), &aevcost);
+            break;
+        case aetSnd:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevsnd);
+            }
+            paevsndf = (AEVSNDF *)pggaev->QvGet(iaev);
+
+            aevsnd.fLoop = paevsndf->fLoop;
+            aevsnd.fQueue = paevsndf->fQueue;
+            aevsnd.vlm = paevsndf->vlm;
+            aevsnd.celn = paevsndf->celn;
+            aevsnd.sty = paevsndf->sty;
+            aevsnd.fNoSound = paevsndf->fNoSound;
+            aevsnd.chid = paevsndf->chid;
+            DeserializeTagfToTag(&paevsndf->tag, &aevsnd.tag);
+
+            pggaev->FPut(iaev, SIZEOF(AEVSND), &aevsnd);
+            break;
+        case aetSize:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevsize);
+            }
+            break;
+        case aetPull:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevpull);
+            }
+            break;
+        case aetRotF:
+        case aetRotH:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevrot);
+            }
+            break;
+        case aetActn:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevactn);
+            }
+            break;
+        case aetAdd:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevadd);
+            }
+            break;
+        case aetFreeze:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevfreeze);
+            }
+            break;
+        case aetMove:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevmove);
+            }
+            break;
+        case aetTweak:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevtweak);
+            }
+            break;
+        case aetStep:
+            if (kboOther == bo)
+            {
+                SwapBytesBom(pggaev->QvGet(iaev), kbomAevstep);
+            }
+            break;
+        case aetRem:
+            // no var data
+            break;
+        default:
+            Bug("Unknown AET");
+            break;
+        }
+    }
+
+    return pggaev;
+}
+
+/***************************************************************************
+    Serialize all events in pggaev
+***************************************************************************/
+PGG SerializeAEVs(PGG pggaev)
+{
+    AssertPo(pggaev, 0);
+
+    PGG pggaevf;
+    int32_t iaev;
+    AEVCOSTF aevcostf;
+    AEVCOST *paevcost;
+    AEVSNDF aevsndf;
+    AEVSND *paevsnd;
+
+    pggaevf = pggaev->PggDup();
+    if (pggaevf == pvNil)
+        return pvNil;
+
+    for (iaev = 0; iaev < pggaevf->IvMac(); iaev++)
+    {
+        switch (((AEV *)pggaevf->QvFixedGet(iaev))->aet)
+        {
+        case aetCost:
+            paevcost = (AEVCOST *)pggaevf->QvGet(iaev);
+
+            aevcostf.ibset = paevcost->ibset;
+            aevcostf.cmid = paevcost->cmid;
+            aevcostf.fCmtl = paevcost->fCmtl;
+            SerializeTagToTagf(&paevcost->tag, &aevcostf.tag);
+
+            if (!pggaevf->FPut(iaev, SIZEOF(AEVCOSTF), &aevcostf))
+                goto LFail;
+
+            break;
+        case aetSnd:
+            paevsnd = (AEVSND *)pggaevf->QvGet(iaev);
+
+            aevsndf.fLoop = paevsnd->fLoop;
+            aevsndf.fQueue = paevsnd->fQueue;
+            aevsndf.vlm = paevsnd->vlm;
+            aevsndf.celn = paevsnd->celn;
+            aevsndf.sty = paevsnd->sty;
+            aevsndf.fNoSound = paevsnd->fNoSound;
+            aevsndf.chid = paevsnd->chid;
+            SerializeTagToTagf(&paevsnd->tag, &aevsndf.tag);
+
+            if (!pggaevf->FPut(iaev, SIZEOF(AEVSNDF), &aevsndf))
+                goto LFail;
+
+            break;
+        case aetSize:
+        case aetPull:
+        case aetRotF:
+        case aetRotH:
+        case aetActn:
+        case aetAdd:
+        case aetFreeze:
+        case aetMove:
+        case aetTweak:
+        case aetStep:
+        case aetRem:
+            // no var data
+            break;
+        default:
+            Bug("Unknown AET");
+            break;
+        }
+    }
+
+    return pggaevf;
+
+LFail:
+    ReleasePpo(&pggaevf);
+    return pvNil;
+}
 
 /***************************************************************************
     Write the actor out to disk.  Store the root chunk in the given CNO.
@@ -57,6 +260,7 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
     AEVSND aevsnd;
     int32_t nfrmFirst;
     int32_t nfrmLast;
+    PGG pggaev = pvNil;
 
     // Validate the actor's lifetime if not done already
     if (knfrmInvalid != _nfrmFirst)
@@ -98,7 +302,7 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
     actf.arid = _arid;
     actf.nfrmFirst = _nfrmFirst;
     actf.nfrmLast = _nfrmLast;
-    actf.tagTmpl = _tagTmpl;
+    SerializeTagToTagf(&_tagTmpl, &actf.tagTmpl);
     if (!pcfl->FPutPv(&actf, SIZEOF(ACTF), kctgActr, cnoActr))
         return fFalse;
 
@@ -111,12 +315,22 @@ bool ACTR::FWrite(PCFL pcfl, CNO cnoActr, CNO cnoScene)
         return fFalse;
 
     // Now write the GGAE chunk:
-    if (!pcfl->FAddChild(kctgActr, cnoActr, kchidGgae, _pggaev->CbOnFile(), kctgGgae, &cnoGgae, &blck))
+    pggaev = SerializeAEVs(_pggaev);
+    if (pggaev == pvNil)
+        return fFalse;
+
+    if (!pcfl->FAddChild(kctgActr, cnoActr, kchidGgae, pggaev->CbOnFile(), kctgGgae, &cnoGgae, &blck))
     {
+        ReleasePpo(&pggaev);
         return fFalse;
     }
-    if (!_pggaev->FWrite(&blck))
+    if (!pggaev->FWrite(&blck))
+    {
+        ReleasePpo(&pggaev);
         return fFalse;
+    }
+
+    ReleasePpo(&pggaev);
 
     // Adopt actor sounds into the scene
     for (iaev = 0; iaev < _pggaev->IvMac(); iaev++)
@@ -262,7 +476,7 @@ bool ACTR::_FReadActor(PCFL pcfl, CNO cno)
     _arid = actf.arid;
     _nfrmFirst = actf.nfrmFirst;
     _nfrmLast = actf.nfrmLast;
-    _tagTmpl = actf.tagTmpl;
+    DeserializeTagfToTag(&actf.tagTmpl, &_tagTmpl);
     _fLifeDirty = (knfrmInvalid == _nfrmFirst) || (knfrmInvalid == _nfrmLast);
 
     if (_tagTmpl.sid == ksidUseCrf)
@@ -345,73 +559,16 @@ bool ACTR::_FReadEvents(PCFL pcfl, CNO cno)
 
     BLCK blck;
     int16_t bo;
+    PGG pggaevf;
 
     if (!pcfl->FFind(kctgGgae, cno, &blck))
         return fFalse;
-    _pggaev = GG::PggRead(&blck, &bo);
-    if (pvNil == _pggaev)
+    pggaevf = GG::PggRead(&blck, &bo);
+    if (pvNil == pggaevf)
         return fFalse;
-    if (kboOther == bo)
-        _SwapBytesPggaev(_pggaev);
+    _pggaev = DeserializeAEVs(bo, pggaevf);
+    ReleasePpo(&pggaevf);
     return fTrue;
-}
-
-/***************************************************************************
-    SwapBytes all events in pggaev
-***************************************************************************/
-void ACTR::_SwapBytesPggaev(PGG pggaev)
-{
-    AssertPo(pggaev, 0);
-
-    int32_t iaev;
-
-    for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
-    {
-        SwapBytesBom(pggaev->QvFixedGet(iaev), kbomAev);
-        switch (((AEV *)pggaev->QvFixedGet(iaev))->aet)
-        {
-        case aetCost:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevcost);
-            break;
-        case aetSnd:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevsnd);
-            break;
-        case aetSize:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevsize);
-            break;
-        case aetPull:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevpull);
-            break;
-        case aetRotF:
-        case aetRotH:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevrot);
-            break;
-        case aetActn:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevactn);
-            break;
-        case aetAdd:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevadd);
-            break;
-        case aetFreeze:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevfreeze);
-            break;
-        case aetMove:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevmove);
-            break;
-        case aetTweak:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevtweak);
-            break;
-        case aetStep:
-            SwapBytesBom(pggaev->QvGet(iaev), kbomAevstep);
-            break;
-        case aetRem:
-            // no var data
-            break;
-        default:
-            Bug("Unknown AET");
-            break;
-        }
-    }
 }
 
 /***************************************************************************
@@ -486,9 +643,11 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     ACTF actf;
     BLCK blck;
     int16_t bo;
+    TAG tag;
     PTAG ptag;
     PGL pgltag;
     PGG pggaev = pvNil;
+    PGG pggaevf = pvNil;
     int32_t iaev;
     KID kid;
 
@@ -524,7 +683,6 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         if (pvNil != pgltagTmpl)
         {
             int32_t itag;
-            TAG tag;
 
             for (itag = 0; itag < pgltagTmpl->IvMac(); itag++)
             {
@@ -539,7 +697,8 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         }
     }
 
-    if (!pgltag->FInsert(0, &actf.tagTmpl))
+    DeserializeTagfToTag(&actf.tagTmpl, &tag);
+    if (!pgltag->FInsert(0, &tag))
         goto LFail;
 
     // Pull all tags out of the event list:
@@ -547,11 +706,10 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
         goto LFail;
     if (!pcfl->FFind(kctgGgae, kid.cki.cno, &blck))
         goto LFail;
-    pggaev = GG::PggRead(&blck, &bo);
-    if (pvNil == pggaev)
+    pggaevf = GG::PggRead(&blck, &bo);
+    if (pvNil == pggaevf)
         goto LFail;
-    if (kboOther == bo)
-        _SwapBytesPggaev(pggaev);
+    pggaev = DeserializeAEVs(bo, pggaevf);
     pggaev->Lock();
     for (iaev = 0; iaev < pggaev->IvMac(); iaev++)
     {
@@ -567,11 +725,13 @@ PGL ACTR::PgltagFetch(PCFL pcfl, CNO cno, bool *pfError)
     pggaev->Unlock();
     *pfError = fFalse;
     ReleasePpo(&pggaev);
+    ReleasePpo(&pggaevf);
     return pgltag;
 LFail:
     *pfError = fTrue;
     ReleasePpo(&pgltag);
     ReleasePpo(&pggaev);
+    ReleasePpo(&pggaevf);
     return pvNil;
 }
 

@@ -220,6 +220,16 @@ struct AEVACTN
 VERIFY_STRUCT_SIZE(AEVACTN, 8);
 const BOM kbomAevactn = 0xf0000000;
 
+// On-disk representation of AEVCOST
+struct AEVCOSTF
+{
+    int32_t ibset; // body part set
+    int32_t cmid;  // costume ID (for custom costumes)
+    tribool fCmtl; // vs fMtrl
+    TAGF tag;
+};
+VERIFY_STRUCT_SIZE(AEVCOSTF, 28);
+
 struct AEVCOST
 {
     int32_t ibset; // body part set
@@ -227,8 +237,21 @@ struct AEVCOST
     tribool fCmtl; // vs fMtrl
     TAG tag;
 };
-VERIFY_STRUCT_SIZE(AEVCOST, 28);
 const BOM kbomAevcost = 0xfc000000 | (kbomTag >> 6);
+
+// On-disk representation of AEVSND
+struct AEVSNDF
+{
+    tribool fLoop;    // loop count
+    tribool fQueue;   // queued sound
+    int32_t vlm;      // volume
+    int32_t celn;     // motion match	: ivNil if not
+    int32_t sty;      // sound type
+    tribool fNoSound; // no sound
+    CHID chid;        // user sound requires chid
+    TAGF tag;
+};
+VERIFY_STRUCT_SIZE(AEVSNDF, 44);
 
 struct AEVSND
 {
@@ -241,7 +264,6 @@ struct AEVSND
     CHID chid;        // user sound requires chid
     TAG tag;
 };
-VERIFY_STRUCT_SIZE(AEVSND, 44);
 const BOM kbomAevsnd = 0xfff00000 | (kbomTag >> 12);
 
 const BOM kbomAevsize = 0xc0000000;
@@ -466,7 +488,6 @@ class ACTR : public ACTR_PAR
     bool _FReadActor(PCFL pcfl, CNO cno);
     bool _FReadRoute(PCFL pcfl, CNO cno);
     bool _FReadEvents(PCFL pcfl, CNO cno);
-    static void _SwapBytesPggaev(PGG pggaev);
     bool _FOpenTags(PCRF pcrf);
     static bool _FIsIaevTag(PGG pggaev, int32_t iaev, PTAG *pptag, PAEV *pqaev = pvNil);
     void _CloseTags(void);

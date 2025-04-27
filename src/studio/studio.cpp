@@ -840,12 +840,14 @@ bool STDIO::FCmdNewScene(PCMD pcmd)
     AssertThis(0);
     AssertVarMem(pcmd);
 
+    TAGF tagf;
     TAG tag;
     bool fEnable;
 
     vapp.BeginLongOp();
 
-    tag = *((PTAG)(pcmd->rglw));
+    tagf = *((TAGF *)(pcmd->rglw));
+    DeserializeTagfToTag(&tagf, &tag);
 
     if (pvNil != _pmvie)
     {

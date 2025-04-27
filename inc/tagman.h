@@ -44,6 +44,17 @@ const int32_t ksidInvalid = -1; // negative SIDs imply an invalid TAG
 const int32_t sidNil = 0;
 const int32_t ksidUseCrf = 0; // chunk is in ptag->pcrf
 
+/* On-disk representation of TAG */
+typedef struct TAGF *PTAGF;
+struct TAGF
+{
+    int32_t sid;
+    int32_t _pcrf;
+    CTG ctg;
+    CNO cno;
+};
+VERIFY_STRUCT_SIZE(TAGF, 16);
+
 typedef struct TAG *PTAG;
 struct TAG
 {
@@ -53,13 +64,17 @@ struct TAG
     void MarkMem(void);
 #endif // DEBUG
 
-    int32_t sid; // Source ID (or ksidUseCrf)
-    PCRF pcrf;   // File to look in for this chunk if sid is ksidUseCrf
-    CTG ctg;     // CTG of chunk
-    CNO cno;     // CNO of chunk
+    int32_t sid;   // Source ID (or ksidUseCrf)
+    int32_t _pcrf; // was: pcrf
+    CTG ctg;       // CTG of chunk
+    CNO cno;       // CNO of chunk
+    PCRF pcrf;     // File to look in for this chunk if sid is ksidUseCrf
 };
-VERIFY_STRUCT_SIZE(TAG, 16);
 const BOM kbomTag = 0xFF000000;
+
+// Functions for serializing and deserializing tags
+void DeserializeTagfToTag(PTAGF ptagf, PTAG ptag);
+void SerializeTagToTagf(PTAG ptag, PTAGF ptagf);
 
 // FNINSCD is a client-supplied callback function to alert the user to
 // insert the given CD.  The name of the source is passed to the callback.
