@@ -134,23 +134,6 @@ add_subdirectory(kauai)
 add_subdirectory(src)
 
 
-# Please pay attention to the ending / in each DIRECTORY declaration. It
-# affects the destination!
-install(TARGETS studio RUNTIME DESTINATION .)
-# HACK(bruxisma): This is due to UTEST.CHT not generating 3DMOVIE.CHK
-#                 Renaming it to 3DMOVIE.CHT would resolve this.
-install(FILES $<FILTER:$<TARGET_PROPERTY:studio,CHOMPED_CHUNKS>,EXCLUDE,.+utest[.]chk$>
-  DESTINATION "Microsoft Kids/3D Movie Maker")
-install(FILES $<FILTER:$<TARGET_PROPERTY:studio,CHOMPED_CHUNKS>,INCLUDE,.+utest[.]chk$>
-  RENAME 3dmovie.chk
-  DESTINATION "Microsoft Kids/3D Movie Maker")
-install(FILES $<TARGET_PROPERTY:studio,3DMM_PROJECTS>
-  DESTINATION "Microsoft Kids/Users/Melanie")
-install(FILES $<TARGET_PROPERTY:studio,3DMM_SAMPLES>
-  DESTINATION "Microsoft Kids/Users/McZee")
-install(DIRECTORY "${PROJECT_SOURCE_DIR}/content-files/"
-  DESTINATION "Microsoft Kids/3D Movie Maker")
-
 # CPack must be included *last*, which is antithetical to how most CMake
 # Modules work. We can set all variables for all packaging regardless of
 # whether they're supported. This way we can just swap out what is added to
