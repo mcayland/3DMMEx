@@ -35,13 +35,20 @@ enable_testing()
 find_package(GTest CONFIG REQUIRED)
 include(GoogleTest)
 
-find_package(BRender REQUIRED)
-
 # Options
 option(BUILD_PACKAGES "Build packages for 3DMM" ON)
 
 cmake_dependent_option(3DMM_PACKAGE_WIX "Generate an MSI via WiX" ON "BUILD_PACKAGES AND DEFINED ENV{WIX}" OFF)
 cmake_dependent_option(3DMM_PACKAGE_ZIP "Generate a portable ZIP" ON "BUILD_PACKAGES" OFF)
+
+if (MSVC AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+  set(3DMM_BRENDER_LIBRARY_DEFAULT "Original")
+else()
+  set(3DMM_BRENDER_LIBRARY_DEFAULT "Source")
+endif()
+
+set(3DMM_BRENDER_LIBRARY "${3DMM_BRENDER_LIBRARY_DEFAULT}" CACHE STRING "Argonaut BRender library to use for rendering 3D images")
+set_property(CACHE 3DMM_BRENDER_LIBRARY PROPERTY STRINGS "Original" "Source")
 
 set(3DMM_AUDIOMAN_LIBRARY "Decompilation" CACHE STRING "AudioMan library to use for mixing wave sounds")
 set_property(CACHE 3DMM_AUDIOMAN_LIBRARY PROPERTY STRINGS "Original" "Decompilation" "Stub")
@@ -91,6 +98,41 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/inc/version.h.in"
   "${PROJECT_BINARY_DIR}/inc/version.h"
 )
+
+# Select BRender library
+if ("${3DMM_BRENDER_LIBRARY}" STREQUAL "Original")
+
+    # Use original static libraries
+    find_package(BRender REQUIRED)
+
+elseif("${3DMM_BRENDER_LIBRARY}" STREQUAL "Source")
+
+    message("Building BRender from source")
+
+    FetchContent_Declare(
+        3DMM-BRender
+        GIT_REPOSITORY https://github.com/mcayland/3DMM-BRender
+        GIT_TAG fix/3dmm-actor-rendering
+    )
+
+    set(BRENDER_ASAN OFF)
+    FetchContent_MakeAvailable(3DMM-BRender)
+
+    add_library(brender INTERFACE)
+    target_link_libraries(
+        brender
+        INTERFACE
+        FW ZB FMT STD
+    )
+    target_include_directories(
+        brender
+        INTERFACE
+        "${BRender_SOURCE_DIR}/INC"
+    )
+    add_library(BRender::Libraries ALIAS brender)
+else()
+    message(FATAL_ERROR "Invalid BRender library selected: ${3DMM_BRENDER_LIBRARY}")
+endif()
 
 # Select AudioMan library
 if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
