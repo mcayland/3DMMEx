@@ -53,8 +53,6 @@ add_custom_target(
     "${PROJECT_BINARY_DIR}/generated/kauai/src/kidchk.h"
 )
 
-add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4430>)
-
 # Base: Base files required for all Kauai projects
 add_library(KauaiBase
     "${PROJECT_SOURCE_DIR}/kauai/src/utilglob.cpp"
