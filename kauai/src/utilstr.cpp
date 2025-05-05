@@ -555,7 +555,12 @@ bool STN::FFormat(PSTN pstnFormat, ...)
     AssertThis(0);
     AssertPo(pstnFormat, 0);
 
-    return FFormatRgch(pstnFormat->Prgch(), pstnFormat->Cch(), (uintptr_t *)(&pstnFormat + 1));
+    va_list args;
+    va_start(args, pstnFormat);
+    bool fRet = FFormatRgch(pstnFormat->Prgch(), pstnFormat->Cch(), args);
+    va_end(args);
+
+    return fRet;
 }
 
 /***************************************************************************
@@ -566,18 +571,22 @@ bool STN::FFormatSz(const PCSZ pszFormat, ...)
     AssertThis(0);
     AssertSz(pszFormat);
 
-    return FFormatRgch(pszFormat, CchSz(pszFormat), (uintptr_t *)(&pszFormat + 1));
+    va_list args;
+    va_start(args, pszFormat);
+    bool fRet = FFormatRgch(pszFormat, CchSz(pszFormat), args);
+    va_end(args);
+
+    return fRet;
 }
 
 /***************************************************************************
     Core routine for sprintf functionality.
 ***************************************************************************/
-bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *prgluData)
+bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valData)
 {
     AssertThis(0);
     AssertIn(cchFormat, 0, kcchMaxStn + 1);
     AssertPvCb(prgchFormat, cchFormat * SIZEOF(achar));
-    AssertVarMem(prgluData);
 
     // Data Write Order - these dwo values are pcode for when to add what
     enum
@@ -591,7 +600,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *pr
     int32_t cch;
     int32_t cchMin;
     int32_t ivArg;
-    uintptr_t lu, luRad;
+    int32_t lu, luRad;
     achar ch;
     achar rgchT[kcchMaxStn];
     const achar *prgchTerm;
@@ -599,6 +608,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *pr
     achar chSign, chPad;
     uint32_t dwo;
     PSTN pstn;
+    PSZ pszT;
     bool fRet = fFalse;
 
     pchInLim = (pchIn = prgchFormat) + cchFormat;
@@ -685,33 +695,34 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *pr
 
         // code after the switch assumes that prgchTerm points to the
         // characters to add to the stream and cch is the number of characters
-        AssertPvCb(prgluData, LwMul(ivArg + 1, SIZEOF(uint32_t)));
-        lu = prgluData[ivArg++];
+        lu = 0;
         prgchTerm = rgchT;
         switch (ch)
         {
         case ChLit('c'):
-            rgchT[0] = (achar)lu;
+            rgchT[0] = (achar)va_arg(valData, int32_t);
             cch = 1;
             break;
 
         case ChLit('s'):
-            pstn = (PSTN)lu;
+            pstn = va_arg(valData, PSTN);
             AssertPo(pstn, 0);
             prgchTerm = pstn->Prgch();
             cch = pstn->Cch();
             break;
 
         case ChLit('z'):
-            AssertSz((achar *)lu);
-            prgchTerm = (achar *)lu;
-            cch = CchSz((PSZ)prgchTerm);
+            pszT = va_arg(valData, PSZ);
+            AssertSz(pszT);
+            prgchTerm = pszT;
+            cch = CchSz(pszT);
             break;
 
         case ChLit('f'):
+            lu = va_arg(valData, int32_t);
             for (cch = 4; cch-- > 0; lu >>= 8)
             {
-                ch = (achar)(uint8_t)lu;
+                ch = (achar)(lu & 0xFF);
                 if (0 == ch)
                     ch = 1;
                 rgchT[cch] = ch;
@@ -720,6 +731,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *pr
             break;
 
         case ChLit('x'):
+            lu = va_arg(valData, int32_t);
             // if cchMin is not 0, don't make it longer than cchMin
             if (cchMin > 0 && cchMin < 8)
                 lu &= (1L << (cchMin * 4)) - 1;
@@ -727,6 +739,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *pr
             goto LUnsigned;
 
         case ChLit('d'):
+            lu = va_arg(valData, int32_t);
             if ((int32_t)lu < 0)
             {
                 chSign = ChLit('-');
@@ -736,6 +749,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *pr
             goto LUnsigned;
 
         case ChLit('u'):
+            lu = va_arg(valData, int32_t);
             luRad = 10;
         LUnsigned:
             prgchTermMut = rgchT + CvFromRgv(rgchT);

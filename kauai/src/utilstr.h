@@ -25,6 +25,8 @@
 #ifndef UTILSTR_H
 #define UTILSTR_H
 
+#include <cstdarg>
+
 /***************************************************************************
     OS kind for string translation - these should always have their high
     and low bytes equal.
@@ -483,7 +485,7 @@ class STN
 
     bool FFormat(PSTN pstnFormat, ...);
     bool FFormatSz(const PCSZ pszFormat, ...);
-    bool FFormatRgch(const achar *prgchFormat, int32_t cchFormat, uintptr_t *prgluData);
+    bool FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valData);
     bool FGetLw(int32_t *plw, int32_t lwBase = 0);
     bool FExpandControls(void);
 };
