@@ -112,7 +112,9 @@ target_link_libraries(studio
 
 set_property(TARGET studio PROPERTY OUTPUT_NAME 3dmovie)
 target_link_options(studio BEFORE PRIVATE $<$<LINK_LANG_AND_ID:CXX,MSVC>:/MANIFESTUAC:NO>)
-target_link_options(studio BEFORE PRIVATE "/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'")
+target_link_options(studio
+  BEFORE PRIVATE
+    $<$<LINK_LANG_AND_ID:CXX,MSVC>:"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'">)
 target_link_options(studio
   BEFORE PRIVATE
     $<$<AND:$<LINK_LANG_AND_ID:CXX,MSVC>,$<CONFIG:DEBUG>>:/NODEFAULTLIB:libcmt.lib>)
