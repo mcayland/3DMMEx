@@ -87,10 +87,6 @@ if (CMAKE_C_BYTE_ORDER MATCHES LITTLE_ENDIAN)
 endif()
 
 
-if (NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
-  message(FATAL_ERROR "Cannot compile for 64-bit yet")
-endif()
-
 # Configure version header
 execute_process(
   COMMAND git describe --tags --always
