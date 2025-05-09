@@ -4247,7 +4247,7 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
                 goto LFail1;
             }
 
-            pscen->_pggsevStart->Put(isevStart, &pactr);
+            pscen->_pggsevStart->FPut(isevStart, SIZEOF(PACTR), &pactr);
             break;
 
         case sevtAddTbox:
@@ -4267,7 +4267,7 @@ SCEN *SCEN::PscenRead(PMVIE pmvie, PCRF pcrf, CNO cno)
                 goto LFail1;
             }
 
-            pscen->_pggsevStart->Put(isevStart, &ptbox);
+            pscen->_pggsevStart->FPut(isevStart, SIZEOF(PTBOX), &ptbox);
             break;
 
         case sevtSetBkgd:
