@@ -488,13 +488,13 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
         lpOfn = (OPENFILENAME *)lParam;
         pdiPortfolio = (PDLGINFO)(lpOfn->lCustData);
 
-        SetWindowLong(hwndCustom, GWL_USERDATA, (LONG)pdiPortfolio);
+        SetWindowLongPtr(hwndCustom, GWLP_USERDATA, (LONG_PTR)pdiPortfolio);
 
         hwndDlg = GetParent(hwndCustom);
 
         // Give ourselves a way to access the custom dlg hwnd
         // from the common dlg subclass wndproc.
-        SetWindowLong(hwndDlg, GWL_USERDATA, (LONG)hwndCustom);
+        SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR)hwndCustom);
 
         // Hide common dlg controls that we're not interested in here. Use the Common Dialog
         // Message for hiding the control. The documentation on CDM_HIDECONTROL doesn't really
@@ -562,24 +562,25 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
         // the window anyway..
 
         // Subclass the push btns to prevent the background flashing in the default color.
-        lpBtnProc = (WNDPROC)SetWindowLong(GetDlgItem(hwndCustom, IDC_BUTTON1), GWL_WNDPROC, (LONG)SubClassBtnProc);
+        lpBtnProc =
+            (WNDPROC)SetWindowLongPtr(GetDlgItem(hwndCustom, IDC_BUTTON1), GWLP_WNDPROC, (LONG_PTR)SubClassBtnProc);
 
         lpOtherBtnProc =
-            (WNDPROC)SetWindowLong(GetDlgItem(hwndCustom, IDC_BUTTON2), GWL_WNDPROC, (LONG)SubClassBtnProc);
+            (WNDPROC)SetWindowLongPtr(GetDlgItem(hwndCustom, IDC_BUTTON2), GWLP_WNDPROC, (LONG_PTR)SubClassBtnProc);
         Assert(lpBtnProc == lpOtherBtnProc, "Custom portfolio buttons (ok/cancel) have different window procs");
 
         lpOtherBtnProc =
-            (WNDPROC)SetWindowLong(GetDlgItem(hwndCustom, IDC_BUTTON3), GWL_WNDPROC, (LONG)SubClassBtnProc);
+            (WNDPROC)SetWindowLongPtr(GetDlgItem(hwndCustom, IDC_BUTTON3), GWLP_WNDPROC, (LONG_PTR)SubClassBtnProc);
         Assert(lpBtnProc == lpOtherBtnProc, "Custom portfolio buttons (ok/home) have different window procs");
 
         // Subclass the preview window to allow custom draw.
         lpPreviewProc =
-            (WNDPROC)SetWindowLong(GetDlgItem(hwndCustom, IDC_PREVIEW), GWL_WNDPROC, (LONG)SubClassPreviewProc);
+            (WNDPROC)SetWindowLongPtr(GetDlgItem(hwndCustom, IDC_PREVIEW), GWLP_WNDPROC, (LONG_PTR)SubClassPreviewProc);
 
         // Subclass the main common dlg window to stop static control backgrounds being
         // fill with the current system color. Instead use a color that matches our
         // custom background bitmap.
-        lpDlgProc = (WNDPROC)SetWindowLong(hwndDlg, GWL_WNDPROC, (LONG)SubClassDlgProc);
+        lpDlgProc = (WNDPROC)SetWindowLongPtr(hwndDlg, GWLP_WNDPROC, (LONG_PTR)SubClassDlgProc);
 
         // For the save portfolio we want the file name control to have focus when displayed.
         if (!pdiPortfolio->fIsOpen)
