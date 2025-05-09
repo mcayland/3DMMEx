@@ -144,6 +144,31 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "MinSizeRel"
             }
+        },
+        {
+            "name": "clangcl:x64:base",
+            "inherits": "clangcl:base",
+            "hidden": true,
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            }
+        },
+        {
+            "displayName": "ClangCL x64 Debug",
+            "name": "x64-clangcl-debug",
+            "inherits": "clangcl:x64:base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "displayName": "ClangCL x64 RelWithDebInfo",
+            "name": "x64-clangcl-relwithdebinfo",
+            "inherits": "clangcl:x64:base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
         }
     ]
 }
