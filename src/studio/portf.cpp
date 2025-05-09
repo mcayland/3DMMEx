@@ -1467,7 +1467,7 @@ LRESULT CALLBACK SubClassDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         // Draw the control background in the light gray that matched the custom
         // background bitmap. Otherwise the background is drawn in the current
         // system color, which may not match the background at all.
-        return ((LONG)GetStockObject(LTGRAY_BRUSH));
+        return ((LONG_PTR)GetStockObject(LTGRAY_BRUSH));
     }
     case WM_SYSCOMMAND: {
         // Is a screen saver trying to start?
