@@ -111,7 +111,7 @@ bool DLG::_FInit(void)
     for (csit = dtm.cdit, idit = 0; csit > 0; csit--)
     {
         // align to dword
-        if ((int32_t)psw & 2)
+        if ((uintptr_t)psw & 2)
             psw++;
 
         // get and skip the ditm
