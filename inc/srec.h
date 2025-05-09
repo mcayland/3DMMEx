@@ -111,7 +111,7 @@ class SREC : public SREC_PAR
 
     bool _FOpenRecord();
     bool _FCloseRecord();
-    static void _WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
+    static void _WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
   protected:
     bool _FInit(int32_t csampSec, int32_t cchan, int32_t cbSample, uint32_t dtsMax);
