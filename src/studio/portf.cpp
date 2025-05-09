@@ -154,7 +154,7 @@ bool FPortGetFniOpen(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, FNI *pf
     diPortfolio.fDrawnBkgnd = fFalse;
     diPortfolio.grfPrevType = grfPrevType;
     diPortfolio.cnoWave = cnoWave;
-    ofn.lCustData = (DWORD)&diPortfolio;
+    ofn.lCustData = (LPARAM)&diPortfolio;
 
     ofn.lpstrFilter = lpstrFilter;
     ofn.lpstrTitle = lpstrTitle;
@@ -287,7 +287,7 @@ bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR
     diPortfolio.fDrawnBkgnd = fFalse;
     diPortfolio.grfPrevType = grfPrevType;
     diPortfolio.cnoWave = cnoWave;
-    ofn.lCustData = (DWORD)&diPortfolio;
+    ofn.lCustData = (LPARAM)&diPortfolio;
 
     ofn.lpstrFilter = lpstrFilter;
     ofn.lpstrTitle = lpstrTitle;
