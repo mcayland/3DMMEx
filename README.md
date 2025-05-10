@@ -13,6 +13,7 @@
 * Visual Studio 2022
   * Desktop development with C++ workload
   * Clang (optional)
+* Ninja
 * CMake 3.22+
 * WiX (optional: required to build MSI packages)
 
@@ -22,10 +23,10 @@ Use CMake to build the project. The project includes a CMakePresets.json file th
 
 * Open the Developer Command Prompt for Visual Studio 2022 (or use a tool such as [VCVars](https://github.com/bruxisma/VCVars) to add the build tools to your path)
 * Run `cmake --preset <preset-name>`:
-  * Debug build: `x86-msvc-debug`
-    * For local development and testing, use the Debug build. It has additional runtime checking that helps to identify bugs.
-  * Release build: `x86-msvc-relwithdebinfo`
-  * Clang builds: Choose a `x86-clang-*` preset to compile with Clang instead of the Microsoft Visual C++ compiler
+  * x86 Debug build: `x86-msvc-debug`
+    * Debug builds are recommended for local development and testing, as they have additional runtime checking that helps to identify bugs.
+  * x86 Release build: `x86-msvc-relwithdebinfo`
+  * There are additional presets for x64 builds and compiling with Clang instead of the Visual C++ compiler
 * Run `cmake --build build\<preset-name> --target install`
   * The `--target install` is optional but recommended. This will create a directory `dist\<preset-name>` with the directory layout required for 3DMM to run.
   * Kauai development tools (eg. Chelp, Ched) are not built by default. You can build them by building the `tools` target.
