@@ -600,7 +600,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valDa
     int32_t cch;
     int32_t cchMin;
     int32_t ivArg;
-    int32_t lu, luRad;
+    uint32_t lu, luRad;
     achar ch;
     achar rgchT[kcchMaxStn];
     const achar *prgchTerm;
@@ -700,7 +700,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valDa
         switch (ch)
         {
         case ChLit('c'):
-            rgchT[0] = (achar)va_arg(valData, int32_t);
+            rgchT[0] = (achar)va_arg(valData, uint32_t);
             cch = 1;
             break;
 
@@ -719,7 +719,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valDa
             break;
 
         case ChLit('f'):
-            lu = va_arg(valData, int32_t);
+            lu = va_arg(valData, uint32_t);
             for (cch = 4; cch-- > 0; lu >>= 8)
             {
                 ch = (achar)(lu & 0xFF);
@@ -731,7 +731,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valDa
             break;
 
         case ChLit('x'):
-            lu = va_arg(valData, int32_t);
+            lu = va_arg(valData, uint32_t);
             // if cchMin is not 0, don't make it longer than cchMin
             if (cchMin > 0 && cchMin < 8)
                 lu &= (1L << (cchMin * 4)) - 1;
@@ -739,7 +739,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valDa
             goto LUnsigned;
 
         case ChLit('d'):
-            lu = va_arg(valData, int32_t);
+            lu = va_arg(valData, uint32_t);
             if ((int32_t)lu < 0)
             {
                 chSign = ChLit('-');
@@ -749,7 +749,7 @@ bool STN::FFormatRgch(const achar *prgchFormat, int32_t cchFormat, va_list valDa
             goto LUnsigned;
 
         case ChLit('u'):
-            lu = va_arg(valData, int32_t);
+            lu = va_arg(valData, uint32_t);
             luRad = 10;
         LUnsigned:
             prgchTermMut = rgchT + CvFromRgv(rgchT);
