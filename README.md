@@ -14,7 +14,6 @@
   * Desktop development with C++ workload
   * Clang (optional)
 * CMake 3.22+
-* vcpkg
 * WiX (optional: required to build MSI packages)
 
 ### Building
@@ -22,7 +21,6 @@
 Use CMake to build the project. The project includes a CMakePresets.json file that specifies [build presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
 
 * Open the Developer Command Prompt for Visual Studio 2022 (or use a tool such as [VCVars](https://github.com/bruxisma/VCVars) to add the build tools to your path)
-* Run `vcpkg install --triplet x86-windows` to download and build dependencies
 * Run `cmake --preset <preset-name>`:
   * Debug build: `x86-msvc-debug`
     * For local development and testing, use the Debug build. It has additional runtime checking that helps to identify bugs.

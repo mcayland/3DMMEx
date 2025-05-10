@@ -36,7 +36,7 @@ include(FetchContent)
 include(TargetChompSources)
 
 enable_testing()
-find_package(GTest CONFIG REQUIRED)
+include(FetchGoogleTest)
 include(GoogleTest)
 
 # Options
