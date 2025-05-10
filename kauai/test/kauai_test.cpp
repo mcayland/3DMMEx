@@ -594,3 +594,72 @@ TEST(KauaiTests, TestCrf)
 
     ReleasePpo(&pcrf);
 }
+
+TEST(KauaiTests, TestStnFormat)
+{
+    STN stn, stnT;
+
+    // Characters
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%c%c"), ChLit('3'), ChLit('D'));
+    AssertPo(&stn, 0);
+    EXPECT_STREQ("3D", stn.Psz());
+
+    // STN strings
+    stnT = PszLit("3D Movie Maker");
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%s"), &stnT);
+    EXPECT_STREQ(stnT.Psz(), stn.Psz());
+
+    // Null-terminated strings
+    PCSZ pcszNull = PszLit("3D Movie Maker");
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%z"), pcszNull);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ(stn.Psz(), pcszNull);
+
+    // Chunk tags
+    CTG ctg = kctgText;
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%f"), ctg);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ(stn.Psz(), PszLit("TEXT"));
+
+    // Hex
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%x"), 0x3d);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ("3D", stn.Psz());
+
+    stn.SetNil();
+    stn.FFormatSz(PszLit("0x%x"), -1);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ("0xFFFFFFFF", stn.Psz());
+
+    // Signed decimal
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%d, %d"), 0x3d, -0x3d);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ("61, -61", stn.Psz());
+
+    // Unsigned decimal
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%u, %u"), 0x3d, -0x3d);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ("61, 4294967235", stn.Psz());
+
+    // Width
+    stn.SetNil();
+    stn.FFormatSz(PszLit("%3d, %-3d, %03d"), 0x3d, 0x3d, 0x3d);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ(" 61, 61 , 061", stn.Psz());
+
+    // Using an STN as a format string
+    STN stnFormat = PszLit("%u%c %s %z");
+    stnT = "Movie";
+    stn.SetNil();
+    stn.FFormat(&stnFormat, 3, ChLit('D'), &stnT, PszLit("Maker"));
+    AssertPo(&stnT, 0);
+    AssertPo(&stn, 0);
+    EXPECT_STREQ("3D Movie Maker", stn.Psz());
+}
