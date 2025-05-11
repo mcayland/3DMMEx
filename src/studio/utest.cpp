@@ -2313,38 +2313,61 @@ bool APP::_FFindMsKidsDir(void)
     SZ szMsKidsDir;
     STN stn;
     STN stnUsers;
+    FNI fniInstallDir;
+    bool fFound = fFalse;
+    PFNI rgpfniDir[3];
 
+    // Build list of paths to search for the Microsoft Kids directory
+    ClearPb(rgpfniDir, SIZEOF(rgpfniDir));
+    rgpfniDir[0] = &_fniExe;        // Application directory
+    rgpfniDir[1] = pvNil;           // InstallDirectory from registry if present
+    rgpfniDir[2] = &_fniCurrentDir; // Current working directory
+
+    // Read the install directory from the registry
     szMsKidsDir[0] = chNil;
     if (!FGetSetRegKey(kszInstallDirValue, szMsKidsDir, SIZEOF(SZ), fregMachine | fregString))
     {
         Warn("Missing InstallDirectory registry entry or registry error");
     }
-    stn = szMsKidsDir;
-    if (stn.Cch() == 0 || !_fniMsKidsDir.FBuildFromPath(&stn, kftgDir) || tYes != _fniMsKidsDir.TExists())
-    {
-        // REVIEW *****: this artificial search is temp until we have a
-        // real setup program and users have a InstallDirectory registry entry
-        _fniMsKidsDir = _fniExe;
-        if (!_fniMsKidsDir.FSetLeaf(pvNil, kftgDir))
-            return fFalse;
-        /* FOONE: hack out search to top of DIR
-        while (_fniMsKidsDir.FUpDir(pvNil, ffniMoveToDir))
-            ;
-        */
 
-        if (!_FFindMsKidsDirAt(&_fniMsKidsDir))
+    stn = szMsKidsDir;
+    if (stn.Cch() != 0)
+    {
+        if (fniInstallDir.FBuildFromPath(&stn, kftgDir))
         {
-            _fniMsKidsDir = _fniCurrentDir;
-            if (!_fniMsKidsDir.FSetLeaf(pvNil, kftgDir))
-                return fFalse;
-            if (!_FFindMsKidsDirAt(&_fniMsKidsDir))
+            rgpfniDir[2] = &fniInstallDir;
+        }
+        else
+        {
+            Bug("Could not build path from InstallDirectory registry entry");
+        }
+    }
+
+    // Search each path for the Microsoft Kids directory
+    for (int32_t ipfni = 0; ipfni < CvFromRgv(rgpfniDir); ipfni++)
+    {
+        if (rgpfniDir[ipfni] == pvNil)
+        {
+            continue;
+        }
+
+        _fniMsKidsDir = *rgpfniDir[ipfni];
+        if (_fniMsKidsDir.FSetLeaf(pvNil, kftgDir))
+        {
+            if (_FFindMsKidsDirAt(&_fniMsKidsDir))
             {
-                Warn("Can't find Microsoft Kids or MSKIDS.");
-                stn = PszLit("Microsoft Kids");
-                _FCantFindFileDialog(&stn); // ignore failure
-                return fFalse;
+                fFound = fTrue;
+                break;
             }
         }
+    }
+
+    if (!fFound)
+    {
+        Warn("Can't find Microsoft Kids or MSKIDS.");
+        stn = PszLit("Microsoft Kids");
+        _FCantFindFileDialog(&stn); // ignore failure
+        return fFalse;
     }
 
     AssertPo(&_fniMsKidsDir, ffniDir);
