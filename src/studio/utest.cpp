@@ -2335,7 +2335,7 @@ bool APP::_FFindMsKidsDir(void)
     {
         if (fniInstallDir.FBuildFromPath(&stn, kftgDir))
         {
-            rgpfniDir[2] = &fniInstallDir;
+            rgpfniDir[1] = &fniInstallDir;
         }
         else
         {
