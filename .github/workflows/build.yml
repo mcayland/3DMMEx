@@ -16,25 +16,28 @@ jobs:
         shell: cmd
         run: |
           call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x86
-          cmake --build build/x86-msvc-relwithdebinfo --target tools dist
+          cmake --build build/x86-msvc-relwithdebinfo --target tools studio KauaiTest
       - name: Run tests
         shell: cmd
         run: |
-          cd build/x86-msvc-relwithdebinfo && ctest --output-on-failure --timeout 60
-      - name: Upload Build Artifacts
+          ctest --test-dir build/x86-msvc-relwithdebinfo --output-on-failure --timeout 60
+      - name: CMake Install
+        shell: cmd
+        run: |
+          cmake --install build/x86-msvc-relwithdebinfo --prefix dist/x86-msvc-relwithdebinfo
+      - name: Upload debug symbols
         uses: actions/upload-artifact@v4
         with:
-          name: Build Artifacts
+          name: 3DMMEx Windows x86 debug symbols
           path: |
             build/x86-msvc-relwithdebinfo/src/3dmovie.pdb
             build/x86-msvc-relwithdebinfo/src/chomp/studio/*.i
       - name: Upload Release
         uses: actions/upload-artifact@v4
         with:
-          name: 3DMMEx Release
+          name: 3DMMEx Windows x86
           path: |
-            build/x86-msvc-relwithdebinfo/*.zip
-          compression-level: 0 # already compressed
+            dist/x86-msvc-relwithdebinfo
 
   compile-clang-x86:
     name: Windows Clang Win32 x86
