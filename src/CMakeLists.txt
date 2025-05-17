@@ -121,10 +121,14 @@ if(MSVC)
         BEFORE PRIVATE
         "/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'"
     )
-    target_link_options(studio
-        BEFORE PRIVATE
-        $<$<CONFIG:DEBUG>:/NODEFAULTLIB:libcmt.lib>
-    )
+
+    if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
+        # Avoid LNK4098 warning when linking original AudioMan libraries
+        target_link_options(studio
+            BEFORE PRIVATE
+            $<$<CONFIG:DEBUG>:/NODEFAULTLIB:libcmt.lib>
+        )
+    endif()
 endif()
 
 set_property(
