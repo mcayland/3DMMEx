@@ -1,8 +1,8 @@
 name: build
 on: push
 jobs:
-  compile-msvc-x86:
-    name: Windows MSVC Win32 x86
+  compile-msvc-x86-release:
+    name: Windows MSVC x86 Release
     runs-on: windows-latest
     steps:
       - name: Check out repository code
@@ -39,8 +39,8 @@ jobs:
           path: |
             dist/x86-msvc-relwithdebinfo
 
-  compile-clang-x86:
-    name: Windows Clang Win32 x86
+  compile-clang-x86-debug:
+    name: Windows Clang x86 Debug
     runs-on: windows-latest
     steps:
       - name: Check out repository code
@@ -59,14 +59,14 @@ jobs:
         shell: cmd
         run: |
           call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x86
-          cmake --build build/x86-clangcl-debug --target tools studio KauaiTest
+          cmake --build build/x86-clangcl-debug --target KauaiTest
       - name: Run tests
         shell: cmd
         run: |
-          cd build/x86-clangcl-debug && ctest --output-on-failure --timeout 60
+          ctest --test-dir build/x86-clangcl-debug --output-on-failure --timeout 60
 
-  compile-msvc-x64:
-    name: Windows MSVC Win64 x64
+  compile-msvc-x64-debug:
+    name: Windows MSVC x64 Debug
     runs-on: windows-latest
     steps:
       - name: Check out repository code
@@ -80,14 +80,14 @@ jobs:
         shell: cmd
         run: |
           call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x64
-          cmake --build build/x64-msvc-debug --target tools studio KauaiTest
+          cmake --build build/x64-msvc-debug --target KauaiTest
       - name: Run tests
         shell: cmd
         run: |
-          cd build/x64-msvc-debug && ctest --output-on-failure --timeout 60
+          ctest --test-dir build/x64-msvc-debug --output-on-failure --timeout 60
 
-  compile-clang-x64:
-    name: Windows Clang Win64 x64
+  compile-clang-x64-release:
+    name: Windows Clang x64 Release
     runs-on: windows-latest
     steps:
       - name: Check out repository code
@@ -101,13 +101,32 @@ jobs:
         shell: cmd
         run: |
           call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x64
-          cmake --preset x64-clangcl-debug -D3DMM_PACKAGE_WIX=OFF
+          cmake --preset x64-clangcl-relwithdebinfo -D3DMM_PACKAGE_WIX=OFF
       - name: CMake Build
         shell: cmd
         run: |
           call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" x64
-          cmake --build build/x64-clangcl-debug --target tools studio KauaiTest
+          cmake --build build/x64-clangcl-relwithdebinfo --target tools studio KauaiTest
       - name: Run tests
         shell: cmd
         run: |
-          cd build/x64-clangcl-debug && ctest --output-on-failure --timeout 60
+          ctest --test-dir build/x64-clangcl-relwithdebinfo --output-on-failure --timeout 60
+      - name: CMake Install
+        shell: cmd
+        run: |
+          cmake --install build/x64-clangcl-relwithdebinfo --prefix dist/x64-clangcl-relwithdebinfo
+          move dist\x64-clangcl-relwithdebinfo\3dmovie.exe dist\x64-clangcl-relwithdebinfo\3dmovie-x64.exe
+          move build\x64-clangcl-relwithdebinfo\src\3dmovie.pdb build\x64-clangcl-relwithdebinfo\src\3dmovie-x64.pdb
+      - name: Upload debug symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3DMMEx Windows x64 debug symbols
+          path: |
+            build/x64-clangcl-relwithdebinfo/src/3dmovie-x64.pdb
+            build/x64-clangcl-relwithdebinfo/src/chomp/studio/*.i
+      - name: Upload Release
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3DMMEx Windows x64
+          path: |
+            dist/x64-clangcl-relwithdebinfo
