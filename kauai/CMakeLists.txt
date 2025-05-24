@@ -323,12 +323,8 @@ add_library(KauaiGui
     "${PROJECT_SOURCE_DIR}/kauai/src/gob.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/mbmpgui.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/region.cpp"
-
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/appbwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gfxwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/menuwin.cpp>
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/gobwin.cpp>
 )
+
 target_link_libraries(
     KauaiGui
     PUBLIC
@@ -344,6 +340,29 @@ target_include_directories(
     PUBLIC
     "${PROJECT_SOURCE_DIR}/kauai/src"
 )
+
+if (3DMM_GUI STREQUAL "Win32")
+    target_sources(
+        KauaiGui
+        PRIVATE
+        ${PROJECT_SOURCE_DIR}/kauai/src/appbwin.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/menuwin.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/gfxwin.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/gobwin.cpp
+    )
+elseif(3DMM_GUI STREQUAL "SDL")
+    target_sources(
+        KauaiGui
+        PRIVATE
+        ${PROJECT_SOURCE_DIR}/kauai/src/appbsdl.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/menusdl.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/gfxsdl.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/gobsdl.cpp
+        ${PROJECT_SOURCE_DIR}/kauai/src/fontsdl.cpp
+    )
+else()
+    message(FATAL_ERROR "Invalid GUI specified: ${3DMM_GUI}")
+endif()
 
 # GUI application entrypoint
 add_library(
@@ -365,15 +384,26 @@ target_include_directories(
 # Dlg: Dialog support
 add_library(KauaiDlg
     "${PROJECT_SOURCE_DIR}/kauai/src/dlg.cpp"
-
-    # Windows implementation
-    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/kauai/src/dlgwin.cpp>
 )
 target_link_libraries(
     KauaiDlg
     PUBLIC
     KauaiGui
 )
+
+if (3DMM_GUI STREQUAL "Win32")
+    target_sources(
+        KauaiDlg
+        PRIVATE
+        ${PROJECT_SOURCE_DIR}/kauai/src/dlgwin.cpp
+    )
+elseif(3DMM_GUI STREQUAL "SDL")
+    target_sources(
+        KauaiDlg
+        PRIVATE
+        ${PROJECT_SOURCE_DIR}/kauai/src/dlgsdl.cpp
+    )
+endif()
 
 # Ctl: Control support
 add_library(KauaiCtl
