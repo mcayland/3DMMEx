@@ -165,7 +165,7 @@ void GOB::GetPtMouse(PT *ppt, bool *pfDown)
     AssertThis(0);
     if (ppt != pvNil)
     {
-        PTS pts;
+        POINT pts;
         int32_t xp, yp;
         PGOB pgob;
 

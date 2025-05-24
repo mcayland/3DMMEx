@@ -340,11 +340,11 @@ void AssertBomRgsw(BOM bom, int32_t cb);
 
 #ifdef MAC
 typedef Rect RCS;
-typedef Point PTS;
 #elif defined(WIN)
 typedef RECT RCS;
-typedef POINT PTS;
 #endif // WIN
+
+typedef class PT PTS;
 
 /****************************************
     Rectangle and point stuff
@@ -377,13 +377,14 @@ class PT
         xp = xpT, yp = ypT;
     }
 
-    // for assigning to/from a PTS
-    operator PTS(void);
-    PT &operator=(PTS &pts);
-    PT(PTS &pts)
+#ifdef WIN32
+    operator POINT(void);
+    PT &operator=(POINT &pts);
+    PT(POINT &pts)
     {
         *this = pts;
     }
+#endif // WIN32
 
     // interaction with other points
     bool operator==(PT &pt)

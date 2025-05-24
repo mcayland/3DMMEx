@@ -1087,8 +1087,8 @@ KWND GOB::_HwndGetDptFromCoo(PT *pdpt, int32_t coo)
         if (cooGlobal == coo && kwndNil != hwnd)
         {
             // Map from Hwnd to screen
-            PTS pts;
-            pts = PTS(*pdpt);
+            POINT pts;
+            pts = POINT(*pdpt);
 #ifdef WIN
             ClientToScreen(hwnd, &pts);
 #endif // WIN
@@ -1126,7 +1126,7 @@ PGOB GOB::PgobFromPtGlobal(int32_t xp, int32_t yp, PT *pptLocal)
 {
     AssertNilOrVarMem(pptLocal);
     HWND hwnd;
-    PTS pts;
+    POINT pts;
     PGOB pgob;
 
 #ifdef MAC

@@ -516,31 +516,35 @@ void AssertBomRgsw(BOM bom, int32_t cb)
 }
 #endif // DEBUG
 
+#ifdef WIN32
 /***************************************************************************
     Truncates a util point to a system point.
     REVIEW shonk: should we assert on truncation?  Should we truncate
     on windows?
 ***************************************************************************/
-PT::operator PTS(void)
+PT::operator POINT(void)
 {
     AssertThisMem();
-    PTS pts;
+    POINT pts;
 
-    MacWin(pts.h, pts.x) = SwTruncLw(xp);
-    MacWin(pts.v, pts.y) = SwTruncLw(yp);
+    pts.x = SwTruncLw(xp);
+    pts.y = SwTruncLw(yp);
+
     return pts;
 }
 
 /***************************************************************************
     Copies a system point to a util point.
 ***************************************************************************/
-PT &PT::operator=(PTS &pts)
+PT &PT::operator=(POINT &pts)
 {
     AssertThisMem();
-    xp = MacWin(pts.h, pts.x);
-    yp = MacWin(pts.v, pts.y);
+    xp = pts.x;
+    yp = pts.y;
     return *this;
 }
+
+#endif // WIN32
 
 /***************************************************************************
     Map a point from prcSrc coordinates to prcDst coordinates.

@@ -142,7 +142,7 @@ void APPB::TrackMouse(PGOB pgob, PT *ppt)
     AssertVarMem(ppt);
 
     EVT evt;
-    PTS pts;
+    POINT pts;
 
     for (;;)
     {

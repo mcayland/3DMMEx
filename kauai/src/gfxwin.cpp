@@ -932,7 +932,7 @@ void GPT::DrawLine(PTS *ppts1, PTS *ppts2, GDD *pgdd)
 
     poly->cpts = 6;
 
-    if (ppts2->x < ppts1->x)
+    if (ppts2->xp < ppts1->xp)
     {
         // swap them
         PTS *pptsT;
@@ -941,10 +941,10 @@ void GPT::DrawLine(PTS *ppts1, PTS *ppts2, GDD *pgdd)
         ppts2 = ppts1;
         ppts1 = pptsT;
     }
-    Assert(ppts2->x >= ppts1->x, "points still not in order");
+    Assert(ppts2->xp >= ppts1->xp, "points still not in order");
 
-    dxp = ppts2->x - ppts1->x;
-    dyp = ppts2->y - ppts1->y;
+    dxp = ppts2->xp - ppts1->xp;
+    dyp = ppts2->yp - ppts1->yp;
     dypPen = pgdd->dypPen;
 
     pptsDst = poly->rgpts;
@@ -952,26 +952,26 @@ void GPT::DrawLine(PTS *ppts1, PTS *ppts2, GDD *pgdd)
     if (dyp < 0)
     {
         dypPen = -dypPen;
-        pptsDst[1].x = pptsDst[0].x;
-        pptsDst[1].y = pptsDst[0].y - dypPen;
+        pptsDst[1].xp = pptsDst[0].xp;
+        pptsDst[1].yp = pptsDst[0].yp - dypPen;
         pptsDst++;
     }
-    pptsDst[1].x = pptsDst[0].x + pgdd->dxpPen;
-    pptsDst[1].y = pptsDst[0].y;
+    pptsDst[1].xp = pptsDst[0].xp + pgdd->dxpPen;
+    pptsDst[1].yp = pptsDst[0].yp;
     pptsDst++;
-    pptsDst[1].x = pptsDst[0].x + dxp;
-    pptsDst[1].y = pptsDst[0].y + dyp;
+    pptsDst[1].xp = pptsDst[0].xp + dxp;
+    pptsDst[1].yp = pptsDst[0].yp + dyp;
     pptsDst++;
-    pptsDst[1].x = pptsDst[0].x;
-    pptsDst[1].y = pptsDst[0].y + dypPen;
+    pptsDst[1].xp = pptsDst[0].xp;
+    pptsDst[1].yp = pptsDst[0].yp + dypPen;
     pptsDst++;
-    pptsDst[1].x = pptsDst[0].x - pgdd->dxpPen;
-    pptsDst[1].y = pptsDst[0].y;
+    pptsDst[1].xp = pptsDst[0].xp - pgdd->dxpPen;
+    pptsDst[1].yp = pptsDst[0].yp;
     if (dyp >= 0)
     {
         pptsDst++;
-        pptsDst[1].x = pptsDst[0].x - dxp;
-        pptsDst[1].y = pptsDst[0].y - dyp;
+        pptsDst[1].xp = pptsDst[0].xp - dxp;
+        pptsDst[1].yp = pptsDst[0].yp - dyp;
     }
     Assert(pptsDst == &poly->rgpts[4], "wrote off end of OLY");
 
@@ -1022,7 +1022,10 @@ void GPT::_FillPoly(OLY *poly)
 {
     AssertVarMem(poly);
 
-    Polygon(_hdc, poly->rgpts, poly->cpts);
+    // TODO: FIXME: Are polygons used in 3DMM?
+    // If they are, add code to convert rgpts to a rgPOINT
+    // Polygon(_hdc, poly->rgpts, poly->cpts);
+    RawRtn();
     _Flush();
 }
 
@@ -1274,9 +1277,9 @@ void GPT::DrawRgch(const achar *prgch, int32_t cch, PTS pts, GDD *pgdd, DSF *pds
     // Windows won't vertically center via text alignment flags, so we need
     // to do it ourselves.
     if (pdsf->tav == tavCenter)
-        pts.y = rcs.top;
+        pts.yp = rcs.top;
 
-    TextOut(_hdc, pts.x, pts.y, prgch, cch);
+    TextOut(_hdc, pts.xp, pts.yp, prgch, cch);
     _Flush();
 
     if (pdsf->grfont & fontBoxed)
@@ -1353,10 +1356,10 @@ void GPT::GetRcsFromRgch(RCS *prcs, const achar *prgch, int32_t cch, PTS pts, DS
         dxp = -dpt.cx;
         break;
     }
-    prcs->left = pts.x + dxp;
-    prcs->right = pts.x + dpt.cx + dxp;
-    prcs->top = pts.y + dyp;
-    prcs->bottom = pts.y + txm.tmHeight + dyp;
+    prcs->left = pts.xp + dxp;
+    prcs->right = pts.xp + dpt.cx + dxp;
+    prcs->top = pts.yp + dyp;
+    prcs->bottom = pts.yp + txm.tmHeight + dyp;
 }
 
 /***************************************************************************
