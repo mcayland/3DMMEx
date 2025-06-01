@@ -314,6 +314,22 @@ target_include_directories(
     "${PROJECT_SOURCE_DIR}/kauai/src"
 )
 
+# GUI application entrypoint
+add_library(
+    KauaiGuiMain
+    "${PROJECT_SOURCE_DIR}/kauai/src/appmainwin.cpp"
+)
+target_link_libraries(
+    KauaiGuiMain
+    PUBLIC
+    KauaiGui
+)
+target_include_directories(
+    KauaiGuiMain
+    PUBLIC
+    "${PROJECT_SOURCE_DIR}/kauai/src"
+)
+
 # Dlg: Dialog support
 add_library(KauaiDlg
     "${PROJECT_SOURCE_DIR}/kauai/src/dlg.cpp"
@@ -457,6 +473,7 @@ target_link_libraries(chelp
     PRIVATE
     KauaiBase
     KauaiGui
+    KauaiGuiMain
     KauaiGroup
     KauaiMbmpIO
     KauaiSound
@@ -492,6 +509,7 @@ target_link_libraries(
     KauaiGroup
     KauaiFile
     KauaiGui
+    KauaiGuiMain
     KauaiDoc
     KauaiStream
     KauaiSound
@@ -548,6 +566,7 @@ target_sources(ched PRIVATE
 target_link_libraries(ched
     PRIVATE
     KauaiGui
+    KauaiGuiMain
     KauaiDlg
     KauaiKid
     KauaiKidCom

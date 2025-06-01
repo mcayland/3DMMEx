@@ -102,6 +102,7 @@ target_link_libraries(studio
     PUBLIC
     KauaiBase
     KauaiGui
+    KauaiGuiMain
     KauaiKid
     KauaiDlg
     engine
