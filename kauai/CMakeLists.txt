@@ -317,6 +317,7 @@ target_include_directories(
 # GUI application entrypoint
 add_library(
     KauaiGuiMain
+    "${PROJECT_SOURCE_DIR}/kauai/src/appassert.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/appmainwin.cpp"
 )
 target_link_libraries(
