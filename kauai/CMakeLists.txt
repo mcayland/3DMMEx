@@ -88,6 +88,23 @@ target_compile_definitions(
 )
 add_dependencies(KauaiBase GenerateChunkTags)
 
+if (3DMM_GUI STREQUAL "Win32")
+    target_compile_definitions(
+        KauaiBase
+        PUBLIC
+        KAUAI_WIN32
+    )
+elseif(3DMM_GUI STREQUAL "SDL")
+    target_compile_definitions(
+        KauaiBase
+        PUBLIC
+        KAUAI_SDL
+    )
+else()
+    message(FATAL_ERROR "Invalid GUI specified: ${3DMM_GUI}")
+endif()
+
+
 # Groups: Collection classes
 add_library(KauaiGroup
     "${PROJECT_SOURCE_DIR}/kauai/src/groups.cpp"
