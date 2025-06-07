@@ -20,7 +20,7 @@ bool FPortGetFniSave(FNI *pfni, LPCTSTR lpstrFilter, LPCTSTR lpstrTitle, LPCTSTR
                      uint32_t grfPrevType, CNO cnoWave);
 
 UINT_PTR CALLBACK OpenHookProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-void OpenPreview(HWND hwnd, PGNV pgnvOff, RCS *prcsPreview);
+void OpenPreview(HWND hwnd, PGNV pgnvOff, RECT *prcsPreview);
 void RepaintPortfolio(HWND hwndCustom);
 
 static WNDPROC lpBtnProc;
@@ -34,7 +34,7 @@ typedef struct dlginfo
 {
     bool fIsOpen;         // fTrue if Open file, (ie not Save file)
     bool fDrawnBkgnd;     // fTrue if portfolio background bitmap has been displayed.
-    RCS rcsDlg;           // Initial size of the portfolio common dlg window client area.
+    RECT rcsDlg;          // Initial size of the portfolio common dlg window client area.
     uint32_t grfPrevType; // Bits for types of preview required, (eg movie, sound etc) == 0 if no preview
     CNO cnoWave;          // Wave file cno for audio when portfolio is invoked.
 } DLGINFO;
@@ -787,12 +787,12 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
             // So take any special action now to ensure the portfolio still looks good.
 
             PDLGINFO pdiPortfolio = (PDLGINFO)GetWindowLongPtr(hwndCustom, GWLP_USERDATA);
-            RCS rcsApp;
+            RECT rcsApp;
             POINT ptBtn;
             int ypBtn;
             PMBMP pmbmpBtn;
             RC rcBmp;
-            RCS rcsAppScreen, rcsPreview;
+            RECT rcsAppScreen, rcsPreview;
             int xOff = 0;
             int yOff = 0;
             LONG lStyle;
@@ -1051,7 +1051,7 @@ void RepaintPortfolio(HWND hwndCustom)
         if ((pgpt = GPT::PgptNew(ps.hdc)) != pvNil)
         {
             RC rcDisplay;
-            RCS rcsPort, rcsPreview;
+            RECT rcsPort, rcsPreview;
             GNV gnv(pgpt);
             PGNV pgnvOff;
             PGPT pgptOff;
@@ -1145,7 +1145,7 @@ void RepaintPortfolio(HWND hwndCustom)
                         if ((pmbmpBtn = (PMBMP)vpapp->PcrmAll()->PbacoFetch(kctgMbmp, cnoBtn, MBMP::FReadMbmp)))
                         {
                             HWND hwndBtn = GetDlgItem(hwndCustom, iBtnId);
-                            RCS rcsBtn;
+                            RECT rcsBtn;
                             RC rcItem;
 
                             GetClientRect(hwndBtn, &rcsBtn);
@@ -1198,7 +1198,7 @@ void RepaintPortfolio(HWND hwndCustom)
  Returns: nothing.
 
 ***************************************************************************/
-void OpenPreview(HWND hwndCustom, PGNV pgnvOff, RCS *prcsPreview)
+void OpenPreview(HWND hwndCustom, PGNV pgnvOff, RECT *prcsPreview)
 {
     STN stn;
     PCFL pcfl;
@@ -1343,7 +1343,7 @@ LRESULT CALLBACK SubClassPreviewProc(HWND hwndPreview, UINT msg, WPARAM wParam, 
     {
     case WM_PAINT: {
         PAINTSTRUCT ps;
-        RCS rcsPreview;
+        RECT rcsPreview;
         RC rcPreview;
         PGNV pgnvOff;
         PGPT pgpt, pgptOff;

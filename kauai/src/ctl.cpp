@@ -99,7 +99,7 @@ PCTL CTL::PctlFromHctl(HCTL hctl)
 void CTL::_NewRc(void)
 {
     RC rc;
-    RCS rcs;
+    RECT rcs;
     HWND hwnd;
 
     if (_hctl == hNil)
@@ -274,7 +274,6 @@ bool SCB::_FCreate(int32_t val, int32_t valMin, int32_t valMax, uint32_t grfscb)
 {
     Assert(_Hctl() == hNil, "scb already created");
     RC rc;
-    RCS rcs;
     HWND hwnd;
     HCTL hctl;
 
@@ -284,7 +283,6 @@ bool SCB::_FCreate(int32_t val, int32_t valMin, int32_t valMax, uint32_t grfscb)
         Bug("can only add controls to hwnd based gobs");
         return fFalse;
     }
-    rcs = RCS(rc);
 
 #ifdef MAC
     GNV gnv(this);
@@ -296,6 +294,7 @@ bool SCB::_FCreate(int32_t val, int32_t valMin, int32_t valMax, uint32_t grfscb)
     ValidRc(pvNil);
 #endif // MAC
 #ifdef WIN
+    RECT rcs(rc);
     hctl = CreateWindow(PszLit("SCROLLBAR"), PszLit(""), (_fVert ? SBS_VERT : SBS_HORZ) | WS_CHILD | WS_VISIBLE,
                         rcs.left, rcs.top, rcs.right - rcs.left, rcs.bottom - rcs.top, hwnd, hNil, vwig.hinst, pvNil);
     if (hctl == hNil || !_FSetHctl(hctl))
@@ -588,7 +587,7 @@ PWSB WSB::PwsbNew(PGOB pgob, uint32_t grfgob)
 
 #ifdef WIN
     RC rc;
-    RCS rcs;
+    RECT rcs;
     HWND hwnd;
     HCTL hctl;
 

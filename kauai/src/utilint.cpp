@@ -972,10 +972,12 @@ void RC::PinToRc(RC *prc)
         Offset(dxp, dyp);
 }
 
+#ifdef WIN32
+
 /***************************************************************************
     Copies a system rectangle to a util rectangle.
 ***************************************************************************/
-RC &RC::operator=(RCS &rcs)
+RC &RC::operator=(RECT &rcs)
 {
     AssertThisMem();
 
@@ -990,10 +992,10 @@ RC &RC::operator=(RCS &rcs)
     Truncates util rectangle to a system rectangle.
     REVIEW shonk: should we assert on truncation?
 ***************************************************************************/
-RC::operator RCS(void)
+RC::operator RECT(void)
 {
     AssertThisMem();
-    RCS rcs;
+    RECT rcs;
 
     rcs.left = SwTruncLw(xpLeft);
     rcs.right = SwTruncLw(xpRight);
@@ -1001,6 +1003,8 @@ RC::operator RCS(void)
     rcs.bottom = SwTruncLw(ypBottom);
     return rcs;
 }
+
+#endif // WIN32
 
 /***************************************************************************
     Return the area of the rectangle.

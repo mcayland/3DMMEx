@@ -418,7 +418,7 @@ bool GOB::FGetRcInval(RC *prc, int32_t gin)
     if (kginMark != gin)
     {
         // get any system invalidated area
-        RCS rcs;
+        RECT rcs;
         RC rcT;
 
 #ifdef WIN
@@ -533,7 +533,7 @@ void GOB::Scroll(RC *prc, int32_t dxp, int32_t dyp, int32_t gin, RC *prcBad1, RC
 #ifdef WIN
     // SW_INVALIDATE invalidates any uncovered stuff and translates any
     // previously invalid stuff
-    RCS rcs = RCS(rc);
+    RECT rcs = RCS(rc);
     ScrollWindowEx(pgob->_hwnd, dxp, dyp, pvNil, &rcs, hNil, pvNil, SW_INVALIDATE);
 
     // compute the bad rectangles
@@ -561,12 +561,12 @@ void GOB::Scroll(RC *prc, int32_t dxp, int32_t dyp, int32_t gin, RC *prcBad1, RC
     case ginNil:
         if (!rcBad1.FEmpty())
         {
-            rcs = RCS(rcBad1);
+            rcs = RECT(rcBad1);
             ValidateRect(pgob->_hwnd, &rcs);
         }
         if (!rcBad2.FEmpty())
         {
-            rcs = RCS(rcBad2);
+            rcs = RECT(rcBad2);
             ValidateRect(pgob->_hwnd, &rcs);
         }
         break;
@@ -1296,7 +1296,7 @@ void GOB::_SetRcCur(void)
 
         if (pgob->_hwnd != hNil)
         {
-            RCS rcs;
+            RECT rcs;
 
             GetClientRect(pgob->_hwnd, &rcs);
             rc = rcs;

@@ -1027,7 +1027,7 @@ void APP::_GetWindowProps(int32_t *pxp, int32_t *pyp, int32_t *pdxp, int32_t *pd
     }
     else
     {
-        RCS rcs;
+        RECT rcs;
         *pdwStyle |= (WS_OVERLAPPED | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
         *pdwStyle &= ~WS_POPUP;
         rcs.left = 0;

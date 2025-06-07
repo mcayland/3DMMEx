@@ -43,10 +43,10 @@ HRGN _HrgnNew(RCS *prcs, bool fOval);
 HRGN _HrgnNew(RCS *prcs, int32_t dxpInset, int32_t dypInset, bool fOval)
 {
     AssertVarMem(prcs);
-    return fOval ? CreateEllipticRgn(prcs->left + dxpInset, prcs->top + dypInset, prcs->right - dxpInset,
-                                     prcs->bottom - dypInset)
-                 : CreateRectRgn(prcs->left + dxpInset, prcs->top + dypInset, prcs->right - dxpInset,
-                                 prcs->bottom - dypInset);
+    return fOval ? CreateEllipticRgn(prcs->xpLeft + dxpInset, prcs->ypTop + dypInset, prcs->xpRight - dxpInset,
+                                     prcs->ypBottom - dypInset)
+                 : CreateRectRgn(prcs->xpLeft + dxpInset, prcs->ypTop + dypInset, prcs->xpRight - dxpInset,
+                                 prcs->ypBottom - dypInset);
 }
 
 /***************************************************************************
@@ -742,7 +742,7 @@ PGPT GPT::PgptNewPic(RC *prc)
     AssertVarMem(prc);
     Assert(!prc->FEmpty(), "empty rectangle for metafile GPT");
     PGPT pgpt;
-    RCS rcs;
+    RECT rcs;
     HDC hdc;
 
     // NOTE: have to use nil for the rect because GDI is messed up -
@@ -816,7 +816,8 @@ void GPT::HiliteRcs(RCS *prcs, GDD *pgdd)
 {
     AssertThis(0);
     _SetClip(pgdd->prcsClip);
-    InvertRect(_hdc, prcs);
+    RECT rcs(*prcs);
+    InvertRect(_hdc, &rcs);
     _Flush();
 }
 
@@ -828,8 +829,8 @@ void GPT::DrawRcs(RCS *prcs, GDD *pgdd)
     AssertThis(0);
     AssertVarMem(prcs);
     AssertVarMem(pgdd);
-    if (!(pgdd->grfgdd & fgddFrame) || pgdd->dxpPen * 2 >= prcs->right - prcs->left ||
-        pgdd->dypPen * 2 >= prcs->bottom - prcs->top)
+    if (!(pgdd->grfgdd & fgddFrame) || pgdd->dxpPen * 2 >= prcs->xpRight - prcs->xpLeft ||
+        pgdd->dypPen * 2 >= prcs->ypBottom - prcs->ypTop)
     {
         // just fill it
         _Fill(prcs, pgdd, (PFNDRW)&GPT::_FillRcs);
@@ -846,8 +847,8 @@ void GPT::DrawOval(RCS *prcs, GDD *pgdd)
     AssertThis(0);
     AssertVarMem(prcs);
     AssertVarMem(pgdd);
-    if (!(pgdd->grfgdd & fgddFrame) || pgdd->dxpPen * 2 >= prcs->right - prcs->left ||
-        pgdd->dypPen * 2 >= prcs->bottom - prcs->top)
+    if (!(pgdd->grfgdd & fgddFrame) || pgdd->dxpPen * 2 >= prcs->xpRight - prcs->xpLeft ||
+        pgdd->dypPen * 2 >= prcs->ypBottom - prcs->ypTop)
     {
         // just fill it
         _Fill(prcs, pgdd, (PFNDRW)&GPT::_FillOval);
@@ -862,8 +863,8 @@ void GPT::DrawOval(RCS *prcs, GDD *pgdd)
 ***************************************************************************/
 void GPT::_FrameRcsOval(RCS *prcs, GDD *pgdd, bool fOval)
 {
-    Assert((pgdd->grfgdd & fgddFrame) && pgdd->dxpPen * 2 < prcs->right - prcs->left &&
-               pgdd->dypPen * 2 < prcs->bottom - prcs->top,
+    Assert((pgdd->grfgdd & fgddFrame) && pgdd->dxpPen * 2 < prcs->xpRight - prcs->xpLeft &&
+               pgdd->dypPen * 2 < prcs->ypBottom - prcs->ypTop,
            "use solid fill");
 
     // Create a region for the area to fill.  This is faster than
@@ -986,7 +987,7 @@ void GPT::_FillRcs(RCS *prcs)
 {
     AssertVarMem(prcs);
 
-    Rectangle(_hdc, prcs->left, prcs->top, prcs->right + 1, prcs->bottom + 1);
+    Rectangle(_hdc, prcs->xpLeft, prcs->ypTop, prcs->xpRight + 1, prcs->ypBottom + 1);
     _Flush();
 }
 
@@ -998,7 +999,7 @@ void GPT::_FillOval(RCS *prcs)
 {
     AssertVarMem(prcs);
 
-    Ellipse(_hdc, prcs->left, prcs->top, prcs->right + 1, prcs->bottom + 1);
+    Ellipse(_hdc, prcs->xpLeft, prcs->ypTop, prcs->xpRight + 1, prcs->ypBottom + 1);
     _Flush();
 }
 
@@ -1220,7 +1221,8 @@ void GPT::ScrollRcs(RCS *prcs, int32_t dxp, int32_t dyp, GDD *pgdd)
     AssertVarMem(pgdd);
 
     _SetClip(pgdd->prcsClip);
-    ScrollDC(_hdc, dxp, dyp, prcs, prcs, hNil, pvNil);
+    RECT rcs(*prcs);
+    ScrollDC(_hdc, dxp, dyp, &rcs, &rcs, hNil, pvNil);
     _Flush();
 }
 
@@ -1277,7 +1279,7 @@ void GPT::DrawRgch(const achar *prgch, int32_t cch, PTS pts, GDD *pgdd, DSF *pds
     // Windows won't vertically center via text alignment flags, so we need
     // to do it ourselves.
     if (pdsf->tav == tavCenter)
-        pts.yp = rcs.top;
+        pts.yp = rcs.ypTop;
 
     TextOut(_hdc, pts.xp, pts.yp, prgch, cch);
     _Flush();
@@ -1356,10 +1358,10 @@ void GPT::GetRcsFromRgch(RCS *prcs, const achar *prgch, int32_t cch, PTS pts, DS
         dxp = -dpt.cx;
         break;
     }
-    prcs->left = pts.xp + dxp;
-    prcs->right = pts.xp + dpt.cx + dxp;
-    prcs->top = pts.yp + dyp;
-    prcs->bottom = pts.yp + txm.tmHeight + dyp;
+    prcs->xpLeft = pts.xp + dxp;
+    prcs->xpRight = pts.xp + dpt.cx + dxp;
+    prcs->ypTop = pts.yp + dyp;
+    prcs->ypBottom = pts.yp + txm.tmHeight + dyp;
 }
 
 /***************************************************************************
@@ -1518,9 +1520,9 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
     // see if we're doing an offscreen (2x, 2x) stretch or (1x, 2x) stretch -
     // optimize for these
     if (pgptSrc->_cbitPixel == 8 && _cbitPixel == 8 &&
-        ((dxpSrc = prcsSrc->right - prcsSrc->left) == (dxpDst = prcsDst->right - prcsDst->left) ||
+        ((dxpSrc = prcsSrc->xpRight - prcsSrc->xpLeft) == (dxpDst = prcsDst->xpRight - prcsDst->xpLeft) ||
          2 * dxpSrc == dxpDst) &&
-        2 * (prcsSrc->bottom - prcsSrc->top) == prcsDst->bottom - prcsDst->top && !pgptSrc->_fOwnPalette &&
+        2 * (prcsSrc->ypBottom - prcsSrc->ypTop) == prcsDst->ypBottom - prcsDst->ypTop && !pgptSrc->_fOwnPalette &&
         !_fOwnPalette)
     {
         RC rcClip;
@@ -1532,16 +1534,16 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
 
         if (dxpSrc == dxpDst)
         {
-            rcDouble.xpLeft += rcSrc.xpLeft - prcsSrc->left;
-            rcDouble.xpRight += rcSrc.xpRight - prcsSrc->right;
+            rcDouble.xpLeft += rcSrc.xpLeft - prcsSrc->xpLeft;
+            rcDouble.xpRight += rcSrc.xpRight - prcsSrc->xpRight;
         }
         else
         {
-            rcDouble.xpLeft += 2 * (rcSrc.xpLeft - prcsSrc->left);
-            rcDouble.xpRight += 2 * (rcSrc.xpRight - prcsSrc->right);
+            rcDouble.xpLeft += 2 * (rcSrc.xpLeft - prcsSrc->xpLeft);
+            rcDouble.xpRight += 2 * (rcSrc.xpRight - prcsSrc->xpRight);
         }
-        rcDouble.ypTop += 2 * (rcSrc.ypTop - prcsSrc->top);
-        rcDouble.ypBottom += 2 * (rcSrc.ypBottom - prcsSrc->bottom);
+        rcDouble.ypTop += 2 * (rcSrc.ypTop - prcsSrc->ypTop);
+        rcDouble.ypBottom += 2 * (rcSrc.ypBottom - prcsSrc->ypBottom);
 
         if (pvNil != pgdd->prcsClip)
         {
@@ -1558,12 +1560,12 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
         if (dxpSrc == dxpDst)
         {
             DoubleVertStretch(pgptSrc->_prgbPixels, pgptSrc->_cbRow, pgptSrc->_rcOff.Dyp(), &rcSrc, _prgbPixels, _cbRow,
-                              _rcOff.Dyp(), prcsDst->left, prcsDst->top, &rcClip, _pregnClip);
+                              _rcOff.Dyp(), prcsDst->xpLeft, prcsDst->ypTop, &rcClip, _pregnClip);
         }
         else
         {
             DoubleStretch(pgptSrc->_prgbPixels, pgptSrc->_cbRow, pgptSrc->_rcOff.Dyp(), &rcSrc, _prgbPixels, _cbRow,
-                          _rcOff.Dyp(), prcsDst->left, prcsDst->top, &rcClip, _pregnClip);
+                          _rcOff.Dyp(), prcsDst->xpLeft, prcsDst->ypTop, &rcClip, _pregnClip);
         }
         return;
     }
@@ -1571,8 +1573,8 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
     // see if we're doing an offscreen double vertical stretch, ie 2x in the
     // vertical direction, 1x in horizontal - optimize for this
     if (pgptSrc->_cbitPixel == 8 && _cbitPixel == 8 &&
-        2 * (prcsSrc->right - prcsSrc->left) == prcsDst->right - prcsDst->left &&
-        2 * (prcsSrc->bottom - prcsSrc->top) == prcsDst->bottom - prcsDst->top && !pgptSrc->_fOwnPalette &&
+        2 * (prcsSrc->xpRight - prcsSrc->xpLeft) == prcsDst->xpRight - prcsDst->xpLeft &&
+        2 * (prcsSrc->ypBottom - prcsSrc->ypTop) == prcsDst->ypBottom - prcsDst->ypTop && !pgptSrc->_fOwnPalette &&
         !_fOwnPalette)
     {
         RC rcClip;
@@ -1582,10 +1584,10 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
         if (!rcSrc.FIntersect(&pgptSrc->_rcOff))
             return;
 
-        rcDouble.xpLeft += 2 * (rcSrc.xpLeft - prcsSrc->left);
-        rcDouble.ypTop += 2 * (rcSrc.ypTop - prcsSrc->top);
-        rcDouble.xpRight += 2 * (rcSrc.xpRight - prcsSrc->right);
-        rcDouble.ypBottom += 2 * (rcSrc.ypBottom - prcsSrc->bottom);
+        rcDouble.xpLeft += 2 * (rcSrc.xpLeft - prcsSrc->xpLeft);
+        rcDouble.ypTop += 2 * (rcSrc.ypTop - prcsSrc->ypTop);
+        rcDouble.xpRight += 2 * (rcSrc.xpRight - prcsSrc->xpRight);
+        rcDouble.ypBottom += 2 * (rcSrc.ypBottom - prcsSrc->ypBottom);
 
         if (pvNil != pgdd->prcsClip)
         {
@@ -1599,7 +1601,7 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
         if (_cactDraw >= _cactFlush || pgptSrc->_cactDraw >= _cactFlush)
             Flush();
         DoubleStretch(pgptSrc->_prgbPixels, pgptSrc->_cbRow, pgptSrc->_rcOff.Dyp(), &rcSrc, _prgbPixels, _cbRow,
-                      _rcOff.Dyp(), prcsDst->left, prcsDst->top, &rcClip, _pregnClip);
+                      _rcOff.Dyp(), prcsDst->xpLeft, prcsDst->ypTop, &rcClip, _pregnClip);
         return;
     }
 
@@ -1609,9 +1611,9 @@ void GPT::CopyPixels(PGPT pgptSrc, RCS *prcsSrc, RCS *prcsDst, GDD *pgdd)
     _SetClip(pgdd->prcsClip);
     pgptSrc->_EnsurePalette();
     SetStretchBltMode(_hdc, COLORONCOLOR);
-    StretchBlt(_hdc, prcsDst->left, prcsDst->top, prcsDst->right - prcsDst->left, prcsDst->bottom - prcsDst->top,
-               pgptSrc->_hdc, prcsSrc->left, prcsSrc->top, prcsSrc->right - prcsSrc->left,
-               prcsSrc->bottom - prcsSrc->top, SRCCOPY);
+    StretchBlt(_hdc, prcsDst->xpLeft, prcsDst->ypTop, prcsDst->xpRight - prcsDst->xpLeft,
+               prcsDst->ypBottom - prcsDst->ypTop, pgptSrc->_hdc, prcsSrc->xpLeft, prcsSrc->ypTop,
+               prcsSrc->xpRight - prcsSrc->xpLeft, prcsSrc->ypBottom - prcsSrc->ypTop, SRCCOPY);
 
     // we need to set the source's _cactDraw to _cactFlush because its bits
     // are referenced in the GDI queue until a flush occurs - so if we
@@ -1638,7 +1640,8 @@ void GPT::DrawPic(PPIC ppic, RCS *prcs, GDD *pgdd)
         return;
     }
 
-    PlayEnhMetaFile(_hdc, ppic->Hpic(), prcs);
+    RECT rcs(*prcs);
+    PlayEnhMetaFile(_hdc, ppic->Hpic(), &rcs);
     RestoreDC(_hdc, wLevel);
     _Flush();
 }
@@ -1715,7 +1718,7 @@ void GPT::DrawMbmp(PMBMP pmbmp, RCS *prcs, GDD *pgdd)
             Warn("Drawing MBMP failed");
             return;
         }
-        RCS rcs = rcSrc;
+        RECT rcs = rcSrc;
         FillRect(pgpt->_hdc, &rcs, (HBRUSH)GetStockObject(WHITE_BRUSH));
 
         Flush();
@@ -1742,8 +1745,8 @@ void GPT::DrawDib(HDRAWDIB hdd, BITMAPINFOHEADER *pbi, RCS *prcs, GDD *pgdd)
 
     _SetClip(pgdd->prcsClip);
 #ifdef KAUAI_WIN32
-    DrawDibDraw(hdd, _hdc, prcs->left, prcs->top, prcs->right - prcs->left, prcs->bottom - prcs->top, pbi, pvNil, 0, 0,
-                -1, -1, DDF_BACKGROUNDPAL);
+    DrawDibDraw(hdd, _hdc, prcs->xpLeft, prcs->ypTop, prcs->xpRight - prcs->xpLeft, prcs->ypBottom - prcs->ypTop, pbi,
+                pvNil, 0, 0, -1, -1, DDF_BACKGROUNDPAL);
     _Flush();
 #else  // !KAUAI_WIN32
     Bug("DrawDib is only for Win32 video playback");
@@ -1886,7 +1889,7 @@ bool FCreateRgn(HRGN *phrgn, RC *prc)
 {
     AssertVarMem(phrgn);
     AssertNilOrVarMem(prc);
-    RCS rcs;
+    RECT rcs;
 
     if (pvNil == prc)
         ClearPb(&rcs, SIZEOF(rcs));
@@ -1985,7 +1988,7 @@ bool FDiffRgn(HRGN hrgnDst, HRGN hrgnSrc, HRGN hrgnSrcSub, bool *pfEmpty)
 bool FRectRgn(HRGN hrgn, RC *prc)
 {
     Assert(hNil != hrgn, "null rgn");
-    RCS rcs;
+    RECT rcs;
     bool fRet;
 
     fRet = GetRgnBox(hrgn, &rcs) != COMPLEXREGION;
@@ -2000,7 +2003,7 @@ bool FRectRgn(HRGN hrgn, RC *prc)
 bool FEmptyRgn(HRGN hrgn, RC *prc)
 {
     Assert(hNil != hrgn, "null rgn");
-    RCS rcs;
+    RECT rcs;
     bool fRet;
 
     fRet = GetRgnBox(hrgn, &rcs) == NULLREGION;

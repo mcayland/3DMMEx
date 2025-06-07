@@ -1122,7 +1122,7 @@ HRGN REGN::HrgnCreate(void)
 {
 #ifdef WIN
     RGNDATAHEADER *prd;
-    RCS *prcs;
+    RECT *prcs;
     REGSC regsc;
     int32_t crcMac, crc;
     HRGN hrgn;
@@ -1134,7 +1134,7 @@ HRGN REGN::HrgnCreate(void)
         return hNil;
     }
 
-    prcs = (RCS *)(prd + 1);
+    prcs = (RECT *)(prd + 1);
     regsc.Init(this, &_rc);
     crc = 0;
     if (!_rc.FEmpty())

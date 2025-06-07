@@ -66,11 +66,13 @@ inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
 #ifdef WIN
 inline void InvalHwndRcs(HWND hwnd, RCS *prcs)
 {
-    InvalidateRect(hwnd, prcs, fFalse);
+    RECT rcs = *prcs;
+    InvalidateRect(hwnd, &rcs, fFalse);
 }
 inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
 {
-    ValidateRect(hwnd, prcs);
+    RECT rcs = *prcs;
+    ValidateRect(hwnd, &rcs);
 }
 #endif // WIN
 

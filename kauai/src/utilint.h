@@ -334,17 +334,9 @@ void AssertBomRgsw(BOM bom, int32_t cb);
 #define AssertBomRgsw(bom, cb)
 #endif //! DEBUG
 
-/****************************************
-    OS level rectangle and point
-****************************************/
-
-#ifdef MAC
-typedef Rect RCS;
-#elif defined(WIN)
-typedef RECT RCS;
-#endif // WIN
-
+// FUTURE: remove redundant types
 typedef class PT PTS;
+typedef class RC RCS;
 
 /****************************************
     Rectangle and point stuff
@@ -450,13 +442,14 @@ class RC
         ypBottom = ypBottomT;
     }
 
-    // for assigning to/from an RCS
-    operator RCS(void);
-    RC &operator=(RCS &rcs);
-    RC(RCS &rcs)
+#ifdef WIN32
+    operator RECT(void);
+    RC &operator=(RECT &rcs);
+    RC(RECT &rcs)
     {
         *this = rcs;
     }
+#endif // WIN32
 
     void Zero(void)
     {

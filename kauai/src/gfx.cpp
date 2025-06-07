@@ -763,7 +763,7 @@ void GNV::ScrollRc(RC *prc, int32_t dxp, int32_t dyp, RC *prc1, RC *prc2)
 
     _MapPtPts(prc->xpLeft + dxp, prc->ypTop + dyp, &pts);
     pt = pts;
-    _pgpt->ScrollRcs(&rcs, pt.xp - rcs.left, pt.yp - rcs.top, &_gdd);
+    _pgpt->ScrollRcs(&rcs, pt.xp - rcs.xpLeft, pt.yp - rcs.ypTop, &_gdd);
 
     GetBadRcForScroll(prc, dxp, dyp, prc1, prc2);
 }
@@ -2021,7 +2021,7 @@ bool GNV::_FMapRcRcs(RC *prc, RCS *prcs)
 
     rc.Map(&_rcSrc, &_rcDst);
     *prcs = RCS(rc);
-    return prcs->left < prcs->right && prcs->top < prcs->bottom;
+    return prcs->xpLeft < prcs->xpRight && prcs->ypTop < prcs->ypBottom;
 }
 
 /***************************************************************************

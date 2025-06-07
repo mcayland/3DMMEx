@@ -260,7 +260,7 @@ INT_PTR CALLBACK _FDlgCore(HWND hdlg, UINT msg, WPARAM w, LPARAM lw)
 
     case WM_INITDIALOG:
         DLGI *pdlgi;
-        RCS rcs;
+        RECT rcs;
 
         // the pdlgi should be in the lParam
         pdlgi = (DLGI *)lw;

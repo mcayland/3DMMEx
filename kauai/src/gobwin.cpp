@@ -110,7 +110,7 @@ KWND GOB::_HwndNewMdi(PSTN pstnTitle)
     {
         // create the client first
         CLIENTCREATESTRUCT ccs;
-        RCS rcs;
+        RECT rcs;
 
         ccs.hWindowMenu = hNil;
         ccs.idFirstChild = 1;
@@ -194,7 +194,7 @@ void GOB::Clean(void)
     AssertThis(0);
     HWND hwnd;
     RC rc, rcT;
-    RCS rcs;
+    RECT rcs;
 
     if (hNil == (hwnd = _HwndGetRc(&rc)))
         return;
