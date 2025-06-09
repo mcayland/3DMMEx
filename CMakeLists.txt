@@ -193,6 +193,7 @@ else()
     message(FATAL_ERROR "Invalid AudioMan library selected: ${3DMM_AUDIOMAN_LIBRARY}")
 endif()
 
+add_custom_target(tests)
 
 add_subdirectory(kauai)
 

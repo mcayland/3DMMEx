@@ -531,6 +531,12 @@ target_link_libraries(
 )
 gtest_discover_tests(KauaiGuiTest)
 
+add_dependencies(
+    tests
+    KauaiTest
+    KauaiGuiTest
+)
+
 # Utilities
 
 # Add a meta target to build all Kauai tools
