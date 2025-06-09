@@ -518,6 +518,19 @@ target_link_libraries(
 )
 gtest_discover_tests(KauaiTest)
 
+add_executable(KauaiGuiTest
+    "${PROJECT_SOURCE_DIR}/kauai/test/gui_test.cpp"
+)
+target_link_libraries(
+    KauaiGuiTest
+    PUBLIC
+    KauaiTestLib
+    KauaiGui
+    KauaiRichText
+    GTest::gtest_main
+)
+gtest_discover_tests(KauaiGuiTest)
+
 # Utilities
 
 # Add a meta target to build all Kauai tools
