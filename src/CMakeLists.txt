@@ -49,6 +49,7 @@ target_link_libraries(engine
     KauaiDoc
     KauaiRichText
     bren
+    3DMMForever::AudioMan  # required for sound recorder
 )
 
 # On non-windows WIN32 is a no-op
