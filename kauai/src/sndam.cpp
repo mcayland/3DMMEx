@@ -706,6 +706,11 @@ SDAM::~SDAM(void)
 
     if (_fAudioManInited && 0 == _pamix->Release())
         _pamix = pvNil;
+
+#ifdef DEBUG
+    // check for Audioman memory leaks
+    DetectLeaks(fTrue, fFalse);
+#endif // DEBUG
 }
 
 #ifdef DEBUG

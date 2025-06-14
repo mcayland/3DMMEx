@@ -682,10 +682,6 @@ void APPB::_Loop(void)
     }
 }
 
-#ifdef WIN
-STDAPI_(int) DetectLeaks(BOOL fDebugOut, BOOL fMessageBox);
-#endif // WIN
-
 /***************************************************************************
     Clean up routine for the app base class.
 ***************************************************************************/
@@ -705,13 +701,6 @@ void APPB::_CleanUp(void)
         psndm->Activate(fFalse);
         ReleasePpo(&psndm);
     }
-
-#ifdef WIN
-#ifdef DEBUG
-    // check for Audioman memory leaks
-    DetectLeaks(fTrue, fFalse);
-#endif // DEBUG
-#endif // WIN
 
     GOB::ShutDown();
     FIL::ShutDown();
