@@ -237,9 +237,6 @@ target_link_libraries(
 add_library(
     KauaiSound
     "${PROJECT_SOURCE_DIR}/kauai/src/sndm.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     "${PROJECT_SOURCE_DIR}/kauai/src/midi.cpp"
 )
 target_link_libraries(
@@ -247,23 +244,38 @@ target_link_libraries(
     PUBLIC
     KauaiGroup
     KauaiStream
-    3DMMForever::AudioMan
-    $<$<PLATFORM_ID:Windows>:msacm32>
-    $<$<PLATFORM_ID:Windows>:winmm>
 )
 
-if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
-
-    # The static library requires a stub for some old MSVC floating-point division helper functions
-    add_library(
-        FDivStub
-        "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"
+if (3DMM_GUI STREQUAL "Win32")
+    # Win32: Use AudioMan for wave sounds and winmm MIDI player for music
+    target_sources(
+        KauaiSound
+        PRIVATE
+        "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
     target_link_libraries(
         KauaiSound
-        PRIVATE
-        FDivStub
+        PUBLIC
+        3DMMForever::AudioMan
+        msacm32
+        winmm
     )
+    if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
+        # The static library requires a stub for some old MSVC floating-point division helper functions
+        add_library(
+            FDivStub
+            "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"
+        )
+        target_link_libraries(
+            KauaiSound
+            PRIVATE
+            FDivStub
+        )
+    endif()
+else()
+    message(WARNING "Sound playback disabled")
 endif()
 
 # Pic: vector graphics support

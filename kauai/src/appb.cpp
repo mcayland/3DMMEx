@@ -625,6 +625,7 @@ bool APPB::_FInitSound(int32_t wav)
     if (pvNil == (vpsndm = SNDM::PsndmNew()))
         return fTrue;
 
+#if defined(KAUAI_WIN32)
     if (pvNil != (psndv = SDAM::PsdamNew(wav)))
     {
         vpsndm->FAddDevice(kctgWave, psndv);
@@ -637,6 +638,7 @@ bool APPB::_FInitSound(int32_t wav)
         vpsndm->FAddDevice(kctgMidi, psndv);
         ReleasePpo(&psndv);
     }
+#endif // KAUAI_WIN32
 
     return fTrue;
 }
