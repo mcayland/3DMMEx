@@ -8,18 +8,30 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef WIN32
 #include <windows.h>
+#endif // WIN32
 
 #include "brender.h"
 
 static void BR_CALLBACK BrStdioWarning(char *message)
 {
-    MessageBox(0, message, "BRender Warning", MB_OK);
+#ifdef WIN32
+    MessageBoxA(0, message, "BRender Warning", MB_OK);
+#else  // !WIN32
+    printf("BRender Warning: %s\n", message);
+#endif // WIN32
 }
 
 static void BR_CALLBACK BrStdioError(char *message)
 {
-    MessageBox(0, message, "BRender Fatal Error", MB_OK);
+#ifdef WIN32
+    MessageBoxA(0, message, "BRender Fatal Error", MB_OK);
+#else  // !WIN32
+    printf("BRender Fatal Error: %s\n", message);
+#endif // WIN32
+
     exit(10);
 }
 
