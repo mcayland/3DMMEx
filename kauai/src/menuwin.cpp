@@ -14,8 +14,8 @@
 #include "frame.h"
 ASSERTNAME
 
-const achar kchList = '_';
-const achar kchFontList = '$';
+const achar kchList = ChLit('_');
+const achar kchFontList = ChLit('$');
 
 PMUB vpmubCur;
 RTCLASS(MUB)

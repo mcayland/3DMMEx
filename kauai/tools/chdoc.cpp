@@ -516,7 +516,7 @@ DCLB::DCLB(PDOCB pdocb, PGCB pgcb) : DDG(pdocb, pgcb)
     _dypHeader = 0;
     _onn = vpappb->OnnDefFixed();
     gnv.SetOnn(_onn);
-    ch = 'A';
+    ch = ChLit('A');
     gnv.GetRcFromRgch(&rc, &ch, 1, 0, 0);
     _dypLine = rc.Dyp();
     _dxpChar = rc.Dxp();

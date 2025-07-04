@@ -300,7 +300,7 @@ uint32_t FNI::Grfvk(void)
     uint32_t grfvk = fvkNil;
 
     psz = _stnFile.Psz();
-    if (_stnFile.Cch() < 3 || psz[1] != ':' || psz[2] != '\\' && psz[2] != '/')
+    if (_stnFile.Cch() < 3 || psz[1] != ChLit(':') || psz[2] != ChLit('\\') && psz[2] != ChLit('/'))
         return fvkNetwork;
 
     stn.FFormatSz(PszLit("%c:\\"), psz[0]);
@@ -440,7 +440,7 @@ tribool FNI::TExists(void)
         stn = _stnFile;
         pstn = &stn;
         cch = stn.Cch();
-        Assert(cch > 0 && (stn.Psz()[cch - 1] == '\\' || stn.Psz()[cch - 1] == '/'), 0);
+        Assert(cch > 0 && (stn.Psz()[cch - 1] == ChLit('\\') || stn.Psz()[cch - 1] == ChLit('/')), 0);
         stn.Delete(cch - 1);
     }
 
@@ -875,7 +875,7 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, int32_t cftg, uint32_t grffne)
 
     if (pfniDir == pvNil)
     {
-        _fesCur.chVol = 'A';
+        _fesCur.chVol = ChLit('A');
         _fesCur.grfvol = GetLogicalDrives();
     }
     else
@@ -936,7 +936,7 @@ bool FNE::FNextFni(FNI *pfni, uint32_t *pgrffneOut, uint32_t grffneIn)
         {
         }
 
-        if (_fesCur.chVol > 'Z')
+        if (_fesCur.chVol > ChLit('Z'))
             goto LDone;
         // we've got one
         stn.FFormatSz(PszLit("%c:\\"), (int32_t)_fesCur.chVol++);

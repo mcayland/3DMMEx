@@ -23,7 +23,7 @@ RTCLASS(TXHG)
 RTCLASS(HBAL)
 RTCLASS(HBTN)
 
-const achar kchHelpString = '~';
+const achar kchHelpString = ChLit('~');
 
 /***************************************************************************
     Constructor for a help text document.
@@ -153,7 +153,7 @@ bool TXHD::_FReadChunk(PCFL pcfl, CTG ctg, CNO cno, PSTRG pstrg, uint32_t grftxh
             }
 
             cpMin = cp++;
-            for (stid = 0; cp < cpMac && FIn(lw = _ChFetch(cp) - '0', 0, 10); cp++)
+            for (stid = 0; cp < cpMac && FIn(lw = _ChFetch(cp) - ChLit('0'), 0, 10); cp++)
                 stid = stid * 10 + lw;
             if (!pstrg->FGet(stid, &stn))
                 Warn("string missing");

@@ -2327,7 +2327,7 @@ bool CHLX::FGetPath(FNI *pfni)
         return fFalse;
     }
 
-    if (!_FFetchRgch(&ch) || '"' != ch)
+    if (!_FFetchRgch(&ch) || ChLit('"') != ch)
         return fFalse;
     _Advance();
 
@@ -2337,7 +2337,7 @@ bool CHLX::FGetPath(FNI *pfni)
         if (!_FFetchRgch(&ch))
             return fFalse;
         _Advance();
-        if ('"' == ch)
+        if (ChLit('"') == ch)
             break;
         if (kchReturn == ch)
             return fFalse;
