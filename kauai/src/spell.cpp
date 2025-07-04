@@ -14,6 +14,11 @@ ASSERTNAME
 
 RTCLASS(SPLC)
 
+#ifdef MIR
+#undef MIR
+#define MIR(foo) MAKEINTRESOURCEA(foo)
+#endif // MIR
+
 /***************************************************************************
     Constructor for the spell checker.
 ***************************************************************************/
@@ -286,12 +291,19 @@ bool SPLC::_FLoadDictionary(SC_LID sclid, PSZ psz, SC_MDRS *pmdrs)
         return fFalse;
     }
 
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
+
     if (secNOERRORS != SpellOpenMdr(_splid, psz, pvNil, fFalse, fTrue, sclid, pmdrs))
     {
         return fFalse;
     }
 
     return fTrue;
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -309,13 +321,18 @@ bool SPLC::_FLoadUserDictionary(PSZ psz, SC_UDR *pudr, bool fCreate)
         Bug("spell checker not initialized");
         return fFalse;
     }
-
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
     if (secNOERRORS != SpellOpenUdr(_splid, psz, FPure(fCreate), IgnoreAlwaysProp, pudr, &fReadOnly))
     {
         return fFalse;
     }
 
     return fTrue;
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -330,11 +347,16 @@ bool SPLC::FSetOptions(uint32_t grfsplc)
         Bug("spell checker not initialized");
         return fFalse;
     }
-
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
     if (secNOERRORS != SpellOptions(_splid, grfsplc))
         return fFalse;
 
     return fTrue;
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -349,6 +371,12 @@ bool SPLC::FCheck(achar *prgch, int32_t cch, int32_t *pichMinBad, int32_t *pichL
     AssertVarMem(pichLimBad);
     AssertPo(pstnReplace, 0);
     AssertVarMem(pscrs);
+
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
 
     SC_SIB sib;
     SC_SRB srb;
@@ -401,6 +429,7 @@ bool SPLC::FCheck(achar *prgch, int32_t cch, int32_t *pichMinBad, int32_t *pichL
     *pichMinBad = srb.ichError;
     *pichLimBad = srb.ichError + srb.cchError;
     return fTrue;
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -412,6 +441,12 @@ bool SPLC::FSuggest(achar *prgch, int32_t cch, bool fFirst, PSTN pstn)
     AssertIn(cch, 1, ksuMax);
     AssertPvCb(prgch, cch * SIZEOF(achar));
     AssertPo(pstn, 0);
+
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
 
     SC_SIB sib;
     SC_SRB srb;
@@ -479,6 +514,7 @@ bool SPLC::FSuggest(achar *prgch, int32_t cch, bool fFirst, PSTN pstn)
             break;
         }
     }
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -495,7 +531,13 @@ bool SPLC::FIgnoreAll(PSTN pstn)
         return fFalse;
     }
 
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
     return secNOERRORS == SpellAddUdr(_splid, udrIgnoreAlways, pstn->Psz());
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -512,9 +554,14 @@ bool SPLC::FChange(PSTN pstnSrc, PSTN pstnDst, bool fAll)
         Bug("spell checker not initialized");
         return fFalse;
     }
-
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
     return secNOERRORS ==
            SpellAddChangeUdr(_splid, fAll ? udrChangeAlways : udrChangeOnce, pstnSrc->Psz(), pstnDst->Psz());
+#endif // UNICODE
 }
 
 /***************************************************************************
@@ -530,8 +577,13 @@ bool SPLC::FAddToUser(PSTN pstn)
         Bug("user dictionary not loaded");
         return fFalse;
     }
-
+#ifdef UNICODE
+    // CSAPI used in Kauai does not support Unicode
+    RawRtn();
+    return fFalse;
+#else  // !UNICODE
     return secNOERRORS == SpellAddUdr(_splid, _udr, pstn->Psz());
+#endif // UNICODE
 }
 
 /***************************************************************************
