@@ -618,7 +618,7 @@ bool BKGD::FWritePlaceFile(BRS xrPlace, BRS yrPlace, BRS zrPlace)
     int32_t zr1 = BrScalarToInt(zrPlace);
     int32_t zr2 = LwAbs((int32_t)(1000000.0 * BrScalarToFloat(zrPlace - BrIntToScalar(zr1))));
 
-    if (!stnFile.FFormatSz("%s-cam.1-%d.pos", &_stn, _icam + 1))
+    if (!stnFile.FFormatSz(PszLit("%s-cam.1-%d.pos"), &_stn, _icam + 1))
         goto LFail;
     if (!fni.FBuildFromPath(&stnFile))
         goto LFail;
@@ -628,7 +628,7 @@ bool BKGD::FWritePlaceFile(BRS xrPlace, BRS yrPlace, BRS zrPlace)
         pfil = FIL::PfilCreate(&fni);
     if (pvNil == pfil)
         goto LFail;
-    if (!stnData.FFormatSz("NEW_ACTOR_POS %d.%06d %d.%06d %d.%06d\n\r", xr1, xr2, yr1, yr2, zr1, zr2))
+    if (!stnData.FFormatSz(PszLit("NEW_ACTOR_POS %d.%06d %d.%06d %d.%06d\n\r"), xr1, xr2, yr1, yr2, zr1, zr2))
     {
         goto LFail;
     }

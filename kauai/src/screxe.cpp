@@ -1431,7 +1431,7 @@ PSCPT SCPT::PscptRead(PCFL pcfl, CTG ctg, CNO cno)
 
         if (!pcfl->FGetName(ctg, cno, &pscpt->_stnSrcChunk))
         {
-            pscpt->_stnSrcChunk = "";
+            pscpt->_stnSrcChunk = PszLit("");
         }
     }
 #endif // DEBUG

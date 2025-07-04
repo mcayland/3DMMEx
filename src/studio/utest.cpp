@@ -660,7 +660,7 @@ bool APP::_FEnsureAudio(void)
 ***************************************************************************/
 bool APP::_FEnsureVideo(void)
 {
-    if (wHaveMCI("AVIVIDEO"))
+    if (wHaveMCI(PszLit("AVIVIDEO")))
     {
         // MCI for video is not installed
         wInstallComp(IC_MCI_VFW);

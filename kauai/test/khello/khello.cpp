@@ -338,7 +338,7 @@ bool MessageLogGob::FCmdTrackMouse(PCMD_MOUSE pcmd)
     {
         if ((1 << ibit) & pcmd->grfcust)
         {
-            stnCmd.FAppendSz(" ");
+            stnCmd.FAppendSz(PszLit(" "));
             stnCmd.FAppendSz(mpfcustpsz[ibit]);
         }
     }

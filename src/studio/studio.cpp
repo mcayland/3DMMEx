@@ -246,7 +246,7 @@ bool STDIO::_FOpenStudio(bool fPaletteFade)
 
     if (!psceg->FRunScript(pscpt, &lwParm, 1))
     {
-        vpappb->TGiveAlertSz("Running script failed", bkOk, cokExclamation);
+        vpappb->TGiveAlertSz(PszLit("Running script failed"), bkOk, cokExclamation);
         goto LFail;
     }
 
