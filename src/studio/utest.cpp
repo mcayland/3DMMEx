@@ -2487,7 +2487,7 @@ LFail:
     the end of the string.  Exception: if the space character is surrounded
     by double quotes, this function skips by it.
 ***************************************************************************/
-void APP::_SkipToSpace(char **ppch)
+void APP::_SkipToSpace(achar **ppch)
 {
     AssertBaseThis(0);
     AssertVarMem(ppch);
@@ -2505,7 +2505,7 @@ void APP::_SkipToSpace(char **ppch)
 /***************************************************************************
     Advances *ppch to the next non-space character.
 ***************************************************************************/
-void APP::_SkipSpace(char **ppch)
+void APP::_SkipSpace(achar **ppch)
 {
     AssertBaseThis(0);
     AssertVarMem(ppch);
