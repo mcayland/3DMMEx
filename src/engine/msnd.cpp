@@ -346,7 +346,9 @@ bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, int32_t sty, CNO *pcno, PSTN p
     ReleasePpo(&pfilNew);
 
     // open the file as a pSound
-    if (FAILED(AllocSoundFromFile(&psnd, stn.Psz(), 0, fTrue, pvNil)))
+    SZS szs;
+    stn.GetSzs(szs);
+    if (FAILED(AllocSoundFromFile(&psnd, szs, 0, fTrue, pvNil)))
         goto LFailPushError;
     if (FAILED(psnd->GetFormat((LPWAVEFORMATEX)&wfxSrc, SIZEOF(WAVEFORMATEX))))
         goto LFailPushError;

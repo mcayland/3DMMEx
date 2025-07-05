@@ -397,7 +397,9 @@ bool SREC::FSave(PFNI pfni)
         pfni->GetStnPath(&stn);
 
         // now save _psnd to the FNI passed in
-        if (FAILED(SoundToFileAsWave(_psnd, stn.Psz())))
+        SZS szs;
+        stn.GetSzs(szs);
+        if (FAILED(SoundToFileAsWave(_psnd, szs)))
         {
             PushErc(ercSocWaveSaveFailure);
             return fFalse;
