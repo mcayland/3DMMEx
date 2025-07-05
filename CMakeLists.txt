@@ -109,6 +109,13 @@ if (CMAKE_C_BYTE_ORDER MATCHES LITTLE_ENDIAN)
     add_compile_definitions ("LITTLE_ENDIAN")
 endif()
 
+option(3DMM_UNICODE "Enable Unicode" OFF)
+if (3DMM_UNICODE)
+    add_compile_definitions(
+        UNICODE
+        _UNICODE
+    )
+endif()
 
 # Configure version header
 execute_process(
