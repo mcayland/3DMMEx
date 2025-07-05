@@ -1202,7 +1202,7 @@ bool EDSL::FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ic
     {
         SortLw(&ich1, &ich2);
         if (_cch > ich2)
-            BltPb(_rgch + ich2, _rgch + ich1, _cch - ich2);
+            BltPb(_rgch + ich2, _rgch + ich1, (_cch - ich2) * SIZEOF(achar));
         _cch -= (ich2 - ich1);
         _ichAnchor = _ichOther = ich1;
     }
@@ -1213,8 +1213,8 @@ bool EDSL::FReplace(const achar *prgch, int32_t cchIns, int32_t ich1, int32_t ic
         if (_cch > kcchMaxEdsl - cchIns)
             _cch = kcchMaxEdsl - cchIns;
         if (_cch > ich1)
-            BltPb(_rgch + ich1, _rgch + ich1 + cchIns, _cch - ich1);
-        CopyPb(prgch, _rgch + ich1, cchIns);
+            BltPb(_rgch + ich1, _rgch + ich1 + cchIns, (_cch - ich1) * SIZEOF(achar));
+        CopyPb(prgch, _rgch + ich1, cchIns * SIZEOF(achar));
         _cch += cchIns;
         _ichAnchor = _ichOther = ich1 + cchIns;
     }
@@ -1266,7 +1266,7 @@ int32_t EDSL::CchFetch(achar *prgch, int32_t ich, int32_t cchWant)
     AssertPvCb(prgch, cchWant * SIZEOF(achar));
 
     if (0 < (cchWant = LwBound(cchWant, 0, IchMac() + 1 - ich)))
-        CopyPb(_rgch + ich, prgch, cchWant);
+        CopyPb(_rgch + ich, prgch, cchWant * SIZEOF(achar));
     return cchWant;
 }
 
