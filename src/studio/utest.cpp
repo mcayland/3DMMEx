@@ -3310,7 +3310,7 @@ char *LoadGenResource(HINSTANCE hInst, LPCSTR lpResource, LPCSTR lpType)
     HRSRC hResource;
     HGLOBAL hGbl;
 
-    hResource = FindResource(hInst, lpResource, lpType);
+    hResource = FindResourceA(hInst, lpResource, lpType);
 
     if (hResource == NULL)
         return (NULL);
@@ -3333,7 +3333,8 @@ bool APP::FCmdInfo(PCMD pcmd)
     int32_t idit;
     bool fRunInWindowNew;
     STN stn;
-    STN stnT;
+    STN stnT, stnGitTag;
+    SZS szsT = szGitTag;
     bool fSaveChanges;
     int32_t lwValue = 0;
     bool fValue = fFalse;
@@ -3345,11 +3346,12 @@ bool APP::FCmdInfo(PCMD pcmd)
         return fTrue;
     pdlg->PutRadio(iditRenderModeInfo, _fSlowCPU ? 1 : 0);
 
-    stn = "3DMMEx";
+    stn = PszLit("3DMMEx");
 #ifdef DEBUG
     stn.FAppendSz(PszLit(" (Debug)"));
 #endif // DEBUG
-    stnT.FFormatSz(PszLit(" %d.%d.%d (%z)"), rmj, rmm, rup, PszLit(szGitTag));
+    stnGitTag.SetSzs(szsT);
+    stnT.FFormatSz(PszLit(" %d.%d.%d (%s)"), rmj, rmm, rup, &stnGitTag);
     stn.FAppendStn(&stnT);
     pdlg->FPutStn(iditProductNameInfo, &stn);
 
@@ -3509,7 +3511,7 @@ bool APP::FCmdInfo(PCMD pcmd)
 #ifdef WIN
 #ifdef UNICODE
 typedef LONG(WINAPI *PFNCHDS)(LPDEVMODEW lpDevMode, DWORD dwFlags);
-const PSZ kpszChds = PszLit("ChangeDisplaySettingsW");
+const char kpszChds[] = "ChangeDisplaySettingsW";
 #else
 typedef LONG(WINAPI *PFNCHDS)(LPDEVMODEA lpDevMode, DWORD dwFlags);
 const PCSZ kpszChds = PszLit("ChangeDisplaySettingsA");
