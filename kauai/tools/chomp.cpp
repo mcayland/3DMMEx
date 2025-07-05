@@ -23,7 +23,7 @@ int __cdecl main(int cpszs, char *prgpszs[])
     MSSIO mssioError(stderr);
     bool fCompile = fTrue;
     bool fSearchPath = fFalse;
-    PCSZ pszSearchPath = pvNil;
+    PSZS pszSearchPath = pvNil;
 
 #ifdef UNICODE
     fprintf(stderr, "\nMicrosoft (R) Chunky File Compiler (Unicode; " Debug("Debug; ") __DATE__ "; " __TIME__ ")\n");
@@ -120,10 +120,15 @@ int __cdecl main(int cpszs, char *prgpszs[])
             goto LUsage;
         }
 
-        if (!chcm.FSetSearchPath(pszSearchPath))
+        if (pszSearchPath != pvNil)
         {
-            fprintf(stderr, "Could not set search path\n\n");
-            goto LUsage;
+            STN stnSearchPath;
+            stnSearchPath.SetSzs(pszSearchPath);
+            if (!chcm.FSetSearchPath(stnSearchPath.Psz()))
+            {
+                fprintf(stderr, "Could not set search path\n\n");
+                goto LUsage;
+            }
         }
 
         pcfl = chcm.PcflCompile(&fniSrc, &fniDst, &mssioError);
