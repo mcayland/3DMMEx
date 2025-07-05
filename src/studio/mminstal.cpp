@@ -82,7 +82,7 @@ WORD wHaveWaveDevice(DWORD dwReqFormats)
     if (0 == wNumWavDev)
     {
 #ifdef _DEBUG
-        MessageBox(NULL, "No WAVE devices on your machine.", NULL, MB_ICONINFORMATION);
+        MessageBox(NULL, TEXT("No WAVE devices on your machine."), NULL, MB_ICONINFORMATION);
 #endif
         return (HWD_NODEVICE);
     }
@@ -108,21 +108,23 @@ WORD wHaveWaveDevice(DWORD dwReqFormats)
         // We got the capabilities OK but the formats didn't match
     case 0:
 #ifdef _DEBUG
-        MessageBox(NULL, "Found 1 or more WAVE devices, but none support the desired PCM format.", NULL, MB_ICONSTOP);
+        MessageBox(NULL, TEXT("Found 1 or more WAVE devices, but none support the desired PCM format."), NULL,
+                   MB_ICONSTOP);
 #endif
         return (HWD_NOFORMAT);
 
         // There wasn't an installed driver for the WAVE device
     case MMSYSERR_NODRIVER:
 #ifdef _DEBUG
-        MessageBox(NULL, "Found 1 or more WAVE devices, but there was no driver installed for it.", NULL, MB_ICONSTOP);
+        MessageBox(NULL, TEXT("Found 1 or more WAVE devices, but there was no driver installed for it."), NULL,
+                   MB_ICONSTOP);
 #endif
         return (HWD_NODRIVER);
     }
 
     // Some other error occured.
 #ifdef _DEBUG
-    MessageBox(NULL, "Found 1 or more WAVE devices, but an error occured getting the device capabilities.", NULL,
+    MessageBox(NULL, TEXT("Found 1 or more WAVE devices, but an error occured getting the device capabilities."), NULL,
                MB_ICONSTOP);
 #endif
     return (HWD_ERROR);
@@ -195,7 +197,7 @@ WORD wHaveACM()
         (WOC.vDriverVersion < 0x0332)) // ACM ver is less than 3.50 (for Win32) HIBYTE=Major LOBYTE=Minor ver num
     {
 #ifdef _DEBUG
-        MessageBox(NULL, "ACM not installed or it is an old version.", NULL, MB_ICONSTOP);
+        MessageBox(NULL, TEXT("ACM not installed or it is an old version."), NULL, MB_ICONSTOP);
 #endif
         return (1);
     }
@@ -240,7 +242,7 @@ WORD wHaveACMCodec(DWORD dwReqCodec)
     if (MMSYSERR_NOERROR != mmRet)
     {
 #ifdef _DEBUG
-        MessageBox(NULL, "Requested audio codec is not installed or is not active.", NULL, MB_ICONSTOP);
+        MessageBox(NULL, TEXT("Requested audio codec is not installed or is not active."), NULL, MB_ICONSTOP);
 #endif
         return (HAC_NOCODEC);
     }
@@ -255,7 +257,7 @@ WORD wHaveACMCodec(DWORD dwReqCodec)
     }
 
 #ifdef _DEBUG
-    MessageBox(NULL, "codec is installed but won't convert to PCM.", acmFTD.szFormatTag, MB_ICONSTOP);
+    MessageBox(NULL, TEXT("codec is installed but won't convert to PCM."), acmFTD.szFormatTag, MB_ICONSTOP);
 #endif
     return (HAC_NOCONVERT);
 }
@@ -284,7 +286,7 @@ WORD wHaveICMCodec(DWORD dwReqCodec)
     if (FALSE == ICInfo(ICTYPE_VIDEO, dwReqCodec, &icInfo))
     {
 #ifdef _DEBUG
-        MessageBox(NULL, "No ICM or no codec installed.", NULL, MB_ICONSTOP);
+        MessageBox(NULL, TEXT("No ICM or no codec installed."), NULL, MB_ICONSTOP);
 #endif
         return (HIC_NOCODEC);
     }
@@ -318,7 +320,7 @@ WORD wHaveMCI(PCSZ dwDeviceType)
     MCIERROR mciErr;
 
     mciOpen.dwCallback = NULL;
-    mciOpen.lpstrDeviceType = (LPSTR)dwDeviceType;
+    mciOpen.lpstrDeviceType = (LPTSTR)dwDeviceType;
     mciOpen.lpstrElementName = NULL;
     mciOpen.lpstrAlias = NULL;
 
@@ -333,9 +335,9 @@ WORD wHaveMCI(PCSZ dwDeviceType)
 #ifdef _DEBUG
     else
     {
-        char szErrBuf[128] = "Memory Error";
+        TCHAR szErrBuf[128] = TEXT("Memory Error");
         mciGetErrorString(mciErr, szErrBuf, 128);
-        MessageBox(NULL, szErrBuf, "MCI not installed", MB_ICONSTOP);
+        MessageBox(NULL, szErrBuf, TEXT("MCI not installed"), MB_ICONSTOP);
     }
 #endif
 
@@ -377,8 +379,8 @@ BOOL fRunningWin95(void)
 
 ******************************************************************************/
 
-#define HOW_NEVER_REBOOT "0" // Whatever happens the machine will not be rebooted.
-#define MMINF "MOTOWN.INF"
+#define HOW_NEVER_REBOOT TEXT("0") // Whatever happens the machine will not be rebooted.
+#define MMINF TEXT("MOTOWN.INF")
 
 // The following 2 arrays must parallel each other between Win95 setup sections & NT driver names
 
@@ -414,10 +416,10 @@ WORD wInstallComp(WORD wComp)
         lstrcat(szCommandLine, szSectionName);
 
         // Add <reboot mode> <inf name>
-        lstrcat(szCommandLine, " " HOW_NEVER_REBOOT " " MMINF);
+        lstrcat(szCommandLine, TEXT(" ") HOW_NEVER_REBOOT TEXT(" ") MMINF);
 
 #ifdef _DEBUG
-        MessageBox(NULL, szCommandLine, "Win95 setup command", MB_ICONINFORMATION);
+        MessageBox(NULL, szCommandLine, TEXT("Win95 setup command"), MB_ICONINFORMATION);
 #endif
 
         // Now execute the command line to cause the actual install
@@ -451,7 +453,7 @@ WORD wInstallComp(WORD wComp)
         }
 
 #ifdef _DEBUG
-        MessageBox(NULL, szCommandLine, "Error launching command line", MB_ICONINFORMATION);
+        MessageBox(NULL, szCommandLine, TEXT("Error launching command line"), MB_ICONINFORMATION);
 #endif
 
         return (1);
