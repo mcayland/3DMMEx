@@ -11,14 +11,15 @@ void GetTestResourcePath(PFNI pfniTestResourcePath)
     STN stnTestResourcePath;
     SZ szEnv;
     FillPb(szEnv, SIZEOF(szEnv), 0);
-    if (GetEnvironmentVariable(PszLit("KAUAI_TEST_RESOURCES"), szEnv, SIZEOF(szEnv)) != 0)
+    if (GetEnvironmentVariable(PszLit("KAUAI_TEST_RESOURCES"), szEnv, CvFromRgv(szEnv)) != 0)
     {
         stnTestResourcePath = szEnv;
     }
     else
     {
         // Use path defined at compile time
-        stnTestResourcePath = PszLit(KAUAI_TEST_RESOURCES_PATH);
+        SZS szTestPath = KAUAI_TEST_RESOURCES_PATH;
+        stnTestResourcePath.SetSzs(szTestPath);
     }
 
     ASSERT_TRUE(pfniTestResourcePath->FBuildFromPath(&stnTestResourcePath, kftgDir))

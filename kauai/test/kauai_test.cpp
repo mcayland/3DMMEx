@@ -400,7 +400,7 @@ TEST(KauaiTests, TestCfl)
     for (rel = 0; rel < relLim; rel++)
     {
         perel = &dnrel[rel];
-        EXPECT_TRUE(pcfl->FAddPv(perel->psz, CchSz(perel->psz), perel->ctg, &perel->cno));
+        EXPECT_TRUE(pcfl->FAddPv(perel->psz, CchSz(perel->psz) * SIZEOF(achar), perel->ctg, &perel->cno));
         stn = perel->psz;
         EXPECT_TRUE(pcfl->FSetName(perel->ctg, perel->cno, &stn));
         if (perel->relPar1 < relLim)
@@ -603,7 +603,7 @@ TEST(KauaiTests, TestStnFormat)
     stn.SetNil();
     stn.FFormatSz(PszLit("%c%c"), ChLit('3'), ChLit('D'));
     AssertPo(&stn, 0);
-    EXPECT_STREQ("3D", stn.Psz());
+    EXPECT_STREQ(PszLit("3D"), stn.Psz());
 
     // STN strings
     stnT = PszLit("3D Movie Maker");
@@ -629,37 +629,37 @@ TEST(KauaiTests, TestStnFormat)
     stn.SetNil();
     stn.FFormatSz(PszLit("%x"), 0x3d);
     AssertPo(&stn, 0);
-    EXPECT_STREQ("3D", stn.Psz());
+    EXPECT_STREQ(PszLit("3D"), stn.Psz());
 
     stn.SetNil();
     stn.FFormatSz(PszLit("0x%x"), -1);
     AssertPo(&stn, 0);
-    EXPECT_STREQ("0xFFFFFFFF", stn.Psz());
+    EXPECT_STREQ(PszLit("0xFFFFFFFF"), stn.Psz());
 
     // Signed decimal
     stn.SetNil();
     stn.FFormatSz(PszLit("%d, %d"), 0x3d, -0x3d);
     AssertPo(&stn, 0);
-    EXPECT_STREQ("61, -61", stn.Psz());
+    EXPECT_STREQ(PszLit("61, -61"), stn.Psz());
 
     // Unsigned decimal
     stn.SetNil();
     stn.FFormatSz(PszLit("%u, %u"), 0x3d, -0x3d);
     AssertPo(&stn, 0);
-    EXPECT_STREQ("61, 4294967235", stn.Psz());
+    EXPECT_STREQ(PszLit("61, 4294967235"), stn.Psz());
 
     // Width
     stn.SetNil();
     stn.FFormatSz(PszLit("%3d, %-3d, %03d"), 0x3d, 0x3d, 0x3d);
     AssertPo(&stn, 0);
-    EXPECT_STREQ(" 61, 61 , 061", stn.Psz());
+    EXPECT_STREQ(PszLit(" 61, 61 , 061"), stn.Psz());
 
     // Using an STN as a format string
     STN stnFormat = PszLit("%u%c %s %z");
-    stnT = "Movie";
+    stnT = PszLit("Movie");
     stn.SetNil();
     stn.FFormat(&stnFormat, 3, ChLit('D'), &stnT, PszLit("Maker"));
     AssertPo(&stnT, 0);
     AssertPo(&stn, 0);
-    EXPECT_STREQ("3D Movie Maker", stn.Psz());
+    EXPECT_STREQ(PszLit("3D Movie Maker"), stn.Psz());
 }

@@ -32,6 +32,6 @@ void WarnProc(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg)
 {
 #ifdef WIN32
     // Log warnings to debugger if attached
-    OutputDebugString(pszsMsg);
+    OutputDebugStringA(pszsMsg);
 #endif // WIN32
 }
