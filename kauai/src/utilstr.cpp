@@ -15,6 +15,10 @@ ASSERTNAME
 
 #include "chtrans.h"
 
+// Check sizes of character types that are used in the file format
+VERIFY_STRUCT_SIZE(schar, 1);
+VERIFY_STRUCT_SIZE(wchar, 2);
+
 const achar vrgchHex[] = PszLit("0123456789ABCDEF");
 
 /***************************************************************************
