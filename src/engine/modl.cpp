@@ -288,12 +288,14 @@ PMODL MODL::PmodlReadFromDat(FNI *pfni)
     if (pvNil == pmodl)
         goto LFail;
     pfni->GetStnPath(&stn);
-    pmodl->_pbmdl = BrModelLoad(stn.Psz());
+    SZS szs;
+    stn.GetSzs(szs);
+    pmodl->_pbmdl = BrModelLoad(szs);
     if (pvNil == pmodl->_pbmdl)
         goto LFail;
     pmodl->_pbmdl->flags |= BR_MODF_KEEP_ORIGINAL;
     BrModelPrepare(pmodl->_pbmdl, BR_MPREP_ALL);
-    Assert(CchSz(pmodl->_pbmdl->identifier) >= SIZEOF(void *), "no room for pmodl ptr");
+    Assert(CchSz((PCSZ)(pmodl->_pbmdl->identifier)) >= SIZEOF(void *), "no room for pmodl ptr");
     CopyPb(&pmodl, pmodl->_pbmdl->identifier, SIZEOF(void *));
     AssertPo(pmodl, 0);
     return pmodl;

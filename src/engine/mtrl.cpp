@@ -59,9 +59,8 @@ PMTRL MTRL::PmtrlNew(int32_t iclrBase, int32_t cclr)
     // An arbitrary 8-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    STN stnMaterialName;
-    stnMaterialName = PszLit("12345678");
-    pmtrl->_pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
+    SZS szsMaterialName = "12345678";
+    pmtrl->_pbmtl = BrMaterialAllocate((char *)szsMaterialName);
     if (pvNil == pmtrl->_pbmtl)
     {
         ReleasePpo(&pmtrl);
@@ -145,9 +144,8 @@ bool MTRL::_FInit(PCRF pcrf, CTG ctg, CNO cno)
     // An arbitrary 8-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    STN stnMaterialName;
-    stnMaterialName = PszLit("12345678");
-    _pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
+    SZS szsMaterialName = "12345678";
+    _pbmtl = BrMaterialAllocate((char *)szsMaterialName);
     if (pvNil == _pbmtl)
         return fFalse;
     CopyPb(&pmtrlThis, _pbmtl->identifier, SIZEOF(PMTRL));
@@ -220,10 +218,10 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     AssertPo(pfni, ffniFile);
 
     STN stn;
-    STN stnMaterialName;
     PMTRL pmtrl;
     PBMTL pbmtl;
     PTMAP ptmap;
+    SZS szsMaterialName = "12345678";
 
     pmtrl = NewObj MTRL;
     if (pvNil == pmtrl)
@@ -232,8 +230,7 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     // An arbitrary 8-character string is passed to BrMaterialAllocate (to
     // be stored in a string pointed to by _pbmtl->identifier).  The
     // contents of the string are then replaced by the "this" pointer.
-    stnMaterialName = PszLit("12345678");
-    pmtrl->_pbmtl = BrMaterialAllocate(stnMaterialName.Psz());
+    pmtrl->_pbmtl = BrMaterialAllocate((char *)szsMaterialName);
     if (pvNil == pmtrl->_pbmtl)
         goto LFail;
     pbmtl = pmtrl->_pbmtl;
@@ -246,7 +243,9 @@ PMTRL MTRL::PmtrlNewFromPix(PFNI pfni)
     pbmtl->opacity = kbOpaque; // all socrates objects are opaque
     pbmtl->flags = BR_MATF_LIGHT | BR_MATF_GOURAUD;
     pfni->GetStnPath(&stn);
-    pbmtl->colour_map = BrPixelmapLoad(stn.Psz());
+    SZS szs;
+    stn.GetSzs(szs);
+    pbmtl->colour_map = BrPixelmapLoad(szs);
     if (pvNil == pbmtl->colour_map)
         goto LFail;
 
