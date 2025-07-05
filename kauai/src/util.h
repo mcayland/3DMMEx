@@ -101,7 +101,13 @@ typedef char schar;
 const schar kschMax = (schar)0x7F;
 const schar kschMin = (schar)0x80;
 #endif //! MAC
+
+#ifdef WIN32
+typedef wchar_t wchar;
+#else  // !WIN32
 typedef uint16_t wchar;
+#endif // WIN32
+
 const wchar kwchMax = ksuMax;
 const wchar kwchMin = ksuMin;
 #ifdef UNICODE
