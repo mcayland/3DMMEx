@@ -367,7 +367,7 @@ void LEXB::AssertValid(uint32_t grf)
     AssertIn(_fpCur, 0, _fpMac + 1);
     AssertIn(_fpMac, 0, kcbMax);
     AssertIn(_ichCur, 0, _ichLim + 1);
-    AssertIn(_ichLim, 0, SIZEOF(_rgch) + 1);
+    AssertIn(_ichLim, 0, CvFromRgv(_rgch) + 1);
 }
 
 /***************************************************************************
