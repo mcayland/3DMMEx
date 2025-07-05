@@ -635,7 +635,7 @@ UINT_PTR CALLBACK OpenHookProc(HWND hwndCustom, UINT msg, WPARAM wParam, LPARAM 
                 // but there isn't, so use a regular Windows call for this.
 
                 // Get the current text for the control.
-                GetDlgItemText(hwndDlg, edt1, szCurFile, sizeof(szCurFile));
+                GetDlgItemText(hwndDlg, edt1, szCurFile, CvFromRgv(szCurFile));
 
                 // Now change folder!
                 SendMessage(hwndDlg, CDM_SETCONTROLTEXT, edt1, (LPARAM)szUserDir);
@@ -1088,7 +1088,7 @@ void RepaintPortfolio(HWND hwndCustom)
                     // While we have this offscreen dc, paint all our custom display into it now.
 
                     // First the caption text. Position the text using its size.
-                    GetWindowText(GetParent(hwndCustom), szCaption, sizeof(szCaption));
+                    GetWindowText(GetParent(hwndCustom), szCaption, CvFromRgv(szCaption));
                     GetTextMetrics(ps.hdc, &tmCaption);
                     pgnvOff->DrawRgch(szCaption, CchSz(szCaption), (tmCaption.tmAveCharWidth * 2),
                                       tmCaption.tmHeight / 4, kacrBlack, kacrClear);
