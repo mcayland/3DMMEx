@@ -2117,7 +2117,7 @@ void TXRD::FetchChp(int32_t cp, PCHP pchp, int32_t *pcpMin, int32_t *pcpLim)
         {
         case sprmStyle:
             _chp.grfont = B0Lw(mpe.lw);
-            _chp.dypOffset = (int32_t)(achar)B1Lw(mpe.lw);
+            _chp.dypOffset = (schar)B1Lw(mpe.lw);
             _chp.dypFont += SwHigh(mpe.lw);
             break;
 
