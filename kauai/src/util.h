@@ -42,7 +42,9 @@
 #elif defined(WIN)
 
 #ifdef UNICODE
+#ifndef _UNICODE
 #define _UNICODE
+#endif // _UNICODE
 #endif // UNICODE
 
 // windef.h typedef's PSZ to char *, this fools it into using PSZS instead
