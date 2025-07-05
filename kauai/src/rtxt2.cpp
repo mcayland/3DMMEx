@@ -209,7 +209,7 @@ void CHR::GetNextRun(bool fMustAdvance)
 
     // Start the next run
     if (FIn(_chrd.cpLim, _cpMin + 1, _cpLimFetch))
-        BltPb(_rgch + _chrd.cpLim - _cpMin, _rgch, _cpLimFetch - _chrd.cpLim);
+        BltPb(_rgch + _chrd.cpLim - _cpMin, _rgch, (_cpLimFetch - _chrd.cpLim) * SIZEOF(achar));
     _cpMin = _chrd.cpLimDraw = _chrd.cpLim;
     _xpMin = _chrd.xpLimDraw = _chrd.xpLim;
     _xpBreak = LwMax(_xpBreak, _xpMin);
