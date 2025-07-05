@@ -1267,17 +1267,17 @@ bool APP::_FGetUserName(void)
 
 #ifdef WIN
     bool fRet = fTrue;
-    DWORD dwCbUser = SIZEOF(SZ);
     SZ szT;
+    DWORD cchUser = CvFromRgv(szT);
 
-    switch (WNetGetUser(NULL, szT, &dwCbUser))
+    switch (WNetGetUser(NULL, szT, &cchUser))
     {
     case ERROR_EXTENDED_ERROR: {
         DWORD dwError;
         SZ szProvider;
         STN stnMessage;
 
-        if (WNetGetLastError(&dwError, szT, SIZEOF(SZ), szProvider, SIZEOF(SZ)) == NO_ERROR)
+        if (WNetGetLastError(&dwError, szT, CvFromRgv(szT), szProvider, CvFromRgv(szProvider)) == NO_ERROR)
         {
             STN stnFormat;
 
