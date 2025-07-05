@@ -91,12 +91,24 @@ void STN::SetSzs(PSZS pszsSrc)
 
 #ifdef UNICODE
 #ifdef WIN
-    // REVIEW shonk: is this correct?
-    int32_t cch = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pszsSrc, -1, _rgch + 1, kcchMaxStn);
 
-    AssertIn(cch, 1, kcchMaxStn + 1);
-    _rgch[0] = (achar)(cch - 1);
-    _rgch[cch] = 0;
+    if (pszsSrc[0] == 0)
+    {
+        _rgch[1] = 0;
+        _rgch[0] = 0;
+    }
+    else
+    {
+        int32_t cch = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pszsSrc, -1, _rgch + 1, kcchMaxStn);
+        AssertIn(cch, 1, kcchMaxStn + 1);
+        if (cch == 0)
+        {
+            cch = 1;
+        }
+        _rgch[0] = cch - 1;
+        _rgch[cch] = 0;
+    }
+
 #endif // WIN
 #ifdef MAC
     RawRtn(); // REVIEW shonk: Mac: implement
@@ -508,9 +520,24 @@ void STN::GetSzs(PSZS pszs)
 
 #ifdef UNICODE
 #ifdef WIN
-    int32_t cchs = WideCharToMultiByte(CP_ACP, 0, _rgch + 1, -1, pszs, kcchMaxSz, pvNil, pvNil);
 
-    pszs[cchs] = 0;
+    if (Cch() == 0)
+    {
+        pszs[0] = 0;
+    }
+    else
+    {
+        int32_t cch = WideCharToMultiByte(CP_ACP, 0, _rgch + 1, -1, pszs, kcchMaxSz, pvNil, pvNil);
+        if (cch == 0)
+        {
+            pszs[0] = 0;
+        }
+        else
+        {
+            pszs[cch - 1] = 0;
+        }
+    }
+
 #endif // WIN
 #ifdef MAC
     RawRtn(); // REVIEW shonk: Mac: implement
