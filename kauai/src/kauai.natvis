@@ -3,7 +3,8 @@
 
 	<!-- Strings -->
 	<Type Name="STN">
-		<DisplayString>{(char*)_rgch+1, [*(uint8_t*)(_rgch)]na}</DisplayString>
+		<DisplayString Condition="koskCur == koskSbWin">{(char*)_rgch+1, [*(uint8_t*)(_rgch)]na}</DisplayString>
+		<DisplayString Condition="koskCur == koskUniWin">{(wchar_t*)_rgch+1, [*(wchar_t*)(_rgch)]na}</DisplayString>
 	</Type>
 
 	<!-- Point -->
