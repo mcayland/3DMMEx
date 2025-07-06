@@ -86,6 +86,7 @@ const wchar kchwUnicode = 0xFEFF;
 const wchar kchwUnicodeSwap = 0xFFFE;
 
 const int32_t kcchMaxSz = 255;
+const int32_t kcchMaxUtf8Sz = 511;
 const int32_t kcchMaxSt = 255;
 const int32_t kcchMaxStz = 255;
 const int32_t kcchExtraSz = 1;
@@ -94,6 +95,7 @@ const int32_t kcchExtraStz = 2;
 const int32_t kcchTotSz = kcchMaxSz + kcchExtraSz;
 const int32_t kcchTotSt = kcchMaxSt + kcchExtraSt;
 const int32_t kcchTotStz = kcchMaxStz + kcchExtraStz;
+const int32_t kcchTotUtf8Sz = kcchMaxUtf8Sz + kcchExtraSz;
 
 const int32_t kcchMaxStn = 255;
 const int32_t kcbMaxDataStn = kcchTotStz * SIZEOF(wchar) + SIZEOF(int16_t);
@@ -116,6 +118,9 @@ typedef achar ST[kcchTotSt];
 typedef achar STZ[kcchTotStz];
 typedef schar *PSZS;
 typedef schar SZS[kcchTotSz];
+
+typedef char *PU8SZ;
+typedef char U8SZ[kcchTotUtf8Sz];
 
 /***************************************************************************
     String related asserts
@@ -389,6 +394,7 @@ class STN
         SetRgch(PszStz(pstzSrc), CchStz(pstzSrc));
     }
     void SetSzs(PSZS pszsSrc);
+    void SetUtf8Sz(PU8SZ pu8szSrc);
 
     // assignment operators
     STN &operator=(STN &stnSrc);
@@ -420,6 +426,7 @@ class STN
         CopyPb(Pstz(), pstzDst, (Cch() + kcchExtraStz) * SIZEOF(achar));
     }
     void GetSzs(PSZS pszs);
+    void GetUtf8Sz(U8SZ pszutf8);
 
     // modifying the string
     void Delete(int32_t ich, int32_t cch = kcchMaxStn);

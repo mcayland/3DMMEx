@@ -119,6 +119,58 @@ void STN::SetSzs(PSZS pszsSrc)
 }
 
 /***************************************************************************
+    Put the zero terminated UTF-8 string into the STN.
+***************************************************************************/
+void STN::SetUtf8Sz(PU8SZ pu8szSrc)
+{
+    AssertThis(0);
+
+    if (pu8szSrc == pvNil)
+    {
+        SetNil();
+        return;
+    }
+
+#ifdef WIN
+    int32_t cch;
+    int32_t cb;
+    wchar wszT[kcchMaxSz];
+
+    // Convert the string to Unicode
+    cch = MultiByteToWideChar(CP_UTF8, 0, pu8szSrc, -1, wszT, kcchMaxSz);
+    if (cch == 0)
+    {
+        Bug("Failed to convert string from UTF-8 to wide string");
+        SetNil();
+        return;
+    }
+
+#ifdef UNICODE
+    // No more conversion needed
+    SetSz(wszT);
+#else // !UNICODE
+
+    // Convert the string to the current code page
+    char szT[kcchMaxSz];
+    cch = WideCharToMultiByte(CP_ACP, 0, wszT, -1, szT, kcchMaxSz, pvNil, pvNil);
+    if (cch == 0)
+    {
+        Bug("Failed to convert string from wide string to ANSI code page");
+        SetNil();
+        return;
+    }
+    SetSz(szT);
+
+#endif // UNICODE
+
+#else  // !WIN
+    // TODO: Set STN from UTF-8 string
+    RawRtn();
+    SetNil();
+#endif // WIN
+}
+
+/***************************************************************************
     Delete (at most) cch characters starting at position ich.
 ***************************************************************************/
 void STN::Delete(int32_t ich, int32_t cch)
@@ -546,6 +598,55 @@ void STN::GetSzs(PSZS pszs)
 #else  //! UNICODE
     CopyPb(_rgch + 1, pszs, Cch() + 1);
 #endif // UNICODE
+}
+
+/***************************************************************************
+    Get a zero terminated UTF-8 string from this string.
+***************************************************************************/
+void STN::GetUtf8Sz(U8SZ pu8sz)
+{
+    AssertThis(0);
+    AssertPvCb(pu8sz, kcchTotUtf8Sz);
+
+#ifdef WIN32
+    int32_t cch;
+    int32_t cb;
+    const wchar *pwcsT;
+
+    if (Cch() == 0)
+    {
+        pu8sz[0] = 0;
+        return;
+    }
+
+#ifdef UNICODE
+    // The string is already Unicode, so we can convert it directly to UTF-8
+    pwcsT = Psz();
+    cch = Cch();
+#else  // !UNICODE
+    // We have to convert the string to Unicode, then to UTF-8
+    wchar wszT[kcchMaxSz];
+    cch = MultiByteToWideChar(CP_ACP, 0, Psz(), Cch(), wszT, kcchMaxSz);
+    Assert(cch == Cch(), "MultiByteToWideChar did not convert all characters");
+    if (cch == 0)
+    {
+        pu8sz[0] = 0;
+        return;
+    }
+    wszT[cch] = 0;
+    pwcsT = wszT;
+#endif // UNICODE
+
+    // Convert the string to UTF-8
+    cb = WideCharToMultiByte(CP_UTF8, 0, pwcsT, cch, pu8sz, kcchMaxUtf8Sz, pvNil, pvNil);
+    Assert(cb != 0, "WideCharToMultiByte failed to convert characters");
+    pu8sz[cb] = 0;
+
+#else  // !WIN32
+    // TODO: convert STN to UTF-8
+    RawRtn();
+    pu8sz[0] = 0;
+#endif // WIN32
 }
 
 /***************************************************************************
