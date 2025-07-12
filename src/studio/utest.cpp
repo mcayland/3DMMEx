@@ -18,7 +18,10 @@
 ***************************************************************************/
 #include "studio.h"
 #include "socres.h"
+
+#ifdef KAUAI_WIN32
 #include "mminstal.h"
+#endif // KAUAI_WIN32
 
 ASSERTNAME
 
@@ -575,7 +578,7 @@ bool APP::_FEnsureAudio(void)
 {
     AssertBaseThis(0);
 
-#ifdef WIN
+#ifdef KAUAI_WIN32
     int32_t cwod; // count of wave-out devices
     int32_t cmod; // count of midi-out devices
     int32_t fShowMessage;
@@ -648,10 +651,9 @@ bool APP::_FEnsureAudio(void)
             }
         }
     }
-#endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
+#else  // !KAUAI_WIN32
+    // TODO: Check if we can play audio
+#endif // KAUAI_WIN32
     return fTrue;
 }
 
@@ -660,6 +662,7 @@ bool APP::_FEnsureAudio(void)
 ***************************************************************************/
 bool APP::_FEnsureVideo(void)
 {
+#ifdef KAUAI_WIN32
     if (wHaveMCI(PszLit("AVIVIDEO")))
     {
         // MCI for video is not installed
@@ -675,6 +678,9 @@ bool APP::_FEnsureVideo(void)
         _fDontReportInitFailure = fTrue;
         return fFalse;
     }
+#else
+// TODO: Check if we can play video
+#endif
 
     return fTrue;
 }

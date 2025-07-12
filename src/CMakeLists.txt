@@ -70,7 +70,6 @@ target_sources(studio
     "${PROJECT_SOURCE_DIR}/src/studio/ape.cpp"
     "${PROJECT_SOURCE_DIR}/src/studio/browser.cpp"
     "${PROJECT_SOURCE_DIR}/src/studio/esl.cpp"
-    "${PROJECT_SOURCE_DIR}/src/studio/mminstal.cpp"
     "${PROJECT_SOURCE_DIR}/src/studio/popup.cpp"
     "${PROJECT_SOURCE_DIR}/src/studio/scnsort.cpp"
     "${PROJECT_SOURCE_DIR}/src/studio/splot.cpp"
@@ -85,6 +84,7 @@ target_sources(studio
 
     # Windows
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/portfwin.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/mminstal.cpp>
 )
 
 target_include_directories(studio
