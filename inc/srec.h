@@ -101,6 +101,7 @@ class SREC : public SREC_PAR
     bool _fHaveSound;   // have you recorded a sound yet?
     bool _fBufferAdded; // have added record buffer
 
+#ifdef KAUAI_WIN32
     HWAVEIN _hwavein; // handle to wavein device
     WAVEHDR _wavehdr; // wave hdr for buffer
 
@@ -112,6 +113,7 @@ class SREC : public SREC_PAR
     bool _FOpenRecord();
     bool _FCloseRecord();
     static void _WaveInProc(HWAVEIN hwi, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
+#endif // KAUAI_WIN32
 
   protected:
     bool _FInit(int32_t csampSec, int32_t cchan, int32_t cbSample, uint32_t dtsMax);

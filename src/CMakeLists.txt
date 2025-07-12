@@ -32,7 +32,6 @@ target_sources(engine
     "${PROJECT_SOURCE_DIR}/src/engine/msnd.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/mtrl.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/scene.cpp"
-    "${PROJECT_SOURCE_DIR}/src/engine/srec.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/tagl.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/tagman.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/tbox.cpp"
@@ -40,6 +39,18 @@ target_sources(engine
     "${PROJECT_SOURCE_DIR}/src/engine/tdt.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/tmpl.cpp"
 )
+if (3DMM_GUI STREQUAL "Win32")
+    target_sources(engine
+        PRIVATE
+        "${PROJECT_SOURCE_DIR}/src/engine/srecwin.cpp"
+    )
+else()
+    target_sources(engine
+        PRIVATE
+        "${PROJECT_SOURCE_DIR}/src/engine/srecstub.cpp"
+    )
+endif()
+
 target_include_directories(engine PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/INC>)
 target_link_libraries(engine
