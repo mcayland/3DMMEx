@@ -14,7 +14,8 @@
 #define CHOMP_H
 
 #include <stdio.h>
-#include "frame.h"
+#include "util.h"
+#include "chcm.h"
 #include "mssio.h"
 
 #endif //! CHOMP_H
