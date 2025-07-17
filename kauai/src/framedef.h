@@ -23,11 +23,11 @@
 #define MacWin(mac, win) mac
 #define Mac(foo) foo
 #define Win(foo)
-#elif defined(WIN)
+#else
 #define MacWin(mac, win) win
 #define Mac(foo)
 #define Win(foo) foo
-#endif // WIN
+#endif // WIN/Other
 
 /***************************************************************************
     Miscellaneous defines
