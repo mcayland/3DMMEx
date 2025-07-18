@@ -54,10 +54,6 @@ inline uint32_t TsCurrent(void)
 {
     return vpusac->TsCur();
 }
-inline uint32_t DtsCaret(void)
-{
-    return MacWin(GetCaretTime(), GetCaretBlinkTime());
-}
 
 /***************************************************************************
     Mutexes to protect various global linked lists, etc.

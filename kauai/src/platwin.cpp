@@ -58,3 +58,8 @@ inline uint32_t TsCurrentSystem(void)
 {
     return timeGetTime();
 }
+
+inline uint32_t DtsCaret(void)
+{
+    return GetCaretBlinkTime();
+}
