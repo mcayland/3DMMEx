@@ -54,3 +54,15 @@ inline uint32_t LwThreadCur(void)
 ***************************************************************************/
 const uint32_t kdtsSecond = 1000;
 
+inline uint32_t TsCurrentSystem(void)
+{
+#if defined(KAUAI_WIN32)
+    // n.b. WIN: timeGetTime is more accurate than GetTickCount
+    return MacWin(TickCount(), timeGetTime());
+#elif defined(KAUAI_SDL)
+    return SDL_GetTicks();
+#else
+    RawRtn();
+    return 0;
+#endif
+}
