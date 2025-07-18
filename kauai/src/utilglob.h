@@ -54,11 +54,6 @@ inline uint32_t TsCurrent(void)
 {
     return vpusac->TsCur();
 }
-inline uint32_t TsCurrentSystem(void)
-{
-    // n.b. WIN: timeGetTime is more accurate than GetTickCount
-    return MacWin(TickCount(), timeGetTime());
-}
 inline uint32_t DtsCaret(void)
 {
     return MacWin(GetCaretTime(), GetCaretBlinkTime());

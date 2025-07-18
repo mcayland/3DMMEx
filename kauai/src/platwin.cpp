@@ -54,3 +54,7 @@ inline uint32_t LwThreadCur(void)
 ***************************************************************************/
 const uint32_t kdtsSecond = 1000;
 
+inline uint32_t TsCurrentSystem(void)
+{
+    return timeGetTime();
+}
