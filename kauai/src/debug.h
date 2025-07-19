@@ -23,6 +23,15 @@ inline void Debugger(void)
 }
 #endif // WIN
 
+#ifdef __unix__
+#include <signal.h>
+
+inline void Debugger(void)
+{
+    raise(SIGTRAP);
+}
+#endif // __unix__
+
 #ifdef DEBUG
 bool FAssertProc(schar *pszsFile, int32_t lwLine, schar *pszsMsg, void *pv, int32_t cb);
 void WarnProc(schar *pszsFile, int32_t lwLine, schar *pszsMsg);
