@@ -15,8 +15,29 @@ ASSERTNAME
 
 #ifdef MAC
 #define CUROSK koskUniMac
-#else
+#define UPPERCASETEXT(str, len) UppercaseText(str, len, smSystemScript)
+#define LOWERCASETEXT(str, len) LowercaseText(str, len, smSystemScript)
+#endif
+
+#ifdef WIN
 #define CUROSK koskUniWin
+#define UPPERCASETEXT(str ,len) CharUpperBuffA(str, len)
+#define LOWERCASETEXT(str, len) CharLowerBuffA(str, len)
+#endif
+
+#ifdef __unix__
+#include <ctype.h>
+
+#define CUROSK koskUniWin
+#define UPPERCASETEXT(str, len) \
+    for (int ot = 0; ot < len; ot++) { \
+        str[ot] = toupper(str[ot]); \
+    }
+
+#define LOWERCASETEXT(str, len) \
+    for (int ot = 0; ot < len; ot++) { \
+        str[ot] = tolower(str[ot]); \
+    }
 #endif
 
 #include "chtrans.h"
@@ -1297,7 +1318,7 @@ void UpperRgchs(schar *prgchs, int32_t cchs)
     {
         for (ichs = 0; ichs < 256; ichs++)
             _mpchschsUpper[ichs] = (uint8_t)ichs;
-        MacWin(UppercaseText(_mpchschsUpper, 256, smSystemScript), CharUpperBuffA(_mpchschsUpper, 256));
+        UPPERCASETEXT(_mpchschsUpper, 256);
         _fInited = fTrue;
     }
 
@@ -1319,7 +1340,7 @@ void LowerRgchs(schar *prgchs, int32_t cchs)
     {
         for (ichs = 0; ichs < 256; ichs++)
             _mpchschsLower[ichs] = (uint8_t)ichs;
-        MacWin(LowercaseText(_mpchschsLower, 256, smSystemScript), CharLowerBuffA(_mpchschsLower, 256));
+        LOWERCASETEXT(_mpchschsLower, 256);
         _fInited = fTrue;
     }
 
@@ -1562,7 +1583,12 @@ void TranslateRgch(achar *prgch, int32_t cch, int16_t osk, bool fToCur)
     // for unicode, we just have to change the byte ordering
     SwapBytesRgsw(prgch, cch);
 #else  //! UNICODE
-    auto pmpchschs = MacWin(!fToCur, fToCur) ? _mpchschsMacToWin : _mpchschsWinToMac;
+#ifdef MAC
+#define FTOCUR !fToCur
+#else
+#define FTOCUR fToCur
+#endif
+    auto pmpchschs = FTOCUR ? _mpchschsMacToWin : _mpchschsWinToMac;
 
     for (; cch > 0; cch--, prgch++)
     {
