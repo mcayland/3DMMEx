@@ -107,15 +107,18 @@ target_compile_definitions(
 file(GLOB building-chunk-sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/building/*.cht")
 file(GLOB studio-chunk-sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/studio/*.cht")
 
-target_chomp_sources(studio
-  "${PROJECT_SOURCE_DIR}/src/studio/utest.cht"
-  "${PROJECT_SOURCE_DIR}/src/studio/studio.cht"
-  "${PROJECT_SOURCE_DIR}/src/building/bldghd.cht"
-  "${PROJECT_SOURCE_DIR}/src/building/building.cht"
-  "${PROJECT_SOURCE_DIR}/src/helpaud/helpaud.cht"
-  "${PROJECT_SOURCE_DIR}/src/help/help.cht"
-  "${PROJECT_SOURCE_DIR}/src/shared/shared.cht"
-  "${PROJECT_SOURCE_DIR}/src/shared/sharecd.cht")
+if (NOT 3DMM_PRECOMPILED_CHUNKY_PATH)
+    target_chomp_sources(studio
+        "${PROJECT_SOURCE_DIR}/src/studio/utest.cht"
+        "${PROJECT_SOURCE_DIR}/src/studio/studio.cht"
+        "${PROJECT_SOURCE_DIR}/src/building/bldghd.cht"
+        "${PROJECT_SOURCE_DIR}/src/building/building.cht"
+        "${PROJECT_SOURCE_DIR}/src/helpaud/helpaud.cht"
+        "${PROJECT_SOURCE_DIR}/src/help/help.cht"
+        "${PROJECT_SOURCE_DIR}/src/shared/shared.cht"
+        "${PROJECT_SOURCE_DIR}/src/shared/sharecd.cht"
+    )
+endif()
 
 target_link_libraries(studio
     PUBLIC
@@ -187,13 +190,33 @@ set_property(
 # Please pay attention to the ending / in each DIRECTORY declaration. It
 # affects the destination!
 install(TARGETS studio RUNTIME DESTINATION .)
-# HACK(bruxisma): This is due to UTEST.CHT not generating 3DMOVIE.CHK
-#                 Renaming it to 3DMOVIE.CHT would resolve this.
-install(FILES $<FILTER:$<TARGET_PROPERTY:studio,CHOMPED_CHUNKS>,EXCLUDE,.+utest[.]chk$>
-  DESTINATION "Microsoft Kids/3D Movie Maker")
-install(FILES $<FILTER:$<TARGET_PROPERTY:studio,CHOMPED_CHUNKS>,INCLUDE,.+utest[.]chk$>
-  RENAME 3dmovie.chk
-  DESTINATION "Microsoft Kids/3D Movie Maker")
+
+if (3DMM_PRECOMPILED_CHUNKY_PATH)
+    set(chunky_files
+        3dmovie.chk
+        bldghd.chk
+        building.chk
+        help.chk
+        helpaud.chk
+        sharecd.chk
+        shared.chk
+        studio.chk
+    )
+    foreach(chunky_file ${chunky_files})
+        install(
+            FILES "${3DMM_PRECOMPILED_CHUNKY_PATH}/${chunky_file}"
+            DESTINATION "Microsoft Kids/3D Movie Maker"
+        )
+    endforeach()
+else()
+    # HACK(bruxisma): This is due to UTEST.CHT not generating 3DMOVIE.CHK
+    #                 Renaming it to 3DMOVIE.CHT would resolve this.
+    install(FILES $<FILTER:$<TARGET_PROPERTY:studio,CHOMPED_CHUNKS>,EXCLUDE,.+utest[.]chk$>
+      DESTINATION "Microsoft Kids/3D Movie Maker")
+    install(FILES $<FILTER:$<TARGET_PROPERTY:studio,CHOMPED_CHUNKS>,INCLUDE,.+utest[.]chk$>
+      RENAME 3dmovie.chk
+      DESTINATION "Microsoft Kids/3D Movie Maker")
+endif()
 install(FILES $<TARGET_PROPERTY:studio,3DMM_PROJECTS>
   DESTINATION "Microsoft Kids/Users/Melanie")
 install(FILES $<TARGET_PROPERTY:studio,3DMM_SAMPLES>
