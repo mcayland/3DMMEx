@@ -55,7 +55,7 @@ set(3DMM_BRENDER_LIBRARY "${3DMM_BRENDER_LIBRARY_DEFAULT}" CACHE STRING "Argonau
 set_property(CACHE 3DMM_BRENDER_LIBRARY PROPERTY STRINGS "Original" "Source")
 
 set(3DMM_AUDIOMAN_LIBRARY "Decompilation" CACHE STRING "AudioMan library to use for mixing wave sounds")
-set_property(CACHE 3DMM_AUDIOMAN_LIBRARY PROPERTY STRINGS "Original" "Decompilation" "Stub")
+set_property(CACHE 3DMM_AUDIOMAN_LIBRARY PROPERTY STRINGS "Original" "Decompilation")
 
 # Default to Win32 on Windows, and SDL on other platforms.
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -183,18 +183,6 @@ elseif("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Decompilation")
     set(AUDIOMAN_USE_DEBUG_ALLOCATOR OFF)
     FetchContent_MakeAvailable(AudioManDecomp)
     add_library(3DMMForever::AudioMan ALIAS AudioMan)
-
-elseif("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Stub")
-
-    # Use stub library
-    add_library(audioman)
-    add_library(3DMMForever::AudioMan ALIAS audioman)
-    target_include_directories(audioman PUBLIC
-        "${PROJECT_SOURCE_DIR}/kauai/src"
-    )
-    target_sources(audioman PRIVATE
-        "${PROJECT_SOURCE_DIR}/audioman/audioman.cpp"
-    )
 
 else()
     message(FATAL_ERROR "Invalid AudioMan library selected: ${3DMM_AUDIOMAN_LIBRARY}")
