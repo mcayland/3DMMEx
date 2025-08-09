@@ -504,65 +504,67 @@ target_link_libraries(
 )
 
 # Unit tests
-add_library(
-    KauaiTestLib
-    STATIC
-    "${PROJECT_SOURCE_DIR}/kauai/test/assert.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/test/resources.cpp"
-)
-target_include_directories(
-    KauaiTestLib
-    PUBLIC
-    "${PROJECT_SOURCE_DIR}/kauai/test"
-)
-target_link_libraries(
-    KauaiTestLib
-    PUBLIC
-    KauaiBase
-    KauaiFile
-    GTest::gtest
-)
-target_compile_definitions(
-    KauaiTestLib
-    PRIVATE
-    KAUAI_TEST_RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test/res"
-)
+if (BUILD_TESTS)
+    add_library(
+        KauaiTestLib
+        STATIC
+        "${PROJECT_SOURCE_DIR}/kauai/test/assert.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/test/resources.cpp"
+    )
+    target_include_directories(
+        KauaiTestLib
+        PUBLIC
+        "${PROJECT_SOURCE_DIR}/kauai/test"
+    )
+    target_link_libraries(
+        KauaiTestLib
+        PUBLIC
+        KauaiBase
+        KauaiFile
+        GTest::gtest
+    )
+    target_compile_definitions(
+        KauaiTestLib
+        PRIVATE
+        KAUAI_TEST_RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test/res"
+    )
 
-add_executable(KauaiTest
-    "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/test/compiler_test.cpp"
-    "${PROJECT_SOURCE_DIR}/kauai/test/string_test.cpp"
-)
-target_link_libraries(
-    KauaiTest
-    PUBLIC
-    KauaiTestLib
-    KauaiGroup
-    KauaiChcm
-    KauaiSound
-    GTest::gtest_main
-)
-gtest_discover_tests(KauaiTest)
+    add_executable(KauaiTest
+        "${PROJECT_SOURCE_DIR}/kauai/test/kauai_test.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/test/compression_test.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/test/compiler_test.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/test/string_test.cpp"
+    )
+    target_link_libraries(
+        KauaiTest
+        PUBLIC
+        KauaiTestLib
+        KauaiGroup
+        KauaiChcm
+        KauaiSound
+        GTest::gtest_main
+    )
+    gtest_discover_tests(KauaiTest)
 
-add_executable(KauaiGuiTest
-    "${PROJECT_SOURCE_DIR}/kauai/test/gui_test.cpp"
-)
-target_link_libraries(
-    KauaiGuiTest
-    PUBLIC
-    KauaiTestLib
-    KauaiGui
-    KauaiRichText
-    GTest::gtest_main
-)
-gtest_discover_tests(KauaiGuiTest)
+    add_executable(KauaiGuiTest
+        "${PROJECT_SOURCE_DIR}/kauai/test/gui_test.cpp"
+    )
+    target_link_libraries(
+        KauaiGuiTest
+        PUBLIC
+        KauaiTestLib
+        KauaiGui
+        KauaiRichText
+        GTest::gtest_main
+    )
+    gtest_discover_tests(KauaiGuiTest)
 
-add_dependencies(
-    tests
-    KauaiTest
-    KauaiGuiTest
-)
+    add_dependencies(
+        tests
+        KauaiTest
+        KauaiGuiTest
+    )
+endif()
 
 # Utilities
 

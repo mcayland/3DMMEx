@@ -35,10 +35,6 @@ include(CMakeDependentOption)
 include(FetchContent)
 include(TargetChompSources)
 
-enable_testing()
-include(FetchGoogleTest)
-include(GoogleTest)
-
 # Options
 option(BUILD_PACKAGES "Build packages for 3DMM" ON)
 
@@ -199,7 +195,13 @@ if (NOT "${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "None")
     add_compile_definitions(HAS_AUDIOMAN)
 endif()
 
-add_custom_target(tests)
+option(BUILD_TESTS "Enable building tests" ON)
+if (BUILD_TESTS)
+    enable_testing()
+    include(FetchGoogleTest)
+    include(GoogleTest)
+    add_custom_target(tests)
+endif()
 
 add_subdirectory(kauai)
 
