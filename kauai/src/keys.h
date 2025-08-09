@@ -31,4 +31,19 @@
 #define kvkDelete MacWin(0x7F, VK_DELETE)
 #define kvkReturn MacWin(0x0D, VK_RETURN)
 
+#define kvkF1 VK_F1
+#define kvkF2 VK_F2
+#define kvkF3 VK_F3
+#define kvkF4 VK_F4
+#define kvkF5 VK_F5
+#define kvkF6 VK_F6
+#define kvkF7 VK_F7
+#define kvkF8 VK_F8
+#define kvkF9 VK_F9
+#define kvkF10 VK_F10
+#define kvkF11 VK_F11
+#define kvkF12 VK_F12
+
+#define VK_FROM_ALPHA(ch) (ch)
+
 #endif //! KEYS_H
