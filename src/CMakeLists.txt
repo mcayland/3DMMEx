@@ -39,7 +39,7 @@ target_sources(engine
     "${PROJECT_SOURCE_DIR}/src/engine/tdt.cpp"
     "${PROJECT_SOURCE_DIR}/src/engine/tmpl.cpp"
 )
-if (3DMM_GUI STREQUAL "Win32")
+if (3DMM_GUI STREQUAL "Win32" AND NOT 3DMM_AUDIOMAN_LIBRARY STREQUAL "None")
     target_sources(engine
         PRIVATE
         "${PROJECT_SOURCE_DIR}/src/engine/srecwin.cpp"
@@ -60,8 +60,13 @@ target_link_libraries(engine
     KauaiDoc
     KauaiRichText
     bren
-    3DMMForever::AudioMan  # required for sound recorder
 )
+if (NOT "${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "None")
+    target_link_libraries(engine
+        PUBLIC
+        3DMMForever::AudioMan
+    )
+endif()
 
 # On non-windows WIN32 is a no-op
 add_executable(studio WIN32)
@@ -123,6 +128,7 @@ target_link_libraries(studio
 
     $<$<PLATFORM_ID:Windows>:mpr> # Required for WNetGetUser()
     $<$<PLATFORM_ID:Windows>:vfw32> # Required for ICInfo in _wHaveICMCodec
+    $<$<PLATFORM_ID:Windows>:msacm32> # Required for acmFormatTagDetailsA in _wHaveACMCodec
 )
 
 set_property(TARGET studio PROPERTY OUTPUT_NAME 3dmovie)

@@ -54,8 +54,13 @@ endif()
 set(3DMM_BRENDER_LIBRARY "${3DMM_BRENDER_LIBRARY_DEFAULT}" CACHE STRING "Argonaut BRender library to use for rendering 3D images")
 set_property(CACHE 3DMM_BRENDER_LIBRARY PROPERTY STRINGS "Original" "Source")
 
-set(3DMM_AUDIOMAN_LIBRARY "Decompilation" CACHE STRING "AudioMan library to use for mixing wave sounds")
-set_property(CACHE 3DMM_AUDIOMAN_LIBRARY PROPERTY STRINGS "Original" "Decompilation")
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    # AudioMan is only supported on Windows
+    set(3DMM_AUDIOMAN_LIBRARY "Decompilation" CACHE STRING "AudioMan library to use for mixing wave sounds")
+    set_property(CACHE 3DMM_AUDIOMAN_LIBRARY PROPERTY STRINGS "Original" "Decompilation" "None")
+else()
+    set(3DMM_AUDIOMAN_LIBRARY "None")
+endif()
 
 # Default to Win32 on Windows, and SDL on other platforms.
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -168,7 +173,7 @@ endif()
 if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
 
     # Use original static library
-    find_package(AudioMan)
+    find_package(AudioMan REQUIRED)
 
 elseif("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Decompilation")
 
@@ -184,8 +189,14 @@ elseif("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Decompilation")
     FetchContent_MakeAvailable(AudioManDecomp)
     add_library(3DMMForever::AudioMan ALIAS AudioMan)
 
+elseif("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "None")
+    # No AudioMan
 else()
     message(FATAL_ERROR "Invalid AudioMan library selected: ${3DMM_AUDIOMAN_LIBRARY}")
+endif()
+
+if (NOT "${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "None")
+    add_compile_definitions(HAS_AUDIOMAN)
 endif()
 
 add_custom_target(tests)

@@ -247,33 +247,47 @@ target_link_libraries(
 )
 
 if (3DMM_GUI STREQUAL "Win32")
-    # Win32: Use AudioMan for wave sounds and winmm MIDI player for music
+    # Win32: Use AudioMan for wave sounds
+
+    if (NOT "${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "None")
+        target_sources(
+            KauaiSound
+            PRIVATE
+            "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
+        )
+        target_link_libraries(
+            KauaiSound
+            PUBLIC
+            3DMMForever::AudioMan
+            msacm32
+        )
+        if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
+            # The static library requires a stub for some old MSVC floating-point division helper functions
+            add_library(
+                FDivStub
+                "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"
+            )
+            target_link_libraries(
+                KauaiSound
+                PRIVATE
+                FDivStub
+            )
+        endif()
+    endif()
+
+    # Use Win32 MIDI player
     target_sources(
         KauaiSound
         PRIVATE
-        "${PROJECT_SOURCE_DIR}/kauai/src/sndam.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
     target_link_libraries(
         KauaiSound
         PUBLIC
-        3DMMForever::AudioMan
-        msacm32
         winmm
     )
-    if ("${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "Original")
-        # The static library requires a stub for some old MSVC floating-point division helper functions
-        add_library(
-            FDivStub
-            "${PROJECT_SOURCE_DIR}/kauai/src/stub.cpp"
-        )
-        target_link_libraries(
-            KauaiSound
-            PRIVATE
-            FDivStub
-        )
-    endif()
+
 else()
     message(WARNING "Sound playback disabled")
 endif()

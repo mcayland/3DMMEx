@@ -626,11 +626,14 @@ bool APPB::_FInitSound(int32_t wav)
         return fTrue;
 
 #if defined(KAUAI_WIN32)
+
+#if defined(HAS_AUDIOMAN)
     if (pvNil != (psndv = SDAM::PsdamNew(wav)))
     {
         vpsndm->FAddDevice(kctgWave, psndv);
         ReleasePpo(&psndv);
     }
+#endif // HAS_AUDIOMAN
 
     // create the midi playback device - use the stream one
     if (pvNil != (psndv = MDPS::PmdpsNew()))

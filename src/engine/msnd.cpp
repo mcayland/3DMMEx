@@ -23,7 +23,10 @@
 
 ***************************************************************************/
 #include "soc.h"
+
+#ifdef HAS_AUDIOMAN
 #include "audioman.h"
+#endif // HAS_AUDIOMAN
 
 ASSERTNAME
 
@@ -303,6 +306,8 @@ bool MSND::FCopyWave(PFIL pfilSrc, PCFL pcflDest, int32_t sty, CNO *pcno, PSTN p
     Assert(sty != styMidi, "Illegal sty argument");
     AssertNilOrPo(pstn, 0);
 
+#if defined(KAUAI_WIN32) && defined(HAS_AUDIOMAN)
+
     FNI fniSrc;
     STN stnName; // sound name
     STN stn;     // src file path name
@@ -566,6 +571,12 @@ LFail:
     if (tYes == fniNew.TExists())
         fniNew.FDelete();
     return fFalse;
+
+#else
+    // TODO: implement sound import without AudioMan
+    RawRtn();
+    return fFalse;
+#endif // KAUAI_WIN32 && HAS_AUDIOMAN
 }
 
 /***************************************************************************

@@ -14,7 +14,9 @@
 #ifndef SREC_H
 #define SREC_H
 
+#ifdef HAS_AUDIOMAN
 #include "audioman.h"
+#endif // HAS_AUDIOMAN
 
 /****************************************
     RIFF Header helper class
@@ -32,6 +34,8 @@
 #define DATA_TAG 'atad' // data
 #define FACT_TAG 'tcaf' // fact
 #endif
+
+#ifdef KAUAI_WIN32
 
 #pragma pack(push, _SOCPACK_)
 #pragma pack(1)
@@ -79,6 +83,8 @@ class RIFF
 };
 #pragma pack(pop, _SOCPACK_)
 
+#endif // KAUAI_WIN32
+
 /****************************************
     The sound recording class
 ****************************************/
@@ -105,9 +111,11 @@ class SREC : public SREC_PAR
     HWAVEIN _hwavein; // handle to wavein device
     WAVEHDR _wavehdr; // wave hdr for buffer
 
+#if defined(HAS_AUDIOMAN)
     LPMIXER _pmixer;     // pointer to Audioman Mixer
     LPCHANNEL _pchannel; // pointer to Audioman Channel
     LPSOUND _psnd;       // psnd for current sound
+#endif                   // HAS_AUDIOMAN
     RIFF *_priff;        // pointer to riff in memory
 
     bool _FOpenRecord();
