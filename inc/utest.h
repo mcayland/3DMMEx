@@ -85,6 +85,27 @@ enum
     fregMachine = 0x10
 };
 
+/******************************************************************************
+    FGetSetRegKey
+        Given a reg key (and option sub-key), attempts to either get or set
+        the current value of the key.  If the reg key is created on a Get
+        (fSetKey == fFalse), the data in pvData will be used to set the
+        default value for the key.
+
+
+    Arguments:
+        PSZ pszValueName  --  The value name
+        void *pvData      --  pointer to buffer to read or write key into or from
+        long cbData       --  size of the buffer
+        uint32_t grfreg   --  flags describing what we should do
+        bool *pfNoValue  --  optional parameter, takes whether a real registry
+                              error occurred or not
+
+    Returns:  fTrue if all actions necessary could be performed
+
+************************************************************ PETED ***********/
+bool FGetSetRegKey(PCSZ pszValueName, void *pvData, int32_t cbData, uint32_t grfreg, bool *pfNoValue);
+
 /****************************************
     The app class
 ****************************************/

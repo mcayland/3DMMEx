@@ -90,6 +90,7 @@ target_sources(studio
     # Windows
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/portfwin.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/mminstal.cpp>
+    $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/configwin.cpp>
 )
 
 target_include_directories(studio
