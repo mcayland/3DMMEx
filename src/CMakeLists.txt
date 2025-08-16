@@ -91,6 +91,11 @@ target_sources(studio
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/portfwin.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/mminstal.cpp>
     $<$<PLATFORM_ID:Windows>:${PROJECT_SOURCE_DIR}/src/studio/configwin.cpp>
+
+    # non-Windows
+
+    # TODO: replace with a module that saves settings to a file
+    $<$<NOT:$<PLATFORM_ID:Windows>>:${PROJECT_SOURCE_DIR}/src/studio/configstub.cpp>
 )
 
 target_include_directories(studio
