@@ -1000,41 +1000,49 @@ bool APP::_FInitOS(void)
     RawRtn();
 #endif
 
-    // Create global accelerator tabe
-    _patblGlobal = ATBL::PatblNew(HidUnique(), vpcex);
-    AssertPo(_patblGlobal, 0);
-    if (_patblGlobal != pvNil)
+    // Create global accelerator table
+    if (vpcex != pvNil)
     {
-        // Enable the accelerator table
-        AssertDo(vpcex->FAddCmh(_patblGlobal, 0, kgrfcmmAll), "Could not enable accelerator table");
+        _patblGlobal = ATBL::PatblNew(HidUnique(), vpcex);
+        AssertPo(_patblGlobal, 0);
+        if (_patblGlobal != pvNil)
+        {
+            // Enable the accelerator table
+            AssertDo(vpcex->FAddCmh(_patblGlobal, 0, kgrfcmmAll), "Could not enable accelerator table");
 
-        // Register global keyboard accelerators
-        AssertDo(_patblGlobal->FAddCmdKey(VK_FROM_ALPHA('I'), fcustCmd | fcustShift, cidInfo), "Could not add hotkey");
-        AssertDo(_patblGlobal->FAddCmdKey(VK_FROM_ALPHA('Q'), fcustCmd, cidQuit), "Could not add hotkey");
+            // Register global keyboard accelerators
+            AssertDo(_patblGlobal->FAddCmdKey(VK_FROM_ALPHA('I'), fcustCmd | fcustShift, cidInfo),
+                     "Could not add hotkey");
+            AssertDo(_patblGlobal->FAddCmdKey(VK_FROM_ALPHA('Q'), fcustCmd, cidQuit), "Could not add hotkey");
+        }
+
+        // Create main accelerator table
+        _patblMain = ATBL::PatblNew(HidUnique(), vpcex);
+        AssertPo(_patblMain, 0);
+        if (_patblMain != pvNil)
+        {
+            // Register main keyboard accelerators
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('C'), fcustCmd, cidCopy), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('C'), fcustCmd | fcustShift, cidShiftCopy),
+                     "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('M'), fcustCmd, cidMap), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('N'), fcustCmd, cidNew), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('O'), fcustCmd, cidOpen), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('S'), fcustCmd, cidSave), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('V'), fcustCmd, cidPaste), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(kvkF1, fcustNil, cidHelpBook), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(kvkF9, fcustNil, cidToggleXY), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(kvkF10, fcustNil, cidWriteBmps), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('X'), fcustCmd, cidCut), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('X'), fcustCmd | fcustShift, cidShiftCut),
+                     "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('Y'), fcustCmd, cidRedo), "Could not add hotkey");
+            AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('Z'), fcustCmd, cidUndo), "Could not add hotkey");
+        }
     }
-
-    // Create main accelerator table
-    _patblMain = ATBL::PatblNew(HidUnique(), vpcex);
-    AssertPo(_patblMain, 0);
-    if (_patblMain != pvNil)
+    else
     {
-        // Register main keyboard accelerators
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('C'), fcustCmd, cidCopy), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('C'), fcustCmd | fcustShift, cidShiftCopy),
-                 "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('M'), fcustCmd, cidMap), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('N'), fcustCmd, cidNew), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('O'), fcustCmd, cidOpen), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('S'), fcustCmd, cidSave), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('V'), fcustCmd, cidPaste), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(kvkF1, fcustNil, cidHelpBook), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(kvkF9, fcustNil, cidToggleXY), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(kvkF10, fcustNil, cidWriteBmps), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('X'), fcustCmd, cidCut), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('X'), fcustCmd | fcustShift, cidShiftCut),
-                 "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('Y'), fcustCmd, cidRedo), "Could not add hotkey");
-        AssertDo(_patblMain->FAddCmdKey(VK_FROM_ALPHA('Z'), fcustCmd, cidUndo), "Could not add hotkey");
+        Bug("Cannot initialize accelerator table: nil vpcex");
     }
 
     return fTrue;
