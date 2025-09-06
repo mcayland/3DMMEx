@@ -4191,10 +4191,13 @@ bool APP::_FGetNextEvt(PEVT pevt)
 
     if (!APP_PAR::_FGetNextEvt(pevt))
         return fFalse;
+
     if (pevt->message != WM_USER || pevt->wParam != klwOpenDoc)
         return fTrue;
+#ifdef WIN
     _FProcessOpenDocCmd(); // ignore failure
-    return fFalse;         // we've handled the WM_USER event
+#endif
+    return fFalse; // we've handled the WM_USER event
 }
 #endif // KAUAI_WIN32
 
