@@ -7370,7 +7370,7 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     BRS dxrMouse, dyrMouse, dzrMouse;
     BRS dxrWld, dyrWld, dzrWld; // amount moved from previous point in world space
     BRS zrActr, zrCam, dzrActr;
-    bool fArrowKey = fFalse;
+    bool fArrowKey = fFalse, fKeyDown = fFalse, fKeyUp = fFalse;
     RC rc;
     PT pt;
 
@@ -7404,7 +7404,20 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     dxrMouse = BrsSub(BrIntToScalar(pcmd->xp), BrIntToScalar(_xpPrev));
     dyrMouse = BrsSub(BrIntToScalar(_ypPrev), BrIntToScalar(pcmd->yp));
     dzrMouse = _dzrPrev;
-#ifdef WIN
+
+#ifdef KAUAI_WIN32
+    fKeyUp = (GetKeyState(VK_UP) < 0);
+    fKeyDown = (GetKeyState(VK_DOWN) < 0);
+#else
+    // TODO: implement keyboard handling
+    static bool _fWarnKeyNotImplemented = fTrue;
+    if (_fWarnKeyNotImplemented)
+    {
+        Bug("FIXME: Implement keyboard handling in MVU::_MouseDrag");
+        _fWarnKeyNotImplemented = fFalse;
+    }
+#endif
+
     //
     // Get the "mouse Z" by sampling the arrow keys.  If an arrow key
     // is down, the number of pixels moved is the number of seconds
@@ -7412,12 +7425,12 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     //
     uint32_t dts = LwMax(1, TsCurrent() - _tsLastSample);
     BRS drSec = BrsDiv(BrIntToScalar(dts), BR_SCALAR(kdtsSecond));
-    if (GetKeyState(VK_UP) < 0)
+    if (fKeyUp)
     {
         fArrowKey = fTrue;
         dzrMouse += BrsMul(drSec, kdwrMousePerSecond);
     }
-    if (GetKeyState(VK_DOWN) < 0)
+    if (fKeyDown)
     {
         fArrowKey = fTrue;
         dzrMouse -= BrsMul(drSec, kdwrMousePerSecond);
@@ -7434,10 +7447,6 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     }
     _dzrPrev = dzrMouse;
     _tsLastSample = TsCurrent();
-#endif
-#ifdef MAC
-    RawRtn();
-#endif
 
     MouseToWorld(dxrMouse, dyrMouse, dzrMouse, &dxrWld, &dyrWld, &dzrWld, Tool() == toolRecordSameAction);
 
