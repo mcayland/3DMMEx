@@ -28,9 +28,6 @@
             "architecture": {
                 "value": "x86",
                 "strategy": "external"
-            },
-            "cacheVariables": {
-                "3DMM_BRENDER_LIBRARY": "Source"
             }
         },
         {
@@ -86,9 +83,6 @@
             "architecture": {
                 "value": "x86",
                 "strategy": "external"
-            },
-            "cacheVariables": {
-                "3DMM_BRENDER_LIBRARY": "Source"
             }
         },
         {
