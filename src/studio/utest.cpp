@@ -558,16 +558,9 @@ void APP::_TryToActivateWindow(void)
 bool APP::_FEnsureOS(void)
 {
     AssertBaseThis(0);
-#ifdef WIN
 
     // We can no longer compile for Windows pre-95 or NT 3.51
     return fTrue;
-
-#endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif             // MAC
-    return fFalse; // Bad OS
 }
 
 /***************************************************************************
