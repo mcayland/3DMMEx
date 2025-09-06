@@ -918,11 +918,9 @@ bool APP::_FDisplayIs640480(void)
 {
 #ifdef WIN
     return (GetSystemMetrics(SM_CXSCREEN) == 640 && GetSystemMetrics(SM_CYSCREEN) == 480);
-#endif // WIN
-#ifdef MAC
-    RawRtn();
+#else  // !WIN
     return fFalse;
-#endif // MAC
+#endif // WIN
 }
 
 /***************************************************************************
