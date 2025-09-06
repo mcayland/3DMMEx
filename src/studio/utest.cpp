@@ -514,10 +514,10 @@ bool APP::_FAppAlreadyRunning(void)
         CloseHandle(hsem);
         return fTrue;
     }
+#else  // !WIN
+    // FUTURE: Check if app is already running
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
+
     return fFalse;
 }
 
@@ -545,10 +545,9 @@ void APP::_TryToActivateWindow(void)
         if (fniUserDoc.Ftg() != ftgNil)
             _FSendOpenDocCmd(hwnd, &fniUserDoc); // ignore failure
     }
-#endif // WIN
-#ifdef MAC
+#else  // !WIN
     RawRtn();
-#endif // MAC
+#endif // WIN
 }
 
 /***************************************************************************
@@ -740,10 +739,9 @@ bool APP::_FEnsureColorDepth(void)
             }
         }
     */
+#else  // !WIN
+    // Assume colour depth >= 8-bit
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
     return fTrue;
 }
 
@@ -1102,9 +1100,6 @@ void APP::_RebuildMainWindow(void)
     SetWindowLong(vwig.hwndApp, GWL_STYLE, dwStyle);
     SetWindowPos(vwig.hwndApp, HWND_TOP, xpWindow, ypWindow, dxpWindow, dypWindow, 0);
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
 }
 
 /***************************************************************************
@@ -1277,9 +1272,7 @@ bool APP::_FGetUserDirectories(void)
 #ifdef WIN
     if (SetCurrentDirectory(szDir) == FALSE)
         return fFalse;
-#else  //! WIN
-    RawRtn();
-#endif //! WIN
+#endif // WIN
     AssertPo(&_fniUserDir, ffniDir);
 
     if (!FSetProp(kpridFirstTimeUser, fFirstTimeUser))
@@ -2111,25 +2104,30 @@ void APP::_ParseCommandLine(void)
 {
     AssertBaseThis(0);
 
-#ifdef WIN
     SZ sz;
-    STN stn;
-    achar *pch;
-    achar *pchT;
+    STN stn, stnCurrentDir, stnExe;
+    achar *pch = pvNil;
+    achar *pchT = pvNil;
     FNI fniT;
 
-    // Get path to current directory
+    // Get paths to current directory and executable
+#ifdef WIN
     GetCurrentDirectory(kcchMaxSz, sz);
-    stn.SetSz(sz);
-    if (!_fniCurrentDir.FBuildFromPath(&stn, kftgDir))
-        Bug("Bad current directory?");
+    stnCurrentDir.SetSz(sz);
 
-    // Get path to exe
     GetModuleFileName(NULL, sz, kcchMaxSz);
-    stn.SetSz(sz);
-    if (!_fniExe.FBuildFromPath(&stn))
-        Bug("Bad module filename?");
+    stnExe.SetSz(sz);
+#else  // !WIN
+    Bug("FIXME: Get current directory and executable path");
+    stnCurrentDir = PszLit(".");
+    stnExe = PszLit(".//3dmovie.exe");
+#endif // WIN
 
+    AssertDo(_fniCurrentDir.FBuildFromPath(&stnCurrentDir, kftgDir), "Bad current directory?");
+    AssertDo(_fniExe.FBuildFromPath(&stnExe), "Bad module filename?");
+
+    // FIXME: Parse command-line arguments on non-Windows
+#ifdef WIN
     pch = vwig.pszCmdLine;
     // first argument (app name) is useless...skip it
     _SkipToSpace(&pch);
@@ -2226,9 +2224,6 @@ void APP::_ParseCommandLine(void)
         }
     }
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
 }
 
 /***************************************************************************
@@ -2523,9 +2518,6 @@ void APP::_Activate(bool fActive)
     }
 
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
 
     /* Don't do this stuff unless we've got the CEX set up */
     if (vpcex != pvNil)
@@ -3510,9 +3502,7 @@ bool APP::_FDisplaySwitchSupported(void)
     return fTrue;
 
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif             // MAC
+
     return fFalse; // OS doesn't support res-switching
 }
 
@@ -3614,9 +3604,6 @@ LFail:
     if (0 != hLibrary)
         FreeLibrary(hLibrary);
 #endif // WIN
-#ifdef MAC
-    RawRtn();
-#endif // MAC
     return fFalse;
 }
 
