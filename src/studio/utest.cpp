@@ -3096,9 +3096,13 @@ void APP::MemStat(int32_t *pdwTotalPhys, int32_t *pdwAvailPhys)
         *pdwTotalPhys = ms.dwTotalPhys;
     if (pvNil != pdwAvailPhys)
         *pdwAvailPhys = ms.dwAvailPhys;
-#else
-    RawRtn();
-#endif //! WIN
+#else  // !WIN
+    // FIXME: Get memory usage
+    if (pvNil != pdwTotalPhys)
+        *pdwTotalPhys = 0;
+    if (pvNil != pdwAvailPhys)
+        *pdwAvailPhys = 0;
+#endif // WIN
 }
 
 /******************************************************************************
