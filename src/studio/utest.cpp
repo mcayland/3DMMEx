@@ -1550,10 +1550,6 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
     AssertBaseThis(0);
     AssertVarMem(ppgst);
 
-#ifdef WIN
-    HKEY hkey = 0;
-    DWORD dwDisposition;
-    DWORD iValue;
     SZ szSid;
     STN stnSid;
     DWORD cchSid = kcchMaxSz;
@@ -1565,6 +1561,11 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
 
     if ((pgst = GST::PgstNew(SIZEOF(int32_t))) == pvNil)
         goto LFail;
+
+#ifdef WIN
+    HKEY hkey;
+    DWORD dwDisposition;
+    DWORD iValue;
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, kszProductsKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ, NULL, &hkey,
                        &dwDisposition) == ERROR_SUCCESS)
@@ -1593,6 +1594,8 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
         Warn("_FReadTitlesFromReg: Could not open products key");
     }
 
+#endif // WIN
+
     if (pgst->IvMac() == 0)
     {
         stnTitle.SetSz(PszLit("3D Movie Maker/3DMovie"));
@@ -1603,9 +1606,7 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
             goto LFail;
         }
     }
-#else  //! WIN
-    RawRtn();
-#endif //! WIN
+
     *ppgst = pgst;
     return fTrue;
 
