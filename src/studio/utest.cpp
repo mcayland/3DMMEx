@@ -1341,8 +1341,11 @@ bool APP::_FGetUserName(void)
     Assert(!fRet || _stnUser.Cch() > 0, "Bug in _FGetUserName");
     return fRet;
 #else  // WIN
-    RawRtn();
-    return fFalse;
+    Bug("FIXME: Implement APP::_FGetUserName");
+
+    // Set a default user name
+    _stnUser = PszLit("User");
+    return fTrue;
 #endif // !WIN
 }
 
