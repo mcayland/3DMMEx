@@ -159,9 +159,9 @@ void APP::GetStnAppName(PSTN pstn)
             _stnAppName = sz;
         else
             Warn("Couldn't read app name");
-#else  // MAC
-        RawRtn();
-#endif // MAC
+#else
+        _stnAppName = PszLit("Microsoft 3D Movie Maker");
+#endif
     }
     *pstn = _stnAppName;
 }
@@ -2262,9 +2262,10 @@ bool APP::_FEnsureProductNames(void)
         if (0 == LoadString(vwig.hinst, stid3DMovieNameShort, sz, kcchMaxSz))
             return fFalse;
         _stnProductShort.SetSz(sz);
-#else  // MAC
-        RawRtn();
-#endif // MAC
+#else
+        _stnProductLong = PszLit("3D Movie Maker");
+        _stnProductShort = PszLit("3DMovie");
+#endif
     }
 
     if (_stnProductShort.Cch() == 0)
