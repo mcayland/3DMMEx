@@ -24,7 +24,7 @@ class BackgroundGob : public BackgroundGob_PAR
     }
 
     // Render the GOB
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 
     // Set the background to a pattern
     void TogglePattern();
@@ -54,11 +54,11 @@ class MessageLogGob : public MessageLogGob_PAR
     }
 
     // Render the GOB
-    virtual void Draw(PGNV pgnv, RC *prcClip);
+    virtual void Draw(PGNV pgnv, RC *prcClip) override;
 
-    bool FCmdMouseMove(PCMD_MOUSE cmd);
+    virtual bool FCmdMouseMove(PCMD_MOUSE cmd) override;
+    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd) override;
     bool FCmdRollOff(PCMD cmd);
-    virtual bool FCmdTrackMouse(PCMD_MOUSE pcmd);
 
     void AddCmd(STN stnCmd);
 
@@ -86,11 +86,11 @@ class KhelloApp : public KhelloApp_PAR
     MARKMEM
 
   protected:
-    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef);
-    virtual void _CleanUp();
+    virtual bool _FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef) override;
+    virtual void _CleanUp() override;
 
   public:
-    virtual void GetStnAppName(PSTN pstn);
+    virtual void GetStnAppName(PSTN pstn) override;
 
     // Commands
     bool FCmdExit(PCMD pcmd);
