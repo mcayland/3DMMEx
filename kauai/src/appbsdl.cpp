@@ -277,6 +277,7 @@ bool APPB::FAssertProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv,
     }
 #endif // WIN && IN_80386
 
+#ifdef WIN
     OutputDebugString(stn0.Psz());
     OutputDebugString(PszLit("\n"));
 
@@ -290,6 +291,21 @@ bool APPB::FAssertProcApp(PSZS pszsFile, int32_t lwLine, PSZS pszsMsg, void *pv,
         OutputDebugString(stn2.Psz());
         OutputDebugString(PszLit("\n"));
     }
+#else  // !WIN
+    U8SZ u8szT;
+    stn0.GetUtf8Sz(u8szT);
+    fprintf(stderr, "%s\n", u8szT);
+    if (stn1.Cch() > 0)
+    {
+        stn1.GetUtf8Sz(u8szT);
+        fprintf(stderr, "%s\n", u8szT);
+    }
+    if (stn2.Cch() > 0)
+    {
+        stn2.GetUtf8Sz(u8szT);
+        fprintf(stderr, "%s\n", u8szT);
+    }
+#endif // WIN
 
     // can't use a dialog - it may cause grid - lock
     int32_t sid;
