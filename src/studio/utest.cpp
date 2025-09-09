@@ -2109,8 +2109,8 @@ void APP::_ParseCommandLine(void)
 
     SZ sz;
     STN stn, stnCurrentDir, stnExe;
-    achar *pch = pvNil;
-    achar *pchT = pvNil;
+    PCSZ pch = pvNil;
+    PCSZ pchT = pvNil;
     FNI fniT;
 
     // Get paths to current directory and executable
@@ -2440,7 +2440,7 @@ LFail:
     the end of the string.  Exception: if the space character is surrounded
     by double quotes, this function skips by it.
 ***************************************************************************/
-void APP::_SkipToSpace(achar **ppch)
+void APP::_SkipToSpace(PCSZ *ppch)
 {
     AssertBaseThis(0);
     AssertVarMem(ppch);
@@ -2458,7 +2458,7 @@ void APP::_SkipToSpace(achar **ppch)
 /***************************************************************************
     Advances *ppch to the next non-space character.
 ***************************************************************************/
-void APP::_SkipSpace(achar **ppch)
+void APP::_SkipSpace(PCSZ *ppch)
 {
     AssertBaseThis(0);
     AssertVarMem(ppch);

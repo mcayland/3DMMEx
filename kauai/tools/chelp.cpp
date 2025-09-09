@@ -130,7 +130,7 @@ bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
     // parse the command line and load any resource files and help files
     FNI fni;
     bool fQuote, fRes, fSkip;
-    PSZ psz = vwig.pszCmdLine;
+    PCSZ psz = vwig.pszCmdLine;
 
     // skip the first token since it is the path
     fSkip = fTrue;

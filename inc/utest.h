@@ -183,8 +183,8 @@ class APP : public APP_PAR
     bool _FEnsureDisplayResolution(void);
     bool _FDisplaySwitchSupported(void);
     void _ParseCommandLine(void);
-    void _SkipToSpace(achar **ppch);
-    void _SkipSpace(achar **ppch);
+    void _SkipToSpace(PCSZ *ppch);
+    void _SkipSpace(PCSZ *ppch);
     bool _FEnsureProductNames(void);
     bool _FFindProductDir(PGST pgst);
     bool _FQueryProductExists(STN *pstnLong, STN *pstnShort, FNI *pfni);

@@ -33,7 +33,7 @@ struct WIG
 {
     HINSTANCE hinst;
     HINSTANCE hinstPrev;
-    LPTSTR pszCmdLine;
+    PCSZ pszCmdLine;
     int wShow;
 
     KWND hwndApp;

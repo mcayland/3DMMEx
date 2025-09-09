@@ -45,7 +45,7 @@ bool APP::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
     PDDG pddg;
     PDOCB pdocb;
     int32_t lw;
-    PSZ psz = vwig.pszCmdLine;
+    PCSZ psz = vwig.pszCmdLine;
 
     fSkip = fTrue;
     fScript = fFalse;
