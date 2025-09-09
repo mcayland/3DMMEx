@@ -27,24 +27,27 @@ typedef EventRecord EVT;
 #endif // WIN
 typedef EVT *PEVT;
 
-#ifdef WIN
-// windows specific globals
+// Window globals
 struct WIG
 {
+    PCSZ pszCmdLine;
+    KWND hwndApp;
+    KWND hwndClient; // MDI client window
+
+#ifdef WIN
+
     HINSTANCE hinst;
     HINSTANCE hinstPrev;
-    PCSZ pszCmdLine;
-    int wShow;
 
-    KWND hwndApp;
+    int wShow;
     HDC hdcApp;
-    KWND hwndClient;      // MDI client window
     HACCEL haccel;        // main accelerator table
     KWND hwndNextViewer;  // next clipboard viewer
     int32_t lwThreadMain; // main thread
+
+#endif // WIN
 };
 extern WIG vwig;
-#endif // WIN
 
 /***************************************************************************
     The base application class.
