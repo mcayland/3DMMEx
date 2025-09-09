@@ -33,6 +33,8 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszs, int wShow)
  */
 void APPB::CreateConsole()
 {
+    // This is only needed on Windows
+#ifdef WIN32
     if (!AllocConsole())
     {
         return;
@@ -46,6 +48,7 @@ void APPB::CreateConsole()
     std::clog.clear();
     std::cerr.clear();
     std::cin.clear();
+#endif // WIN32
 }
 
 /***************************************************************************
