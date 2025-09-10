@@ -489,7 +489,13 @@ PDDG DOCB::PddgActive(void)
 PDMD DOCB::PdmdNew(void)
 {
     AssertThis(fobjAssertFull);
+#if defined(KAUAI_WIN32)
     return DMD::PdmdNew(this);
+#else  // !KAUAI_WIN32
+    // MDI document windows aren't used in 3DMM
+    Bug("MDI document windows not implemented!");
+    return pvNil;
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -519,7 +525,12 @@ void DOCB::ActivateDmd(void)
 PDMW DOCB::PdmwNew(PGCB pgcb)
 {
     AssertThis(fobjAssertFull);
+#if defined(KAUAI_WIN32)
     return DMW::PdmwNew(this, pgcb);
+#else  // !KAUAI_WIN32
+    Bug("Default document window not implemented!");
+    return pvNil;
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -528,7 +539,12 @@ PDMW DOCB::PdmwNew(PGCB pgcb)
 PDSG DOCB::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel)
 {
     AssertThis(fobjAssertFull);
+#if defined(KAUAI_WIN32)
     return DSG::PdsgNew(pdmw, pdsgSplit, grfdsg, rel);
+#else  // !KAUAI_WIN32
+    Bug("Document scroll GOB not implemented!");
+    return pvNil;
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -537,7 +553,12 @@ PDSG DOCB::PdsgNew(PDMW pdmw, PDSG pdsgSplit, uint32_t grfdsg, int32_t rel)
 PDDG DOCB::PddgNew(PGCB pgcb)
 {
     AssertThis(fobjAssertFull);
+#if defined(KAUAI_WIN32)
     return DDG::PddgNew(this, pgcb);
+#else  // !KAUAI_WIN32
+    Bug("Document display GOB not implemented!");
+    return pvNil;
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -1269,6 +1290,7 @@ void DDG::_SetScrollValues(void)
     PGOB pgob;
 
     pgob = PgobPar();
+#if defined(KAUAI_WIN32)
     if (pgob->FIs(kclsDSG))
     {
         if (pvNil != (pscb = (PSCB)pgob->PgobFromHid(khidVScroll)))
@@ -1276,6 +1298,7 @@ void DDG::_SetScrollValues(void)
         if (pvNil != (pscb = (PSCB)pgob->PgobFromHid(khidHScroll)))
             pscb->SetValMinMax(_scvHorz, 0, _ScvMax(fFalse));
     }
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -1323,6 +1346,8 @@ void DDG::MarkMem(void)
     MarkMemObj(_pdocb);
 }
 #endif // DEBUG
+
+#if defined(KAUAI_WIN32)
 
 /***************************************************************************
     Static method: create a new Document MDI window.  Put a size box in
@@ -2450,3 +2475,5 @@ tribool DSSM::TVert(void)
     pdmw = pdsg->Pdmw();
     return pdmw->TVert(pdsg);
 }
+
+#endif // KAUAI_WIN32
