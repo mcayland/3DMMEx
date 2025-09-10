@@ -421,19 +421,11 @@ bool GOB::FGetRcInval(RC *prc, int32_t gin)
         RECT rcs;
         RC rcT;
 
-#ifdef WIN
+#if defined(KAUAI_WIN32)
         GetUpdateRect(pgob->_hwnd, &rcs, fFalse);
-#endif // WIN
-#ifdef MAC
-        PPRT pprt;
-
-        rcs = (*pgob->_hwnd->updateRgn)->rgnBBox;
-        GetPort(&pprt);
-        SetPort(&pgob->_hwnd->port);
-        GlobalToLocal((PTS *)&rcs);
-        GlobalToLocal((PTS *)&rcs + 1);
-        SetPort(pprt);
-#endif // MAC
+#else
+#error not implemented
+#endif
         rcT = RC(rcs);
         if (rcT.FIntersect(&rc))
             prc->Union(&rcT);
@@ -530,7 +522,7 @@ void GOB::Scroll(RC *prc, int32_t dxp, int32_t dyp, int32_t gin, RC *prcBad1, RC
         }
     }
 
-#ifdef WIN
+#if defined(KAUAI_WIN32)
     // SW_INVALIDATE invalidates any uncovered stuff and translates any
     // previously invalid stuff
     RECT rcs = RCS(rc);
@@ -571,69 +563,9 @@ void GOB::Scroll(RC *prc, int32_t dxp, int32_t dyp, int32_t gin, RC *prcBad1, RC
         }
         break;
     }
-#endif // WIN
-#ifdef MAC
-    HRGN hrgn;
-
-    // Make sure the vis region intersected with the rectangle to scroll is
-    // a rectangle
-    if (!FCreateRgn(&hrgn, &rc) || !FIntersectRgn(hrgn, pgob->_hwnd->port.visRgn, hrgn) || !FRectRgn(hrgn, &rc))
-    {
-        // there is something on top of this one, just invalidate the
-        // rectangle to be scrolled
-        FreePhrgn(&hrgn);
-        pgob->ValidRc(&rc, kginDraw);
-        pgob->InvalRc(&rc, gin);
-        if (pvNil != prcBad1)
-            prcBad1->OffsetCopy(&rc, -dpt.xp, -dpt.yp);
-        return;
-    }
-    FreePhrgn(&hrgn);
-
-    GNV gnv(pgob);
-    gnv.ScrollRc(&rc, dxp, dyp, &rcBad1, &rcBad2);
-
-    // translate any invalid area
-    if (FGetRcInval(&rcT, kginSysInval))
-    {
-        // something is invalid
-        rcT.Offset(dpt.xp, dpt.yp);
-        if (rcT.FIntersect(&rc))
-        {
-            pgob->ValidRc(&rcT, kginSysInval);
-            rcT.Offset(dxp, dyp);
-            if (rcT.FIntersect(&rc))
-                pgob->InvalRc(&rcT, kginSysInval);
-        }
-    }
-
-    if (pvNil != prcBad1)
-        prcBad1->OffsetCopy(&rcBad1, -dpt.xp, -dpt.yp);
-    if (pvNil != prcBad2)
-        prcBad2->OffsetCopy(&rcBad2, -dpt.xp, -dpt.yp);
-
-    switch (gin)
-    {
-    default:
-        Bug("bad gin");
-        // fall through
-    case ginNil:
-        break;
-    case kginDraw:
-        vpappb->MarkRc(&rcBad1, pgob);
-        vpappb->MarkRc(&rcBad2, pgob);
-        vpappb->UpdateMarked();
-        break;
-    case kginSysInval:
-        pgob->InvalRc(&rcBad1);
-        pgob->InvalRc(&rcBad2);
-        break;
-    case kginMark:
-        vpappb->MarkRc(&rcBad1, pgob);
-        vpappb->MarkRc(&rcBad2, pgob);
-        break;
-    }
-#endif // MAC
+#else
+#error not implemented
+#endif
 }
 
 /***************************************************************************
@@ -1089,16 +1021,11 @@ KWND GOB::_HwndGetDptFromCoo(PT *pdpt, int32_t coo)
             // Map from Hwnd to screen
             POINT pts;
             pts = POINT(*pdpt);
-#ifdef WIN
+#if defined(KAUAI_WIN32)
             ClientToScreen(hwnd, &pts);
-#endif // WIN
-#ifdef MAC
-            PPRT pprt;
-            GetPort(&pprt);
-            SetPort(&hwnd->port);
-            LocalToGlobal(&pts);
-            SetPort(pprt);
-#endif // MAC
+#else
+#error not implemented
+#endif
             *pdpt = PT(pts);
         }
         break;
@@ -1129,27 +1056,7 @@ PGOB GOB::PgobFromPtGlobal(int32_t xp, int32_t yp, PT *pptLocal)
     POINT pts;
     PGOB pgob;
 
-#ifdef MAC
-    PPRT pprt;
-
-    pts.h = (short)xp;
-    pts.v = (short)yp;
-    if (inContent != FindWindow(pts, (WindowPtr *)&hwnd) || hNil == hwnd || pvNil == (pgob = PgobFromHwnd(hwnd)))
-    {
-        if (pvNil != pptLocal)
-        {
-            pptLocal->xp = xp;
-            pptLocal->yp = yp;
-        }
-        return pvNil;
-    }
-    GetPort(&pprt);
-    SetPort(&hwnd->port);
-    GlobalToLocal(&pts);
-    SetPort(pprt);
-    return pgob->PgobFromPt(pts.h, pts.v, pptLocal);
-#endif // MAC
-#ifdef WIN
+#if defined(KAUAI_WIN32)
     pts.x = xp;
     pts.y = yp;
     if (hNil == (hwnd = WindowFromPoint(pts)) || pvNil == (pgob = PgobFromHwnd(hwnd)))
@@ -1163,7 +1070,9 @@ PGOB GOB::PgobFromPtGlobal(int32_t xp, int32_t yp, PT *pptLocal)
     }
     ScreenToClient(hwnd, &pts);
     return pgob->PgobFromPt(pts.x, pts.y, pptLocal);
-#endif // WIN
+#else
+#error not implemented
+#endif
 }
 
 /***************************************************************************
