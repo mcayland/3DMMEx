@@ -1051,6 +1051,8 @@ void APP::_GetWindowProps(int32_t *pxp, int32_t *pyp, int32_t *pdxp, int32_t *pd
     AssertVarMem(pdyp);
     AssertVarMem(pdwStyle);
 
+#if defined(KAUAI_WIN32)
+
     if (!_fRunInWindow)
     {
         *pdwStyle |= (WS_POPUP | WS_CLIPCHILDREN);
@@ -1077,6 +1079,14 @@ void APP::_GetWindowProps(int32_t *pxp, int32_t *pyp, int32_t *pdxp, int32_t *pd
         *pxp = LwMax((GetSystemMetrics(SM_CXSCREEN) - *pdxp) / 2, 0);
         *pyp = LwMax((GetSystemMetrics(SM_CYSCREEN) - *pdyp) / 2, 0);
     }
+
+#else
+    *pxp = 0;
+    *pyp = 0;
+    *pdxp = 640;
+    *pdyp = 480;
+    *pdwStyle = 0;
+#endif
 }
 
 /***************************************************************************
@@ -1088,7 +1098,7 @@ void APP::_RebuildMainWindow(void)
     AssertBaseThis(0);
     Assert(_fMainWindowCreated, 0);
 
-#ifdef WIN
+#if defined(KAUAI_WIN32)
     int32_t dxpWindow;
     int32_t dypWindow;
     int32_t xpWindow;
@@ -1099,7 +1109,7 @@ void APP::_RebuildMainWindow(void)
     _GetWindowProps(&xpWindow, &ypWindow, &dxpWindow, &dypWindow, &dwStyle);
     SetWindowLong(vwig.hwndApp, GWL_STYLE, dwStyle);
     SetWindowPos(vwig.hwndApp, HWND_TOP, xpWindow, ypWindow, dxpWindow, dypWindow, 0);
-#endif // WIN
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -3504,13 +3514,12 @@ bool APP::_FDisplaySwitchSupported(void)
     AssertBaseThis(0);
 
 #ifdef WIN
-
     // We can no longer compile for Windows platforms that do not support screen resolution changes.
     return fTrue;
-
+#else
+    // OS doesn't support res-switching
+    return fFalse;
 #endif // WIN
-
-    return fFalse; // OS doesn't support res-switching
 }
 
 /***************************************************************************
