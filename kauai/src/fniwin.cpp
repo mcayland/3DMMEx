@@ -11,8 +11,11 @@
 
 ***************************************************************************/
 #include "util.h"
-#include <commdlg.h>
 ASSERTNAME
+
+#ifdef WIN
+#include <commdlg.h>
+#endif // WIN
 
 // This is the FTG to use for temp files - clients may set this to whatever
 // they want.
@@ -57,6 +60,7 @@ bool FNI::FGetOpen(const achar *prgchFilter, HWND hwndOwner)
     AssertThis(0);
     AssertNilOrVarMem(prgchFilter);
 
+#ifdef WIN
     OFN ofn;
     SZ sz;
 
@@ -84,6 +88,12 @@ bool FNI::FGetOpen(const achar *prgchFilter, HWND hwndOwner)
     _SetFtgFromName();
     AssertThis(ffniFile);
     return fTrue;
+
+#else  // !WIN
+    // FGetOpen not supported on non-Windows
+    RawRtn();
+    return fFalse;
+#endif // WIN
 }
 
 /***************************************************************************
@@ -94,6 +104,7 @@ bool FNI::FGetSave(const achar *prgchFilter, HWND hwndOwner)
     AssertThis(0);
     AssertNilOrVarMem(prgchFilter);
 
+#ifdef WIN
     OFN ofn;
     SZ sz;
 
@@ -122,6 +133,13 @@ bool FNI::FGetSave(const achar *prgchFilter, HWND hwndOwner)
     _SetFtgFromName();
     AssertThis(ffniFile);
     return fTrue;
+#else // !WIN
+
+    // FGetSave not supported on non-Windows
+    RawRtn();
+    return fFalse;
+
+#endif // WIN
 }
 
 /***************************************************************************
