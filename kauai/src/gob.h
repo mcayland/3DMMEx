@@ -63,7 +63,7 @@ inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
     SetPort(pprt);
 }
 #endif // MAC
-#ifdef WIN
+#ifdef KAUAI_WIN32
 inline void InvalHwndRcs(HWND hwnd, RCS *prcs)
 {
     RECT rcs = *prcs;
@@ -74,7 +74,18 @@ inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
     RECT rcs = *prcs;
     ValidateRect(hwnd, &rcs);
 }
-#endif // WIN
+#endif // KAUAI_WIN32
+
+#ifdef KAUAI_SDL
+inline void InvalHwndRcs(HWND hwnd, RCS *prcs)
+{
+    // do nothing
+}
+inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
+{
+    // do nothing
+}
+#endif // KAUAI_SDL
 
 // coordinates
 enum
