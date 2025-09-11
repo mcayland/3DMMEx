@@ -365,17 +365,11 @@ class APP : public APP_PAR
     {
 #ifdef WIN
         if (_fMinimized || GetForegroundWindow() != vwig.hwndApp)
-#else
-        if (_fMinimized)
-#endif
         {
-#ifdef WIN
             SetForegroundWindow(vwig.hwndApp);
             ShowWindow(vwig.hwndApp, SW_RESTORE);
-#else  //! WIN
-            RawRtn();
-#endif //! WIN
         }
+#endif // WIN
     }
     tribool TModal(PRCA prca, int32_t tpc, PSTN pstnBackup = pvNil, int32_t bkBackup = ivNil, int32_t stidSubst = ivNil,
                    PSTN pstnSubst = pvNil);
