@@ -96,6 +96,7 @@ target_sources(studio
 
     # TODO: replace with a module that saves settings to a file
     $<$<NOT:$<PLATFORM_ID:Windows>>:${PROJECT_SOURCE_DIR}/src/studio/configstub.cpp>
+    $<$<NOT:$<PLATFORM_ID:Windows>>:${PROJECT_SOURCE_DIR}/src/studio/portfstub.cpp>
 )
 
 target_include_directories(studio
