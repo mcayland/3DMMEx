@@ -719,6 +719,9 @@ class GPT : public GPT_PAR
     bool _fNewClip : 1;   //_pregnClip is new
     bool _fOffscreen : 1; // is offscreen
 
+    // Offscreen GPT bounding rectangle
+    RC _rcOff;
+
     // Window to render to
     SDL_Window *_wnd = pvNil;
     // Renderer to use when rendering

@@ -208,6 +208,10 @@ PGPT GPT::PgptNewOffscreen(RC *prc, int32_t cbitPixel)
     pgpt = PgptNew((SDL_Window *)vwig.hwndApp, cbitPixel, fTrue, prc->Dxp(), prc->Dyp());
     Assert(pgpt != pvNil, "couldn't allocate GPT");
 
+    pgpt->_ptBase = prc->PtTopLeft();
+    pgpt->_rcOff = *prc;
+    pgpt->_rcOff.OffsetToOrigin();
+
     return pgpt;
 }
 
@@ -257,10 +261,7 @@ byte *GPT::PrgbLockPixels(RC *prc)
 
     if (prc != pvNil)
     {
-        prc->xpLeft = 0;
-        prc->ypTop = 0;
-        prc->xpRight = _surface->w;
-        prc->ypBottom = _surface->h;
+        *prc = _rcOff;
     }
 
     return (byte *)_surface->pixels;
