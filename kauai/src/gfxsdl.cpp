@@ -183,6 +183,18 @@ PGPT GPT::PgptNew(HDC hdc)
 ***************************************************************************/
 GPT::~GPT(void)
 {
+    if (_texture != pvNil)
+    {
+        SDL_DestroyTexture(_texture);
+        _texture = pvNil;
+    }
+
+    if (_surface != pvNil)
+    {
+        SDL_FreeSurface(_surface);
+        _surface = pvNil;
+    }
+
     ReleasePpo(&_pregnClip);
 }
 
