@@ -7405,17 +7405,18 @@ void MVU::_MouseDrag(CMD_MOUSE *pcmd)
     dyrMouse = BrsSub(BrIntToScalar(_ypPrev), BrIntToScalar(pcmd->yp));
     dzrMouse = _dzrPrev;
 
-#ifdef KAUAI_WIN32
+#if defined(KAUAI_WIN32)
     fKeyUp = (GetKeyState(VK_UP) < 0);
     fKeyDown = (GetKeyState(VK_DOWN) < 0);
-#else
-    // TODO: implement keyboard handling
-    static bool _fWarnKeyNotImplemented = fTrue;
-    if (_fWarnKeyNotImplemented)
+#elif defined(KAUAI_SDL)
+    const uint8_t *rgbKeyStates = SDL_GetKeyboardState(pvNil);
+    if (rgbKeyStates)
     {
-        Bug("FIXME: Implement keyboard handling in MVU::_MouseDrag");
-        _fWarnKeyNotImplemented = fFalse;
+        fKeyUp = FPure(rgbKeyStates[SDL_SCANCODE_UP]);
+        fKeyDown = FPure(rgbKeyStates[SDL_SCANCODE_DOWN]);
     }
+#else
+    RawRtn();
 #endif
 
     //
