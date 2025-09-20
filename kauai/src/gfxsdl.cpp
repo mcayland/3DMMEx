@@ -12,6 +12,9 @@ ASSERTNAME
 // Palette used for drawing 8-bit images
 static SDL_Palette *_pal = pvNil;
 
+// Number of colors in an 8-bit palette
+const int32_t kcsdlc = 256;
+
 #define AssertDoSDL(x) AssertDo(0 == (x), SDL_GetError());
 
 /***************************************************************************
@@ -42,39 +45,15 @@ const SDL_Color _rgsdlcWin[20] = {
     {0xFF, 0xFF, 0, 0},    {0, 0, 0xFF, 0},       {0xFF, 0, 0xFF, 0},    {0, 0xFF, 0xFF, 0},    {0xFF, 0xFF, 0xFF, 0},
 };
 
-/***************************************************************************
-    Static method to set the current color table.
-    While using fpalIdentity the following cautions apply:
-
-        1) The following indexes are reserved by the system, so shouldn't be used:
-            { 0, 1, 3, 15, 255 } (Mac)
-            { 0 - 9; 246 - 255 } (Win).
-        2) While we're in the background, RGB values may get mapped to
-            the wrong indexes, so the colors will change when we move
-            to the foreground.  The solution is to always use indexed
-            based color while using fForceOnSystem.
-        3) This should only be called when we are the foreground app.
-
-***************************************************************************/
-void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
+// Set colors in a SDL palette from a list of colors
+static void SetPalette(SDL_Palette *sdlpal, PGL pglclr)
 {
     int ret = 0;
-    const int32_t kcsdlc = 256;
     SDL_Color rgsdlc[kcsdlc];
     int32_t cclr;
 
+    Assert(sdlpal != pvNil, "Palette cannot be nil");
     AssertNilOrPo(pglclr, 0);
-
-    // Allocate a palette
-    if (_pal == pvNil)
-    {
-        _pal = SDL_AllocPalette(kcsdlc);
-        if (_pal == pvNil)
-        {
-            Assert(_pal != pvNil, "Could not allocate palette");
-            return;
-        }
-    }
 
     // Copy standard colors
     CopyPb(_rgsdlcWin, rgsdlc, 10 * SIZEOF(_rgsdlcWin[0]));
@@ -100,7 +79,39 @@ void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
     }
 
     // Add colours to the palette
-    AssertDoSDL(SDL_SetPaletteColors(_pal, rgsdlc, 0, kcsdlc));
+    AssertDoSDL(SDL_SetPaletteColors(sdlpal, rgsdlc, 0, CvFromRgv(rgsdlc)));
+}
+
+/***************************************************************************
+    Static method to set the current color table.
+    While using fpalIdentity the following cautions apply:
+
+        1) The following indexes are reserved by the system, so shouldn't be used:
+            { 0, 1, 3, 15, 255 } (Mac)
+            { 0 - 9; 246 - 255 } (Win).
+        2) While we're in the background, RGB values may get mapped to
+            the wrong indexes, so the colors will change when we move
+            to the foreground.  The solution is to always use indexed
+            based color while using fForceOnSystem.
+        3) This should only be called when we are the foreground app.
+
+***************************************************************************/
+void GPT::SetActiveColors(PGL pglclr, uint32_t grfpal)
+{
+    AssertNilOrPo(pglclr, 0);
+
+    // Allocate a palette
+    if (_pal == pvNil)
+    {
+        _pal = SDL_AllocPalette(kcsdlc);
+        if (_pal == pvNil)
+        {
+            Assert(_pal != pvNil, "Could not allocate palette");
+            return;
+        }
+    }
+
+    SetPalette(_pal, pglclr);
 
     vcactRealize++;
 }
@@ -193,6 +204,12 @@ GPT::~GPT(void)
     {
         SDL_FreeSurface(_surface);
         _surface = pvNil;
+    }
+
+    if (_palOff != pvNil)
+    {
+        SDL_FreePalette(_palOff);
+        _palOff = pvNil;
     }
 
     ReleasePpo(&_pregnClip);
@@ -934,9 +951,21 @@ void GPT::SetOffscreenColors(PGL pglclr)
 {
     AssertThis(0);
     AssertNilOrPo(pglclr, 0);
+    Assert(_surface != pvNil, "Surface must be created");
 
-    // TODO: used in scene thumbnail generation
-    RawRtn();
+    // Allocate a palette
+    if (_palOff == pvNil)
+    {
+        _palOff = SDL_AllocPalette(kcsdlc);
+        if (_palOff == pvNil)
+        {
+            Assert(_palOff != pvNil, "Could not allocate palette");
+            return;
+        }
+    }
+
+    SetPalette(_palOff, pglclr);
+    AssertDoSDL(SDL_SetSurfacePalette(_surface, _palOff));
 }
 
 /***************************************************************************

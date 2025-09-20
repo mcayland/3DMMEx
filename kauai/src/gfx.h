@@ -730,6 +730,8 @@ class GPT : public GPT_PAR
     SDL_Surface *_surface = pvNil;
     // Texture used for rendering the image
     SDL_Texture *_texture = pvNil;
+    // Palette for offscreen GPTs
+    SDL_Palette *_palOff = pvNil;
 
     // Set to True if the surface has changed / the texture needs to be updated
     bool _fSurfaceDirty = fTrue;
