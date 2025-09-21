@@ -374,15 +374,57 @@ void GPT::DrawRcs(RCS *prcs, GDD *pgdd)
     // Convert color to SDL color
     SDL_Color clrFore = acrFore._SDLColor();
 
-    Assert((pgdd->grfgdd & fgddFrame) == 0, "fgddFrame not supported");
     if ((pgdd->grfgdd & fgddPattern))
     {
         // TODO: support fgddPattern
     }
     else
     {
-        // Fill rectangle
-        AssertDoSDL(SDL_FillRect(_surface, &sdlRect, SDL_MapRGB(_surface->format, clrFore.r, clrFore.g, clrFore.b)));
+        Uint32 sdlclr = SDL_MapRGB(_surface->format, clrFore.r, clrFore.g, clrFore.b);
+
+        if (_pregnClip == pvNil || _pregnClip->FIsRc())
+        {
+            // Fill rectangle
+            AssertDoSDL(SDL_FillRect(_surface, &sdlRect, sdlclr));
+        }
+        else
+        {
+            // Clipping region is not a rectangle
+            // Use the region scanner to fill the rectangle
+
+            REGSC regsc;
+            RC rcClipDest(*prcs);
+            regsc.Init(_pregnClip, &rcClipDest);
+
+            int32_t xpDestStart, xpDestEnd;
+            int32_t ypDest, dyp;
+
+            for (ypDest = rcClipDest.ypTop; ypDest < rcClipDest.ypBottom; ypDest += dyp)
+            {
+                dyp = regsc.DypCur();
+
+                // Find each rectangle at this scan line
+                while (regsc.XpCur() < klwMax)
+                {
+                    xpDestStart = regsc.XpCur();
+                    xpDestEnd = regsc.XpFetch();
+
+                    sdlRect.x = rcClipDest.xpLeft + xpDestStart;
+                    sdlRect.w = xpDestEnd - xpDestStart;
+                    sdlRect.y = ypDest;
+                    sdlRect.h = dyp;
+
+                    AssertDoSDL(SDL_FillRect(_surface, &sdlRect, sdlclr));
+
+                    // Fetch the next run
+                    regsc.XpFetch();
+                }
+
+                // Move to the next change in rectangles
+                regsc.ScanNext(dyp);
+            }
+        }
+
         InvalidateTexture();
     }
 
