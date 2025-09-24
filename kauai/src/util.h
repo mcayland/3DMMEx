@@ -64,6 +64,7 @@ typedef HCURSOR HCRS;
 #else
 
 typedef void * HPIC;
+typedef void * HCTL;
 
 #endif // WIN
 
