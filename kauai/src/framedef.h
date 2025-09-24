@@ -152,7 +152,11 @@
 
 #include "framechk.h"
 
-#define kctgPictNative MacWin(kctgMacPict, kctgMeta)
+#ifdef MAC
+#define kctgPictNative kctgMacPict
+#else
+#define kctgPictNative kctgMeta
+#endif
 
 /***************************************************************************
     Command IDs
