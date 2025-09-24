@@ -17,8 +17,13 @@
 #define SNDM_H
 
 const int32_t siiNil = 0;
-const FTG kftgMidi = MacWin(KLCONST4('M', 'I', 'D', 'I'), KLCONST3('M', 'I', 'D')); // REVIEW shonk: Mac: file type
-const FTG kftgWave = MacWin(KLCONST4('W', 'A', 'V', 'E'), KLCONST3('W', 'A', 'V')); // REVIEW shonk: Mac: file type
+#ifdef MAC
+const FTG kftgMidi = KLCONST4('M', 'I', 'D', 'I'); // REVIEW shonk: Mac: file type
+const FTG kftgWave = KLCONST4('W', 'A', 'V', 'E'); // REVIEW shonk: Mac: file type
+#else
+const FTG kftgMidi = KLCONST3('M', 'I', 'D');
+const FTG kftgWave = KLCONST3('W', 'A', 'V');
+#endif
 
 /***************************************************************************
     Sound device - like audioman or our midi player.
