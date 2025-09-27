@@ -49,18 +49,18 @@ void MUTX::Leave(void)
 /****************************************
     Current thread id
 ****************************************/
-inline long LwThreadCur(void)
+uint32_t LwThreadCur(void)
 {
-    return (long)pthread_self();
+    return (uint32_t)pthread_self();
 }
 
 /***************************************************************************
     Universal scalable application clock and other time stuff
 ***************************************************************************/
 
-const unsigned long kdtsSecond = 1000;
+const uint32_t kdtsSecond = 1000;
 
-inline unsigned long TsCurrentSystem(void)
+uint32_t TsCurrentSystem(void)
 {
     struct timespec ts;
     static int64_t clockzero_ns;
@@ -76,7 +76,7 @@ inline unsigned long TsCurrentSystem(void)
     return (clock_ns - clockzero_ns) / 1000000;
 }
 
-inline unsigned long DtsCaret(void)
+uint32_t DtsCaret(void)
 {
     return 1000;  /* 1s for now */
 }
