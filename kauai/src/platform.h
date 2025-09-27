@@ -29,7 +29,7 @@ class MUTX
     Current thread id
 ****************************************/
 
-extern inline uint32_t LwThreadCur(void);
+uint32_t LwThreadCur(void);
 
 /***************************************************************************
     Universal scalable application clock and other time stuff
