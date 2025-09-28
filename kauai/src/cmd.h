@@ -257,9 +257,9 @@ class CEX : public CEX_PAR
     CMD _cmdCur;        // command being dispatched
     int32_t _icmheNext; // next command handler to dispatch to
     PGOB _pgobTrack;    // the gob that is tracking the mouse
-#ifdef WIN
+#ifdef KAUAI_WIN32
     HWND _hwndCapture; // the hwnd that we captured the mouse with
-#endif                 // WIN
+#endif                 // KAUAI_WIN32
 
     // filter list and command queue
     PGL _pglcmhe;       // the command filter list

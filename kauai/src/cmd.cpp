@@ -687,11 +687,11 @@ void CEX::BuryCmh(PCMH pcmh)
 
     if (_pgobTrack == pcmh)
     {
-#ifdef WIN
+#ifdef KAUAI_WIN32
         if (hNil != _hwndCapture && GetCapture() == _hwndCapture)
             ReleaseCapture();
         _hwndCapture = hNil;
-#endif // WIN
+#endif // KAUAI_WIN32
         _pgobTrack = pvNil;
     }
     if (_cmdCur.pcmh == pcmh)
@@ -1179,10 +1179,10 @@ void CEX::TrackMouse(PGOB pgob)
     Assert(_pgobTrack == pvNil, "some other gob is already tracking the mouse");
 
     _pgobTrack = pgob;
-#ifdef WIN
+#ifdef KAUAI_WIN32
     _hwndCapture = pgob->HwndContainer();
     SetCapture(_hwndCapture);
-#endif // WIN
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
@@ -1192,14 +1192,14 @@ void CEX::EndMouseTracking(void)
 {
     AssertThis(0);
 
-#ifdef WIN
+#ifdef KAUAI_WIN32
     if (pvNil != _pgobTrack)
     {
         if (hNil != _hwndCapture && GetCapture() == _hwndCapture)
             ReleaseCapture();
         _hwndCapture = hNil;
     }
-#endif // WIN
+#endif // KAUAI_WIN32
     _pgobTrack = pvNil;
 }
 
@@ -1221,7 +1221,7 @@ void CEX::Suspend(bool fSuspend)
 {
     AssertThis(0);
 
-#ifdef WIN
+#ifdef KAUAI_WIN32
     if (pvNil == _pgobTrack || hNil == _hwndCapture)
         return;
 
@@ -1229,7 +1229,7 @@ void CEX::Suspend(bool fSuspend)
         ReleaseCapture();
     else if (!fSuspend && GetCapture() != _hwndCapture)
         SetCapture(_hwndCapture);
-#endif // WIN
+#endif // KAUAI_WIN32
 }
 
 /***************************************************************************
