@@ -182,3 +182,16 @@ void GOB::MakeHwndActive(KWND hwnd)
 {
     RawRtn();
 }
+
+/***************************************************************************
+    Create a new MDI window and attach it to the gob.
+***************************************************************************/
+bool GOB::FCreateAndAttachMdi(PSTN pstnTitle)
+{
+    AssertThis(0);
+    AssertPo(pstnTitle, 0);
+
+    // SDL does not support MDI
+    RawRtn();
+    return fFalse;
+}

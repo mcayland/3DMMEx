@@ -231,3 +231,23 @@ void GOB::MakeHwndActive(KWND hwnd)
     if (IsWindow(hwnd) && GetParent(hwnd) == vwig.hwndClient && vwig.hwndClient != hNil)
         SendMessage(vwig.hwndClient, WM_MDIACTIVATE, (WPARAM)(HWND)hwnd, 0);
 }
+
+/***************************************************************************
+    Create a new MDI window and attach it to the gob.
+***************************************************************************/
+bool GOB::FCreateAndAttachMdi(PSTN pstnTitle)
+{
+    AssertThis(0);
+    AssertPo(pstnTitle, 0);
+    HWND hwnd;
+
+    if ((hwnd = _HwndNewMdi(pstnTitle)) == hNil)
+        return fFalse;
+    if (!FAttachHwnd(hwnd))
+    {
+        _DestroyHwnd(hwnd);
+        return fFalse;
+    }
+    AssertThis(0);
+    return fTrue;
+}

@@ -1315,26 +1315,6 @@ PGOB GOB::PgobLastChild(void)
 }
 
 /***************************************************************************
-    Create a new MDI window and attach it to the gob.
-***************************************************************************/
-bool GOB::FCreateAndAttachMdi(PSTN pstnTitle)
-{
-    AssertThis(0);
-    AssertPo(pstnTitle, 0);
-    HWND hwnd;
-
-    if ((hwnd = _HwndNewMdi(pstnTitle)) == hNil)
-        return fFalse;
-    if (!FAttachHwnd(hwnd))
-    {
-        _DestroyHwnd(hwnd);
-        return fFalse;
-    }
-    AssertThis(0);
-    return fTrue;
-}
-
-/***************************************************************************
     Static method: find the currently active MDI gob.
 ***************************************************************************/
 PGOB GOB::PgobMdiActive(void)
