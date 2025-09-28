@@ -282,10 +282,13 @@ class APPB : public APPB_PAR
 
     // common commands
     virtual bool FCmdQuit(PCMD pcmd);
+    virtual bool FCmdIdle(PCMD pcmd);
+
+#ifdef KAUAI_WIN32
     virtual bool FCmdShowClipboard(PCMD pcmd);
     virtual bool FEnableAppCmd(PCMD pcmd, uint32_t *pgrfeds);
-    virtual bool FCmdIdle(PCMD pcmd);
     virtual bool FCmdChooseWnd(PCMD pcmd);
+#endif // KAUAI_WIN32
 #ifdef MAC
     virtual bool FCmdOpenDA(PCMD pcmd);
 #endif // MAC

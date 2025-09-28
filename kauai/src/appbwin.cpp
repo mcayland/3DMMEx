@@ -1161,3 +1161,60 @@ void APPB::RefreshCurs(void)
 #endif // MAC
     }
 }
+
+/***************************************************************************
+    Open a window onto the clipboard, if it exists.
+***************************************************************************/
+bool APPB::FCmdShowClipboard(PCMD pcmd)
+{
+    AssertThis(0);
+    AssertVarMem(pcmd);
+
+    vpclip->Show();
+    return fTrue;
+}
+
+/***************************************************************************
+    Enable app level commands
+***************************************************************************/
+bool APPB::FEnableAppCmd(PCMD pcmd, uint32_t *pgrfeds)
+{
+    AssertThis(0);
+    AssertVarMem(pcmd);
+    AssertVarMem(pgrfeds);
+
+    *pgrfeds = fedsEnable;
+    switch (pcmd->cid)
+    {
+    case cidShowClipboard:
+        if (vpclip->FDocIsClip(pvNil))
+            goto LDisable;
+        break;
+
+    case cidChooseWnd:
+        if ((HWND)(*(uintptr_t *)pcmd->rglw) == GOB::HwndMdiActive())
+            *pgrfeds |= fedsCheck;
+        else
+            *pgrfeds |= fedsUncheck;
+        break;
+    default:
+        BugVar("unhandled cid in FEnableAppCmd", &pcmd->cid);
+    LDisable:
+        *pgrfeds = fedsDisable;
+        break;
+    }
+
+    return fTrue;
+}
+
+/***************************************************************************
+    Respond to a cidChooseWnd command.
+***************************************************************************/
+bool APPB::FCmdChooseWnd(PCMD pcmd)
+{
+    AssertThis(0);
+    AssertVarMem(pcmd);
+
+    GOB::MakeHwndActive((HWND)(*(uintptr_t *)pcmd->rglw));
+    return fTrue;
+}
