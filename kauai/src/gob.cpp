@@ -1063,7 +1063,7 @@ void GOB::GetMinMax(RC *prcMinMax)
 PGOB GOB::PgobFromPtGlobal(int32_t xp, int32_t yp, PT *pptLocal)
 {
     AssertNilOrVarMem(pptLocal);
-    HWND hwnd;
+    KWND hwnd;
     POINT pts;
     PGOB pgob;
 
@@ -1319,7 +1319,7 @@ PGOB GOB::PgobLastChild(void)
 ***************************************************************************/
 PGOB GOB::PgobMdiActive(void)
 {
-    HWND hwnd;
+    KWND hwnd;
 
     if (hNil == (hwnd = HwndMdiActive()))
         return pvNil;

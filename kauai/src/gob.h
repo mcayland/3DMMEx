@@ -77,11 +77,11 @@ inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
 #endif // KAUAI_WIN32
 
 #ifdef KAUAI_SDL
-inline void InvalHwndRcs(HWND hwnd, RCS *prcs)
+inline void InvalHwndRcs(KWND hwnd, RCS *prcs)
 {
     // do nothing
 }
-inline void ValidHwndRcs(HWND hwnd, RCS *prcs)
+inline void ValidHwndRcs(KWND hwnd, RCS *prcs)
 {
     // do nothing
 }
