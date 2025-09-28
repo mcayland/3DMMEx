@@ -1230,10 +1230,19 @@ void GOB::_SetRcCur(void)
 
         if (pgob->_hwnd != hNil)
         {
+#if defined(KAUAI_WIN32)
             RECT rcs;
 
             GetClientRect(pgob->_hwnd, &rcs);
             rc = rcs;
+#elif defined(KAUAI_SDL)
+            int dxpClient = 0, dypClient = 0;
+            SDL_GetWindowSize((SDL_Window *)pgob->_hwnd, &dxpClient, &dypClient);
+            Assert(dxpClient > 0 && dypClient > 0, "SDL_GetWindowSize failed?");
+            rc.Set(0, 0, dxpClient, dypClient);
+#else
+#error not implemented
+#endif
             rcVis.Max();
         }
         else if (pgob->_pgobPar != pvNil)
