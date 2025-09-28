@@ -746,7 +746,7 @@ void APPB::_MarkRegnRc(PREGN pregn, RC *prc, PGOB pgobCoo)
     int32_t imkrgn;
     RC rc;
     PT pt;
-    HWND hwnd;
+    KWND hwnd;
 
     // get the offset
     pgobCoo->GetRc(&rc, cooHwnd);
@@ -858,7 +858,7 @@ void APPB::_UnmarkRegnRc(PREGN pregn, RC *prc, PGOB pgobCoo)
     int32_t imkrgn;
     RC rc;
     PT pt;
-    HWND hwnd;
+    KWND hwnd;
 
     if (pvNil == _pglmkrgn || _pglmkrgn->IvMac() == 0)
         return;
