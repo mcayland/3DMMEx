@@ -341,6 +341,9 @@ class APPB : public APPB_PAR
 
     // whether to allow a screen saver to come up
     virtual bool FAllowScreenSaver(void);
+
+    virtual bool FIsMaximized();
+    virtual bool FSetMaximized(bool fMaximized);
 };
 
 extern PAPPB vpappb;

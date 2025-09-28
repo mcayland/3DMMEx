@@ -1260,14 +1260,7 @@ bool APPB::FSetProp(int32_t prid, int32_t lw)
         break;
 
     case kpridMaximized:
-#ifdef WIN
-        if (FPure(IsZoomed(vwig.hwndApp)) == FPure(lw))
-            break;
-        return FPure(ShowWindow(vwig.hwndApp, lw ? SW_SHOWMAXIMIZED : SW_SHOWNORMAL));
-#else  //! WIN
-       // REVIEW shonk: Mac: implement
-        return FPure(lw);
-#endif //! WIN
+        return FSetMaximized(FPure(lw));
 
     case kpridToolTipDelay:
         lw = LwBound(lw, 0, LwMulDiv(klwMax, kdtimSecond, kdtsSecond));
@@ -1303,12 +1296,7 @@ bool APPB::FGetProp(int32_t prid, int32_t *plw)
         break;
 
     case kpridMaximized:
-#ifdef WIN
-        *plw = FPure(IsZoomed(vwig.hwndApp));
-#else  //! WIN
-       // REVIEW shonk: Mac: implement
-        *plw = fTrue;
-#endif //! WIN
+        *plw = FIsMaximized();
         break;
 
     case kpridToolTipDelay:

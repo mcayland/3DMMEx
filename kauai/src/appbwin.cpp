@@ -1218,3 +1218,28 @@ bool APPB::FCmdChooseWnd(PCMD pcmd)
     GOB::MakeHwndActive((HWND)(*(uintptr_t *)pcmd->rglw));
     return fTrue;
 }
+
+/***************************************************************************
+    Return fTrue if the main app window is maximized.
+***************************************************************************/
+bool APPB::FIsMaximized()
+{
+    return FPure(IsZoomed(vwig.hwndApp));
+}
+
+/***************************************************************************
+    Maximize the window if fMaximized is true.
+***************************************************************************/
+bool APPB::FSetMaximized(bool fMaximized)
+{
+    AssertThis(0);
+
+    if (FIsMaximized() == fMaximized)
+    {
+        return fMaximized;
+    }
+    else
+    {
+        return FPure(ShowWindow(vwig.hwndApp, fMaximized ? SW_SHOWMAXIMIZED : SW_SHOWNORMAL));
+    }
+}

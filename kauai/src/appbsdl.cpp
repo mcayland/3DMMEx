@@ -786,3 +786,29 @@ void APPB::RefreshCurs(void)
         SDL_SetCursor(psdlcurs);
     }
 }
+
+/***************************************************************************
+    Return fTrue if the main app window is maximized.
+***************************************************************************/
+bool APPB::FIsMaximized()
+{
+    return fFalse;
+}
+
+/***************************************************************************
+    Maximize the window if fMaximized is true.
+***************************************************************************/
+bool APPB::FSetMaximized(bool fMaximized)
+{
+    AssertThis(0);
+
+    if (FIsMaximized() == fMaximized)
+    {
+        return fMaximized;
+    }
+    else
+    {
+        RawRtn();
+        return fFalse;
+    }
+}
