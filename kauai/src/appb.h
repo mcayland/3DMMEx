@@ -50,6 +50,11 @@ struct WIG
     KWND hwndNextViewer;  // next clipboard viewer
     int32_t lwThreadMain; // main thread
 
+#else
+
+    int wShow;
+    int32_t lwThreadMain; // main thread
+
 #endif // WIN
 };
 extern WIG vwig;

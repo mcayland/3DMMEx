@@ -10,7 +10,9 @@
 #include "frame.h"
 #include "fcntl.h"
 #include "stdio.h"
+#ifdef WIN
 #include "io.h"
+#endif
 
 ASSERTNAME
 
@@ -33,6 +35,8 @@ static SDL_Cursor *vpsdlcursArrow = pvNil;
 /***************************************************************************
     WinMain for any frame work app. Sets up vwig and calls FrameMain.
 ***************************************************************************/
+
+#ifdef KAUAI_WIN32
 int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszs, int wShow)
 {
     vwig.hinst = hinst;
@@ -47,6 +51,20 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszs, int wShow)
     SDL_Quit();
     return 0;
 }
+#else
+int main(int argc, char *argv[])
+{
+    vwig.pszCmdLine = argv[0]; // FIXME MCA is this right?
+    vwig.wShow = true;
+    vwig.lwThreadMain = LwThreadCur();
+#ifdef DEBUG
+    APPB::CreateConsole();
+#endif
+    FrameMain();
+    SDL_Quit();
+    return 0;
+}
+#endif
 
 /*
  * Create debug console window and wire up std streams
