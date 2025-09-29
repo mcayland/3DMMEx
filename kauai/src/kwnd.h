@@ -33,7 +33,6 @@ class KWND
 #endif // WIN
 
 #ifdef KAUAI_SDL
-
     // Create a KWND from an SDL Window handle
     explicit KWND(SDL_Window *wnd)
     {
@@ -44,7 +43,7 @@ class KWND
     }
 
     // Get SDL Window handle
-    explicit operator SDL_Window *() const
+    operator SDL_Window *() const
     {
         return _wnd;
     }
@@ -59,6 +58,15 @@ class KWND
         return *this;
     }
 
+    bool operator==(std::nullptr_t) const
+    {
+        return _wnd == nullptr;
+    }
+
+    bool operator!=(std::nullptr_t) const
+    {
+        return _wnd != nullptr;
+    }
 #endif // KAUAI_SDL
 
 #ifdef WIN
@@ -89,8 +97,10 @@ class KWND
     {
         return _hwnd != nullptr;
     }
+#endif
 
   private:
+#ifdef WIN
     HWND _hwnd = nullptr;
 #endif // WIN
 
