@@ -47,11 +47,10 @@ FNI::FNI(void)
     SetNil();
 }
 
-#ifdef WIN
 /***************************************************************************
     Get an fni (for opening) from the user.
 ***************************************************************************/
-bool FNI::FGetOpen(achar *prgchFilter, HWND hwndOwner)
+bool FNI::FGetOpen(const achar *prgchFilter, KWND hwndOwner)
 {
     AssertThis(0);
     AssertNilOrVarMem(prgchFilter);
@@ -63,7 +62,7 @@ bool FNI::FGetOpen(achar *prgchFilter, HWND hwndOwner)
 /***************************************************************************
     Get an fni (for saving) from the user.
 ***************************************************************************/
-bool FNI::FGetSave(achar *prgchFilter, HWND hwndOwner)
+bool FNI::FGetSave(const achar *prgchFilter, KWND hwndOwner)
 {
     AssertThis(0);
     AssertNilOrVarMem(prgchFilter);
@@ -81,16 +80,14 @@ bool FNI::FGetSave(achar *prgchFilter, HWND hwndOwner)
 
     Returns: fTrue if it could find the file
 ******************************************************************************/
-bool FNI::FSearchInPath(PSTN pstn, PSTN pstnEnv)
+bool FNI::FSearchInPath(PSTN pstn, PCSZ pcszEnv)
 {
     AssertThis(0);
     AssertPo(pstn, 0);
-    AssertNilOrPo(pstnEnv, 0);
 
     assert(0);
     return fFalse;
 }
-#endif
 
 /***************************************************************************
     Builds the fni from the path.
