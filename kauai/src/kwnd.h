@@ -33,6 +33,10 @@ class KWND
 #endif // WIN
 
 #ifdef KAUAI_SDL
+    KWND(std::nullptr_t) : _wnd(nullptr)
+    {
+    }
+
     // Create a KWND from an SDL Window handle
     explicit KWND(SDL_Window *wnd)
     {
