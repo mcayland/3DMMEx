@@ -16,6 +16,8 @@
 #ifndef FNI_H
 #define FNI_H
 
+#include "kwnd.h"
+
 #ifdef MAC
 typedef FSSpec FSS;
 #endif // MAC
@@ -97,9 +99,9 @@ class FNI : public FNI_PAR
     bool FGetOpen(FTG *prgftg, short cftg);
     bool FGetSave(FTG ftg, PST pstPrompt, PST pstDefault);
     bool FBuild(int32_t lwVol, int32_t lwDir, PSTN pstn, FTG ftg);
-#elif defined(WIN)
-    bool FGetOpen(const achar *prgchFilter, HWND hwndOwner);
-    bool FGetSave(const achar *prgchFilter, HWND hwndOwner);
+#else
+    bool FGetOpen(const achar *prgchFilter, KWND hwndOwner);
+    bool FGetSave(const achar *prgchFilter, KWND hwndOwner);
     bool FSearchInPath(PSTN pstn, PCSZ pcszEnv = pvNil);
 #endif                                                   // WIN
     bool FBuildFromPath(PSTN pstn, FTG ftgDef = ftgNil); // REVIEW shonk: Mac: implement
@@ -131,8 +133,7 @@ class FNI : public FNI_PAR
 #ifdef MAC
 #define FGetFniOpenMacro(pfni, prgftg, cftg, prgchFilter, hwndOwner) (pfni)->FGetOpen(prgftg, cftg)
 #define FGetFniSaveMacro(pfni, ftg, pstPrompt, pstDef, prgchFilter, hwndOwner) (pfni)->FGetSave(ftg, pstPrompt, pstDef)
-#endif // MAC
-#ifdef WIN
+#else // MAC
 #define FGetFniOpenMacro(pfni, prgftg, cftg, prgchFilter, hwndOwner) (pfni)->FGetOpen(prgchFilter, hwndOwner)
 #define FGetFniSaveMacro(pfni, ftg, pstPrompt, pstDef, prgchFilter, hwndOwner) (pfni)->FGetSave(prgchFilter, hwndOwner)
 #endif // WIN
