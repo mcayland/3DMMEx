@@ -490,7 +490,7 @@ elseif(3DMM_GUI STREQUAL "SDL")
 endif()
 
 # Ctl: Control support (Win32 only)
-if (3DMM_GUI STREQUAL "Win32")
+#if (3DMM_GUI STREQUAL "Win32")
     add_library(KauaiCtl
         "${PROJECT_SOURCE_DIR}/kauai/src/ctl.cpp"
     )
@@ -499,7 +499,7 @@ if (3DMM_GUI STREQUAL "Win32")
         PUBLIC
         KauaiGui
     )
-endif()
+#endif()
 
 # Doc: Base document class support
 add_library(KauaiDoc
@@ -512,13 +512,13 @@ target_link_libraries(
     KauaiGui
 )
 
-if (3DMM_GUI STREQUAL "Win32")
+#if (3DMM_GUI STREQUAL "Win32")
     target_link_libraries(
         KauaiDoc
         PRIVATE
         KauaiCtl
     )
-endif()
+#endif()
 
 # RichText: Rich text document support
 add_library(KauaiRichText
