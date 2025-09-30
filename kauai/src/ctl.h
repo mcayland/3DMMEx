@@ -16,10 +16,10 @@
 #ifndef CTL_H
 #define CTL_H
 
-#ifdef WIN
-typedef HWND HCTL;
-#elif defined(MAC)
+#if defined(MAC)
 typedef ControlHandle HCTL;
+#else // MAC
+typedef KWND HCTL;
 #endif // MAC
 
 // general control
