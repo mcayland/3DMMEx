@@ -85,11 +85,11 @@ class FNI : public FNI_PAR
     STN _stnFile;
 #endif
 
-#ifdef WIN
+#ifndef MAC
     void _SetFtgFromName(void);
     int32_t _CchExt(void);
     bool _FChangeLeaf(PSTN pstn);
-#endif // WIN
+#endif // MAC
 
   public:
     FNI(void);
