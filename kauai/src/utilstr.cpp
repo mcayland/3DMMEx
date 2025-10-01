@@ -1257,8 +1257,11 @@ bool FEqualUserRgch(const achar *prgch1, int32_t cch1, const achar *prgch2, int3
 #ifdef WIN
         CharUpperBuff(rgch1, cchBuf);
         CharUpperBuff(rgch2, cchBuf);
-#else  //! WIN
+#elif defined(MAC)  //! WIN
         RawRtn(); // REVIEW shonk: Mac: implement
+#else
+        UPPERCASETEXT(rgch1, cchBuf);
+        UPPERCASETEXT(rgch2, cchBuf);
 #endif //! WIN
         if (!FEqualRgb(rgch1, rgch2, cchBuf * SIZEOF(achar)))
             return fFalse;
