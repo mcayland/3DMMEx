@@ -212,6 +212,52 @@ void NTL::MarkMem(void)
 
 #endif // DEBUG
 
+bool NTL::FAddFontFile(PFNI pfniFontFile)
+{
+    AssertPo(pfniFontFile, 0);
+
+    bool fRet;
+    STN stnFontName;
+    int grfont;
+    bool fUseFont;
+    int onn;
+    PGL pglsdlfont = pvNil;
+
+    fRet = FGetTtfFontInfo(pfniFontFile, &stnFontName, &grfont);
+    if (!fRet)
+    {
+        goto LFail;
+    }
+
+    // Get the list of SDL fonts for this font name
+    if (_pgst->FFindStn(&stnFontName, &onn))
+    {
+        _pgst->GetExtra(onn, &pglsdlfont);
+        AssertPo(pglsdlfont, 0);
+        pglsdlfont->AddRef();
+    }
+    else
+    {
+        if (!FAddFontName(stnFontName.Psz(), &onn, &pglsdlfont))
+        {
+            Bug("Could not add font to list");
+            goto LFail;
+        }
+    }
+
+    // Add this font
+    PSDLFont psdlf;
+    AssertDo(psdlf = SDLFontFile::PSDLFontFileNew(pfniFontFile, grfont), "Could not allocate SDL font");
+    if (psdlf != pvNil)
+        AssertDo(pglsdlfont->FAdd(&psdlf), "Could not add SDL font to font list");
+
+    fRet = fTrue;
+
+LFail:
+    ReleasePpo(&pglsdlfont);
+    return fRet;
+}
+
 bool NTL::FAddAllFontsInDir(PFNI pfniFontDir)
 {
     AssertPo(pfniFontDir, 0);
@@ -219,8 +265,6 @@ bool NTL::FAddAllFontsInDir(PFNI pfniFontDir)
     FTG rgftgFont[] = {KLCONST3('T', 'T', 'F'), KLCONST3('T', 'T', 'C')};
     FNE fneFontFiles;
     FNI fniFontFile;
-    int onn;
-    PGL pglsdlfont = pvNil;
 
     // Find all font files in the font directory
     if (!fneFontFiles.FInit(pfniFontDir, rgftgFont, CvFromRgv(rgftgFont), ffneNil))
@@ -231,37 +275,7 @@ bool NTL::FAddAllFontsInDir(PFNI pfniFontDir)
 
     while (fneFontFiles.FNextFni(&fniFontFile))
     {
-        STN stnFontName;
-        int grfont;
-        bool fUseFont;
-
-        fUseFont = FGetTtfFontInfo(&fniFontFile, &stnFontName, &grfont);
-        if (!fUseFont)
-            continue;
-
-        // Get the list of SDL fonts for this font name
-        if (_pgst->FFindStn(&stnFontName, &onn))
-        {
-            _pgst->GetExtra(onn, &pglsdlfont);
-            AssertPo(pglsdlfont, 0);
-            pglsdlfont->AddRef();
-        }
-        else
-        {
-            if (!FAddFontName(stnFontName.Psz(), &onn, &pglsdlfont))
-            {
-                Bug("Could not add font to list");
-                continue;
-            }
-        }
-
-        // Add this font
-        PSDLFont psdlf;
-        AssertDo(psdlf = SDLFontFile::PSDLFontFileNew(&fniFontFile, grfont), "Could not allocate SDL font");
-        if (psdlf != pvNil)
-            AssertDo(pglsdlfont->FAdd(&psdlf), "Could not add SDL font to font list");
-
-        ReleasePpo(&pglsdlfont);
+        AssertDo(FAddFontFile(&fniFontFile), "Failed to add font");
     }
 
     return fTrue;

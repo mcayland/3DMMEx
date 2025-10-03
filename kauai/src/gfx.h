@@ -105,6 +105,11 @@ class NTL : public NTL_PAR
      **/
     bool FAddAllFontsInDir(PFNI pfniFontDir);
 
+    /**
+     * @brief Add a single TrueType font file
+     **/
+    bool FAddFontFile(PFNI pfniFontFile);
+
 #endif // KAUAI_SDL
 
   public:
