@@ -249,7 +249,13 @@ bool NTL::FAddFontFile(PFNI pfniFontFile)
     PSDLFont psdlf;
     AssertDo(psdlf = SDLFontFile::PSDLFontFileNew(pfniFontFile, grfont), "Could not allocate SDL font");
     if (psdlf != pvNil)
-        AssertDo(pglsdlfont->FAdd(&psdlf), "Could not add SDL font to font list");
+    {
+        if (!pglsdlfont->FAdd(&psdlf))
+        {
+            Bug("Could not add SDL font to font list");
+            ReleasePpo(&psdlf);
+        }
+    }
 
     fRet = fTrue;
 
@@ -335,7 +341,13 @@ bool NTL::FInit(void)
         PSDLFont psdlf;
         AssertDo(psdlf = SDLFontFile::PSDLFontFileNew(&fniDefaultFont, 0), "Could not allocate SDL font");
         if (psdlf != pvNil)
-            AssertDo(pglsdlfont->FAdd(&psdlf), "Could not add SDL font to font list");
+        {
+            if (!pglsdlfont->FAdd(&psdlf))
+            {
+                Bug("Could not add SDL font to font list");
+                ReleasePpo(&psdlf);
+            }
+        }
     }
 
     fRet = fTrue;
