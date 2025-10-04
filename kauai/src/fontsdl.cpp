@@ -467,6 +467,13 @@ TTF_Font *NTL::TtfFontFromDsf(DSF *pdsf)
         }
     }
 
+    if (pttf == pvNil)
+    {
+        Warn("Failed to match font");
+        PSDLFont *ppsdlf = (PSDLFont *)pglsdlfont->QvGet(0);
+        pttf = (*ppsdlf)->PttfFont();
+    }
+
     Assert(pttf != pvNil, "Did not match any font");
     return pttf;
 }
