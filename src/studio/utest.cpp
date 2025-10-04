@@ -2136,27 +2136,13 @@ void APP::_ParseCommandLine(void)
 {
     AssertBaseThis(0);
 
-    SZ sz;
-    STN stn, stnCurrentDir, stnExe;
+    STN stn;
     PCSZ pch = pvNil;
     PCSZ pchT = pvNil;
     FNI fniT;
 
-    // Get paths to current directory and executable
-#ifdef WIN
-    GetCurrentDirectory(kcchMaxSz, sz);
-    stnCurrentDir.SetSz(sz);
-
-    GetModuleFileName(NULL, sz, kcchMaxSz);
-    stnExe.SetSz(sz);
-#else  // !WIN
-    Bug("FIXME: Get current directory and executable path");
-    stnCurrentDir = PszLit(".");
-    stnExe = PszLit(".//3dmovie.exe");
-#endif // WIN
-
-    AssertDo(_fniCurrentDir.FBuildFromPath(&stnCurrentDir, kftgDir), "Bad current directory?");
-    AssertDo(_fniExe.FBuildFromPath(&stnExe), "Bad module filename?");
+    AssertDo(_fniCurrentDir.FGetCwd(), "Bad current directory?");
+    AssertDo(_fniExe.FGetExe(), "Bad module filename?");
 
     // FIXME: Parse command-line arguments on non-Windows
 #ifdef WIN
