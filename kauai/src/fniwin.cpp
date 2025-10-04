@@ -299,6 +299,17 @@ bool FNI::FGetTemp(void)
 }
 
 /***************************************************************************
+    Set the FNI to the current working directory
+***************************************************************************/
+bool FNI::FGetCwd()
+{
+    AssertThis(0);
+
+    STN stnCurrentDir = PszLit(".");
+    return FBuildFromPath(&stnCurrentDir, kftgDir);
+}
+
+/***************************************************************************
     Return the file type of the fni.
 ***************************************************************************/
 FTG FNI::Ftg(void)
