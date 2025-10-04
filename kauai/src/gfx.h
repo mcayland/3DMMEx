@@ -107,8 +107,17 @@ class NTL : public NTL_PAR
 
     /**
      * @brief Add a single TrueType font file
+     * @param pfniFontFile  Path to font file
+     * @param pstnFontName  Set font name (default: name from font file)
+     * @param ponn          Set to the font number
      **/
-    bool FAddFontFile(PFNI pfniFontFile);
+    bool FAddFontFile(PFNI pfniFontFile, PSTN pstnFontName = pvNil, int32_t *ponn = pvNil);
+
+    /**
+     * @brief Add all of the available fonts to the font list.
+     * This function should also set the default font number, _onnSystem.
+     **/
+    bool _FLoadFontTable();
 
 #endif // KAUAI_SDL
 

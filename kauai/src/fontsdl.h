@@ -13,6 +13,10 @@
 // Bitmask of all supported font styles
 #define fontAll (fontBold | fontItalic | fontUnderline | fontBoxed)
 
+const FTG kftgTtf = KLCONST3('t', 't', 'f');
+const FTG kftgTtc = KLCONST3('t', 't', 'c');
+const FTG kftgOtf = KLCONST3('o', 't', 'f');
+
 typedef class SDLFont *PSDLFont;
 
 #define SDLFont_PAR BASE

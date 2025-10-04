@@ -394,6 +394,16 @@ elseif(3DMM_GUI STREQUAL "SDL")
         ${PROJECT_SOURCE_DIR}/kauai/src/fontsdl.cpp
         ${PROJECT_SOURCE_DIR}/kauai/src/cursorsdl.cpp
     )
+
+    if(WIN32)
+        target_sources(
+            KauaiGui
+            PRIVATE
+            ${PROJECT_SOURCE_DIR}/kauai/src/fontsdlwin.cpp
+        )
+    else()
+        # TODO
+    endif()
 else()
     message(FATAL_ERROR "Invalid GUI specified: ${3DMM_GUI}")
 endif()
