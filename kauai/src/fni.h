@@ -98,6 +98,7 @@ class FNI : public FNI_PAR
     bool FBuildFromPath(PSTN pstn, FTG ftgDef = ftgNil); // REVIEW shonk: Mac: implement
     bool FGetUnique(FTG ftg);
     bool FGetCwd();
+    bool FGetExe();
     bool FGetTemp(void);
     void SetNil(void);
 

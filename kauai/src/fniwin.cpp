@@ -310,6 +310,23 @@ bool FNI::FGetCwd()
 }
 
 /***************************************************************************
+    Set the FNI to the current executable file
+***************************************************************************/
+bool FNI::FGetExe()
+{
+    AssertThis(0);
+
+    bool fRet;
+    SZ sz;
+    STN stnExe;
+
+    GetModuleFileName(NULL, sz, kcchMaxSz);
+    stnExe.SetSz(sz);
+
+    return FBuildFromPath(&stnExe);
+}
+
+/***************************************************************************
     Return the file type of the fni.
 ***************************************************************************/
 FTG FNI::Ftg(void)
