@@ -240,7 +240,7 @@ bool FAllocPv(void **ppv, int32_t cb, uint32_t grfmem, int32_t mpr)
     return fTrue;
 }
 
-#ifdef WIN
+#ifndef MAC
 /***************************************************************************
     Resizes the given block.  *ppv may change.  If fmemClear, clears any
     newly added space.
@@ -360,7 +360,7 @@ bool _FResizePpv(void **ppv, int32_t cbNew, int32_t cbOld, uint32_t grfmem, int3
 
     return fTrue;
 }
-#endif // WIN
+#endif // MAC
 
 /***************************************************************************
     If *ppv is not nil, frees it and sets *ppv to nil.
