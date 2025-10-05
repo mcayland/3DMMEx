@@ -72,15 +72,11 @@ bool FResizePhq(HQ *phq, int32_t cb, uint32_t grfmem, int32_t mpr)
         Bug("Resizing locked HQ");
         PushErc(ercOomHq);
     }
-#ifdef DEBUG
-#ifdef WIN
-    else if (!_FResizePpvDebug((void **)&phqh, cb + SIZEOF(HQH), phqh->cb + SIZEOF(HQH), grfmem, mpr, NULL))
+    else if (!_FResizePpvDebug((void **)&phqh, cb + SIZEOF(HQH), phqh->cb + SIZEOF(HQH), grfmem, mpr, &vdmglob.dmaglHq))
     {
         PushErc(ercOomHq);
         AssertHq(*phq);
     }
-#endif
-#endif
     else
     {
         phqh->cb = cb;
@@ -113,11 +109,11 @@ void FreePhq(HQ *phq)
 /***************************************************************************
     Create a new HQ the same size as hqSrc and copy hqSrc into it.
 ***************************************************************************/
-bool FCopyHq(HQ hqSrc, HQ *phqDst, long mpr)
+bool FCopyHq(HQ hqSrc, HQ *phqDst, int32_t mpr)
 {
     AssertHq(hqSrc);
     AssertVarMem(phqDst);
-    long cb;
+    int32_t cb;
 
     if (!FAllocHq(phqDst, cb = CbOfHq(hqSrc), fmemNil, mpr))
         return fFalse;
