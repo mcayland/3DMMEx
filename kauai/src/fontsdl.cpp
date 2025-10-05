@@ -328,7 +328,7 @@ TTF_Font *NTL::TtfFontFromDsf(DSF *pdsf)
             return pvNil;
         if (*ppsdlfont == pvNil)
             return pvNil;
-        return (*ppsdlfont)->PttfFont();
+        return (*ppsdlfont)->PttfFont(pdsf->dyp);
     }
 
     // Go through the font list twice to find the best match
@@ -360,7 +360,7 @@ TTF_Font *NTL::TtfFontFromDsf(DSF *pdsf)
 
                 if (fMatch)
                 {
-                    pttf = (*ppsdlf)->PttfFont();
+                    pttf = (*ppsdlf)->PttfFont(pdsf->dyp);
                     break;
                 }
             }
@@ -376,56 +376,119 @@ TTF_Font *NTL::TtfFontFromDsf(DSF *pdsf)
     {
         Warn("Failed to match font");
         PSDLFont *ppsdlf = (PSDLFont *)pglsdlfont->QvGet(0);
-        pttf = (*ppsdlf)->PttfFont();
+        pttf = (*ppsdlf)->PttfFont(pdsf->dyp);
     }
 
     Assert(pttf != pvNil, "Did not match any font");
     return pttf;
 }
 
-TTF_Font *SDLFont::PttfFont()
+TTF_Font *SDLFont::PttfFont(int32_t dyp)
 {
-    // Load the font on first use
-    if (_ttfFont == pvNil && !_fLoadFailed)
+    // Check if we already failed to load the font
+    if (_fLoadFailed)
+        return pvNil;
+
+    // Check if we have already loaded a font of this size
+    if (_pglinstance != pvNil)
     {
-        _fLoadFailed = fTrue;
-        SDL_RWops *rwops = GetFontRWops();
-        if (rwops != pvNil)
+        for (int32_t iinstance = 0; iinstance < _pglinstance->IvMac(); iinstance++)
         {
-            _ttfFont = TTF_OpenFontRW(rwops, 1, 0);
-
-            if (_ttfFont != pvNil)
+            SDLFont::Instance *pinstance = (SDLFont::Instance *)_pglinstance->QvGet(iinstance);
+            if (pinstance != pvNil && pinstance->dyp == dyp)
             {
-                _fLoadFailed = fFalse;
-                // The TTF font object now owns the rwops object
-                rwops = pvNil;
-            }
-            else
-            {
-                PCSZ pszErr = TTF_GetError();
-                Assert(0, pszErr);
-                PushErc(ercGfxCantSetFont);
-            }
-
-            if (rwops != pvNil)
-            {
-                SDL_RWclose(rwops);
+                Assert(pinstance->pttffont != pvNil, "pttffont in instance nil");
+                return pinstance->pttffont;
             }
         }
     }
 
-    return _ttfFont;
+    // Allocate the font instance list if we haven't already
+    if (_pglinstance == pvNil)
+    {
+        _pglinstance = GL::PglNew(sizeof(SDLFont::Instance), 1);
+        if (_pglinstance == pvNil)
+        {
+            PushErc(ercOomNew);
+            return pvNil;
+        }
+    }
+
+    // Load the font
+    _fLoadFailed = fTrue;
+    SDL_RWops *rwops = GetFontRWops();
+    TTF_Font *pttffont = pvNil;
+    if (rwops != pvNil)
+    {
+        pttffont = TTF_OpenFontRW(rwops, 1, dyp);
+
+        if (pttffont != pvNil)
+        {
+            _fLoadFailed = fFalse;
+
+            // Add the font to the font list
+            SDLFont::Instance instance;
+            instance.dyp = dyp;
+            instance.pttffont = pttffont;
+
+            if (!_pglinstance->FAdd(&instance))
+            {
+                Bug("Could not add font instance to font instance list");
+                TTF_CloseFont(pttffont);
+                pttffont = pvNil;
+            }
+
+            // rwops is freed when the TTF font is closed
+            rwops = pvNil;
+        }
+        else
+        {
+            PCSZ pszErr = TTF_GetError();
+            Assert(0, pszErr);
+            PushErc(ercGfxCantSetFont);
+        }
+
+        if (rwops != pvNil)
+        {
+            SDL_RWclose(rwops);
+        }
+    }
+
+    return pttffont;
 }
 
 SDLFont::~SDLFont()
 {
-    // Free font
-    if (_ttfFont != pvNil)
+    // Free font instances
+    if (_pglinstance != pvNil)
     {
-        TTF_CloseFont(_ttfFont);
-        _ttfFont = pvNil;
+        for (int32_t iinstance = 0; iinstance < _pglinstance->IvMac(); iinstance++)
+        {
+            SDLFont::Instance *pinstance = (SDLFont::Instance *)_pglinstance->QvGet(iinstance);
+            TTF_CloseFont(pinstance->pttffont);
+        }
+        ReleasePpo(&_pglinstance);
     }
 }
+
+#ifdef DEBUG
+
+void SDLFont::AssertValid(uint32_t grf)
+{
+    SDLFont_PAR::AssertValid(0);
+    AssertNilOrPo(_pglinstance, 0);
+}
+
+void SDLFont::MarkMem(void)
+{
+    SDLFont_PAR::MarkMem();
+    if (_pglinstance)
+    {
+        _pglinstance->MarkMem();
+    }
+}
+
+#endif // DEBUG
 
 PSDLFontFile SDLFontFile::PSDLFontFileNew(PFNI pfniFont, int32_t grffont)
 {
@@ -437,6 +500,7 @@ PSDLFontFile SDLFontFile::PSDLFontFileNew(PFNI pfniFont, int32_t grffont)
         return pvNil;
     }
 
+    psdlf->_pglinstance = pvNil;
     psdlf->_fniFont = *pfniFont;
     psdlf->_grfont = grffont;
 
@@ -465,6 +529,7 @@ PSDLFontMemory SDLFontMemory::PSDLFontMemoryNew(const uint8_t *pbFont, const int
         return pvNil;
     }
 
+    psdlf->_pglinstance = pvNil;
     psdlf->_pbFont = pbFont;
     psdlf->_cbFont = cbFont;
     psdlf->_grfont = grffont;

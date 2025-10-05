@@ -26,6 +26,8 @@ typedef class SDLFont *PSDLFont;
 class SDLFont : public SDLFont_PAR
 {
     RTCLASS_DEC
+    ASSERT
+    MARKMEM
     NOCOPY(SDLFont)
 
   public:
@@ -33,8 +35,9 @@ class SDLFont : public SDLFont_PAR
 
     /**
      * @brief Get the SDL_TTF font object. This will load the font if not already loaded.
+     * @param dyp       Font height in points
      **/
-    TTF_Font *PttfFont();
+    TTF_Font *PttfFont(int32_t dyp);
 
     /**
      * @brief Return bitmask for supported font styles
@@ -46,9 +49,6 @@ class SDLFont : public SDLFont_PAR
     }
 
   protected:
-    // Loaded font
-    TTF_Font *_ttfFont = pvNil;
-
     // fTrue if we failed to load the font
     bool _fLoadFailed = fFalse;
 
@@ -57,6 +57,15 @@ class SDLFont : public SDLFont_PAR
 
     // Return a SDL_RWops object for reading font data
     virtual SDL_RWops *GetFontRWops() = 0;
+
+    struct Instance
+    {
+        int32_t dyp;        // Font height in points
+        TTF_Font *pttffont; // Pointer to loaded font
+    };
+
+    // List of font instances
+    PGL _pglinstance = pvNil;
 };
 
 typedef class SDLFontFile *PSDLFontFile;
