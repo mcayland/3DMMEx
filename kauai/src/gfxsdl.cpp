@@ -658,6 +658,22 @@ void GPT::DrawRgch(const achar *prgch, int32_t cch, PTS pts, GDD *pgdd, DSF *pds
     Assert(acrFore != kacrInvert, "not supported yet");
     Assert(acrBack != kacrInvert, "not supported yet");
 
+    // Skip drawing if the string is empty or contains only spaces
+    bool fAllSpaces = fTrue;
+    for (int32_t ich = 0; ich < cch; ich++)
+    {
+        if (prgch[ich] != kchSpace)
+        {
+            fAllSpaces = fFalse;
+            break;
+        }
+    }
+
+    if (fAllSpaces && acrBack == kacrClear)
+    {
+        return;
+    }
+
     // Map colors
     sdlcBack = acrBack._SDLColor();
     sdlcFore = acrFore._SDLColor();
