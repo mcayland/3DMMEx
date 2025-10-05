@@ -162,7 +162,7 @@ bool NTL::FAddFontFile(PFNI pfniFontFile, PSTN pstnFontName, int32_t *ponn)
     }
 
     // Get the list of SDL fonts for this font name
-    if (_pgst->FFindStn(&stnFontName, &onn))
+    if (_pgst->FFindStn(&stnFontName, &onn, fgstUserSorted))
     {
         _pgst->GetExtra(onn, &pglsdlfont);
         AssertPo(pglsdlfont, 0);
@@ -267,12 +267,18 @@ bool NTL::FAddFontName(PCSZ pcszFontName, int32_t *ponn, PGL *pglsdlfont)
     bool fRet = fFalse;
     PGL pgl = pvNil;
     STN stnFontName = pcszFontName;
+    int32_t onn;
 
     // Create list to map a font face to SDL fonts
     if (pvNil == (pgl = GL::PglNew(sizeof(PSDLFont), 0)))
         goto LFail;
 
-    fRet = _pgst->FAddStn(&stnFontName, &pgl, ponn);
+    // Check if the font name already exists
+    // This also gets the position to insert the font name
+    if (_pgst->FFindStn(&stnFontName, &onn, fgstUserSorted))
+        goto LFail;
+
+    fRet = _pgst->FInsertStn(onn, &stnFontName, &pgl);
     Assert(fRet, "Could not add font to list");
     if (fRet)
     {
@@ -282,6 +288,7 @@ bool NTL::FAddFontName(PCSZ pcszFontName, int32_t *ponn, PGL *pglsdlfont)
         // Return a reference to the caller
         pgl->AddRef();
         *pglsdlfont = pgl;
+        *ponn = onn;
     }
 
 LFail:
