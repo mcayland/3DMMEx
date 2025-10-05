@@ -263,9 +263,36 @@ bool FIL::FWriteRgb(const void *pv, int32_t cb, FP fp)
     AssertIn(cb, 0, kcbMax);
     AssertIn(fp, 0, klwMax);
     AssertPvCb(pv, cb);
+
+    size_t cbT;
     bool fRet = fFalse;
 
-    assert(0);
+    if (cb <= 0)
+        return fTrue;
+
+    _mutx.Enter();
+
+    Assert(_grffil & ffilWriteEnable, "can't write to read only file");
+
+    if (!_fOpen)
+        _FOpen(fFalse, _grffil);
+
+    _SetFpPos(fp);
+    if (_el >= kelWrite)
+        goto LRet;
+
+    _fWrote = fTrue;
+    if (!(cbT = std::fwrite(pv, 1, cb, _fp)) || cb != cbT)
+    {
+        PushErc(ercFileGeneral);
+        _el = kelWrite;
+        goto LRet;
+    }
+
+    fRet = fTrue;
+
+LRet:
+    _mutx.Leave();
     return fRet;
 }
 
