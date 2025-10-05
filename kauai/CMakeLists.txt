@@ -395,7 +395,19 @@ elseif(3DMM_GUI STREQUAL "SDL")
         ${PROJECT_SOURCE_DIR}/kauai/src/cursorsdl.cpp
     )
 
-    if(WIN32)
+    find_package(Fontconfig)
+    if(Fontconfig_FOUND)
+        target_sources(
+            KauaiGui
+            PRIVATE
+            ${PROJECT_SOURCE_DIR}/kauai/src/fontsdllinux.cpp
+        )
+        target_link_libraries(
+            KauaiGui
+            PRIVATE
+            Fontconfig::Fontconfig
+        )
+    elseif(WIN32)
         target_sources(
             KauaiGui
             PRIVATE
