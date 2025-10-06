@@ -86,8 +86,29 @@ bool FNI::FSearchInPath(PSTN pstn, PCSZ pcszEnv)
     AssertThis(0);
     AssertPo(pstn, 0);
 
-    assert(0);
-    return fFalse;
+    int32_t cch;
+    std::filesystem::path path;
+    PCSZ sz;
+
+    if (pcszEnv)
+    {
+        path = pcszEnv;
+    }
+    else
+    {
+        path = PszLit("");
+    }
+
+    path = path / pstn->Psz();
+    sz = path.c_str();
+    cch = strlen(sz);
+
+    Assert(cch <= kcchMaxSz, 0);
+    _stnFile = sz;
+    _SetFtgFromName();
+
+    AssertThis(ffniFile | ffniDir);
+    return fTrue;
 }
 
 /***************************************************************************
