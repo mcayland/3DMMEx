@@ -2344,7 +2344,7 @@ bool CHLX::FGetPath(FNI *pfni)
         stn.FAppendCh(ch);
     }
 
-#ifdef WIN
+#ifndef WIN
     if (pfni->FSearchInPath(&stn, _pszSearchPath))
     {
         return fTrue;
