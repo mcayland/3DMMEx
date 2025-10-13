@@ -361,9 +361,13 @@ bool FNI::FSameDir(FNI *pfni)
 {
     AssertThis(ffniFile | ffniDir);
     AssertPo(pfni, ffniFile | ffniDir);
+    FNI fni1, fni2;
 
-    assert(0);
-    return fFalse;
+    fni1 = *this;
+    fni2 = *pfni;
+    fni1._FChangeLeaf(pvNil);
+    fni2._FChangeLeaf(pvNil);
+    return fni1.FEqual(&fni2);
 }
 
 /***************************************************************************
@@ -376,8 +380,35 @@ bool FNI::FDownDir(PSTN pstn, uint32_t grffni)
     AssertThis(ffniDir);
     AssertPo(pstn, 0);
 
-    assert(0);
-    return fFalse;
+    FNI fniT;
+
+    fniT = *this;
+    // the +1 is for the \ character
+    if (fniT._stnFile.Cch() + pstn->Cch() + 1 > kcchMaxStn)
+    {
+        PushErc(ercFniGeneral);
+        return fFalse;
+    }
+    AssertDo(fniT._stnFile.FAppendStn(pstn), 0);
+    AssertDo(fniT._stnFile.FAppendCh(ChLit('\\')), 0);
+    fniT._ftg = kftgDir;
+    AssertPo(&fniT, ffniDir);
+
+    if (fniT.TExists() != tYes)
+    {
+        if (!(grffni & ffniCreateDir))
+            return fFalse;
+        // try to create it
+        if (!std::filesystem::create_directory(fniT._stnFile.Psz()))
+        {
+            PushErc(ercFniDirCreate);
+            return fFalse;
+        }
+    }
+    if (grffni & ffniMoveToDir)
+        *this = fniT;
+
+    return fTrue;
 }
 
 /***************************************************************************
@@ -389,8 +420,50 @@ bool FNI::FUpDir(PSTN pstn, uint32_t grffni)
     AssertThis(ffniDir);
     AssertNilOrPo(pstn, 0);
 
-    assert(0);
-    return fFalse;
+    int32_t cch;
+    achar *pchT;
+    PCSZ sz;
+    STN stn;
+    std::filesystem::path fullpath;
+
+    stn = _stnFile;
+    if (!stn.FAppendSz(PszLit("..")))
+        return fFalse;
+
+    fullpath = stn.Psz();
+    sz = fullpath.c_str();
+    cch = strlen(sz);
+    if (cch >= _stnFile.Cch() - 1)
+    {
+        return fFalse;
+    }
+    Assert(cch <= kcchMaxSz, 0);
+    Assert(cch < _stnFile.Cch() + 2, 0);
+    stn = sz;
+    switch (stn.Psz()[cch - 1])
+    {
+    case ChLit('\\'):
+    case ChLit('/'):
+        break;
+    default:
+        AssertDo(stn.FAppendCh(ChLit('\\')), 0);
+        cch++;
+        break;
+    }
+
+    if (pvNil != pstn)
+    {
+        // copy the tail and delete the trailing slash
+        pstn->SetSz(_stnFile.Psz() + cch);
+        pstn->Delete(pstn->Cch() - 1);
+    }
+
+    if (grffni & ffniMoveToDir)
+    {
+        _stnFile = stn;
+        AssertThis(ffniDir);
+    }
+    return fTrue;
 }
 
 #ifdef DEBUG
@@ -504,6 +577,38 @@ void FNI::_SetFtgFromName(void)
             _ftg = (_ftg << 8) | (int32_t)(uint8_t)toupper((schar)pchLim[ich]);
     }
     AssertThis(ffniFile | ffniDir);
+}
+
+/***************************************************************************
+    Change the leaf of the fni.
+***************************************************************************/
+bool FNI::_FChangeLeaf(PSTN pstn)
+{
+    AssertThis(ffniFile | ffniDir);
+    AssertNilOrPo(pstn, 0);
+
+    achar *pch;
+    PSZ psz;
+    int32_t cchBase, cch;
+
+    psz = _stnFile.Psz();
+    for (pch = psz + _stnFile.Cch(); pch-- > psz && *pch != ChLit('\\') && *pch != ChLit('/');)
+    {
+    }
+    Assert(pch > psz, "bad fni");
+
+    cchBase = pch - psz + 1;
+    _stnFile.Delete(cchBase);
+    _ftg = kftgDir;
+    if (pstn != pvNil && (cch = pstn->Cch()) > 0)
+    {
+        if (cchBase + cch > kcchMaxStn)
+            return fFalse;
+        AssertDo(_stnFile.FAppendStn(pstn), 0);
+        _SetFtgFromName();
+    }
+    AssertThis(ffniFile | ffniDir);
+    return fTrue;
 }
 
 /***************************************************************************
