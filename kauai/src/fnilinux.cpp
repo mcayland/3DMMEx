@@ -219,8 +219,24 @@ bool FNI::FGetTemp(void)
 {
     AssertThis(0);
 
-    assert(0);
-    return fFalse;
+    if (_fniTemp._ftg != kftgDir)
+    {
+        // get the temp directory
+        std::filesystem::path tmppath = std::filesystem::temp_directory_path();
+        tmppath = tmppath / "/";
+
+        PCSZ sz = tmppath.c_str();
+        if (sz == NULL)
+        {
+            PushErc(ercFniGeneral);
+            return fFalse;
+        }
+        _fniTemp._stnFile = sz;
+        _fniTemp._ftg = kftgDir;
+        AssertPo(&_fniTemp, ffniDir);
+    }
+    *this = _fniTemp;
+    return FGetUnique(vftgTemp);
 }
 
 /***************************************************************************
