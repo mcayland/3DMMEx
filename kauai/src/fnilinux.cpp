@@ -268,7 +268,20 @@ bool FNI::FSetLeaf(PSTN pstn, FTG ftg)
     AssertThis(ffniFile | ffniDir);
     AssertNilOrPo(pstn, 0);
 
-    assert(0);
+    _CleanFtg(&ftg);
+    Assert(FPure(ftg == kftgDir) == FPure(pstn == pvNil || pstn->Cch() == 0), "ftg doesn't match pstn");
+    if (!_FChangeLeaf(pstn))
+        goto LFail;
+
+    if ((kftgDir != ftg) && (ftgNil != ftg) && !FChangeFtg(ftg))
+        goto LFail;
+
+    AssertThis(ffniFile | ffniDir);
+    return fTrue;
+
+LFail:
+    SetNil();
+    PushErc(ercFniGeneral);
     return fFalse;
 }
 
@@ -527,7 +540,7 @@ void FNI::AssertValid(uint32_t grffni)
     {
         Assert(grffni & ffniDir, "unexpected dir");
         Assert(szT[cch - 1] == ChLit('\\') || szT[cch - 1] == ChLit('/'), "expected trailing slash");
-        Assert(pszT == NULL, "unexpected filename");
+        Assert(strlen(fullpath.filename().c_str()) == 0, "unexpected filename");
     }
     else
     {
@@ -625,6 +638,43 @@ bool FNI::_FChangeLeaf(PSTN pstn)
     }
     AssertThis(ffniFile | ffniDir);
     return fTrue;
+}
+
+/***************************************************************************
+    Make sure the ftg is all uppercase and has no characters after a zero.
+***************************************************************************/
+priv void _CleanFtg(FTG *pftg, PSTN pstnExt)
+{
+    AssertVarMem(pftg);
+    AssertNilOrPo(pstnExt, 0);
+
+    int32_t ichs;
+    schar chs;
+    bool fZero;
+    FTG ftgNew;
+
+    if (pvNil != pstnExt)
+        pstnExt->SetNil();
+
+    if (*pftg == kftgDir || *pftg == ftgNil)
+        return;
+
+    fZero = fFalse;
+    ftgNew = 0;
+    for (ichs = 0; ichs < kcchsMaxExt; ichs++)
+    {
+        chs = (schar)((uint32_t)*pftg >> (ichs * 8));
+        fZero |= (chs == 0);
+        if (!fZero)
+        {
+            chs = ChsUpper(chs);
+            ftgNew |= (int32_t)(uint8_t)chs << (8 * ichs);
+            if (pvNil != pstnExt)
+                pstnExt->FInsertCh(0, (achar)(uint8_t)chs);
+        }
+    }
+
+    *pftg = ftgNew;
 }
 
 /***************************************************************************
