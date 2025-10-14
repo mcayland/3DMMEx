@@ -223,7 +223,7 @@ bool FNI::FGetTemp(void)
     {
         // get the temp directory
         std::filesystem::path tmppath = std::filesystem::temp_directory_path();
-        tmppath = tmppath / "/";
+        tmppath = tmppath / "";
 
         PCSZ sz = tmppath.c_str();
         if (sz == NULL)
@@ -293,9 +293,28 @@ bool FNI::FChangeFtg(FTG ftg)
 {
     AssertThis(ffniFile);
     Assert(ftg != ftgNil && ftg != kftgDir, "Bad FTG");
+    STN stnFtg;
+    int32_t cchBase;
 
-    assert(0);
-    return fFalse;
+    _CleanFtg(&ftg, &stnFtg);
+    if (_ftg == ftg)
+        return fTrue;
+
+    // set the extension
+    cchBase = _stnFile.Cch() - _CchExt();
+
+    // use >= to leave room for the '.'
+    if (cchBase + stnFtg.Cch() >= kcchMaxStn)
+        return fFalse;
+
+    _stnFile.Delete(cchBase);
+    _ftg = ftg;
+    if (stnFtg.Cch() > 0)
+    {
+        _stnFile.FAppendCh(ChLit('.'));
+        _stnFile.FAppendStn(&stnFtg);
+    }
+    return fTrue;
 }
 
 /***************************************************************************
@@ -334,9 +353,34 @@ void FNI::GetStnPath(PSTN pstn)
 tribool FNI::TExists(void)
 {
     AssertThis(ffniFile | ffniDir);
+    STN stn;
+    PSTN pstn;
+    uint32_t lu;
 
-    assert(0);
-    return tNo;
+    // strip off the trailing slash (if a directory).
+    pstn = &_stnFile;
+    if (_ftg == kftgDir)
+    {
+        int32_t cch;
+
+        stn = _stnFile;
+        pstn = &stn;
+        cch = stn.Cch();
+        Assert(cch > 0 && (stn.Psz()[cch - 1] == ChLit('\\') || stn.Psz()[cch - 1] == ChLit('/')), 0);
+        stn.Delete(cch - 1);
+    }
+
+    if (!std::filesystem::exists(pstn->Psz()))
+    {
+        return tNo;
+    }
+    if ((_ftg == kftgDir) != std::filesystem::is_directory(pstn->Psz()))
+    {
+        PushErc(ercFniMismatch);
+        return tMaybe;
+    }
+
+    return tYes;
 }
 
 /***************************************************************************
