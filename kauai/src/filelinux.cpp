@@ -106,7 +106,7 @@ void FIL::_Close(bool fFinal)
 
     if ((_grffil & ffilTemp) && fFinal && _fEverOpen)
     {
-        if (!std::remove(_fni._stnFile.Psz()))
+        if (std::remove(_fni._stnFile.Psz()))
             Warn("Deleting temp file failed");
     }
 
