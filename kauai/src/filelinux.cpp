@@ -23,7 +23,7 @@ const ulong kfpError = 0xFFFFFFFF;
 ***************************************************************************/
 priv FILE * _HfileOpen(PSZ psz, uint32_t grffil)
 {
-    const char *mode = (grffil & ffilWriteEnable) ? "wb" : "rb";
+    const char *mode = (grffil & ffilWriteEnable) ? "wb+" : "rb";
 
     return std::fopen(psz, mode);
 }
