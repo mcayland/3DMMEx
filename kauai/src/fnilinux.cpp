@@ -463,7 +463,7 @@ bool FNI::FDownDir(PSTN pstn, uint32_t grffni)
         return fFalse;
     }
     AssertDo(fniT._stnFile.FAppendStn(pstn), 0);
-    AssertDo(fniT._stnFile.FAppendCh(ChLit('\\')), 0);
+    AssertDo(fniT._stnFile.FAppendCh(ChLit('/')), 0);
     fniT._ftg = kftgDir;
     AssertPo(&fniT, ffniDir);
 
@@ -668,7 +668,7 @@ bool FNI::_FChangeLeaf(PSTN pstn)
     for (pch = psz + _stnFile.Cch(); pch-- > psz && *pch != ChLit('\\') && *pch != ChLit('/');)
     {
     }
-    Assert(pch > psz, "bad fni");
+    Assert(pch >= psz, "bad fni");
 
     cchBase = pch - psz + 1;
     _stnFile.Delete(cchBase);
