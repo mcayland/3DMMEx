@@ -11,11 +11,13 @@ void GetTestResourcePath(PFNI pfniTestResourcePath)
     STN stnTestResourcePath;
     SZ szEnv;
     FillPb(szEnv, SIZEOF(szEnv), 0);
+#ifdef WIN
     if (GetEnvironmentVariable(PszLit("KAUAI_TEST_RESOURCES"), szEnv, CvFromRgv(szEnv)) != 0)
     {
         stnTestResourcePath = szEnv;
     }
     else
+#endif
     {
         // Use path defined at compile time
         SZS szTestPath = KAUAI_TEST_RESOURCES_PATH;
