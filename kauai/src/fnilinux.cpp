@@ -503,7 +503,7 @@ bool FNI::FUpDir(PSTN pstn, uint32_t grffni)
     if (!stn.FAppendSz(PszLit("..")))
         return fFalse;
 
-    fullpath = stn.Psz();
+    fullpath = std::filesystem::canonical(stn.Psz());
     sz = fullpath.c_str();
     cch = strlen(sz);
     if (cch >= _stnFile.Cch() - 1)
