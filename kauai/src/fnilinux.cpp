@@ -158,7 +158,7 @@ bool FNI::FBuildFromPath(PSTN pstn, FTG ftgDef)
         achar ch = _stnFile.Prgch()[_stnFile.Cch() - 1];
         if (ch != ChLit('\\') && ch != ChLit('/'))
         {
-            if (!_stnFile.FAppendCh(ChLit('\\')))
+            if (!_stnFile.FAppendCh(ChLit('/')))
             {
                 goto LFail;
             }
