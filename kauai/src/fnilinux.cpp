@@ -391,7 +391,9 @@ bool FNI::FDelete(void)
     AssertThis(ffniFile);
     Assert(FIL::PfilFromFni(this) == pvNil, "file is open");
 
-    assert(0);
+    if (!std::remove(_stnFile.Psz()))
+        return fTrue;
+    PushErc(ercFniDelete);
     return fFalse;
 }
 
