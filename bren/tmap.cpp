@@ -158,8 +158,6 @@ bool TMAP::FWrite(PBLCK pblck)
     return fTrue;
 }
 
-#ifdef WIN
-
 #define CALCDIST(bRed1, bGreen1, bBlue1, bRed2, bGreen2, bBlue2)                                                       \
     (((bRed1) - (bRed2)) * ((bRed1) - (bRed2)) + ((bGreen1) - (bGreen2)) * ((bGreen1) - (bGreen2)) +                   \
      ((bBlue1) - (bBlue2)) * ((bBlue1) - (bBlue2)))
@@ -255,7 +253,7 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni, PGL pglclr)
                         pglCache->Put(prgb[iprgb], &iclrBest);
                     }
 
-                    prgb[iprgb] = (BYTE)iclrBest;
+                    prgb[iprgb] = (uint8_t)iclrBest;
                 }
             }
 
@@ -269,15 +267,6 @@ PTMAP TMAP::PtmapReadNative(FNI *pfni, PGL pglclr)
 
     return ptmap;
 }
-#endif // WIN
-
-#ifdef MAC
-PTMAP TMAP::PtmapReadNative(FNI *pfni)
-{
-    RawRtn(); // REVIEW peted: NYI
-    return pvNil;
-}
-#endif // MAC
 
 /*
  *	PtmapNew	--	Given pixel data and attributes, creates a new TMAP with
