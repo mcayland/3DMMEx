@@ -93,11 +93,19 @@
 #define khidMsqClock khidLimKidFrame + 4
 // khidStudio 				khidLimKidFrame + 5  Defined in stdiodef.h
 
-#define kftgChunky MacWin(KLCONST4('c', 'h', 'n', 'k'), KLCONST3('C', 'H', 'K'))
-#define kftgContent MacWin(KLCONST4('3', 'c', 'o', 'n'), KLCONST3('3', 'C', 'N'))
-#define kftgThumbDesc MacWin(KLCONST4('3', 't', 'h', 'd'), KLCONST3('3', 'T', 'H'))
-#define kftg3mm MacWin(KLCONST3('3', 'm', 'm'), KLCONST3('3', 'M', 'M'))
-#define kftgSocTemp MacWin(KLCONST4('3', 't', 'm', 'p'), KLCONST3('3', 'T', 'P'))
+#ifdef MAC
+#define kftgChunky KLCONST4('c', 'h', 'n', 'k')
+#define kftgContent KLCONST4('3', 'c', 'o', 'n')
+#define kftgThumbDesc KLCONST4('3', 't', 'h', 'd')
+#define kftg3mm KLCONST3('3', 'm', 'm')
+#define kftgSocTemp KLCONST4('3', 't', 'm', 'p')
+#else
+#define kftgChunky KLCONST3('C', 'H', 'K')
+#define kftgContent KLCONST3('3', 'C', 'N')
+#define kftgThumbDesc KLCONST3('3', 'T', 'H')
+#define kftg3mm KLCONST3('3', 'M', 'M')
+#define kftgSocTemp KLCONST3('3', 'T', 'P')
+#endif
 
 #define ksz3mm PszLit("3mm")
 
