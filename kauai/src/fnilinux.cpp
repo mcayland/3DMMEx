@@ -779,7 +779,22 @@ FNE::~FNE(void)
 ***************************************************************************/
 void FNE::_Free(void)
 {
-    assert(0);
+    if (_prgftg != _rgftg)
+    {
+        FreePpv((void **)&_prgftg);
+        _prgftg = _rgftg;
+    }
+#if 0
+    do
+    {
+        if (hBadWin != _fesCur.hn)
+            FindClose(_fesCur.hn);
+    } while (pvNil != _pglfes && _pglfes->FPop(&_fesCur));
+    _fesCur.hn = hBadWin;
+#endif
+    _fInited = fFalse;
+    ReleasePpo(&_pglfes);
+    AssertThis(0);
 }
 
 /***************************************************************************
