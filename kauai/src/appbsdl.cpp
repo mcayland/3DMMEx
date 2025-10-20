@@ -10,7 +10,9 @@
 #include "frame.h"
 #include "fcntl.h"
 #include "stdio.h"
+#ifdef WIN32
 #include "io.h"
+#endif
 
 ASSERTNAME
 
