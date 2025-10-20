@@ -114,11 +114,19 @@ void APP::Run(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
         grfapp |= fappStereoSound;
     }
 
+#ifdef WIN
     __try
     {
         APP_PAR::Run(grfapp, grfgob, ginDef);
     }
     __except (UnhandledExceptionFilter(GetExceptionInformation()))
+#else
+    try
+    {
+        APP_PAR::Run(grfapp, grfgob, ginDef);
+    }
+    catch (...)
+#endif
     {
         PDLG pdlg;
 
@@ -1511,10 +1519,9 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
 
     SZ szSid;
     STN stnSid;
-    DWORD cchSid = kcchMaxSz;
+
     SZ szTitle;
     STN stnTitle;
-    DWORD cchTitle = kcchMaxSz;
     PGST pgst;
     int32_t sid;
 
@@ -1522,6 +1529,8 @@ bool APP::_FReadTitlesFromReg(PGST *ppgst)
         goto LFail;
 
 #ifdef WIN
+    DWORD cchSid = kcchMaxSz;
+    DWORD cchTitle = kcchMaxSz;
     HKEY hkey;
     DWORD dwDisposition;
     DWORD iValue;
