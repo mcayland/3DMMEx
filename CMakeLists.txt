@@ -159,7 +159,7 @@ elseif("${3DMM_BRENDER_LIBRARY}" STREQUAL "Source")
     FetchContent_Declare(
         3DMM-BRender
         GIT_REPOSITORY https://github.com/mcayland/3DMM-BRender
-        GIT_TAG fix/3dmm-actor-rendering
+        GIT_TAG oss-dev
     )
 
     set(BRENDER_ASAN OFF)
