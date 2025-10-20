@@ -240,6 +240,36 @@ bool FNI::FGetTemp(void)
 }
 
 /***************************************************************************
+    Set the FNI to the current working directory
+***************************************************************************/
+bool FNI::FGetCwd()
+{
+    AssertThis(0);
+
+    STN stnCurrentDir = PszLit(".");
+    return FBuildFromPath(&stnCurrentDir, kftgDir);
+}
+
+/***************************************************************************
+    Set the FNI to the current executable file
+***************************************************************************/
+bool FNI::FGetExe()
+{
+    AssertThis(0);
+
+    bool fRet;
+    SZ sz;
+    STN stnExe;
+    ssize_t len;
+
+    len = ::readlink("/proc/self/exe", (char *)&sz, sizeof(sz) - 1);
+    sz[len] = '\0';
+    stnExe.SetSz(sz);
+
+    return FBuildFromPath(&stnExe);
+}
+
+/***************************************************************************
     Return the file type of the fni.
 ***************************************************************************/
 FTG FNI::Ftg(void)
