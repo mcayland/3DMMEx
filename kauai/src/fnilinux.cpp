@@ -679,7 +679,7 @@ void FNI::_SetFtgFromName(void)
         AssertIn(cch, -1, kcchsMaxExt + 1);
         pchLim -= cch;
         for (ich = 0; ich < cch; ich++)
-            _ftg = (_ftg << 8) | (int32_t)(uint8_t)toupper((schar)pchLim[ich]);
+            _ftg = (_ftg << 8) | (int32_t)(uint8_t)tolower((schar)pchLim[ich]);
     }
     AssertThis(ffniFile | ffniDir);
 }
@@ -717,7 +717,7 @@ bool FNI::_FChangeLeaf(PSTN pstn)
 }
 
 /***************************************************************************
-    Make sure the ftg is all uppercase and has no characters after a zero.
+    Make sure the ftg is all lowercase and has no characters after a zero.
 ***************************************************************************/
 priv void _CleanFtg(FTG *pftg, PSTN pstnExt)
 {
@@ -743,7 +743,7 @@ priv void _CleanFtg(FTG *pftg, PSTN pstnExt)
         fZero |= (chs == 0);
         if (!fZero)
         {
-            chs = ChsUpper(chs);
+            chs = ChsLower(chs);
             ftgNew |= (int32_t)(uint8_t)chs << (8 * ichs);
             if (pvNil != pstnExt)
                 pstnExt->FInsertCh(0, (achar)(uint8_t)chs);
