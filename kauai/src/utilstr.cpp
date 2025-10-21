@@ -27,6 +27,7 @@ ASSERTNAME
 
 #ifdef __unix__
 #include <ctype.h>
+#include <iconv.h>
 
 #define CUROSK koskUniWin
 #define UPPERCASETEXT(str, len) \
@@ -191,9 +192,27 @@ void STN::SetUtf8Sz(PU8SZ pu8szSrc)
 #endif // UNICODE
 
 #else  // !WIN
-    // TODO: Set STN from UTF-8 string
-    RawRtn();
-    SetNil();
+    int32_t cb;
+    iconv_t ic;
+    char szT[kcchMaxSz];
+    size_t cch, cchLeft;
+    char *in_ptr, *out_ptr;
+
+    cch = strlen(pu8szSrc);
+    cchLeft = kcchMaxSz;
+
+    in_ptr = pu8szSrc;
+    out_ptr = szT;
+
+    ic = iconv_open("CP1252", "UTF-8");
+    iconv(ic, &in_ptr, &cch, &out_ptr, &cchLeft);
+    iconv_close(ic);
+
+    cb = kcchMaxSz - cchLeft;
+    Assert(cb != 0, "iconv failed to convert characters");
+    szT[cb] = 0;
+
+    SetSz(szT);
 #endif // WIN
 }
 
@@ -630,7 +649,7 @@ void STN::GetSzs(PSZS pszs)
 /***************************************************************************
     Get a zero terminated UTF-8 string from this string.
 ***************************************************************************/
-void STN::GetUtf8Sz(U8SZ pu8sz)
+void STN::GetUtf8Sz(PU8SZ pu8sz)
 {
     AssertThis(0);
     AssertPvCb(pu8sz, kcchTotUtf8Sz);
@@ -670,9 +689,26 @@ void STN::GetUtf8Sz(U8SZ pu8sz)
     pu8sz[cb] = 0;
 
 #else  // !WIN32
-    // TODO: convert STN to UTF-8
-    RawRtn();
-    pu8sz[0] = 0;
+    int32_t cb;
+    iconv_t ic;
+    char *pT;
+    size_t cch, cchLeft;
+    char *in_ptr, *out_ptr;
+
+    pT = Psz();
+    cch = Cch();
+    cchLeft = kcchMaxUtf8Sz;
+
+    in_ptr = pT;
+    out_ptr = pu8sz;
+
+    ic = iconv_open("UTF-8", "CP1252");
+    iconv(ic, &in_ptr, &cch, &out_ptr, &cchLeft);
+    iconv_close(ic);
+
+    cb = kcchMaxUtf8Sz - cchLeft;
+    Assert(cb != 0, "iconv failed to convert characters");
+    pu8sz[cb] = 0;
 #endif // WIN32
 }
 
