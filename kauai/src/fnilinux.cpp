@@ -551,7 +551,7 @@ bool FNI::FUpDir(PSTN pstn, uint32_t grffni)
     case ChLit('/'):
         break;
     default:
-        AssertDo(stn.FAppendCh(ChLit('\\')), 0);
+        AssertDo(stn.FAppendCh(ChLit('/')), 0);
         cch++;
         break;
     }
