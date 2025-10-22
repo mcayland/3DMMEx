@@ -654,16 +654,16 @@ void STN::GetUtf8Sz(PU8SZ pu8sz)
     AssertThis(0);
     AssertPvCb(pu8sz, kcchTotUtf8Sz);
 
-#ifdef WIN32
-    int32_t cch;
-    int32_t cb;
-    const wchar *pwcsT;
-
     if (Cch() == 0)
     {
         pu8sz[0] = 0;
         return;
     }
+
+#ifdef WIN32
+    int32_t cch;
+    int32_t cb;
+    const wchar *pwcsT;
 
 #ifdef UNICODE
     // The string is already Unicode, so we can convert it directly to UTF-8
