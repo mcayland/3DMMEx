@@ -56,8 +56,8 @@ const FTG kftgDir = KLCONST4('.', '.', '.', '.');
 const FTG kftgTemp = KLCONST4('t', 'e', 'm', 'p'); // the standard temp file ftg
 const FTG kftgText = KLCONST4('T', 'E', 'X', 'T');
 #else
-const FTG kftgTemp = KLCONST3('T', 'M', 'P'); // the standard temp file ftg
-const FTG kftgText = KLCONST3('T', 'X', 'T');
+const FTG kftgTemp = KLCONST3('t', 'm', 'p'); // the standard temp file ftg
+const FTG kftgText = KLCONST3('t', 'x', 't');
 #endif
 extern FTG vftgTemp; // the ftg to use for temp files
 
