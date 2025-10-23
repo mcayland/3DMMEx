@@ -100,11 +100,11 @@
 #define kftg3mm KLCONST3('3', 'm', 'm')
 #define kftgSocTemp KLCONST4('3', 't', 'm', 'p')
 #else
-#define kftgChunky KLCONST3('C', 'H', 'K')
-#define kftgContent KLCONST3('3', 'C', 'N')
-#define kftgThumbDesc KLCONST3('3', 'T', 'H')
-#define kftg3mm KLCONST3('3', 'M', 'M')
-#define kftgSocTemp KLCONST3('3', 'T', 'P')
+#define kftgChunky KLCONST3('c', 'h', 'k')
+#define kftgContent KLCONST3('3', 'c', 'n')
+#define kftgThumbDesc KLCONST3('3', 't', 'h')
+#define kftg3mm KLCONST3('3', 'm', 'm')
+#define kftgSocTemp KLCONST3('3', 't', 'p')
 #endif
 
 #define ksz3mm PszLit("3mm")
