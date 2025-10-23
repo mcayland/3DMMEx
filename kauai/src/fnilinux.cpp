@@ -806,8 +806,54 @@ bool FNE::FInit(FNI *pfniDir, FTG *prgftg, int32_t cftg, uint32_t grffne)
     AssertNilOrVarMem(pfniDir);
     AssertIn(cftg, 0, kcbMax);
     AssertPvCb(prgftg, LwMul(cftg, SIZEOF(FTG)));
+    FTG *pftg;
 
-    return fFalse;
+    // free the old stuff
+    _Free();
+
+    if (0 >= cftg)
+        _cftg = 0;
+    else
+    {
+        int32_t cb = LwMul(cftg, SIZEOF(FTG));
+
+        if (cftg > kcftgFneBase && !FAllocPv((void **)&_prgftg, cb, fmemNil, mprNormal))
+        {
+            _prgftg = _rgftg;
+            PushErc(ercFneGeneral);
+            AssertThis(0);
+            return fFalse;
+        }
+        CopyPb(prgftg, _prgftg, cb);
+        _cftg = cftg;
+        for (pftg = _prgftg + _cftg; pftg-- > _prgftg;)
+            _CleanFtg(pftg);
+    }
+
+    if (pfniDir == pvNil)
+    {
+        _fesCur.fni.SetNil();
+    }
+    else
+    {
+        STN stn;
+
+        _fesCur.fni = *pfniDir;
+
+        stn = PszLit("");
+        if (!_fesCur.fni._FChangeLeaf(&stn))
+        {
+            PushErc(ercFneGeneral);
+            _Free();
+            AssertThis(0);
+            return fFalse;
+        }
+    }
+    _fesCur.it_init = false;
+    _fRecurse = FPure(grffne & ffneRecurse);
+    _fInited = fTrue;
+    AssertThis(0);
+    return fTrue;
 }
 
 /***************************************************************************
@@ -818,9 +864,139 @@ bool FNE::FNextFni(FNI *pfni, uint32_t *pgrffneOut, uint32_t grffneIn)
     AssertThis(0);
     AssertVarMem(pfni);
     AssertNilOrVarMem(pgrffneOut);
+    STN stn;
+    bool fT;
+    int32_t fvol;
+    int32_t err;
+    FTG *pftg;
+    std::filesystem::path basepath;
 
-    assert(0);
-    return fFalse;
+    if (!_fInited)
+    {
+        Bug("must initialize the FNE before using it!");
+        return fFalse;
+    }
+
+    if (grffneIn & ffneSkipDir)
+    {
+        // skip the rest of the stuff in this dir
+        if (!_FPop())
+            goto LDone;
+    }
+
+    // directory or file
+    basepath = std::filesystem::path(_fesCur.fni._stnFile.Psz());
+    for (;;)
+    {
+        std::filesystem::directory_entry de;
+
+        if (_fesCur.fni._stnFile.Cch() == 0)
+            goto LDone;
+
+        if (_fesCur.it_init == false)
+        {
+            STN stn;
+
+            _fesCur.it = std::filesystem::directory_iterator(_fesCur.fni._stnFile.Psz());
+            _fesCur.it_init = true;
+        }
+        else
+        {
+            _fesCur.it++;
+        }
+
+        if (_fesCur.it == std::filesystem::end(_fesCur.it)) {
+            goto LPop;
+        }
+
+        de = *_fesCur.it;
+
+        stn.SetSz(std::filesystem::relative(de.path(), basepath).c_str());
+        *pfni = _fesCur.fni;
+        if (de.is_directory())
+        {
+            if (stn.FEqualSz(PszLit(".")) || stn.FEqualSz(PszLit("..")))
+                continue;
+            AssertDo(pfni->_FChangeLeaf(pvNil), 0);
+            fT = pfni->FDownDir(&stn, ffniMoveToDir);
+        }
+        else
+            fT = pfni->_FChangeLeaf(&stn);
+        if (!fT)
+        {
+            PushErc(ercFneGeneral);
+            continue;
+        }
+
+        if (_cftg == 0)
+            goto LGotOne;
+        for (pftg = _prgftg + _cftg; pftg-- > _prgftg;)
+        {
+            if (*pftg == pfni->_ftg)
+                goto LGotOne;
+        }
+    }
+    Bug("How did we fall through to here?");
+
+LPop:
+    if (pvNil == _pglfes || _pglfes->IvMac() == 0)
+    {
+    LDone:
+        _Free();
+        AssertThis(0);
+        return fFalse;
+    }
+
+    // we're about to pop a directory, so send the current directory back
+    // with ffnePost
+    if (pvNil != pgrffneOut)
+        *pgrffneOut = ffnePost;
+    *pfni = _fesCur.fni;
+    AssertDo(pfni->_FChangeLeaf(pvNil), 0);
+    AssertDo(_FPop(), 0);
+    AssertPo(pfni, ffniDir);
+    AssertThis(0);
+    return fTrue;
+
+LGotOne:
+    AssertPo(pfni, ffniFile | ffniDir);
+    if (pvNil != pgrffneOut)
+        *pgrffneOut = ffnePre | ffnePost;
+
+    if (_fRecurse && pfni->_ftg == kftgDir)
+    {
+        if ((pvNil != _pglfes || pvNil != (_pglfes = GL::PglNew(SIZEOF(FES), 5))) && _pglfes->FPush(&_fesCur))
+        {
+            // set up the new fes
+            _fesCur.fni = *pfni;
+            stn = PszLit("*");
+            if (!_fesCur.fni._FChangeLeaf(&stn))
+            {
+                AssertDo(_pglfes->FPop(&_fesCur), 0);
+            }
+            else
+            {
+                _fesCur.it = std::filesystem::end(_fesCur.it);
+                if (pvNil != pgrffneOut)
+                    *pgrffneOut = ffnePre;
+            }
+        }
+        else
+            PushErc(ercFneGeneral);
+    }
+    AssertThis(0);
+    return fTrue;
+}
+
+/***************************************************************************
+    Pop a state in the FNE.
+***************************************************************************/
+bool FNE::_FPop(void)
+{
+    AssertBaseThis(0);
+
+    _fesCur.it == std::filesystem::end(_fesCur.it);
+    return pvNil != _pglfes && _pglfes->FPop(&_fesCur);
 }
 
 #ifdef DEBUG

@@ -17,6 +17,7 @@
 #define FNI_H
 
 #include "kwnd.h"
+#include <filesystem>
 
 #ifdef MAC
 typedef FSSpec FSS;
@@ -171,14 +172,17 @@ class FNE : public FNE_PAR
         int32_t lwVol;
         int32_t lwDir;
         int32_t iv;
-#endif // MAC
-#ifdef WIN
+#elifdef WIN
         FNI fni; // directory fni
         HN hn;   // for enumerating files/directories
         WIN32_FIND_DATA wfd;
         uint32_t grfvol; // which volumes are available (for enumerating volumes)
         int32_t chVol;   // which volume we're on (for enumerating volumes)
-#endif                   // WIN
+#else                    // WIN
+        FNI fni;
+        std::filesystem::directory_iterator it;
+        bool it_init;
+#endif  // Other
     };
 
     FTG _rgftg[kcftgFneBase];
@@ -190,9 +194,9 @@ class FNE : public FNE_PAR
     FES _fesCur;
 
     void _Free(void);
-#ifdef WIN
+#ifndef MAC
     bool _FPop(void);
-#endif // WIN
+#endif // MAC
 
   public:
     FNE(void);
