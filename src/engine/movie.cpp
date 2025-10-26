@@ -26,6 +26,12 @@ Actors, Text boxes, etc.
 
 ***************************************************************************/
 
+#ifndef WIN
+#include <filesystem>
+
+namespace fs = std::filesystem;
+#endif
+
 #include "soc.h"
 ASSERTNAME
 
@@ -243,8 +249,14 @@ bool MVIE::_FSetPfilSave(PFNI pfni)
     pfni->GetStnPath(&stnFile);
 #ifdef WIN
     _fReadOnly = (((lAttrib = GetFileAttributes(stnFile.Psz())) != 0xFFFFFFFF) && (lAttrib & FILE_ATTRIBUTE_READONLY));
-#else // MAC
+#elif defined(MAC) // MAC
     RawRtn();
+#else
+    {
+        fs::perms perms = fs::status(stnFile.Psz()).permissions();
+
+        _fReadOnly = (perms & fs::perms::owner_read) == fs::perms::none;
+    }
 #endif
     return fTrue;
 }
