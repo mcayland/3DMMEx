@@ -243,8 +243,14 @@ bool MVIE::_FSetPfilSave(PFNI pfni)
     pfni->GetStnPath(&stnFile);
 #ifdef WIN
     _fReadOnly = (((lAttrib = GetFileAttributes(stnFile.Psz())) != 0xFFFFFFFF) && (lAttrib & FILE_ATTRIBUTE_READONLY));
-#else // MAC
+#elif defined(MAC) // MAC
     RawRtn();
+#else
+    {
+        std::filesystem::perms perms = std::filesystem::status(stnFile.Psz()).permissions();
+
+        _fReadOnly = (perms & std::filesystem::perms::owner_read) == std::filesystem::perms::none;
+    }
 #endif
     return fTrue;
 }
