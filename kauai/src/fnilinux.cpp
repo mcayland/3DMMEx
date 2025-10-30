@@ -434,8 +434,18 @@ bool FNI::FRename(FNI *pfni)
 {
     AssertThis(ffniFile);
     AssertPo(pfni, ffniFile);
+    std::filesystem::perms perms;
 
-    assert(0);
+    perms = std::filesystem::status(_stnFile.Psz()).permissions();
+    if (!((perms & std::filesystem::perms::owner_write) == std::filesystem::perms::none))
+    {
+        std::filesystem::path src = std::filesystem::path(_stnFile.Psz());
+        std::filesystem::path dst = std::filesystem::path(pfni->_stnFile.Psz());
+
+        std::filesystem::rename(src, dst);
+        return fTrue;
+    }
+    PushErc(ercFniRename);
     return fFalse;
 }
 
