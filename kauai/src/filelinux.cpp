@@ -326,8 +326,27 @@ bool FIL::FRename(FNI *pfni)
 {
     AssertThis(0);
     AssertPo(pfni, ffniFile);
+    FNI fni;
     bool fRet = fFalse;
 
-    assert(0);
+    _mutx.Enter();
+
+    Assert(_fni.FSameDir(pfni), "trying to change directories with FRename");
+
+    _Close();
+    fRet = _fni.FRename(pfni);
+    if (fRet)
+        _fni = *pfni;
+
+    // reopen the file
+    if (!_FOpen(fFalse, _grffil))
+        fRet = fFalse;
+
+    _mutx.Leave();
+
+    if (!fRet)
+        PushErc(ercFileRename);
+
+    AssertThis(0);
     return fRet;
 }
