@@ -1031,11 +1031,12 @@ KWND GOB::_HwndGetDptFromCoo(PT *pdpt, int32_t coo)
             ClientToScreen(hwnd, &pts);
 #elif defined(KAUAI_SDL)
             // FIXME MCA: is this correct?
+            int xpWnd, ypWnd;
             PTS pts;
 
             Assert(hwnd == vwig.hwndApp, "We should only have one window");
 
-            int xpWnd, ypWnd;
+            pts = *pdpt;
             SDL_GetWindowPosition((SDL_Window *)hwnd, &xpWnd, &ypWnd);
             pts.xp += xpWnd;
             pts.yp += ypWnd;
