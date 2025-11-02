@@ -122,3 +122,11 @@ uint32_t GetEnvironmentVariable(const char *pcszName, char *pszValue, uint32_t c
     memcpy(pszValue, psz, ilen);
     return ilen;
 }
+
+/****************************************
+    Current username
+****************************************/
+void GetUserName(char *psz, int cchMax)
+{
+    getlogin_r(psz, cchMax);
+}
