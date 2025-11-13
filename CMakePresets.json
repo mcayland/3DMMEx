@@ -184,6 +184,15 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "3DMM_GUI": "SDL"
             }
-        }
+        },
+        {
+            "displayName": "SDL Linux gcc x64_64 Debug",
+            "name": "sdl-x86_64-gcc-linux-debug",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "3DMM_GUI": "SDL"
+            }
+       }
     ]
 }
