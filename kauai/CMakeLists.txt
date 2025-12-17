@@ -303,6 +303,13 @@ if(WIN32)
         PUBLIC
         winmm
     )
+else()
+    # Use Win32 MIDI player
+    target_sources(
+        KauaiSound
+        PRIVATE
+        "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
+    )
 endif()
 
 # SDL Sound playback support
