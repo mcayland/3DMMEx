@@ -16,6 +16,8 @@
 #ifndef MDEV2PRI_H
 #define MDEV2PRI_H
 
+#ifdef WIN
+
 // This corresponds to the Win95 MIDIEVENT structure (with no optional data).
 // We're using the older headers, so need to define our own.
 struct MEV
@@ -46,6 +48,34 @@ typedef MIDIHDR *PMHO;
 
 // A midi stream handle can be used as a midi out handle.
 typedef HMIDIOUT HMS;
+
+#else
+
+// MIDI Event
+struct MEV
+{
+    uint32_t dwDeltaTime; // midi ticks between this and previous event
+    uint32_t dwStreamID;  // reserved - must be zero
+    uint32_t dwEvent;
+};
+typedef MEV *PMEV;
+
+// MIDI header
+struct MH
+{
+    uint8_t *lpData;
+    uint32_t dwBufferLength;
+    uint32_t dwBytesRecorded;
+    uint32_t *dwUser;
+    uint32_t dwFlags;
+    MH *lpNext;
+    uint32_t *reserved;
+    uint32_t dwOffset;
+    uint32_t *dwReserved[8];
+};
+typedef MH *PMH;
+
+#endif
 
 /***************************************************************************
     This is the midi stream cached object.

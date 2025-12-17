@@ -305,7 +305,12 @@ if (3DMM_GUI STREQUAL "Win32")
     )
 
 else()
-    message(WARNING "Sound playback disabled")
+    # Use Win32 MIDI player
+    target_sources(
+        KauaiSound
+        PRIVATE
+        "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
+    )
 endif()
 
 # Miniaudio sound device
