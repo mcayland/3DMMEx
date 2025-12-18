@@ -296,19 +296,13 @@ if(WIN32)
         KauaiSound
         PRIVATE
         "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mdev2win.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
     target_link_libraries(
         KauaiSound
         PUBLIC
         winmm
-    )
-else()
-    # Use Win32 MIDI player
-    target_sources(
-        KauaiSound
-        PRIVATE
-        "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
 endif()
 
@@ -318,6 +312,8 @@ if(3DMM_GUI STREQUAL "SDL")
         KauaiSound
         PRIVATE
         "${PROJECT_SOURCE_DIR}/kauai/src/sndsdl.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mdev2sdl.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
     target_link_libraries(
         KauaiSound

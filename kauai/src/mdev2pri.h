@@ -66,7 +66,7 @@ struct MH
     uint8_t *lpData;
     uint32_t dwBufferLength;
     uint32_t dwBytesRecorded;
-    uint32_t *dwUser;
+    uintptr_t dwUser;
     uint32_t dwFlags;
     MH *lpNext;
     uint32_t *reserved;
@@ -74,6 +74,8 @@ struct MH
     uint32_t *dwReserved[8];
 };
 typedef MH *PMH;
+
+typedef void *HMS;
 
 #endif
 
@@ -178,8 +180,13 @@ class MSMIX : public MSMIX_PAR
 
     // Mutex to protect our member variables
     MUTX _mutx;
+#ifdef WIN32
     HN _hevt; // to notify the thread that the sound list changed
     HN _hth;  // thread to terminate non-playing sounds
+#else
+    void *_hevt;
+    void *_hth;
+#endif
 
     PMISI _pmisi;    // the midi stream interface
     PGL _pglmsos;    // the list of current sounds, in priority order
@@ -204,8 +211,10 @@ class MSMIX : public MSMIX_PAR
     static void _MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData);
     void _Notify(void *pvData, PMDWS pmdws);
 
+#ifdef WIN32
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
+#endif
 
   public:
     static PMSMIX PmsmixNew(void);
@@ -221,9 +230,9 @@ class MSMIX : public MSMIX_PAR
 
 // Define these so we can use old (msvc 2.1) header files
 #ifndef MEVT_SHORTMSG
-#define MEVT_SHORTMSG ((BYTE)0x00) // parm = shortmsg for midiOutShortMsg
-#define MEVT_TEMPO ((BYTE)0x01)    // parm = new tempo in microsec/qn
-#define MEVT_NOP ((BYTE)0x02)      // parm = unused; does nothing
+#define MEVT_SHORTMSG ((uint8_t)0x00) // parm = shortmsg for midiOutShortMsg
+#define MEVT_TEMPO ((uint8_t)0x01)    // parm = new tempo in microsec/qn
+#define MEVT_NOP ((uint8_t)0x02)      // parm = unused; does nothing
 #define MIDIPROP_SET 0x80000000L
 #define MIDIPROP_GET 0x40000000L
 #define MIDIPROP_TIMEDIV 0x00000001L
@@ -249,7 +258,7 @@ class MISI : public MISI_PAR
     // system volume level - to be saved and restored. The volume we set
     // is always relative to this
     tribool _tBogusDriver; // to indicate whether midiOutGetVolume really works
-    DWORD _luVolSys;
+    uint32_t _luVolSys;
     int32_t _vlmBase; // our current volume relative to _luVolSys.
 
     MISI(PFNMIDI pfn, uintptr_t luUser);
@@ -312,19 +321,29 @@ class WMS : public WMS_PAR
     typedef MSIR *PMSIR;
 
     MUTX _mutx;
+#ifdef WIN32
     HINSTANCE _hlib;
+#else
+    void *_hlib;
+#endif
     PGL _pglpmsir;
     int32_t _ipmsirCur;
     int32_t _cmhOut;
 
+#ifdef WIN32
     HN _hevt; // event to wake up the thread
     HN _hth;  // thread to do callbacks and cleanup after a notify
+#else
+    void *_hevt;
+    void *_hth;
+#endif
 
 #ifdef STREAM_BUG
     bool _fActive : 1;
 #endif               // STREAM_BUG
     bool _fDone : 1; // tells the aux thread to terminate
 
+#ifdef WIN
     MMRESULT(WINAPI *_pfnOpen)
     (HMS *phms, LPUINT puDeviceID, DWORD cMidi, DWORD_PTR dwCallback, DWORD_PTR dwInstance, DWORD fdwOpen);
     MMRESULT(WINAPI *_pfnClose)(HMS hms);
@@ -334,6 +353,7 @@ class WMS : public WMS_PAR
     MMRESULT(WINAPI *_pfnPause)(HMS hms);
     MMRESULT(WINAPI *_pfnRestart)(HMS hms);
     MMRESULT(WINAPI *_pfnStop)(HMS hms);
+#endif
 
     WMS(PFNMIDI pfn, uintptr_t luUser);
     bool _FInit(void);
@@ -346,12 +366,14 @@ class WMS : public WMS_PAR
     int32_t _CmhSubmitBuffers(void);
     void _ResetStream(void);
 
+#ifdef WIN32
     // MidiOutProc callback function
     static void __stdcall _MidiProc(HMS hms, UINT msg, DWORD_PTR luUser, DWORD_PTR lu1, DWORD_PTR lu2);
-    void _Notify(HMS hms, PMH pmh);
 
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
+#endif
+    void _Notify(HMS hms, PMH pmh);
 
   public:
     static PWMS PwmsNew(PFNMIDI pfn, uintptr_t luUser);
@@ -390,8 +412,13 @@ class OMS : public OMS_PAR
     };
 
     MUTX _mutx;
+#ifdef WIN32
     HN _hevt; // event to notify the thread that the stream data has changed
     HN _hth;  // thread to play the stream data
+#else
+    void *_hevt;
+    void *_hth;
+#endif
 
     bool _fChanged : 1; // the event has been signalled
     bool _fStop : 1;    // tells the aux thread to stop all buffers
@@ -409,8 +436,10 @@ class OMS : public OMS_PAR
     virtual bool _FOpen(void) override;
     virtual bool _FClose(void) override;
 
+#ifdef WIN32
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
+#endif
     void _ReleaseBuffers(void);
 
   public:
