@@ -296,6 +296,7 @@ if (3DMM_GUI STREQUAL "Win32")
         KauaiSound
         PRIVATE
         "${PROJECT_SOURCE_DIR}/kauai/src/mididev.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mdev2win.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
     target_link_libraries(
@@ -322,6 +323,8 @@ if(3DMM_GUI STREQUAL "SDL")
         "${PROJECT_SOURCE_DIR}/kauai/src/sndmastream.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/sndmasound.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/sndmadevice.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mdev2sdl.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/mididev2.cpp"
     )
     target_link_libraries(
         KauaiSound
