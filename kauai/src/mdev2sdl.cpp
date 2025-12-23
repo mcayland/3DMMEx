@@ -11,6 +11,7 @@
 ***************************************************************************/
 #include "frame.h"
 #include "mdev2pri.h"
+ASSERTNAME
 
 /***************************************************************************
     Constructor for the midi stream output object.
@@ -56,6 +57,19 @@ bool MSMIX::_FInit(void)
 {
     AssertBaseThis(0);
 
+    if (pvNil == (_pglmsos = GL::PglNew(SIZEOF(MSOS))))
+        return fFalse;
+    _pglmsos->SetMinGrow(1);
+
+    if (pvNil == (_pmisi = WMS::PwmsNew(_MidiProc, (uintptr_t)this)) &&
+        pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (uintptr_t)this)))
+    {
+        return fFalse;
+    }
+
+    _hevt = (void *)-1;
+    _hth = (void *)-1;
+
     return fTrue;
 }
 
@@ -75,6 +89,22 @@ void MSMIX::_StopStream(void)
 void MSMIX::_Restart(bool fNew)
 {
     AssertThis(0);
+}
+
+/***************************************************************************
+    Call back from the midi stream stuff.
+***************************************************************************/
+void MSMIX::_MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData)
+{
+    PMSMIX pmsmix;
+    PMDWS pmdws;
+
+    pmsmix = (PMSMIX)luUser;
+    AssertPo(pmsmix, 0);
+    pmdws = (PMDWS)luData;
+    AssertNilOrPo(pmdws, 0);
+
+    pmsmix->_Notify(pvData, pmdws);
 }
 
 /***************************************************************************

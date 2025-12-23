@@ -11,6 +11,7 @@
 ***************************************************************************/
 #include "frame.h"
 #include "mdev2pri.h"
+ASSERTNAME
 
 /***************************************************************************
     Constructor for the midi stream output object.
