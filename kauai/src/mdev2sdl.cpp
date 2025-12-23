@@ -148,6 +148,14 @@ WMS::~WMS(void)
 ***************************************************************************/
 bool WMS::_FInit(void)
 {
+    _hlib = (void *)-1;
+    _hevt = (void *)-1;
+    _hth = (void *)-1;
+
+    if (pvNil == (_pglpmsir = GL::PglNew(SIZEOF(PMSIR))))
+        return fFalse;
+    _pglpmsir->SetMinGrow(1);
+
     AssertThis(0);
     return fTrue;
 }
