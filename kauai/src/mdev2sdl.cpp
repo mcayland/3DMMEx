@@ -89,6 +89,24 @@ void MSMIX::_StopStream(void)
 void MSMIX::_Restart(bool fNew)
 {
     AssertThis(0);
+
+    if (_pmisi->FActive() && !_fPlaying && _pglmsos->IvMac() > 0)
+    {
+        // start playing the first MSOS
+        MSOS msos;
+        uint32_t tsCur = TsCurrentSystem();
+
+        if (fNew)
+        {
+            _pglmsos->Get(0, &msos);
+            msos.tsStart = tsCur - msos.dtsStart;
+            _pglmsos->Put(0, &msos);
+        }
+        _SubmitBuffers(tsCur);
+    }
+
+    // signal the aux thread that the list changed
+    //SetEvent(_hevt);
 }
 
 /***************************************************************************
@@ -113,6 +131,14 @@ void MSMIX::_MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData)
 void MISI::_Reset(void)
 {
     //Assert(hNil != _hms, 0);
+}
+
+/***************************************************************************
+    Get the system volume level.
+***************************************************************************/
+void MISI::_GetSysVol(void)
+{
+    Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
 }
 
 /***************************************************************************
@@ -169,6 +195,8 @@ bool WMS::_FInit(void)
 bool WMS::_FOpen(void)
 {
     AssertThis(0);
+
+    _hms = (void *)-1;
 
     return fTrue;
 }
@@ -261,6 +289,22 @@ bool OMS::_FInit(void)
 bool OMS::_FOpen(void)
 {
     AssertThis(0);
+
+    _mutx.Enter();
+
+    if (hNil != _hms)
+        goto LDone;
+
+    _fChanged = _fStop = fFalse;
+
+    // get the system volume level
+    _GetSysVol();
+
+    // set our volume level
+    _SetSysVlm();
+
+LDone:
+    _mutx.Leave();
 
     return fTrue;
 }
