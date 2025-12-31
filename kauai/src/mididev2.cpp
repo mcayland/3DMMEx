@@ -540,6 +540,9 @@ void MSMIX::AssertValid(uint32_t grf)
     MSMIX_PAR::AssertValid(0);
     _mutx.Enter();
     Assert(hNil != _hevt, "nil event");
+    if (hNil == _hth) {
+      fprintf(stderr, ">>>> hth is %p\n", _hth);
+    }
     Assert(hNil != _hth, "nil thread");
     AssertPo(_pglmsos, 0);
     AssertPo(_pmisi, 0);
