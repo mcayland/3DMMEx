@@ -13,6 +13,9 @@
 #include "mdev2pri.h"
 ASSERTNAME
 
+//#include <thread>
+//using namespace std::chrono_literals;
+
 /***************************************************************************
     Constructor for the midi stream output object.
 ***************************************************************************/
@@ -25,20 +28,22 @@ MSMIX::MSMIX(void)
 ***************************************************************************/
 MSMIX::~MSMIX(void)
 {
-#if 0
     Assert(pvNil == _pmisi || !_pmisi->FActive(), "MISI still active!");
 
     if (hNil != _hth)
     {
         // tell the thread to end and wait for it to finish
         _fDone = fTrue;
-        SetEvent(_hevt);
+        SDL_CondSignal(_hevt);
+#if 0
         WaitForSingleObject(_hth, INFINITE);
+#endif
     }
 
+#if 0
     if (hNil != _hevt)
         CloseHandle(_hevt);
-
+#endif
     if (pvNil != _pglmsos)
     {
         Assert(_pglmsos->IvMac() == 0, "MSMIX still has active sounds");
@@ -46,7 +51,6 @@ MSMIX::~MSMIX(void)
     }
     ReleasePpo(&_pmisi);
     ReleasePpo(&_pglmevKey);
-#endif
 }
 
 /***************************************************************************
@@ -67,8 +71,11 @@ bool MSMIX::_FInit(void)
         return fFalse;
     }
 
-    _hevt = (void *)-1;
-    _hth = (void *)-1;
+    _hevtmutx = SDL_CreateMutex();
+    _hevt = SDL_CreateCond();
+    _mutx.Enter();
+    _hth = SDL_CreateThread(MSMIX::_ThreadProc, "msmix-sdl", this);
+    _mutx.Leave();
 
     return fTrue;
 }
@@ -80,6 +87,27 @@ bool MSMIX::_FInit(void)
 void MSMIX::_StopStream(void)
 {
     AssertThis(0);
+
+    if (!_fPlaying)
+        return;
+
+    // set _fPlaying to false first so the call back knows that we're
+    // aborting the current stream - so it doesn't notify us.
+    _fPlaying = fFalse;
+
+    _pmisi->StopPlaying();
+
+    // Wait for the buffers to be returned
+    _fWaiting = fTrue;
+    _mutx.Leave();
+
+    //while (_cpvOut > 0) {
+        fprintf(stderr, ">>> cpvOut is %x\n", _cpvOut);
+    //    std::this_thread::sleep_for(0ms);
+    //}
+
+    _mutx.Enter();
+    _fWaiting = fFalse;
 }
 
 /***************************************************************************
@@ -106,7 +134,7 @@ void MSMIX::_Restart(bool fNew)
     }
 
     // signal the aux thread that the list changed
-    //SetEvent(_hevt);
+    SDL_CondSignal(_hevt);
 }
 
 /***************************************************************************
@@ -123,6 +151,90 @@ void MSMIX::_MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData)
     AssertNilOrPo(pmdws, 0);
 
     pmsmix->_Notify(pvData, pmdws);
+}
+
+/***************************************************************************
+    AT: Static method. Thread function for the MSMIX object.
+***************************************************************************/
+int MSMIX::_ThreadProc(void *pv)
+{
+    PMSMIX pmsmix = (PMSMIX)pv;
+
+    AssertPo(pmsmix, 0);
+
+    return pmsmix->_LuThread();
+}
+
+/***************************************************************************
+    AT: This thread just sleeps until the next sound is due to expire, then
+    wakes up and nukes any expired sounds.
+***************************************************************************/
+uint32_t MSMIX::_LuThread(void)
+{
+    AssertThis(0);
+    uint32_t tsCur;
+    int32_t imsos;
+    MSOS msos;
+    int32_t cactSkip;
+    uint32_t dtsNextStop = kluMax;
+
+    for (;;)
+    {
+        SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
+
+        if (_fDone)
+            return 0;
+
+        _mutx.Enter();
+
+        if (_fWaiting)
+        {
+            // we're waiting for buffers to be returned, so don't touch
+            // anything!
+            dtsNextStop = 1;
+        }
+        else
+        {
+            // See if any sounds have expired...
+            tsCur = TsCurrentSystem();
+            dtsNextStop = kluMax;
+            for (imsos = _pglmsos->IvMac(); imsos-- > 0;)
+            {
+                if (imsos == 0 && _fPlaying)
+                    break;
+                _pglmsos->Get(imsos, &msos);
+
+                cactSkip = (tsCur - msos.tsStart) / msos.dts;
+                if (cactSkip > 0)
+                {
+                    uint32_t dtsSeek;
+
+                    if (msos.cactPlay > 0 && (msos.cactPlay -= cactSkip) <= 0)
+                    {
+                        // this sound is done
+                        _pglmsos->Delete(imsos);
+                        _mutx.Leave();
+
+                        // do the notify
+                        msos.pmsque->Notify(msos.pmdws);
+
+                        _mutx.Enter();
+                        dtsNextStop = 0;
+                        break;
+                    }
+
+                    // adjust the values in the MSOS
+                    dtsSeek = (tsCur - msos.tsStart) % msos.dts;
+                    msos.tsStart = tsCur - dtsSeek;
+                    _pglmsos->Put(imsos, &msos);
+                }
+
+                dtsNextStop = LuMin(dtsNextStop, msos.dts - (tsCur - msos.tsStart));
+            }
+        }
+
+        _mutx.Leave();
+    }
 }
 
 /***************************************************************************

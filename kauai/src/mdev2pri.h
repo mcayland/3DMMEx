@@ -184,8 +184,9 @@ class MSMIX : public MSMIX_PAR
     HN _hevt; // to notify the thread that the sound list changed
     HN _hth;  // thread to terminate non-playing sounds
 #else
-    void *_hevt;
-    void *_hth;
+    SDL_cond *_hevt;
+    SDL_mutex *_hevtmutx;
+    SDL_Thread *_hth;
 #endif
 
     PMISI _pmisi;    // the midi stream interface
@@ -214,6 +215,9 @@ class MSMIX : public MSMIX_PAR
 #ifdef WIN32
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
+#else
+    static int _ThreadProc(void *pv);
+    uint32_t _LuThread(void);
 #endif
 
   public:
