@@ -96,6 +96,9 @@ elseif("${3DMM_GUI}" STREQUAL "SDL")
     find_package(SDL2_ttf CONFIG REQUIRED)
     find_package(SDL2_mixer CONFIG REQUIRED)
 
+    include(FindFluidSynth)
+    find_package(FluidSynth REQUIRED)
+
     # TODO: Find libiniparser if installed
     include(FetchIniParser)
 
