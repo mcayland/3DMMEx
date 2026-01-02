@@ -319,6 +319,7 @@ if(3DMM_GUI STREQUAL "SDL")
         KauaiSound
         PUBLIC
         SDL2_mixer::SDL2_mixer
+        fluidsynth
     )
 endif()
 
