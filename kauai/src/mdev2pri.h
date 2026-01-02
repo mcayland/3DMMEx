@@ -51,6 +51,8 @@ typedef HMIDIOUT HMS;
 
 #else
 
+#include <fluidsynth.h>
+
 // MIDI Event
 struct MEV
 {
@@ -422,6 +424,9 @@ class OMS : public OMS_PAR
 #else
     void *_hevt;
     void *_hth;
+
+    fluid_settings_t *_flset;
+    fluid_synth_t *_flsynth;
 #endif
 
     bool _fChanged : 1; // the event has been signalled

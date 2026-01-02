@@ -13,6 +13,8 @@
 #include "mdev2pri.h"
 ASSERTNAME
 
+#include <fluidsynth.h>
+
 //#include <thread>
 //using namespace std::chrono_literals;
 
@@ -65,8 +67,7 @@ bool MSMIX::_FInit(void)
         return fFalse;
     _pglmsos->SetMinGrow(1);
 
-    if (pvNil == (_pmisi = WMS::PwmsNew(_MidiProc, (uintptr_t)this)) &&
-        pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (uintptr_t)this)))
+    if (pvNil == (_pmisi = OMS::PomsNew(_MidiProc, (uintptr_t)this)))
     {
         return fFalse;
     }
@@ -310,7 +311,7 @@ bool WMS::_FOpen(void)
 
     _hms = (void *)-1;
 
-    return fTrue;
+    return fFalse;
 }
 
 /***************************************************************************
@@ -360,6 +361,27 @@ void WMS::_ResetStream(void)
 ***************************************************************************/
 bool WMS::_FSubmit(PMH pmh)
 {
+    bool fRestart = (0 == _cmhOut);
+    PMEV pmevStart;
+    PMEV pmevCur;
+    int32_t iMevCount;
+    int32_t iMevCur;
+
+    if (hNil == _hms)
+        return fFalse;
+
+    iMevCur = 0;
+    iMevCount = pmh->dwBufferLength / SIZEOF(MEV);
+    pmevStart = (PMEV)pmh->lpData;
+    while (iMevCur < iMevCount) {
+        pmevCur = &pmevStart[iMevCur];
+
+        fprintf(stderr, "Delta: %d  Event: 0x%x\n", pmevCur->dwDeltaTime, pmevCur->dwEvent);
+
+        iMevCur++;
+    }
+
+    fprintf(stderr, "DONE!\n");
     return fTrue;
 }
 
@@ -376,6 +398,14 @@ void WMS::StopPlaying(void)
 ***************************************************************************/
 OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 {
+    int id;
+
+    _flset = new_fluid_settings();
+    Assert(_flset != pvNil, "failed to create fluidsynth settings");
+    _flsynth = new_fluid_synth(_flset);
+    Assert(_flsynth != pvNil, "failed to create fluidsynth synth");
+    id = fluid_synth_sfload(_flsynth, "/usr/share/sounds/sf2/default-GM.sf2", true);
+    Assert(id != FLUID_FAILED, "failed to load soundfont");
 }
 
 /***************************************************************************
@@ -383,6 +413,8 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 ***************************************************************************/
 OMS::~OMS(void)
 {
+    delete_fluid_synth(_flsynth);
+    delete_fluid_settings(_flset);
 }
 
 /***************************************************************************
@@ -391,6 +423,14 @@ OMS::~OMS(void)
 bool OMS::_FInit(void)
 {
     AssertBaseThis(0);
+
+    if (pvNil == (_pglmsb = GL::PglNew(SIZEOF(MSB))))
+        return fFalse;
+    _pglmsb->SetMinGrow(1);
+
+    _hevt = (void *)-1;
+    _hth = (void *)-1;
+    _hms = (void *)-1;
 
     return fTrue;
 }
@@ -403,7 +443,7 @@ bool OMS::_FOpen(void)
     AssertThis(0);
 
     _mutx.Enter();
-
+    fprintf(stderr, "OMS open\n");
     if (hNil != _hms)
         goto LDone;
 
@@ -427,6 +467,34 @@ LDone:
 bool OMS::_FClose(void)
 {
     AssertThis(0);
+
+    fprintf(stderr, "OMS close\n");
+
+    _mutx.Enter();
+
+    if (hNil == _hms)
+    {
+        _mutx.Leave();
+        return fTrue;
+    }
+
+    if (_pglmsb->IvMac() > 0)
+    {
+        Bug("closing a stream that still has buffers!");
+        _mutx.Leave();
+        return fFalse;
+    }
+
+    // reset the device
+    _Reset();
+
+    // restore the volume level
+    _SetSysVol(_luVolSys);
+
+    //midiOutClose(_hms);
+    _hms = hNil;
+
+    _mutx.Leave();
 
     return fTrue;
 }
