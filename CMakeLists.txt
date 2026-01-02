@@ -97,6 +97,9 @@ elseif("${3DMM_GUI}" STREQUAL "SDL")
 
     include(FetchMiniaudio)
 
+    include(FindFluidSynth)
+    find_package(FluidSynth REQUIRED)
+
     # TODO: Find libiniparser if installed
     include(FetchIniParser)
 
