@@ -16,6 +16,8 @@
 #ifndef MDEV2PRI_H
 #define MDEV2PRI_H
 
+extern const int32_t kdtsMinSlip;
+
 #ifdef WIN
 
 // This corresponds to the Win95 MIDIEVENT structure (with no optional data).
@@ -422,8 +424,9 @@ class OMS : public OMS_PAR
     HN _hevt; // event to notify the thread that the stream data has changed
     HN _hth;  // thread to play the stream data
 #else
-    void *_hevt;
-    void *_hth;
+    SDL_cond *_hevt;
+    SDL_mutex *_hevtmutx;
+    SDL_Thread *_hth;
 
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
@@ -448,6 +451,9 @@ class OMS : public OMS_PAR
 #ifdef WIN32
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
+#else
+    static int _ThreadProc(void *pv);
+    uint32_t _LuThread(void);
 #endif
     void _ReleaseBuffers(void);
 

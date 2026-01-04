@@ -428,8 +428,9 @@ bool OMS::_FInit(void)
         return fFalse;
     _pglmsb->SetMinGrow(1);
 
-    _hevt = (void *)-1;
-    _hth = (void *)-1;
+    _hevtmutx = SDL_CreateMutex();
+    _hevt = SDL_CreateCond();
+    _hth = SDL_CreateThread(OMS::_ThreadProc, "oms-sdl", this);
     _hms = (void *)-1;
 
     return fTrue;
@@ -507,8 +508,37 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
     AssertThis(0);
     AssertPvCb(pvData, cb);
     AssertIn(ibStart, 0, cb);
-    //Assert(cb % SIZEOF(MEV) == 0, "bad cb");
-    //Assert(ibStart % SIZEOF(MEV) == 0, "bad cb");
+    Assert(cb % SIZEOF(MEV) == 0, "bad cb");
+    Assert(ibStart % SIZEOF(MEV) == 0, "bad cb");
+
+    MSB msb;
+
+    _mutx.Enter();
+
+    if (hNil == _hms)
+        goto LFail;
+
+    msb.pvData = pvData;
+    msb.cb = cb;
+    msb.ibStart = ibStart;
+    msb.cactPlay = cactPlay;
+    msb.luData = luData;
+
+    if (!_pglmsb->FAdd(&msb))
+    {
+    LFail:
+        _mutx.Leave();
+        return fFalse;
+    }
+
+    if (1 == _pglmsb->IvMac())
+    {
+        // Start the buffer
+        SDL_CondSignal(_hevt);
+        _fChanged = fTrue;
+    }
+
+    _mutx.Leave();
 
     return fTrue;
 }
@@ -520,4 +550,123 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
 void OMS::StopPlaying(void)
 {
     AssertThis(0);
+}
+
+/***************************************************************************
+    AT: Static method. Thread function for the midi stream object.
+***************************************************************************/
+int OMS::_ThreadProc(void *pv)
+{
+    POMS poms = (POMS)pv;
+
+    AssertPo(poms, 0);
+
+    return poms->_LuThread();
+}
+
+/***************************************************************************
+    AT: The midi stream playback thread.
+***************************************************************************/
+uint32_t OMS::_LuThread(void)
+{
+    AssertThis(0);
+    MSB msb;
+    bool fChanged; // whether the event went off
+    uint32_t tsCur;
+    const int32_t klwInfinite = klwMax;
+    int32_t dtsWait = klwInfinite;
+
+    for (;;)
+    {
+        //fChanged =
+        //    dtsWait > 0 && WAIT_TIMEOUT != WaitForSingleObject(_hevt, dtsWait == klwInfinite ? INFINITE : dtsWait);
+
+        fChanged =
+            dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? (int32_t)-1 : dtsWait);
+
+        if (_fDone)
+            return 0;
+
+        _mutx.Enter();
+        if (_fChanged && !fChanged)
+        {
+            // the event went off before we got the mutx.
+            dtsWait = klwInfinite;
+            goto LLoop;
+        }
+
+        _fChanged = fFalse;
+        if (!fChanged)
+        {
+            // play the event
+            if (_pmev < _pmevLim)
+            {
+                //if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
+                //    midiOutShortMsg(_hms, _pmev->dwEvent & 0x00FFFFFF);
+
+                _pmev++;
+                if (_pmev >= _pmevLim)
+                    dtsWait = 0;
+                else
+                {
+                    uint32_t tsNew = TsCurrentSystem();
+
+                    tsCur += _pmev->dwDeltaTime;
+                    dtsWait = tsCur - tsNew;
+                    if (dtsWait < -kdtsMinSlip)
+                    {
+                        tsCur = tsNew;
+                        dtsWait = 0;
+                    }
+                }
+                goto LLoop;
+            }
+
+            // ran out of events in the current buffer - see if we should
+            // repeat it
+            _pglmsb->Get(0, &msb);
+            if (msb.cactPlay == 1)
+            {
+                _imsbCur = 1;
+                _ReleaseBuffers();
+            }
+            else
+            {
+                // repeat the current buffer
+                if (msb.cactPlay > 0)
+                    msb.cactPlay--;
+                msb.ibStart = 0;
+                _pglmsb->Put(0, &msb);
+            }
+        }
+        else if (_fStop)
+        {
+            // release all buffers
+            _fStop = fFalse;
+            _imsbCur = _pglmsb->IvMac();
+            _ReleaseBuffers();
+        }
+
+        if (0 == _pglmsb->IvMac())
+        {
+            // no buffers to play
+            dtsWait = klwInfinite;
+        }
+        else
+        {
+            // start playing the new buffers
+            _pglmsb->Get(0, &msb);
+            _pmev = (PMEV)PvAddBv(msb.pvData, msb.ibStart);
+            _pmevLim = (PMEV)PvAddBv(msb.pvData, msb.cb);
+            if (_pmev >= _pmevLim)
+                dtsWait = 0;
+            else
+            {
+                dtsWait = _pmev->dwDeltaTime;
+                tsCur = TsCurrentSystem() + dtsWait;
+            }
+        }
+    LLoop:
+        _mutx.Leave();
+    }
 }
