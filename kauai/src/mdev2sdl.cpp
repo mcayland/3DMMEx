@@ -181,7 +181,9 @@ uint32_t MSMIX::_LuThread(void)
 
     for (;;)
     {
+        SDL_LockMutex(_hevtmutx);
         SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
+        SDL_UnlockMutex(_hevtmutx);
 
         if (_fDone)
             return 0;
@@ -430,7 +432,9 @@ bool OMS::_FInit(void)
 
     _hevtmutx = SDL_CreateMutex();
     _hevt = SDL_CreateCond();
+    _mutx.Enter();
     _hth = SDL_CreateThread(OMS::_ThreadProc, "oms-sdl", this);
+    _mutx.Leave();
     _hms = (void *)-1;
 
     return fTrue;
@@ -534,6 +538,7 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
     if (1 == _pglmsb->IvMac())
     {
         // Start the buffer
+        fprintf(stderr, "OMS::FQueue signal\n");
         SDL_CondSignal(_hevt);
         _fChanged = fTrue;
     }
@@ -578,11 +583,10 @@ uint32_t OMS::_LuThread(void)
 
     for (;;)
     {
-        //fChanged =
-        //    dtsWait > 0 && WAIT_TIMEOUT != WaitForSingleObject(_hevt, dtsWait == klwInfinite ? INFINITE : dtsWait);
-
+        SDL_LockMutex(_hevtmutx);
         fChanged =
-            dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? (int32_t)-1 : dtsWait);
+            dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait);
+        SDL_UnlockMutex(_hevtmutx);
 
         if (_fDone)
             return 0;
