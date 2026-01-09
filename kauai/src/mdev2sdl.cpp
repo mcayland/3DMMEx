@@ -404,6 +404,7 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 
     _flset = new_fluid_settings();
     Assert(_flset != pvNil, "failed to create fluidsynth settings");
+    fluid_settings_setnum(_flset, "synth.sample-rate", 44100.0);
     _flsynth = new_fluid_synth(_flset);
     Assert(_flsynth != pvNil, "failed to create fluidsynth synth");
     id = fluid_synth_sfload(_flsynth, "/usr/share/sounds/sf2/default-GM.sf2", true);
@@ -433,7 +434,8 @@ bool OMS::_FInit(void)
     _hevtmutx = SDL_CreateMutex();
     _hevt = SDL_CreateCond();
     _mutx.Enter();
-    _hth = SDL_CreateThread(OMS::_ThreadProc, "oms-sdl", this);
+    _hth = SDL_CreateThread(OMS::_ThreadProc, "sdl-midi-event", this);
+    _hthr = SDL_CreateThread(OMS::_ThreadProcRender, "sdl-midi-render", this);
     _mutx.Leave();
     _hms = (void *)-1;
 
@@ -608,6 +610,9 @@ uint32_t OMS::_LuThread(void)
                 //if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
                 //    midiOutShortMsg(_hms, _pmev->dwEvent & 0x00FFFFFF);
 
+                if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
+                    fprintf(stderr, "#### key\n");
+                
                 _pmev++;
                 if (_pmev >= _pmevLim)
                     dtsWait = 0;
@@ -672,5 +677,32 @@ uint32_t OMS::_LuThread(void)
         }
     LLoop:
         _mutx.Leave();
+    }
+}
+
+/***************************************************************************
+    AT: Static method. Thread function for the midi event renderer.
+***************************************************************************/
+int OMS::_ThreadProcRender(void *pv)
+{
+    POMS poms = (POMS)pv;
+
+    AssertPo(poms, 0);
+
+    return poms->_LuRenderThread();
+}
+
+/***************************************************************************
+    AT: The midi stream playback thread.
+***************************************************************************/
+uint32_t OMS::_LuRenderThread(void)
+{
+    for (;;)
+    {
+        if (_fDone)
+        {
+            fprintf(stderr, "##### FINISH\n");
+            return 0;
+        }
     }
 }
