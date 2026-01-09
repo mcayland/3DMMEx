@@ -424,9 +424,10 @@ class OMS : public OMS_PAR
     HN _hevt; // event to notify the thread that the stream data has changed
     HN _hth;  // thread to play the stream data
 #else
-    SDL_cond *_hevt;
+    SDL_cond *_hevt;   // event to notify the thread that the stream data has changed
     SDL_mutex *_hevtmutx;
-    SDL_Thread *_hth;
+    SDL_Thread *_hth;  // thread to play the midi events
+    SDL_Thread *_hthr; // thread to render audio samples
 
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
@@ -454,6 +455,8 @@ class OMS : public OMS_PAR
 #else
     static int _ThreadProc(void *pv);
     uint32_t _LuThread(void);
+    static int _ThreadProcRender(void *pv);
+    uint32_t _LuRenderThread(void);
 #endif
     void _ReleaseBuffers(void);
 
