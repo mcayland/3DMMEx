@@ -431,6 +431,8 @@ class OMS : public OMS_PAR
 
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
+    short _flsynth_dest;
+    fluid_sequencer_t *_flseq;
 #endif
 
     bool _fChanged : 1; // the event has been signalled
