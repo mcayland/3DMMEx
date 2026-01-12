@@ -400,6 +400,7 @@ void WMS::StopPlaying(void)
 ***************************************************************************/
 OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 {
+    fluid_audio_driver_t* adriver;
     int id;
 
     _flset = new_fluid_settings();
@@ -407,8 +408,13 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
     fluid_settings_setnum(_flset, "synth.sample-rate", 44100.0);
     _flsynth = new_fluid_synth(_flset);
     Assert(_flsynth != pvNil, "failed to create fluidsynth synth");
+
     id = fluid_synth_sfload(_flsynth, "/usr/share/sounds/sf2/default-GM.sf2", true);
     Assert(id != FLUID_FAILED, "failed to load soundfont");
+
+    fluid_settings_setstr(_flset, "audio.driver", "pulseaudio");
+    adriver = new_fluid_audio_driver(_flset, _flsynth);
+    Assert(adriver != pvNil, "failed to load pulse driver");
 }
 
 /***************************************************************************
@@ -610,9 +616,50 @@ uint32_t OMS::_LuThread(void)
                 //if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
                 //    midiOutShortMsg(_hms, _pmev->dwEvent & 0x00FFFFFF);
 
+                switch (_pmev->dwEvent & 0xf0)
+                {
+                    case 0x80: /* Note off */
+                        fluid_synth_noteoff(_flsynth, _pmev->dwEvent & 0xf,
+                                            (_pmev->dwEvent & 0x7f00) >> 8);
+                        break;
+
+                    case 0x90: /* Note on */
+                        fluid_synth_noteon(_flsynth,
+                                           _pmev->dwEvent & 0xf,
+                                           (_pmev->dwEvent & 0x7f00) >> 8,
+                                           (_pmev->dwEvent & 0x7f0000) >> 16);
+                        break;
+
+                    case 0xb0: /* Control change */
+                        fluid_synth_cc(_flsynth,
+                                       _pmev->dwEvent & 0xf,
+                                       (_pmev->dwEvent & 0x7f00) >> 8,
+                                       (_pmev->dwEvent & 0x7f0000) >> 16);
+                        break;
+
+                    case 0xc0: /* Program change */
+                        fluid_synth_program_change(_flsynth,
+                                                   _pmev->dwEvent & 0xf,
+                                                   (_pmev->dwEvent & 0x7f00) >> 8);
+                        break;
+
+                    case 0xd0: /* Channel pressure */
+                        fluid_synth_channel_pressure(_flsynth,
+                                                     _pmev->dwEvent & 0xf,
+                                                     (_pmev->dwEvent & 0x7f00) >> 8);
+                        break;
+
+                    case 0xe0: /* Pitch wheel */
+                        fluid_synth_pitch_bend(_flsynth,
+                                               _pmev->dwEvent & 0xf,
+                                               ((_pmev->dwEvent & 0x7f00) >> 8) |
+                                               ((_pmev->dwEvent & 0x7f0000) >> 9));
+                        break;
+                }
+
                 if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
-                    fprintf(stderr, "#### key\n");
-                
+                    fprintf(stderr, "#### key 0x%x  status 0x%x\n", _pmev->dwEvent, _pmev->dwEvent & 0xf0);
+
                 _pmev++;
                 if (_pmev >= _pmevLim)
                     dtsWait = 0;
