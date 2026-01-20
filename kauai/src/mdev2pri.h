@@ -439,6 +439,7 @@ class OMS : public OMS_PAR
     fluid_synth_t *_flsynth;
     short _flsynth_dest;
     fluid_sequencer_t *_flseq;
+    fluid_audio_driver_t *_fldriver;
 #endif
 
     bool _fChanged : 1; // the event has been signalled
