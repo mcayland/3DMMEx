@@ -186,9 +186,7 @@ uint32_t MSMIX::_LuThread(void)
     {
         fprintf(stderr, "<<<< MSMIX::_LuThread before condwait\n");
         SDL_LockMutex(_hevtmutx);
-        if (!_fChanged) {
-            SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
-        }
+        SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
         SDL_UnlockMutex(_hevtmutx);
         fprintf(stderr, ">>>> MSMIX::_LuThread after condwait\n");
 
@@ -421,7 +419,6 @@ void WMS::StopPlaying(void)
 ***************************************************************************/
 OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 {
-    fluid_audio_driver_t* adriver;
     int id;
 
     _flset = new_fluid_settings();
@@ -434,8 +431,8 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
     Assert(id != FLUID_FAILED, "failed to load soundfont");
 
     fluid_settings_setstr(_flset, "audio.driver", "pulseaudio");
-    adriver = new_fluid_audio_driver(_flset, _flsynth);
-    Assert(adriver != pvNil, "failed to load pulse driver");
+    _fldriver = new_fluid_audio_driver(_flset, _flsynth);
+    Assert(_fldriver != pvNil, "failed to load pulse driver");
 }
 
 /***************************************************************************
@@ -443,6 +440,7 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 ***************************************************************************/
 OMS::~OMS(void)
 {
+    delete_fluid_audio_driver(_fldriver);
     delete_fluid_synth(_flsynth);
     delete_fluid_settings(_flset);
 }
@@ -527,7 +525,7 @@ bool OMS::_FClose(void)
     _SetSysVol(_luVolSys);
 
     //midiOutClose(_hms);
-    //_hms = hNil;
+    _hms = hNil;
 
     _mutx.Leave();
 
