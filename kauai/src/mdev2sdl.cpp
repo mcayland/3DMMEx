@@ -258,7 +258,10 @@ uint32_t MSMIX::_LuThread(void)
 ***************************************************************************/
 void MISI::_Reset(void)
 {
-    //Assert(hNil != _hms, 0);
+    Assert(hNil != _hms, 0);
+    fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
+
+    fluid_synth_all_notes_off(_flsynth, -1);
 }
 
 /***************************************************************************
@@ -569,8 +572,8 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
         // Start the buffer
         fprintf(stderr, "OMS::FQueue signal\n");
         _hevtb = fTrue;
-        SDL_CondSignal(_hevt);
         _fChanged = fTrue;
+        SDL_CondSignal(_hevt);
     }
 
     _mutx.Leave();
@@ -593,8 +596,8 @@ void OMS::StopPlaying(void)
         fprintf(stderr, ">>> OMS::StopPlaying\n");
         _fStop = fTrue;
         _hevtb = fTrue;
-        SDL_CondSignal(_hevt);
         _fChanged = fTrue;
+        SDL_CondSignal(_hevt);
     }
 
     _mutx.Leave();
