@@ -718,6 +718,7 @@ void MSMIX::_SubmitBuffers(uint32_t tsCur)
             dtsSeek = (tsCur - msos.tsStart) % msos.dts;
             msos.tsStart = tsCur - dtsSeek;
             _pglmsos->Put(imsos, &msos);
+            fprintf(stderr, "----> Put1\n");
         }
 
         // Calling SetVlm causes us to tell the MISI about the new volume
@@ -744,10 +745,12 @@ void MSMIX::_SubmitBuffers(uint32_t tsCur)
 
                 _cpvOut++;
                 _fPlaying = fTrue;
+                fprintf(stderr, "_cpvOut++: imsos: %d cpvOut.1 == %d\n", imsos, _cpvOut);
             }
         }
 
         _cpvOut++;
+        fprintf(stderr, "_cpvOut++: imsos: %d cpvOut.2 == %d\n", imsos, _cpvOut);
         pvData = msos.pmdws->PvLockData(&cb);
         if (_pmisi->FQueueBuffer(pvData, cb, cbSkip, msos.cactPlay, (uintptr_t)msos.pmdws))
         {
@@ -773,6 +776,7 @@ void MSMIX::_SubmitBuffers(uint32_t tsCur)
         msos.sii = klwMin;
         msos.spr = klwMin;
         _pglmsos->Put(imsos, &msos);
+        fprintf(stderr, "----> Put2\n");
     }
 
     if (_fPlaying && imsos > 0)
@@ -953,10 +957,12 @@ void MSMIX::_Notify(void *pvData, PMDWS pmdws)
     AssertNilOrPo(pmdws, 0);
     MSOS msos;
 
+    fprintf(stderr, "MSMIX NOTIFY!\n");
     _mutx.Enter();
 
     Assert(_cpvOut > 0, "what buffer is this?");
     _cpvOut--;
+    fprintf(stderr, "   cpvOut--: cpvOut == %d\n", _cpvOut);
     if (pvNil != pmdws)
     {
         AssertVar(_pglmsos->IvMac() > 0 && ((MSOS *)_pglmsos->QvGet(0))->pmdws == pmdws, "Wrong pmdws", &pmdws);

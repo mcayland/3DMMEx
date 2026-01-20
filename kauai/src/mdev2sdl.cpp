@@ -102,11 +102,11 @@ void MSMIX::_StopStream(void)
     _fWaiting = fTrue;
     _mutx.Leave();
 
-    //while (_cpvOut > 0) {
-        fprintf(stderr, ">>> cpvOut is %x\n", _cpvOut);
+    while (_cpvOut > 0) {
+        fprintf(stderr, ">>> MSMIX::cpvOut is %x\n", _cpvOut);
     //    std::this_thread::sleep_for(0ms);
-    //}
-
+    }
+    fprintf(stderr, "=== MSMIX::cpvOut == 0\n");
     _mutx.Enter();
     _fWaiting = fFalse;
 }
@@ -130,11 +130,14 @@ void MSMIX::_Restart(bool fNew)
             _pglmsos->Get(0, &msos);
             msos.tsStart = tsCur - msos.dtsStart;
             _pglmsos->Put(0, &msos);
+            fprintf(stderr, "----> Put3\n");
         }
         _SubmitBuffers(tsCur);
     }
 
     // signal the aux thread that the list changed
+    fprintf(stderr, " >>> MSMIX::_Restart condsignal\n");
+    _hevtb = fTrue;
     SDL_CondSignal(_hevt);
 }
 
@@ -151,6 +154,7 @@ void MSMIX::_MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData)
     pmdws = (PMDWS)luData;
     AssertNilOrPo(pmdws, 0);
 
+    fprintf(stderr, " >>> MSMIX::_MidiProc about to notify\n");
     pmsmix->_Notify(pvData, pmdws);
 }
 
@@ -181,9 +185,14 @@ uint32_t MSMIX::_LuThread(void)
 
     for (;;)
     {
+        fprintf(stderr, "<<<< MSMIX::_LuThread before condwait\n");
         SDL_LockMutex(_hevtmutx);
-        SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
+        if (!_hevtb) {
+            SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
+        }
+        _hevtb = fFalse;
         SDL_UnlockMutex(_hevtmutx);
+        fprintf(stderr, ">>>> MSMIX::_LuThread after condwait\n");
 
         if (_fDone)
             return 0;
@@ -195,12 +204,14 @@ uint32_t MSMIX::_LuThread(void)
             // we're waiting for buffers to be returned, so don't touch
             // anything!
             dtsNextStop = 1;
+            fprintf(stderr, " ___ fWaiting\n");
         }
         else
         {
             // See if any sounds have expired...
             tsCur = TsCurrentSystem();
             dtsNextStop = kluMax;
+            fprintf(stderr, " ___ MSMIX expire check count: %d  _fPlaying: %d\n", _pglmsos->IvMac(), _fPlaying);
             for (imsos = _pglmsos->IvMac(); imsos-- > 0;)
             {
                 if (imsos == 0 && _fPlaying)
@@ -208,6 +219,7 @@ uint32_t MSMIX::_LuThread(void)
                 _pglmsos->Get(imsos, &msos);
 
                 cactSkip = (tsCur - msos.tsStart) / msos.dts;
+                fprintf(stderr, " ___ cactSkip is %d\n", cactSkip);
                 if (cactSkip > 0)
                 {
                     uint32_t dtsSeek;
@@ -219,6 +231,7 @@ uint32_t MSMIX::_LuThread(void)
                         _mutx.Leave();
 
                         // do the notify
+                        fprintf(stderr, " ___<<<< about to NOTIFY\n");
                         msos.pmsque->Notify(msos.pmdws);
 
                         _mutx.Enter();
@@ -254,6 +267,10 @@ void MISI::_Reset(void)
 void MISI::_GetSysVol(void)
 {
     Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
+    //fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
+
+    //float gain = fluid_synth_get_gain(_flsynth);
+    //_luVolSys = (uint32_t)(0x1fff * gain);
 }
 
 /***************************************************************************
@@ -261,7 +278,10 @@ void MISI::_GetSysVol(void)
 ***************************************************************************/
 void MISI::_SetSysVol(uint32_t luVol)
 {
-    //Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
+    Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
+    //fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
+fprintf(stderr, " FLVOL is %d\n", luVol);
+    //fluid_synth_set_gain(_flsynth, ((float)luVol) / 0x1fff);
 }
 
 /***************************************************************************
@@ -443,7 +463,6 @@ bool OMS::_FInit(void)
     _hth = SDL_CreateThread(OMS::_ThreadProc, "sdl-midi-event", this);
     _hthr = SDL_CreateThread(OMS::_ThreadProcRender, "sdl-midi-render", this);
     _mutx.Leave();
-    _hms = (void *)-1;
 
     return fTrue;
 }
@@ -461,6 +480,8 @@ bool OMS::_FOpen(void)
         goto LDone;
 
     _fChanged = _fStop = fFalse;
+
+    _hms = _flsynth;
 
     // get the system volume level
     _GetSysVol();
@@ -505,7 +526,7 @@ bool OMS::_FClose(void)
     _SetSysVol(_luVolSys);
 
     //midiOutClose(_hms);
-    _hms = hNil;
+    //_hms = hNil;
 
     _mutx.Leave();
 
@@ -547,6 +568,7 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
     {
         // Start the buffer
         fprintf(stderr, "OMS::FQueue signal\n");
+        _hevtb = fTrue;
         SDL_CondSignal(_hevt);
         _fChanged = fTrue;
     }
@@ -563,6 +585,19 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
 void OMS::StopPlaying(void)
 {
     AssertThis(0);
+
+    _mutx.Enter();
+
+    if (hNil != _hms)
+    {
+        fprintf(stderr, ">>> OMS::StopPlaying\n");
+        _fStop = fTrue;
+        _hevtb = fTrue;
+        SDL_CondSignal(_hevt);
+        _fChanged = fTrue;
+    }
+
+    _mutx.Leave();
 }
 
 /***************************************************************************
@@ -591,10 +626,19 @@ uint32_t OMS::_LuThread(void)
 
     for (;;)
     {
+        fprintf(stderr, "<<<< OMS::_LuThread before condwait: dtsWait is %d\n", dtsWait);
         SDL_LockMutex(_hevtmutx);
-        fChanged =
-            dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait);
+        if (!_hevtb) {
+            fChanged =
+                dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait);
+        }
+        else
+        {
+            fChanged = true;
+        }
+        _hevtb = fFalse;
         SDL_UnlockMutex(_hevtmutx);
+        fprintf(stderr, ">>>> OMS::_LuThread after condwait: fChanged is %d, dtsWait is %d\n", fChanged, dtsWait);
 
         if (_fDone)
             return 0;
@@ -613,8 +657,7 @@ uint32_t OMS::_LuThread(void)
             // play the event
             if (_pmev < _pmevLim)
             {
-                //if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
-                //    midiOutShortMsg(_hms, _pmev->dwEvent & 0x00FFFFFF);
+                if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24)) {
 
                 switch (_pmev->dwEvent & 0xf0)
                 {
@@ -657,12 +700,16 @@ uint32_t OMS::_LuThread(void)
                         break;
                 }
 
-                if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
-                    fprintf(stderr, "#### key 0x%x  status 0x%x\n", _pmev->dwEvent, _pmev->dwEvent & 0xf0);
+                }
+                //if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
+                //    fprintf(stderr, "#### key 0x%x  status 0x%x\n", _pmev->dwEvent, _pmev->dwEvent & 0xf0);
 
                 _pmev++;
                 if (_pmev >= _pmevLim)
+                {
                     dtsWait = 0;
+                    fprintf(stderr, " >>> dtsWait 0.1\n");
+                }
                 else
                 {
                     uint32_t tsNew = TsCurrentSystem();
@@ -673,6 +720,7 @@ uint32_t OMS::_LuThread(void)
                     {
                         tsCur = tsNew;
                         dtsWait = 0;
+                        fprintf(stderr, " >>> dtsWait 0.2\n");
                     }
                 }
                 goto LLoop;
@@ -715,11 +763,15 @@ uint32_t OMS::_LuThread(void)
             _pmev = (PMEV)PvAddBv(msb.pvData, msb.ibStart);
             _pmevLim = (PMEV)PvAddBv(msb.pvData, msb.cb);
             if (_pmev >= _pmevLim)
+            {
                 dtsWait = 0;
+                fprintf(stderr, " >>> dtsWait 0.3\n");
+            }
             else
             {
                 dtsWait = _pmev->dwDeltaTime;
                 tsCur = TsCurrentSystem() + dtsWait;
+                fprintf(stderr, " >>> dtsWait 0.4 tsCur %d, dtsWait %d\n", tsCur, dtsWait);
             }
         }
     LLoop:
