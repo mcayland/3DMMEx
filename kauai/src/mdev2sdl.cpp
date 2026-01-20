@@ -137,7 +137,6 @@ void MSMIX::_Restart(bool fNew)
 
     // signal the aux thread that the list changed
     fprintf(stderr, " >>> MSMIX::_Restart condsignal\n");
-    _hevtb = fTrue;
     SDL_CondSignal(_hevt);
 }
 
@@ -187,10 +186,9 @@ uint32_t MSMIX::_LuThread(void)
     {
         fprintf(stderr, "<<<< MSMIX::_LuThread before condwait\n");
         SDL_LockMutex(_hevtmutx);
-        if (!_hevtb) {
+        if (!_fChanged) {
             SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsNextStop);
         }
-        _hevtb = fFalse;
         SDL_UnlockMutex(_hevtmutx);
         fprintf(stderr, ">>>> MSMIX::_LuThread after condwait\n");
 
@@ -571,7 +569,6 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
     {
         // Start the buffer
         fprintf(stderr, "OMS::FQueue signal\n");
-        _hevtb = fTrue;
         _fChanged = fTrue;
         SDL_CondSignal(_hevt);
     }
@@ -595,7 +592,6 @@ void OMS::StopPlaying(void)
     {
         fprintf(stderr, ">>> OMS::StopPlaying\n");
         _fStop = fTrue;
-        _hevtb = fTrue;
         _fChanged = fTrue;
         SDL_CondSignal(_hevt);
     }
@@ -631,7 +627,7 @@ uint32_t OMS::_LuThread(void)
     {
         fprintf(stderr, "<<<< OMS::_LuThread before condwait: dtsWait is %d\n", dtsWait);
         SDL_LockMutex(_hevtmutx);
-        if (!_hevtb) {
+        if (!_fChanged) {
             fChanged =
                 dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait);
         }
@@ -639,7 +635,6 @@ uint32_t OMS::_LuThread(void)
         {
             fChanged = true;
         }
-        _hevtb = fFalse;
         SDL_UnlockMutex(_hevtmutx);
         fprintf(stderr, ">>>> OMS::_LuThread after condwait: fChanged is %d, dtsWait is %d\n", fChanged, dtsWait);
 
