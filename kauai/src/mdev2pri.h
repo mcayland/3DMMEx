@@ -199,6 +199,7 @@ class MSMIX : public MSMIX_PAR
     int32_t _cpvOut; // number of buffers submitted (0, 1, or 2)
 
     PGL _pglmevKey;     // to accumulate state events for seeking
+    bool _fChanged : 1; // the event has been signalled
     bool _fPlaying : 1; // whether we're currently playing the first stream
     bool _fWaiting : 1; // we're waiting for our buffers to get returned
     bool _fDone : 1;    // tells the aux thread to terminate
@@ -433,7 +434,6 @@ class OMS : public OMS_PAR
     SDL_mutex *_hevtmutx;
     SDL_Thread *_hth;  // thread to play the midi events
     SDL_Thread *_hthr; // thread to render audio samples
-    bool _hevtb;
 
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
