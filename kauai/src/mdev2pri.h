@@ -191,6 +191,7 @@ class MSMIX : public MSMIX_PAR
     SDL_cond *_hevt;
     SDL_mutex *_hevtmutx;
     SDL_Thread *_hth;
+    bool _hevtb;
 #endif
 
     PMISI _pmisi;    // the midi stream interface
@@ -259,7 +260,11 @@ class MISI : public MISI_PAR
     RTCLASS_DEC
 
   protected:
+#ifdef WIN32
     HMS _hms;          // the midi stream handle
+#else
+    void *_hms;
+#endif
     PFNMIDI _pfnCall;  // call back function
     uintptr_t _luUser; // user data to send back
 
@@ -428,6 +433,7 @@ class OMS : public OMS_PAR
     SDL_mutex *_hevtmutx;
     SDL_Thread *_hth;  // thread to play the midi events
     SDL_Thread *_hthr; // thread to render audio samples
+    bool _hevtb;
 
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
