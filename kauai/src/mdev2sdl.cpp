@@ -23,6 +23,8 @@ ASSERTNAME
 ***************************************************************************/
 MSMIX::MSMIX(void)
 {
+    _vlmBase = kvlmFull;
+    _vlmSound = kvlmFull;
 }
 
 /***************************************************************************
@@ -266,10 +268,11 @@ void MISI::_Reset(void)
 void MISI::_GetSysVol(void)
 {
     Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
-    //fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
+    fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
+    float gain = fluid_synth_get_gain(_flsynth);
+    uint32_t vol = (uint32_t)((gain / 0.5) * 0xffff);
 
-    //float gain = fluid_synth_get_gain(_flsynth);
-    //_luVolSys = (uint32_t)(0x1fff * gain);
+    _luVolSys = vol << 16 | vol;
 }
 
 /***************************************************************************
@@ -278,9 +281,15 @@ void MISI::_GetSysVol(void)
 void MISI::_SetSysVol(uint32_t luVol)
 {
     Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
-    //fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
-fprintf(stderr, " FLVOL is %d\n", luVol);
-    //fluid_synth_set_gain(_flsynth, ((float)luVol) / 0x1fff);
+    uint32_t vol = luVol & 0xffff;
+    float gain = ((float)vol) / 0xffff * 0.5;
+
+    fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
+    fprintf(stderr, " FLVOL is 0x%x, gain is %f\n", vol, gain);
+    if (vol == 0) {
+        fprintf(stderr, "FLOP!\n");
+    }
+    fluid_synth_set_gain(_flsynth, gain);
 }
 
 /***************************************************************************
