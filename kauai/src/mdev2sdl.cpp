@@ -428,7 +428,8 @@ void WMS::StopPlaying(void)
 ***************************************************************************/
 OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 {
-    int id;
+    char buf[256];
+    int id, ret;
 
     _flset = new_fluid_settings();
     Assert(_flset != pvNil, "failed to create fluidsynth settings");
@@ -436,8 +437,12 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
     _flsynth = new_fluid_synth(_flset);
     Assert(_flsynth != pvNil, "failed to create fluidsynth synth");
 
-    id = fluid_synth_sfload(_flsynth, "/usr/share/sounds/sf2/default-GM.sf2", true);
-    Assert(id != FLUID_FAILED, "failed to load soundfont");
+    ret = fluid_settings_copystr(_flset, "synth.default-soundfont", buf, sizeof(buf));
+    if (ret == FLUID_OK)
+    {
+        id = fluid_synth_sfload(_flsynth, buf, true);
+        Assert(id != FLUID_FAILED, "failed to load soundfont");
+    }
 
     fluid_settings_setstr(_flset, "audio.driver", "pulseaudio");
     _fldriver = new_fluid_audio_driver(_flset, _flsynth);
