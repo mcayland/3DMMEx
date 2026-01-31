@@ -330,7 +330,7 @@ if(3DMM_GUI STREQUAL "SDL")
         KauaiSound
         PUBLIC
         miniaudio
-        fluidsynth
+        FluidSynth::libfluidsynth
     )
 endif()
 
