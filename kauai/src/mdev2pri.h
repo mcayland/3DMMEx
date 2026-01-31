@@ -16,6 +16,8 @@
 #ifndef MDEV2PRI_H
 #define MDEV2PRI_H
 
+#include <fluidsynth.h>
+
 extern const int32_t kdtsMinSlip;
 
 #ifdef WIN
@@ -184,7 +186,7 @@ class MSMIX : public MSMIX_PAR
 
     // Mutex to protect our member variables
     MUTX _mutx;
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     HN _hevt; // to notify the thread that the sound list changed
     HN _hth;  // thread to terminate non-playing sounds
 #else
@@ -218,7 +220,7 @@ class MSMIX : public MSMIX_PAR
     static void _MidiProc(uintptr_t luUser, void *pvData, uintptr_t luData);
     void _Notify(void *pvData, PMDWS pmdws);
 
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
 #else
@@ -261,7 +263,7 @@ class MISI : public MISI_PAR
     RTCLASS_DEC
 
   protected:
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     HMS _hms;          // the midi stream handle
 #else
     void *_hms;
@@ -335,7 +337,7 @@ class WMS : public WMS_PAR
     typedef MSIR *PMSIR;
 
     MUTX _mutx;
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     HINSTANCE _hlib;
 #else
     void *_hlib;
@@ -344,7 +346,7 @@ class WMS : public WMS_PAR
     int32_t _ipmsirCur;
     int32_t _cmhOut;
 
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     HN _hevt; // event to wake up the thread
     HN _hth;  // thread to do callbacks and cleanup after a notify
 #else
@@ -380,7 +382,7 @@ class WMS : public WMS_PAR
     int32_t _CmhSubmitBuffers(void);
     void _ResetStream(void);
 
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     // MidiOutProc callback function
     static void __stdcall _MidiProc(HMS hms, UINT msg, DWORD_PTR luUser, DWORD_PTR lu1, DWORD_PTR lu2);
 
@@ -426,7 +428,7 @@ class OMS : public OMS_PAR
     };
 
     MUTX _mutx;
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     HN _hevt; // event to notify the thread that the stream data has changed
     HN _hth;  // thread to play the stream data
 #else
@@ -458,7 +460,7 @@ class OMS : public OMS_PAR
     virtual bool _FOpen(void) override;
     virtual bool _FClose(void) override;
 
-#ifdef WIN32
+#ifdef KAUAI_WIN32
     static DWORD __stdcall _ThreadProc(void *pv);
     DWORD _LuThread(void);
 #else

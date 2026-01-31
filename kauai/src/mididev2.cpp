@@ -13,6 +13,8 @@
 #include "mdev2pri.h"
 ASSERTNAME
 
+#include <cstdio>
+
 RTCLASS(MDWS)
 RTCLASS(MSQUE)
 RTCLASS(MDPS)
