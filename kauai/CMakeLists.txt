@@ -262,9 +262,8 @@ target_link_libraries(
     KauaiStream
 )
 
-if (3DMM_GUI STREQUAL "Win32")
-    # Win32: Use AudioMan for wave sounds
-
+# Build AudioMan playback device for all Windows builds
+if(WIN32)
     if (NOT "${3DMM_AUDIOMAN_LIBRARY}" STREQUAL "None")
         target_sources(
             KauaiSound
@@ -290,8 +289,10 @@ if (3DMM_GUI STREQUAL "Win32")
             )
         endif()
     endif()
+endif()
 
-    # Use Win32 MIDI player
+# Win32 MIDI player
+if (3DMM_GUI STREQUAL "Win32")
     target_sources(
         KauaiSound
         PRIVATE
