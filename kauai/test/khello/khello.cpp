@@ -11,6 +11,9 @@
 #include "resource.h"
 ASSERTNAME
 
+#include <sndma.h>
+#include <cstdio>
+
 // Background GOB class
 #define BackgroundGob_PAR GOB
 #define kclsBackgroundGob KLCONST4('k', 'b', 'k', 'g')
@@ -100,20 +103,30 @@ class KhelloApp : public KhelloApp_PAR
     bool FCmdDissolve(PCMD pcmd);
     bool FCmdPattern(PCMD pcmd);
 
+    bool FCmdPlaySound(PCMD pcmd);
+    bool FCmdPlayNoise(PCMD pcmd);
+
   private:
     BackgroundGob *_gobBackground = pvNil;
     MessageLogGob *_gobTest = pvNil;
     PATBL _patbl = pvNil;
+
+    PCRM _pcrm = pvNil;
+    PMiniaudioStream _pastream = pvNil;
 };
 
 #define cidDissolve 50001
 #define cidPattern 50002
+#define cidPlaySound 50003
+#define cidPlayNoise 50004
 
 BEGIN_CMD_MAP(KhelloApp, APPB)
 ON_CID_GEN(cidClose, &KhelloApp::FCmdExit, pvNil)
 ON_CID_GEN(cidKey, &KhelloApp::FCmdKey, pvNil)
 ON_CID_GEN(cidDissolve, &KhelloApp::FCmdDissolve, pvNil)
 ON_CID_GEN(cidPattern, &KhelloApp::FCmdPattern, pvNil)
+ON_CID_GEN(cidPlaySound, &KhelloApp::FCmdPlaySound, pvNil)
+ON_CID_GEN(cidPlayNoise, &KhelloApp::FCmdPlayNoise, pvNil)
 END_CMD_MAP_NIL()
 
 // Globals
@@ -190,7 +203,14 @@ bool KhelloApp::_FInit(uint32_t grfapp, uint32_t grfgob, int32_t ginDef)
         AssertDo(_patbl->FAddCmdKey(VK_FROM_ALPHA('D'), fcustNil, cidDissolve),
                  "Could not add accelerator table entry");
         AssertDo(_patbl->FAddCmdKey(VK_FROM_ALPHA('P'), fcustNil, cidPattern), "Could not add accelerator table entry");
+        AssertDo(_patbl->FAddCmdKey(VK_FROM_ALPHA('S'), fcustNil, cidPlaySound),
+                 "Could not add accelerator table entry");
+        AssertDo(_patbl->FAddCmdKey(VK_FROM_ALPHA('N'), fcustNil, cidPlayNoise),
+                 "Could not add accelerator table entry");
     }
+
+    // Create resource manager
+    _pcrm = CRM::PcrmNew(1);
 
     return fTrue;
 }
@@ -210,6 +230,8 @@ void KhelloApp::MarkMem()
     MarkMemObj(_gobBackground);
     MarkMemObj(_gobTest);
     MarkMemObj(_patbl);
+    MarkMemObj(_pcrm);
+    MarkMemObj(_pastream);
 }
 
 /***************************************************************************
@@ -296,6 +318,79 @@ bool KhelloApp::FCmdPattern(PCMD cmd)
 bool KhelloApp::FCmdDissolve(PCMD cmd)
 {
     this->SetGft(kgftDissolve, 0, 2000, pvNil, kacrBlack);
+    return fTrue;
+}
+
+bool KhelloApp::FCmdPlaySound(PCMD cmd)
+{
+    int32_t sii;
+
+    const CNO kcnoSound = 65540; // sound ID in shared.chk
+
+    // Check if the sound is in the resource manager
+    // If not, we'll need to load the chunky file containing it.
+    if (_pcrm->PcrfFindChunk(kctgWave, kcnoSound) == pvNil)
+    {
+        STN stn;
+        FNI fni;
+        PCFL pcfl = pvNil;
+
+        // Find shared.chk in the same directory as the EXE
+        // NOTE: the build doesn't actually copy it there!
+        // We probably should build a custom chunky file for this.
+        fni.FGetExe();
+
+        stn = PszLit("shared.chk");
+        AssertDo(fni.FSetLeaf(&stn), "Finding shared.chk failed!");
+        if (fni.TExists() != tYes)
+        {
+            STN stnT;
+            fni.FGetExe();
+            fni.FSetLeaf(pvNil, kftgDir);
+            fni.GetStnPath(&stnT);
+            stn.FFormatSz(PszLit("Please copy shared.chk to: %s"), &stnT);
+            TGiveAlertSz(stn.Psz(), bkOk, cokNil);
+            return fTrue;
+        }
+
+        pcfl = CFL::PcflOpen(&fni, fcflNil);
+        AssertPo(pcfl, 0);
+
+        _pcrm->FAddCfl(pcfl, 524288);
+        ReleasePpo(&pcfl);
+    }
+
+    sii = vpsndm->SiiPlay(_pcrm, kctgWave, kcnoSound);
+
+    return fTrue;
+}
+
+bool KhelloApp::FCmdPlayNoise(PCMD cmd)
+{
+    if (_pastream == pvNil)
+    {
+        // Create the stream and start playing it
+        _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
+        AssertPo(_pastream, 0);
+        AssertDo(_pastream->FPlay(), "Could not play");
+    }
+    AssertPo(_pastream, 0);
+
+    // Generate some random noise
+    ma_device *pdevice = MiniaudioManager::Pmanager()->Pengine()->pDevice;
+    Assert(pdevice->playback.format == ma_format_f32, "expected f32 format");
+    Assert(pdevice->playback.channels == 2, "expected stereo");
+
+    const int32_t cframe = 8000;
+    float rgframe[cframe * 2];
+    for (int32_t iframe = 0; iframe < cframe; iframe++)
+    {
+        rgframe[iframe] = ((float)vrndUtil.LwNext(256) / 256.0F) * 0.2F - 0.1F;
+    }
+
+    // Play the audio
+    AssertDo(_pastream->FWriteAudio(rgframe, cframe), "Could not write all of the noise");
+
     return fTrue;
 }
 
