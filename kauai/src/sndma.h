@@ -35,6 +35,46 @@ class MiniaudioManager : public MiniaudioManager_PAR
     MUTX _mutxInit;
 };
 
+// Audio stream
+typedef class MiniaudioStream *PMiniaudioStream;
+#define MiniaudioStream_PAR BASE
+#define kclsMiniaudioStream KLCONST4('m', 'a', 's', 't')
+class MiniaudioStream : public MiniaudioStream_PAR
+{
+    RTCLASS_DEC
+    NOCOPY(MiniaudioStream)
+
+  public:
+    virtual ~MiniaudioStream();
+
+    static PMiniaudioStream PastreamNew(PMiniaudioManager pmanager);
+
+    bool FPlay();
+    bool FStop();
+
+    // Write audio into the ring buffer
+    // NOTE: the input data needs to be the same format as the ma_engine uses for playback
+    bool FWriteAudio(const void *pvframe, int32_t cframe);
+
+    // Volume control
+    int32_t GetVlm();
+    void SetVlm(int32_t vlm);
+
+  protected:
+    MiniaudioStream();
+
+  private:
+    bool _fInit = fFalse;
+    PMiniaudioManager _pmanager;
+    ma_format _format;
+    ma_uint32 _cchannel;
+    ma_sound _sound;
+    ma_pcm_rb _buffer;
+    int32_t _vlm;
+
+    bool FInit(PMiniaudioManager pmanager);
+};
+
 typedef class MiniaudioCachedSound *PMiniaudioCachedSound;
 
 // Size of block read cache
