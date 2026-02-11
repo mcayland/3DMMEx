@@ -1019,3 +1019,32 @@ DWORD OMS::_LuThread(void)
         _mutx.Leave();
     }
 }
+
+#ifdef DEBUG
+/***************************************************************************
+    Assert the validity of a OMS.
+***************************************************************************/
+void OMS::AssertValid(uint32_t grf)
+{
+    OMS_PAR::AssertValid(0);
+
+    _mutx.Enter();
+    Assert(hNil != _hth, "nil thread");
+    Assert(hNil != _hevt, "nil event");
+    AssertPo(_pglmsb, 0);
+    _mutx.Leave();
+}
+
+/***************************************************************************
+    Mark memory for the OMS.
+***************************************************************************/
+void OMS::MarkMem(void)
+{
+    AssertValid(0);
+    OMS_PAR::MarkMem();
+
+    _mutx.Enter();
+    MarkMemObj(_pglmsb);
+    _mutx.Leave();
+}
+#endif // DEBUG

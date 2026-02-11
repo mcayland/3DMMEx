@@ -17,6 +17,7 @@
 #define MDEV2PRI_H
 
 #include <fluidsynth.h>
+#include <sndma.h>
 
 extern const int32_t kdtsMinSlip;
 
@@ -442,6 +443,10 @@ class OMS : public OMS_PAR
     short _flsynth_dest;
     fluid_sequencer_t *_flseq;
     fluid_audio_driver_t *_fldriver;
+    int _flframecount;
+    float *_flframe;
+
+    PMiniaudioStream _pastream;
 #endif
 
     bool _fChanged : 1; // the event has been signalled

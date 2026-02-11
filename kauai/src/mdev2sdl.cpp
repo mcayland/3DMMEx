@@ -289,7 +289,7 @@ void MISI::_SetSysVol(uint32_t luVol)
     if (vol == 0) {
         fprintf(stderr, "FLOP!\n");
     }
-    fluid_synth_set_gain(_flsynth, gain);
+    //fluid_synth_set_gain(_flsynth, gain);
 }
 
 /***************************************************************************
@@ -444,9 +444,17 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
         Assert(id != FLUID_FAILED, "failed to load soundfont");
     }
 
-    fluid_settings_setstr(_flset, "audio.driver", "pulseaudio");
-    _fldriver = new_fluid_audio_driver(_flset, _flsynth);
-    Assert(_fldriver != pvNil, "failed to load pulse driver");
+    ret = fluid_settings_getint(_flset, "audio.period-size", &_flframecount);
+    Assert(ret == FLUID_OK, "failed to get audio.period-size");
+
+    // Check the output format is correct
+    ma_device *pdevice = MiniaudioManager::Pmanager()->Pengine()->pDevice;
+    Assert(pdevice->playback.format == ma_format_f32, "expected f32 format");
+    Assert(pdevice->playback.channels == 2, "expected stereo");
+
+    //fluid_settings_setstr(_flset, "audio.driver", "pulseaudio");
+    //_fldriver = new_fluid_audio_driver(_flset, _flsynth);
+    //Assert(_fldriver != pvNil, "failed to load pulse driver");
 }
 
 /***************************************************************************
@@ -475,6 +483,11 @@ bool OMS::_FInit(void)
     _mutx.Enter();
     _hth = SDL_CreateThread(OMS::_ThreadProc, "sdl-midi-event", this);
     _hthr = SDL_CreateThread(OMS::_ThreadProcRender, "sdl-midi-render", this);
+
+    // Create the stream and start playing it
+    _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
+    //AssertPo(_pastream, 0);
+    AssertDo(_pastream->FPlay(), "Could not play");
     _mutx.Leave();
 
     return fTrue;
@@ -806,6 +819,13 @@ int OMS::_ThreadProcRender(void *pv)
 ***************************************************************************/
 uint32_t OMS::_LuRenderThread(void)
 {
+    float rgframe[_flframecount * 2];
+
+    fprintf(stderr, "##### START RENDER THREAD\n");
+    fprintf(stderr, ">>> APS is %d\n", _flframecount);
+
+    SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
+
     for (;;)
     {
         if (_fDone)
@@ -813,5 +833,45 @@ uint32_t OMS::_LuRenderThread(void)
             fprintf(stderr, "##### FINISH\n");
             return 0;
         }
+
+        if (!_fStop)
+        {
+            fluid_synth_write_float(_flsynth, _flframecount,
+                                    rgframe, 0, 2,
+                                    rgframe, 1, 2);
+        }
+
+        //AssertDo(_pastream->FWriteAudio(rgframe, _flframecount), "Could not write all of the noise");
+        _pastream->FWriteAudio(rgframe, _flframecount);
     }
 }
+
+#ifdef DEBUG
+/***************************************************************************
+    Assert the validity of a OMS.
+***************************************************************************/
+void OMS::AssertValid(uint32_t grf)
+{
+    OMS_PAR::AssertValid(0);
+
+    _mutx.Enter();
+    Assert(hNil != _hth, "nil thread");
+    Assert(hNil != _hevt, "nil event");
+    AssertPo(_pglmsb, 0);
+    _mutx.Leave();
+}
+
+/***************************************************************************
+    Mark memory used by the OMS
+***************************************************************************/
+void OMS::MarkMem(void)
+{
+    AssertValid(0);
+    OMS_PAR::MarkMem();
+
+    _mutx.Enter();
+    MarkMemObj(_pglmsb);
+    MarkMemObj(_pastream);
+    _mutx.Leave();
+}
+#endif

@@ -88,7 +88,13 @@ bool MiniaudioStream::FWriteAudio(const void *pvframe, int32_t cframe)
         }
 
         iframe += cframeBuffer;
+        //fprintf(stderr, "    ~~~~~ ERROR: iframe: %d, cframe: %d\n", iframe, cframe);
     }
+
+    //if (iframe != cframe)
+    //{
+    //    fprintf(stderr, "    ~~~~~ ERROR: iframe: %d, cframe: %d\n", iframe, cframe);
+    //}
 
     return (iframe == cframe);
 }

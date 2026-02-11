@@ -39,6 +39,8 @@ ma_engine *MiniaudioManager::Pengine()
     if (!_fInit)
     {
         ma_engine_config config = ma_engine_config_init();
+        config.channels   = 2;
+        config.sampleRate = 44100;
 
         ma_result result = ma_engine_init(&config, &_engine);
         AssertMaSuccess(result, "ma_engine_init failed");
