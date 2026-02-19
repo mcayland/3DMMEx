@@ -66,7 +66,9 @@ bool MiniaudioStream::FWriteAudio(const void *pvframe, int32_t cframe)
     while (iframe < cframe)
     {
         cframeBuffer = (cframe - iframe);
+        fprintf(stderr, " -- before cframebuffer %d\n", cframeBuffer);
         result = ma_pcm_rb_acquire_write(&_buffer, &cframeBuffer, &pvBuffer);
+        fprintf(stderr, " -- after RB addr %p, cframebuffer %d, distance %d\n", pvBuffer, cframeBuffer, ma_pcm_rb_pointer_distance(&_buffer));
         AssertMaSuccess(result, "Could not acquire ring buffer for write");
         if (result != MA_SUCCESS)
         {
@@ -97,6 +99,11 @@ bool MiniaudioStream::FWriteAudio(const void *pvframe, int32_t cframe)
     //}
 
     return (iframe == cframe);
+}
+
+int MiniaudioStream::FGetPendingFrames()
+{
+    return ma_pcm_rb_pointer_distance(&_buffer);
 }
 
 MiniaudioStream::MiniaudioStream()
@@ -145,7 +152,8 @@ bool MiniaudioStream::FInit(PMiniaudioManager pmanager, ma_format format, ma_uin
     }
 
     // Create a sound from the ring buffer data source
-    result = ma_sound_init_from_data_source(pengine, &_buffer, 0, pvNil, &_sound);
+    result = ma_sound_init_from_data_source(pengine, &_buffer, MA_SOUND_FLAG_LOOPING, pvNil, &_sound);
+    //ma_sound_init_from_file(pengine, "/home/mca/3dmm/Microsoft-3D-Movie-Maker/src/studio/sound/tooltips/vzr018.wav", 0, NULL, NULL, &_sound);
     AssertMaSuccess(result, "Could not create sound from ring buffer");
     if (result != MA_SUCCESS)
     {
@@ -169,6 +177,7 @@ bool MiniaudioStream::FPlay()
     Assert(_fInit, "not initialised");
 
     ma_result result = ma_sound_start(&_sound);
+    fprintf(stderr, "PPPPPPLLLLLLLL\n");
     AssertMaSuccess(result, "Failed to start audio stream");
     return (result == MA_SUCCESS);
 }

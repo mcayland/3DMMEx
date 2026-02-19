@@ -462,9 +462,28 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser) : MISI(pfn, luUser)
 ***************************************************************************/
 OMS::~OMS(void)
 {
-    delete_fluid_audio_driver(_fldriver);
+    int is;
+
+    if (hNil != _hth)
+    {
+        _fDone = fTrue;
+        SDL_CondSignal(_hevt);
+        SDL_WaitThread(_hth, &is);
+    }
+
+    _mutx.Enter();
+    
+    if (hNil != _hthr)
+        SDL_WaitThread(_hthr, &is);
+
+    Assert(_hms == hNil, "Still have an HMS");
+    Assert(_pglmsb->IvMac() == 0, "Still have some buffers");
+    ReleasePpo(&_pglmsb);
+
     delete_fluid_synth(_flsynth);
     delete_fluid_settings(_flset);
+
+    _mutx.Leave();
 }
 
 /***************************************************************************
@@ -828,21 +847,27 @@ uint32_t OMS::_LuRenderThread(void)
 
     for (;;)
     {
-        if (_fDone)
+        while (_pastream->FGetPendingFrames() < 24000)
         {
-            fprintf(stderr, "##### FINISH\n");
-            return 0;
-        }
+            if (_fDone)
+            {
+                fprintf(stderr, "##### FINISH\n");
+                return 0;
+            }
 
-        if (!_fStop)
-        {
-            fluid_synth_write_float(_flsynth, _flframecount,
-                                    rgframe, 0, 2,
-                                    rgframe, 1, 2);
-        }
+            if (!_fStop)
+            {
+                fluid_synth_write_float(_flsynth, _flframecount,
+                                        rgframe, 0, 2,
+                                        rgframe, 1, 2);
+                
+                //AssertDo(_pastream->FWriteAudio(rgframe, _flframecount), "Could not write all of the noise");
+                fprintf(stderr, "  -> call with flframecount is %d\n", _flframecount);
+                _pastream->FWriteAudio(rgframe, _flframecount);
+            }
 
-        //AssertDo(_pastream->FWriteAudio(rgframe, _flframecount), "Could not write all of the noise");
-        _pastream->FWriteAudio(rgframe, _flframecount);
+            SDL_Delay(1);
+        }
     }
 }
 

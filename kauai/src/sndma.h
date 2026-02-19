@@ -59,6 +59,9 @@ class MiniaudioStream : public MiniaudioStream_PAR
     // NOTE: the input data needs to be the same format as the ma_engine uses for playback
     bool FWriteAudio(const void *pvframe, int32_t cframe);
 
+    // Return the number of frames queued in the ringbuffer
+    int FGetPendingFrames();
+
     // Volume control
     int32_t GetVlm();
     void SetVlm(int32_t vlm);
