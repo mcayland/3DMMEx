@@ -63,8 +63,8 @@ class MiniaudioStream : public MiniaudioStream_PAR
     int FGetPendingFrames();
 
     // Volume control
-    int32_t GetVlm();
-    void SetVlm(int32_t vlm);
+    uint32_t GetVlm();
+    void SetVlm(uint32_t vlm);
 
     ma_uint32 Cchannel();
     ma_format Format();
@@ -78,7 +78,7 @@ class MiniaudioStream : public MiniaudioStream_PAR
     PMiniaudioManager _pmanager;
     ma_sound _sound;
     ma_pcm_rb _buffer;
-    int32_t _vlm;
+    uint32_t _vlm;
 
     bool FInit(PMiniaudioManager pmanager, ma_format format, ma_uint32 cchannel, ma_uint32 csample);
 };

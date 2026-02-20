@@ -82,8 +82,6 @@ struct MH
 };
 typedef MH *PMH;
 
-typedef void *HMS;
-
 #endif
 
 /***************************************************************************
@@ -267,7 +265,14 @@ class MISI : public MISI_PAR
 #ifdef KAUAI_WIN32
     HMS _hms;          // the midi stream handle
 #else
-    void *_hms;
+    struct MS
+    {
+        fluid_synth_t *_flsynth;
+        PMiniaudioStream _pastream;
+    };
+    typedef MS *HMS;
+
+    HMS _hms;
 #endif
     PFNMIDI _pfnCall;  // call back function
     uintptr_t _luUser; // user data to send back

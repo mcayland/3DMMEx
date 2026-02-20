@@ -257,9 +257,8 @@ uint32_t MSMIX::_LuThread(void)
 void MISI::_Reset(void)
 {
     Assert(hNil != _hms, 0);
-    fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
 
-    fluid_synth_all_notes_off(_flsynth, -1);
+    fluid_synth_all_notes_off(_hms->_flsynth, -1);
 }
 
 /***************************************************************************
@@ -268,11 +267,10 @@ void MISI::_Reset(void)
 void MISI::_GetSysVol(void)
 {
     Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
-    fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
-    float gain = fluid_synth_get_gain(_flsynth);
-    uint32_t vol = (uint32_t)((gain / 0.5) * 0xffff);
+    //PMiniaudioStream _pastream = (PMiniaudioStream)_hms;
 
-    _luVolSys = vol << 16 | vol;
+    // FIXME: why does this not work?
+    //_luVolSys = _hms->_pastream->GetVlm();
 }
 
 /***************************************************************************
@@ -281,15 +279,9 @@ void MISI::_GetSysVol(void)
 void MISI::_SetSysVol(uint32_t luVol)
 {
     Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
-    uint32_t vol = luVol & 0xffff;
-    float gain = ((float)vol) / 0xffff * 0.5;
+    //PMiniaudioStream _pastream = (PMiniaudioStream)_hms;
 
-    fluid_synth_t *_flsynth = (fluid_synth_t *)_hms;
-    fprintf(stderr, " FLVOL is 0x%x, gain is %f\n", vol, gain);
-    if (vol == 0) {
-        fprintf(stderr, "FLOP!\n");
-    }
-    //fluid_synth_set_gain(_flsynth, gain);
+    _hms->_pastream->SetVlm(luVol);
 }
 
 /***************************************************************************
@@ -339,7 +331,7 @@ bool WMS::_FOpen(void)
 {
     AssertThis(0);
 
-    _hms = (void *)-1;
+    _hms = pvNil;
 
     return fFalse;
 }
@@ -483,6 +475,8 @@ OMS::~OMS(void)
     delete_fluid_synth(_flsynth);
     delete_fluid_settings(_flset);
 
+    FreePpv((void **)&_hms);
+
     _mutx.Leave();
 }
 
@@ -507,6 +501,8 @@ bool OMS::_FInit(void)
     _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
     //AssertPo(_pastream, 0);
     AssertDo(_pastream->FPlay(), "Could not play");
+    
+LFail:
     _mutx.Leave();
 
     return fTrue;
@@ -525,8 +521,11 @@ bool OMS::_FOpen(void)
         goto LDone;
 
     _fChanged = _fStop = fFalse;
+    if (!FAllocPv((void **)&_hms, SIZEOF(MS), fmemClear, mprNormal))
+        goto LDone;
 
-    _hms = _flsynth;
+    _hms->_pastream = _pastream;
+    _hms->_flsynth = _flsynth;
 
     // get the system volume level
     _GetSysVol();
@@ -897,6 +896,7 @@ void OMS::MarkMem(void)
     _mutx.Enter();
     MarkMemObj(_pglmsb);
     MarkMemObj(_pastream);
+    MarkPv(_hms);
     _mutx.Leave();
 }
 #endif

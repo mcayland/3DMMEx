@@ -698,8 +698,5 @@ void MiniaudioDevice::MarkMem()
 
 float ScaleVlm(int32_t vlm)
 {
-    // The volume control in the studio can be set to a maximum value of 2*kvlmFull
-    const int32_t kvlmMac = (kvlmFull * 2) + 1;
-    AssertIn(vlm, 0, kvlmMac);
     return ((float)vlm) / (float)kvlmFull;
 }

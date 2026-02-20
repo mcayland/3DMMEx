@@ -192,14 +192,16 @@ bool MiniaudioStream::FStop()
     return (result == MA_SUCCESS);
 }
 
-void MiniaudioStream::SetVlm(int32_t vlm)
+void MiniaudioStream::SetVlm(uint32_t vlm)
 {
     AssertThis(0);
-    AssertIn(vlm, 0, kvlmFull * 2 + 1);
     Assert(_fInit, "not initialised");
 
+    float fvlm;;
+
     _vlm = vlm;
-    ma_sound_set_volume(&_sound, ScaleVlm(_vlm));
+    fvlm = ScaleVlm(_vlm & 0xffff);
+    ma_sound_set_volume(&_sound, fvlm);
 }
 
 ma_uint32 MiniaudioStream::Cchannel()
@@ -220,7 +222,7 @@ ma_uint32 MiniaudioStream::SampleRate()
     return _buffer.sampleRate;
 }
 
-int32_t MiniaudioStream::GetVlm()
+uint32_t MiniaudioStream::GetVlm()
 {
     AssertThis(0);
 
