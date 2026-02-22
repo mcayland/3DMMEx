@@ -366,7 +366,7 @@ else()
 
     # Use stub implementation
     add_library(KauaiVideo
-        "${PROJECT_SOURCE_DIR}/kauai/src/videostub.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/videosdl.cpp"
     )
     target_link_libraries(
         KauaiVideo
