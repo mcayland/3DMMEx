@@ -864,9 +864,9 @@ uint32_t OMS::_LuRenderThread(void)
                 fprintf(stderr, "  -> call with flframecount is %d\n", _flframecount);
                 _pastream->FWriteAudio(rgframe, _flframecount);
             }
-
-            SDL_Delay(1);
         }
+
+        SDL_Delay(1);
     }
 }
 
