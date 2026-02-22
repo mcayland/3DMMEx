@@ -28,7 +28,8 @@ MiniaudioStream::~MiniaudioStream()
     ReleasePpo(&_pmanager);
 }
 
-PMiniaudioStream MiniaudioStream::PastreamNew(PMiniaudioManager pmanager)
+PMiniaudioStream MiniaudioStream::PastreamNew(PMiniaudioManager pmanager, ma_format format, ma_uint32 cchannel,
+                                              ma_uint32 csample)
 {
     AssertPo(pmanager, 0);
 
@@ -37,7 +38,7 @@ PMiniaudioStream MiniaudioStream::PastreamNew(PMiniaudioManager pmanager)
     pastream = NewObj MiniaudioStream();
     if (pastream != pvNil)
     {
-        if (!pastream->FInit(pmanager))
+        if (!pastream->FInit(pmanager, format, cchannel, csample))
         {
             ReleasePpo(&pastream);
         }
@@ -76,8 +77,8 @@ bool MiniaudioStream::FWriteAudio(const void *pvframe, int32_t cframe)
             break;
         }
 
-        ma_copy_pcm_frames(pvBuffer, ma_offset_pcm_frames_const_ptr(pvframe, iframe, _format, _cchannel), cframeBuffer,
-                           _format, _cchannel);
+        ma_copy_pcm_frames(pvBuffer, ma_offset_pcm_frames_const_ptr(pvframe, iframe, _buffer.format, _buffer.channels),
+                           cframeBuffer, _buffer.format, _buffer.channels);
         result = ma_pcm_rb_commit_write(&_buffer, cframeBuffer);
         AssertMaSuccess(result, "Could not commit to ring buffer");
 
@@ -96,11 +97,9 @@ MiniaudioStream::MiniaudioStream()
 {
     _fInit = fFalse;
     _buffer = {0};
-    _cchannel = 0;
-    _format = ma_format_unknown;
 }
 
-bool MiniaudioStream::FInit(PMiniaudioManager pmanager)
+bool MiniaudioStream::FInit(PMiniaudioManager pmanager, ma_format format, ma_uint32 cchannel, ma_uint32 csample)
 {
     Assert(pmanager != pvNil, "no object!");
 
@@ -120,11 +119,19 @@ bool MiniaudioStream::FInit(PMiniaudioManager pmanager)
 
     // Initialise the ring buffer
     pdevice = _pmanager->Pengine()->pDevice;
-    _format = pdevice->playback.format;
-    _cchannel = pdevice->playback.channels;
 
-    const int32_t kcframeBuffer = 48000; // TODO: how big should this be?
-    result = ma_pcm_rb_init(_format, _cchannel, kcframeBuffer, pvNil, pvNil, &_buffer);
+    if (format == ma_format_unknown)
+        format = pdevice->playback.format;
+
+    cchannel = cchannel;
+    if (cchannel == 0)
+        cchannel = pdevice->playback.channels;
+
+    // Default to one second of audio
+    if (csample == 0)
+        csample = pdevice->sampleRate;
+
+    result = ma_pcm_rb_init(format, cchannel, csample, pvNil, pvNil, &_buffer);
     AssertMaSuccess(result, "Could not create ring buffer");
     if (result != MA_SUCCESS)
     {
@@ -178,6 +185,24 @@ void MiniaudioStream::SetVlm(int32_t vlm)
 
     _vlm = vlm;
     ma_sound_set_volume(&_sound, ScaleVlm(_vlm));
+}
+
+ma_uint32 MiniaudioStream::Cchannel()
+{
+    AssertThis(0);
+    return _buffer.channels;
+}
+
+ma_format MiniaudioStream::Format()
+{
+    AssertThis(0);
+    return _buffer.format;
+}
+
+ma_uint32 MiniaudioStream::SampleRate()
+{
+    AssertThis(0);
+    return _buffer.sampleRate;
 }
 
 int32_t MiniaudioStream::GetVlm()
