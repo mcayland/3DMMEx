@@ -107,6 +107,7 @@ void MSMIX::_StopStream(void)
     while (_cpvOut > 0) {
         fprintf(stderr, ">>> MSMIX::cpvOut is %x\n", _cpvOut);
     //    std::this_thread::sleep_for(0ms);
+        SDL_Delay(0);
     }
     fprintf(stderr, "=== MSMIX::cpvOut == 0\n");
     _mutx.Enter();
@@ -259,6 +260,7 @@ void MISI::_Reset(void)
     Assert(hNil != _hms, 0);
 
     fluid_synth_all_notes_off(_hms->_flsynth, -1);
+    //_hms->_pastream->FStop();
 }
 
 /***************************************************************************
@@ -637,8 +639,8 @@ void OMS::StopPlaying(void)
         _fStop = fTrue;
         _fChanged = fTrue;
         SDL_CondSignal(_hevt);
-    }
 
+    }
     _mutx.Leave();
 }
 
@@ -698,6 +700,8 @@ uint32_t OMS::_LuThread(void)
             // play the event
             if (_pmev < _pmevLim)
             {
+                fprintf(stderr, "--> PROC MIDI EVENT\n");
+                
                 if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24)) {
 
                 switch (_pmev->dwEvent & 0xf0)
@@ -796,9 +800,11 @@ uint32_t OMS::_LuThread(void)
         {
             // no buffers to play
             dtsWait = klwInfinite;
+            //_hms->_pastream->FStop();
         }
         else
         {
+            //_hms->_pastream->FPlay();
             // start playing the new buffers
             _pglmsb->Get(0, &msb);
             _pmev = (PMEV)PvAddBv(msb.pvData, msb.ibStart);
@@ -846,7 +852,7 @@ uint32_t OMS::_LuRenderThread(void)
 
     for (;;)
     {
-        while (_pastream->FGetPendingFrames() < 24000)
+        while (_pastream->FGetPendingFrames() < 8192)
         {
             if (_fDone)
             {
@@ -861,12 +867,12 @@ uint32_t OMS::_LuRenderThread(void)
                                         rgframe, 1, 2);
                 
                 //AssertDo(_pastream->FWriteAudio(rgframe, _flframecount), "Could not write all of the noise");
-                fprintf(stderr, "  -> call with flframecount is %d\n", _flframecount);
+                //fprintf(stderr, "  -> call with flframecount is %d\n", _flframecount);
                 _pastream->FWriteAudio(rgframe, _flframecount);
             }
         }
 
-        SDL_Delay(1);
+        SDL_Delay(5);
     }
 }
 

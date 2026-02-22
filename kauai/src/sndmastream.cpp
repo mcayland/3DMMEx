@@ -66,9 +66,9 @@ bool MiniaudioStream::FWriteAudio(const void *pvframe, int32_t cframe)
     while (iframe < cframe)
     {
         cframeBuffer = (cframe - iframe);
-        fprintf(stderr, " -- before cframebuffer %d\n", cframeBuffer);
+        //fprintf(stderr, " -- before cframebuffer %d\n", cframeBuffer);
         result = ma_pcm_rb_acquire_write(&_buffer, &cframeBuffer, &pvBuffer);
-        fprintf(stderr, " -- after RB addr %p, cframebuffer %d, distance %d\n", pvBuffer, cframeBuffer, ma_pcm_rb_pointer_distance(&_buffer));
+        //fprintf(stderr, " -- after RB addr %p, cframebuffer %d, distance %d\n", pvBuffer, cframeBuffer, ma_pcm_rb_pointer_distance(&_buffer));
         AssertMaSuccess(result, "Could not acquire ring buffer for write");
         if (result != MA_SUCCESS)
         {
@@ -109,6 +109,7 @@ int MiniaudioStream::FGetPendingFrames()
 MiniaudioStream::MiniaudioStream()
 {
     _fInit = fFalse;
+    _vlm = vluSysVolFake;
     _buffer = {0};
 }
 
@@ -144,7 +145,7 @@ bool MiniaudioStream::FInit(PMiniaudioManager pmanager, ma_format format, ma_uin
     if (csample == 0)
         csample = pdevice->sampleRate;
 
-    result = ma_pcm_rb_init(format, cchannel, csample, pvNil, pvNil, &_buffer);
+    result = ma_pcm_rb_init(format, cchannel, 16384, pvNil, pvNil, &_buffer);
     AssertMaSuccess(result, "Could not create ring buffer");
     if (result != MA_SUCCESS)
     {
@@ -197,7 +198,7 @@ void MiniaudioStream::SetVlm(uint32_t vlm)
     AssertThis(0);
     Assert(_fInit, "not initialised");
 
-    float fvlm;;
+    float fvlm;
 
     _vlm = vlm;
     fvlm = ScaleVlm(_vlm & 0xffff);
@@ -225,6 +226,8 @@ ma_uint32 MiniaudioStream::SampleRate()
 uint32_t MiniaudioStream::GetVlm()
 {
     AssertThis(0);
+    
+    float fvlm = ma_sound_get_volume(&_sound);
 
     return _vlm;
 }
