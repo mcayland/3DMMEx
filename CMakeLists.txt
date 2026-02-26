@@ -88,6 +88,8 @@ elseif("${3DMM_GUI}" STREQUAL "SDL")
 
     message(WARNING "SDL support does not work yet!")
 
+    find_package(PkgConfig)
+
     if (WIN32)
         include(FetchSDL2)
         include(FetchFluidSynth)
@@ -103,6 +105,8 @@ elseif("${3DMM_GUI}" STREQUAL "SDL")
 
     # TODO: Find libiniparser if installed
     include(FetchIniParser)
+
+    pkg_check_modules(GST REQUIRED gstreamer-1.0)
 
 endif()
 

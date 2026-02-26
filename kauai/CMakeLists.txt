@@ -372,6 +372,13 @@ else()
         KauaiVideo
         PUBLIC
         KauaiGui
+        "${GST_LIBRARIES}"
+    )
+    target_include_directories(
+        KauaiVideo
+        PUBLIC
+        KauaiGui
+        "${GST_INCLUDE_DIRS}"
     )
 endif()
 
