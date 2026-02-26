@@ -8,9 +8,13 @@
     Graphical video object implementation stub.
 
 ***************************************************************************/
-#include "frame.h"
+
 #include <gst/gst.h>
+#include <glib.h>
 #include <SDL2/SDL.h>
+
+#include "frame.h"
+
 ASSERTNAME
 
 RTCLASS(GVID)
