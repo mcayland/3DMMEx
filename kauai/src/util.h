@@ -65,9 +65,9 @@ typedef void *HPIC;
 #define BLOCK
 
 #ifdef DEBUG
-#define priv
+#define _priv
 #else //! DEBUG
-#define priv static
+#define _priv static
 #endif //! DEBUG
 
 // standard scalar types

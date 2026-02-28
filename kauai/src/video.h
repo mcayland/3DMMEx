@@ -12,6 +12,11 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 
+#ifndef KAUAI_WIN32
+#include <gst/gst.h>
+#include <glib.h>
+#endif
+
 /***************************************************************************
     Generic video class. This is an interface that supports the GVDS
     (video stream) and GVDW (video window) classes.
@@ -178,6 +183,10 @@ class GVDW : public GVDW_PAR
     bool _fDeviceOpen : 1;
     bool _fPlaying : 1;
     bool _fVisible : 1;
+
+#ifndef KAUAI_WIN32
+    GstElement *_pipeline;
+#endif
 
     GVDW(int32_t hid);
     ~GVDW(void);

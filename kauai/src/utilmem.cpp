@@ -44,9 +44,9 @@ struct MBF
 
 MBH *_pmbhFirst; // head of the doubly linked list
 
-priv void _LinkMbh(MBH *pmbh);
-priv void _UnlinkMbh(MBH *pmbh, MBH *pmbhOld);
-priv void _AssertMbh(MBH *pmbh);
+_priv void _LinkMbh(MBH *pmbh);
+_priv void _UnlinkMbh(MBH *pmbh, MBH *pmbhOld);
+_priv void _AssertMbh(MBH *pmbh);
 #endif // DEBUG
 
 #ifdef MAC
@@ -395,7 +395,7 @@ void FreePpv(void **ppv)
 /***************************************************************************
     Link the Mbh into the debug-only doubly linked list.
 ***************************************************************************/
-priv void _LinkMbh(MBH *pmbh)
+_priv void _LinkMbh(MBH *pmbh)
 {
     AssertVarMem(pmbh);
 
@@ -416,7 +416,7 @@ priv void _LinkMbh(MBH *pmbh)
     previous value of the linked block.  pmbhOld may not be a valid pointer
     now (when mem is resized).
 ***************************************************************************/
-priv void _UnlinkMbh(MBH *pmbh, MBH *pmbhOld)
+_priv void _UnlinkMbh(MBH *pmbh, MBH *pmbhOld)
 {
     AssertVarMem(pmbh);
     Assert(pmbhOld != pvNil, 0);
