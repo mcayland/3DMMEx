@@ -25,7 +25,7 @@ FTG vftgTemp = kftgTemp;
 // a long).
 const long kcchsMaxExt = SIZEOF(int32_t);
 
-priv void _CleanFtg(FTG *pftg, PSTN pstnExt = pvNil);
+_priv void _CleanFtg(FTG *pftg, PSTN pstnExt = pvNil);
 FNI _fniTemp;
 
 RTCLASS(FNI)
@@ -742,7 +742,7 @@ bool FNI::_FChangeLeaf(PSTN pstn)
 /***************************************************************************
     Make sure the ftg is all lowercase and has no characters after a zero.
 ***************************************************************************/
-priv void _CleanFtg(FTG *pftg, PSTN pstnExt)
+_priv void _CleanFtg(FTG *pftg, PSTN pstnExt)
 {
     AssertVarMem(pftg);
     AssertNilOrPo(pstnExt, 0);

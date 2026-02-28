@@ -9,11 +9,11 @@
 
 ***************************************************************************/
 
+#include "frame.h"
+
 #include <gst/gst.h>
 #include <glib.h>
 #include <SDL2/SDL.h>
-
-#include "frame.h"
 
 ASSERTNAME
 
@@ -228,16 +228,28 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     AssertPo(pfni, ffniFile);
     AssertPo(pgobBase, 0);
 
-    _pgobBase = pgobBase;
+    STN stnPath;
+    STN stn;
+    GError *error = NULL;
+    g_autofree gchar *uri = NULL;
+    g_autofree gchar *desc = NULL;
 
-    // Show video playback error only once
-    static bool _fShowError = fTrue;
-    if (_fShowError)
-    {
-        PushErc(ercCantOpenVideo);
-        _fShowError = fFalse;
+    _pgobBase = pgobBase;
+    pfni->GetStnPath(&stnPath);
+
+    gst_init(NULL, NULL);
+
+    uri = g_uri_escape_string(stnPath.Psz(), NULL, TRUE);
+    desc = g_strdup_printf("uridecodebin uri=file://%s ! videoconvert ! videoscale ! "
+      " appsink name=sink caps=\"video/x-raw,format=RGB,width=400,pixel-aspect-ratio=1/1\"", uri);
+    fprintf(stderr, "file is %s\n", uri);
+
+    _pipeline = gst_parse_launch(desc, &error);
+    if (error != NULL) {
+        goto LFail;
     }
 
+LFail:
     return fFalse;
 }
 
