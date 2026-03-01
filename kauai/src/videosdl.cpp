@@ -220,7 +220,13 @@ GVDW::GVDW(int32_t hid) : GVDW_PAR(hid)
 
 GVDW::~GVDW(void)
 {
+    int status;
+    
     AssertBaseThis(0);
+    _fDone = fTrue;
+    SDL_WaitThread(_hth, &status);
+    SDL_DestroyRenderer(_rdr);
+    SDL_DestroyWindow(_hwndMovie);
 }
 
 bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
@@ -231,26 +237,174 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     STN stnPath;
     STN stn;
     GError *error = NULL;
+    GstElement *pipeline;
+    GstSample *sample = NULL;
+    GstCaps *caps = NULL;
+    GstElement *sink = NULL;
+    GstElement *xsrc = NULL;
+    GstPad *pad = NULL;
+    GstStructure *structure = NULL;
+    GstQuery *query = NULL;
+    GstState state;
+    GstState pending;
     g_autofree gchar *uri = NULL;
     g_autofree gchar *desc = NULL;
+    gint gint_val;
+    gint frame_n;
+    gint frame_d;
+    gint64 duration;
+    int wx;
+    int wy;
+    int res;
+    RC rc;
 
     _pgobBase = pgobBase;
     pfni->GetStnPath(&stnPath);
 
     gst_init(NULL, NULL);
 
-    uri = g_uri_escape_string(stnPath.Psz(), NULL, TRUE);
-    desc = g_strdup_printf("uridecodebin uri=file://%s ! videoconvert ! videoscale ! "
-      " appsink name=sink caps=\"video/x-raw,format=RGB,width=400,pixel-aspect-ratio=1/1\"", uri);
+    uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
+    _desc = g_strdup_printf("uridecodebin uri=file://%s ! videoconvert ! videoscale ! "
+      " appsink name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"", uri);
     fprintf(stderr, "file is %s\n", uri);
 
-    _pipeline = gst_parse_launch(desc, &error);
+    pipeline = gst_parse_launch(_desc, &error);
     if (error != NULL) {
         goto LFail;
     }
 
+    /* Find width, height and frame rate */
+    gst_element_set_state(pipeline, GST_STATE_PAUSED);
+    sink = gst_bin_get_by_name(GST_BIN(pipeline), "sink");
+    g_signal_emit_by_name(sink, "pull-preroll", &sample, NULL);
+    caps = gst_sample_get_caps(sample);
+    if (!caps) {
+        return fFalse;
+    }
+    structure = gst_caps_get_structure(caps, 0);
+
+    res = gst_structure_get_int(structure, "width", &gint_val);
+    if (!res)
+    {
+        return fFalse;
+    }
+    _dxp = gint_val;
+    res = gst_structure_get_int(structure, "height", &gint_val);
+    if (!res)
+    {
+        return fFalse;
+    }
+    _dyp = gint_val;
+    res = gst_structure_get_fraction(structure, "framerate",
+                                     &frame_n, &frame_d);
+    if (!res)
+    {
+        return fFalse;
+    }
+    _framems = (int32_t)(1000 / (((double)frame_n) / frame_d)); 
+
+    /* Determine the total number of frames in the file */
+    query = gst_query_new_duration(GST_FORMAT_DEFAULT);
+    res = gst_element_query(pipeline, query);
+    if (!res)
+    {
+        return fFalse;
+    }
+    gst_query_parse_duration(query, NULL, &duration);
+    _nfrMac = duration;
+
+    /* Create surface */
+    pgobBase->GetRcVis(&rc, cooGlobal);
+
+    _hwndMovie = SDL_CreateWindow("movie", rc.xpLeft, rc.ypTop,
+                                  _dxp, _dyp,
+                                  SDL_WINDOW_BORDERLESS);
+
+    _rdr = SDL_CreateRenderer(_hwndMovie, -1, 0);
+
+    _texture = SDL_CreateTexture(_rdr, SDL_PIXELFORMAT_RGB24,
+                                 SDL_TEXTUREACCESS_STATIC, _dxp, _dyp);
+
+   _hth = SDL_CreateThread(GVDW::_ThreadProc, "sdl-video-render", this);
+
 LFail:
-    return fFalse;
+    return fTrue;
+}
+
+/***************************************************************************
+    AT: Static method. Thread function for the video stream object.
+***************************************************************************/
+int GVDW::_ThreadProc(void *pv)
+{
+    PGVDW gdvw = (PGVDW)pv;
+
+    AssertPo(gdvw, 0);
+
+    return gdvw->_LuThread();
+}
+
+/***************************************************************************
+    AT: The video stream playback thread.
+***************************************************************************/
+uint32_t GVDW::_LuThread(void)
+{
+    AssertThis(0);
+
+    GstElement *sink;
+    GError *error = NULL;
+
+    // GST_DEBUG=3,appsink:6
+    _pipeline = gst_parse_launch(_desc, &error);
+
+    sink = gst_bin_get_by_name(GST_BIN(_pipeline), "sink");
+
+    for (;;)
+    {
+        if (_fDone)
+            break;
+
+        if (_fPlaying)
+        {
+            GstBuffer *buffer;
+            GstSample *sample;
+            GstMapInfo map;
+            SDL_Rect rect;
+
+            fprintf(stderr, "VIDEO THREAD\n");
+
+            /* get the preroll buffer from appsink */
+            gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+            g_signal_emit_by_name(sink, "pull-preroll", &sample, NULL);
+            
+            if (sample != NULL)
+            {
+                gst_element_set_state(_pipeline, GST_STATE_PLAYING);
+
+                buffer = gst_sample_get_buffer(sample);
+                if (gst_buffer_map(buffer, &map, GST_MAP_READ))
+                {
+                    /* update the texture with the mapped buffer */
+                    SDL_UpdateTexture(_texture, &rect, map.data, _dxp * 3);
+                    SDL_RenderCopy(_rdr, _texture, NULL, NULL);
+                    SDL_RenderPresent(_rdr);
+                    gst_buffer_unmap(buffer, &map);
+                }
+                gst_sample_unref(sample);
+            }
+            else
+            {
+                _fPlaying = fFalse;
+            }
+
+            SDL_Delay(_framems);
+        }
+        else
+        {
+            SDL_Delay(1);
+        }
+    }
+
+    return 0;
 }
 
 int32_t GVDW::NfrMac(void)
@@ -287,7 +441,9 @@ bool GVDW::FPlay(RC *prc)
 
     Stop();
 
-    return fFalse;
+    _fPlaying = fTrue;
+
+    return fTrue;
 }
 
 void GVDW::SetRcPlay(RC *prc)

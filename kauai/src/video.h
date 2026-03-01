@@ -185,7 +185,17 @@ class GVDW : public GVDW_PAR
     bool _fVisible : 1;
 
 #ifndef KAUAI_WIN32
+    bool _fDone : 1;
+    
+    gchar *_desc;
     GstElement *_pipeline;
+    SDL_Thread *_hth;
+    SDL_Renderer *_rdr;
+    SDL_Texture *_texture;
+    int32_t _framems;
+
+    static int _ThreadProc(void *pv);
+    uint32_t _LuThread(void);
 #endif
 
     GVDW(int32_t hid);
