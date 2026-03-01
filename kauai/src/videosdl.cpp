@@ -264,9 +264,11 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     gst_init(NULL, NULL);
 
     uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
-    _desc = g_strdup_printf("uridecodebin uri=file://%s ! videoconvert ! videoscale ! "
-      " appsink name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"", uri);
+    _desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
+      " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
+      " u. ! audioconvert ! audioresample ! autoaudiosink", uri);
     fprintf(stderr, "file is %s\n", uri);
+    fprintf(stderr, "desc is %s\n", _desc);
 
     pipeline = gst_parse_launch(_desc, &error);
     if (error != NULL) {
@@ -275,7 +277,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
 
     /* Find width, height and frame rate */
     gst_element_set_state(pipeline, GST_STATE_PAUSED);
-    sink = gst_bin_get_by_name(GST_BIN(pipeline), "sink");
+    sink = gst_bin_get_by_name(GST_BIN(pipeline), "vsink");
     g_signal_emit_by_name(sink, "pull-preroll", &sample, NULL);
     caps = gst_sample_get_caps(sample);
     if (!caps) {
@@ -356,7 +358,7 @@ uint32_t GVDW::_LuThread(void)
     // GST_DEBUG=3,appsink:6
     _pipeline = gst_parse_launch(_desc, &error);
 
-    sink = gst_bin_get_by_name(GST_BIN(_pipeline), "sink");
+    sink = gst_bin_get_by_name(GST_BIN(_pipeline), "vsink");
 
     for (;;)
     {
