@@ -177,11 +177,13 @@ bool MiniaudioStream::FStop()
 void MiniaudioStream::SetVlm(int32_t vlm)
 {
     AssertThis(0);
-    AssertIn(vlm, 0, kvlmFull * 2 + 1);
     Assert(_fInit, "not initialised");
 
+    float fvlm;
+
     _vlm = vlm;
-    ma_sound_set_volume(&_sound, ScaleVlm(_vlm));
+    fvlm = ScaleVlm(_vlm & 0xffff);
+    ma_sound_set_volume(&_sound, fvlm);
 }
 
 ma_uint32 MiniaudioStream::Cchannel()
