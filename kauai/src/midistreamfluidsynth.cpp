@@ -1,0 +1,626 @@
+/* Copyright (c) Microsoft Corporation.
+   Licensed under the MIT License. */
+
+/***************************************************************************
+    Author: ShonK
+    Project: Kauai
+    Copyright (c) Microsoft Corporation
+
+    MIDI stream interface: FluidSynth
+
+***************************************************************************/
+#include "frame.h"
+#include "mdev2pri.h"
+#include "midistreamfluidsynth.h"
+ASSERTNAME
+
+RTCLASS(OMS)
+
+const int32_t kdtsMinSlip = kdtsSecond / 30;
+
+/***************************************************************************
+    Constructor for our own midi stream api implementation.
+***************************************************************************/
+OMS::OMS(PFNMIDI pfn, uintptr_t luUser)
+{
+    ma_device *pdevice = MiniaudioManager::Pmanager()->Pengine()->pDevice;
+    char buf[256];
+    int id, ret;
+
+    _flset = new_fluid_settings();
+    Assert(_flset != pvNil, "failed to create fluidsynth settings");
+    fluid_settings_setnum(_flset, "synth.sample-rate", pdevice->sampleRate);
+
+    _flsynth = new_fluid_synth(_flset);
+    Assert(_flsynth != pvNil, "failed to create fluidsynth synth");
+
+    ret = fluid_settings_copystr(_flset, "synth.default-soundfont", buf, sizeof(buf));
+    if (ret == FLUID_OK)
+    {
+        id = fluid_synth_sfload(_flsynth, buf, true);
+        if (id == FLUID_FAILED)
+        {
+            FNI fniExe;
+            STN path;
+
+            fniExe.FGetExe();
+            fniExe.FSetLeaf(pvNil, kftgDir);
+            fniExe.GetStnPath(&path);
+            snprintf(buf, sizeof(buf), "%sMS Basic.sf3", path.Psz());
+
+            id = fluid_synth_sfload(_flsynth, buf, true);
+        }
+        Assert(id != FLUID_FAILED, "failed to load soundfont");
+    }
+
+    ret = fluid_settings_getint(_flset, "audio.period-size", &_flframecount);
+    Assert(ret == FLUID_OK, "failed to get audio.period-size");
+
+    // Check the output format is correct
+    Assert(pdevice->playback.format == ma_format_f32, "expected f32 format");
+    Assert(pdevice->playback.channels == 2, "expected stereo");
+
+    //fluid_settings_setstr(_flset, "audio.driver", "pulseaudio");
+    //_fldriver = new_fluid_audio_driver(_flset, _flsynth);
+    //Assert(_fldriver != pvNil, "failed to load pulse driver");
+}
+
+/***************************************************************************
+    Destructor for our midi stream.
+***************************************************************************/
+OMS::~OMS(void)
+{
+    int is;
+
+    if (hNil != _hth)
+    {
+        _fDone = fTrue;
+        SDL_CondSignal(_hevt);
+        SDL_WaitThread(_hth, &is);
+    }
+
+    _mutx.Enter();
+
+    if (hNil != _hthr)
+        SDL_WaitThread(_hthr, &is);
+
+    Assert(_hms == hNil, "Still have an HMS");
+    Assert(_pglmsb->IvMac() == 0, "Still have some buffers");
+    ReleasePpo(&_pglmsb);
+
+    delete_fluid_synth(_flsynth);
+    delete_fluid_settings(_flset);
+
+    FreePpv((void **)&_hms);
+
+    _mutx.Leave();
+}
+
+/***************************************************************************
+    Create a new OMS.
+***************************************************************************/
+POMS OMS::PomsNew(PFNMIDI pfn, uintptr_t luUser)
+{
+    POMS poms;
+
+    if (pvNil == (poms = NewObj OMS(pfn, luUser)))
+        return pvNil;
+
+    if (!poms->_FInit())
+        ReleasePpo(&poms);
+
+    return poms;
+}
+
+/***************************************************************************
+    Initialize the OMS.
+***************************************************************************/
+bool OMS::_FInit(void)
+{
+    AssertBaseThis(0);
+
+    if (pvNil == (_pglmsb = GL::PglNew(SIZEOF(MSB))))
+        return fFalse;
+    _pglmsb->SetMinGrow(1);
+
+    _hevtmutx = SDL_CreateMutex();
+    _hevt = SDL_CreateCond();
+    _mutx.Enter();
+    _hth = SDL_CreateThread(OMS::_ThreadProc, "sdl-midi-event", this);
+    _hthr = SDL_CreateThread(OMS::_ThreadProcRender, "sdl-midi-render", this);
+
+    // Create the stream and start playing it
+    _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
+    //AssertPo(_pastream, 0);
+    AssertDo(_pastream->FPlay(), "Could not play");
+
+LFail:
+    _mutx.Leave();
+
+    return fTrue;
+}
+
+#ifdef DEBUG
+/***************************************************************************
+    Assert the validity of a OMS.
+***************************************************************************/
+void OMS::AssertValid(uint32_t grf)
+{
+    OMS_PAR::AssertValid(0);
+
+    _mutx.Enter();
+    Assert(hNil != _hth, "nil thread");
+    Assert(hNil != _hevt, "nil event");
+    AssertPo(_pglmsb, 0);
+    _mutx.Leave();
+}
+
+/***************************************************************************
+    Mark memory for the OMS.
+***************************************************************************/
+void OMS::MarkMem(void)
+{
+    AssertValid(0);
+    OMS_PAR::MarkMem();
+
+    _mutx.Enter();
+    MarkMemObj(_pglmsb);
+    _mutx.Leave();
+}
+#endif // DEBUG
+
+/***************************************************************************
+    Open the stream.
+***************************************************************************/
+bool OMS::_FOpen(void)
+{
+    AssertThis(0);
+
+    _mutx.Enter();
+    fprintf(stderr, "OMS open\n");
+    if (hNil != _hms)
+        goto LDone;
+
+    _fChanged = _fStop = fFalse;
+    if (!FAllocPv((void **)&_hms, SIZEOF(MS), fmemClear, mprNormal))
+        goto LDone;
+
+    _hms->_pastream = _pastream;
+    _hms->_flsynth = _flsynth;
+
+    // get the system volume level
+    _GetSysVol();
+
+    // set our volume level
+    _SetSysVlm();
+
+LDone:
+    _mutx.Leave();
+
+    return fTrue;
+}
+
+/***************************************************************************
+    Close the stream.
+***************************************************************************/
+bool OMS::_FClose(void)
+{
+    AssertThis(0);
+
+    fprintf(stderr, "OMS close\n");
+
+    _mutx.Enter();
+
+    if (hNil == _hms)
+    {
+        _mutx.Leave();
+        return fTrue;
+    }
+
+    if (_pglmsb->IvMac() > 0)
+    {
+        Bug("closing a stream that still has buffers!");
+        _mutx.Leave();
+        return fFalse;
+    }
+
+    // reset the device
+    _Reset();
+
+    // restore the volume level
+    _SetSysVol(_luVolSys);
+
+    //midiOutClose(_hms);
+    _hms = hNil;
+
+    _mutx.Leave();
+
+    return fTrue;
+}
+
+/***************************************************************************
+    Reset the midi device.
+***************************************************************************/
+void OMS::_Reset(void)
+{
+    Assert(hNil != _hms, 0);
+
+    fluid_synth_all_notes_off(_hms->_flsynth, -1);
+    //_hms->_pastream->FStop();
+}
+
+/***************************************************************************
+    Get the system volume level.
+***************************************************************************/
+void OMS::_GetSysVol(void)
+{
+    Assert(hNil != _hms, "calling _GetSysVol with nil _hms");
+    //PMiniaudioStream _pastream = (PMiniaudioStream)_hms;
+
+    // FIXME: why does this not work?
+    //_luVolSys = _hms->_pastream->GetVlm();
+}
+
+/***************************************************************************
+    Set the system volume level.
+***************************************************************************/
+void OMS::_SetSysVol(uint32_t luVol)
+{
+    Assert(hNil != _hms, "calling _SetSysVol with nil _hms");
+    //PMiniaudioStream _pastream = (PMiniaudioStream)_hms;
+
+    _hms->_pastream->SetVlm(luVol);
+}
+
+/***************************************************************************
+    Set the volume for the midi stream output device.
+***************************************************************************/
+void OMS::SetVlm(int32_t vlm)
+{
+    AssertThis(0);
+
+    if (vlm != _vlmBase)
+    {
+        _vlmBase = vlm;
+        if (hNil != _hms)
+            _SetSysVlm();
+    }
+}
+
+/***************************************************************************
+    Queue a buffer to the midi stream.
+***************************************************************************/
+bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData)
+{
+    AssertThis(0);
+    AssertPvCb(pvData, cb);
+    AssertIn(ibStart, 0, cb);
+    Assert(cb % SIZEOF(MEV) == 0, "bad cb");
+    Assert(ibStart % SIZEOF(MEV) == 0, "bad cb");
+
+    MSB msb;
+
+    _mutx.Enter();
+
+    if (hNil == _hms)
+        goto LFail;
+
+    msb.pvData = pvData;
+    msb.cb = cb;
+    msb.ibStart = ibStart;
+    msb.cactPlay = cactPlay;
+    msb.luData = luData;
+
+    if (!_pglmsb->FAdd(&msb))
+    {
+    LFail:
+        _mutx.Leave();
+        return fFalse;
+    }
+
+    if (1 == _pglmsb->IvMac())
+    {
+        // Start the buffer
+        fprintf(stderr, "OMS::FQueue signal\n");
+        _fChanged = fTrue;
+        SDL_CondSignal(_hevt);
+    }
+
+    _mutx.Leave();
+
+    return fTrue;
+}
+
+/***************************************************************************
+    Stop the stream and release all buffers. The buffer notifies are
+    asynchronous.
+***************************************************************************/
+void OMS::StopPlaying(void)
+{
+    AssertThis(0);
+
+    _mutx.Enter();
+
+    if (hNil != _hms)
+    {
+        _fStop = fTrue;
+        //SetEvent(_hevt);
+        SDL_CondSignal(_hevt);
+        _fChanged = fTrue;
+    }
+
+    _mutx.Leave();
+}
+
+/***************************************************************************
+    AT: Static method. Thread function for the midi stream object.
+***************************************************************************/
+int OMS::_ThreadProc(void *pv)
+{
+    POMS poms = (POMS)pv;
+
+    AssertPo(poms, 0);
+
+    return poms->_LuThread();
+}
+
+/***************************************************************************
+    AT: The midi stream playback thread.
+***************************************************************************/
+uint32_t OMS::_LuThread(void)
+{
+    AssertThis(0);
+    MSB msb;
+    bool fChanged; // whether the event went off
+    uint32_t tsCur;
+    const int32_t klwInfinite = klwMax;
+    int32_t dtsWait = klwInfinite;
+
+    for (;;)
+    {
+        fprintf(stderr, "<<<< OMS::_LuThread before condwait: dtsWait is %d\n", dtsWait);
+        SDL_LockMutex(_hevtmutx);
+        if (!_fChanged) {
+            fChanged =
+                dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait);
+        }
+        else
+        {
+            fChanged = true;
+        }
+        SDL_UnlockMutex(_hevtmutx);
+        fprintf(stderr, ">>>> OMS::_LuThread after condwait: fChanged is %d, dtsWait is %d\n", fChanged, dtsWait);
+
+        if (_fDone)
+            return 0;
+
+        _mutx.Enter();
+        if (_fChanged && !fChanged)
+        {
+            // the event went off before we got the mutx.
+            dtsWait = klwInfinite;
+            goto LLoop;
+        }
+
+        _fChanged = fFalse;
+        if (!fChanged)
+        {
+            // play the event
+            if (_pmev < _pmevLim)
+            {
+                fprintf(stderr, "--> PROC MIDI EVENT\n");
+
+                if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24)) {
+
+                switch (_pmev->dwEvent & 0xf0)
+                {
+                    case 0x80: /* Note off */
+                        fluid_synth_noteoff(_flsynth, _pmev->dwEvent & 0xf,
+                                            (_pmev->dwEvent & 0x7f00) >> 8);
+                        break;
+
+                    case 0x90: /* Note on */
+                        fluid_synth_noteon(_flsynth,
+                                           _pmev->dwEvent & 0xf,
+                                           (_pmev->dwEvent & 0x7f00) >> 8,
+                                           (_pmev->dwEvent & 0x7f0000) >> 16);
+                        break;
+
+                    case 0xb0: /* Control change */
+                        fluid_synth_cc(_flsynth,
+                                       _pmev->dwEvent & 0xf,
+                                       (_pmev->dwEvent & 0x7f00) >> 8,
+                                       (_pmev->dwEvent & 0x7f0000) >> 16);
+                        break;
+
+                    case 0xc0: /* Program change */
+                        fluid_synth_program_change(_flsynth,
+                                                   _pmev->dwEvent & 0xf,
+                                                   (_pmev->dwEvent & 0x7f00) >> 8);
+                        break;
+
+                    case 0xd0: /* Channel pressure */
+                        fluid_synth_channel_pressure(_flsynth,
+                                                     _pmev->dwEvent & 0xf,
+                                                     (_pmev->dwEvent & 0x7f00) >> 8);
+                        break;
+
+                    case 0xe0: /* Pitch wheel */
+                        fluid_synth_pitch_bend(_flsynth,
+                                               _pmev->dwEvent & 0xf,
+                                               ((_pmev->dwEvent & 0x7f00) >> 8) |
+                                               ((_pmev->dwEvent & 0x7f0000) >> 9));
+                        break;
+                }
+
+                }
+                //if (MEVT_SHORTMSG == (_pmev->dwEvent >> 24))
+                //    fprintf(stderr, "#### key 0x%x  status 0x%x\n", _pmev->dwEvent, _pmev->dwEvent & 0xf0);
+
+                _pmev++;
+                if (_pmev >= _pmevLim)
+                {
+                    dtsWait = 0;
+                    fprintf(stderr, " >>> dtsWait 0.1\n");
+                }
+                else
+                {
+                    uint32_t tsNew = TsCurrentSystem();
+
+                    tsCur += _pmev->dwDeltaTime;
+                    dtsWait = tsCur - tsNew;
+                    if (dtsWait < -kdtsMinSlip)
+                    {
+                        tsCur = tsNew;
+                        dtsWait = 0;
+                        fprintf(stderr, " >>> dtsWait 0.2\n");
+                    }
+                }
+                goto LLoop;
+            }
+
+            // ran out of events in the current buffer - see if we should
+            // repeat it
+            _pglmsb->Get(0, &msb);
+            if (msb.cactPlay == 1)
+            {
+                _imsbCur = 1;
+                _ReleaseBuffers();
+            }
+            else
+            {
+                // repeat the current buffer
+                if (msb.cactPlay > 0)
+                    msb.cactPlay--;
+                msb.ibStart = 0;
+                _pglmsb->Put(0, &msb);
+            }
+        }
+        else if (_fStop)
+        {
+            // release all buffers
+            _fStop = fFalse;
+            _imsbCur = _pglmsb->IvMac();
+            _ReleaseBuffers();
+        }
+
+        if (0 == _pglmsb->IvMac())
+        {
+            // no buffers to play
+            dtsWait = klwInfinite;
+            //_hms->_pastream->FStop();
+        }
+        else
+        {
+            //_hms->_pastream->FPlay();
+            // start playing the new buffers
+            _pglmsb->Get(0, &msb);
+            _pmev = (PMEV)PvAddBv(msb.pvData, msb.ibStart);
+            _pmevLim = (PMEV)PvAddBv(msb.pvData, msb.cb);
+            if (_pmev >= _pmevLim)
+            {
+                dtsWait = 0;
+                fprintf(stderr, " >>> dtsWait 0.3\n");
+            }
+            else
+            {
+                dtsWait = _pmev->dwDeltaTime;
+                tsCur = TsCurrentSystem() + dtsWait;
+                fprintf(stderr, " >>> dtsWait 0.4 tsCur %d, dtsWait %d\n", tsCur, dtsWait);
+            }
+        }
+    LLoop:
+        _mutx.Leave();
+    }
+}
+
+/***************************************************************************
+    AT: Static method. Thread function for the midi event renderer.
+***************************************************************************/
+int OMS::_ThreadProcRender(void *pv)
+{
+    POMS poms = (POMS)pv;
+
+    AssertPo(poms, 0);
+
+    return poms->_LuRenderThread();
+}
+
+/***************************************************************************
+    AT: The midi stream playback thread.
+***************************************************************************/
+uint32_t OMS::_LuRenderThread(void)
+{
+    float *flFrame = pvNil;
+
+    if (!FAllocPv((void **)&flFrame, SIZEOF(float) * _flframecount * 2, fmemClear, mprNormal))
+        goto LFail;
+
+    fprintf(stderr, "##### START RENDER THREAD\n");
+    fprintf(stderr, ">>> APS is %d\n", _flframecount);
+
+    SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
+
+    for (;;)
+    {
+        SDL_Event event;
+
+        while (_pastream->FGetPendingFrames() < 8192)
+        {
+            if (_fDone)
+            {
+                fprintf(stderr, "##### FINISH\n");
+                return 0;
+            }
+
+            if (!_fStop)
+            {
+                fluid_synth_write_float(_flsynth, _flframecount,
+                                        flFrame, 0, 2,
+                                        flFrame, 1, 2);
+
+                //AssertDo(_pastream->FWriteAudio(rgframe, _flframecount), "Could not write all of the noise");
+                //fprintf(stderr, "  -> call with flframecount is %d\n", _flframecount);
+                _pastream->FWriteAudio(flFrame, _flframecount);
+            }
+        }
+
+        if (_fDone)
+        {
+            SDL_CondSignal(_hevt);
+        }
+
+        SDL_Delay(5);
+    }
+
+LFail:
+    FreePpv((void **)flFrame);
+
+    return 0;
+}
+
+/***************************************************************************
+    Release all buffers up to _imsbCur. Assumes that we have the mutx
+    checked out exactly once.
+***************************************************************************/
+void OMS::_ReleaseBuffers(void)
+{
+    MSB msb;
+
+    if (_imsbCur >= _pglmsb->IvMac() && hNil != _hms)
+        _Reset();
+
+    while (_imsbCur > 0)
+    {
+        _pglmsb->Get(0, &msb);
+        _pglmsb->Delete(0);
+        _imsbCur--;
+
+        _mutx.Leave();
+
+        // call the notify proc
+        //(*_pfnCall)(_luUser, msb.pvData, msb.luData);
+
+        _mutx.Enter();
+    }
+}

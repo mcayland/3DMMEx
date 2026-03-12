@@ -319,6 +319,7 @@ if(3DMM_GUI STREQUAL "SDL")
         "${PROJECT_SOURCE_DIR}/kauai/src/sndmastream.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/sndmasound.cpp"
         "${PROJECT_SOURCE_DIR}/kauai/src/sndmadevice.cpp"
+        "${PROJECT_SOURCE_DIR}/kauai/src/midistreamfluidsynth.cpp"
     )
     target_link_libraries(
         KauaiSound
