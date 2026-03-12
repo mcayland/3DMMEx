@@ -27,6 +27,11 @@ OMS::OMS(PFNMIDI pfn, uintptr_t luUser)
     char buf[256];
     int id, ret;
 
+    _pfnCall = pfn;
+    _luUser = luUser;
+    _luVolSys = (uint32_t)(-1);
+    _vlmBase = kvlmFull;
+
     _flset = new_fluid_settings();
     Assert(_flset != pvNil, "failed to create fluidsynth settings");
     fluid_settings_setnum(_flset, "synth.sample-rate", pdevice->sampleRate);
@@ -273,6 +278,19 @@ void OMS::_SetSysVol(uint32_t luVol)
 }
 
 /***************************************************************************
+    Set the system volume level from the current values of _vlmBase
+    and _luVolSys. We set the system volume to the result of scaling
+    _luVolSys by _vlmBase.
+***************************************************************************/
+void OMS::_SetSysVlm(void)
+{
+    uint32_t luVol;
+
+    luVol = LuVolScale(_luVolSys, _vlmBase);
+    _SetSysVol(luVol);
+}
+
+/***************************************************************************
     Set the volume for the midi stream output device.
 ***************************************************************************/
 void OMS::SetVlm(int32_t vlm)
@@ -285,6 +303,34 @@ void OMS::SetVlm(int32_t vlm)
         if (hNil != _hms)
             _SetSysVlm();
     }
+}
+
+/***************************************************************************
+    Get the current volume.
+***************************************************************************/
+int32_t OMS::VlmCur(void)
+{
+    AssertThis(0);
+
+    return _vlmBase;
+}
+
+/***************************************************************************
+    Return whether the midi stream output device is active.
+***************************************************************************/
+bool OMS::FActive(void)
+{
+    return hNil != _hms;
+}
+
+/***************************************************************************
+    Activate or deactivate the Midi stream output object.
+***************************************************************************/
+bool OMS::FActivate(bool fActivate)
+{
+    AssertThis(0);
+
+    return fActivate ? _FOpen() : _FClose();
 }
 
 /***************************************************************************
@@ -619,7 +665,7 @@ void OMS::_ReleaseBuffers(void)
         _mutx.Leave();
 
         // call the notify proc
-        //(*_pfnCall)(_luUser, msb.pvData, msb.luData);
+        (*_pfnCall)(_luUser, msb.pvData, msb.luData);
 
         _mutx.Enter();
     }

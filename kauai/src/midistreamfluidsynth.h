@@ -46,6 +46,8 @@ class OMS : public OMS_PAR
     };
     typedef MS *HMS;
 
+    PFNMIDI _pfnCall;  // call back function
+    uintptr_t _luUser; // user data to send back
     HMS _hms;
     
     MUTX _mutx;
