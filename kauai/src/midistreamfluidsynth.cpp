@@ -77,17 +77,21 @@ OMS::~OMS(void)
 {
     int is;
 
-    if (hNil != _hth)
+    if (_hth.joinable())
     {
         _fDone = fTrue;
-        SDL_CondSignal(_hevt);
-        SDL_WaitThread(_hth, &is);
+        _hevt.Set();
+        // FIXME: MCA: what to do here?
+        _hth.join();
+        //SDL_WaitThread(_hth, &is);
     }
 
     _mutx.Enter();
 
-    if (hNil != _hthr)
-        SDL_WaitThread(_hthr, &is);
+    if (_hthr.joinable())
+    {
+        _hthr.join();
+    }
 
     Assert(_hms == hNil, "Still have an HMS");
     Assert(_pglmsb->IvMac() == 0, "Still have some buffers");
@@ -128,11 +132,10 @@ bool OMS::_FInit(void)
         return fFalse;
     _pglmsb->SetMinGrow(1);
 
-    _hevtmutx = SDL_CreateMutex();
-    _hevt = SDL_CreateCond();
     _mutx.Enter();
-    _hth = SDL_CreateThread(OMS::_ThreadProc, "sdl-midi-event", this);
-    _hthr = SDL_CreateThread(OMS::_ThreadProcRender, "sdl-midi-render", this);
+
+    _hth = std::thread([this] { return this->_LuThread(); });
+    _hthr = std::thread([this] { return this->_LuRenderThread(); });
 
     // Create the stream and start playing it
     _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
@@ -154,8 +157,8 @@ void OMS::AssertValid(uint32_t grf)
     OMS_PAR::AssertValid(0);
 
     _mutx.Enter();
-    Assert(hNil != _hth, "nil thread");
-    Assert(hNil != _hevt, "nil event");
+    //Assert(hNil != _hth, "nil thread");
+    //Assert(hNil != _hevt, "nil event");
     AssertPo(_pglmsb, 0);
     _mutx.Leave();
 }
@@ -369,7 +372,7 @@ bool OMS::FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPl
         // Start the buffer
         fprintf(stderr, "OMS::FQueue signal\n");
         _fChanged = fTrue;
-        SDL_CondSignal(_hevt);
+        _hevt.Set();
     }
 
     _mutx.Leave();
@@ -390,8 +393,7 @@ void OMS::StopPlaying(void)
     if (hNil != _hms)
     {
         _fStop = fTrue;
-        //SetEvent(_hevt);
-        SDL_CondSignal(_hevt);
+        _hevt.Set();
         _fChanged = fTrue;
     }
 
@@ -425,16 +427,7 @@ uint32_t OMS::_LuThread(void)
     for (;;)
     {
         fprintf(stderr, "<<<< OMS::_LuThread before condwait: dtsWait is %d\n", dtsWait);
-        SDL_LockMutex(_hevtmutx);
-        if (!_fChanged) {
-            fChanged =
-                dtsWait > 0 && SDL_MUTEX_TIMEDOUT != SDL_CondWaitTimeout(_hevt, _hevtmutx, dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait);
-        }
-        else
-        {
-            fChanged = true;
-        }
-        SDL_UnlockMutex(_hevtmutx);
+        fChanged = (dtsWait > 0 && _hevt.Wait(dtsWait == klwInfinite ? SDL_MUTEX_MAXWAIT : dtsWait));
         fprintf(stderr, ">>>> OMS::_LuThread after condwait: fChanged is %d, dtsWait is %d\n", fChanged, dtsWait);
 
         if (_fDone)
@@ -633,7 +626,7 @@ uint32_t OMS::_LuRenderThread(void)
 
         if (_fDone)
         {
-            SDL_CondSignal(_hevt);
+            _hevt.Set();
         }
 
         SDL_Delay(5);

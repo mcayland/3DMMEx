@@ -56,10 +56,14 @@ class OMS : public OMS_PAR
     std::thread _hevt; // event to notify the thread that the stream data has changed
     std::thread _hth;  // thread to play the stream data
 #else
-    SDL_cond *_hevt;   // event to notify the thread that the stream data has changed
-    SDL_mutex *_hevtmutx;
-    SDL_Thread *_hth;  // thread to play the midi events
-    SDL_Thread *_hthr; // thread to render audio samples
+    //SDL_cond *_hevt;   // event to notify the thread that the stream data has changed
+    //SDL_mutex *_hevtmutx;
+    //SDL_Thread *_hth;  // thread to play the midi events
+    //SDL_Thread *_hthr; // thread to render audio samples
+
+    Signal _hevt;
+    std::thread _hth;
+    std::thread _hthr;
 
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
