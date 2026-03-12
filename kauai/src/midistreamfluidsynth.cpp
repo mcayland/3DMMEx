@@ -168,11 +168,12 @@ void OMS::AssertValid(uint32_t grf)
 ***************************************************************************/
 void OMS::MarkMem(void)
 {
-    AssertValid(0);
     OMS_PAR::MarkMem();
 
     _mutx.Enter();
     MarkMemObj(_pglmsb);
+    MarkMemObj(_pastream);
+    MarkPv(_hms);
     _mutx.Leave();
 }
 #endif // DEBUG
