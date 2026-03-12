@@ -1,0 +1,111 @@
+/* Copyright (c) Microsoft Corporation.
+   Licensed under the MIT License. */
+
+/***************************************************************************
+    Author: ShonK, Mark Cave-Ayland
+    Project: Kauai
+    Reviewed:
+    Copyright (c) Microsoft Corporation
+
+    MIDI stream interface: POSIX
+
+***************************************************************************/
+#ifndef MIDISTREAMPOSIX_H
+#define MIDISTREAMPOSIX_H
+
+#include <fluidsynth.h>
+#include <sndma.h>
+
+/***************************************************************************
+    Our fake midi stream class.
+***************************************************************************/
+typedef class OMS *POMS;
+#define OMS_PAR MISI
+#define kclsOMS KLCONST3('O', 'M', 'S')
+class OMS : public OMS_PAR
+{
+    RTCLASS_DEC
+    ASSERT
+    MARKMEM
+
+  protected:
+    struct MSB
+    {
+        void *pvData;
+        int32_t cb;
+        int32_t ibStart;
+        int32_t cactPlay;
+
+        uintptr_t luData;
+    };
+
+    struct MS
+    {
+        fluid_synth_t *_flsynth;
+        PMiniaudioStream _pastream;
+    };
+    typedef MS *HMS;
+
+    PFNMIDI _pfnCall;  // call back function
+    uintptr_t _luUser; // user data to send back
+    HMS _hms;
+
+    MUTX _mutx;
+
+    Signal _hevt;
+    std::thread _hth;
+    std::thread _hthr;
+
+    fluid_settings_t *_flset;
+    fluid_synth_t *_flsynth;
+    fluid_audio_driver_t *_fldriver;
+    int _flframecount;
+
+    PMiniaudioStream _pastream;
+
+    uint32_t _luVolSys;
+    int32_t _vlmBase; // our current volume relative to _luVolSys.
+
+    std::atomic<bool> _fChanged; // the event has been signalled
+    std::atomic<bool> _fStop;    // tells the aux thread to stop all buffers
+    std::atomic<bool> _fDone;    // tells the aux thread to return
+
+    int32_t _imsbCur;
+    PGL _pglmsb;
+    PMEV _pmev;
+    PMEV _pmevLim;
+    uint32_t _tsCur;
+
+    OMS(PFNMIDI pfn, uintptr_t luUser);
+    bool _FInit(void);
+
+    virtual bool _FOpen(void);
+    virtual bool _FClose(void);
+
+    void _Reset(void);
+    void _GetSysVol(void);
+    void _SetSysVol(uint32_t luVol);
+    void _SetSysVlm(void);
+
+    static int _ThreadProc(void *pv);
+    uint32_t _LuThread(void);
+    static int _ThreadProcRender(void *pv);
+    uint32_t _LuRenderThread(void);
+
+    void _ReleaseBuffers(void);
+
+  public:
+    static POMS PomsNew(PFNMIDI pfn, uintptr_t luUser);
+    ~OMS(void);
+
+    virtual void SetVlm(int32_t vlm);
+    virtual int32_t VlmCur(void);
+
+    virtual bool FActive(void);
+    virtual bool FActivate(bool fActivate);
+
+    virtual bool FQueueBuffer(void *pvData, int32_t cb, int32_t ibStart, int32_t cactPlay, uintptr_t luData) override;
+    virtual void StopPlaying(void) override;
+};
+
+#endif //! MIDISTREAMPOSIX_H
