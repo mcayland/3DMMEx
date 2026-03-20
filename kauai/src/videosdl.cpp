@@ -266,7 +266,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
     _desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
       " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
-      " u. ! audioconvert ! audioresample ! autoaudiosink", uri);
+      " u. ! audioconvert ! audioresample ! appsink name=asink", uri);
     fprintf(stderr, "file is %s\n", uri);
     fprintf(stderr, "desc is %s\n", _desc);
 
