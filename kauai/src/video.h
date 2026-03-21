@@ -13,8 +13,17 @@
 #define VIDEO_H
 
 #ifndef KAUAI_WIN32
+#include <thread>
+
 #include <gst/gst.h>
 #include <glib.h>
+
+typedef struct NSCB
+{
+    Signal hevt;
+    GstSample *sample;
+} NSCB;
+
 #endif
 
 /***************************************************************************
@@ -189,12 +198,13 @@ class GVDW : public GVDW_PAR
     
     gchar *_desc;
     GstElement *_pipeline;
-    SDL_Thread *_hth;
+    std::thread _hth;
     SDL_Renderer *_rdr;
     SDL_Texture *_texture;
     int32_t _framems;
 
-    static int _ThreadProc(void *pv);
+    NSCB _nscbvid;
+
     uint32_t _LuThread(void);
 #endif
 

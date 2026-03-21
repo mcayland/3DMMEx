@@ -11,7 +11,11 @@
 
 #include "frame.h"
 
+#include <thread>
+
 #include <gst/gst.h>
+#include <gst/app/gstappsink.h>
+
 #include <glib.h>
 #include <SDL2/SDL.h>
 
@@ -25,6 +29,7 @@ BEGIN_CMD_MAP_BASE(GVDS)
 END_CMD_MAP(&GVDS::FCmdAll, pvNil, kgrfcmmAll)
 
 const int32_t kcmhlGvds = kswMin; // put videos at the head of the list
+
 
 PGVID GVID::PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased, int32_t hid)
 {
@@ -220,11 +225,13 @@ GVDW::GVDW(int32_t hid) : GVDW_PAR(hid)
 
 GVDW::~GVDW(void)
 {
-    int status;
-    
     AssertBaseThis(0);
-    _fDone = fTrue;
-    SDL_WaitThread(_hth, &status);
+
+    if (_hth.joinable())
+    {
+        _fDone = fTrue;
+        _hth.join();
+    }
     SDL_DestroyRenderer(_rdr);
     SDL_DestroyWindow(_hwndMovie);
 }
@@ -264,9 +271,11 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     gst_init(NULL, NULL);
 
     uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
+    //_desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
+    //  " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
+    //  " u. ! audioconvert ! audioresample ! appsink name=asink", uri);
     _desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
-      " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
-      " u. ! audioconvert ! audioresample ! appsink name=asink", uri);
+      " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" , uri);
     fprintf(stderr, "file is %s\n", uri);
     fprintf(stderr, "desc is %s\n", _desc);
 
@@ -316,7 +325,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     _nfrMac = duration;
 
     /* Create surface */
-    pgobBase->GetRcVis(&rc, cooGlobal);
+    _pgobBase->GetRcVis(&rc, cooGlobal);
 
     _hwndMovie = SDL_CreateWindow("movie", rc.xpLeft, rc.ypTop,
                                   _dxp, _dyp,
@@ -327,22 +336,20 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     _texture = SDL_CreateTexture(_rdr, SDL_PIXELFORMAT_RGB24,
                                  SDL_TEXTUREACCESS_STATIC, _dxp, _dyp);
 
-   _hth = SDL_CreateThread(GVDW::_ThreadProc, "sdl-video-render", this);
+    _hth = std::thread([this] { return this->_LuThread(); });
+
+    return fTrue;
 
 LFail:
-    return fTrue;
+    return fFalse;
 }
 
-/***************************************************************************
-    AT: Static method. Thread function for the video stream object.
-***************************************************************************/
-int GVDW::_ThreadProc(void *pv)
+static void
+new_video_sample(GstAppSink *vsink, NSCB *nscb)
 {
-    PGVDW gdvw = (PGVDW)pv;
-
-    AssertPo(gdvw, 0);
-
-    return gdvw->_LuThread();
+    /* Signal video render thread */
+    nscb->sample = gst_app_sink_pull_sample(vsink);
+    nscb->hevt.Set();
 }
 
 /***************************************************************************
@@ -352,16 +359,22 @@ uint32_t GVDW::_LuThread(void)
 {
     AssertThis(0);
 
-    GstElement *sink;
+    GstElement *vsink;
     GError *error = NULL;
 
     // GST_DEBUG=3,appsink:6
     _pipeline = gst_parse_launch(_desc, &error);
 
-    sink = gst_bin_get_by_name(GST_BIN(_pipeline), "vsink");
+    vsink = gst_bin_get_by_name(GST_BIN(_pipeline), "vsink");
+    g_object_set(G_OBJECT(vsink), "emit-signals", TRUE, NULL);
+    g_signal_connect(vsink, "new-sample", G_CALLBACK(new_video_sample), &_nscbvid);
+
+    gst_element_set_state(_pipeline, GST_STATE_PLAYING);
 
     for (;;)
     {
+        _nscbvid.hevt.Wait(0xffffff);
+
         if (_fDone)
             break;
 
@@ -370,35 +383,28 @@ uint32_t GVDW::_LuThread(void)
             GstBuffer *buffer;
             GstSample *sample;
             GstMapInfo map;
-            SDL_Rect rect;
 
             fprintf(stderr, "VIDEO THREAD\n");
 
-            /* get the preroll buffer from appsink */
-            gst_element_set_state(_pipeline, GST_STATE_PAUSED);
-            g_signal_emit_by_name(sink, "pull-preroll", &sample, NULL);
-            
-            if (sample != NULL)
+            if (_nscbvid.sample != NULL)
             {
-                gst_element_set_state(_pipeline, GST_STATE_PLAYING);
-
-                buffer = gst_sample_get_buffer(sample);
+                buffer = gst_sample_get_buffer(_nscbvid.sample);
                 if (gst_buffer_map(buffer, &map, GST_MAP_READ))
                 {
                     /* update the texture with the mapped buffer */
-                    SDL_UpdateTexture(_texture, &rect, map.data, _dxp * 3);
+                    SDL_UpdateTexture(_texture, NULL, map.data, _dxp * 3);
                     SDL_RenderCopy(_rdr, _texture, NULL, NULL);
                     SDL_RenderPresent(_rdr);
                     gst_buffer_unmap(buffer, &map);
                 }
-                gst_sample_unref(sample);
+                gst_sample_unref(_nscbvid.sample);
             }
             else
             {
                 _fPlaying = fFalse;
             }
 
-            SDL_Delay(_framems);
+            //SDL_Delay(_framems);
         }
         else
         {
