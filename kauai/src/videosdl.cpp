@@ -266,16 +266,24 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     int wy;
     int res;
     RC rc;
+    ma_device *pdevice;
 
     _pgobBase = pgobBase;
     pfni->GetStnPath(&stnPath);
 
     gst_init(NULL, NULL);
 
+    pdevice = MiniaudioManager::Pmanager()->Pengine()->pDevice;
+
+    // Check the output format is correct
+    Assert(pdevice->playback.format == ma_format_f32, "expected f32 format");
+    Assert(pdevice->playback.channels == 2, "expected stereo");
+
     uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
     _desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
       " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
-      " u. ! audioconvert ! audioresample ! appsink name=asink caps=\"audio/x-raw,format=F32LE,rate=48000,channels=2,layout=interleaved\"", uri);
+      " u. ! audioconvert ! audioresample ! appsink name=asink caps=\"audio/x-raw,format=F32LE,rate=%d,channels=%d,layout=interleaved\"",
+      uri, pdevice->playback.converter.sampleRateOut, pdevice->playback.channels);
     fprintf(stderr, "file is %s\n", uri);
     fprintf(stderr, "desc is %s\n", _desc);
 
