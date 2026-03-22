@@ -444,11 +444,9 @@ uint32_t GVDW::_LuThread(void)
                 _nscb.asample = NULL;
             }
 
-            if (gst_app_sink_is_eos(GST_APP_SINK_CAST(vsink)) ||
+            if (gst_app_sink_is_eos(GST_APP_SINK_CAST(vsink)) &&
                 gst_app_sink_is_eos(GST_APP_SINK_CAST(asink)))
             {
-                _nscb.asample = NULL;
-                _nscb.vsample = NULL;
                 gst_element_set_state(_pipeline, GST_STATE_PAUSED);
                 _fPlaying = fFalse;
             }
