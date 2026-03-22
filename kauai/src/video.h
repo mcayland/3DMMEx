@@ -18,10 +18,13 @@
 #include <gst/gst.h>
 #include <glib.h>
 
+#include "sndma.h"
+
 typedef struct NSCB
 {
     Signal hevt;
-    GstSample *sample;
+    GstSample *vsample;
+    GstSample *asample;
 } NSCB;
 
 #endif
@@ -177,6 +180,7 @@ class GVDW : public GVDW_PAR
 {
     RTCLASS_DEC
     ASSERT
+    MARKMEM
 
   protected:
     KWND _hwndMovie;
@@ -203,7 +207,9 @@ class GVDW : public GVDW_PAR
     SDL_Texture *_texture;
     int32_t _framems;
 
-    NSCB _nscbvid;
+    PMiniaudioStream _pastream;
+    
+    NSCB _nscb;
 
     uint32_t _LuThread(void);
 #endif

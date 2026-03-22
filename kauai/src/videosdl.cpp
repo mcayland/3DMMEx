@@ -232,6 +232,7 @@ GVDW::~GVDW(void)
         _fDone = fTrue;
         _hth.join();
     }
+    ReleasePpo(&_pastream);
     SDL_DestroyRenderer(_rdr);
     SDL_DestroyWindow(_hwndMovie);
 }
@@ -271,11 +272,9 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     gst_init(NULL, NULL);
 
     uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
-    //_desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
-    //  " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
-    //  " u. ! audioconvert ! audioresample ! appsink name=asink", uri);
     _desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
-      " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" , uri);
+      " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
+      " u. ! audioconvert ! audioresample ! appsink name=asink caps=\"audio/x-raw,format=F32LE,rate=48000,channels=2,layout=interleaved\"", uri);
     fprintf(stderr, "file is %s\n", uri);
     fprintf(stderr, "desc is %s\n", _desc);
 
@@ -336,6 +335,11 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     _texture = SDL_CreateTexture(_rdr, SDL_PIXELFORMAT_RGB24,
                                  SDL_TEXTUREACCESS_STATIC, _dxp, _dyp);
 
+    // Create the stream and start playing it
+    _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
+    AssertPo(_pastream, 0);
+    AssertDo(_pastream->FPlay(), "Could not play");
+
     _hth = std::thread([this] { return this->_LuThread(); });
 
     return fTrue;
@@ -348,7 +352,15 @@ static void
 new_video_sample(GstAppSink *vsink, NSCB *nscb)
 {
     /* Signal video render thread */
-    nscb->sample = gst_app_sink_pull_sample(vsink);
+    nscb->vsample = gst_app_sink_pull_sample(vsink);
+    nscb->hevt.Set();
+}
+
+static void
+new_audio_sample(GstAppSink *asink, NSCB *nscb)
+{
+    /* Signal video render thread */
+    nscb->asample = gst_app_sink_pull_sample(asink);
     nscb->hevt.Set();
 }
 
@@ -360,6 +372,7 @@ uint32_t GVDW::_LuThread(void)
     AssertThis(0);
 
     GstElement *vsink;
+    GstElement *asink;
     GError *error = NULL;
 
     // GST_DEBUG=3,appsink:6
@@ -367,28 +380,31 @@ uint32_t GVDW::_LuThread(void)
 
     vsink = gst_bin_get_by_name(GST_BIN(_pipeline), "vsink");
     g_object_set(G_OBJECT(vsink), "emit-signals", TRUE, NULL);
-    g_signal_connect(vsink, "new-sample", G_CALLBACK(new_video_sample), &_nscbvid);
+    g_signal_connect(vsink, "new-sample", G_CALLBACK(new_video_sample), &_nscb);
+    asink = gst_bin_get_by_name(GST_BIN(_pipeline), "asink");
+    g_object_set(G_OBJECT(asink), "emit-signals", TRUE, NULL);
+    g_signal_connect(asink, "new-sample", G_CALLBACK(new_audio_sample), &_nscb);
 
     gst_element_set_state(_pipeline, GST_STATE_PLAYING);
 
     for (;;)
     {
-        _nscbvid.hevt.Wait(0xffffff);
+        _nscb.hevt.Wait(0xffffff);
 
         if (_fDone)
             break;
 
         if (_fPlaying)
         {
-            GstBuffer *buffer;
-            GstSample *sample;
-            GstMapInfo map;
-
-            fprintf(stderr, "VIDEO THREAD\n");
-
-            if (_nscbvid.sample != NULL)
+            if (_nscb.vsample != NULL)
             {
-                buffer = gst_sample_get_buffer(_nscbvid.sample);
+                GstBuffer *buffer;
+                GstSample *sample;
+                GstMapInfo map;
+
+                fprintf(stderr, "VIDEO SAMPLE\n");
+
+                buffer = gst_sample_get_buffer(_nscb.vsample);
                 if (gst_buffer_map(buffer, &map, GST_MAP_READ))
                 {
                     /* update the texture with the mapped buffer */
@@ -397,14 +413,30 @@ uint32_t GVDW::_LuThread(void)
                     SDL_RenderPresent(_rdr);
                     gst_buffer_unmap(buffer, &map);
                 }
-                gst_sample_unref(_nscbvid.sample);
-            }
-            else
-            {
-                _fPlaying = fFalse;
+                gst_sample_unref(_nscb.vsample);
+                _nscb.vsample = NULL;
             }
 
-            //SDL_Delay(_framems);
+            if (_nscb.asample != NULL)
+            {
+                GstBuffer *buffer;
+                GstSample *sample;
+                GstMapInfo map;
+
+                fprintf(stderr, "AUDIO SAMPLE\n");
+                
+                buffer = gst_sample_get_buffer(_nscb.asample);
+                if (gst_buffer_map(buffer, &map, GST_MAP_READ))
+                {
+                    _pastream->FWriteAudio(map.data, map.size / (sizeof(float) * 2));
+                }
+                gst_sample_unref(_nscb.asample);
+                _nscb.asample = NULL;
+            }
+
+            if (gst_app_sink_is_eos(GST_APP_SINK_CAST(vsink)) ||
+                gst_app_sink_is_eos(GST_APP_SINK_CAST(asink)))
+                _fPlaying = fFalse;
         }
         else
         {
@@ -517,5 +549,11 @@ void GVDW::AssertValid(uint32_t grf)
     GVDW_PAR::AssertValid(0);
     Assert(_hwndMovie != hNil, 0);
     AssertPo(_pgobBase, 0);
+}
+
+void GVDW::MarkMem(void)
+{
+    GVDW_PAR::MarkMem();
+    MarkMemObj(_pastream);
 }
 #endif // DEBUG
