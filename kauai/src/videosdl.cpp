@@ -230,10 +230,10 @@ GVDW::~GVDW(void)
     if (_hth.joinable())
     {
         _fDone = fTrue;
-        _pastream->FStop();
         _nscb.hevt.Set();
         _hth.join();
     }
+    _pastream->FStop();
     ReleasePpo(&_pastream);
     SDL_DestroyRenderer(_rdr);
     SDL_DestroyWindow(_hwndMovie);
