@@ -230,6 +230,7 @@ GVDW::~GVDW(void)
     if (_hth.joinable())
     {
         _fDone = fTrue;
+        _nscb.hevt.Set();
         _hth.join();
     }
     ReleasePpo(&_pastream);
