@@ -206,8 +206,6 @@ class GVDW : public GVDW_PAR
     std::thread _hth;
     PGNV _pgnv;
     SDL_Surface *_surface;
-    SDL_Renderer *_rdr;
-    SDL_Texture *_texture;
     int32_t _framems;
 
     PMiniaudioStream _pastream;

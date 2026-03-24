@@ -31,6 +31,7 @@ END_CMD_MAP(&GVDS::FCmdAll, pvNil, kgrfcmmAll)
 
 const int32_t kcmhlGvds = kswMin; // put videos at the head of the list
 
+#define GVDW_LUTHREAD_SLEEP_DELAY 5
 
 PGVID GVID::PgvidNew(PFNI pfni, PGOB pgobBase, bool fHwndBased, int32_t hid)
 {
@@ -236,8 +237,7 @@ GVDW::~GVDW(void)
     }
     _pastream->FStop();
     ReleasePpo(&_pastream);
-    SDL_DestroyRenderer(_rdr);
-    SDL_DestroyWindow(_hwndMovie);
+    SDL_FreeSurface(_surface);
 }
 
 bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
@@ -316,13 +316,6 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
         return fFalse;
     }
     _dyp = gint_val;
-    res = gst_structure_get_fraction(structure, "framerate",
-                                     &frame_n, &frame_d);
-    if (!res)
-    {
-        return fFalse;
-    }
-    _framems = (int32_t)(1000 / (((double)frame_n) / frame_d)); 
 
     /* Determine the total number of frames in the file */
     query = gst_query_new_duration(GST_FORMAT_DEFAULT);
@@ -334,19 +327,8 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     gst_query_parse_duration(query, NULL, &duration);
     _nfrMac = duration;
 
-    _surface = SDL_CreateRGBSurface(0, _dxp, _dyp, 32, 0, 0, 0, 0);
-
     /* Create surface */
-    _pgobBase->GetRcVis(&rc, cooGlobal);
-
-    _hwndMovie = SDL_CreateWindow("movie", rc.xpLeft, rc.ypTop,
-                                  _dxp, _dyp,
-                                  SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN);
-
-    _rdr = SDL_CreateRenderer(_hwndMovie, -1, 0);
-
-    _texture = SDL_CreateTexture(_rdr, SDL_PIXELFORMAT_RGB24,
-                                 SDL_TEXTUREACCESS_STATIC, _dxp, _dyp);
+    _surface = SDL_CreateRGBSurface(0, _dxp, _dyp, 32, 0, 0, 0, 0);
 
     // Create the stream and start playing it
     _pastream = MiniaudioStream::PastreamNew(MiniaudioManager::Pmanager());
@@ -422,12 +404,7 @@ uint32_t GVDW::_LuThread(void)
                 buffer = gst_sample_get_buffer(_nscb.vsample);
                 if (gst_buffer_map(buffer, &map, GST_MAP_READ))
                 {
-#if 0
-                    /* update the texture with the mapped buffer */
-                    SDL_UpdateTexture(_texture, NULL, map.data, _dxp * 3);
-                    SDL_RenderCopy(_rdr, _texture, NULL, NULL);
-                    SDL_RenderPresent(_rdr);
-#endif
+                    /* Update the surface with the mapped buffer */
                     CopyPb(map.data, _surface->pixels, _dxp * 4 * _dyp);
 
                     gnv.DrawSurface(_surface, &_rc);
@@ -462,7 +439,7 @@ uint32_t GVDW::_LuThread(void)
         }
         else
         {
-            SDL_Delay(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(GVDW_LUTHREAD_SLEEP_DELAY));
         }
     }
 
@@ -538,8 +515,6 @@ void GVDW::Draw(PGNV pgnv, RC *prc)
     AssertVarMem(prc);
 
     _SetRc();
-    //_pgnv = pgnv;
-    //_nscb.hevt.Set();
 }
 
 void GVDW::_SetRc(void)
@@ -573,9 +548,7 @@ void GVDW::GetRc(RC *prc)
 void GVDW::AssertValid(uint32_t grf)
 {
     GVDW_PAR::AssertValid(0);
-#if 0
-    Assert(_hwndMovie != hNil, 0);
-#endif
+
     Assert(_surface != hNil, 0);
     AssertPo(_pgobBase, 0);
 }
@@ -583,6 +556,7 @@ void GVDW::AssertValid(uint32_t grf)
 void GVDW::MarkMem(void)
 {
     GVDW_PAR::MarkMem();
+
     MarkMemObj(_pastream);
 }
 #endif // DEBUG
