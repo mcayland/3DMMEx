@@ -18,6 +18,22 @@ const int32_t kcsdlc = 256;
 #define AssertDoSDL(x) AssertDo(0 == (x), SDL_GetError());
 
 /***************************************************************************
+    Draw a surface.
+***************************************************************************/
+void GNV::DrawSurface(SDL_Surface *surface, RC *prc)
+{
+    AssertThis(0);
+    AssertVarMem(prc);
+
+    RCS rcs;
+
+    if (!_FMapRcRcs(prc, &rcs))
+        return;
+
+    _pgpt->DrawSurface(surface, &rcs, &_gdd);
+}
+
+/***************************************************************************
     Static method to flush any pending graphics operations.
 ***************************************************************************/
 void GPT::Flush(void)
@@ -1092,6 +1108,32 @@ void GPT::Flip()
     AssertDoSDL(SDL_RenderClear(_renderer));
     AssertDoSDL(SDL_RenderCopy(_renderer, _texture, NULL, NULL));
     SDL_RenderPresent(_renderer);
+}
+
+/***************************************************************************
+    Draw the surface.
+***************************************************************************/
+void GPT::DrawSurface(SDL_Surface *surface, RCS *prcs, GDD *pgdd)
+{
+    AssertThis(0);
+    AssertVarMem(prcs);
+    AssertVarMem(pgdd);
+
+    SDL_Rect sdlRectClip = *pgdd->prcsClip;
+    SDL_SetClipRect(_surface, &sdlRectClip);
+    SDL_Rect sdlRectSurface;
+
+    sdlRectSurface.x = prcs->xpLeft;
+    sdlRectSurface.y = prcs->ypTop;
+    sdlRectSurface.w = prcs->xpRight - prcs->xpLeft;
+    sdlRectSurface.h = prcs->ypBottom - prcs->ypTop;
+
+    AssertDoSDL(SDL_BlitSurface(surface, &sdlRectSurface, _surface, &sdlRectSurface));
+    AssertDoSDL(SDL_BlitSurface(surface, NULL, _surface, NULL));
+
+    InvalidateTexture();
+    Flip();
+    SDL_SetClipRect(_surface, pvNil);
 }
 
 #ifdef DEBUG

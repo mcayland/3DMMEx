@@ -18,6 +18,7 @@
 #include <gst/gst.h>
 #include <glib.h>
 
+#include "gfx.h"
 #include "sndma.h"
 
 typedef struct NSCB
@@ -203,6 +204,8 @@ class GVDW : public GVDW_PAR
     gchar *_desc;
     GstElement *_pipeline;
     std::thread _hth;
+    PGNV _pgnv;
+    SDL_Surface *_surface;
     SDL_Renderer *_rdr;
     SDL_Texture *_texture;
     int32_t _framems;

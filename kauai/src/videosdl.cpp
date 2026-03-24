@@ -10,6 +10,7 @@
 ***************************************************************************/
 
 #include "frame.h"
+#include "gfx.h"
 
 #include <thread>
 
@@ -282,7 +283,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
 
     uri = g_uri_escape_string(stnPath.Psz(), "/", TRUE);
     _desc = g_strdup_printf("uridecodebin uri=file://%s name=u ! videoconvert ! videoscale !"
-      " appsink name=vsink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"" //, uri);
+      " appsink name=vsink caps=\"video/x-raw,format=BGRA,pixel-aspect-ratio=1/1\"" //, uri);
       " u. ! audioconvert ! audioresample ! appsink name=asink caps=\"audio/x-raw,format=F32LE,rate=%d,channels=%d,layout=interleaved\"",
       uri, pdevice->playback.converter.sampleRateOut, pdevice->playback.channels);
     fprintf(stderr, "file is %s\n", uri);
@@ -333,12 +334,14 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     gst_query_parse_duration(query, NULL, &duration);
     _nfrMac = duration;
 
+    _surface = SDL_CreateRGBSurface(0, _dxp, _dyp, 32, 0, 0, 0, 0);
+
     /* Create surface */
     _pgobBase->GetRcVis(&rc, cooGlobal);
 
     _hwndMovie = SDL_CreateWindow("movie", rc.xpLeft, rc.ypTop,
                                   _dxp, _dyp,
-                                  SDL_WINDOW_BORDERLESS);
+                                  SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN);
 
     _rdr = SDL_CreateRenderer(_hwndMovie, -1, 0);
 
@@ -384,7 +387,12 @@ uint32_t GVDW::_LuThread(void)
     GstElement *vsink;
     GstElement *asink;
     GError *error = NULL;
+    RC rc;
+    PGOB pgobScreen = GOB::PgobScreen();
+    GNV gnv(pgobScreen);
 
+    pgobScreen->GetRc(&rc, cooHwnd);
+    
     // GST_DEBUG=3,appsink:6
     _pipeline = gst_parse_launch(_desc, &error);
 
@@ -399,7 +407,7 @@ uint32_t GVDW::_LuThread(void)
 
     for (;;)
     {
-        _nscb.hevt.Wait(0xffffff);
+        _nscb.hevt.Wait(0xffffffff);
 
         if (_fDone)
             break;
@@ -417,10 +425,15 @@ uint32_t GVDW::_LuThread(void)
                 buffer = gst_sample_get_buffer(_nscb.vsample);
                 if (gst_buffer_map(buffer, &map, GST_MAP_READ))
                 {
+#if 0
                     /* update the texture with the mapped buffer */
                     SDL_UpdateTexture(_texture, NULL, map.data, _dxp * 3);
                     SDL_RenderCopy(_rdr, _texture, NULL, NULL);
                     SDL_RenderPresent(_rdr);
+#endif
+                    CopyPb(map.data, _surface->pixels, _dxp * 4 * _dyp);
+
+                    gnv.DrawSurface(_surface, &rc);
                     gst_buffer_unmap(buffer, &map);
                 }
                 gst_sample_unref(_nscb.vsample);
@@ -447,8 +460,7 @@ uint32_t GVDW::_LuThread(void)
             if (gst_app_sink_is_eos(GST_APP_SINK_CAST(vsink)) &&
                 gst_app_sink_is_eos(GST_APP_SINK_CAST(asink)))
             {
-                gst_element_set_state(_pipeline, GST_STATE_PAUSED);
-                _fPlaying = fFalse;
+                Stop();
             }
         }
         else
@@ -517,6 +529,7 @@ void GVDW::Stop(void)
     if (!_fPlaying)
         return;
 
+    gst_element_set_state(_pipeline, GST_STATE_PAUSED);
     _fPlaying = fFalse;
 }
 
@@ -527,6 +540,8 @@ void GVDW::Draw(PGNV pgnv, RC *prc)
     AssertVarMem(prc);
 
     _SetRc();
+    //_pgnv = pgnv;
+    //_nscb.hevt.Set();
 }
 
 void GVDW::_SetRc(void)
@@ -560,7 +575,10 @@ void GVDW::GetRc(RC *prc)
 void GVDW::AssertValid(uint32_t grf)
 {
     GVDW_PAR::AssertValid(0);
+#if 0
     Assert(_hwndMovie != hNil, 0);
+#endif
+    Assert(_surface != hNil, 0);
     AssertPo(_pgobBase, 0);
 }
 
