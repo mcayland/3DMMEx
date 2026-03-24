@@ -399,8 +399,6 @@ uint32_t GVDW::_LuThread(void)
                 GstSample *sample;
                 GstMapInfo map;
 
-                fprintf(stderr, "VIDEO SAMPLE\n");
-
                 buffer = gst_sample_get_buffer(_nscb.vsample);
                 if (gst_buffer_map(buffer, &map, GST_MAP_READ))
                 {
@@ -420,8 +418,6 @@ uint32_t GVDW::_LuThread(void)
                 GstSample *sample;
                 GstMapInfo map;
 
-                fprintf(stderr, "AUDIO SAMPLE\n");
-                
                 buffer = gst_sample_get_buffer(_nscb.asample);
                 if (gst_buffer_map(buffer, &map, GST_MAP_READ))
                 {
