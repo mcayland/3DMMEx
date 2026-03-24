@@ -387,12 +387,9 @@ uint32_t GVDW::_LuThread(void)
     GstElement *vsink;
     GstElement *asink;
     GError *error = NULL;
-    RC rc;
     PGOB pgobScreen = GOB::PgobScreen();
     GNV gnv(pgobScreen);
 
-    pgobScreen->GetRc(&rc, cooHwnd);
-    
     // GST_DEBUG=3,appsink:6
     _pipeline = gst_parse_launch(_desc, &error);
 
@@ -433,7 +430,7 @@ uint32_t GVDW::_LuThread(void)
 #endif
                     CopyPb(map.data, _surface->pixels, _dxp * 4 * _dyp);
 
-                    gnv.DrawSurface(_surface, &rc);
+                    gnv.DrawSurface(_surface, &_rc);
                     gst_buffer_unmap(buffer, &map);
                 }
                 gst_sample_unref(_nscb.vsample);
@@ -506,6 +503,7 @@ bool GVDW::FPlay(RC *prc)
 
     Stop();
 
+    SetRcPlay(prc);
     _fPlaying = fTrue;
 
     return fTrue;

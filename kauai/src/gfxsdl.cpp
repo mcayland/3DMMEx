@@ -1121,15 +1121,21 @@ void GPT::DrawSurface(SDL_Surface *surface, RCS *prcs, GDD *pgdd)
 
     SDL_Rect sdlRectClip = *pgdd->prcsClip;
     SDL_SetClipRect(_surface, &sdlRectClip);
-    SDL_Rect sdlRectSurface;
+    SDL_Rect sdlRectSrc;
+    SDL_Rect sdlRectDst;
 
-    sdlRectSurface.x = prcs->xpLeft;
-    sdlRectSurface.y = prcs->ypTop;
-    sdlRectSurface.w = prcs->xpRight - prcs->xpLeft;
-    sdlRectSurface.h = prcs->ypBottom - prcs->ypTop;
+    sdlRectSrc.x = 0;
+    sdlRectSrc.y = 0;
+    sdlRectSrc.w = prcs->xpRight - prcs->xpLeft;
+    sdlRectSrc.h = prcs->ypBottom - prcs->ypTop;
 
-    AssertDoSDL(SDL_BlitSurface(surface, &sdlRectSurface, _surface, &sdlRectSurface));
-    AssertDoSDL(SDL_BlitSurface(surface, NULL, _surface, NULL));
+    sdlRectDst.x = prcs->xpLeft;
+    sdlRectDst.y = prcs->ypTop;
+    sdlRectDst.w = prcs->xpRight - prcs->xpLeft;
+    sdlRectDst.h = prcs->ypBottom - prcs->ypTop;
+
+    AssertDoSDL(SDL_BlitSurface(surface, &sdlRectSrc, _surface, &sdlRectDst));
+    //AssertDoSDL(SDL_BlitSurface(surface, NULL, _surface, NULL));
 
     InvalidateTexture();
     Flip();
