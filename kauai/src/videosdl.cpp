@@ -430,7 +430,8 @@ uint32_t GVDW::_LuThread(void)
             if (gst_app_sink_is_eos(GST_APP_SINK_CAST(vsink)) &&
                 gst_app_sink_is_eos(GST_APP_SINK_CAST(asink)))
             {
-                Stop();
+                gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+                _fPlaying = fFalse;
             }
         }
         else
@@ -502,6 +503,7 @@ void GVDW::Stop(void)
 
     gst_element_set_state(_pipeline, GST_STATE_PAUSED);
     _fPlaying = fFalse;
+    _nscb.hevt.Set();
 }
 
 void GVDW::Draw(PGNV pgnv, RC *prc)
