@@ -106,7 +106,10 @@ elseif("${3DMM_GUI}" STREQUAL "SDL")
     # TODO: Find libiniparser if installed
     include(FetchIniParser)
 
-    pkg_check_modules(GST REQUIRED gstreamer-1.0 gstreamer-app-1.0)
+    find_package(PkgConfig QUIET)
+    if (PkgConfig_FOUND)
+        pkg_check_modules(GST REQUIRED gstreamer-1.0 gstreamer-app-1.0)
+    endif()
 
 endif()
 
