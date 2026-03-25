@@ -159,6 +159,13 @@ bool FMS::_FInit(void)
         goto LFail;
     }
 
+    ret = fluid_settings_getint(_flset, "synth.midi-channels", &_flchans);
+    if (ret == FLUID_FAILED)
+    {
+        Bug("failed to get synth.midi-channels");
+        goto LFail;
+    }
+
     // Check the output format is correct
     if (pdevice->playback.format != ma_format_f32)
     {
@@ -284,7 +291,13 @@ void FMS::_Reset(void)
 {
     Assert(_fOpen == fTrue, 0);
 
-    fluid_synth_all_notes_off(_flsynth, -1);
+    int ich;
+
+    for (ich = 0; ich < _flchans; ich++)
+    {
+        fluid_synth_all_notes_off(_flsynth, ich);
+        fluid_synth_pitch_bend(_flsynth, ich, 8192);
+    }
 }
 
 /***************************************************************************

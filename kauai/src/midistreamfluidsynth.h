@@ -52,6 +52,7 @@ class FMS : public FMS_PAR
     fluid_settings_t *_flset;
     fluid_synth_t *_flsynth;
     int _flframecount;
+    int _flchans;
 
     PMiniaudioStream _pastream;
 
