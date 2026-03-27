@@ -106,11 +106,19 @@ elseif(3DMM_GUI STREQUAL "SDL")
         PUBLIC
         KAUAI_SDL
     )
+    target_include_directories (
+        KauaiBase
+        PUBLIC
+        miniaudio
+        "${GST_INCLUDE_DIRS}"
+    )
     target_link_libraries(
         KauaiBase
         PUBLIC
         SDL2::SDL2
         SDL2_ttf::SDL2_ttf
+        miniaudio
+        "${GST_LIBRARIES}"
     )
 else()
     message(FATAL_ERROR "Invalid GUI specified: ${3DMM_GUI}")
