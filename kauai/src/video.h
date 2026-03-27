@@ -163,6 +163,7 @@ class GVDW : public GVDW_PAR
 {
     RTCLASS_DEC
     ASSERT
+    MARKMEM
 
   protected:
     KWND _hwndMovie;

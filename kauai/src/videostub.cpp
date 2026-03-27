@@ -328,4 +328,9 @@ void GVDW::AssertValid(uint32_t grf)
     Assert(_hwndMovie != hNil, 0);
     AssertPo(_pgobBase, 0);
 }
+
+void GVDW::MarkMem(void)
+{
+    GVDW_PAR::MarkMem();
+}
 #endif // DEBUG
