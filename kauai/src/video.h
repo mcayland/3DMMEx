@@ -12,6 +12,26 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 
+#ifndef KAUAI_WIN32
+#include <thread>
+
+#ifndef WIN // For now
+#include <gst/gst.h>
+#include <glib.h>
+
+typedef struct NSCB
+{
+    Signal hevt;
+    GstSample *vsample;
+    GstSample *asample;
+} NSCB;
+#endif
+
+#include "gfx.h"
+#include "sndma.h"
+
+#endif
+
 /***************************************************************************
     Generic video class. This is an interface that supports the GVDS
     (video stream) and GVDW (video window) classes.
@@ -179,6 +199,24 @@ class GVDW : public GVDW_PAR
     bool _fDeviceOpen : 1;
     bool _fPlaying : 1;
     bool _fVisible : 1;
+
+#ifndef KAUAI_WIN32
+    bool _fPipelineReady : 1;
+    bool _fDone : 1;
+#ifndef WIN // For now
+    gchar *_desc;
+#endif
+    std::thread _hth;
+    PGNV _pgnv;
+    SDL_Surface *_surface;
+
+    PMiniaudioStream _pastream;
+#ifndef WIN // For now
+    GstElement *_pipeline;
+    NSCB _nscb;
+#endif
+    uint32_t _LuThread(void);
+#endif
 
     GVDW(int32_t hid);
     ~GVDW(void);
