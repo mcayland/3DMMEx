@@ -252,7 +252,6 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     STN stnPath;
     STN stn;
     GError *error = NULL;
-    GstElement *pipeline;
     GstSample *sample = NULL;
     GstCaps *caps = NULL;
     GstElement *vsink = NULL;
@@ -290,7 +289,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
                             "caps=\"audio/x-raw,format=F32LE,rate=%d,channels=%d,layout=interleaved\"",
                             uri, pdevice->playback.converter.sampleRateOut, pdevice->playback.channels);
 
-    pipeline = gst_parse_launch(_desc, &error);
+    _nscb.pipeline = gst_parse_launch(_desc, &error);
     if (error != NULL)
     {
         Bug("Unable to setup gstreamer pipeline");
@@ -298,8 +297,8 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
     }
 
     /* Find width and height */
-    gst_element_set_state(pipeline, GST_STATE_PAUSED);
-    vsink = gst_bin_get_by_name(GST_BIN(pipeline), "vsink");
+    gst_element_set_state(_nscb.pipeline, GST_STATE_PAUSED);
+    vsink = gst_bin_get_by_name(GST_BIN(_nscb.pipeline), "vsink");
     g_signal_emit_by_name(vsink, "pull-preroll", &sample, NULL);
     caps = gst_sample_get_caps(sample);
     if (!caps)
@@ -326,7 +325,7 @@ bool GVDW::_FInit(PFNI pfni, PGOB pgobBase)
 
     // Determine the total number of frames in the file
     query = gst_query_new_duration(GST_FORMAT_DEFAULT);
-    res = gst_element_query(pipeline, query);
+    res = gst_element_query(_nscb.pipeline, query);
     if (!res)
     {
         Bug("Unable to retrieve video frame count");
@@ -383,12 +382,12 @@ uint32_t GVDW::_LuThread(void)
 
     // Pipeline must be setup in the render thread, otherwise we end up with
     // strange failures
-    _pipeline = gst_parse_launch(_desc, &error);
+    //_nscb.pipeline = gst_parse_launch(_desc, &error);
 
-    vsink = gst_bin_get_by_name(GST_BIN(_pipeline), "vsink");
+    vsink = gst_bin_get_by_name(GST_BIN(_nscb.pipeline), "vsink");
     g_object_set(G_OBJECT(vsink), "emit-signals", TRUE, NULL);
     g_signal_connect(vsink, "new-sample", G_CALLBACK(NewVideoSample), &_nscb);
-    asink = gst_bin_get_by_name(GST_BIN(_pipeline), "asink");
+    asink = gst_bin_get_by_name(GST_BIN(_nscb.pipeline), "asink");
     g_object_set(G_OBJECT(asink), "emit-signals", TRUE, NULL);
     g_signal_connect(asink, "new-sample", G_CALLBACK(NewAudioSample), &_nscb);
 
@@ -401,7 +400,7 @@ uint32_t GVDW::_LuThread(void)
 
         if (!_fPipelineReady)
         {
-            gst_element_set_state(_pipeline, GST_STATE_PLAYING);
+            gst_element_set_state(_nscb.pipeline, GST_STATE_PLAYING);
             _fPipelineReady = fTrue;
         }
 
@@ -442,7 +441,7 @@ uint32_t GVDW::_LuThread(void)
 
             if (gst_app_sink_is_eos(GST_APP_SINK_CAST(vsink)) && gst_app_sink_is_eos(GST_APP_SINK_CAST(asink)))
             {
-                gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+                gst_element_set_state(_nscb.pipeline, GST_STATE_PAUSED);
                 _fPlaying = fFalse;
             }
         }
@@ -452,7 +451,7 @@ uint32_t GVDW::_LuThread(void)
         }
     }
 
-    gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+    gst_element_set_state(_nscb.pipeline, GST_STATE_PAUSED);
 
     return 0;
 }
@@ -521,7 +520,7 @@ void GVDW::Stop(void)
 
     vpcex->RemoveCmh(this, kcmhlGvds);
 
-    gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+    gst_element_set_state(_nscb.pipeline, GST_STATE_PAUSED);
     _fPlaying = fFalse;
     _nscb.hevt.Set();
 }

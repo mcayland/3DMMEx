@@ -21,6 +21,7 @@
 
 typedef struct NSCB
 {
+    GstElement *pipeline = NULL;
     Signal hevt;
     GstSample *vsample;
     GstSample *asample;
@@ -214,7 +215,6 @@ class GVDW : public GVDW_PAR
 
     PMiniaudioStream _pastream;
 #ifndef WIN // For now
-    GstElement *_pipeline;
     NSCB _nscb;
 #endif
     uint32_t _LuThread(void);
