@@ -24,6 +24,7 @@ typedef struct NSCB
     Signal hevt;
     GstSample *vsample;
     GstSample *asample;
+    bool fFrameReady = false;
 } NSCB;
 #endif
 
@@ -182,6 +183,7 @@ typedef class GVDW *PGVDW;
 class GVDW : public GVDW_PAR
 {
     RTCLASS_DEC
+    CMD_MAP_DEC(GVDW)
     ASSERT
     MARKMEM
 
@@ -264,6 +266,9 @@ class GVDW : public GVDW_PAR
 
     // Set the rectangle to play into.
     virtual void SetRcPlay(RC *prc) override;
+
+    // Intercepts all commands, so we get to play our movie no matter what.
+    virtual bool FCmdAll(PCMD pcmd);
 };
 
 #endif //! VIDEO_H

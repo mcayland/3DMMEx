@@ -29,6 +29,9 @@ RTCLASS(GVDW)
 BEGIN_CMD_MAP_BASE(GVDS)
 END_CMD_MAP(&GVDS::FCmdAll, pvNil, kgrfcmmAll)
 
+BEGIN_CMD_MAP_BASE(GVDW)
+END_CMD_MAP(&GVDW::FCmdAll, pvNil, kgrfcmmAll)
+
 const int32_t kcmhlGvds = kswMin; // put videos at the head of the list
 
 #define GVDW_LUTHREAD_SLEEP_DELAY 5
@@ -377,8 +380,6 @@ uint32_t GVDW::_LuThread(void)
     GstElement *vsink;
     GstElement *asink;
     GError *error = NULL;
-    PGOB pgobScreen = GOB::PgobScreen();
-    GNV gnv(pgobScreen);
 
     // Pipeline must be setup in the render thread, otherwise we end up with
     // strange failures
@@ -417,8 +418,7 @@ uint32_t GVDW::_LuThread(void)
                 {
                     /* Update the surface with the mapped buffer */
                     CopyPb(map.data, _surface->pixels, _dxp * 4 * _dyp);
-
-                    gnv.DrawSurface(_surface, &_rc);
+                    _nscb.fFrameReady = true;
                     gst_buffer_unmap(buffer, &map);
                 }
                 gst_sample_unref(_nscb.vsample);
@@ -491,6 +491,9 @@ bool GVDW::FPlay(RC *prc)
 
     Stop();
 
+   if (!vpcex->FAddCmh(this, kcmhlGvds, kgrfcmmAll))
+        return fFalse;
+
     SetRcPlay(prc);
     _fPlaying = fTrue;
     _nscb.hevt.Set();
@@ -515,6 +518,8 @@ void GVDW::Stop(void)
 
     if (!_fPlaying)
         return;
+
+    vpcex->RemoveCmh(this, kcmhlGvds);
 
     gst_element_set_state(_pipeline, GST_STATE_PAUSED);
     _fPlaying = fFalse;
@@ -555,6 +560,23 @@ void GVDW::GetRc(RC *prc)
     AssertVarMem(prc);
 
     prc->Set(0, 0, _dxp, _dyp);
+}
+
+bool GVDW::FCmdAll(PCMD pcmd)
+{
+    AssertThis(0);
+    AssertVarMem(pcmd);
+
+    PGOB pgobScreen = GOB::PgobScreen();
+    GNV gnv(pgobScreen);
+
+    if (_nscb.fFrameReady == fTrue)
+    {
+        gnv.DrawSurface(_surface, &_rc);
+        _nscb.fFrameReady = false;
+    }
+
+    return fFalse;
 }
 
 #ifdef DEBUG
