@@ -108,7 +108,7 @@ bool APPB::_FInitOS(void)
     stnApp.GetUtf8Sz(u8szApp);
     int32_t xpWindow = SDL_WINDOWPOS_UNDEFINED;
     int32_t ypWindow = SDL_WINDOWPOS_UNDEFINED;
-    SDL_Window *wnd = SDL_CreateWindow(u8szApp, xpWindow, ypWindow, kdxpWindow, kdypWindow, 0);
+    SDL_Window *wnd = SDL_CreateWindow(u8szApp, xpWindow, ypWindow, kdxpWindow * 2, kdypWindow * 2, 0);
     Assert(wnd != pvNil, "no window returned from SDL_CreateWindow");
     if (wnd == pvNil)
     {
@@ -217,6 +217,8 @@ void APPB::TrackMouse(PGOB pgob, PT *ppt)
         {
             grfcust |= fcustMouse;
         }
+        xp /= 2;
+        yp /= 2;
     }
     else if (ret == 0)
     {
@@ -226,6 +228,8 @@ void APPB::TrackMouse(PGOB pgob, PT *ppt)
         {
             grfcust |= fcustMouse;
         }
+        xp /= 2;
+        yp /= 2;
     }
     else
     {
@@ -322,8 +326,8 @@ void APPB::_DispatchEvt(PEVT pevt)
     case SDL_MOUSEBUTTONDOWN:
         ResetToolTip();
 
-        xp = pevt->button.x;
-        yp = pevt->button.y;
+        xp = pevt->button.x / 2;
+        yp = pevt->button.y / 2;
 
         // GrfcustCur() may not always have fcustMouse set when the message is processed.
         grfcust = GrfcustCur();
@@ -374,7 +378,6 @@ void APPB::_DispatchEvt(PEVT pevt)
                 }
                 _pgobMouse = pgob;
                 _xpMouse = klwMax;
-
                 pgob->MouseDown(pt.xp, pt.yp, _cactMouse, grfcust);
             }
             else
@@ -820,7 +823,7 @@ void APPB::PositionCurs(int32_t xpScreen, int32_t ypScreen)
 {
     AssertThis(0);
 
-    SDL_WarpMouseGlobal(xpScreen, ypScreen);
+    SDL_WarpMouseGlobal(xpScreen * 2, ypScreen * 2);
 
     if (_fFlushCursor)
     {

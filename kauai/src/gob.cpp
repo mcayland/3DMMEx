@@ -1037,6 +1037,8 @@ KWND GOB::_HwndGetDptFromCoo(PT *pdpt, int32_t coo)
 
             pts = *pdpt;
             SDL_GetWindowPosition((SDL_Window *)hwnd, &xpWnd, &ypWnd);
+            xpWnd /= 2;
+            ypWnd /= 2;
             pts.xp += xpWnd;
             pts.yp += ypWnd;
 
@@ -1092,6 +1094,8 @@ PGOB GOB::PgobFromPtGlobal(int32_t xp, int32_t yp, PT *pptLocal)
     PTS pts;
     int xpWnd, ypWnd;
     SDL_GetWindowPosition((SDL_Window *)vwig.hwndApp, &xpWnd, &ypWnd);
+    xpWnd /= 2;
+    ypWnd /= 2;
 
     pts.xp = xp - xpWnd;
     pts.yp = yp - ypWnd;
@@ -1253,8 +1257,9 @@ void GOB::_SetRcCur(void)
             rc = rcs;
 #elif defined(KAUAI_SDL)
             int dxpClient = 0, dypClient = 0;
-            SDL_GetWindowSize((SDL_Window *)pgob->_hwnd, &dxpClient, &dypClient);
-            Assert(dxpClient > 0 && dypClient > 0, "SDL_GetWindowSize failed?");
+            dxpClient = 640; // should be kdxpWindow?
+            dypClient = 480; // should be kdypWindow?
+            Assert(dxpClient > 0 && dypClient > 0, "Invalid window size");
             rc.Set(0, 0, dxpClient, dypClient);
 #else
 #error not implemented

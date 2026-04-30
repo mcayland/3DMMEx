@@ -149,7 +149,8 @@ PGPT GPT::PgptNew(SDL_Window *wnd, int cbitPixel, bool fOffscreen, int dxp, int 
     // get drawable size
     if (!fOffscreen)
     {
-        AssertDoSDL(SDL_GetRendererOutputSize(pgpt->_renderer, &dxp, &dyp));
+        dxp = 640; // should be kdxpWindow?
+        dyp = 480; // should be kdypWindow?
     }
     Assert(dxp != 0, "dxp must be > 0");
     Assert(dyp != 0, "dyp must be > 0");

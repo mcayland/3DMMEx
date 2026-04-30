@@ -138,8 +138,8 @@ void GOB::GetPtMouse(PT *ppt, bool *pfDown)
             yp -= pgob->_rcCur.ypTop;
         }
 
-        ppt->xp = xp;
-        ppt->yp = yp;
+        ppt->xp = xp / 2;
+        ppt->yp = yp / 2;
     }
     if (pfDown != pvNil)
         *pfDown = mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
